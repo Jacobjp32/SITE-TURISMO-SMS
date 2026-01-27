@@ -26,7 +26,7 @@ const Reservas = {
             preco: 'R$ 80,00',
             precoNum: 80,
             descricao: 'Navegue pelas águas do Rio Iguaçu e descubra a beleza natural da região.',
-            imagem: 'images/PRAÇA_DO_RIO_IGUAÇU.jpg',
+            imagem: 'images/PRACA_DO_RIO_IGUACU.jpg',
             horarios: ['09:00', '14:00', '16:00'],
             diasDisponiveis: ['Sáb', 'Dom'],
             vagasPorHorario: 12
@@ -65,7 +65,7 @@ const Reservas = {
             preco: 'R$ 100,00',
             precoNum: 100,
             descricao: 'Visite as igrejas centenárias de herança polonesa e ucraniana.',
-            imagem: 'images/IGREJA_ÁGUA_BRANCA.jpg',
+            imagem: 'images/IGREJA_AGUA_BRANCA.jpg',
             horarios: ['08:00', '13:00'],
             diasDisponiveis: ['Seg', 'Qua', 'Sex'],
             vagasPorHorario: 20
@@ -78,7 +78,7 @@ const Reservas = {
             preco: 'R$ 60,00',
             precoNum: 60,
             descricao: 'Caminhada guiada pela mata nativa com observação de fauna e flora.',
-            imagem: 'images/PONTE_SOB_O_RIO_IGUAÇU.jpg',
+            imagem: 'images/PONTE_SOB_O_RIO_IGUACU.jpg',
             horarios: ['07:00', '15:00'],
             diasDisponiveis: ['Sáb', 'Dom'],
             vagasPorHorario: 10
@@ -91,7 +91,7 @@ const Reservas = {
             preco: 'R$ 70,00',
             precoNum: 70,
             descricao: 'Conheça os principais pontos turísticos da Capital Polonesa do Paraná.',
-            imagem: 'images/FOTO_GERAL_SÃO_MATEUS_DO_SUL.jpg',
+            imagem: 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
             horarios: ['09:00', '14:00'],
             diasDisponiveis: ['Ter', 'Qui', 'Sáb', 'Dom'],
             vagasPorHorario: 25

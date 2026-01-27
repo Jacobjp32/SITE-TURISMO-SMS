@@ -31,7 +31,7 @@ const RoteiroIA = {
             publico: ['familia', 'casal', 'criancas', 'solo'],
             interesse: ['natureza', 'relaxamento', 'fotografia', 'passeio'],
             descricao: 'Área verde às margens do Rio Iguaçu com playground e quiosques.',
-            imagem: 'images/PRAÇA_DO_RIO_IGUAÇU.jpg'
+            imagem: 'images/PRACA_DO_RIO_IGUACU.jpg'
         },
         {
             id: 3,
@@ -53,7 +53,7 @@ const RoteiroIA = {
             publico: ['familia', 'casal', 'solo', 'idosos'],
             interesse: ['arquitetura', 'religiao', 'polonesa', 'historia', 'fotografia'],
             descricao: 'Igreja de madeira centenária, patrimônio da imigração polonesa.',
-            imagem: 'images/IGREJA_ÁGUA_BRANCA.jpg'
+            imagem: 'images/IGREJA_AGUA_BRANCA.jpg'
         },
         {
             id: 5,
@@ -64,7 +64,7 @@ const RoteiroIA = {
             publico: ['familia', 'casal', 'grupos', 'aventureiros'],
             interesse: ['natureza', 'aventura', 'fotografia', 'relaxamento'],
             descricao: 'Navegação pelo Rio Iguaçu com vistas panorâmicas.',
-            imagem: 'images/PONTE_SOB_O_RIO_IGUAÇU.jpg'
+            imagem: 'images/PONTE_SOB_O_RIO_IGUACU.jpg'
         },
         {
             id: 6,

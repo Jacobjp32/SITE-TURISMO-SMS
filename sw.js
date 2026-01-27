@@ -6,27 +6,27 @@
  * Permite que o site funcione offline como um app mobile.
  */
 
-const CACHE_NAME = 'turismo-sms-v4';
-const OFFLINE_URL = '/offline.html';
+const CACHE_NAME = 'turismo-sms-v5';
+const OFFLINE_URL = 'offline.html';
 
-// Arquivos para cache inicial
+// Arquivos para cache inicial (caminhos relativos para GitHub Pages)
 const PRECACHE_ASSETS = [
-    '/',
-    '/index.html',
-    '/eventos.html',
-    '/reservas.html',
-    '/roteiro-ia.html',
-    '/o-que-fazer.html',
-    '/sabores.html',
-    '/galeria.html',
-    '/offline.html',
-    '/translations.js',
-    '/config.js',
-    '/js/chatbot.js',
-    '/js/roteiro-ia.js',
-    '/js/reservas.js',
-    '/images/logo_pin_turismo_3d.png',
-    '/images/FOTO_GERAL_SÃO_MATEUS_DO_SUL.jpg',
+    './',
+    'index.html',
+    'eventos.html',
+    'reservas.html',
+    'roteiro-ia.html',
+    'o-que-fazer.html',
+    'sabores.html',
+    'galeria.html',
+    'offline.html',
+    'translations.js',
+    'config.js',
+    'js/chatbot.js',
+    'js/roteiro-ia.js',
+    'js/reservas.js',
+    'images/logo_pin_turismo_3d.png',
+    'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@400;500;600;700&display=swap'
 ];
 
@@ -94,7 +94,7 @@ self.addEventListener('fetch', event => {
                     .catch(() => {
                         // Offline - retornar página offline para navegação
                         if (event.request.mode === 'navigate') {
-                            return caches.match(OFFLINE_URL);
+                            return caches.match('offline.html');
                         }
                     });
             })
@@ -117,11 +117,11 @@ function fetchAndCache(request) {
 self.addEventListener('push', event => {
     const options = {
         body: event.data ? event.data.text() : 'Nova atualização disponível!',
-        icon: '/images/logo_pin_turismo_3d.png',
-        badge: '/images/logo_pin_turismo_3d.png',
+        icon: 'images/logo_pin_turismo_3d.png',
+        badge: 'images/logo_pin_turismo_3d.png',
         vibrate: [100, 50, 100],
         data: {
-            url: '/'
+            url: './'
         }
     };
     
@@ -134,7 +134,7 @@ self.addEventListener('push', event => {
 self.addEventListener('notificationclick', event => {
     event.notification.close();
     event.waitUntil(
-        clients.openWindow(event.notification.data.url || '/')
+        clients.openWindow(event.notification.data.url || './')
     );
 });
 

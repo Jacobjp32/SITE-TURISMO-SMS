@@ -80,7 +80,7 @@ const CMS = {
                 categoria: 'Turismo',
                 resumo: 'Prefeitura inaugura roteiro de ecoturismo às margens do Rio Iguaçu com trilhas, mirantes e passeios de barco.',
                 conteudo: 'A Prefeitura Municipal inaugurou a nova Rota Caminhos do Iguaçu, um roteiro de ecoturismo que percorre as margens do Rio Iguaçu.\n\nO percurso inclui trilhas ecológicas, mirantes panorâmicos e passeios de barco, oferecendo uma experiência única de contato com a natureza.',
-                imagem: 'images/PRAÇA_DO_RIO_IGUAÇU.jpg',
+                imagem: 'images/PRACA_DO_RIO_IGUACU.jpg',
                 autor: 'Departamento de Turismo',
                 dataPublicacao: '2026-01-05T09:00:00',
                 destaque: false,
