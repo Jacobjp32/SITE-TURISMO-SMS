@@ -134,14 +134,19 @@
     </script>
     
     <title>São Mateus do Sul - Capital Polonesa do Paraná | Turismo Oficial</title>
-    <!-- Google Maps - função initMap definida antes do carregamento -->
+    <!-- Google Maps - carregamento otimizado -->
     <script>
-        // Função vazia para evitar erro de callback do Google Maps
+        // Função callback para o Google Maps
         function initMap() {
             console.log('Google Maps API carregada');
         }
+        
+        // Carregar Google Maps de forma assíncrona
+        (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]);for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.googleapis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once."):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
+            key: "AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik",
+            v: "weekly"
+        });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik&callback=initMap&libraries=places" async defer></script>
     
     
     <!-- Fonts -->
@@ -370,8 +375,9 @@
         }
 
         .nav-logo img {
-            width: 50px;
-            height: auto;
+            height: 70px;
+            width: auto;
+            max-width: 280px;
         }
 
         .nav-links {
@@ -849,7 +855,9 @@
             }
 
             .nav-logo img {
-                width: 40px;
+                height: 50px;
+                width: auto;
+                max-width: 180px;
             }
 
             .nav-toggle {
@@ -940,7 +948,8 @@
 
         .stat-label {
             font-size: 0.85rem;
-            color: #666;
+            color: var(--forest-deep);
+            font-weight: 500;
         }
 
         .explore-btn {
@@ -3095,7 +3104,7 @@
     <nav class="nav">
         <div class="nav-container">
             <a href="#" class="nav-logo">
-                <img src="images/logo_header.png" alt="Visite São Mateus do Sul - Capital Polonesa do Paraná">
+                <img src="images/logo_header_branca.png" alt="Visite São Mateus do Sul - Capital Polonesa do Paraná" style="height: 70px; width: auto;">
             </a>
             
             <!-- Menu Hamburger -->
@@ -5986,227 +5995,12 @@
     <!-- Sistema de Avaliações -->
     <script src="js/avaliacoes.js"></script>
     
-    <!-- Dark Mode Toggle -->
-    <script>
-    (function() {
-        // Criar botão de dark mode
-        const darkModeBtn = document.createElement('button');
-        darkModeBtn.id = 'dark-mode-toggle';
-        darkModeBtn.innerHTML = '🌙';
-        darkModeBtn.setAttribute('aria-label', 'Alternar modo escuro');
-        darkModeBtn.style.cssText = `
-            position: fixed;
-            bottom: 160px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            background: var(--forest-deep, #0a3d2e);
-            color: white;
-            font-size: 1.5rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 9998;
-            transition: all 0.3s;
-        `;
-        
-        // Verificar preferência salva
-        const isDark = localStorage.getItem('darkMode') === 'true';
-        if (isDark) {
-            document.body.classList.add('dark-mode');
-            darkModeBtn.innerHTML = '☀️';
-        }
-        
-        darkModeBtn.addEventListener('click', function() {
-            document.body.classList.toggle('dark-mode');
-            const isDarkNow = document.body.classList.contains('dark-mode');
-            localStorage.setItem('darkMode', isDarkNow);
-            darkModeBtn.innerHTML = isDarkNow ? '☀️' : '🌙';
-        });
-        
-        document.body.appendChild(darkModeBtn);
-    })();
-    </script>
-    
-    <!-- Dark Mode Styles - CORREÇÃO COMPLETA v2 -->
-    <style>
-        /* === DARK MODE GLOBAL === */
-        body.dark-mode {
-            background: #0f0f23 !important;
-            color: #e0e0e0 !important;
-        }
-        
-        body.dark-mode * {
-            border-color: #333 !important;
-        }
-        
-        /* Header e Nav */
-        body.dark-mode .navbar,
-        body.dark-mode header,
-        body.dark-mode .accessibility-bar,
-        body.dark-mode nav {
-            background: #1a1a2e !important;
-        }
-        
-        /* Seções */
-        body.dark-mode section,
-        body.dark-mode .section {
-            background: #16213e !important;
-        }
-        
-        /* Cards e containers */
-        body.dark-mode .card,
-        body.dark-mode .filter-card,
-        body.dark-mode .info-card,
-        body.dark-mode .stat-box,
-        body.dark-mode .experience-box,
-        body.dark-mode .pillar-item,
-        body.dark-mode .pilar-item,
-        body.dark-mode .gastro-item,
-        body.dark-mode .attraction-card,
-        body.dark-mode .event-card,
-        body.dark-mode .stat-item,
-        body.dark-mode .contact-form,
-        body.dark-mode .form-group input,
-        body.dark-mode .form-group textarea,
-        body.dark-mode .form-group select {
-            background: #1a1a2e !important;
-            color: #e0e0e0 !important;
-        }
-        
-        /* SEÇÃO ABOUT-HERO (onde estão os stats 1908, 116, etc) */
-        body.dark-mode .about-hero {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
-        }
-        
-        body.dark-mode .about-stats .stat-item {
-            background: rgba(255, 255, 255, 0.08) !important;
-            border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        }
-        
-        body.dark-mode .about-stats .stat-number {
-            color: #d4a574 !important;
-            font-size: 2.5rem !important;
-        }
-        
-        body.dark-mode .about-stats .stat-label {
-            color: #c0c0c0 !important;
-            opacity: 1 !important;
-        }
-        
-        /* Títulos */
-        body.dark-mode h1, 
-        body.dark-mode h2, 
-        body.dark-mode h3,
-        body.dark-mode h4, 
-        body.dark-mode h5, 
-        body.dark-mode h6,
-        body.dark-mode .section-title,
-        body.dark-mode .stat-number,
-        body.dark-mode strong,
-        body.dark-mode .pilar-title,
-        body.dark-mode .about-hero h1 {
-            color: #ffffff !important;
-        }
-        
-        /* Textos */
-        body.dark-mode p, 
-        body.dark-mode span:not(.stat-number):not(.emoji), 
-        body.dark-mode li,
-        body.dark-mode .stat-label,
-        body.dark-mode .section-subtitle,
-        body.dark-mode .section-description,
-        body.dark-mode label,
-        body.dark-mode td, 
-        body.dark-mode th,
-        body.dark-mode .about-hero-subtitle,
-        body.dark-mode .pilar-description {
-            color: #b0b0b0 !important;
-        }
-        
-        /* Links */
-        body.dark-mode a:not(.btn):not(button) {
-            color: #d4a574 !important;
-        }
-        
-        /* Footer */
-        body.dark-mode .footer-institutional,
-        body.dark-mode footer {
-            background: #0f0f23 !important;
-        }
-        
-        /* Tabelas */
-        body.dark-mode table,
-        body.dark-mode tr,
-        body.dark-mode td,
-        body.dark-mode th {
-            background: #1a1a2e !important;
-        }
-        
-        /* Menu dropdown */
-        body.dark-mode .dropdown-content,
-        body.dark-mode .nav-dropdown,
-        body.dark-mode .submenu {
-            background: #1a1a2e !important;
-        }
-        
-        /* Mapa */
-        body.dark-mode .map-sidebar {
-            background: rgba(26, 26, 46, 0.95) !important;
-        }
-        
-        /* Badges */
-        body.dark-mode .badge,
-        body.dark-mode .tag,
-        body.dark-mode .category-tag,
-        body.dark-mode .section-label {
-            background: #333 !important;
-            color: #d4a574 !important;
-        }
-        
-        /* Pilares section */
-        body.dark-mode .pilares-section {
-            background: #0f0f23 !important;
-        }
-        
-        body.dark-mode .pilar-content {
-            background: #1a1a2e !important;
-        }
-        
-        /* === POSICIONAMENTO DOS BOTÕES FLUTUANTES === */
-        #dark-mode-toggle {
-            position: fixed !important;
-            bottom: 160px !important;
-            right: 20px !important;
-            z-index: 9998 !important;
-        }
-        
-        #chatbot-widget,
-        .chatbot-container {
-            position: fixed !important;
-            bottom: 90px !important;
-            right: 20px !important;
-            z-index: 9997 !important;
-        }
-        
-        .back-to-top,
-        #backToTop {
-            position: fixed !important;
-            bottom: 20px !important;
-            right: 20px !important;
-            z-index: 9996 !important;
-        }
-        
-        #dark-mode-toggle:hover {
-            transform: scale(1.1);
-        }
-    </style>
+    <!-- Dark Mode removido conforme solicitado -->
 
-<script>
+    <script>
     // Registrar Service Worker para PWA
     if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/sw.js")
+        navigator.serviceWorker.register("sw.js")
             .then(reg => console.log("SW registrado:", reg.scope))
             .catch(err => console.log("SW erro:", err));
     }
