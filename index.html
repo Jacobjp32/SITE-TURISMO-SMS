@@ -375,9 +375,9 @@
         }
 
         .nav-logo img {
-            height: 70px;
+            height: 90px;
             width: auto;
-            max-width: 280px;
+            max-width: 350px;
         }
 
         .nav-links {
@@ -813,6 +813,25 @@
                 min-height: 60vh;
                 padding: 3rem 1rem;
             }
+            
+            .about-hero-content {
+                padding: 0 0.5rem;
+                max-width: 100%;
+            }
+            
+            .about-hero h1 {
+                font-size: 1.8rem;
+                line-height: 1.3;
+                padding: 0 0.5rem;
+                word-wrap: break-word;
+            }
+            
+            .about-hero-subtitle {
+                font-size: 1rem;
+                padding: 0 0.5rem;
+                line-height: 1.6;
+                margin-bottom: 2rem;
+            }
 
             .about-badge {
                 padding: 0.6rem 1.2rem;
@@ -823,6 +842,19 @@
             .about-stats {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 1rem;
+                padding: 0 0.5rem;
+            }
+            
+            .about-stats .stat-item {
+                padding: 1rem;
+            }
+            
+            .about-stats .stat-number {
+                font-size: 1.8rem;
+            }
+            
+            .about-stats .stat-label {
+                font-size: 0.75rem;
             }
 
             /* Reviews Grid */
@@ -855,9 +887,9 @@
             }
 
             .nav-logo img {
-                height: 50px;
+                height: 65px;
                 width: auto;
-                max-width: 180px;
+                max-width: 220px;
             }
 
             .nav-toggle {
@@ -884,6 +916,40 @@
             .explore-btn {
                 padding: 0.875rem;
                 font-size: 0.9rem;
+            }
+            
+            /* About Hero - Extra Small */
+            .about-hero {
+                padding: 2rem 1rem;
+                min-height: auto;
+            }
+            
+            .about-hero h1 {
+                font-size: 1.5rem !important;
+                line-height: 1.4;
+            }
+            
+            .about-hero h1 br {
+                display: none;
+            }
+            
+            .about-hero-subtitle {
+                font-size: 0.95rem !important;
+                line-height: 1.5;
+            }
+            
+            .about-badge {
+                font-size: 0.65rem;
+                padding: 0.5rem 1rem;
+                letter-spacing: 1px;
+            }
+            
+            .about-stats .stat-number {
+                font-size: 1.5rem;
+            }
+            
+            .about-stats .stat-label {
+                font-size: 0.7rem;
             }
         }
 
@@ -947,9 +1013,12 @@
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: var(--forest-deep);
-            font-weight: 500;
+            font-size: 0.9rem;
+            color: #0a3d2e !important;
+            font-weight: 600;
+            opacity: 1 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .explore-btn {
