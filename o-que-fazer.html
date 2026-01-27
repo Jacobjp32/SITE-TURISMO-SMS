@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="O que fazer em São Mateus do Sul: Rota da Erva-Mate, Cultura Polonesa, Turismo de Fé, passeios náuticos no Rio Iguaçu. Descubra as melhores atrações da Capital Polonesa do Paraná.">
+    <meta name="keywords" content="o que fazer São Mateus do Sul, turismo, atrações, rota erva-mate, cultura polonesa, rio iguaçu, turismo religioso, Paraná">
+    <link rel="canonical" href="https://saomateusdosul.tur.br/o-que-fazer.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="O Que Fazer | São Mateus do Sul">
+    <meta property="og:description" content="Descubra as melhores experiências turísticas na Capital Polonesa do Paraná.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saomateusdosul.tur.br/o-que-fazer.html">
+    <meta property="og:locale" content="pt_BR">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <!-- Schema.org - Rotas Turísticas -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Rotas Turísticas de São Mateus do Sul",
+        "itemListElement": [
+            {"@type": "TouristTrip", "position": 1, "name": "Rota da Erva-Mate", "description": "Conheça a tradição centenária do mate com selo de Indicação Geográfica", "touristType": "Rural tourism"},
+            {"@type": "TouristTrip", "position": 2, "name": "Rota da Cultura Polonesa", "description": "Herança dos imigrantes: arquitetura, gastronomia e festas", "touristType": "Cultural tourism"},
+            {"@type": "TouristTrip", "position": 3, "name": "Turismo de Fé", "description": "Templos centenários e capelas das colônias rurais", "touristType": "Religious tourism"},
+            {"@type": "TouristTrip", "position": 4, "name": "Náutica e Natureza", "description": "Passeios pelo Rio Iguaçu e Mata Atlântica", "touristType": "Ecotourism"}
+        ]
+    }
+    </script>
+    
+    <!-- Schema.org - Breadcrumb -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Início", "item": "https://saomateusdosul.tur.br/"},
+            {"@type": "ListItem", "position": 2, "name": "O Que Fazer", "item": "https://saomateusdosul.tur.br/o-que-fazer.html"}
+        ]
+    }
+    </script>
+    
+    <title>O Que Fazer | São Mateus do Sul - Capital Polonesa do Paraná</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --white-pure: #ffffff;
+            --cream-light: #f8f6f0;
+            --polish-red: #dc143c;
+            --mate-green: #2d5016;
+            --river-blue: #1e6091;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .header-logo img {
+            width: 50px;
+            height: auto;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .header-nav a:hover {
+            opacity: 1;
+            color: var(--gold-polish);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--forest-deep) 0%, var(--mate-green) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="2" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
+            background-size: 30px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Route Cards */
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .route-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .route-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .route-card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .route-card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+        }
+
+        .route-card-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: white;
+            color: var(--forest-deep);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            z-index: 1;
+        }
+
+        .route-card-content {
+            padding: 1.5rem;
+        }
+
+        .route-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .route-card p {
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .route-card .highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .route-card .highlight-tag {
+            background: var(--cream-light);
+            color: var(--forest-deep);
+            padding: 0.3rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .route-card .btn-explore {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--forest-deep);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .route-card .btn-explore:hover {
+            background: #0a5d3e;
+        }
+
+        /* Attractions Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Top 10 Attractions */
+        .attractions-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .attraction-item {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 80px 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+            transition: transform 0.2s;
+        }
+
+        .attraction-item:hover {
+            transform: translateX(10px);
+        }
+
+        .attraction-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--forest-deep), var(--mate-green));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .attraction-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.25rem;
+        }
+
+        .attraction-info .category {
+            color: var(--gold-polish);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .attraction-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .attraction-action {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--forest-deep);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0a5d3e;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--forest-deep);
+            color: var(--forest-deep);
+        }
+
+        .btn-outline:hover {
+            background: var(--forest-deep);
+            color: white;
+        }
+
+        /* IG Badge */
+        .ig-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, #ffd700, #daa520);
+            color: #333;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* Info Cards */
+        .info-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .info-section h3 {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--forest-deep);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--cream-light);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border-left: 4px solid var(--gold-polish);
+        }
+
+        .info-card h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .routes-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .attraction-item {
+                grid-template-columns: 60px 1fr;
+            }
+
+            .attraction-action {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                margin-top: 1rem;
+            }
+
+            .attraction-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            .header-nav {
+                display: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .route-card-image {
+                height: 150px;
+            }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div class="header-title">São Mateus do Sul</div>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html">Início</a>
+                <a href="sabores.html">Sabores</a>
+                <a href="eventos.html">Eventos</a>
+                <a href="index.html#onde-ficar">Onde Ficar</a>
+                <a href="rotas-completas.html">Roteiros</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 data-lang-key="page-oquefazer-titulo">🧭 O Que Fazer</h1>
+            <p data-lang-key="page-oquefazer-subtitulo">Explore as rotas temáticas e descubra experiências únicas na Capital Polonesa do Paraná. Da cultura do mate às tradições polonesas, do turismo de fé aos passeios náuticos.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        
+        <!-- Rotas Temáticas -->
+        <div class="routes-grid">
+            
+            <!-- Rota da Erva-Mate -->
+            <article class="route-card">
+                <div class="route-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
+                    <span class="route-card-badge">🌿 Indicação Geográfica</span>
+                </div>
+                <div class="route-card-content">
+                    <h3>Rota da Erva-Mate</h3>
+                    <p>Conheça a tradição centenária do mate em São Mateus do Sul, terra da erva-mate com selo de Indicação Geográfica IG São Matheus.</p>
+                    <div class="highlights">
+                        <span class="highlight-tag">🧉 Chimarródromo</span>
+                        <span class="highlight-tag">🏭 Ervateiras</span>
+                        <span class="highlight-tag">🛒 Rua do Mathe</span>
+                        <span class="highlight-tag">🏆 Selo IG</span>
+                    </div>
+                    <a href="rotas-completas.html#erva-mate" class="btn-explore">
+                        Explorar Rota →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Cultura Polonesa -->
+            <article class="route-card">
+                <div class="route-card-image" style="background-image: url('images/IGREJA_ÁGUA_BRANCA.jpg');">
+                    <span class="route-card-badge">🇵🇱 Tradição Viva</span>
+                </div>
+                <div class="route-card-content">
+                    <h3>Cultura Polonesa</h3>
+                    <p>Mergulhe na herança dos imigrantes poloneses que colonizaram a região. Arquitetura, gastronomia, danças folclóricas e festas tradicionais.</p>
+                    <div class="highlights">
+                        <span class="highlight-tag">⛪ Igrejas Históricas</span>
+                        <span class="highlight-tag">🥟 Pierogi</span>
+                        <span class="highlight-tag">💃 Folclore</span>
+                        <span class="highlight-tag">🎭 Mês Polonês</span>
+                    </div>
+                    <a href="rotas-completas.html#polonesa" class="btn-explore">
+                        Explorar Rota →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Turismo de Fé -->
+            <article class="route-card">
+                <div class="route-card-image" style="background-image: url('images/IGREJA_MATRIZ_FRONTAL.jpg');">
+                    <span class="route-card-badge">✝️ Fé e História</span>
+                </div>
+                <div class="route-card-content">
+                    <h3>Turismo de Fé</h3>
+                    <p>Visite os templos centenários construídos pelos imigrantes. A Igreja Matriz neogótica, as capelas das colônias e os santuários de devoção mariana.</p>
+                    <div class="highlights">
+                        <span class="highlight-tag">🏛️ Igreja Matriz</span>
+                        <span class="highlight-tag">🙏 N.S. Częstochowa</span>
+                        <span class="highlight-tag">⛪ Capelas Rurais</span>
+                        <span class="highlight-tag">📿 Via Sacra</span>
+                    </div>
+                    <a href="rotas-completas.html#fe" class="btn-explore">
+                        Explorar Rota →
+                    </a>
+                </div>
+            </article>
+
+            <!-- Náutica e Natureza -->
+            <article class="route-card">
+                <div class="route-card-image" style="background-image: url('images/PONTE_SOB_O_RIO_IGUAÇU.jpg');">
+                    <span class="route-card-badge">🚣 Rio Iguaçu</span>
+                </div>
+                <div class="route-card-content">
+                    <h3>Náutica e Natureza</h3>
+                    <p>Navegue pelo majestoso Rio Iguaçu, conheça o histórico Vapor Pery e desfrute das paisagens naturais preservadas da Mata Atlântica.</p>
+                    <div class="highlights">
+                        <span class="highlight-tag">🛥️ Vapor Pery</span>
+                        <span class="highlight-tag">🌊 Rio Iguaçu</span>
+                        <span class="highlight-tag">🌳 Mata Atlântica</span>
+                        <span class="highlight-tag">🎣 Pesca</span>
+                    </div>
+                    <a href="rotas-completas.html#natureza" class="btn-explore">
+                        Explorar Rota →
+                    </a>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- Top 10 Atrações -->
+        <section>
+            <div class="section-title">
+                <h2>🏆 Top 10 Atrações</h2>
+                <p>Os pontos turísticos imperdíveis de São Mateus do Sul</p>
+            </div>
+
+            <div class="attractions-list">
+                
+                <!-- 1. Igreja Matriz -->
+                <div class="attraction-item">
+                    <div class="attraction-number">1</div>
+                    <div class="attraction-info">
+                        <span class="category">Patrimônio Histórico</span>
+                        <h4>Igreja Matriz São Mateus</h4>
+                        <p>Templo neogótico centenário no coração da cidade. Sua arquitetura imponente e vitrais coloridos encantam visitantes de todo o Brasil.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 2. Praça do Rio Iguaçu -->
+                <div class="attraction-item">
+                    <div class="attraction-number">2</div>
+                    <div class="attraction-info">
+                        <span class="category">Área de Lazer</span>
+                        <h4>Praça do Rio Iguaçu & Vapor Pery</h4>
+                        <p>Área de lazer às margens do rio com o histórico Vapor Pery, embarcação que navegou o Iguaçu por décadas transportando erva-mate.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 3. Rua do Mathe -->
+                <div class="attraction-item">
+                    <div class="attraction-number">3</div>
+                    <div class="attraction-info">
+                        <span class="category">Gastronomia & Cultura</span>
+                        <h4>Rua do Mathe & Chimarródromo</h4>
+                        <p>Coração gastronômico da cidade. Feiras, eventos culturais e o tradicional Chimarródromo para degustar a erva-mate premiada.</p>
+                        <span class="ig-badge">🏆 Erva-mate com IG São Matheus</span>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 4. Casa da Memória -->
+                <div class="attraction-item">
+                    <div class="attraction-number">4</div>
+                    <div class="attraction-info">
+                        <span class="category">Museu</span>
+                        <h4>Casa da Memória Padre Bauer</h4>
+                        <p>Acervo histórico da imigração polonesa e da história regional. Documentos, fotografias e objetos que contam a saga dos colonizadores.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 5. Igreja Água Branca -->
+                <div class="attraction-item">
+                    <div class="attraction-number">5</div>
+                    <div class="attraction-info">
+                        <span class="category">Patrimônio Polonês</span>
+                        <h4>Igreja de Água Branca</h4>
+                        <p>Capela centenária com arquitetura polonesa tradicional, lambrequins decorativos e altar dedicado a Nossa Senhora de Częstochowa.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 6. Museu da Erva-Mate -->
+                <div class="attraction-item">
+                    <div class="attraction-number">6</div>
+                    <div class="attraction-info">
+                        <span class="category">Museu</span>
+                        <h4>Museu da Erva-Mate</h4>
+                        <p>História da produção ervateira na região. Equipamentos antigos, processo de beneficiamento e a importância econômica do mate.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 7. Porto Gastronômico -->
+                <div class="attraction-item">
+                    <div class="attraction-number">7</div>
+                    <div class="attraction-info">
+                        <span class="category">Gastronomia</span>
+                        <h4>Porto Gastronômico</h4>
+                        <p>Espaço gastronômico moderno com restaurantes, bares e eventos culturais. Vista privilegiada e ambiente sofisticado.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 8. Colônias Polonesas -->
+                <div class="attraction-item">
+                    <div class="attraction-number">8</div>
+                    <div class="attraction-info">
+                        <span class="category">Turismo Rural</span>
+                        <h4>Colônias Polonesas</h4>
+                        <p>Comunidades rurais que preservam as tradições dos imigrantes. Festas religiosas, gastronomia caseira e hospitalidade única.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 9. Produtores Rurais -->
+                <div class="attraction-item">
+                    <div class="attraction-number">9</div>
+                    <div class="attraction-info">
+                        <span class="category">Agroturismo</span>
+                        <h4>Propriedades Rurais</h4>
+                        <p>Visite produtores de morangos, vinícolas artesanais, queijarias e pomares. Compre direto do produtor e conheça o campo.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+                <!-- 10. Rio Iguaçu -->
+                <div class="attraction-item">
+                    <div class="attraction-number">10</div>
+                    <div class="attraction-info">
+                        <span class="category">Natureza</span>
+                        <h4>Rio Iguaçu</h4>
+                        <p>O segundo maior rio do Paraná oferece passeios de barco, pesca esportiva e contemplação da natureza preservada.</p>
+                    </div>
+                    <div class="attraction-action">
+                        <a href="#" class="btn-small btn-primary">📍 Ver no Mapa</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Info Section - IG São Matheus -->
+        <section class="info-section">
+            <h3>🏆 Indicação Geográfica IG São Matheus</h3>
+            <p style="margin-bottom: 1.5rem; color: #666;">São Mateus do Sul é reconhecida pelo INPI com o selo de Indicação Geográfica para a erva-mate, atestando a qualidade e origem do produto.</p>
+            
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>🌿 O que é a IG?</h4>
+                    <p>A Indicação Geográfica certifica que a erva-mate produzida na região possui características únicas ligadas ao terroir local.</p>
+                </div>
+                <div class="info-card">
+                    <h4>📍 Área Demarcada</h4>
+                    <p>Abrange São Mateus do Sul e municípios vizinhos, reconhecidos pela tradição centenária na produção de erva-mate.</p>
+                </div>
+                <div class="info-card">
+                    <h4>🛒 Onde Comprar</h4>
+                    <p>Na Rua do Mathe, Feira do Produtor e ervateiras certificadas você encontra produtos com o selo IG São Matheus.</p>
+                </div>
+                <div class="info-card">
+                    <h4>🧉 Degustação</h4>
+                    <p>O Chimarródromo oferece degustação gratuita durante a Roda de Mathe, todo primeiro domingo do mês.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section style="text-align: center; margin-top: 3rem; padding: 3rem; background: linear-gradient(135deg, var(--forest-deep), var(--mate-green)); border-radius: 20px; color: white;">
+            <h3 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem;">Pronto para Explorar?</h3>
+            <p style="opacity: 0.9; margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">Baixe nossos roteiros em PDF ou GPX e planeje sua visita à Capital Polonesa do Paraná.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                <a href="rotas-completas.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: white; color: var(--forest-deep); text-decoration: none; border-radius: 30px; font-weight: 600;">
+                    📥 Ver Roteiros
+                </a>
+                <a href="eventos.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: var(--gold-polish); color: var(--forest-deep); text-decoration: none; border-radius: 30px; font-weight: 600;">
+                    📅 Ver Eventos
+                </a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="index.html">Voltar ao Portal</a> | 
+            <a href="transparencia.html">Transparência</a>
+        </p>
+    </footer>
+</body>
+</html>

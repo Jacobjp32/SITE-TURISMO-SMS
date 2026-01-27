@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Completo - Rotas Turísticas São Mateus do Sul</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+        }
+
+        #map {
+            width: 100%;
+            height: 100vh;
+        }
+
+        .info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000;
+            max-width: 350px;
+        }
+
+        .info-panel h1 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #0a3d2e;
+        }
+
+        .info-panel p {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .legend-icon {
+            font-size: 1.3rem;
+        }
+
+        .stats {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            color: #0a3d2e;
+        }
+
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            background: #0a3d2e;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 700;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: #d4a574;
+            color: #0a3d2e;
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <!-- 
+    ⚠️  ATENÇÃO: Para o mapa funcionar em produção, você precisa:
+    
+    1. Criar API Key do Google Maps:
+       - Acesse: https://console.cloud.google.com/
+       - Ative "Maps JavaScript API"
+       - Crie uma API Key
+    
+    2. Substitua na linha acima:
+       - De: key=
+       - Para: key=SUA_API_KEY_AQUI
+    
+    NOTA: Funciona sem key para teste local, mas PRECISA em produção!
+    -->
+
+</head>
+<body>
+    <div id="map"></div>
+
+    <div class="info-panel">
+        <h1>📍 Mapa Completo</h1>
+        <p>38 estabelecimentos mapeados em 6 rotas turísticas</p>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-icon">🍓</span>
+                <span>Sabores & Memórias</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🌿</span>
+                <span>Erva-Mate</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">⛪</span>
+                <span>Polonesa</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🌊</span>
+                <span>Das Águas</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🏘️</span>
+                <span>Fluviópolis</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-icon">🌱</span>
+                <span>Da Terra</span>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <span>Total de Pins:</span>
+                <span class="stat-number">38</span>
+            </div>
+            <div class="stat">
+                <span>Localidades:</span>
+                <span class="stat-number">15</span>
+            </div>
+            <div class="stat">
+                <span>Rotas:</span>
+                <span class="stat-number">6</span>
+            </div>
+        </div>
+    </div>
+
+    <a href="index.html" class="back-btn">← Voltar ao Site</a>
+
+    <script>
+        // Dados dos estabelecimentos
+        const establishments = [{"name": "Morangos da Mary", "location": "Localidade de Divisa", "route": "🍓 Sabores", "lat": -25.9, "lng": -50.41}, {"name": "Dalety Queijos", "location": "Localidade de Fluviópolis", "route": "🍓 Sabores", "lat": -25.84, "lng": -50.42}, {"name": "All Garden", "location": "Localidade de Divisa", "route": "🍓 Sabores", "lat": -25.9, "lng": -50.41}, {"name": "Nova Esperança Equoterapia", "location": "Localidade do Espigãozinho", "route": "🍓 Sabores", "lat": -25.88, "lng": -50.36}, {"name": "Cabana Campo de Telha", "location": "Localidade de Fluviópolis", "route": "🍓 Sabores", "lat": -25.84, "lng": -50.42}, {"name": "Parada do Chimarrão", "location": "Localidade de Fluviópolis", "route": "🌿 Mate", "lat": -25.84, "lng": -50.42}, {"name": "Ervateira Taquaral", "location": "Localidade de Taquaral / Colônia Taquaral", "route": "🌿 Mate", "lat": -25.82, "lng": -50.35}, {"name": "Vivenda do Mate", "location": "Localidade da Água Branca", "route": "🌿 Mate", "lat": -25.75, "lng": -50.32}, {"name": "Viveiro Santana", "location": "Localidade do Faxinal do Ilhéus", "route": "🌿 Mate", "lat": -25.89, "lng": -50.34}, {"name": "Bier Herr Cervejaria", "location": "Bairro São Joaquim", "route": "🌿 Mate", "lat": -25.87, "lng": -50.385}, {"name": "Igreja Água Branca", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Delícias da Bernardina", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Armazém Campestre", "location": "Localidade de Divisa", "route": "⛪ Polonesa", "lat": -25.9, "lng": -50.41}, {"name": "Queijos da Cleonice", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Propriedade Inês/Lucival", "location": "Localidade de Divisa", "route": "⛪ Polonesa", "lat": -25.9, "lng": -50.41}, {"name": "Ancestral Gastronomia", "location": "Centro", "route": "⛪ Polonesa", "lat": -25.8668, "lng": -50.3828}, {"name": "Artur Biergarten", "location": "Bairro São Joaquim", "route": "⛪ Polonesa", "lat": -25.87, "lng": -50.385}, {"name": "Ribeiro Pesca", "location": "Colônia Iguaçu", "route": "🌊 Águas", "lat": -25.88, "lng": -50.39}, {"name": "Marina Barra do Iguaçu", "location": "Localidade da Barra do Potinga", "route": "🌊 Águas", "lat": -25.88, "lng": -50.39}, {"name": "Área Lazer Ulbrich", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro Tio Ivo", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro da Joana", "location": "Localidade do Emboque", "route": "🌊 Águas", "lat": -25.865, "lng": -50.35}, {"name": "Pesqueiro do Luizão", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro do Kiko", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Rancho Samas", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Frigorífico 3M", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Canil São José", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Parada Pinoli", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Hotel Moro", "location": "Centro", "route": "🏘️ Fluviópolis", "lat": -25.8668, "lng": -50.3828}, {"name": "Restaurante Dallas", "location": "Centro", "route": "🏘️ Fluviópolis", "lat": -25.8668, "lng": -50.3828}, {"name": "Propriedade Eduardo Pachek", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Pitayas Dragão do Iguaçu", "location": "Colônia Cachoeira", "route": "🏘️ Fluviópolis", "lat": -25.91, "lng": -50.33}, {"name": "Viveiro MK", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Sawe Parque Aquático", "location": "Localidade da Vargem Grande", "route": "🌱 Terra", "lat": -25.92, "lng": -50.38}, {"name": "Mag Verduras", "location": "Núcleo Maria Rosa", "route": "🌱 Terra", "lat": -25.855, "lng": -50.395}, {"name": "Propriedade do Tico", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Sítio Sapopema", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Propriedade da Sabrina", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}];
+
+        let map;
+
+        // Ícones por categoria
+        const routeIcons = {
+            '🍓 Sabores': '🍓',
+            '🌿 Mate': '🌿',
+            '⛪ Polonesa': '⛪',
+            '🌊 Águas': '🌊',
+            '🏘️ Fluviópolis': '🏘️',
+            '🌱 Terra': '🌱'
+        };
+
+        // Cores por categoria
+        const routeColors = {
+            '🍓 Sabores': '#ef4444',
+            '🌿 Mate': '#22c55e',
+            '⛪ Polonesa': '#dc143c',
+            '🌊 Águas': '#3b82f6',
+            '🏘️ Fluviópolis': '#f59e0b',
+            '🌱 Terra': '#84cc16'
+        };
+
+        function initMap() {
+            const center = { lat: -25.8668, lng: -50.3828 };
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: center,
+                zoom: 11,
+                mapTypeId: 'terrain',
+                styles: [
+                    {
+                        featureType: 'poi',
+                        stylers: [{ visibility: 'off' }]
+                    }
+                ]
+            });
+
+            // Adicionar marcadores para cada estabelecimento
+            establishments.forEach(est => {
+                const marker = new google.maps.Marker({
+                    position: { lat: est.lat, lng: est.lng },
+                    map: map,
+                    title: est.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 12,
+                        fillColor: routeColors[est.route],
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3
+                    }
+                });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="padding: 10px; font-family: 'Raleway', sans-serif;">
+                            <div style="font-size: 1.5rem; margin-bottom: 5px;">${routeIcons[est.route]}</div>
+                            <h3 style="margin: 0 0 5px 0; color: #0a3d2e; font-size: 1.1rem;">${est.name}</h3>
+                            <p style="margin: 0; color: #666; font-size: 0.9rem;">
+                                📍 ${est.location}<br>
+                                🎯 ${est.route}
+                            </p>
+                            <a href="rotas-completas.html" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #0a3d2e; color: white; text-decoration: none; border-radius: 5px; font-size: 0.85rem;">
+                                Ver Detalhes →
+                            </a>
+                        </div>
+                    `
+                });
+
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+
+                // Hover effect
+                marker.addListener('mouseover', () => {
+                    marker.setIcon({
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 15,
+                        fillColor: routeColors[est.route],
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 4
+                    });
+                });
+
+                marker.addListener('mouseout', () => {
+                    marker.setIcon({
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 12,
+                        fillColor: routeColors[est.route],
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3
+                    });
+                });
+            });
+
+            // Adicionar marcador especial para o centro (Igreja Matriz)
+            const centerMarker = new google.maps.Marker({
+                position: center,
+                map: map,
+                title: 'São Mateus do Sul - Centro',
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    scale: 20,
+                    fillColor: '#d4a574',
+                    fillOpacity: 1,
+                    strokeColor: '#ffffff',
+                    strokeWeight: 4
+                }
+            });
+
+            const centerInfo = new google.maps.InfoWindow({
+                content: `
+                    <div style="padding: 15px; font-family: 'Raleway', sans-serif; text-align: center;">
+                        <h2 style="margin: 0 0 10px 0; color: #0a3d2e;">⭐ São Mateus do Sul</h2>
+                        <p style="margin: 0; color: #666;">Centro Histórico<br>Capital Polonesa do Paraná</p>
+                    </div>
+                `
+            });
+
+            centerMarker.addListener('click', () => {
+                centerInfo.open(map, centerMarker);
+            });
+        }
+    </script>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhBoA0WpC-kdW9i5jRvmf8AFrkGo9Ar0I&callback=initMap" async defer></script>
+</body>
+</html>

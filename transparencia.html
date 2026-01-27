@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Transparência Turística de São Mateus do Sul. Acesse informações sobre o COMTUR, FUMTUR, atas de reuniões, convênios e prestação de contas.">
+    <meta name="keywords" content="COMTUR, FUMTUR, transparência, turismo, São Mateus do Sul, conselho municipal, fundo municipal">
+    <meta name="author" content="Prefeitura Municipal de São Mateus do Sul">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <title>Transparência Turística | São Mateus do Sul</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --white-pure: #ffffff;
+            --cream-light: #f8f6f0;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Barra de Acessibilidade */
+        .accessibility-bar {
+            background: #1a1a1a;
+            color: #ffffff;
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        .accessibility-bar .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .accessibility-bar a,
+        .accessibility-bar button {
+            color: #ffffff;
+            text-decoration: none;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .accessibility-bar a:hover,
+        .accessibility-bar button:hover {
+            background: var(--gold-polish);
+            color: #1a1a1a;
+        }
+
+        .accessibility-bar .controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white;
+            padding: 2rem;
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .header-logo img {
+            width: 60px;
+            height: auto;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+        }
+
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 2rem;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .header-nav a:hover {
+            opacity: 1;
+            color: var(--gold-polish);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--forest-deep), #062118);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cream-light);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--forest-deep);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--forest-deep);
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--cream-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--gold-polish);
+        }
+
+        .info-card h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: var(--forest-deep);
+            color: white;
+            font-weight: 500;
+        }
+
+        .data-table tr:hover {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        .data-table .btn-download {
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            padding: 0.4rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .data-table .btn-download:hover {
+            background: #c49464;
+        }
+
+        /* Placeholder Notice */
+        .placeholder-notice {
+            background: linear-gradient(135deg, #fff9e6, #fff3cc);
+            border: 1px dashed var(--gold-polish);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            color: #856404;
+        }
+
+        .placeholder-notice strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Members List */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--cream-light);
+            border-radius: 10px;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--forest-deep);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .member-info h4 {
+            color: var(--forest-deep);
+            font-size: 0.95rem;
+        }
+
+        .member-info p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .member-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--forest-deep);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .quick-link:hover {
+            background: #0a5d3e;
+            transform: translateY(-2px);
+        }
+
+        /* Accessibility Section */
+        .accessibility-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .accessibility-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--cream-light);
+            border-radius: 10px;
+        }
+
+        .accessibility-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .accessibility-item h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .header-nav a {
+                margin: 0 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .data-table {
+                font-size: 0.85rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .accessibility-bar .shortcuts {
+                display: none;
+            }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <!-- Barra de Acessibilidade -->
+    <div class="accessibility-bar">
+        <div class="container">
+            <div class="shortcuts">
+                <a href="#main-content">Conteúdo [1]</a>
+                <a href="index.html">Voltar ao Site</a>
+            </div>
+            <div class="controls">
+                <button onclick="changeFontSize(1)">A+</button>
+                <button onclick="changeFontSize(-1)">A-</button>
+                <button onclick="toggleContrast()">◐ Contraste</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div>
+                    <div class="header-title">São Mateus do Sul</div>
+                    <small style="opacity: 0.8;">Portal de Turismo</small>
+                </div>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html">Início</a>
+                <a href="index.html#attractions">Atrações</a>
+                <a href="rotas-completas.html">Rotas</a>
+                <a href="#comtur">COMTUR</a>
+                <a href="#fumtur">FUMTUR</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang-key="page-transparencia-titulo">🏛️ Transparência Turística</h1>
+        <p data-lang-key="page-transparencia-subtitulo">Acesso à informação sobre a gestão do turismo municipal. Documentos, atas, convênios e prestação de contas em conformidade com a Lei de Acesso à Informação.</p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        
+        <!-- COMTUR Section -->
+        <section class="section" id="comtur">
+            <div class="section-header">
+                <div class="section-icon">🏛️</div>
+                <div>
+                    <h2 class="section-title">COMTUR - Conselho Municipal de Turismo</h2>
+                    <p class="section-subtitle">Lei Municipal nº 1.889/2009 e alterações</p>
+                </div>
+            </div>
+
+            <p>O Conselho Municipal de Turismo é um órgão colegiado de caráter consultivo e deliberativo, responsável por formular e acompanhar a Política Municipal de Turismo.</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📋 Composição</h4>
+                    <p>Representantes do poder público e sociedade civil organizada, conforme Lei Municipal.</p>
+                </div>
+                <div class="info-card">
+                    <h4>📅 Reuniões</h4>
+                    <p>Reuniões ordinárias bimestrais, conforme regimento interno.</p>
+                </div>
+                <div class="info-card">
+                    <h4>📍 Sede</h4>
+                    <p>Secretaria Municipal de Turismo, Cultura e Esporte</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--forest-deep);">Composição Atual do Conselho</h3>
+            
+            <div class="placeholder-notice">
+                <strong>⚠️ Área para Atualização</strong>
+                Inserir lista atualizada dos conselheiros titulares e suplentes, com indicação das entidades representadas.
+            </div>
+
+            <div class="members-grid" style="margin-top: 1.5rem;">
+                <!-- Exemplo de estrutura para membros -->
+                <div class="member-card">
+                    <div class="member-avatar">SM</div>
+                    <div class="member-info">
+                        <h4>Secretaria Municipal de Turismo</h4>
+                        <p>Representante Governamental</p>
+                        <span class="member-badge">Titular</span>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar">AC</div>
+                    <div class="member-info">
+                        <h4>ACIASMS</h4>
+                        <p>Associação Comercial</p>
+                        <span class="member-badge">Titular</span>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar">EM</div>
+                    <div class="member-info">
+                        <h4>Setor Ervateiro</h4>
+                        <p>Representante da Erva-mate</p>
+                        <span class="member-badge">Titular</span>
+                    </div>
+                </div>
+                <div class="member-card">
+                    <div class="member-avatar">HO</div>
+                    <div class="member-info">
+                        <h4>Setor Hoteleiro</h4>
+                        <p>Representante de Hospedagem</p>
+                        <span class="member-badge">Titular</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--forest-deep);">📜 Legislação</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Data</th>
+                        <th>Tipo</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lei Municipal nº 1.889/2009 - Criação do COMTUR</td>
+                        <td>2009</td>
+                        <td>Lei de Criação</td>
+                        <td><a href="docs/comtur/lei-1889-2009-criacao-comtur.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td>Decreto nº 496/2011 - Regimento Interno do COMTUR</td>
+                        <td>2011</td>
+                        <td>Regimento</td>
+                        <td><a href="docs/comtur/decreto-496-2011-regimento-interno.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td>Lei nº 3.250/2024 - Alteração da Lei de Criação</td>
+                        <td>2024</td>
+                        <td>Alteração</td>
+                        <td><a href="docs/comtur/lei-3250-2024-alteracao.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td>Decreto nº 1.073/2024 - Nomeação dos Membros</td>
+                        <td>2024</td>
+                        <td>Nomeação</td>
+                        <td><a href="docs/comtur/decreto-1073-2024-nomeacao-membros.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--forest-deep);">📄 Atas de Reuniões</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Período</th>
+                        <th>Tipo</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Atas COMTUR 2024/2025 - Compilado</td>
+                        <td>2024-2025</td>
+                        <td>Atas</td>
+                        <td><a href="docs/comtur/atas-comtur-2024-2025.docx" target="_blank" class="btn-download">📥 DOCX</a></td>
+                    </tr>
+                    <tr>
+                        <td>Ata 4ª Reunião - Conselho Municipal de Turismo</td>
+                        <td>Nov/2024</td>
+                        <td>Ata</td>
+                        <td><a href="docs/comtur/ata-4-comtur-novembro.docx" target="_blank" class="btn-download">📥 DOCX</a></td>
+                    </tr>
+                    <tr>
+                        <td>Convite para Reunião do Conselho 2024</td>
+                        <td>2024</td>
+                        <td>Convite</td>
+                        <td><a href="docs/comtur/convite-conselho-2024.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--forest-deep);">📊 Documentos Técnicos</h3>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Documento</th>
+                        <th>Ano</th>
+                        <th>Tipo</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>LOA 2025 - Lei Orçamentária Anual</td>
+                        <td>2025</td>
+                        <td>Orçamento</td>
+                        <td><a href="docs/comtur/loa-2025.pdf" target="_blank" class="btn-download">📥 PDF</a></td>
+                    </tr>
+                    <tr>
+                        <td>Checklist - Mapa do Turismo Brasileiro 2025</td>
+                        <td>2025</td>
+                        <td>Técnico</td>
+                        <td><a href="docs/comtur/checklist-mapa-turismo-2025.docx" target="_blank" class="btn-download">📥 DOCX</a></td>
+                    </tr>
+                    <tr>
+                        <td>Sistema do Ministério do Turismo</td>
+                        <td>2025</td>
+                        <td>Manual</td>
+                        <td><a href="docs/comtur/sistema-ministerio-turismo.docx" target="_blank" class="btn-download">📥 DOCX</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- FUMTUR Section -->
+        <section class="section" id="fumtur">
+            <div class="section-header">
+                <div class="section-icon">💰</div>
+                <div>
+                    <h2 class="section-title">FUMTUR - Fundo Municipal de Turismo</h2>
+                    <p class="section-subtitle">Gestão financeira do turismo municipal</p>
+                </div>
+            </div>
+
+            <p>O Fundo Municipal de Turismo é o instrumento de gestão financeira destinado a apoiar projetos e ações de desenvolvimento turístico no município.</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>🎯 Finalidade</h4>
+                    <p>Financiamento de projetos turísticos, infraestrutura e promoção do destino.</p>
+                </div>
+                <div class="info-card">
+                    <h4>📊 Controle</h4>
+                    <p>Prestação de contas através do Portal da Transparência municipal.</p>
+                </div>
+                <div class="info-card">
+                    <h4>🔗 Origem dos Recursos</h4>
+                    <p>Dotações orçamentárias, convênios estaduais e federais, doações.</p>
+                </div>
+            </div>
+
+            <h3 style="margin: 2rem 0 1rem; color: var(--forest-deep);">📊 Prestação de Contas</h3>
+
+            <div class="quick-links">
+                <a href="https://www.saomateusdosul.pr.gov.br/transparencia" target="_blank" class="quick-link">
+                    🔗 Portal da Transparência Municipal
+                </a>
+                <a href="docs/comtur/loa-2025.pdf" target="_blank" class="quick-link">
+                    📄 LOA 2025 - Lei Orçamentária Anual
+                </a>
+                <a href="#comtur" class="quick-link">
+                    📄 Documentos do COMTUR
+                </a>
+            </div>
+
+            <div class="placeholder-notice" style="margin-top: 1.5rem;">
+                <strong>⚠️ Área para Integração</strong>
+                Integrar widget ou link direto ao Portal da Transparência filtrando despesas/receitas do FUMTUR.
+            </div>
+        </section>
+
+        <!-- Convênios Section -->
+        <section class="section" id="convenios">
+            <div class="section-header">
+                <div class="section-icon">🤝</div>
+                <div>
+                    <h2 class="section-title">Convênios e Projetos</h2>
+                    <p class="section-subtitle">Parcerias com SETU, Governo Federal e IGR</p>
+                </div>
+            </div>
+
+            <p>Convênios firmados para desenvolvimento turístico com a Secretaria de Estado do Turismo (SETU), Ministério do Turismo e outras entidades.</p>
+
+            <div class="placeholder-notice">
+                <strong>⚠️ Área para Atualização</strong>
+                Inserir extratos de convênios vigentes (Paraná Mais Viagem, Paraná Mais Eventos, etc.), planos de trabalho e prestações de contas.
+            </div>
+
+            <table class="data-table" style="margin-top: 1.5rem;">
+                <thead>
+                    <tr>
+                        <th>Programa/Convênio</th>
+                        <th>Órgão</th>
+                        <th>Vigência</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Paraná Mais Viagem</td>
+                        <td>SETU</td>
+                        <td>2025</td>
+                        <td><span style="color: green;">✓ Vigente</span></td>
+                    </tr>
+                    <tr>
+                        <td>Paraná Mais Eventos</td>
+                        <td>SETU</td>
+                        <td>2025</td>
+                        <td><span style="color: green;">✓ Vigente</span></td>
+                    </tr>
+                    <tr>
+                        <td>IGR Sul do Paraná / ATEMA</td>
+                        <td>Instância Regional</td>
+                        <td>Contínuo</td>
+                        <td><span style="color: green;">✓ Ativo</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Acessibilidade Section -->
+        <section class="section" id="acessibilidade">
+            <div class="section-header">
+                <div class="section-icon">♿</div>
+                <div>
+                    <h2 class="section-title">Acessibilidade</h2>
+                    <p class="section-subtitle">Conformidade com Lei Brasileira de Inclusão</p>
+                </div>
+            </div>
+
+            <p>Este site segue as diretrizes do eMAG (Modelo de Acessibilidade em Governo Eletrônico) e da Lei Brasileira de Inclusão (Lei nº 13.146/2015).</p>
+
+            <div class="accessibility-info">
+                <div class="accessibility-item">
+                    <div class="icon">⌨️</div>
+                    <h4>Atalhos de Teclado</h4>
+                    <p>Alt+1: Conteúdo<br>Alt+2: Menu<br>Alt+4: Rodapé</p>
+                </div>
+                <div class="accessibility-item">
+                    <div class="icon">🔤</div>
+                    <h4>Tamanho de Fonte</h4>
+                    <p>Ajuste o tamanho do texto através dos botões A+ e A-</p>
+                </div>
+                <div class="accessibility-item">
+                    <div class="icon">◐</div>
+                    <h4>Alto Contraste</h4>
+                    <p>Ative o modo de alto contraste para melhor visualização</p>
+                </div>
+                <div class="accessibility-item">
+                    <div class="icon">🤟</div>
+                    <h4>VLibras</h4>
+                    <p>Tradução automática para Língua Brasileira de Sinais</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LGPD Section -->
+        <section class="section" id="lgpd">
+            <div class="section-header">
+                <div class="section-icon">🔒</div>
+                <div>
+                    <h2 class="section-title">Política de Privacidade</h2>
+                    <p class="section-subtitle">Conformidade com a LGPD</p>
+                </div>
+            </div>
+
+            <p>A Prefeitura Municipal de São Mateus do Sul está comprometida com a proteção dos dados pessoais dos cidadãos, em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018).</p>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h4>📧 Encarregado de Dados (DPO)</h4>
+                    <p>Entre em contato: <a href="mailto:lgpd@saomateusdosul.pr.gov.br">lgpd@saomateusdosul.pr.gov.br</a></p>
+                </div>
+                <div class="info-card">
+                    <h4>📄 Política Completa</h4>
+                    <p>Acesse a política de privacidade no Portal da Prefeitura</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2025 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="index.html">Voltar ao Portal de Turismo</a> | 
+            <a href="mailto:turismo@saomateusdosul.pr.gov.br">turismo@saomateusdosul.pr.gov.br</a>
+        </p>
+    </footer>
+
+    <!-- VLibras -->
+    <div vw class="enabled">
+        <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    </div>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+        new window.VLibras.Widget('https://vlibras.gov.br/app');
+    </script>
+
+    <!-- Scripts de Acessibilidade -->
+    <script>
+    function changeFontSize(direction) {
+        var body = document.body;
+        var currentSize = parseFloat(window.getComputedStyle(body).fontSize);
+        var newSize = direction > 0 ? currentSize * 1.1 : currentSize * 0.9;
+        newSize = Math.max(12, Math.min(24, newSize));
+        body.style.fontSize = newSize + 'px';
+    }
+
+    function toggleContrast() {
+        document.body.classList.toggle('high-contrast');
+    }
+
+    // Alto contraste styles
+    var style = document.createElement('style');
+    style.textContent = `
+        body.high-contrast { background: #000 !important; color: #ff0 !important; }
+        body.high-contrast * { background-color: #000 !important; color: #ff0 !important; border-color: #ff0 !important; }
+        body.high-contrast a { color: #0ff !important; }
+        body.high-contrast .section { border: 2px solid #ff0 !important; }
+    `;
+    document.head.appendChild(style);
+    </script>
+</body>
+</html>
