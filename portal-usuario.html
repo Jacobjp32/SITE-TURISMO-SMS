@@ -785,7 +785,7 @@
             </a>
             <nav class="header-nav">
                 <a href="index.html">← Voltar ao Portal</a>
-                <button class="btn-logout" onclick="AuthSystem.logout()" id="logoutBtn" style="display: none;">
+                <button class="btn-logout" onclick="handleLogout()" id="logoutBtn" style="display: none;">
                     Sair
                 </button>
             </nav>
@@ -1190,29 +1190,104 @@
     </footer>
 
     <!-- Scripts -->
-    <script src="js/auth.js"></script>
+    <script src="js/firebase-auth.js"></script>
     <script>
+        // Aguardar Firebase inicializar
+        window.addEventListener('authStateChanged', function(e) {
+            checkAuth();
+        });
+
         // Verificar autenticação ao carregar
         document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
             setupCategorySelectors();
             setupEntradaToggle();
+            setupForms();
+            
+            // Verificar auth após um pequeno delay para Firebase carregar
+            setTimeout(checkAuth, 1000);
         });
 
         function checkAuth() {
-            const user = AuthSystem.getCurrentUser();
+            const user = window.currentUser || (window.FirebaseSystem && FirebaseSystem.getCurrentUser());
             
             if (user) {
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('dashboard').classList.add('active');
                 document.getElementById('logoutBtn').style.display = 'block';
-                document.getElementById('userName').textContent = user.nome.split(' ')[0];
+                document.getElementById('userName').textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
                 loadUserEvents();
             } else {
                 document.getElementById('authScreen').style.display = 'flex';
                 document.getElementById('dashboard').classList.remove('active');
                 document.getElementById('logoutBtn').style.display = 'none';
             }
+        }
+
+        function setupForms() {
+            // Formulário de Login
+            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.textContent = 'Entrando...';
+
+                const email = document.getElementById('loginEmail').value;
+                const senha = document.getElementById('loginSenha').value;
+                
+                const result = await FirebaseSystem.login(email, senha);
+                
+                if (result.success) {
+                    FirebaseSystem.showNotification(result.message, 'success');
+                } else {
+                    FirebaseSystem.showNotification(result.message, 'error');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+            });
+
+            // Formulário de Cadastro
+            document.getElementById('registerForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                const btn = this.querySelector('button[type="submit"]');
+                btn.disabled = true;
+                btn.textContent = 'Criando conta...';
+
+                const userData = {
+                    nome: document.getElementById('regNome').value,
+                    email: document.getElementById('regEmail').value,
+                    senha: document.getElementById('regSenha').value,
+                    telefone: document.getElementById('regTelefone')?.value || '',
+                    tipo: document.getElementById('regTipo')?.value || 'turista',
+                    organizacao: document.getElementById('regOrganizacao')?.value || ''
+                };
+
+                // Verificar confirmação de senha
+                const senhaConfirm = document.getElementById('regSenhaConfirm')?.value;
+                if (senhaConfirm && userData.senha !== senhaConfirm) {
+                    FirebaseSystem.showNotification('As senhas não coincidem.', 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Criar Conta';
+                    return;
+                }
+
+                const result = await FirebaseSystem.register(userData);
+                
+                if (result.success) {
+                    FirebaseSystem.showNotification(result.message, 'success');
+                    this.reset();
+                } else {
+                    FirebaseSystem.showNotification(result.message, 'error');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Criar Conta';
+            });
+        }
+
+        async function handleLogout() {
+            await FirebaseSystem.logout();
+            FirebaseSystem.showNotification('Você saiu da conta.', 'info');
         }
 
         function switchAuthTab(tab) {
@@ -1284,8 +1359,11 @@
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
 
-        function submitEventForm(e) {
+        async function submitEventForm(e) {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
             
             const eventData = {
                 nome: document.getElementById('evtNome').value,
@@ -1302,21 +1380,27 @@
                 site: document.getElementById('evtSite').value
             };
 
-            const result = AuthSystem.submitEvent(eventData);
+            const result = await FirebaseSystem.submitEvent(eventData);
             
             if (result.success) {
-                AuthSystem.showNotification(result.message, 'success');
+                FirebaseSystem.showNotification(result.message, 'success');
                 closeModal('eventModal');
                 document.getElementById('eventForm').reset();
                 document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
                 loadUserEvents();
             } else {
-                AuthSystem.showNotification(result.message, 'error');
+                FirebaseSystem.showNotification(result.message, 'error');
             }
+
+            btn.disabled = false;
+            btn.textContent = 'Enviar para Análise';
         }
 
-        function submitEstablishmentForm(e) {
+        async function submitEstablishmentForm(e) {
             e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
             
             const estData = {
                 nome: document.getElementById('estNome').value,
@@ -1329,21 +1413,26 @@
                 horario: document.getElementById('estHorario').value
             };
 
-            const result = AuthSystem.submitEstablishment(estData);
+            const result = await FirebaseSystem.submitEstablishment(estData);
             
             if (result.success) {
-                AuthSystem.showNotification(result.message, 'success');
+                FirebaseSystem.showNotification(result.message, 'success');
                 closeModal('establishmentModal');
                 document.getElementById('establishmentForm').reset();
                 document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
             } else {
-                AuthSystem.showNotification(result.message, 'error');
+                FirebaseSystem.showNotification(result.message, 'error');
             }
+
+            btn.disabled = false;
+            btn.textContent = 'Enviar para Análise';
         }
 
-        function loadUserEvents() {
-            const events = AuthSystem.getUserEvents();
+        async function loadUserEvents() {
             const container = document.getElementById('eventsList');
+            container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
+
+            const events = await FirebaseSystem.getUserEvents();
             
             if (events.length === 0) {
                 container.innerHTML = `
