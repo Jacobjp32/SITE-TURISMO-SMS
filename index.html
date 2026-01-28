@@ -14,8 +14,8 @@
     </script>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Descubra São Mateus do Sul, Capital Polonesa do Paraná. Explore a cultura polonesa, rotas turísticas, erva-mate premiada e o Rio Iguaçu. Turismo autêntico no coração do Paraná.">
-    <meta name="keywords" content="São Mateus do Sul, turismo Paraná, cultura polonesa, erva-mate, Rio Iguaçu, turismo rural, gastronomia polonesa, rotas turísticas">
+    <meta name="description" content="Descubra São Mateus do Sul, Capital Polonesa do Paraná e Cidade Amiga do Idoso. Explore a cultura polonesa, rotas turísticas, erva-mate premiada, a indústria do xisto e o Rio Iguaçu. Turismo autêntico no coração do Paraná.">
+    <meta name="keywords" content="São Mateus do Sul, turismo Paraná, cultura polonesa, erva-mate, Rio Iguaçu, turismo rural, gastronomia polonesa, rotas turísticas, xisto, Terra do Xisto, Cidade Amiga do Idoso, AgroSamas, Natal Ouro Verde">
     <meta name="author" content="Prefeitura Municipal de São Mateus do Sul">
     <meta name="robots" content="index, follow">
     <meta name="language" content="pt-BR">
@@ -61,8 +61,8 @@
         "@context": "https://schema.org",
         "@type": "TouristDestination",
         "name": "São Mateus do Sul",
-        "alternateName": "Capital Polonesa do Paraná",
-        "description": "Município turístico no Paraná, Brasil, conhecido pela herança cultural polonesa, produção de erva-mate com Indicação Geográfica e belezas naturais do Rio Iguaçu.",
+        "alternateName": ["Capital Polonesa do Paraná", "Terra do Xisto", "Cidade Amiga do Idoso"],
+        "description": "Município turístico no Paraná, Brasil, reconhecido como Cidade Amiga do Idoso pela OMS. Conhecido pela herança cultural polonesa, produção de erva-mate com Indicação Geográfica, indústria do xisto e belezas naturais do Rio Iguaçu.",
         "url": "https://saomateusdosul.tur.br",
         "image": "https://saomateusdosul.tur.br/images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg",
         "geo": {
@@ -76,7 +76,7 @@
             "addressRegion": "PR",
             "addressCountry": "BR"
         },
-        "touristType": ["Cultural tourism", "Rural tourism", "Religious tourism", "Ecotourism"],
+        "touristType": ["Cultural tourism", "Rural tourism", "Religious tourism", "Ecotourism", "Industrial tourism"],
         "includesAttraction": [
             {
                 "@type": "TouristAttraction",
@@ -97,6 +97,11 @@
                 "@type": "TouristAttraction",
                 "name": "Museu da Erva-Mate",
                 "description": "História da produção ervateira com selo de Indicação Geográfica"
+            },
+            {
+                "@type": "TouristAttraction",
+                "name": "Usina de Xisto (SIX)",
+                "description": "Unidade industrial da Petrobras para processamento de xisto betuminoso"
             }
         ]
     }
@@ -410,6 +415,20 @@
 
         .nav-links a:hover, .nav-links .dropdown-toggle:hover {
             background: rgba(212, 165, 116, 0.2);
+        }
+
+        /* Botão de Login */
+        .nav-login-btn {
+            background: linear-gradient(135deg, var(--gold-polish), #c4956a) !important;
+            color: var(--forest-deep) !important;
+            font-weight: 600 !important;
+            border-radius: 25px !important;
+            padding: 0.6rem 1.2rem !important;
+        }
+
+        .nav-login-btn:hover {
+            background: linear-gradient(135deg, #c4956a, #b38559) !important;
+            transform: scale(1.05);
         }
 
         .dropdown-toggle .arrow {
@@ -1362,6 +1381,15 @@
             color: var(--white);
         }
 
+        .about-badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
         .about-badge {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -1372,8 +1400,11 @@
             font-weight: 700;
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 2rem;
-            animation: fadeInDown 1s ease-out;
+        }
+
+        .about-badge.badge-oms {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
         }
 
         .about-hero h1 {
@@ -3227,6 +3258,13 @@
                 
                 <li><a href="#contato" data-lang-key="nav-contato">Contato</a></li>
                 
+                <!-- Login/Portal do Usuário -->
+                <li>
+                    <a href="portal-usuario.html" class="nav-login-btn" data-lang-key="nav-login">
+                        👤 Entrar
+                    </a>
+                </li>
+                
                 <li><div class="language-selector">
                     <button class="current-language" id="currentLang">
                         <span class="flag">🇧🇷</span>
@@ -3691,6 +3729,287 @@
         }
     </style>
 
+    <!-- ============================================================
+         FESTAS EM DESTAQUE - AGROSAMAS E NATAL OURO VERDE
+         Seção permanente destacando as duas principais festas
+    ============================================================ -->
+    <section class="festas-destaque-section" id="festas-destaque">
+        <div class="festas-container">
+            <div class="festas-header">
+                <span class="festas-label">🎉 Festas Imperdíveis</span>
+                <h2 class="festas-title">Eventos que Movem a <strong>Cidade</strong></h2>
+                <p class="festas-subtitle">Conheça as duas maiores celebrações de São Mateus do Sul</p>
+            </div>
+
+            <div class="festas-grid">
+                <!-- AgroSamas -->
+                <div class="festa-card festa-agrosamas">
+                    <div class="festa-badge">SETEMBRO</div>
+                    <div class="festa-icon">🚜</div>
+                    <h3 class="festa-nome">5º AgroSamas 2026</h3>
+                    <p class="festa-descricao">O maior evento do município! Cinco dias de shows nacionais, feira gastronômica, exposição agropecuária, parque de diversões e o famoso Parque dos Dinossauros.</p>
+                    <div class="festa-info">
+                        <span>📅 17 a 21 de Setembro</span>
+                        <span>📍 Rua do Mathe</span>
+                        <span>🆓 Entrada Gratuita</span>
+                    </div>
+                    <div class="festa-destaques">
+                        <span>🎵 Shows</span>
+                        <span>🍽️ Gastronomia</span>
+                        <span>🦕 Dinossauros</span>
+                        <span>🎪 Parque</span>
+                    </div>
+                    <a href="https://agrosamas.com.br" target="_blank" class="festa-btn">
+                        Acesse o Site Oficial →
+                    </a>
+                </div>
+
+                <!-- Natal Ouro Verde -->
+                <div class="festa-card festa-natal">
+                    <div class="festa-badge">DEZEMBRO</div>
+                    <div class="festa-icon">🎄</div>
+                    <h3 class="festa-nome">Natal Ouro Verde 2026</h3>
+                    <p class="festa-descricao">A magia do Natal na Capital Polonesa! Desfiles temáticos, apresentações culturais, shows, decoração especial e a tradicional chegada do Papai Noel em família.</p>
+                    <div class="festa-info">
+                        <span>📅 05 a 19 de Dezembro</span>
+                        <span>📍 Centro da Cidade</span>
+                        <span>🆓 Entrada Gratuita</span>
+                    </div>
+                    <div class="festa-destaques">
+                        <span>🎅 Papai Noel</span>
+                        <span>🎭 Desfiles</span>
+                        <span>✨ Iluminação</span>
+                        <span>🎵 Coral</span>
+                    </div>
+                    <a href="eventos.html#dezembro" class="festa-btn">
+                        Ver Programação →
+                    </a>
+                </div>
+            </div>
+
+            <div class="festas-cta">
+                <a href="eventos.html" class="festas-ver-mais">
+                    📅 Ver Calendário Completo de Eventos 2026
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Festas em Destaque Section */
+        .festas-destaque-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #0a3d2e 0%, #0d5a3e 50%, #0a3d2e 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .festas-destaque-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .festas-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .festas-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: white;
+        }
+
+        .festas-label {
+            display: inline-block;
+            background: linear-gradient(135deg, #d4a574, #c4956a);
+            color: #0a3d2e;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .festas-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .festas-title strong {
+            color: #d4a574;
+        }
+
+        .festas-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .festas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .festa-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .festa-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .festa-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .festa-agrosamas .festa-badge {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .festa-natal .festa-badge {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .festa-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .festa-nome {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: #0a3d2e;
+            margin-bottom: 0.75rem;
+        }
+
+        .festa-descricao {
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .festa-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .festa-info span {
+            background: #f0f0f0;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            color: #333;
+        }
+
+        .festa-destaques {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .festa-destaques span {
+            background: linear-gradient(135deg, #0a3d2e, #0d5a3e);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .festa-btn {
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #d4a574, #c4956a);
+            color: #0a3d2e;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .festa-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.4);
+        }
+
+        .festas-cta {
+            text-align: center;
+        }
+
+        .festas-ver-mais {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .festas-ver-mais:hover {
+            background: white;
+            color: #0a3d2e;
+        }
+
+        @media (max-width: 768px) {
+            .festas-destaque-section {
+                padding: 3rem 1rem;
+            }
+
+            .festas-title {
+                font-size: 1.8rem;
+            }
+
+            .festas-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .festa-card {
+                padding: 1.5rem;
+            }
+
+            .festa-nome {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+
     <!-- Attractions -->
     <section id="attractions" class="section">
         <div class="section-header">
@@ -3936,8 +4255,14 @@
     <!-- Hero Section -->
     <section class="about-hero">
         <div class="about-hero-content">
-            <div class="about-badge" data-lang-key="badge-capital-polonesa">
-                🇵🇱 Capital Polonesa do Paraná
+            <!-- Badges de Destaque -->
+            <div class="about-badges-container">
+                <div class="about-badge" data-lang-key="badge-capital-polonesa">
+                    🇵🇱 Capital Polonesa do Paraná
+                </div>
+                <div class="about-badge badge-oms" title="Reconhecida pela Organização Mundial da Saúde">
+                    👴 Cidade Amiga do Idoso - OMS
+                </div>
             </div>
             
             <h1 data-lang-key="sobre-titulo">
@@ -3966,6 +4291,10 @@
                 <div class="stat-item">
                     <span class="stat-number">⛪</span>
                     <span class="stat-label" data-lang-key="sobre-alma-polonesa">Alma Polonesa</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">⚡</span>
+                    <span class="stat-label">Terra do Xisto</span>
                 </div>
             </div>
         </div>

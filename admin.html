@@ -518,6 +518,7 @@
             
             <ul class="sidebar-menu">
                 <li><a href="#" class="active" data-section="home">📊 <span>Dashboard</span></a></li>
+                <li><a href="#" data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
                 <li><a href="#" data-section="noticias">📰 <span>Notícias</span></a></li>
                 <li><a href="#" data-section="eventos">📅 <span>Eventos</span></a></li>
                 <li><a href="#" data-section="reservas">🎫 <span>Reservas</span></a></li>
@@ -609,6 +610,63 @@
                                 <td>Tour Erva-Mate</td>
                                 <td>30/01/2026</td>
                                 <td><span class="badge badge-success">Confirmada</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Aprovações Section - Eventos e Estabelecimentos submetidos por usuários -->
+            <section class="admin-section" id="section-aprovacoes">
+                <div class="page-header">
+                    <h1>✅ Aprovações Pendentes</h1>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h2>🎪 Eventos Aguardando Aprovação</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Solicitante</th>
+                                <th>Enviado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-eventos-pendentes">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem; color: #888;">
+                                    Carregando eventos pendentes...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Endereço</th>
+                                <th>Solicitante</th>
+                                <th>Enviado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-estabelecimentos-pendentes">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem; color: #888;">
+                                    Carregando estabelecimentos pendentes...
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -982,6 +1040,157 @@
                 this.loadNoticias();
                 this.loadEventos();
                 this.loadReservas();
+                this.loadAprovacoes();
+            },
+            
+            // Carregar aprovações pendentes
+            loadAprovacoes: function() {
+                // Carregar eventos pendentes
+                const eventosPendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]')
+                    .filter(e => e.status === 'pendente');
+                const tbodyEventos = document.getElementById('lista-eventos-pendentes');
+                
+                if (eventosPendentes.length === 0) {
+                    tbodyEventos.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 2rem;">✅ Nenhum evento pendente de aprovação.</td></tr>`;
+                } else {
+                    tbodyEventos.innerHTML = eventosPendentes.map(e => `
+                        <tr>
+                            <td><strong>${e.nome}</strong><br><small style="color:#666;">${e.categoria || 'Sem categoria'}</small></td>
+                            <td>${this.formatarData(e.dataInicio)}</td>
+                            <td>${e.local}</td>
+                            <td>${e.submittedByName}<br><small style="color:#666;">${e.submittedByEmail}</small></td>
+                            <td>${this.formatarData(e.submittedAt)}</td>
+                            <td>
+                                <button class="btn-sm" style="background:#d4edda;color:#155724;" onclick="Admin.aprovarEvento('${e.id}')">✅ Aprovar</button>
+                                <button class="btn-sm" style="background:#f8d7da;color:#721c24;" onclick="Admin.rejeitarEvento('${e.id}')">❌ Rejeitar</button>
+                                <button class="btn-sm btn-edit" onclick="Admin.verDetalhesEvento('${e.id}')">👁️ Ver</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Carregar estabelecimentos pendentes
+                const estPendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]')
+                    .filter(e => e.status === 'pendente');
+                const tbodyEst = document.getElementById('lista-estabelecimentos-pendentes');
+                
+                if (estPendentes.length === 0) {
+                    tbodyEst.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 2rem;">✅ Nenhum estabelecimento pendente de aprovação.</td></tr>`;
+                } else {
+                    tbodyEst.innerHTML = estPendentes.map(e => `
+                        <tr>
+                            <td><strong>${e.nome}</strong></td>
+                            <td>${e.categoria || 'Sem categoria'}</td>
+                            <td>${e.endereco}</td>
+                            <td>${e.submittedByName}<br><small style="color:#666;">${e.submittedByEmail}</small></td>
+                            <td>${this.formatarData(e.submittedAt)}</td>
+                            <td>
+                                <button class="btn-sm" style="background:#d4edda;color:#155724;" onclick="Admin.aprovarEstabelecimento('${e.id}')">✅ Aprovar</button>
+                                <button class="btn-sm" style="background:#f8d7da;color:#721c24;" onclick="Admin.rejeitarEstabelecimento('${e.id}')">❌ Rejeitar</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            },
+
+            // Formatar data
+            formatarData: function(dataStr) {
+                if (!dataStr) return '-';
+                const data = new Date(dataStr);
+                return data.toLocaleDateString('pt-BR');
+            },
+
+            // Aprovar evento
+            aprovarEvento: function(eventId) {
+                if (!confirm('Deseja aprovar este evento? Ele será adicionado ao calendário oficial.')) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    evento.status = 'aprovado';
+                    evento.reviewedAt = new Date().toISOString();
+                    
+                    // Mover para aprovados
+                    let aprovados = JSON.parse(localStorage.getItem('sms_eventos_aprovados') || '[]');
+                    aprovados.push(evento);
+                    localStorage.setItem('sms_eventos_aprovados', JSON.stringify(aprovados));
+                    
+                    // Remover dos pendentes
+                    pendentes = pendentes.filter(e => e.id !== eventId);
+                    localStorage.setItem('sms_eventos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('✅ Evento aprovado com sucesso!');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Rejeitar evento
+            rejeitarEvento: function(eventId) {
+                const motivo = prompt('Motivo da rejeição (opcional):');
+                if (motivo === null) return; // Cancelou
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    evento.status = 'rejeitado';
+                    evento.reviewedAt = new Date().toISOString();
+                    evento.reviewNotes = motivo;
+                    
+                    localStorage.setItem('sms_eventos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('Evento rejeitado.');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Ver detalhes do evento
+            verDetalhesEvento: function(eventId) {
+                const pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    alert(`📋 DETALHES DO EVENTO\n\nNome: ${evento.nome}\nCategoria: ${evento.categoria || 'Não informada'}\nData: ${this.formatarData(evento.dataInicio)} ${evento.dataFim ? 'a ' + this.formatarData(evento.dataFim) : ''}\nLocal: ${evento.local}\nEntrada: ${evento.entrada || 'Não informada'}\n\nDescrição:\n${evento.descricao}\n\nContato: ${evento.contato || 'Não informado'}\nSite: ${evento.site || 'Não informado'}\n\nSolicitante: ${evento.submittedByName}\nE-mail: ${evento.submittedByEmail}`);
+                }
+            },
+
+            // Aprovar estabelecimento
+            aprovarEstabelecimento: function(estId) {
+                if (!confirm('Deseja aprovar este estabelecimento?')) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]');
+                const est = pendentes.find(e => e.id === estId);
+                
+                if (est) {
+                    est.status = 'aprovado';
+                    est.reviewedAt = new Date().toISOString();
+                    
+                    pendentes = pendentes.filter(e => e.id !== estId);
+                    localStorage.setItem('sms_estabelecimentos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('✅ Estabelecimento aprovado!');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Rejeitar estabelecimento
+            rejeitarEstabelecimento: function(estId) {
+                const motivo = prompt('Motivo da rejeição (opcional):');
+                if (motivo === null) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]');
+                const est = pendentes.find(e => e.id === estId);
+                
+                if (est) {
+                    est.status = 'rejeitado';
+                    est.reviewNotes = motivo;
+                    
+                    localStorage.setItem('sms_estabelecimentos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('Estabelecimento rejeitado.');
+                    this.loadAprovacoes();
+                }
             },
             
             // Carregar notícias

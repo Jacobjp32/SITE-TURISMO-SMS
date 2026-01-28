@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Portal do Usuário - Cadastre eventos e estabelecimentos no site oficial de turismo de São Mateus do Sul.">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <title>Portal do Usuário | Turismo São Mateus do Sul</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --forest-light: #0d5a3e;
+            --gold-polish: #d4a574;
+            --cream-light: #f8f6f0;
+            --white-pure: #ffffff;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #3498db;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-light));
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .header-logo img {
+            width: 50px;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+        }
+
+        .header-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: background 0.3s;
+        }
+
+        .header-nav a:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-logout {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Auth Screen - Login/Register */
+        .auth-screen {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .auth-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .auth-info {
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-light));
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-info h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-info p {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .auth-benefits {
+            list-style: none;
+        }
+
+        .auth-benefits li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .auth-benefits li::before {
+            content: '✓';
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .auth-forms {
+            padding: 3rem;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .auth-tab.active {
+            color: var(--forest-deep);
+            border-bottom: 3px solid var(--forest-deep);
+            margin-bottom: -2px;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--forest-deep);
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 0.3rem;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 1rem;
+            background: var(--forest-deep);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: inherit;
+        }
+
+        .btn-primary:hover {
+            background: var(--forest-light);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--forest-deep);
+            border: 2px solid var(--forest-deep);
+        }
+
+        .btn-secondary:hover {
+            background: var(--cream-light);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-light));
+            color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-banner h1 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: var(--cream-light);
+            color: var(--forest-deep);
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .card-action:hover {
+            background: var(--gold-polish);
+            color: white;
+        }
+
+        /* Sections */
+        .section-panel {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--forest-deep);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Events List */
+        .events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            background: var(--cream-light);
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .event-item:hover {
+            background: #f0ede5;
+        }
+
+        .event-info h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.3rem;
+        }
+
+        .event-info p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .event-status {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pendente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-aprovado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejeitado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+
+        .empty-state .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            background: white;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .modal-header h2 {
+            font-family: var(--font-display);
+            color: var(--forest-deep);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #888;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            padding: 1.5rem 2rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+        }
+
+        .modal-footer .btn-primary,
+        .modal-footer .btn-secondary {
+            width: auto;
+            padding: 0.8rem 2rem;
+        }
+
+        /* Notifications */
+        .auth-notification {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 3000;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .auth-notif-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .auth-notif-error {
+            background: var(--danger);
+            color: white;
+        }
+
+        .auth-notif-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .auth-notification button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        .auth-notification button:hover {
+            opacity: 1;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-info {
+                display: none;
+            }
+
+            .auth-forms {
+                padding: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .header .container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .event-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+
+        /* Category Select Styling */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .category-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-option:hover {
+            border-color: var(--gold-polish);
+        }
+
+        .category-option.selected {
+            border-color: var(--forest-deep);
+            background: rgba(10, 61, 46, 0.05);
+        }
+
+        .category-option .icon {
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .category-option .label {
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .category-option input {
+            display: none;
+        }
+
+        /* Process steps */
+        .process-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #eee;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #ddd;
+            color: #666;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step.active .step-number {
+            background: var(--forest-deep);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: center;
+        }
+
+        .step.active .step-label {
+            color: var(--forest-deep);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div class="header-title">São Mateus do Sul</div>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html">← Voltar ao Portal</a>
+                <button class="btn-logout" onclick="AuthSystem.logout()" id="logoutBtn" style="display: none;">
+                    Sair
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Auth Screen (Login/Register) -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-container">
+            <div class="auth-info">
+                <h2>Portal do Turismo</h2>
+                <p>Faça parte do turismo de São Mateus do Sul! Cadastre seus eventos e estabelecimentos no portal oficial da cidade.</p>
+                
+                <ul class="auth-benefits">
+                    <li>Cadastre eventos e festas</li>
+                    <li>Divulgue seu estabelecimento</li>
+                    <li>Apareça no calendário oficial</li>
+                    <li>Alcance milhares de turistas</li>
+                    <li>100% gratuito</li>
+                </ul>
+            </div>
+            
+            <div class="auth-forms">
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
+                    <button class="auth-tab" onclick="switchAuthTab('register')">Criar Conta</button>
+                </div>
+                
+                <!-- Login Form -->
+                <form class="auth-form active" id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">E-mail</label>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="loginSenha">Senha</label>
+                        <input type="password" id="loginSenha" placeholder="Sua senha" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Entrar</button>
+                    
+                    <p style="text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem;">
+                        Ainda não tem conta? <a href="#" onclick="switchAuthTab('register')" style="color: var(--forest-deep); font-weight: 600;">Cadastre-se</a>
+                    </p>
+                </form>
+                
+                <!-- Register Form -->
+                <form class="auth-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="regNome">Nome Completo *</label>
+                        <input type="text" id="regNome" placeholder="Seu nome completo" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regEmail">E-mail *</label>
+                        <input type="email" id="regEmail" placeholder="seu@email.com" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="regSenha">Senha *</label>
+                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="regSenhaConfirm">Confirmar Senha *</label>
+                            <input type="password" id="regSenhaConfirm" placeholder="Repita a senha" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regTelefone">Telefone/WhatsApp</label>
+                        <input type="tel" id="regTelefone" placeholder="(42) 99999-9999">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="regTipo">Tipo de Conta</label>
+                        <select id="regTipo">
+                            <option value="turista">Turista / Visitante</option>
+                            <option value="organizador">Organizador de Eventos</option>
+                            <option value="estabelecimento">Proprietário de Estabelecimento</option>
+                        </select>
+                        <p class="form-hint">Organizadores e proprietários podem cadastrar eventos e estabelecimentos.</p>
+                    </div>
+                    
+                    <div class="form-group" id="orgField" style="display: none;">
+                        <label for="regOrganizacao">Nome da Organização/Empresa</label>
+                        <input type="text" id="regOrganizacao" placeholder="Nome da sua empresa ou organização">
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Criar Conta</button>
+                    
+                    <p style="text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem;">
+                        Já tem uma conta? <a href="#" onclick="switchAuthTab('login')" style="color: var(--forest-deep); font-weight: 600;">Faça login</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard (após login) -->
+    <div class="dashboard" id="dashboard">
+        <div class="main-content">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h1>Bem-vindo(a), <span id="userName">Usuário</span>! 👋</h1>
+                <p>Gerencie seus eventos e estabelecimentos cadastrados no portal de turismo.</p>
+            </div>
+            
+            <!-- Dashboard Cards -->
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-icon">🎪</div>
+                    <h3 class="card-title">Cadastrar Evento</h3>
+                    <p class="card-desc">Divulgue sua festa, feira ou evento cultural no calendário oficial de São Mateus do Sul.</p>
+                    <button class="card-action" onclick="openEventModal()">
+                        + Novo Evento
+                    </button>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-icon">🏨</div>
+                    <h3 class="card-title">Cadastrar Estabelecimento</h3>
+                    <p class="card-desc">Adicione seu hotel, restaurante, comércio ou atração turística ao portal.</p>
+                    <button class="card-action" onclick="openEstablishmentModal()">
+                        + Novo Estabelecimento
+                    </button>
+                </div>
+                
+                <div class="dashboard-card">
+                    <div class="card-icon">📋</div>
+                    <h3 class="card-title">Meus Cadastros</h3>
+                    <p class="card-desc">Acompanhe o status de aprovação dos seus eventos e estabelecimentos.</p>
+                    <button class="card-action" onclick="scrollToSection('myEvents')">
+                        Ver Status
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Meus Eventos -->
+            <section class="section-panel" id="myEvents">
+                <div class="section-header">
+                    <h2>📅 Meus Eventos</h2>
+                    <button class="card-action" onclick="openEventModal()">+ Novo Evento</button>
+                </div>
+                
+                <div class="events-list" id="eventsList">
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Você ainda não cadastrou nenhum evento.</p>
+                        <button class="card-action" style="margin-top: 1rem;" onclick="openEventModal()">
+                            Cadastrar Primeiro Evento
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Info sobre aprovação -->
+            <section class="section-panel" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
+                <h2 style="color: var(--forest-deep); margin-bottom: 1rem;">ℹ️ Como funciona a aprovação?</h2>
+                <div class="process-steps">
+                    <div class="step completed">
+                        <div class="step-number">1</div>
+                        <span class="step-label">Cadastro</span>
+                    </div>
+                    <div class="step active">
+                        <div class="step-number">2</div>
+                        <span class="step-label">Análise</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <span class="step-label">Aprovação</span>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <span class="step-label">Publicação</span>
+                    </div>
+                </div>
+                <p style="color: #333; font-size: 0.95rem;">
+                    Após o envio, sua solicitação será analisada pela equipe do COMTUR (Conselho Municipal de Turismo). 
+                    O prazo médio de análise é de <strong>3 a 5 dias úteis</strong>. Você receberá uma notificação quando 
+                    seu evento ou estabelecimento for aprovado e publicado no portal.
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <!-- Modal: Cadastrar Evento -->
+    <div class="modal-overlay" id="eventModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🎪 Cadastrar Novo Evento</h2>
+                <button class="modal-close" onclick="closeModal('eventModal')">&times;</button>
+            </div>
+            <form id="eventForm" onsubmit="submitEventForm(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="evtNome">Nome do Evento *</label>
+                        <input type="text" id="evtNome" placeholder="Ex: Festa da Colônia 2026" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categoria do Evento *</label>
+                        <div class="category-grid">
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="cultural" required>
+                                <span class="icon">🎭</span>
+                                <span class="label">Cultural</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="gastronomico">
+                                <span class="icon">🍽️</span>
+                                <span class="label">Gastronômico</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="religioso">
+                                <span class="icon">⛪</span>
+                                <span class="label">Religioso</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="esportivo">
+                                <span class="icon">🏃</span>
+                                <span class="label">Esportivo</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="musical">
+                                <span class="icon">🎵</span>
+                                <span class="label">Musical</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="evtCategoria" value="feira">
+                                <span class="icon">🛒</span>
+                                <span class="label">Feira</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="evtDataInicio">Data de Início *</label>
+                            <input type="date" id="evtDataInicio" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="evtDataFim">Data de Término</label>
+                            <input type="date" id="evtDataFim">
+                            <p class="form-hint">Deixe em branco se for evento de um dia</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="evtHoraInicio">Horário de Início</label>
+                            <input type="time" id="evtHoraInicio">
+                        </div>
+                        <div class="form-group">
+                            <label for="evtHoraFim">Horário de Término</label>
+                            <input type="time" id="evtHoraFim">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evtLocal">Local do Evento *</label>
+                        <input type="text" id="evtLocal" placeholder="Ex: Rua do Mathe, Centro" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evtDescricao">Descrição do Evento *</label>
+                        <textarea id="evtDescricao" placeholder="Descreva detalhadamente o evento, atrações, programação, etc." required></textarea>
+                        <p class="form-hint">Mínimo de 20 caracteres</p>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="evtEntrada">Valor da Entrada</label>
+                            <select id="evtEntrada">
+                                <option value="gratuito">Gratuito</option>
+                                <option value="pago">Pago</option>
+                                <option value="contribuicao">Contribuição Voluntária</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="evtValorGroup" style="display: none;">
+                            <label for="evtValor">Valor (R$)</label>
+                            <input type="text" id="evtValor" placeholder="Ex: 20,00">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evtContato">Telefone/WhatsApp para Contato</label>
+                        <input type="tel" id="evtContato" placeholder="(42) 99999-9999">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="evtSite">Site ou Rede Social</label>
+                        <input type="url" id="evtSite" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-primary btn-secondary" onclick="closeModal('eventModal')">Cancelar</button>
+                    <button type="submit" class="btn-primary">Enviar para Análise</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Cadastrar Estabelecimento -->
+    <div class="modal-overlay" id="establishmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>🏨 Cadastrar Estabelecimento</h2>
+                <button class="modal-close" onclick="closeModal('establishmentModal')">&times;</button>
+            </div>
+            <form id="establishmentForm" onsubmit="submitEstablishmentForm(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="estNome">Nome do Estabelecimento *</label>
+                        <input type="text" id="estNome" placeholder="Ex: Pousada das Araucárias" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Categoria *</label>
+                        <div class="category-grid">
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="hospedagem" required>
+                                <span class="icon">🏨</span>
+                                <span class="label">Hospedagem</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="restaurante">
+                                <span class="icon">🍽️</span>
+                                <span class="label">Restaurante</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="atracao">
+                                <span class="icon">🎡</span>
+                                <span class="label">Atração</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="comercio">
+                                <span class="icon">🛍️</span>
+                                <span class="label">Comércio</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="servico">
+                                <span class="icon">🚐</span>
+                                <span class="label">Serviço</span>
+                            </label>
+                            <label class="category-option">
+                                <input type="radio" name="estCategoria" value="produtor">
+                                <span class="icon">🌱</span>
+                                <span class="label">Produtor Rural</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estEndereco">Endereço Completo *</label>
+                        <input type="text" id="estEndereco" placeholder="Rua, número, bairro" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estDescricao">Descrição *</label>
+                        <textarea id="estDescricao" placeholder="Descreva seu estabelecimento, serviços oferecidos, diferenciais..." required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="estTelefone">Telefone *</label>
+                            <input type="tel" id="estTelefone" placeholder="(42) 3532-0000" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="estWhatsapp">WhatsApp</label>
+                            <input type="tel" id="estWhatsapp" placeholder="(42) 99999-9999">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estSite">Site ou Instagram</label>
+                        <input type="text" id="estSite" placeholder="https://... ou @seuinstagram">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estHorario">Horário de Funcionamento</label>
+                        <input type="text" id="estHorario" placeholder="Ex: Seg a Sex: 8h às 18h | Sáb: 8h às 12h">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-primary btn-secondary" onclick="closeModal('establishmentModal')">Cancelar</button>
+                    <button type="submit" class="btn-primary">Enviar para Análise</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="index.html">Portal do Turismo</a> | 
+            <a href="transparencia.html">Transparência</a> |
+            <a href="para-o-trade.html">Para o Trade</a>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/auth.js"></script>
+    <script>
+        // Verificar autenticação ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            setupCategorySelectors();
+            setupEntradaToggle();
+        });
+
+        function checkAuth() {
+            const user = AuthSystem.getCurrentUser();
+            
+            if (user) {
+                document.getElementById('authScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                document.getElementById('logoutBtn').style.display = 'block';
+                document.getElementById('userName').textContent = user.nome.split(' ')[0];
+                loadUserEvents();
+            } else {
+                document.getElementById('authScreen').style.display = 'flex';
+                document.getElementById('dashboard').classList.remove('active');
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            }
+        }
+
+        // Mostrar/esconder campo de organização
+        document.getElementById('regTipo').addEventListener('change', function() {
+            const orgField = document.getElementById('orgField');
+            if (this.value === 'organizador' || this.value === 'estabelecimento') {
+                orgField.style.display = 'block';
+            } else {
+                orgField.style.display = 'none';
+            }
+        });
+
+        function setupCategorySelectors() {
+            document.querySelectorAll('.category-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const name = this.querySelector('input').name;
+                    document.querySelectorAll(`.category-option input[name="${name}"]`).forEach(opt => {
+                        opt.closest('.category-option').classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    this.querySelector('input').checked = true;
+                });
+            });
+        }
+
+        function setupEntradaToggle() {
+            const entradaSelect = document.getElementById('evtEntrada');
+            const valorGroup = document.getElementById('evtValorGroup');
+            
+            if (entradaSelect) {
+                entradaSelect.addEventListener('change', function() {
+                    valorGroup.style.display = this.value === 'pago' ? 'block' : 'none';
+                });
+            }
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function openEventModal() {
+            openModal('eventModal');
+        }
+
+        function openEstablishmentModal() {
+            openModal('establishmentModal');
+        }
+
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function submitEventForm(e) {
+            e.preventDefault();
+            
+            const eventData = {
+                nome: document.getElementById('evtNome').value,
+                categoria: document.querySelector('input[name="evtCategoria"]:checked')?.value,
+                dataInicio: document.getElementById('evtDataInicio').value,
+                dataFim: document.getElementById('evtDataFim').value,
+                horaInicio: document.getElementById('evtHoraInicio').value,
+                horaFim: document.getElementById('evtHoraFim').value,
+                local: document.getElementById('evtLocal').value,
+                descricao: document.getElementById('evtDescricao').value,
+                entrada: document.getElementById('evtEntrada').value,
+                valor: document.getElementById('evtValor').value,
+                contato: document.getElementById('evtContato').value,
+                site: document.getElementById('evtSite').value
+            };
+
+            const result = AuthSystem.submitEvent(eventData);
+            
+            if (result.success) {
+                AuthSystem.showNotification(result.message, 'success');
+                closeModal('eventModal');
+                document.getElementById('eventForm').reset();
+                document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+                loadUserEvents();
+            } else {
+                AuthSystem.showNotification(result.message, 'error');
+            }
+        }
+
+        function submitEstablishmentForm(e) {
+            e.preventDefault();
+            
+            const estData = {
+                nome: document.getElementById('estNome').value,
+                categoria: document.querySelector('input[name="estCategoria"]:checked')?.value,
+                endereco: document.getElementById('estEndereco').value,
+                descricao: document.getElementById('estDescricao').value,
+                telefone: document.getElementById('estTelefone').value,
+                whatsapp: document.getElementById('estWhatsapp').value,
+                site: document.getElementById('estSite').value,
+                horario: document.getElementById('estHorario').value
+            };
+
+            const result = AuthSystem.submitEstablishment(estData);
+            
+            if (result.success) {
+                AuthSystem.showNotification(result.message, 'success');
+                closeModal('establishmentModal');
+                document.getElementById('establishmentForm').reset();
+                document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
+            } else {
+                AuthSystem.showNotification(result.message, 'error');
+            }
+        }
+
+        function loadUserEvents() {
+            const events = AuthSystem.getUserEvents();
+            const container = document.getElementById('eventsList');
+            
+            if (events.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Você ainda não cadastrou nenhum evento.</p>
+                        <button class="card-action" style="margin-top: 1rem;" onclick="openEventModal()">
+                            Cadastrar Primeiro Evento
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = events.map(event => `
+                <div class="event-item">
+                    <div class="event-info">
+                        <h4>${event.nome}</h4>
+                        <p>📍 ${event.local} | 📅 ${formatDate(event.dataInicio)}</p>
+                    </div>
+                    <span class="event-status status-${event.status}">${getStatusLabel(event.status)}</span>
+                </div>
+            `).join('');
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Data não definida';
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        function getStatusLabel(status) {
+            const labels = {
+                'pendente': '⏳ Em Análise',
+                'aprovado': '✅ Aprovado',
+                'rejeitado': '❌ Não Aprovado'
+            };
+            return labels[status] || status;
+        }
+
+        // Fechar modal ao clicar fora
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
