@@ -853,9 +853,17 @@
             }
 
             .about-badge {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.75rem;
-                margin-bottom: 1.5rem;
+                padding: 0.5rem 0.8rem;
+                font-size: 0.6rem;
+                margin-bottom: 0.5rem;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+            
+            .about-badges-container {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
             }
 
             .about-stats {
@@ -958,9 +966,17 @@
             }
             
             .about-badge {
-                font-size: 0.65rem;
-                padding: 0.5rem 1rem;
-                letter-spacing: 1px;
+                font-size: 0.55rem;
+                padding: 0.4rem 0.7rem;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+            }
+            
+            .about-badges-container {
+                flex-direction: column;
+                gap: 0.4rem;
+                width: 100%;
+                align-items: center;
             }
             
             .about-stats .stat-number {
@@ -6594,7 +6610,7 @@
         
         // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeMapModal(); 
+            if (e.key === 'Escape') closeMapModal();
         });
     </script>
 </body>
