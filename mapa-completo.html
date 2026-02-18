@@ -16,15 +16,23 @@
 
         body {
             font-family: 'Raleway', sans-serif;
+            overflow: hidden;
         }
 
-        #map {
+        /* Felt Map iframe ocupa tela inteira */
+        #felt-map {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100%;
+            border: none;
+            z-index: 0;
         }
 
+        /* Painel de informações sobreposto */
         .info-panel {
-            position: absolute;
+            position: fixed;
             top: 20px;
             left: 20px;
             background: white;
@@ -32,49 +40,49 @@
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             z-index: 1000;
-            max-width: 350px;
+            max-width: 300px;
         }
 
         .info-panel h1 {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
             color: #0a3d2e;
         }
 
         .info-panel p {
             color: #666;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
         }
 
         .legend {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .legend-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
+            gap: 6px;
+            font-size: 0.8rem;
         }
 
         .legend-icon {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
         }
 
         .stats {
-            margin-top: 15px;
-            padding-top: 15px;
+            margin-top: 12px;
+            padding-top: 12px;
             border-top: 2px solid #f0f0f0;
         }
 
         .stat {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
+            margin-bottom: 4px;
+            font-size: 0.85rem;
         }
 
         .stat-number {
@@ -82,17 +90,20 @@
             color: #0a3d2e;
         }
 
+        /* Botão voltar */
         .back-btn {
-            position: absolute;
+            position: fixed;
             bottom: 20px;
             right: 20px;
-            padding: 15px 30px;
+            padding: 14px 28px;
             background: #0a3d2e;
             color: white;
             text-decoration: none;
             border-radius: 50px;
             font-weight: 700;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
             z-index: 1000;
             transition: all 0.3s;
         }
@@ -102,28 +113,70 @@
             color: #0a3d2e;
             transform: translateY(-2px);
         }
+
+        /* Botão recolher painel (mobile) */
+        .toggle-panel-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: #0a3d2e;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .info-panel {
+                top: 70px;
+                left: 10px;
+                right: 10px;
+                max-width: none;
+                padding: 15px;
+                transition: all 0.3s;
+            }
+
+            .info-panel.collapsed {
+                display: none;
+            }
+
+            .toggle-panel-btn {
+                display: block;
+            }
+
+            .back-btn {
+                bottom: 15px;
+                right: 10px;
+                padding: 12px 20px;
+                font-size: 0.85rem;
+            }
+        }
     </style>
-
-    <!-- 
-    ⚠️  ATENÇÃO: Para o mapa funcionar em produção, você precisa:
-    
-    1. Criar API Key do Google Maps:
-       - Acesse: https://console.cloud.google.com/
-       - Ative "Maps JavaScript API"
-       - Crie uma API Key
-    
-    2. Substitua na linha acima:
-       - De: key=
-       - Para: key=SUA_API_KEY_AQUI
-    
-    NOTA: Funciona sem key para teste local, mas PRECISA em produção!
-    -->
-
 </head>
 <body>
-    <div id="map"></div>
 
-    <div class="info-panel">
+    <!-- Felt Map Embed -->
+    <iframe
+        id="felt-map"
+        title="Mapa Turístico - São Mateus do Sul"
+        src="https://felt.com/embed/map/Getting-started-with-Felt-XXWOlvfeQvuVZbxeb89AWGB?loc=-25.87203%2C-50.38498%2C15z&legend=1&cooperativeGestures=1&link=1&geolocation=0&zoomControls=1&scaleBar=1"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen>
+    </iframe>
+
+    <!-- Botão toggle para mobile -->
+    <button class="toggle-panel-btn" id="toggleBtn" onclick="togglePanel()">📍 Legenda</button>
+
+    <!-- Painel de Informações -->
+    <div class="info-panel" id="infoPanel">
         <h1>📍 Mapa Completo</h1>
         <p>38 estabelecimentos mapeados em 6 rotas turísticas</p>
         
@@ -173,137 +226,13 @@
     <a href="index.html" class="back-btn">← Voltar ao Site</a>
 
     <script>
-        // Dados dos estabelecimentos
-        const establishments = [{"name": "Morangos da Mary", "location": "Localidade de Divisa", "route": "🍓 Sabores", "lat": -25.9, "lng": -50.41}, {"name": "Dalety Queijos", "location": "Localidade de Fluviópolis", "route": "🍓 Sabores", "lat": -25.84, "lng": -50.42}, {"name": "All Garden", "location": "Localidade de Divisa", "route": "🍓 Sabores", "lat": -25.9, "lng": -50.41}, {"name": "Nova Esperança Equoterapia", "location": "Localidade do Espigãozinho", "route": "🍓 Sabores", "lat": -25.88, "lng": -50.36}, {"name": "Cabana Campo de Telha", "location": "Localidade de Fluviópolis", "route": "🍓 Sabores", "lat": -25.84, "lng": -50.42}, {"name": "Parada do Chimarrão", "location": "Localidade de Fluviópolis", "route": "🌿 Mate", "lat": -25.84, "lng": -50.42}, {"name": "Ervateira Taquaral", "location": "Localidade de Taquaral / Colônia Taquaral", "route": "🌿 Mate", "lat": -25.82, "lng": -50.35}, {"name": "Vivenda do Mate", "location": "Localidade da Água Branca", "route": "🌿 Mate", "lat": -25.75, "lng": -50.32}, {"name": "Viveiro Santana", "location": "Localidade do Faxinal do Ilhéus", "route": "🌿 Mate", "lat": -25.89, "lng": -50.34}, {"name": "Bier Herr Cervejaria", "location": "Bairro São Joaquim", "route": "🌿 Mate", "lat": -25.87, "lng": -50.385}, {"name": "Igreja Água Branca", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Delícias da Bernardina", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Armazém Campestre", "location": "Localidade de Divisa", "route": "⛪ Polonesa", "lat": -25.9, "lng": -50.41}, {"name": "Queijos da Cleonice", "location": "Localidade da Água Branca", "route": "⛪ Polonesa", "lat": -25.75, "lng": -50.32}, {"name": "Propriedade Inês/Lucival", "location": "Localidade de Divisa", "route": "⛪ Polonesa", "lat": -25.9, "lng": -50.41}, {"name": "Ancestral Gastronomia", "location": "Centro", "route": "⛪ Polonesa", "lat": -25.8668, "lng": -50.3828}, {"name": "Artur Biergarten", "location": "Bairro São Joaquim", "route": "⛪ Polonesa", "lat": -25.87, "lng": -50.385}, {"name": "Ribeiro Pesca", "location": "Colônia Iguaçu", "route": "🌊 Águas", "lat": -25.88, "lng": -50.39}, {"name": "Marina Barra do Iguaçu", "location": "Localidade da Barra do Potinga", "route": "🌊 Águas", "lat": -25.88, "lng": -50.39}, {"name": "Área Lazer Ulbrich", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro Tio Ivo", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro da Joana", "location": "Localidade do Emboque", "route": "🌊 Águas", "lat": -25.865, "lng": -50.35}, {"name": "Pesqueiro do Luizão", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Pesqueiro do Kiko", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Rancho Samas", "location": "Localidade do Lajeadinho", "route": "🌊 Águas", "lat": -25.875, "lng": -50.37}, {"name": "Frigorífico 3M", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Canil São José", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Parada Pinoli", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Hotel Moro", "location": "Centro", "route": "🏘️ Fluviópolis", "lat": -25.8668, "lng": -50.3828}, {"name": "Restaurante Dallas", "location": "Centro", "route": "🏘️ Fluviópolis", "lat": -25.8668, "lng": -50.3828}, {"name": "Propriedade Eduardo Pachek", "location": "Localidade de Fluviópolis", "route": "🏘️ Fluviópolis", "lat": -25.84, "lng": -50.42}, {"name": "Pitayas Dragão do Iguaçu", "location": "Colônia Cachoeira", "route": "🏘️ Fluviópolis", "lat": -25.91, "lng": -50.33}, {"name": "Viveiro MK", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Sawe Parque Aquático", "location": "Localidade da Vargem Grande", "route": "🌱 Terra", "lat": -25.92, "lng": -50.38}, {"name": "Mag Verduras", "location": "Núcleo Maria Rosa", "route": "🌱 Terra", "lat": -25.855, "lng": -50.395}, {"name": "Propriedade do Tico", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Sítio Sapopema", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}, {"name": "Propriedade da Sabrina", "location": "Localidade de Divisa", "route": "🌱 Terra", "lat": -25.9, "lng": -50.41}];
-
-        let map;
-
-        // Ícones por categoria
-        const routeIcons = {
-            '🍓 Sabores': '🍓',
-            '🌿 Mate': '🌿',
-            '⛪ Polonesa': '⛪',
-            '🌊 Águas': '🌊',
-            '🏘️ Fluviópolis': '🏘️',
-            '🌱 Terra': '🌱'
-        };
-
-        // Cores por categoria
-        const routeColors = {
-            '🍓 Sabores': '#ef4444',
-            '🌿 Mate': '#22c55e',
-            '⛪ Polonesa': '#dc143c',
-            '🌊 Águas': '#3b82f6',
-            '🏘️ Fluviópolis': '#f59e0b',
-            '🌱 Terra': '#84cc16'
-        };
-
-        function initMap() {
-            const center = { lat: -25.8668, lng: -50.3828 };
-            
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: center,
-                zoom: 11,
-                mapTypeId: 'terrain',
-                styles: [
-                    {
-                        featureType: 'poi',
-                        stylers: [{ visibility: 'off' }]
-                    }
-                ]
-            });
-
-            // Adicionar marcadores para cada estabelecimento
-            establishments.forEach(est => {
-                const marker = new google.maps.Marker({
-                    position: { lat: est.lat, lng: est.lng },
-                    map: map,
-                    title: est.name,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 12,
-                        fillColor: routeColors[est.route],
-                        fillOpacity: 1,
-                        strokeColor: '#ffffff',
-                        strokeWeight: 3
-                    }
-                });
-
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="padding: 10px; font-family: 'Raleway', sans-serif;">
-                            <div style="font-size: 1.5rem; margin-bottom: 5px;">${routeIcons[est.route]}</div>
-                            <h3 style="margin: 0 0 5px 0; color: #0a3d2e; font-size: 1.1rem;">${est.name}</h3>
-                            <p style="margin: 0; color: #666; font-size: 0.9rem;">
-                                📍 ${est.location}<br>
-                                🎯 ${est.route}
-                            </p>
-                            <a href="rotas-completas.html" style="display: inline-block; margin-top: 10px; padding: 8px 16px; background: #0a3d2e; color: white; text-decoration: none; border-radius: 5px; font-size: 0.85rem;">
-                                Ver Detalhes →
-                            </a>
-                        </div>
-                    `
-                });
-
-                marker.addListener('click', () => {
-                    infoWindow.open(map, marker);
-                });
-
-                // Hover effect
-                marker.addListener('mouseover', () => {
-                    marker.setIcon({
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 15,
-                        fillColor: routeColors[est.route],
-                        fillOpacity: 1,
-                        strokeColor: '#ffffff',
-                        strokeWeight: 4
-                    });
-                });
-
-                marker.addListener('mouseout', () => {
-                    marker.setIcon({
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 12,
-                        fillColor: routeColors[est.route],
-                        fillOpacity: 1,
-                        strokeColor: '#ffffff',
-                        strokeWeight: 3
-                    });
-                });
-            });
-
-            // Adicionar marcador especial para o centro (Igreja Matriz)
-            const centerMarker = new google.maps.Marker({
-                position: center,
-                map: map,
-                title: 'São Mateus do Sul - Centro',
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 20,
-                    fillColor: '#d4a574',
-                    fillOpacity: 1,
-                    strokeColor: '#ffffff',
-                    strokeWeight: 4
-                }
-            });
-
-            const centerInfo = new google.maps.InfoWindow({
-                content: `
-                    <div style="padding: 15px; font-family: 'Raleway', sans-serif; text-align: center;">
-                        <h2 style="margin: 0 0 10px 0; color: #0a3d2e;">⭐ São Mateus do Sul</h2>
-                        <p style="margin: 0; color: #666;">Centro Histórico<br>Capital Polonesa do Paraná</p>
-                    </div>
-                `
-            });
-
-            centerMarker.addListener('click', () => {
-                centerInfo.open(map, centerMarker);
-            });
+        function togglePanel() {
+            const panel = document.getElementById('infoPanel');
+            const btn = document.getElementById('toggleBtn');
+            panel.classList.toggle('collapsed');
+            btn.textContent = panel.classList.contains('collapsed') ? '📍 Legenda' : '✕ Fechar';
         }
     </script>
 
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhBoA0WpC-kdW9i5jRvmf8AFrkGo9Ar0I&callback=initMap" async defer></script>
 </body>
 </html>
