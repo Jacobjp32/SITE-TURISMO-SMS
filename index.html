@@ -45,7 +45,6 @@
     <!-- Preconnect para performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://maps.googleapis.com">
     
     <!-- DNS Prefetch -->
     <link rel="dns-prefetch" href="https://vlibras.gov.br">
@@ -139,19 +138,6 @@
     </script>
     
     <title>São Mateus do Sul - Capital Polonesa do Paraná | Turismo Oficial</title>
-    <!-- Google Maps - carregamento otimizado -->
-    <script>
-        // Função callback para o Google Maps
-        function initMap() {
-            console.log('Google Maps API carregada');
-        }
-        
-        // Carregar Google Maps de forma assíncrona
-        (function(g){var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]);for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.googleapis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once."):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({
-            key: "AIzaSyBDaeWicvigtP9xPv919E-RNoxfvC-Hqik",
-            v: "weekly"
-        });
-    </script>
     
     
     <!-- Fonts -->
@@ -173,6 +159,9 @@
             --font-body: 'Raleway', sans-serif;
         }
 
+        html, body {
+            overflow-x: hidden;
+        }
         body {
             font-family: var(--font-body);
         }
@@ -383,6 +372,9 @@
             height: 90px;
             width: auto;
             max-width: 350px;
+        }
+        @media (max-width: 768px) {
+            .nav-logo img { height: 60px; max-width: 220px; }
         }
 
         .nav-links {
@@ -834,8 +826,10 @@
             }
             
             .about-hero-content {
-                padding: 0 0.5rem;
+                padding: 0 1.25rem;
                 max-width: 100%;
+                width: 100%;
+                box-sizing: border-box;
             }
             
             .about-hero h1 {
@@ -846,10 +840,12 @@
             }
             
             .about-hero-subtitle {
-                font-size: 1rem;
-                padding: 0 0.5rem;
+                font-size: 0.95rem;
+                padding: 0 1rem;
                 line-height: 1.6;
                 margin-bottom: 2rem;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
             }
 
             .about-badge {
@@ -857,13 +853,15 @@
                 font-size: 0.6rem;
                 margin-bottom: 0.5rem;
                 letter-spacing: 0.5px;
-                white-space: nowrap;
+                white-space: normal;
             }
             
             .about-badges-container {
                 flex-direction: column;
                 gap: 0.5rem;
                 align-items: center;
+                width: 100%;
+                overflow: hidden;
             }
 
             .about-stats {
@@ -969,7 +967,7 @@
                 font-size: 0.55rem;
                 padding: 0.4rem 0.7rem;
                 letter-spacing: 0.5px;
-                white-space: nowrap;
+                white-space: normal;
             }
             
             .about-badges-container {
@@ -993,6 +991,7 @@
             position: relative;
             width: 100%;
             height: 100vh;
+            height: 100dvh;
         }
 
         #map {
@@ -1006,6 +1005,7 @@
             top: 120px;
             left: 2rem;
             width: 400px;
+            max-width: calc(100vw - 4rem);
             background: rgba(255, 255, 255, 0.98);
             border-radius: 15px;
             padding: 2rem;
@@ -1402,6 +1402,8 @@
             z-index: 1;
             text-align: center;
             max-width: 1200px;
+            width: 100%;
+            padding: 0 1.5rem;
             color: var(--white);
         }
 
@@ -1433,11 +1435,13 @@
 
         .about-hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(2.5rem, 7vw, 5rem);
+            font-size: clamp(2rem, 6vw, 5rem);
             font-weight: 300;
             line-height: 1.2;
             margin-bottom: 1.5rem;
             animation: fadeInUp 1s ease-out 0.2s both;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .about-hero h1 strong {
@@ -1446,12 +1450,14 @@
         }
 
         .about-hero-subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-size: clamp(1rem, 2vw, 1.5rem);
             opacity: 0.9;
             max-width: 800px;
             margin: 0 auto 3rem;
             line-height: 1.8;
             animation: fadeInUp 1s ease-out 0.4s both;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .about-stats {
@@ -1569,6 +1575,20 @@
             gap: 4rem;
             align-items: center;
             position: relative;
+        }
+        @media (max-width: 768px) {
+            .pilar-item {
+                grid-template-columns: 1fr !important;
+                direction: ltr !important;
+                padding-left: 0 !important;
+                gap: 1.5rem;
+            }
+            .pilar-item:nth-child(even) { direction: ltr !important; }
+            .pilar-item::before { display: none; }
+            .pilares-timeline::before { display: none; }
+            .pilar-visual { height: 220px !important; }
+            .pilar-content { padding: 0 !important; }
+            .pilar-title { font-size: 1.8rem !important; }
         }
 
         .pilar-item:nth-child(even) {
@@ -1824,7 +1844,7 @@
 
         .reviews-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
             gap: 3rem;
             margin-top: 4rem;
         }
@@ -1945,7 +1965,7 @@
 
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
             gap: 3rem;
             max-width: 1400px;
             margin: 0 auto;
@@ -2330,7 +2350,7 @@
             background: rgba(255,255,255,0.1);
             color: white;
             font-size: 0.9rem;
-            width: 300px;
+            width: min(300px, 100%);
             transition: all 0.3s;
         }
 
@@ -2342,7 +2362,7 @@
             outline: none;
             background: rgba(255,255,255,0.2);
             border-color: var(--gold-polish);
-            width: 350px;
+            width: min(350px, 100%);
         }
 
         .search-results {
@@ -3173,6 +3193,46 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ============================================
+           MOBILE FIXES CONSOLIDADOS v2
+        ============================================ */
+        @media (max-width: 768px) {
+            .nav { top: 0 !important; padding: 0.75rem 1rem !important; }
+            html { scroll-padding-top: 80px; }
+            .section { padding: 3rem 1rem !important; }
+            .pilares-section { padding: 3rem 1rem !important; }
+            .reviews-section { padding: 4rem 1rem !important; }
+            .blog-section { padding: 4rem 1rem !important; }
+            .blog-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+            .festas-grid { grid-template-columns: 1fr !important; }
+            .festas-destaque-section { padding: 3rem 1rem !important; }
+            .diorama-section { padding: 2rem 1rem !important; }
+            .diorama-title { font-size: 1.8rem !important; }
+            .produtor-section { padding: 2rem 1rem !important; }
+            .produtor-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .gallery-section { padding: 3rem 1rem !important; }
+            .gallery-title { font-size: 2rem !important; }
+            .reviews-grid { grid-template-columns: 1fr !important; }
+            .hotels-grid { grid-template-columns: 1fr !important; }
+            .events-calendar { grid-template-columns: 1fr !important; }
+            .contact-section { padding: 3rem 1rem !important; }
+            .contact-cards-grid { grid-template-columns: 1fr !important; }
+            .about-hero { padding: 2rem 1rem !important; min-height: auto !important; }
+            .about-hero h1 { font-size: 1.6rem !important; line-height: 1.3 !important; word-wrap: break-word !important; overflow-wrap: break-word !important; padding: 0 0.5rem !important; }
+            .about-badge { white-space: normal !important; font-size: 0.7rem !important; padding: 0.5rem 1rem !important; text-align: center !important; }
+            .footer-main { padding: 2rem 1rem !important; }
+            .footer-links { flex-direction: column !important; gap: 0.75rem !important; align-items: center !important; }
+            .back-to-top { bottom: 1.5rem !important; right: 1rem !important; }
+        }
+        @media (max-width: 480px) {
+            .nav-logo img { height: 50px !important; max-width: 180px !important; }
+            .about-hero h1 { font-size: 1.5rem !important; }
+            .about-badges-container { flex-direction: column !important; align-items: center !important; }
+            .section-title { font-size: 1.8rem !important; }
+            .pilar-title { font-size: 1.5rem !important; }
+            .festa-card { padding: 1.25rem !important; }
+        }
 </style>
 
     <!-- Google Analytics (GA4) -->
@@ -3882,7 +3942,7 @@
 
         .festas-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
             gap: 2rem;
             margin-bottom: 2rem;
         }
@@ -5017,10 +5077,13 @@
         @media (max-width: 992px) {
             .contact-main-grid {
                 grid-template-columns: 1fr;
+                gap: 2rem;
             }
-            
             .contact-form .form-row {
                 grid-template-columns: 1fr;
+            }
+            .contact-form-wrapper {
+                padding: 1.5rem;
             }
         }
         
@@ -6591,7 +6654,8 @@
             
             // Iframe do Google Maps
             const iframe = document.getElementById('mapModalIframe');
-            iframe.src = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${lat},${lng}&zoom=15`;
+            const mapsKey = (window.CONFIG && window.CONFIG.maps) ? window.CONFIG.maps.apiKey : '';
+            iframe.src = `https://www.google.com/maps/embed/v1/place?key=${mapsKey}&q=${lat},${lng}&zoom=15`;
             
             // Link direto
             document.getElementById('mapModalGoogleLink').href = `https://www.google.com/maps?q=${lat},${lng}`;
