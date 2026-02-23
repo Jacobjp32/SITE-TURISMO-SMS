@@ -172,6 +172,29 @@ const translations = {
         // === FOOTER ===
         'footer-direitos': '© 2026 Prefeitura Municipal de São Mateus do Sul',
         'footer-turismo': 'Secretaria Municipal de Turismo'
+        'nav-login': '👤 Entrar',
+        'produtor-titulo': 'Direto do Produtor',
+        'produtor-intro': 'Visite as propriedades rurais e leve para casa produtos frescos e artesanais.',
+
+        // === NOVAS KEYS v2 ===
+        'btn-enviar-mensagem': 'Enviar Mensagem →',
+        'btn-ver-mapa': '🗺️ Ver no Mapa',
+        'contato-form-title': 'Envie sua Mensagem',
+        'contato-localizacao': 'Localização',
+        'contato-redes': 'Siga-nos nas Redes Sociais',
+        'form-label-assunto': 'Assunto *',
+        'form-label-mensagem': 'Mensagem *',
+        'form-placeholder-nome': 'Seu nome completo',
+        'form-placeholder-email': 'seu@email.com',
+        'form-placeholder-mensagem': 'Como podemos ajudá-lo?',
+        'section-avaliacoes': 'Avaliação Geral dos Visitantes',
+        'section-proximos-eventos': 'Próximos Eventos',
+        'section-eventos-fixos': '📅 Eventos Semanais Fixos',
+        'section-onde-ficar': 'Onde Ficar',
+        'footer-transparencia': 'Transparência',
+        'footer-onde-ficar': 'Onde Ficar',
+        'footer-acessibilidade': 'Acessibilidade',
+        'footer-privacidade': 'Política de Privacidade',
     },
 
     en: {
@@ -342,6 +365,29 @@ const translations = {
         // === FOOTER ===
         'footer-direitos': '© 2026 Municipality of São Mateus do Sul',
         'footer-turismo': 'Municipal Tourism Department'
+        'nav-login': '👤 Sign In',
+        'produtor-titulo': 'Straight from the Producer',
+        'produtor-intro': 'Visit rural properties and take home fresh and handcrafted products.',
+
+        // === NOVAS KEYS v2 ===
+        'btn-enviar-mensagem': 'Send Message →',
+        'btn-ver-mapa': '🗺️ View on Map',
+        'contato-form-title': 'Send your Message',
+        'contato-localizacao': 'Location',
+        'contato-redes': 'Follow us on Social Media',
+        'form-label-assunto': 'Subject *',
+        'form-label-mensagem': 'Message *',
+        'form-placeholder-nome': 'Your full name',
+        'form-placeholder-email': 'your@email.com',
+        'form-placeholder-mensagem': 'How can we help you?',
+        'section-avaliacoes': 'Overall Visitor Rating',
+        'section-proximos-eventos': 'Upcoming Events',
+        'section-eventos-fixos': '📅 Weekly Fixed Events',
+        'section-onde-ficar': 'Where to Stay',
+        'footer-transparencia': 'Transparency',
+        'footer-onde-ficar': 'Where to Stay',
+        'footer-acessibilidade': 'Accessibility',
+        'footer-privacidade': 'Privacy Policy',
     },
 
     es: {
@@ -512,6 +558,29 @@ const translations = {
         // === FOOTER ===
         'footer-direitos': '© 2026 Municipalidad de São Mateus do Sul',
         'footer-turismo': 'Secretaría Municipal de Turismo'
+        'nav-login': '👤 Entrar',
+        'produtor-titulo': 'Directo del Productor',
+        'produtor-intro': 'Visita las propiedades rurales y lleva a casa productos frescos y artesanales.',
+
+        // === NOVAS KEYS v2 ===
+        'btn-enviar-mensagem': 'Enviar Mensaje →',
+        'btn-ver-mapa': '🗺️ Ver en el Mapa',
+        'contato-form-title': 'Envíe su Mensaje',
+        'contato-localizacao': 'Ubicación',
+        'contato-redes': 'Síguenos en Redes Sociales',
+        'form-label-assunto': 'Asunto *',
+        'form-label-mensagem': 'Mensaje *',
+        'form-placeholder-nome': 'Su nombre completo',
+        'form-placeholder-email': 'su@email.com',
+        'form-placeholder-mensagem': '¿Cómo podemos ayudarle?',
+        'section-avaliacoes': 'Valoración General de Visitantes',
+        'section-proximos-eventos': 'Próximos Eventos',
+        'section-eventos-fixos': '📅 Eventos Semanales Fijos',
+        'section-onde-ficar': 'Dónde Alojarse',
+        'footer-transparencia': 'Transparencia',
+        'footer-onde-ficar': 'Dónde Alojarse',
+        'footer-acessibilidade': 'Accesibilidad',
+        'footer-privacidade': 'Política de Privacidad',
     },
 
     pl: {
@@ -756,6 +825,9 @@ const pageTranslations = {
         'btn-reservar': 'Reservar',
         'btn-ver-detalhes': 'Ver detalhes',
         'btn-saiba-mais': 'Saiba mais →'
+        'nav-login': '👤 Zaloguj się',
+        'produtor-titulo': 'Prosto od Producenta',
+        'produtor-intro': 'Odwiedź wiejskie gospodarstwa i zabierz do domu świeże i rzemieślnicze produkty.',
     },
     en: {
         'page-oquefazer-titulo': 'What to <strong>Do</strong>',
@@ -899,6 +971,26 @@ function initPageLanguage() {
         var flags = { pt: '🇧🇷', en: '🇺🇸', es: '🇪🇸', pl: '🇵🇱' };
         if (flagEl) flagEl.textContent = flags[savedLang] || '🇧🇷';
         if (codeEl) codeEl.textContent = savedLang.toUpperCase();
+
+        // === NOVAS KEYS v2 ===
+        'btn-enviar-mensagem': 'Wyślij wiadomość →',
+        'btn-ver-mapa': '🗺️ Zobacz na mapie',
+        'contato-form-title': 'Wyślij wiadomość',
+        'contato-localizacao': 'Lokalizacja',
+        'contato-redes': 'Śledź nas w mediach społecznościowych',
+        'form-label-assunto': 'Temat *',
+        'form-label-mensagem': 'Wiadomość *',
+        'form-placeholder-nome': 'Twoje imię i nazwisko',
+        'form-placeholder-email': 'twoj@email.com',
+        'form-placeholder-mensagem': 'Jak możemy Ci pomóc?',
+        'section-avaliacoes': 'Ogólna ocena odwiedzających',
+        'section-proximos-eventos': 'Nadchodzące wydarzenia',
+        'section-eventos-fixos': '📅 Stałe cotygodniowe wydarzenia',
+        'section-onde-ficar': 'Gdzie nocować',
+        'footer-transparencia': 'Przejrzystość',
+        'footer-onde-ficar': 'Gdzie nocować',
+        'footer-acessibilidade': 'Dostępność',
+        'footer-privacidade': 'Polityka prywatności',
     }
 }
 

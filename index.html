@@ -4784,7 +4784,7 @@
 
             <!-- TripAdvisor Badge -->
             <div class="tripadvisor-badge">
-                <h3>Avaliação Geral dos Visitantes</h3>
+                <h3 data-lang-key="section-avaliacoes">Avaliação Geral dos Visitantes</h3>
                 <div class="rating-summary">
                     <span class="rating-number">4.8</span>
                     <div>
@@ -4810,16 +4810,16 @@
             <div class="contact-main-grid">
                 <!-- Formulário de Contato -->
                 <div class="contact-form-wrapper">
-                    <h3 class="form-title" data-lang-key="form-titulo">Envie sua Mensagem</h3>
+                    <h3 class="form-title" data-lang-key="form-titulo" data-lang-key="contato-form-title">Envie sua Mensagem</h3>
                     <form id="contactForm" class="contact-form" onsubmit="return handleFormSubmit(event)">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="nome" data-lang-key="form-nome">Nome *</label>
-                                <input type="text" id="nome" name="nome" required placeholder="Seu nome completo">
+                                <input type="text" id="nome" name="nome" required placeholder="Seu nome completo" data-lang-key="form-placeholder-nome">
                             </div>
                             <div class="form-group">
                                 <label for="email" data-lang-key="form-email">Email *</label>
-                                <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                                <input type="email" id="email" name="email" required placeholder="seu@email.com" data-lang-key="form-placeholder-email">
                             </div>
                         </div>
                         <div class="form-row">
@@ -4843,7 +4843,7 @@
                         </div>
                         <div class="form-group full-width">
                             <label for="mensagem" data-lang-key="form-mensagem">Mensagem *</label>
-                            <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Como podemos ajudá-lo?"></textarea>
+                            <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Como podemos ajudá-lo?" data-lang-key="form-placeholder-mensagem"></textarea>
                         </div>
                         <div class="form-group full-width checkbox-group">
                             <label class="checkbox-label">
@@ -4884,7 +4884,7 @@
                         <!-- Localização -->
                         <div class="contact-card">
                             <div class="contact-card-icon">📍</div>
-                            <h3 class="contact-card-title" data-lang-key="contato-localizacao">Localização</h3>
+                            <h3 class="contact-card-title" data-lang-key="contato-localizacao" data-lang-key="contato-localizacao">Localização</h3>
                             <p class="contact-card-subtitle" data-lang-key="contato-chale">Chalé da Cultura e Turismo/Produtor</p>
                             <p class="contact-card-subtitle">PRAÇA DO RIO IGUAÇU</p>
                             <p class="contact-card-address">
@@ -5509,7 +5509,7 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
                 <div>
                     <span style="display: inline-block; background: #d4a574; color: #0a3d2e; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;" data-lang-key="label-calendario">Calendário 2026</span>
-                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-eventos">Próximos Eventos</h2>
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-eventos" data-lang-key="section-proximos-eventos">Próximos Eventos</h2>
                     <p style="color: #666; font-size: 1.1rem;" data-lang-key="section-eventos-desc">Festas, feiras e celebrações da Capital Polonesa</p>
                 </div>
                 <a href="eventos.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
@@ -5523,7 +5523,7 @@
 
             <!-- Eventos Recorrentes -->
             <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 5px 30px rgba(0,0,0,0.08);">
-                <h3 style="font-family: 'Cormorant Garamond', serif; color: #0a3d2e; margin-bottom: 1.5rem; font-size: 1.5rem;" data-lang-key="section-eventos-semanais">📅 Eventos Semanais Fixos</h3>
+                <h3 style="font-family: 'Cormorant Garamond', serif; color: #0a3d2e; margin-bottom: 1.5rem; font-size: 1.5rem;" data-lang-key="section-eventos-semanais" data-lang-key="section-eventos-fixos">📅 Eventos Semanais Fixos</h3>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
                     <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
                         <span style="font-size: 2rem;">🍽️</span>
@@ -5567,7 +5567,7 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-label">Hospedagem</span>
-                <h2 class="section-title">Onde Ficar</h2>
+                <h2 class="section-title" data-lang-key="section-onde-ficar">Onde Ficar</h2>
                 <p class="section-description">Conforto e hospitalidade polonesa para sua estadia</p>
             </div>
 
@@ -5654,7 +5654,7 @@
     <footer class="footer" id="footer">
         <!-- Seção Principal do Footer -->
         <div class="footer-main">
-            <img src="images/LOGO_PIN_TURISMO_3D_COM_TEXTO.png" alt="São Mateus do Sul" style="height: 120px; width: auto; margin-bottom: 0.75rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
+            <img src="images/LOGO_PIN_TURISMO_3D_COM_TEXTO_BRANCA.png" alt="São Mateus do Sul" style="height: 120px; width: auto; margin-bottom: 0.75rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
             <p style="font-size: 1.1rem;">Capital Polonesa do Paraná • Terra da Erva-Mate • Terra do Xisto</p>
             <p style="opacity: 0.8; margin-top: 0.5rem;">Experiências autênticas no coração do Paraná</p>
             
@@ -5664,7 +5664,7 @@
                 <a href="#gastronomia">Gastronomia</a>
                 <a href="galeria.html">Galeria</a>
                 <a href="rotas-completas.html">Rotas</a>
-                <a href="transparencia.html">Transparência</a>
+                <a href="transparencia.html" data-lang-key="footer-transparencia">Transparência</a>
                 <a href="tel:+554235320000">📞 (42) 3532-0000</a>
             </div>
         </div>
@@ -6157,7 +6157,11 @@
                     var el = elementos[i];
                     var key = el.getAttribute('data-lang-key');
                     if (trans[key]) {
-                        el.innerHTML = trans[key];
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                            el.placeholder = trans[key];
+                        } else {
+                            el.innerHTML = trans[key];
+                        }
                     }
                 }
                 
