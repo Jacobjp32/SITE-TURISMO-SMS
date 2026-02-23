@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Galeria de fotos de São Mateus do Sul - Capital Polonesa do Paraná. Veja as belezas naturais, patrimônio histórico e cultura local.">
+    <meta name="keywords" content="São Mateus do Sul, galeria, fotos, turismo, Paraná, cultura polonesa">
+    <meta name="author" content="Prefeitura Municipal de São Mateus do Sul">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <link rel="apple-touch-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <title>Galeria - São Mateus do Sul | Capital Polonesa do Paraná</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --white-pure: #ffffff;
+            --cream-light: #f8f6f0;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            padding: 1.5rem 2rem;
+            background: linear-gradient(180deg, 
+                rgba(10, 61, 46, 0.95) 0%, 
+                rgba(10, 61, 46, 0.7) 70%,
+                transparent 100%);
+            backdrop-filter: blur(20px);
+        }
+
+        .nav-container {
+            max-width: 1800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo img {
+            width: 50px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white-pure);
+            text-decoration: none;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            background: rgba(212, 165, 116, 0.3);
+        }
+
+        /* Header da Galeria */
+        .gallery-header {
+            padding: 120px 2rem 4rem;
+            text-align: center;
+            background: linear-gradient(135deg, var(--forest-deep) 0%, #0d4a37 100%);
+            color: white;
+        }
+
+        .gallery-title {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: var(--gold-polish);
+        }
+
+        .gallery-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Grid da Galeria */
+        .gallery-section {
+            padding: 6rem 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--forest-deep);
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-info {
+            padding: 2rem;
+        }
+
+        .photo-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .photo-description {
+            color: #666;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        .photo-category {
+            display: inline-block;
+            background: var(--gold-polish);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        /* Modal para visualizar imagens */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 10001;
+        }
+
+        .modal-close:hover {
+            color: var(--gold-polish);
+        }
+
+        .modal-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .gallery-title {
+                font-size: 2.5rem;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Início</a></li>
+                <li><a href="index.html#attractions">Atrações</a></li>
+                <li><a href="index.html#gastronomia">Gastronomia</a></li>
+                <li><a href="galeria.html" class="active">Galeria</a></li>
+                <li><a href="index.html#sobre">Sobre</a></li>
+                <li><a href="rotas-completas.html">Rotas</a></li>
+                <li><a href="index.html#contato">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header da Galeria -->
+    <header class="gallery-header">
+        <h1 class="gallery-title" data-lang-key="page-galeria-titulo">Galeria</h1>
+        <p class="gallery-subtitle" data-lang-key="page-galeria-subtitulo">
+            Explore através de imagens as belezas e a cultura de São Mateus do Sul, 
+            Capital Polonesa do Paraná
+        </p>
+    </header>
+
+    <!-- Patrimônio Histórico -->
+    <section class="gallery-section">
+        <h2 class="section-title">🏛️ Patrimônio Histórico</h2>
+        <div class="gallery-grid">
+            <div class="photo-card" onclick="openModal('images/IGREJA_MATRIZ_FRONTAL.jpg', 'Igreja Matriz', 'Majestosa arquitetura neogótica que marca o centro da cidade há mais de um século.')">
+                <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" alt="Igreja Matriz">
+                <div class="photo-info">
+                    <div class="photo-category">Patrimônio</div>
+                    <h3 class="photo-title">Igreja Matriz</h3>
+                    <p class="photo-description">Majestosa arquitetura neogótica que marca o centro da cidade há mais de um século.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IGREJA_AGUA_BRANCA.jpg', 'Igreja Água Branca', 'Joia da arquitetura polonesa rural, preservando tradições centenárias.')">
+                <img src="images/IGREJA_AGUA_BRANCA.jpg" alt="Igreja Água Branca">
+                <div class="photo-info">
+                    <div class="photo-category">Cultura Polonesa</div>
+                    <h3 class="photo-title">Igreja Água Branca</h3>
+                    <p class="photo-description">Joia da arquitetura polonesa rural, preservando tradições centenárias.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/PREFEITURA_MUNICIPAL.jpg', 'Prefeitura Municipal', 'Elegante arquitetura que representa a administração e história da cidade.')">
+                <img src="images/PREFEITURA_MUNICIPAL.jpg" alt="Prefeitura Municipal">
+                <div class="photo-info">
+                    <div class="photo-category">Institucional</div>
+                    <h3 class="photo-title">Prefeitura Municipal</h3>
+                    <p class="photo-description">Elegante arquitetura que representa a administração e história da cidade.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Belezas Naturais -->
+    <section class="gallery-section">
+        <h2 class="section-title">🌊 Belezas Naturais</h2>
+        <div class="gallery-grid">
+            <div class="photo-card" onclick="openModal('images/PONTE_SOB_O_RIO_IGUACU.jpg', 'Ponte sobre o Rio Iguaçu', 'Majestosa ponte que conecta as margens do Rio Iguaçu, oferecendo vistas espetaculares.')">
+                <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" alt="Ponte sobre o Rio Iguaçu">
+                <div class="photo-info">
+                    <div class="photo-category">Rio Iguaçu</div>
+                    <h3 class="photo-title">Ponte sobre o Rio Iguaçu</h3>
+                    <p class="photo-description">Majestosa ponte que conecta as margens do Rio Iguaçu, oferecendo vistas espetaculares.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/PRACA_DO_RIO_IGUACU.jpg', 'Praça do Rio Iguaçu', 'Espaço de lazer e contemplação às margens do Rio Iguaçu.')">
+                <img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="Praça do Rio Iguaçu">
+                <div class="photo-info">
+                    <div class="photo-category">Lazer</div>
+                    <h3 class="photo-title">Praça do Rio Iguaçu</h3>
+                    <p class="photo-description">Espaço de lazer e contemplação às margens do Rio Iguaçu.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg', 'Vista Geral da Cidade', 'Panorâmica que revela a harmonia entre natureza e arquitetura.')">
+                <img src="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg" alt="Vista Geral">
+                <div class="photo-info">
+                    <div class="photo-category">Paisagem</div>
+                    <h3 class="photo-title">Vista Geral da Cidade</h3>
+                    <p class="photo-description">Panorâmica que revela a harmonia entre natureza e arquitetura.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gastronomia e Cultura -->
+    <section class="gallery-section">
+        <h2 class="section-title">🍽️ Gastronomia e Produtos Locais</h2>
+        <div class="gallery-grid">
+            <div class="photo-card" onclick="openModal('images/POLSKIE_SMAKI__1_.jpg', 'Polskie Smaki', 'Autêntica gastronomia polonesa no coração de São Mateus do Sul.')">
+                <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Polskie Smaki">
+                <div class="photo-info">
+                    <div class="photo-category">Gastronomia</div>
+                    <h3 class="photo-title">Polskie Smaki</h3>
+                    <p class="photo-description">Autêntica gastronomia polonesa no coração de São Mateus do Sul.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/MORANGO_1.jpg', 'Morangos Locais', 'Deliciosos morangos frescos produzidos na região.')">
+                <img src="images/MORANGO_1.jpg" alt="Morangos">
+                <div class="photo-info">
+                    <div class="photo-category">Produtos Rurais</div>
+                    <h3 class="photo-title">Morangos Locais</h3>
+                    <p class="photo-description">Deliciosos morangos frescos produzidos na região.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/PARRERAL__1_.jpg', 'Parreral', 'Experiência gastronômica com vista privilegiada.')">
+                <img src="images/PARRERAL__1_.jpg" alt="Parreral">
+                <div class="photo-info">
+                    <div class="photo-category">Restaurantes</div>
+                    <h3 class="photo-title">Parreral</h3>
+                    <p class="photo-description">Experiência gastronômica com vista privilegiada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Eventos e Tradições -->
+    <section class="gallery-section">
+        <h2 class="section-title">🎭 Eventos e Tradições</h2>
+        <div class="gallery-grid">
+            <div class="photo-card" onclick="openModal('images/FUNDO_ROTAS.jpg', 'Corrida Rural', 'Evento esportivo que une a comunidade nas estradas rurais de São Mateus do Sul.')">
+                <img src="images/FUNDO_ROTAS.jpg" alt="Corrida Rural">
+                <div class="photo-info">
+                    <div class="photo-category">Eventos</div>
+                    <h3 class="photo-title">Corrida Rural</h3>
+                    <p class="photo-description">Evento esportivo que une a comunidade nas estradas rurais de São Mateus do Sul.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IMG_2295.jpg', 'Fogueira Tradicional', 'Tradições culinárias mantidas vivas através de gerações.')">
+                <img src="images/IMG_2295.jpg" alt="Fogueira Tradicional">
+                <div class="photo-info">
+                    <div class="photo-category">Tradições</div>
+                    <h3 class="photo-title">Fogueira Tradicional</h3>
+                    <p class="photo-description">Tradições culinárias mantidas vivas através de gerações.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IMG_2304.jpg', 'Capela de Nozes', 'Arte sacra única feita com nozes, demonstrando a criatividade local.')">
+                <img src="images/IMG_2304.jpg" alt="Capela de Nozes">
+                <div class="photo-info">
+                    <div class="photo-category">Arte Sacra</div>
+                    <h3 class="photo-title">Capela de Nozes</h3>
+                    <p class="photo-description">Arte sacra única feita com nozes, demonstrando a criatividade local.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IMG_2326.jpg', 'Trabalho Comunitário', 'Espírito colaborativo da comunidade em ação.')">
+                <img src="images/IMG_2326.jpg" alt="Trabalho Comunitário">
+                <div class="photo-info">
+                    <div class="photo-category">Comunidade</div>
+                    <h3 class="photo-title">Trabalho Comunitário</h3>
+                    <p class="photo-description">Espírito colaborativo da comunidade em ação.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IMG_2371.jpg', 'Personagem Tradicional', 'Representação viva das tradições e cultura local.')">
+                <img src="images/IMG_2371.jpg" alt="Personagem Tradicional">
+                <div class="photo-info">
+                    <div class="photo-category">Folclore</div>
+                    <h3 class="photo-title">Personagem Tradicional</h3>
+                    <p class="photo-description">Representação viva das tradições e cultura local.</p>
+                </div>
+            </div>
+
+            <div class="photo-card" onclick="openModal('images/IMG_2301.jpg', 'Atividades Rurais', 'Conexão com a terra e tradições agrícolas.')">
+                <img src="images/IMG_2301.jpg" alt="Atividades Rurais">
+                <div class="photo-info">
+                    <div class="photo-category">Vida Rural</div>
+                    <h3 class="photo-title">Atividades Rurais</h3>
+                    <p class="photo-description">Conexão com a terra e tradições agrícolas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diorama Especial -->
+    <section class="gallery-section">
+        <h2 class="section-title">🎨 Arte e Representação</h2>
+        <div class="gallery-grid">
+            <div class="photo-card" onclick="openModal('images/diorama_sao_mateus.png', 'Diorama Artístico', 'Representação artística única que captura a essência de São Mateus do Sul.')">
+                <img src="images/diorama_sao_mateus.png" alt="Diorama São Mateus do Sul">
+                <div class="photo-info">
+                    <div class="photo-category">Arte</div>
+                    <h3 class="photo-title">Diorama Artístico</h3>
+                    <p class="photo-description">Representação artística única que captura a essência de São Mateus do Sul.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal Lightbox Melhorado -->
+    <div id="imageModal" class="lightbox-modal">
+        <div class="lightbox-overlay" onclick="closeLightbox()"></div>
+        <button class="lightbox-close" onclick="closeLightbox()" aria-label="Fechar">&times;</button>
+        <button class="lightbox-prev" onclick="navigateLightbox(-1)" aria-label="Anterior">❮</button>
+        <button class="lightbox-next" onclick="navigateLightbox(1)" aria-label="Próxima">❯</button>
+        <div class="lightbox-content" onclick="event.stopPropagation()">
+            <img id="modalImage" src="" alt="">
+            <div class="lightbox-info">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDescription"></p>
+                <span class="lightbox-counter" id="lightboxCounter"></span>
+            </div>
+        </div>
+        <div class="lightbox-thumbnails" id="lightboxThumbnails"></div>
+    </div>
+
+    <style>
+        /* Lightbox Melhorado */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100000;
+            animation: fadeIn 0.3s;
+        }
+        
+        .lightbox-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+        }
+        
+        .lightbox-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 85vw;
+            max-height: 75vh;
+            text-align: center;
+        }
+        
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 65vh;
+            border-radius: 10px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            transition: transform 0.3s;
+        }
+        
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 50px;
+            cursor: pointer;
+            z-index: 100001;
+            transition: all 0.3s;
+            line-height: 1;
+        }
+        
+        .lightbox-close:hover {
+            color: var(--gold-polish);
+            transform: rotate(90deg);
+        }
+        
+        .lightbox-prev,
+        .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            font-size: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100001;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-prev { left: 30px; }
+        .lightbox-next { right: 30px; }
+        
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: var(--gold-polish);
+            border-color: var(--gold-polish);
+            color: var(--forest-deep);
+        }
+        
+        .lightbox-info {
+            background: linear-gradient(135deg, rgba(10,61,46,0.95), rgba(10,61,46,0.85));
+            color: white;
+            padding: 1.5rem 2rem;
+            border-radius: 0 0 10px 10px;
+            margin-top: -5px;
+        }
+        
+        .lightbox-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .lightbox-info p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .lightbox-counter {
+            display: inline-block;
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .lightbox-thumbnails {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            max-width: 80vw;
+            overflow-x: auto;
+            padding: 10px;
+        }
+        
+        .lightbox-thumb {
+            width: 60px;
+            height: 45px;
+            border-radius: 5px;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: all 0.3s;
+            object-fit: cover;
+            border: 2px solid transparent;
+        }
+        
+        .lightbox-thumb:hover,
+        .lightbox-thumb.active {
+            opacity: 1;
+            border-color: var(--gold-polish);
+        }
+        
+        @media (max-width: 768px) {
+            .lightbox-prev,
+            .lightbox-next {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .lightbox-prev { left: 10px; }
+            .lightbox-next { right: 10px; }
+            
+            .lightbox-close {
+                top: 10px;
+                right: 15px;
+                font-size: 35px;
+            }
+            
+            .lightbox-thumbnails {
+                display: none;
+            }
+            
+            .lightbox-content {
+                max-width: 95vw;
+            }
+        }
+    </style>
+
+    <script>
+        // Array com todas as imagens da galeria
+        var galleryImages = [];
+        var currentImageIndex = 0;
+        
+        // Inicializar galeria quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            var cards = document.querySelectorAll('.photo-card');
+            cards.forEach(function(card, index) {
+                var img = card.querySelector('img');
+                var title = card.querySelector('.photo-title');
+                var desc = card.querySelector('.photo-description');
+                
+                galleryImages.push({
+                    src: img.src,
+                    title: title ? title.textContent : 'Imagem',
+                    description: desc ? desc.textContent : ''
+                });
+                
+                // Atualizar onclick para usar o índice
+                card.onclick = function() {
+                    openLightbox(index);
+                };
+            });
+        });
+        
+        function openLightbox(index) {
+            currentImageIndex = index;
+            var modal = document.getElementById('imageModal');
+            updateLightboxContent();
+            renderThumbnails();
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function updateLightboxContent() {
+            var image = galleryImages[currentImageIndex];
+            var modalImage = document.getElementById('modalImage');
+            var modalTitle = document.getElementById('modalTitle');
+            var modalDescription = document.getElementById('modalDescription');
+            var counter = document.getElementById('lightboxCounter');
+            
+            modalImage.src = image.src;
+            modalImage.alt = image.title;
+            modalTitle.textContent = image.title;
+            modalDescription.textContent = image.description;
+            counter.textContent = (currentImageIndex + 1) + ' / ' + galleryImages.length;
+            
+            // Atualizar thumbnail ativa
+            var thumbs = document.querySelectorAll('.lightbox-thumb');
+            thumbs.forEach(function(thumb, i) {
+                thumb.classList.toggle('active', i === currentImageIndex);
+            });
+        }
+        
+        function renderThumbnails() {
+            var container = document.getElementById('lightboxThumbnails');
+            container.innerHTML = '';
+            
+            galleryImages.forEach(function(img, index) {
+                var thumb = document.createElement('img');
+                thumb.src = img.src;
+                thumb.className = 'lightbox-thumb' + (index === currentImageIndex ? ' active' : '');
+                thumb.onclick = function(e) {
+                    e.stopPropagation();
+                    currentImageIndex = index;
+                    updateLightboxContent();
+                };
+                container.appendChild(thumb);
+            });
+        }
+        
+        function navigateLightbox(direction) {
+            event.stopPropagation();
+            currentImageIndex += direction;
+            
+            if (currentImageIndex < 0) {
+                currentImageIndex = galleryImages.length - 1;
+            } else if (currentImageIndex >= galleryImages.length) {
+                currentImageIndex = 0;
+            }
+            
+            updateLightboxContent();
+        }
+        
+        function closeLightbox() {
+            var modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Navegação por teclado
+        document.addEventListener('keydown', function(event) {
+            var modal = document.getElementById('imageModal');
+            if (modal.style.display === 'block') {
+                if (event.key === 'Escape') {
+                    closeLightbox();
+                } else if (event.key === 'ArrowLeft') {
+                    navigateLightbox(-1);
+                } else if (event.key === 'ArrowRight') {
+                    navigateLightbox(1);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

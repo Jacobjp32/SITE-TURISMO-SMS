@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore mais de 50 estabelecimentos nas rotas turísticas de São Mateus do Sul. Rota do Mate, Polonesa, Das Águas e muito mais. Busque por localidade e categoria.">
+    <meta name="keywords" content="rotas turísticas São Mateus, estabelecimentos turísticos, rota do mate, rota polonesa, turismo rural Paraná">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Rotas Turísticas - São Mateus do Sul">
+    <meta property="og:description" content="Mais de 50 estabelecimentos para descobrir nas rotas turísticas de São Mateus do Sul.">
+    <meta property="og:image" content="https://saomateusdosul.tur.br/images/logo_pin_turismo.jpg">
+    
+    <title>Rotas Turísticas - São Mateus do Sul | Explore 50+ Estabelecimentos</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&family=Libre+Baskerville:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --forest-rich: #1a5d43;
+            --gold-polish: #d4a574;
+            --gold-light: #e8c9a0;
+            --cream-light: #f9f7f4;
+            --white-pure: #ffffff;
+            
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), var(--forest-rich));
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .header-logo img {
+            width: 70px;
+            height: auto;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .header-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .filters-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--forest-rich);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: var(--font-body);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--gold-polish);
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--forest-rich);
+            background: white;
+            color: var(--forest-deep);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-family: var(--font-body);
+        }
+
+        .filter-btn:hover {
+            background: rgba(10, 61, 46, 0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--forest-deep);
+            color: white;
+        }
+
+        .results-count {
+            font-size: 0.9rem;
+            color: #666;
+            padding: 1rem 0;
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .route-section {
+            margin-bottom: 4rem;
+        }
+
+        .route-section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid var(--gold-polish);
+        }
+
+        .route-icon {
+            font-size: 2.5rem;
+        }
+
+        .route-section-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--forest-deep);
+        }
+
+        .establishments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .establishment-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .establishment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            border-color: var(--gold-polish);
+        }
+
+        .establishment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .establishment-name {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--forest-deep);
+            flex: 1;
+        }
+
+        .establishment-badge {
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .establishment-desc {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .establishment-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: start;
+            gap: 0.8rem;
+            font-size: 0.95rem;
+        }
+
+        .info-icon {
+            font-size: 1.2rem;
+            min-width: 25px;
+        }
+
+        .info-text {
+            flex: 1;
+        }
+
+        .info-text strong {
+            color: var(--forest-deep);
+            display: block;
+            margin-bottom: 0.2rem;
+        }
+
+        .info-link {
+            color: var(--forest-rich);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .info-link:hover {
+            color: var(--gold-polish);
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #999;
+        }
+
+        .no-results h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--forest-deep);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .back-button:hover {
+            background: var(--gold-polish);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .establishments-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-container {
+                flex-direction: column;
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .search-box {
+                width: 100%;
+            }
+            
+            .filter-buttons {
+                gap: 0.5rem;
+                justify-content: center;
+            }
+            
+            .filter-btn {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.75rem;
+                border-width: 1.5px;
+            }
+        }
+        
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .filters-container {
+                padding: 0.8rem;
+                margin-bottom: 1rem;
+            }
+            
+            .filter-btn {
+                padding: 0.4rem 0.6rem;
+                font-size: 0.7rem;
+            }
+            
+            .filters-container h3 {
+                font-size: 0.9rem;
+                margin-bottom: 0.8rem;
+            }
+        }
+    
+        .filters-container {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .filters-container h3 {
+            margin-bottom: 1rem;
+            color: var(--forest-deep);
+            font-size: 1rem;
+        }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1rem;
+            border: 2px solid var(--forest-deep);
+            background: white;
+            color: var(--forest-deep);
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: var(--cream-light);
+        }
+
+        .filter-btn.active {
+            background: var(--forest-deep);
+            color: white;
+        }
+
+        .establishment-card {
+            transition: all 0.3s;
+        }
+
+        .establishment-card.hidden {
+            display: none;
+        }
+
+        /* ============================================
+           HEADER COM IMAGEM DE FUNDO
+        ============================================ */
+        .page-header-with-bg {
+            position: relative;
+            background-image: url('images/FUNDO_ROTAS.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        
+        /* Suporte para diferentes formatos e nomes */
+        @supports (background-image: url('images/FUNDO_ROTAS.jpg')) {
+            .page-header-with-bg {
+                background-image: url('images/FUNDO_ROTAS.jpg');
+            }
+        }
+        
+        @supports (background-image: url('images/FUNDO_ROTAS.jpg')) {
+            .page-header-with-bg {
+                background-image: url('images/FUNDO_ROTAS.jpg');
+            }
+        }
+        
+        /* Fallback com foto geral se FUNDO_ROTAS não existir */
+        .page-header-with-bg {
+            background-image: 
+                url('images/FUNDO_ROTAS.jpg'),
+                url('images/FUNDO_ROTAS.jpg'),
+                url('images/FUNDO_ROTAS.jpg'),
+                url('images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg');
+        }
+        
+        .page-header-with-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(10, 61, 46, 0.85) 0%, 
+                rgba(26, 93, 67, 0.75) 100%);
+            z-index: 1;
+        }
+        
+        .page-header-with-bg .container {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .page-header-with-bg .page-title,
+        .page-header-with-bg .page-subtitle {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* ============================================
+           BOTÃO VOLTAR AO TOPO
+        ============================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            opacity: 0;
+            visibility: hidden;
+            z-index: 9999;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--gold-light);
+            transform: translateY(-5px);
+            box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+        }
+
+        @media (max-width: 768px) {
+            .back-to-top {
+                bottom: 1rem;
+                right: 1rem;
+                width: 45px;
+                height: 45px;
+            }
+        }
+</style>
+
+    <!-- Google Analytics (GA4) -->
+    <!-- INSTRUÇÃO: Substitua 'G-520010346' pelo seu ID do Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-520010346">
+
+        // Botão voltar ao topo
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        if (backToTopBtn) {
+            window.addEventListener('scroll', () => {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.classList.add('visible');
+                } else {
+                    backToTopBtn.classList.remove('visible');
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-520010346');
+    </script>
+
+    <script src="translations.js"></script>
+</head>
+<body>
+    <header class="header">
+        <h2 class="header-title" data-i18n="header.title">Rotas Turísticas</h2>
+        <p class="header-subtitle">
+            <span data-i18n="header.subtitle">Explore todos os estabelecimentos participantes das rotas turísticas de São Mateus do Sul</span>
+        </p>
+    </header>
+
+    <div class="filters">
+        <div class="filters-container">
+            <div class="search-box">
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="search-input" 
+                    placeholder="🔍 Buscar por nome, localidade ou tipo de experiência..."
+                    oninput="filterEstablishments()"
+                >
+            </div>
+            <div style="width: 100%; margin-top: 1rem;">
+                <select id="locationFilter" onchange="filterByLocation()" style="
+                    width: 100%;
+                    padding: 1rem 1.5rem;
+                    border: 2px solid #1a5d43;
+                    border-radius: 50px;
+                    font-size: 1rem;
+                    font-family: var(--font-body);
+                    background: white;
+                    cursor: pointer;
+                ">
+                    <option value="all">📍 Todas as Localidades</option>
+                    <option value="divisa">Localidade de Divisa</option>
+                    <option value="fluviópolis">Localidade de Fluviópolis</option>
+                    <option value="taquaral">Localidade de Taquaral / Colônia Taquaral</option>
+                    <option value="água branca">Localidade da Água Branca</option>
+                    <option value="espigãozinho">Localidade do Espigãozinho</option>
+                    <option value="faxinal">Localidade do Faxinal do Ilhéus</option>
+                    <option value="lajeadinho">Localidade do Lajeadinho</option>
+                    <option value="são joaquim">Bairro São Joaquim</option>
+                    <option value="centro">Centro</option>
+                    <option value="iguaçu">Colônia Iguaçu</option>
+                    <option value="potinga">Localidade da Barra do Potinga</option>
+                    <option value="emboque">Localidade do Emboque</option>
+                    <option value="cachoeira">Colônia Cachoeira</option>
+                    <option value="vargem">Localidade da Vargem Grande</option>
+                    <option value="maria rosa">Núcleo Maria Rosa</option>
+                </select>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterByRoute('all')">Todas</button>
+                <button class="filter-btn" onclick="filterByRoute('sabores')">🍓 Sabores & Memórias</button>
+                <button class="filter-btn" onclick="filterByRoute('mate')">🌿 Erva-Mate</button>
+                <button class="filter-btn" onclick="filterByRoute('polonesa')">⛪ Polonesa</button>
+                <button class="filter-btn" onclick="filterByRoute('aguas')">🌊 Das Águas</button>
+                <button class="filter-btn" onclick="filterByRoute('fluviop')">🏘️ Fluviópolis</button>
+                <button class="filter-btn" onclick="filterByRoute('terra')">🌱 Da Terra</button>
+            </div>
+        </div>
+        <div class="results-count" id="resultsCount"></div>
+    </div>
+
+    <main class="main" id="mainContent">
+        <!-- Content will be generated by JavaScript -->
+    </main>
+
+    <a href="index.html" class="back-button" title="Voltar ao site">←</a>
+
+    <script>
+        // Database of all establishments
+        const establishments = [
+            // ROTA SABORES & MEMÓRIAS
+            {
+                route: 'sabores',
+                name: 'Morangos da Mary',
+                desc: 'Experiência "colha e pague" de morangos com manejo biológico',
+                location: 'Localidade de Divisa',
+                phone: '(42) 99820-6671',
+                hours: 'Sábados e domingos (14h30 às 18h); Seg a Sex com agendamento',
+                social: ''
+            },
+            {
+                route: 'sabores',
+                name: 'Dalety - Queijos e Doces',
+                desc: 'Café colonial, queijos artesanais (minas, mussarela, parmesão) e doces caseiros',
+                location: 'Localidade de Divisa',
+                phone: '(42) 99875-2822',
+                hours: 'Um domingo por mês (agendamento prévio)',
+                social: '@dalety_queijosedoces'
+            },
+            {
+                route: 'sabores',
+                name: 'All Garden',
+                desc: 'Piqueniques, trilhas, buffet e locação para fotografia em meio à natureza',
+                location: 'Localidade de Divisa',
+                phone: '(42) 99813-2267',
+                hours: 'Terça a domingo (agendamento prévio)',
+                social: '@allgardenmoments'
+            },
+            {
+                route: 'sabores',
+                name: 'Nova Esperança - Equoterapia e Equitação',
+                desc: 'Passeios a cavalo, equoterapia e atividades de conexão com animais',
+                location: 'Localidade de Divisa',
+                phone: '(42) 99903-1325',
+                hours: 'Seg a Sex (9h-18h); Sáb e Dom (agendamento)',
+                social: '@novaesperanca.equoterapia'
+            },
+            {
+                route: 'sabores',
+                name: 'Cabana Campo de Telha',
+                desc: 'Museu da cultura tropeira com elementos interativos e música raiz',
+                location: 'Localidade de Divisa',
+                phone: '(42) 99813-2267',
+                hours: 'Sábados e domingos, 13h às 17h (agendamento prévio)',
+                social: ''
+            },
+
+            // ROTA DA ERVA-MATE
+            {
+                route: 'mate',
+                name: 'Parada do Chimarrão (Ervateira Rei Verde)',
+                desc: 'Visita à indústria, loja de produtos, artesanato e aprendizado sobre chimarrão',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 99960-0496 / (42) 3560-1128',
+                hours: 'Loja: Segunda a sábado',
+                social: '@paradadochimarrao476 / @ervamatereiverde'
+            },
+            {
+                route: 'mate',
+                name: 'Ervateira Taquaral',
+                desc: 'Visita ao cultivo e fábrica, degustação de chimarrão e tereré à sombra das araucárias',
+                location: 'Localidade de Taquaral do Bugre',
+                phone: '(42) 98834-0858',
+                hours: 'Sob agendamento',
+                social: '@ervamatetaquaral'
+            },
+            {
+                route: 'mate',
+                name: 'Vivenda do Mate',
+                desc: 'Experiência do sapeco, trilhas e gastronomia criativa com erva-mate (doces, drinks)',
+                location: 'Localidade do Faxinal do Ilhéus',
+                phone: '(41) 99844-8547',
+                hours: 'Sob agendamento',
+                social: '@vivendadomate'
+            },
+            {
+                route: 'mate',
+                name: 'Viveiro Santana',
+                desc: 'Vivência completa do processo produtivo da erva-mate',
+                location: 'Localidade do Lajeadinho',
+                phone: '(42) 99964-2230',
+                hours: 'Qualquer dia (com agendamento)',
+                social: ''
+            },
+            {
+                route: 'mate',
+                name: 'Bier Herr Cervejaria Artesanal',
+                desc: 'Cervejaria artesanal com cerveja premiada à base de erva-mate',
+                location: 'Bairro São Joaquim',
+                phone: '(42) 99934-3798',
+                hours: '1ª segunda-feira do mês, a partir das 13h (agendamento)',
+                social: '@bierherr'
+            },
+
+            // ROTA POLONESA
+            {
+                route: 'polonesa',
+                name: 'Igreja Centenária da Água Branca',
+                desc: 'Imersão cultural e religiosa, café da manhã, histórias, coral e dança polonesa',
+                location: 'Localidade da Água Branca',
+                phone: '(42) 98812-4513',
+                hours: 'Sábados e domingos (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'polonesa',
+                name: 'Delícias da Bernardina',
+                desc: 'Culinária típica polonesa, almoços/jantares e oficinas de culinária',
+                location: 'Colônia Taquaral',
+                phone: '(42) 98845-7103',
+                hours: 'Domingo a domingo (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'polonesa',
+                name: 'Armazém Campestre',
+                desc: 'Armazém histórico (70 anos), degustação de pães, bolos e defumados',
+                location: 'Localidade do Espigãozinho',
+                phone: '(42) 98842-6131',
+                hours: 'Domingo a domingo (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'polonesa',
+                name: 'Queijos Artesanais da Cleonice',
+                desc: 'Queijos artesanais variados (vinho, defumado, temperado) e visita à queijaria',
+                location: 'Colônia Taquaral',
+                phone: '(42) 98824-2769',
+                hours: 'Domingo a domingo (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'polonesa',
+                name: 'Propriedade da Inês e do Lucival',
+                desc: 'Colheita de uva (variedade Poloski), caminhada nos parreirais e contato com a natureza',
+                location: 'Localidade de Espigãozinho',
+                phone: '(42) 99813-9448',
+                hours: 'Dezembro e janeiro (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'polonesa',
+                name: 'Ancestral Gastronomia',
+                desc: 'Culinária polonesa, pães de fermentação natural e eventos temáticos',
+                location: 'Colônia Taquaral',
+                phone: '(42) 98804-0535',
+                hours: 'Sob agendamento',
+                social: '@ancestral.gastronomia'
+            },
+            {
+                route: 'polonesa',
+                name: 'Artur Biergarten',
+                desc: 'Almoço com toque alemão, plantação de mirtilo e girassóis',
+                location: 'Localidade do Faxinal do Ilhéus',
+                phone: '(42) 98418-1639',
+                hours: 'Sob agendamento',
+                social: '@artur.biergarten'
+            },
+
+            // ROTA DAS ÁGUAS
+            {
+                route: 'aguas',
+                name: 'Ribeiro Pesca e Turismo',
+                desc: 'Pesca esportiva e passeio fluvial no Rio Iguaçu',
+                location: 'Centro - Praça do Rio Iguaçu',
+                phone: '(42) 99804-0096',
+                hours: 'Todo domingo, a partir das 14h',
+                social: '@ribeiropescaeturismo'
+            },
+            {
+                route: 'aguas',
+                name: 'Marina Barra do Iguaçu',
+                desc: 'Centro Náutico, restaurante de frutos do mar e lazer',
+                location: 'Colônia Iguaçu',
+                phone: '(42) 98841-6009',
+                hours: 'Qua a Sex (16h-23h), Sáb e Dom (11h30-17h)',
+                social: '@marina.barradoiguacu'
+            },
+            {
+                route: 'aguas',
+                name: 'Área de Lazer Ulbrich',
+                desc: 'Locação de casas, almoço, pesca e lazer no Rio Potinga',
+                location: 'Localidade da Barra do Potinga',
+                phone: '(42) 98808-3565',
+                hours: 'Dom a Dom (locação); Almoço aos domingos (Abril a Nov)',
+                social: '@ulbrichareadelazer'
+            },
+            {
+                route: 'aguas',
+                name: 'Pesqueiro Tio Ivo',
+                desc: 'Pesque e pague, campo de futebol, pedalinho e churrasqueira',
+                location: 'Localidade do Emboque',
+                phone: '(42) 99829-9245',
+                hours: 'Sáb, Dom e Feriados (9h-21h)',
+                social: '@pesqueirotioivo2024'
+            },
+            {
+                route: 'aguas',
+                name: 'Pesqueiro da Joana',
+                desc: 'Pesca de barranco/rio, camping, quiosque e casas para locação',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98805-6204',
+                hours: 'Terça a Domingo (8h às 22h)',
+                social: '@pesqueirodajoana'
+            },
+            {
+                route: 'aguas',
+                name: 'Pesqueiro do Luizão',
+                desc: 'Pesca, camping, hospedagem e venda de petiscos',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 99911-1031',
+                hours: 'Domingo a domingo (8h às 23h)',
+                social: '@pesqueiro._do_.luizao'
+            },
+            {
+                route: 'aguas',
+                name: 'Pesqueiro do Kiko',
+                desc: 'Pesca de barranco, pesca no rio e camping',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98873-6812',
+                hours: 'Domingo a domingo (8h às 23h)',
+                social: ''
+            },
+            {
+                route: 'aguas',
+                name: 'Rancho Samas',
+                desc: 'Pesque e pague e restaurante',
+                location: 'Colônia Cachoeira',
+                phone: '(42) 99976-9967',
+                hours: 'Terça a domingo (10h às 20h)',
+                social: '@ranchosamas'
+            },
+
+            // ROTA CAMINHOS DE FLUVIÓPOLIS
+            {
+                route: 'fluviop',
+                name: 'Frigorífico 3M (Casa de Carnes)',
+                desc: 'Carnes nobres de cordeiro e cortes especiais',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98829-5002',
+                hours: 'Segunda a sábado (8h às 18h)',
+                social: '@frigorifico_3m_carnes_nobres'
+            },
+            {
+                route: 'fluviop',
+                name: 'Canil e Centro de Treinamento São José',
+                desc: 'Demonstração de pastoreio com Border Collies, hotel e creche pet',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98819-8950',
+                hours: 'Segunda a domingo (por agendamento)',
+                social: '@ctecanilsaojose06'
+            },
+            {
+                route: 'fluviop',
+                name: 'Parada Pinoli',
+                desc: 'Restaurante, panificação, espaço pet e kids na estrada',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 99960-0496',
+                hours: 'Segunda a domingo (8h às 22h)',
+                social: '@paradapinoli'
+            },
+            {
+                route: 'fluviop',
+                name: 'Hotel Moro',
+                desc: 'Hospedagem com café da manhã',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98887-4202',
+                hours: '24h (Domingo a domingo)',
+                social: ''
+            },
+            {
+                route: 'fluviop',
+                name: 'Restaurante e Churrascaria Dallas',
+                desc: 'Buffet variado, carnes selecionadas e lanches',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98845-6741',
+                hours: 'Segunda a sábado (8h às 20h)',
+                social: '@dallas_restaurantell'
+            },
+            {
+                route: 'fluviop',
+                name: 'Propriedade Eduardo Pachek',
+                desc: 'Colheita e venda de uvas, visita ao parreiral',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98826-4420',
+                hours: 'Mês de Janeiro (8h às 18h)',
+                social: ''
+            },
+            {
+                route: 'fluviop',
+                name: 'Pitayas Dragão do Iguaçu',
+                desc: 'Venda de frutas (pitayas), mudas e visita à plantação',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98875-2708',
+                hours: 'Finais de semana (Janeiro a Abril) sob agendamento',
+                social: '@pitayasdragaodoiguacu'
+            },
+
+            // ROTA DA TERRA
+            {
+                route: 'terra',
+                name: 'Viveiro MK',
+                desc: 'Venda de mudas, flores, cestas e visita ao viveiro',
+                location: 'Localidade da Vargem Grande',
+                phone: '(42) 99811-3366',
+                hours: 'Viveiro (Seg-Sex 8h-18h), Loja (Sáb 8h-13h)',
+                social: '@lojaviveiromk'
+            },
+            {
+                route: 'terra',
+                name: 'Sawe Parque Aquático',
+                desc: 'Parque aquático, day use, camping e casas para locação',
+                location: 'Localidade da Vargem Grande',
+                phone: '(42) 99975-7499',
+                hours: 'Segunda a domingo (9h às 19h)',
+                social: '@parquesawe'
+            },
+            {
+                route: 'terra',
+                name: 'Mag Verduras',
+                desc: 'Sacolas de verduras orgânicas e café rural',
+                location: 'Localidade de Fluviópolis',
+                phone: '(42) 98845-2124',
+                hours: 'Segunda a domingo (por agendamento)',
+                social: ''
+            },
+            {
+                route: 'terra',
+                name: 'Propriedade do Tico',
+                desc: 'Venda de produtos orgânicos, sementes e mudas',
+                location: '',
+                phone: '(42) 98807-7985',
+                hours: 'Sábados e domingos (por agendamento)',
+                social: ''
+            },
+            {
+                route: 'terra',
+                name: 'Sítio Sapopema',
+                desc: 'Agroecologia, almoço rural (pão no bafo) e venda de produtos',
+                location: 'Núcleo Maria Rosa',
+                phone: '(42) 98869-8709',
+                hours: 'Qualquer dia (sob agendamento)',
+                social: ''
+            },
+            {
+                route: 'terra',
+                name: 'Propriedade da Sabrina',
+                desc: 'Venda de coxinha de farofa tradicional',
+                location: '',
+                phone: '(42) 98890-7686',
+                hours: 'Qualquer dia (sob agendamento)',
+                social: ''
+            }
+        ];
+
+        // Route metadata
+        const routeInfo = {
+            sabores: { icon: '🍓', name: 'Sabores & Memórias', color: '#ef4444' },
+            mate: { icon: '🌿', name: 'Rota da Erva-Mate', color: '#22c55e' },
+            polonesa: { icon: '⛪', name: 'Rota Polonesa', color: '#3b82f6' },
+            aguas: { icon: '🌊', name: 'Rota das Águas', color: '#0ea5e9' },
+            fluviop: { icon: '🏘️', name: 'Caminhos de Fluviópolis', color: '#f59e0b' },
+            terra: { icon: '🌱', name: 'Rota da Terra', color: '#84cc16' }
+        };
+
+        
+        // Sistema de Traduções local (para esta página)
+        const rotasTranslations = {
+            'pt-br': {
+                'header.title': 'Rotas Turísticas',
+                'header.subtitle': '<span data-i18n="header.subtitle">Explore todos os estabelecimentos participantes das rotas turísticas de São Mateus do Sul</span>',
+                'search.placeholder': '🔍 Buscar por nome, localidade ou tipo de experiência...',
+                'filter.all': 'Todas',
+                'filter.sabores': '🍓 Sabores & Memórias',
+                'filter.mate': '🌿 Erva-Mate',
+                'filter.polonesa': '⛪ Polonesa',
+                'filter.aguas': '🌊 Das Águas',
+                'filter.fluviop': '🏘️ Fluviópolis',
+                'filter.terra': '🌱 Da Terra',
+                'results': 'estabelecimento(s) encontrado(s)',
+                'location': 'Localização',
+                'contact': 'Contato',
+                'hours': 'Horário',
+                'social': 'Redes Sociais'
+            },
+            'en': {
+                'header.title': 'Tourist Routes',
+                'header.subtitle': 'Explore all participating establishments in São Mateus do Sul tourist routes',
+                'search.placeholder': '🔍 Search by name, location or experience type...',
+                'filter.all': 'All',
+                'filter.sabores': '🍓 Flavors & Memories',
+                'filter.mate': '🌿 Mate Route',
+                'filter.polonesa': '⛪ Polish Route',
+                'filter.aguas': '🌊 Waters Route',
+                'filter.fluviop': '🏘️ Fluviópolis',
+                'filter.terra': '🌱 Earth Route',
+                'results': 'establishment(s) found',
+                'location': 'Location',
+                'contact': 'Contact',
+                'hours': 'Hours',
+                'social': 'Social Media'
+            },
+            'es': {
+                'header.title': 'Rutas Turísticas',
+                'header.subtitle': 'Explora todos los establecimientos participantes de las rutas turísticas de São Mateus do Sul',
+                'search.placeholder': '🔍 Buscar por nombre, ubicación o tipo de experiencia...',
+                'filter.all': 'Todas',
+                'filter.sabores': '🍓 Sabores y Memorias',
+                'filter.mate': '🌿 Ruta del Mate',
+                'filter.polonesa': '⛪ Ruta Polaca',
+                'filter.aguas': '🌊 Ruta de las Aguas',
+                'filter.fluviop': '🏘️ Fluviópolis',
+                'filter.terra': '🌱 Ruta de la Tierra',
+                'results': 'establecimiento(s) encontrado(s)',
+                'location': 'Ubicación',
+                'contact': 'Contacto',
+                'hours': 'Horario',
+                'social': 'Redes Sociales'
+            },
+            'pl': {
+                'header.title': 'Szlaki Turystyczne',
+                'header.subtitle': 'Odkryj wszystkie uczestniczące obiekty szlaków turystycznych São Mateus do Sul',
+                'search.placeholder': '🔍 Szukaj według nazwy, lokalizacji lub rodzaju doświadczenia...',
+                'filter.all': 'Wszystkie',
+                'filter.sabores': '🍓 Smaki i Wspomnienia',
+                'filter.mate': '🌿 Szlak Yerba Mate',
+                'filter.polonesa': '⛪ Szlak Polski',
+                'filter.aguas': '🌊 Szlak Wód',
+                'filter.fluviop': '🏘️ Fluviópolis',
+                'filter.terra': '🌱 Szlak Ziemi',
+                'results': 'znaleziono obiekt(ów)',
+                'location': 'Lokalizacja',
+                'contact': 'Kontakt',
+                'hours': 'Godziny',
+                'social': 'Media Społecznościowe'
+            }
+        };
+
+        let currentLanguage = 'pt-br';
+
+        function translatePage(lang) {
+            currentLanguage = lang;
+            
+            // Atualizar botões ativos
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(lang.split('-')[0])) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Traduzir elementos com data-i18n
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (rotasTranslations[lang] && rotasTranslations[lang][key]) {
+                    if (el.tagName === 'INPUT') {
+                        el.placeholder = rotasTranslations[lang][key];
+                    } else {
+                        el.textContent = rotasTranslations[lang][key];
+                    }
+                }
+            });
+
+            console.log('Idioma alterado para:', lang);
+        }
+
+        let currentFilter = 'all';
+        let filteredData = [];
+
+        
+        // Filtro por localidade
+        function filterByLocation() {
+            const locationValue = document.getElementById('locationFilter').value.toLowerCase();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.establishment-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const location = card.dataset.location.toLowerCase();
+                const name = card.dataset.name.toLowerCase();
+                const desc = card.dataset.desc.toLowerCase();
+                
+                const matchesLocation = locationValue === 'all' || location.includes(locationValue);
+                const matchesSearch = name.includes(searchTerm) || location.includes(searchTerm) || desc.includes(searchTerm);
+                const matchesRoute = currentFilter === 'all' || card.closest('.route-section')?.dataset.route === currentFilter;
+                
+                if (matchesLocation && matchesSearch && matchesRoute) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Mostrar/ocultar seções
+            document.querySelectorAll('.route-section').forEach(section => {
+                const visibleCards = section.querySelectorAll('.establishment-card[style="display: block;"], .establishment-card:not([style])');
+                if (visibleCards.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+            
+            filteredData = Array.from(cards).filter(c => c.style.display !== 'none');
+            updateResultsCount();
+            
+            if (visibleCount === 0) {
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="no-results">
+                        <h2>Nenhum resultado encontrado</h2>
+                        <p>Tente outra localidade ou termo de busca</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Initialize page
+        function init() {
+            console.log('🚀 Iniciando página de rotas...');
+            console.log('📊 Estabelecimentos carregados:', establishments.length);
+            console.log('🗺️ Rotas disponíveis:', Object.keys(routeInfo));
+            renderContent();
+            updateResultsCount();
+            console.log('✅ Página inicializada com sucesso');
+        }
+
+        // Render content
+        function renderContent() {
+            const mainContent = document.getElementById('mainContent');
+            console.log('🔄 Renderizando conteúdo, filtro atual:', currentFilter);
+            
+            if (!mainContent) {
+                console.error('❌ mainContent não encontrado!');
+                return;
+            }
+            
+            if (currentFilter === 'all') {
+                // Group by route
+                let html = '';
+                Object.keys(routeInfo).forEach(routeKey => {
+                    const route = routeInfo[routeKey];
+                    const items = establishments.filter(e => e.route === routeKey);
+                    console.log(`  - ${routeKey}: ${items.length} itens`);
+                    
+                    if (items.length > 0) {
+                        html += `
+                            <section class="route-section" data-route="${routeKey}">
+                                <div class="route-section-header">
+                                    <span class="route-icon">${route.icon}</span>
+                                    <h2 class="route-section-title">${route.name}</h2>
+                                </div>
+                                <div class="establishments-grid">
+                                    ${items.map(est => renderCard(est)).join('')}
+                                </div>
+                            </section>
+                        `;
+                    }
+                });
+                mainContent.innerHTML = html;
+            } else {
+                // Show filtered results
+                const items = establishments.filter(e => e.route === currentFilter);
+                const route = routeInfo[currentFilter];
+                
+                mainContent.innerHTML = `
+                    <section class="route-section">
+                        <div class="route-section-header">
+                            <span class="route-icon">${route.icon}</span>
+                            <h2 class="route-section-title">${route.name}</h2>
+                        </div>
+                        <div class="establishments-grid">
+                            ${items.map(est => renderCard(est)).join('')}
+                        </div>
+                    </section>
+                `;
+            }
+            
+            filteredData = establishments;
+            updateResultsCount();
+        }
+
+        // Render establishment card
+        function renderCard(est) {
+            return `
+                <div class="establishment-card" data-name="${est.name.toLowerCase()}" data-location="${est.location.toLowerCase()}" data-desc="${est.desc.toLowerCase()}">
+                    <div class="establishment-header">
+                        <h3 class="establishment-name">${est.name}</h3>
+                        <span class="establishment-badge">${routeInfo[est.route].icon}</span>
+                    </div>
+                    <p class="establishment-desc">${est.desc}</p>
+                    <div class="establishment-info">
+                        ${est.location ? `
+                            <div class="info-item">
+                                <span class="info-icon">📍</span>
+                                <div class="info-text">
+                                    <strong>Localização</strong>
+                                    ${est.location}
+                                </div>
+                            </div>
+                        ` : ''}
+                        <div class="info-item">
+                            <span class="info-icon">📞</span>
+                            <div class="info-text">
+                                <strong>Contato</strong>
+                                <a href="tel:${est.phone.replace(/[^\d]/g, '')}" class="info-link">${est.phone}</a>
+                            </div>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-icon">⏰</span>
+                            <div class="info-text">
+                                <strong>Horário</strong>
+                                ${est.hours}
+                            </div>
+                        </div>
+                        ${est.social ? `
+                            <div class="info-item">
+                                <span class="info-icon">📱</span>
+                                <div class="info-text">
+                                    <strong>Redes Sociais</strong>
+                                    <a href="https://instagram.com/${est.social.replace('@', '')}" target="_blank" class="info-link">${est.social}</a>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Filter by route
+        function filterByRoute(route) {
+            currentFilter = route;
+            
+            // Update active button - match by data attribute
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Find button that matches the route
+            const activeBtn = document.querySelector(`.filter-btn[onclick*="'${route}'"]`);
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            // Clear search
+            document.getElementById('searchInput').value = '';
+            
+            renderContent();
+        }
+
+        // Filter by search
+        function filterEstablishments() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const locationValue = document.getElementById('locationFilter').value.toLowerCase();
+            const cards = document.querySelectorAll('.establishment-card');
+            let visibleCount = 0;
+            
+            cards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const location = card.dataset.location.toLowerCase();
+                const desc = card.dataset.desc.toLowerCase();
+                
+                const matchesSearch = name.includes(searchTerm) || location.includes(searchTerm) || desc.includes(searchTerm);
+                const matchesLocation = locationValue === 'all' || location.includes(locationValue);
+                const matchesRoute = currentFilter === 'all' || card.closest('.route-section')?.dataset.route === currentFilter;
+                
+                if (matchesSearch && matchesLocation && matchesRoute) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show/hide route sections
+            document.querySelectorAll('.route-section').forEach(section => {
+                const visibleCards = section.querySelectorAll('.establishment-card[style="display: block;"], .establishment-card:not([style])');
+                if (searchTerm && visibleCards.length === 0) {
+                    section.style.display = 'none';
+                } else {
+                    section.style.display = 'block';
+                }
+            });
+            
+            // Update count
+            filteredData = Array.from(cards).filter(c => c.style.display !== 'none').map(c => ({ name: c.dataset.name }));
+            updateResultsCount();
+            
+            // Show no results message
+            if (visibleCount === 0) {
+                document.getElementById('mainContent').innerHTML = `
+                    <div class="no-results">
+                        <h2>Nenhum resultado encontrado</h2>
+                        <p>Tente buscar por outro termo</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update results count
+        function updateResultsCount() {
+            const count = filteredData.length;
+            const resultsCount = document.getElementById('resultsCount');
+            if (resultsCount) {
+                resultsCount.textContent = `${count} estabelecimento${count !== 1 ? 's' : ''} encontrado${count !== 1 ? 's' : ''}`;
+            }
+        }
+
+        // Initialize on load - garantir que executa após DOM carregado
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('📄 DOM carregado, iniciando...');
+                init();
+            });
+        } else {
+            console.log('📄 DOM já carregado, iniciando imediatamente...');
+            init();
+        }
+        
+        // Também executar após window load como fallback
+        window.addEventListener('load', function() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent && (mainContent.innerHTML.trim() === '' || 
+                mainContent.innerHTML.includes('Content will be generated'))) {
+                console.log('⚠️ Fallback: conteúdo vazio, reinicializando...');
+                init();
+            }
+        });
+        
+        // Fallback final após 1 segundo
+        setTimeout(function() {
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent && (mainContent.innerHTML.trim() === '' || 
+                mainContent.innerHTML.includes('Content will be generated'))) {
+                console.log('⚠️ Fallback 1s: reinicializando...');
+                init();
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>

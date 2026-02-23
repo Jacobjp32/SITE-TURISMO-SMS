@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <title>Painel Admin | Turismo SMS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0a3d2e;
+            --primary-light: #0d5a3e;
+            --accent: #d4a574;
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --text: #333;
+            --text-light: #666;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-box img {
+            width: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        .login-box h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .login-box p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-form button:hover {
+            background: var(--primary-light);
+        }
+        
+        .login-error {
+            color: var(--danger);
+            margin-bottom: 1rem;
+            display: none;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard.active {
+            display: block;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-logo img {
+            width: 40px;
+        }
+        
+        .sidebar-logo span {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu a.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+        }
+        
+        .btn-logout {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: var(--danger);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-card .label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table th {
+            background: #f8f8f8;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+        }
+        
+        .btn-edit { background: #e3f2fd; color: #1976d2; }
+        .btn-delete { background: #ffebee; color: #c62828; }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            color: var(--primary);
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        /* Sections */
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        
+        .quick-action {
+            background: white;
+            border: 2px solid #eee;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .quick-action:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .quick-action .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar {
+                width: 70px;
+                padding: 1rem 0.5rem;
+            }
+            
+            .sidebar-logo span,
+            .sidebar-menu a span {
+                display: none;
+            }
+            
+            .sidebar-menu a {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <img src="images/logo_pin_turismo_3d.png" alt="Logo">
+            <h1>Painel Administrativo</h1>
+            <p>Turismo São Mateus do Sul</p>
+            
+            <p class="login-error" id="loginError">Usuário ou senha incorretos</p>
+            
+            <form class="login-form" onsubmit="Admin.login(event)">
+                <input type="text" id="loginUser" placeholder="Usuário" required>
+                <input type="password" id="loginPass" placeholder="Senha" required>
+                <button type="submit">Entrar</button>
+            </form>
+            
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #999;">
+                Usuário padrão: admin / admin123
+            </p>
+        </div>
+    </div>
+    
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="Logo">
+                <span>Admin</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" data-section="home">📊 <span>Dashboard</span></a></li>
+                <li><a href="#" data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
+                <li><a href="#" data-section="noticias">📰 <span>Notícias</span></a></li>
+                <li><a href="#" data-section="eventos">📅 <span>Eventos</span></a></li>
+                <li><a href="#" data-section="reservas">🎫 <span>Reservas</span></a></li>
+                <li><a href="#" data-section="galeria">🖼️ <span>Galeria</span></a></li>
+                <li><a href="#" data-section="avaliacoes">⭐ <span>Avaliações</span></a></li>
+                <li><a href="#" data-section="config">⚙️ <span>Configurações</span></a></li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="Admin.logout()">🚪 Sair</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section class="admin-section active" id="section-home">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <span id="currentDate"></span>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">👁️</div>
+                        <div class="number" id="stat-visitas">1,234</div>
+                        <div class="label">Visitas este mês</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📰</div>
+                        <div class="number" id="stat-noticias">4</div>
+                        <div class="label">Notícias publicadas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🎫</div>
+                        <div class="number" id="stat-reservas">12</div>
+                        <div class="label">Reservas pendentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">📅</div>
+                        <div class="number">249</div>
+                        <div class="label">Eventos cadastrados</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Ações Rápidas</h2>
+                    </div>
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="Admin.showSection('noticias'); Admin.openModal('noticia')">
+                            <div class="icon">📝</div>
+                            <div>Nova Notícia</div>
+                        </div>
+                        <div class="quick-action" onclick="Admin.showSection('eventos')">
+                            <div class="icon">📅</div>
+                            <div>Novo Evento</div>
+                        </div>
+                        <div class="quick-action" onclick="window.open('index.html', '_blank')">
+                            <div class="icon">🌐</div>
+                            <div>Ver Site</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Últimas Reservas</h2>
+                        <a href="#" onclick="Admin.showSection('reservas')">Ver todas →</a>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cliente</th>
+                                <th>Experiência</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ultimas-reservas">
+                            <tr>
+                                <td>João Silva</td>
+                                <td>Passeio de Barco</td>
+                                <td>28/01/2026</td>
+                                <td><span class="badge badge-warning">Pendente</span></td>
+                            </tr>
+                            <tr>
+                                <td>Maria Santos</td>
+                                <td>Tour Erva-Mate</td>
+                                <td>30/01/2026</td>
+                                <td><span class="badge badge-success">Confirmada</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Aprovações Section - Eventos e Estabelecimentos submetidos por usuários -->
+            <section class="admin-section" id="section-aprovacoes">
+                <div class="page-header">
+                    <h1>✅ Aprovações Pendentes</h1>
+                </div>
+                
+                <div class="card" style="margin-bottom: 1.5rem;">
+                    <div class="card-header">
+                        <h2>🎪 Eventos Aguardando Aprovação</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Solicitante</th>
+                                <th>Enviado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-eventos-pendentes">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem; color: #888;">
+                                    Carregando eventos pendentes...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Endereço</th>
+                                <th>Solicitante</th>
+                                <th>Enviado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-estabelecimentos-pendentes">
+                            <tr>
+                                <td colspan="6" style="text-align: center; padding: 2rem; color: #888;">
+                                    Carregando estabelecimentos pendentes...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Notícias Section -->
+            <section class="admin-section" id="section-noticias">
+                <div class="page-header">
+                    <h1>Gerenciar Notícias</h1>
+                    <button class="btn-primary" onclick="Admin.openModal('noticia')">+ Nova Notícia</button>
+                </div>
+                
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-noticias">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Eventos Section -->
+            <section class="admin-section" id="section-eventos">
+                <div class="page-header">
+                    <h1>Gerenciar Eventos</h1>
+                    <button class="btn-primary" onclick="Admin.openModal('evento')">+ Novo Evento</button>
+                </div>
+                
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Categoria</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-eventos">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Reservas Section -->
+            <section class="admin-section" id="section-reservas">
+                <div class="page-header">
+                    <h1>Gerenciar Reservas</h1>
+                </div>
+                
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Cliente</th>
+                                <th>Experiência</th>
+                                <th>Data</th>
+                                <th>Pessoas</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-reservas">
+                            <!-- Preenchido via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Galeria Section -->
+            <section class="admin-section" id="section-galeria">
+                <div class="page-header">
+                    <h1>Gerenciar Galeria</h1>
+                    <button class="btn-primary">+ Upload Imagem</button>
+                </div>
+                
+                <div class="card">
+                    <p style="text-align: center; padding: 3rem; color: #888;">
+                        📷 Funcionalidade de upload de imagens em desenvolvimento.<br>
+                        Por enquanto, adicione imagens manualmente na pasta /images/
+                    </p>
+                </div>
+            </section>
+            
+            <!-- Avaliações Section -->
+            <section class="admin-section" id="section-avaliacoes">
+                <div class="page-header">
+                    <h1>Avaliações dos Visitantes</h1>
+                </div>
+                
+                <div class="card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Local</th>
+                                <th>Avaliador</th>
+                                <th>Nota</th>
+                                <th>Comentário</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="lista-avaliacoes">
+                            <tr>
+                                <td colspan="5" style="text-align: center; color: #888; padding: 2rem;">
+                                    Nenhuma avaliação registrada ainda.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            
+            <!-- Configurações Section -->
+            <section class="admin-section" id="section-config">
+                <div class="page-header">
+                    <h1>Configurações</h1>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Informações do Site</h2>
+                    </div>
+                    <form onsubmit="Admin.salvarConfig(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Nome do Site</label>
+                                <input type="text" value="Turismo São Mateus do Sul">
+                            </div>
+                            <div class="form-group">
+                                <label>Email de Contato</label>
+                                <input type="email" value="turismo@saomateusdosul.pr.gov.br">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Telefone</label>
+                                <input type="text" value="(42) 3532-0000">
+                            </div>
+                            <div class="form-group">
+                                <label>WhatsApp Reservas</label>
+                                <input type="text" value="5542999999999" placeholder="5542999999999">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar Configurações</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Redes Sociais</h2>
+                    </div>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Facebook</label>
+                                <input type="url" value="https://www.facebook.com/share/1CC3pQvqsi/">
+                            </div>
+                            <div class="form-group">
+                                <label>Instagram</label>
+                                <input type="url" value="https://instagram.com/depculturaeturismosms">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>YouTube</label>
+                                <input type="url" value="https://youtube.com/@prefeiturasms">
+                            </div>
+                            <div class="form-group">
+                                <label>TikTok</label>
+                                <input type="url" value="https://www.tiktok.com/@prefeiturasms">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar Redes Sociais</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Banner AgroSamas</h2>
+                    </div>
+                    <form>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="bannerAtivo"> Ativar Banner do AgroSamas na Home
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-primary">Salvar</button>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <!-- Modal Nova Notícia -->
+    <div class="modal-overlay" id="modal-noticia">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Nova Notícia</h2>
+                <button class="modal-close" onclick="Admin.closeModal('noticia')">×</button>
+            </div>
+            <form onsubmit="Admin.salvarNoticia(event)">
+                <div class="form-group">
+                    <label>Título *</label>
+                    <input type="text" required placeholder="Título da notícia">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select>
+                            <option>Eventos</option>
+                            <option>Cultura</option>
+                            <option>Gastronomia</option>
+                            <option>Turismo</option>
+                            <option>Institucional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Resumo</label>
+                    <textarea placeholder="Breve resumo da notícia..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Conteúdo *</label>
+                    <textarea required placeholder="Conteúdo completo da notícia..." style="min-height: 200px;"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox"> Destacar na home
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Publicar Notícia</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Novo Evento -->
+    <div class="modal-overlay" id="modal-evento">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Novo Evento</h2>
+                <button class="modal-close" onclick="Admin.closeModal('evento')">×</button>
+            </div>
+            <form onsubmit="Admin.salvarEvento(event)">
+                <div class="form-group">
+                    <label>Nome do Evento *</label>
+                    <input type="text" required placeholder="Nome do evento">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Data *</label>
+                        <input type="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Horário</label>
+                        <input type="text" placeholder="Ex: 19h às 22h">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Local</label>
+                        <input type="text" placeholder="Local do evento">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select>
+                            <option value="cultural">Cultural</option>
+                            <option value="religioso">Religioso</option>
+                            <option value="feira">Feira</option>
+                            <option value="esporte">Esporte</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <textarea placeholder="Descrição do evento..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Salvar Evento</button>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        const Admin = {
+            // Credenciais (em produção, usar autenticação real)
+            credentials: {
+                user: 'admin',
+                pass: 'admin123'
+            },
+            
+            // Login
+            login: function(e) {
+                e.preventDefault();
+                const user = document.getElementById('loginUser').value;
+                const pass = document.getElementById('loginPass').value;
+                
+                if (user === this.credentials.user && pass === this.credentials.pass) {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('dashboard').classList.add('active');
+                    localStorage.setItem('adminLogado', 'true');
+                    this.init();
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            },
+            
+            // Logout
+            logout: function() {
+                localStorage.removeItem('adminLogado');
+                document.getElementById('dashboard').classList.remove('active');
+                document.getElementById('loginScreen').style.display = 'flex';
+            },
+            
+            // Verificar sessão
+            checkSession: function() {
+                if (localStorage.getItem('adminLogado') === 'true') {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('dashboard').classList.add('active');
+                    this.init();
+                }
+            },
+            
+            // Inicializar
+            init: function() {
+                this.setupMenu();
+                this.loadData();
+                this.updateDate();
+            },
+            
+            // Setup menu
+            setupMenu: function() {
+                const menuLinks = document.querySelectorAll('.sidebar-menu a');
+                menuLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        menuLinks.forEach(l => l.classList.remove('active'));
+                        link.classList.add('active');
+                        this.showSection(link.dataset.section);
+                    });
+                });
+            },
+            
+            // Mostrar seção
+            showSection: function(section) {
+                document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+                document.getElementById('section-' + section).classList.add('active');
+                
+                document.querySelectorAll('.sidebar-menu a').forEach(l => l.classList.remove('active'));
+                document.querySelector(`.sidebar-menu a[data-section="${section}"]`).classList.add('active');
+            },
+            
+            // Carregar dados
+            loadData: function() {
+                this.loadNoticias();
+                this.loadEventos();
+                this.loadReservas();
+                this.loadAprovacoes();
+            },
+            
+            // Carregar aprovações pendentes
+            loadAprovacoes: function() {
+                // Carregar eventos pendentes
+                const eventosPendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]')
+                    .filter(e => e.status === 'pendente');
+                const tbodyEventos = document.getElementById('lista-eventos-pendentes');
+                
+                if (eventosPendentes.length === 0) {
+                    tbodyEventos.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 2rem;">✅ Nenhum evento pendente de aprovação.</td></tr>`;
+                } else {
+                    tbodyEventos.innerHTML = eventosPendentes.map(e => `
+                        <tr>
+                            <td><strong>${e.nome}</strong><br><small style="color:#666;">${e.categoria || 'Sem categoria'}</small></td>
+                            <td>${this.formatarData(e.dataInicio)}</td>
+                            <td>${e.local}</td>
+                            <td>${e.submittedByName}<br><small style="color:#666;">${e.submittedByEmail}</small></td>
+                            <td>${this.formatarData(e.submittedAt)}</td>
+                            <td>
+                                <button class="btn-sm" style="background:#d4edda;color:#155724;" onclick="Admin.aprovarEvento('${e.id}')">✅ Aprovar</button>
+                                <button class="btn-sm" style="background:#f8d7da;color:#721c24;" onclick="Admin.rejeitarEvento('${e.id}')">❌ Rejeitar</button>
+                                <button class="btn-sm btn-edit" onclick="Admin.verDetalhesEvento('${e.id}')">👁️ Ver</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Carregar estabelecimentos pendentes
+                const estPendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]')
+                    .filter(e => e.status === 'pendente');
+                const tbodyEst = document.getElementById('lista-estabelecimentos-pendentes');
+                
+                if (estPendentes.length === 0) {
+                    tbodyEst.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #888; padding: 2rem;">✅ Nenhum estabelecimento pendente de aprovação.</td></tr>`;
+                } else {
+                    tbodyEst.innerHTML = estPendentes.map(e => `
+                        <tr>
+                            <td><strong>${e.nome}</strong></td>
+                            <td>${e.categoria || 'Sem categoria'}</td>
+                            <td>${e.endereco}</td>
+                            <td>${e.submittedByName}<br><small style="color:#666;">${e.submittedByEmail}</small></td>
+                            <td>${this.formatarData(e.submittedAt)}</td>
+                            <td>
+                                <button class="btn-sm" style="background:#d4edda;color:#155724;" onclick="Admin.aprovarEstabelecimento('${e.id}')">✅ Aprovar</button>
+                                <button class="btn-sm" style="background:#f8d7da;color:#721c24;" onclick="Admin.rejeitarEstabelecimento('${e.id}')">❌ Rejeitar</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            },
+
+            // Formatar data
+            formatarData: function(dataStr) {
+                if (!dataStr) return '-';
+                const data = new Date(dataStr);
+                return data.toLocaleDateString('pt-BR');
+            },
+
+            // Aprovar evento
+            aprovarEvento: function(eventId) {
+                if (!confirm('Deseja aprovar este evento? Ele será adicionado ao calendário oficial.')) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    evento.status = 'aprovado';
+                    evento.reviewedAt = new Date().toISOString();
+                    
+                    // Mover para aprovados
+                    let aprovados = JSON.parse(localStorage.getItem('sms_eventos_aprovados') || '[]');
+                    aprovados.push(evento);
+                    localStorage.setItem('sms_eventos_aprovados', JSON.stringify(aprovados));
+                    
+                    // Remover dos pendentes
+                    pendentes = pendentes.filter(e => e.id !== eventId);
+                    localStorage.setItem('sms_eventos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('✅ Evento aprovado com sucesso!');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Rejeitar evento
+            rejeitarEvento: function(eventId) {
+                const motivo = prompt('Motivo da rejeição (opcional):');
+                if (motivo === null) return; // Cancelou
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    evento.status = 'rejeitado';
+                    evento.reviewedAt = new Date().toISOString();
+                    evento.reviewNotes = motivo;
+                    
+                    localStorage.setItem('sms_eventos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('Evento rejeitado.');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Ver detalhes do evento
+            verDetalhesEvento: function(eventId) {
+                const pendentes = JSON.parse(localStorage.getItem('sms_eventos_pendentes') || '[]');
+                const evento = pendentes.find(e => e.id === eventId);
+                
+                if (evento) {
+                    alert(`📋 DETALHES DO EVENTO\n\nNome: ${evento.nome}\nCategoria: ${evento.categoria || 'Não informada'}\nData: ${this.formatarData(evento.dataInicio)} ${evento.dataFim ? 'a ' + this.formatarData(evento.dataFim) : ''}\nLocal: ${evento.local}\nEntrada: ${evento.entrada || 'Não informada'}\n\nDescrição:\n${evento.descricao}\n\nContato: ${evento.contato || 'Não informado'}\nSite: ${evento.site || 'Não informado'}\n\nSolicitante: ${evento.submittedByName}\nE-mail: ${evento.submittedByEmail}`);
+                }
+            },
+
+            // Aprovar estabelecimento
+            aprovarEstabelecimento: function(estId) {
+                if (!confirm('Deseja aprovar este estabelecimento?')) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]');
+                const est = pendentes.find(e => e.id === estId);
+                
+                if (est) {
+                    est.status = 'aprovado';
+                    est.reviewedAt = new Date().toISOString();
+                    
+                    pendentes = pendentes.filter(e => e.id !== estId);
+                    localStorage.setItem('sms_estabelecimentos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('✅ Estabelecimento aprovado!');
+                    this.loadAprovacoes();
+                }
+            },
+
+            // Rejeitar estabelecimento
+            rejeitarEstabelecimento: function(estId) {
+                const motivo = prompt('Motivo da rejeição (opcional):');
+                if (motivo === null) return;
+                
+                let pendentes = JSON.parse(localStorage.getItem('sms_estabelecimentos_pendentes') || '[]');
+                const est = pendentes.find(e => e.id === estId);
+                
+                if (est) {
+                    est.status = 'rejeitado';
+                    est.reviewNotes = motivo;
+                    
+                    localStorage.setItem('sms_estabelecimentos_pendentes', JSON.stringify(pendentes));
+                    
+                    alert('Estabelecimento rejeitado.');
+                    this.loadAprovacoes();
+                }
+            },
+            
+            // Carregar notícias
+            loadNoticias: function() {
+                const noticias = [
+                    { titulo: '5º AgroSamas 2026: Programação Revelada', categoria: 'Eventos', data: '15/01/2026', status: 'publicado' },
+                    { titulo: 'Polskie Smaki 2026 em Agosto', categoria: 'Cultura', data: '10/01/2026', status: 'publicado' },
+                    { titulo: 'Nova Rota: Caminhos do Iguaçu', categoria: 'Turismo', data: '05/01/2026', status: 'publicado' },
+                    { titulo: 'Erva-Mate Conquista Prêmio', categoria: 'Gastronomia', data: '02/01/2026', status: 'publicado' }
+                ];
+                
+                const tbody = document.getElementById('lista-noticias');
+                tbody.innerHTML = noticias.map(n => `
+                    <tr>
+                        <td>${n.titulo}</td>
+                        <td>${n.categoria}</td>
+                        <td>${n.data}</td>
+                        <td><span class="badge badge-success">Publicado</span></td>
+                        <td>
+                            <button class="btn-sm btn-edit">✏️</button>
+                            <button class="btn-sm btn-delete">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('stat-noticias').textContent = noticias.length;
+            },
+            
+            // Carregar eventos
+            loadEventos: function() {
+                const eventos = [
+                    { nome: '5º AgroSamas', data: '17-21/09/2026', local: 'Rua do Mathe', categoria: 'Cultural' },
+                    { nome: 'Polskie Smaki', data: '15-17/08/2026', local: 'Centro', categoria: 'Cultural' },
+                    { nome: 'Feira Gastronômica', data: 'Semanal', local: 'Rua do Mathe', categoria: 'Feira' }
+                ];
+                
+                const tbody = document.getElementById('lista-eventos');
+                tbody.innerHTML = eventos.map(e => `
+                    <tr>
+                        <td>${e.nome}</td>
+                        <td>${e.data}</td>
+                        <td>${e.local}</td>
+                        <td>${e.categoria}</td>
+                        <td>
+                            <button class="btn-sm btn-edit">✏️</button>
+                            <button class="btn-sm btn-delete">🗑️</button>
+                        </td>
+                    </tr>
+                `).join('');
+            },
+            
+            // Carregar reservas
+            loadReservas: function() {
+                const reservas = JSON.parse(localStorage.getItem('sms_reservas') || '[]');
+                const tbody = document.getElementById('lista-reservas');
+                
+                if (reservas.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #888; padding: 2rem;">Nenhuma reserva registrada.</td></tr>`;
+                    document.getElementById('stat-reservas').textContent = '0';
+                    return;
+                }
+                
+                tbody.innerHTML = reservas.map(r => `
+                    <tr>
+                        <td>#${r.id}</td>
+                        <td>${r.nome}</td>
+                        <td>${r.experienciaNome}</td>
+                        <td>${r.data}</td>
+                        <td>${r.pessoas}</td>
+                        <td>R$ ${r.valorTotal.toFixed(2)}</td>
+                        <td><span class="badge badge-${r.status === 'confirmada' ? 'success' : 'warning'}">${r.status}</span></td>
+                        <td>
+                            <button class="btn-sm btn-edit" onclick="Admin.confirmarReserva(${r.id})">✅</button>
+                            <button class="btn-sm btn-delete" onclick="Admin.cancelarReserva(${r.id})">❌</button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                document.getElementById('stat-reservas').textContent = reservas.filter(r => r.status === 'pendente').length;
+            },
+            
+            // Atualizar data
+            updateDate: function() {
+                const hoje = new Date();
+                document.getElementById('currentDate').textContent = hoje.toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            },
+            
+            // Modais
+            openModal: function(tipo) {
+                document.getElementById('modal-' + tipo).classList.add('active');
+            },
+            
+            closeModal: function(tipo) {
+                document.getElementById('modal-' + tipo).classList.remove('active');
+            },
+            
+            // Salvar notícia
+            salvarNoticia: function(e) {
+                e.preventDefault();
+                alert('✅ Notícia salva com sucesso!');
+                this.closeModal('noticia');
+                this.loadNoticias();
+            },
+            
+            // Salvar evento
+            salvarEvento: function(e) {
+                e.preventDefault();
+                alert('✅ Evento salvo com sucesso!');
+                this.closeModal('evento');
+                this.loadEventos();
+            },
+            
+            // Salvar config
+            salvarConfig: function(e) {
+                e.preventDefault();
+                alert('✅ Configurações salvas!');
+            },
+            
+            // Confirmar reserva
+            confirmarReserva: function(id) {
+                let reservas = JSON.parse(localStorage.getItem('sms_reservas') || '[]');
+                reservas = reservas.map(r => r.id === id ? {...r, status: 'confirmada'} : r);
+                localStorage.setItem('sms_reservas', JSON.stringify(reservas));
+                this.loadReservas();
+                alert('✅ Reserva confirmada!');
+            },
+            
+            // Cancelar reserva
+            cancelarReserva: function(id) {
+                if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
+                    let reservas = JSON.parse(localStorage.getItem('sms_reservas') || '[]');
+                    reservas = reservas.filter(r => r.id !== id);
+                    localStorage.setItem('sms_reservas', JSON.stringify(reservas));
+                    this.loadReservas();
+                    alert('Reserva cancelada.');
+                }
+            }
+        };
+        
+        // Verificar sessão ao carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            Admin.checkSession();
+        });
+    </script>
+</body>
+</html>
