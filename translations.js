@@ -1,6 +1,6 @@
 /**
  * Sistema de Traduções - Portal de Turismo São Mateus do Sul
- * Versão: 5.0 - LIMPA | 199 keys | 4 idiomas | window.translations exposto
+ * Versão: 5.0 - LIMPA | 175 keys | 4 idiomas | window.translations exposto
  */
 
 const translations = {
@@ -204,7 +204,67 @@ const translations = {
     'stat-estabelecimentos': 'Estabelecimentos',
     'stat-historia': 'Anos de História',
     'stat-pontos': 'Pontos Turísticos',
-    'stat-rotas': 'Rotas Temáticas'
+    'stat-rotas': 'Rotas Temáticas',
+
+    // === FESTAS DESTAQUE ===
+    'festas-titulo': 'Eventos que Movem a <strong>Cidade</strong>',
+    'agrosamas-badge': 'SETEMBRO',
+    'agrosamas-nome': '5º AgroSamas 2026',
+    'agrosamas-desc': 'O maior evento do município! Cinco dias de shows nacionais, feira gastronômica, exposição agropecuária, parque de diversões e o famoso Parque dos Dinossauros.',
+    'agrosamas-data': '📅 17 a 21 de Setembro',
+    'agrosamas-local': '📍 Rua do Mathe',
+    'agrosamas-entrada': '🆓 Entrada Gratuita',
+    'agrosamas-tag1': '🎵 Shows',
+    'agrosamas-tag2': '🍽️ Gastronomia',
+    'agrosamas-tag3': '🦕 Dinossauros',
+    'agrosamas-tag4': '🎪 Parque',
+    'natal-badge': 'DEZEMBRO',
+    'natal-nome': 'Natal Ouro Verde 2026',
+    'natal-desc': 'A magia do Natal na Capital Polonesa! Desfiles temáticos, apresentações culturais, shows, decoração especial e a tradicional chegada do Papai Noel em família.',
+    'natal-data': '📅 05 a 19 de Dezembro',
+    'natal-local': '📍 Centro da Cidade',
+    'natal-entrada': '🆓 Entrada Gratuita',
+    'natal-tag1': '🎅 Papai Noel',
+    'natal-tag2': '🎭 Desfiles',
+    'natal-tag3': '✨ Iluminação',
+    'natal-tag4': '🎵 Coral',
+    'natal-btn-ver': 'Ver Programação →',
+    // === BLOG ===
+    'blog-label': 'Novidades',
+    'blog-titulo-html': 'Eventos & <strong>Notícias</strong>',
+    'blog-post1-excerpt': 'A tradicional Festa Polonesa acontece em março com danças folclóricas, gastronomia típica e apresentações do grupo Karolinka. Imperdível!',
+    'blog-post2-excerpt': 'Nossa erva-mate com Indicação Geográfica foi premiada como a melhor do Sul do Brasil em concurso nacional de qualidade.',
+    'blog-post3-excerpt': 'Celebração da história da navegação com passeios de barco, exposições históricas e gastronomia à beira do rio.',
+    'blog-post4-excerpt': 'Celebração especial marca aniversário do principal templo católico da cidade, com missa solene e apresentações culturais.',
+    'blog-post5-excerpt': 'Weekend dedicado à culinária tradicional com oficinas de pierogi, degustações e concurso de receitas centenárias.',
+    'blog-post6-excerpt': 'Espaço à beira do Iguaçu ganha novo deck, playground moderno e área para piqueniques. Perfeito para famílias!',
+    // === PILAR 2 ===
+    'pilar2-titulo': 'Alma Polonesa',
+    'pilar2-desc': 'Somos, por lei estadual, a <strong>Capital Polonesa do Paraná</strong>. A grande maioria da nossa população descende dos corajosos imigrantes poloneses que cruzaram o Atlântico no século XIX em busca de uma nova vida.',
+    'pilar2-destaque1': '<strong>Arquitetura Viva:</strong> Casas de madeira tradicionais preservadas com técnicas centenárias.',
+    'pilar2-destaque2': '<strong>Sabores Autênticos:</strong> Pierogi, repolho recheado, pães artesanais e a hospitalidade polonesa.',
+    'pilar2-destaque3': '<strong>Arte e Tradição:</strong> Pêssankas (ovos decorados), grupos folclóricos como Karolinka, e festas tradicionais.',
+    // === PILAR 3 ===
+    'pilar3-desc': 'Nossa força econômica vem da terra. Do "Ouro Verde" da erva-mate nativa às reservas de xisto betuminoso, São Mateus do Sul une tradição agrícola com inovação tecnológica de ponta.',
+    'pilar3-destaque1': '<strong>Erva-Mate com IG:</strong> Uma das maiores produtoras de erva-mate nativa (sombreada) do Brasil, com Indicação Geográfica reconhecendo nossa qualidade única.',
+    'pilar3-destaque2': '<strong>Usina de Xisto (SIX):</strong> Petrobras instalou aqui uma das mais avançadas unidades de processamento de xisto betuminoso do mundo.',
+    'pilar3-destaque3': '<strong>Referência Nacional:</strong> Somos conhecidos como "Terra do Xisto" e símbolo da força da erva-mate paranaense.',
+    // === PILAR 1 highlights adicionais ===
+    'pilar1-destaque2': '<strong>Evolução do Nome:</strong> Colônia Santa Maria → Maria Augusta → São Mateus do Sul (21/09/1908).',
+    'pilar1-destaque3': '<strong>Natureza Preservada:</strong> O rio permanece como coração geográfico e turístico da cidade.',
+    // === EVENTOS SEMANAIS ===
+    'ev-feira-gastro': 'Feira Gastronômica',
+    'ev-feira-gastro-horario': 'Qua e Sex • 17h-22h',
+    'ev-feira-produtor': 'Feira do Produtor',
+    'ev-feira-produtor-horario': 'Sábados • 7h-12h',
+    'ev-roda-mathe': 'Roda de Mathe',
+    'ev-roda-mathe-horario': '1º Domingo • 9h',
+    'ev-feira-lua': 'Feira da Lua',
+    'ev-feira-lua-horario': '2ª Terça • 17h-22h',
+    // === HOSPEDAGEM ===
+    'hospedagem-label': 'Hospedagem',
+    // === REVIEWS ===
+    'reviews-titulo-html': 'Experiências <strong>Inesquecíveis</strong>',
   },
 
   en: {
@@ -406,7 +466,67 @@ const translations = {
     'stat-estabelecimentos': 'Establishments',
     'stat-historia': 'Years of History',
     'stat-pontos': 'Tourist Spots',
-    'stat-rotas': 'Themed Routes'
+    'stat-rotas': 'Themed Routes',
+
+    // === FESTAS DESTAQUE ===
+    'festas-titulo': 'Events that Move the <strong>City</strong>',
+    'agrosamas-badge': 'SEPTEMBER',
+    'agrosamas-nome': '5th AgroSamas 2026',
+    'agrosamas-desc': 'The biggest event in the municipality! Five days of national shows, food fair, agricultural exhibition, amusement park and the famous Dinosaur Park.',
+    'agrosamas-data': '📅 September 17–21',
+    'agrosamas-local': '📍 Rua do Mathe',
+    'agrosamas-entrada': '🆓 Free Admission',
+    'agrosamas-tag1': '🎵 Shows',
+    'agrosamas-tag2': '🍽️ Gastronomy',
+    'agrosamas-tag3': '🦕 Dinosaurs',
+    'agrosamas-tag4': '🎪 Amusement Park',
+    'natal-badge': 'DECEMBER',
+    'natal-nome': 'Natal Ouro Verde 2026',
+    'natal-desc': 'The magic of Christmas in the Polish Capital! Themed parades, cultural performances, shows, special lighting and the traditional Santa Claus arrival.',
+    'natal-data': '📅 December 5–19',
+    'natal-local': '📍 City Center',
+    'natal-entrada': '🆓 Free Admission',
+    'natal-tag1': '🎅 Santa Claus',
+    'natal-tag2': '🎭 Parades',
+    'natal-tag3': '✨ Lighting',
+    'natal-tag4': '🎵 Choir',
+    'natal-btn-ver': 'View Schedule →',
+    // === BLOG ===
+    'blog-label': 'Latest News',
+    'blog-titulo-html': 'Events & <strong>News</strong>',
+    'blog-post1-excerpt': 'The traditional Polish Festival takes place in March with folk dances, typical gastronomy and performances by the Karolinka group. Not to be missed!',
+    'blog-post2-excerpt': 'Our yerba mate with Geographical Indication was awarded the best in Southern Brazil in a national quality competition.',
+    'blog-post3-excerpt': 'Celebration of navigation history with boat rides, historical exhibitions and riverside gastronomy.',
+    'blog-post4-excerpt': 'Special celebration marks the anniversary of the city\'s main Catholic church, with solemn mass and cultural performances.',
+    'blog-post5-excerpt': 'Weekend dedicated to traditional cuisine with pierogi workshops, tastings and a century-old recipe competition.',
+    'blog-post6-excerpt': 'Riverside space gets a new deck, modern playground and picnic areas. Perfect for families!',
+    // === PILAR 2 ===
+    'pilar2-titulo': 'Polish Soul',
+    'pilar2-desc': 'We are, by state law, the <strong>Polish Capital of Paraná</strong>. The vast majority of our population descends from brave Polish immigrants who crossed the Atlantic in the 19th century in search of a new life.',
+    'pilar2-destaque1': '<strong>Living Architecture:</strong> Traditional wooden houses preserved with century-old techniques.',
+    'pilar2-destaque2': '<strong>Authentic Flavors:</strong> Pierogi, stuffed cabbage, artisan breads and Polish hospitality.',
+    'pilar2-destaque3': '<strong>Art and Tradition:</strong> Pysanky (decorated eggs), folk groups like Karolinka, and traditional festivals.',
+    // === PILAR 3 ===
+    'pilar3-desc': 'Our economic strength comes from the land. From the "Green Gold" of native yerba mate to oil shale reserves, São Mateus do Sul combines agricultural tradition with cutting-edge technological innovation.',
+    'pilar3-destaque1': '<strong>Yerba Mate with GI:</strong> One of the largest producers of native (shade-grown) yerba mate in Brazil, with a Geographical Indication recognizing our unique quality.',
+    'pilar3-destaque2': '<strong>Oil Shale Plant (SIX):</strong> Petrobras established here one of the most advanced oil shale processing units in the world.',
+    'pilar3-destaque3': '<strong>National Reference:</strong> We are known as the "Oil Shale Land" and symbol of Paraná yerba mate strength.',
+    // === PILAR 1 highlights adicionais ===
+    'pilar1-destaque2': '<strong>Name Evolution:</strong> Colônia Santa Maria → Maria Augusta → São Mateus do Sul (09/21/1908).',
+    'pilar1-destaque3': '<strong>Preserved Nature:</strong> The river remains the geographical and tourist heart of the city.',
+    // === EVENTOS SEMANAIS ===
+    'ev-feira-gastro': 'Food Fair',
+    'ev-feira-gastro-horario': 'Wed & Fri • 5pm–10pm',
+    'ev-feira-produtor': 'Farmers Market',
+    'ev-feira-produtor-horario': 'Saturdays • 7am–12pm',
+    'ev-roda-mathe': 'Mate Circle',
+    'ev-roda-mathe-horario': '1st Sunday • 9am',
+    'ev-feira-lua': 'Moon Fair',
+    'ev-feira-lua-horario': '2nd Tuesday • 5pm–10pm',
+    // === HOSPEDAGEM ===
+    'hospedagem-label': 'Accommodation',
+    // === REVIEWS ===
+    'reviews-titulo-html': 'Unforgettable <strong>Experiences</strong>',
   },
 
   es: {
@@ -608,7 +728,67 @@ const translations = {
     'stat-estabelecimentos': 'Establecimientos',
     'stat-historia': 'Años de Historia',
     'stat-pontos': 'Puntos Turísticos',
-    'stat-rotas': 'Rutas Temáticas'
+    'stat-rotas': 'Rutas Temáticas',
+
+    // === FESTAS DESTAQUE ===
+    'festas-titulo': 'Eventos que Mueven la <strong>Ciudad</strong>',
+    'agrosamas-badge': 'SEPTIEMBRE',
+    'agrosamas-nome': '5º AgroSamas 2026',
+    'agrosamas-desc': '¡El mayor evento del municipio! Cinco días de shows nacionales, feria gastronómica, exposición agropecuaria, parque de diversiones y el famoso Parque de los Dinosaurios.',
+    'agrosamas-data': '📅 17 al 21 de Septiembre',
+    'agrosamas-local': '📍 Rua do Mathe',
+    'agrosamas-entrada': '🆓 Entrada Gratuita',
+    'agrosamas-tag1': '🎵 Shows',
+    'agrosamas-tag2': '🍽️ Gastronomía',
+    'agrosamas-tag3': '🦕 Dinosaurios',
+    'agrosamas-tag4': '🎪 Parque',
+    'natal-badge': 'DICIEMBRE',
+    'natal-nome': 'Natal Ouro Verde 2026',
+    'natal-desc': '¡La magia de la Navidad en la Capital Polaca! Desfiles temáticos, actuaciones culturales, shows, decoración especial y la tradicional llegada de Papá Noel en familia.',
+    'natal-data': '📅 05 al 19 de Diciembre',
+    'natal-local': '📍 Centro de la Ciudad',
+    'natal-entrada': '🆓 Entrada Gratuita',
+    'natal-tag1': '🎅 Papá Noel',
+    'natal-tag2': '🎭 Desfiles',
+    'natal-tag3': '✨ Iluminación',
+    'natal-tag4': '🎵 Coro',
+    'natal-btn-ver': 'Ver Programación →',
+    // === BLOG ===
+    'blog-label': 'Últimas Noticias',
+    'blog-titulo-html': 'Eventos y <strong>Noticias</strong>',
+    'blog-post1-excerpt': 'El tradicional Festival Polaco se celebra en marzo con danzas folclóricas, gastronomía típica y actuaciones del grupo Karolinka. ¡Imperdible!',
+    'blog-post2-excerpt': 'Nuestra yerba mate con Indicación Geográfica fue premiada como la mejor del sur de Brasil en un concurso nacional de calidad.',
+    'blog-post3-excerpt': 'Celebración de la historia de la navegación con paseos en barco, exposiciones históricas y gastronomía junto al río.',
+    'blog-post4-excerpt': 'Una celebración especial marca el aniversario del principal templo católico de la ciudad, con misa solemne y actuaciones culturales.',
+    'blog-post5-excerpt': 'Fin de semana dedicado a la cocina tradicional con talleres de pierogi, degustaciones y concurso de recetas centenarias.',
+    'blog-post6-excerpt': 'El espacio junto al Iguazú estrena nuevo deck, moderno parque infantil y áreas para picnic. ¡Perfecto para familias!',
+    // === PILAR 2 ===
+    'pilar2-titulo': 'Alma Polaca',
+    'pilar2-desc': 'Somos, por ley estatal, la <strong>Capital Polaca de Paraná</strong>. La gran mayoría de nuestra población desciende de valientes inmigrantes polacos que cruzaron el Atlántico en el siglo XIX en busca de una nueva vida.',
+    'pilar2-destaque1': '<strong>Arquitectura Viva:</strong> Casas de madera tradicionales preservadas con técnicas centenarias.',
+    'pilar2-destaque2': '<strong>Sabores Auténticos:</strong> Pierogi, repollo relleno, panes artesanales y la hospitalidad polaca.',
+    'pilar2-destaque3': '<strong>Arte y Tradición:</strong> Pysanky (huevos decorados), grupos folclóricos como Karolinka y fiestas tradicionales.',
+    // === PILAR 3 ===
+    'pilar3-desc': 'Nuestra fuerza económica viene de la tierra. Del "Oro Verde" de la yerba mate nativa a las reservas de esquisto bituminoso, São Mateus do Sul une tradición agrícola con innovación tecnológica de vanguardia.',
+    'pilar3-destaque1': '<strong>Yerba Mate con IG:</strong> Una de las mayores productoras de yerba mate nativa (a la sombra) de Brasil, con Indicación Geográfica que reconoce nuestra calidad única.',
+    'pilar3-destaque2': '<strong>Planta de Esquisto (SIX):</strong> Petrobras instaló aquí una de las unidades de procesamiento de esquisto bituminoso más avanzadas del mundo.',
+    'pilar3-destaque3': '<strong>Referencia Nacional:</strong> Somos conocidos como "Tierra del Esquisto" y símbolo de la fuerza de la yerba mate paranaense.',
+    // === PILAR 1 highlights adicionais ===
+    'pilar1-destaque2': '<strong>Evolución del Nombre:</strong> Colônia Santa Maria → Maria Augusta → São Mateus do Sul (21/09/1908).',
+    'pilar1-destaque3': '<strong>Naturaleza Preservada:</strong> El río sigue siendo el corazón geográfico y turístico de la ciudad.',
+    // === EVENTOS SEMANAIS ===
+    'ev-feira-gastro': 'Feria Gastronómica',
+    'ev-feira-gastro-horario': 'Mié y Vie • 17h-22h',
+    'ev-feira-produtor': 'Feria del Productor',
+    'ev-feira-produtor-horario': 'Sábados • 7h-12h',
+    'ev-roda-mathe': 'Rueda de Mate',
+    'ev-roda-mathe-horario': '1er Domingo • 9h',
+    'ev-feira-lua': 'Feria de la Luna',
+    'ev-feira-lua-horario': '2º Martes • 17h-22h',
+    // === HOSPEDAGEM ===
+    'hospedagem-label': 'Alojamiento',
+    // === REVIEWS ===
+    'reviews-titulo-html': 'Experiencias <strong>Inolvidables</strong>',
   },
 
   pl: {
@@ -810,7 +990,67 @@ const translations = {
     'stat-estabelecimentos': 'Obiekty',
     'stat-historia': 'Lat Historii',
     'stat-pontos': 'Punkty Turystyczne',
-    'stat-rotas': 'Szlaki Tematyczne'
+    'stat-rotas': 'Szlaki Tematyczne',
+
+    // === FESTAS DESTAQUE ===
+    'festas-titulo': 'Wydarzenia, które Ożywiają <strong>Miasto</strong>',
+    'agrosamas-badge': 'WRZESIEŃ',
+    'agrosamas-nome': '5. AgroSamas 2026',
+    'agrosamas-desc': 'Największe wydarzenie gminy! Pięć dni krajowych koncertów, jarmarku gastronomicznego, wystawy rolniczej, wesołego miasteczka i słynnego Parku Dinozaurów.',
+    'agrosamas-data': '📅 17–21 Września',
+    'agrosamas-local': '📍 Rua do Mathe',
+    'agrosamas-entrada': '🆓 Wstęp Wolny',
+    'agrosamas-tag1': '🎵 Koncerty',
+    'agrosamas-tag2': '🍽️ Gastronomia',
+    'agrosamas-tag3': '🦕 Dinozaury',
+    'agrosamas-tag4': '🎪 Park Rozrywki',
+    'natal-badge': 'GRUDZIEŃ',
+    'natal-nome': 'Natal Ouro Verde 2026',
+    'natal-desc': 'Magia Bożego Narodzenia w Polskiej Stolicy! Tematyczne parady, występy kulturalne, pokazy, wyjątkowa iluminacja i tradycyjne przybycie Świętego Mikołaja.',
+    'natal-data': '📅 05–19 Grudnia',
+    'natal-local': '📍 Centrum Miasta',
+    'natal-entrada': '🆓 Wstęp Wolny',
+    'natal-tag1': '🎅 Święty Mikołaj',
+    'natal-tag2': '🎭 Parady',
+    'natal-tag3': '✨ Iluminacja',
+    'natal-tag4': '🎵 Chór',
+    'natal-btn-ver': 'Zobacz Program →',
+    // === BLOG ===
+    'blog-label': 'Aktualności',
+    'blog-titulo-html': 'Wydarzenia i <strong>Aktualności</strong>',
+    'blog-post1-excerpt': 'Tradycyjny Festiwal Polski odbywa się w marcu z tańcami ludowymi, typową gastronomią i występami grupy Karolinka. Koniecznie do zobaczenia!',
+    'blog-post2-excerpt': 'Nasza yerba mate z Oznaczeniem Geograficznym została nagrodzona jako najlepsza w południowej Brazylii w ogólnokrajowym konkursie jakości.',
+    'blog-post3-excerpt': 'Celebracja historii żeglugi z rejsami łodzią, wystawami historycznymi i gastronomią nad rzeką.',
+    'blog-post4-excerpt': 'Specjalna uroczystość upamiętnia rocznicę głównego kościoła katolickiego w mieście, z uroczystą mszą i występami kulturalnymi.',
+    'blog-post5-excerpt': 'Weekend poświęcony tradycyjnej kuchni z warsztatami pierogów, degustacjami i konkursem stuletniich przepisów.',
+    'blog-post6-excerpt': 'Przestrzeń nad Iguaçu zyskuje nowy pomost, nowoczesny plac zabaw i miejsca do pikników. Idealne dla rodzin!',
+    // === PILAR 2 ===
+    'pilar2-titulo': 'Polska Dusza',
+    'pilar2-desc': 'Jesteśmy, z mocy prawa stanowego, <strong>Polską Stolicą Paraná</strong>. Zdecydowana większość naszej ludności pochodzi od dzielnych polskich imigrantów, którzy w XIX wieku przekroczyli Atlantyk w poszukiwaniu nowego życia.',
+    'pilar2-destaque1': '<strong>Żywa Architektura:</strong> Tradycyjne drewniane domy zachowane dzięki stuletnim technikom.',
+    'pilar2-destaque2': '<strong>Autentyczne Smaki:</strong> Pierogi, gołąbki, rzemieślnicze chleby i polska gościnność.',
+    'pilar2-destaque3': '<strong>Sztuka i Tradycja:</strong> Pisanki (ozdobione jajka), grupy folklorystyczne jak Karolinka i tradycyjne festiwale.',
+    // === PILAR 3 ===
+    'pilar3-desc': 'Nasza siła gospodarcza pochodzi z ziemi. Od "Zielonego Złota" naturalnej yerba mate po złoża łupków bitumicznych, São Mateus do Sul łączy tradycję rolniczą z najnowocześniejszą innowacją technologiczną.',
+    'pilar3-destaque1': '<strong>Yerba Mate z OG:</strong> Jeden z największych producentów naturalnej (cieniowanej) yerba mate w Brazylii, z Oznaczeniem Geograficznym potwierdzającym naszą wyjątkową jakość.',
+    'pilar3-destaque2': '<strong>Zakład Łupków (SIX):</strong> Petrobras zbudował tu jedną z najbardziej zaawansowanych jednostek przetwarzania łupków bitumicznych na świecie.',
+    'pilar3-destaque3': '<strong>Krajowe Odniesienie:</strong> Jesteśmy znani jako "Ziemia Łupków" i symbol siły yerba mate z Paraná.',
+    // === PILAR 1 highlights adicionais ===
+    'pilar1-destaque2': '<strong>Ewolucja Nazwy:</strong> Colônia Santa Maria → Maria Augusta → São Mateus do Sul (21.09.1908).',
+    'pilar1-destaque3': '<strong>Zachowana Natura:</strong> Rzeka pozostaje geograficznym i turystycznym sercem miasta.',
+    // === EVENTOS SEMANAIS ===
+    'ev-feira-gastro': 'Jarmark Gastronomiczny',
+    'ev-feira-gastro-horario': 'Śr i Pt • 17:00–22:00',
+    'ev-feira-produtor': 'Targ Producentów',
+    'ev-feira-produtor-horario': 'Soboty • 7:00–12:00',
+    'ev-roda-mathe': 'Krąg Mate',
+    'ev-roda-mathe-horario': '1. Niedziela • 9:00',
+    'ev-feira-lua': 'Targ Księżycowy',
+    'ev-feira-lua-horario': '2. Wtorek • 17:00–22:00',
+    // === HOSPEDAGEM ===
+    'hospedagem-label': 'Noclegi',
+    // === REVIEWS ===
+    'reviews-titulo-html': 'Niezapomniane <strong>Doświadczenia</strong>',
   }
 
 };
