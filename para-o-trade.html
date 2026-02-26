@@ -283,6 +283,17 @@
     <script src="translations.js"></script>
 </head>
 <body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -307,14 +318,14 @@
 
             <!-- CADASTUR -->
             <article class="service-card">
-                <h3>📋 CADASTUR</h3>
-                <p>O Cadastro de Prestadores de Serviços Turísticos é obrigatório para diversas atividades e dá acesso a benefícios exclusivos.</p>
+                <h3 data-lang-key="trade-cadastur-h">📋 CADASTUR</h3>
+                <p data-lang-key="trade-cadastur-p">O Cadastro de Prestadores de Serviços Turísticos é obrigatório para diversas atividades e dá acesso a benefícios exclusivos.</p>
                 <ul>
-                    <li>Obrigatório para meios de hospedagem</li>
-                    <li>Agências de turismo e guias</li>
-                    <li>Organizadoras de eventos</li>
-                    <li>Parques temáticos e acampamentos</li>
-                    <li>Transportadoras turísticas</li>
+                    <li data-lang-key="trade-cad-li1">Obrigatório para meios de hospedagem</li>
+                    <li data-lang-key="trade-cad-li2">Agências de turismo e guias</li>
+                    <li data-lang-key="trade-cad-li3">Organizadoras de eventos</li>
+                    <li data-lang-key="trade-cad-li4">Parques temáticos e acampamentos</li>
+                    <li data-lang-key="trade-cad-li5">Transportadoras turísticas</li>
                 </ul>
                 <a href="https://cadastur.turismo.gov.br" target="_blank" class="btn-link">
                     Acessar CADASTUR →
@@ -323,14 +334,14 @@
 
             <!-- Financiamentos -->
             <article class="service-card">
-                <h3>💰 Financiamentos</h3>
-                <p>Linhas de crédito especiais para o setor turístico através do Fomento Paraná e outros programas.</p>
+                <h3 data-lang-key="trade-financ-h">💰 Financiamentos</h3>
+                <p data-lang-key="trade-financ-p">Linhas de crédito especiais para o setor turístico através do Fomento Paraná e outros programas.</p>
                 <ul>
-                    <li>Fomento Paraná - Turismo</li>
-                    <li>FUNGETUR - Fundo Geral do Turismo</li>
-                    <li>PRONAMPE para turismo</li>
-                    <li>Linhas de microcrédito</li>
-                    <li>Incentivos fiscais estaduais</li>
+                    <li data-lang-key="trade-fin-li1">Fomento Paraná - Turismo</li>
+                    <li data-lang-key="trade-fin-li2">FUNGETUR - Fundo Geral do Turismo</li>
+                    <li data-lang-key="trade-fin-li3">PRONAMPE para turismo</li>
+                    <li data-lang-key="trade-fin-li4">Linhas de microcrédito</li>
+                    <li data-lang-key="trade-fin-li5">Incentivos fiscais estaduais</li>
                 </ul>
                 <a href="https://www.fomento.pr.gov.br" target="_blank" class="btn-link">
                     Ver Linhas de Crédito →
@@ -339,14 +350,14 @@
 
             <!-- Selo Turismo Responsável -->
             <article class="service-card">
-                <h3>🏅 Selo Turismo Responsável</h3>
-                <p>Certificação que atesta boas práticas de higiene e segurança no seu estabelecimento.</p>
+                <h3 data-lang-key="trade-selo-h">🏅 Selo Turismo Responsável</h3>
+                <p data-lang-key="trade-selo-p">Certificação que atesta boas práticas de higiene e segurança no seu estabelecimento.</p>
                 <ul>
-                    <li>Aumenta a confiança do turista</li>
-                    <li>Destaque no marketing oficial</li>
-                    <li>Protocolos de biossegurança</li>
-                    <li>Adesão gratuita</li>
-                    <li>Válido nacionalmente</li>
+                    <li data-lang-key="trade-sel-li1">Aumenta a confiança do turista</li>
+                    <li data-lang-key="trade-sel-li2">Destaque no marketing oficial</li>
+                    <li data-lang-key="trade-sel-li3">Protocolos de biossegurança</li>
+                    <li data-lang-key="trade-sel-li4">Adesão gratuita</li>
+                    <li data-lang-key="trade-sel-li5">Válido nacionalmente</li>
                 </ul>
                 <a href="https://cadastur.turismo.gov.br/hotsite/#!/public/selo-turismo-responsavel" target="_blank" class="btn-link">
                     Obter o Selo →
@@ -355,14 +366,14 @@
 
             <!-- Capacitação -->
             <article class="service-card">
-                <h3>📚 Capacitação</h3>
-                <p>Cursos gratuitos para profissionais do turismo através do SEBRAE e parceiros.</p>
+                <h3 data-lang-key="trade-cap-h">📚 Capacitação</h3>
+                <p data-lang-key="trade-cap-p">Cursos gratuitos para profissionais do turismo através do SEBRAE e parceiros.</p>
                 <ul>
-                    <li>Atendimento ao turista</li>
-                    <li>Gestão de meios de hospedagem</li>
-                    <li>Marketing digital para turismo</li>
-                    <li>Gastronomia e boas práticas</li>
-                    <li>Guia de turismo local</li>
+                    <li data-lang-key="trade-cap-li1">Atendimento ao turista</li>
+                    <li data-lang-key="trade-cap-li2">Gestão de meios de hospedagem</li>
+                    <li data-lang-key="trade-cap-li3">Marketing digital para turismo</li>
+                    <li data-lang-key="trade-cap-li4">Gastronomia e boas práticas</li>
+                    <li data-lang-key="trade-cap-li5">Guia de turismo local</li>
                 </ul>
                 <a href="https://www.sebrae.com.br/sites/PortalSebrae/cursosonline" target="_blank" class="btn-link">
                     Ver Cursos →
@@ -373,40 +384,40 @@
 
         <!-- Como se cadastrar -->
         <section class="steps-section">
-            <h2>📝 Como Cadastrar seu Estabelecimento</h2>
+            <h2 data-lang-key="trade-howcad-h">📝 Como Cadastrar seu Estabelecimento</h2>
             
             <div class="steps-grid">
                 <div class="step-card">
                     <div class="step-number">1</div>
-                    <h4>Acesse o CADASTUR</h4>
-                    <p>Entre no site cadastur.turismo.gov.br</p>
+                    <h4 data-lang-key="trade-step1-h">Acesse o CADASTUR</h4>
+                    <p data-lang-key="trade-step1-p">Entre no site cadastur.turismo.gov.br</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">2</div>
-                    <h4>Crie sua Conta</h4>
-                    <p>Cadastre-se com CNPJ ou CPF</p>
+                    <h4 data-lang-key="trade-step2-h">Crie sua Conta</h4>
+                    <p data-lang-key="trade-step2-p">Cadastre-se com CNPJ ou CPF</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">3</div>
-                    <h4>Preencha os Dados</h4>
-                    <p>Informe dados do estabelecimento</p>
+                    <h4 data-lang-key="trade-step3-h">Preencha os Dados</h4>
+                    <p data-lang-key="trade-step3-p">Informe dados do estabelecimento</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">4</div>
-                    <h4>Envie Documentos</h4>
-                    <p>Anexe documentação necessária</p>
+                    <h4 data-lang-key="trade-step4-h">Envie Documentos</h4>
+                    <p data-lang-key="trade-step4-p">Anexe documentação necessária</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number">5</div>
-                    <h4>Aguarde Análise</h4>
-                    <p>Prazo de até 30 dias úteis</p>
+                    <h4 data-lang-key="trade-step5-h">Aguarde Análise</h4>
+                    <p data-lang-key="trade-step5-p">Prazo de até 30 dias úteis</p>
                 </div>
             </div>
         </section>
 
         <!-- Como cadastrar evento -->
         <section class="steps-section" style="background: linear-gradient(135deg, #fef9e7, #fdebd0);">
-            <h2>🎪 Como Cadastrar seu Evento ou Festa</h2>
+            <h2 data-lang-key="trade-howev-h">🎪 Como Cadastrar seu Evento ou Festa</h2>
             <p style="text-align: center; color: #666; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
                 Quer divulgar seu evento no calendário oficial de turismo de São Mateus do Sul? 
                 Cadastre-se em nosso portal e tenha seu evento analisado pelo COMTUR.
@@ -416,27 +427,27 @@
                 <div class="step-card">
                     <div class="step-number" style="background: #e74c3c;">1</div>
                     <h4>Crie sua Conta</h4>
-                    <p>Acesse o Portal do Usuário e cadastre-se gratuitamente</p>
+                    <p data-lang-key="trade-ev-step1">Acesse o Portal do Usuário e cadastre-se gratuitamente</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number" style="background: #e67e22;">2</div>
                     <h4>Preencha os Dados</h4>
-                    <p>Informe nome, data, local e descrição do evento</p>
+                    <p data-lang-key="trade-ev-step2">Informe nome, data, local e descrição do evento</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number" style="background: #f39c12;">3</div>
-                    <h4>Envie para Análise</h4>
-                    <p>Sua solicitação será avaliada pelo COMTUR</p>
+                    <h4 data-lang-key="trade-ev-step3-h">Envie para Análise</h4>
+                    <p data-lang-key="trade-ev-step3-p">Sua solicitação será avaliada pelo COMTUR</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number" style="background: #27ae60;">4</div>
-                    <h4>Aprovação</h4>
-                    <p>Em até 5 dias úteis você recebe o retorno</p>
+                    <h4 data-lang-key="trade-ev-step4-h">Aprovação</h4>
+                    <p data-lang-key="trade-ev-step4-p">Em até 5 dias úteis você recebe o retorno</p>
                 </div>
                 <div class="step-card">
                     <div class="step-number" style="background: #2980b9;">5</div>
-                    <h4>Publicação</h4>
-                    <p>Evento aprovado entra no calendário oficial!</p>
+                    <h4 data-lang-key="trade-ev-step5-h">Publicação</h4>
+                    <p data-lang-key="trade-ev-step5-p">Evento aprovado entra no calendário oficial!</p>
                 </div>
             </div>
 
@@ -451,13 +462,13 @@
         <div class="services-grid">
             
             <article class="service-card">
-                <h3>🏆 Selo Qual.i Turismo</h3>
-                <p>Programa do SEBRAE para qualificação de estabelecimentos turísticos.</p>
+                <h3 data-lang-key="trade-quali-h">🏆 Selo Qual.i Turismo</h3>
+                <p data-lang-key="trade-quali-p">Programa do SEBRAE para qualificação de estabelecimentos turísticos.</p>
                 <ul>
-                    <li>Diagnóstico empresarial</li>
-                    <li>Plano de melhorias</li>
-                    <li>Consultoria especializada</li>
-                    <li>Certificação reconhecida</li>
+                    <li data-lang-key="trade-qua-li1">Diagnóstico empresarial</li>
+                    <li data-lang-key="trade-qua-li2">Plano de melhorias</li>
+                    <li data-lang-key="trade-qua-li3">Consultoria especializada</li>
+                    <li data-lang-key="trade-qua-li4">Certificação reconhecida</li>
                 </ul>
                 <a href="https://www.sebrae.com.br" target="_blank" class="btn-link">
                     Saiba Mais →
@@ -465,15 +476,15 @@
             </article>
 
             <article class="service-card">
-                <h3>🗺️ Inventário Turístico</h3>
-                <p>Cadastre seu estabelecimento no Inventário Turístico Municipal para aparecer nos materiais oficiais.</p>
+                <h3 data-lang-key="trade-inv-h">🗺️ Inventário Turístico</h3>
+                <p data-lang-key="trade-inv-p">Cadastre seu estabelecimento no Inventário Turístico Municipal para aparecer nos materiais oficiais.</p>
                 <ul>
-                    <li>Divulgação no site oficial</li>
-                    <li>Material impresso e digital</li>
-                    <li>Inclusão em roteiros</li>
-                    <li>Cadastro gratuito</li>
+                    <li data-lang-key="trade-inv-li1">Divulgação no site oficial</li>
+                    <li data-lang-key="trade-inv-li2">Material impresso e digital</li>
+                    <li data-lang-key="trade-inv-li3">Inclusão em roteiros</li>
+                    <li data-lang-key="trade-inv-li4">Cadastro gratuito</li>
                 </ul>
-                <a href="mailto:turismo@saomateusdosul.pr.gov.br" class="btn-link">
+                <a href="/cdn-cgi/l/email-protection#b3c7c6c1dac0dedcf3c0d2dcded2c7d6c6c0d7dcc0c6df9dc3c19dd4dcc59dd1c1" class="btn-link">
                     Cadastrar →
                 </a>
             </article>
@@ -482,12 +493,12 @@
 
         <!-- Contato -->
         <section class="contact-section">
-            <h2>📞 Fale com a Secretaria de Turismo</h2>
-            <p>Tire suas dúvidas e saiba como podemos ajudar seu negócio a crescer.</p>
+            <h2 data-lang-key="trade-contato-h">📞 Fale com a Secretaria de Turismo</h2>
+            <p data-lang-key="trade-contato-p">Tire suas dúvidas e saiba como podemos ajudar seu negócio a crescer.</p>
             
             <div class="contact-grid">
                 <div class="contact-item">
-                    📧 turismo@saomateusdosul.pr.gov.br
+                    📧 <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2054555249534d4f6053414f4d4154455553444f53554c0e50520e474f560e4252">[email&#160;protected]</a>
                 </div>
                 <div class="contact-item">
                     📞 (42) 3532-0000
@@ -503,10 +514,4 @@
     <!-- Footer -->
     <footer class="footer">
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="index.html">Voltar ao Portal</a> | 
-            <a href="transparencia.html">Transparência</a>
-        </p>
-    </footer>
-</body>
-</html>
+        <p

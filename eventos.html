@@ -791,6 +791,17 @@
     <script src="translations.js"></script>
 </head>
 <body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -799,11 +810,11 @@
                 <div class="header-title">São Mateus do Sul</div>
             </a>
             <nav class="header-nav">
-                <a href="index.html">Início</a>
-                <a href="index.html#attractions">Atrações</a>
-                <a href="index.html#gastronomia">Gastronomia</a>
-                <a href="rotas-completas.html">Rotas</a>
-                <a href="transparencia.html">Transparência</a>
+                <a href="index.html" data-lang-key="nav-inicio">Início</a>
+                <a href="index.html#attractions" data-lang-key="nav-atracoes">Atrações</a>
+                <a href="index.html#gastronomia" data-lang-key="nav-gastronomia">Gastronomia</a>
+                <a href="rotas-completas.html" data-lang-key="nav-rotas">Rotas</a>
+                <a href="transparencia.html" data-lang-key="nav-transparencia">Transparência</a>
             </nav>
         </div>
     </header>
@@ -821,13 +832,13 @@
             <!-- Card Destaque AgroSamas -->
             <div class="filter-card agrosamas-highlight">
                 <div class="agrosamas-card-header">
-                    <span class="agrosamas-card-badge">⭐ DESTAQUE</span>
-                    <h3>5º AgroSamas 2026</h3>
+                    <span class="agrosamas-card-badge" data-lang-key="ev-badge-destaque">⭐ DESTAQUE</span>
+                    <h3 data-lang-key="ev-agrosamas-h">5º AgroSamas 2026</h3>
                 </div>
-                <p class="agrosamas-card-desc">O maior evento de música, gastronomia e agronegócio da região!</p>
+                <p class="agrosamas-card-desc" data-lang-key="ev-agrosamas-desc">O maior evento de música, gastronomia e agronegócio da região!</p>
                 <div class="agrosamas-card-info">
-                    <span>📅 17-21 Set</span>
-                    <span>🆓 Gratuito</span>
+                    <span data-lang-key="ev-agrosamas-data">📅 17-21 Set</span>
+                    <span data-lang-key="ev-gratuito">🆓 Gratuito</span>
                 </div>
                 <a href="https://agrosamas.com.br" target="_blank" class="agrosamas-card-btn">
                     Site Oficial →
@@ -903,7 +914,7 @@
             </style>
 
             <div class="filter-card">
-                <h3>📆 Mês</h3>
+                <h3 data-lang-key="ev-filtro-mes">📆 Mês</h3>
                 <div class="month-nav" id="monthNav">
                     <button class="month-btn active" data-month="all">Todos</button>
                     <button class="month-btn" data-month="1">Jan</button>
@@ -922,8 +933,8 @@
             </div>
 
             <div class="filter-card">
-                <h3>🏷️ Categoria</h3>
-                <button class="filter-btn active" data-category="all">
+                <h3 data-lang-key="ev-filtro-cat">🏷️ Categoria</h3>
+                <button class="filter-btn active" data-category="all" data-lang-key="ev-btn-todos">
                     <span class="cat-dot" style="background: linear-gradient(45deg, #f8a5a5, #99ccff);"></span>
                     Todas
                     <span class="badge" id="countAll">0</span>
@@ -951,7 +962,7 @@
             </div>
 
             <div class="filter-card">
-                <h3>⭐ Destaques</h3>
+                <h3 data-lang-key="ev-sec-destaques">⭐ Destaques</h3>
                 <button class="filter-btn" data-featured="true">
                     <span>🌟</span>
                     Eventos Principais
@@ -964,7 +975,7 @@
         <div class="events-container">
             <!-- Featured Events -->
             <section class="featured-section" id="featuredSection">
-                <h3>🌟 Próximos Destaques</h3>
+                <h3 data-lang-key="ev-sec-proximos">🌟 Próximos Destaques</h3>
                 <div class="featured-grid" id="featuredGrid">
                     <!-- Preenchido via JS -->
                 </div>
@@ -974,15 +985,15 @@
             <div class="events-header">
                 <h2 id="eventsTitle">Todos os Eventos</h2>
                 <div class="view-toggle">
-                    <button class="view-btn active" data-view="list">📋 Lista</button>
-                    <button class="view-btn" data-view="calendar">📅 Calendário</button>
+                    <button class="view-btn active" data-view="list" data-lang-key="ev-btn-lista">📋 Lista</button>
+                    <button class="view-btn" data-view="calendar" data-lang-key="ev-btn-cal">📅 Calendário</button>
                 </div>
             </div>
 
             <!-- Loading -->
             <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <p>Carregando eventos...</p>
+                <p data-lang-key="ev-loading">Carregando eventos...</p>
             </div>
 
             <!-- Events List -->
@@ -1009,7 +1020,7 @@
             <!-- No Results -->
             <div class="no-results" id="noResults" style="display: none;">
                 <div class="icon">🔍</div>
-                <p>Nenhum evento encontrado para os filtros selecionados.</p>
+                <p data-lang-key="ev-nenhum">Nenhum evento encontrado para os filtros selecionados.</p>
             </div>
         </div>
     </main>

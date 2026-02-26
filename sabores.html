@@ -467,6 +467,17 @@
     <script src="translations.js"></script>
 </head>
 <body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -475,11 +486,11 @@
                 <div class="header-title">São Mateus do Sul</div>
             </a>
             <nav class="header-nav">
-                <a href="index.html">Início</a>
-                <a href="o-que-fazer.html">O Que Fazer</a>
-                <a href="eventos.html">Eventos</a>
-                <a href="index.html#onde-ficar">Onde Ficar</a>
-                <a href="rotas-completas.html">Roteiros</a>
+                <a href="index.html" data-lang-key="nav-inicio">Início</a>
+                <a href="o-que-fazer.html" data-lang-key="nav-oqfazer">O Que Fazer</a>
+                <a href="eventos.html" data-lang-key="nav-eventos">Eventos</a>
+                <a href="index.html#onde-ficar" data-lang-key="nav-ondeficar">Onde Ficar</a>
+                <a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a>
             </nav>
         </div>
     </header>
@@ -496,8 +507,8 @@
         <!-- Pratos Típicos Poloneses -->
         <section>
             <div class="section-header">
-                <h2>🥟 Pratos Típicos Poloneses</h2>
-                <p>A herança culinária dos imigrantes preservada com amor</p>
+                <h2 data-lang-key="sab-pratos-h">🥟 Pratos Típicos Poloneses</h2>
+                <p data-lang-key="sab-pratos-sub">A herança culinária dos imigrantes preservada com amor</p>
             </div>
 
             <div class="dishes-grid">
@@ -505,14 +516,14 @@
                 <!-- Pierogi -->
                 <article class="dish-card">
                     <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg');">
-                        <span class="origin-badge">🇵🇱 Polonês</span>
+                        <span class="origin-badge" data-lang-key="sab-tag-polones">🇵🇱 Polonês</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Pierogi</h3>
-                        <span class="polish-name">Pierogi Ruskie</span>
-                        <p>Massa recheada com batata e requeijão, servida com cebola dourada e nata. O prato mais emblemático da culinária polonesa.</p>
+                        <h3 data-lang-key="sab-pierogi-h">Pierogi</h3>
+                        <span class="polish-name" data-lang-key="sab-pierogi-nome">Pierogi Ruskie</span>
+                        <p data-lang-key="sab-pierogi-desc">Massa recheada com batata e requeijão, servida com cebola dourada e nata. O prato mais emblemático da culinária polonesa.</p>
                         <div class="where-to-find">
-                            <strong>Onde provar:</strong> Polskie Smaki, Feira Gastronômica, Baile do Pierogi
+                            <strong data-lang-key="sab-onde-provar">Onde provar:</strong> Polskie Smaki, Feira Gastronômica, Baile do Pierogi
                         </div>
                     </div>
                 </article>
@@ -523,9 +534,9 @@
                         <span class="origin-badge">🇵🇱 Polonês</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Bigos</h3>
+                        <h3 data-lang-key="sab-bigos-h">Bigos</h3>
                         <span class="polish-name">Bigos - Caçador Polonês</span>
-                        <p>Ensopado de repolho fermentado (chucrute) com carnes variadas. Conhecido como "o prato do caçador".</p>
+                        <p data-lang-key="sab-bigos-desc">Ensopado de repolho fermentado (chucrute) com carnes variadas. Conhecido como "o prato do caçador".</p>
                         <div class="where-to-find">
                             <strong>Onde provar:</strong> Festas das comunidades, Mês Polonês
                         </div>
@@ -538,8 +549,8 @@
                         <span class="origin-badge">🇵🇱 Polonês</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Repolho Recheado</h3>
-                        <span class="polish-name">Gołąbki</span>
+                        <h3 data-lang-key="sab-golabki-h">Repolho Recheado</h3>
+                        <span class="polish-name" data-lang-key="sab-golabki-pl">Gołąbki</span>
                         <p>Folhas de repolho recheadas com carne e arroz, cobertas com molho de tomate. Tradição em todas as festas.</p>
                         <div class="where-to-find">
                             <strong>Onde provar:</strong> Restaurantes típicos, Festas religiosas
@@ -553,9 +564,9 @@
                         <span class="origin-badge">🇵🇱 Polonês</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Kielbasa</h3>
-                        <span class="polish-name">Kiełbasa</span>
-                        <p>Linguiça polonesa defumada artesanalmente. Servida grelhada com mostarda e pão preto.</p>
+                        <h3 data-lang-key="sab-kielbasa-h">Kielbasa</h3>
+                        <span class="polish-name" data-lang-key="sab-kielbasa-pl">Kiełbasa</span>
+                        <p data-lang-key="sab-kielbasa-desc">Linguiça polonesa defumada artesanalmente. Servida grelhada com mostarda e pão preto.</p>
                         <div class="where-to-find">
                             <strong>Onde provar:</strong> Feira do Produtor, Açougues locais
                         </div>
@@ -568,9 +579,9 @@
                         <span class="origin-badge">🇵🇱 Polonês</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Pães e Cucas</h3>
-                        <span class="polish-name">Chleb, Kołacz</span>
-                        <p>Pães de fermentação natural e cucas doces com farofa. Receitas centenárias passadas de geração em geração.</p>
+                        <h3 data-lang-key="sab-paes-h">Pães e Cucas</h3>
+                        <span class="polish-name" data-lang-key="sab-paes-pl">Chleb, Kołacz</span>
+                        <p data-lang-key="sab-paes-desc">Pães de fermentação natural e cucas doces com farofa. Receitas centenárias passadas de geração em geração.</p>
                         <div class="where-to-find">
                             <strong>Onde provar:</strong> Padarias locais, Feira do Produtor
                         </div>
@@ -580,12 +591,12 @@
                 <!-- Chimarrão -->
                 <article class="dish-card">
                     <div class="dish-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
-                        <span class="origin-badge">🧉 Regional</span>
+                        <span class="origin-badge" data-lang-key="sab-tag-regional">🧉 Regional</span>
                     </div>
                     <div class="dish-card-content">
-                        <h3>Chimarrão</h3>
-                        <span class="polish-name">Erva-mate IG São Matheus</span>
-                        <p>A erva-mate com Indicação Geográfica, símbolo da cidade. Tradição que une culturas gaúcha e polonesa.</p>
+                        <h3 data-lang-key="sab-chimarrao-h">Chimarrão</h3>
+                        <span class="polish-name" data-lang-key="sab-chimarrao-ig">Erva-mate IG São Matheus</span>
+                        <p data-lang-key="sab-chimarrao-desc">A erva-mate com Indicação Geográfica, símbolo da cidade. Tradição que une culturas gaúcha e polonesa.</p>
                         <div class="where-to-find">
                             <strong>Onde provar:</strong> Chimarródromo, Roda de Mathe (1º domingo)
                         </div>
@@ -598,50 +609,50 @@
         <!-- Feiras -->
         <section class="fairs-section">
             <div class="section-header" style="text-align: left;">
-                <h2>🛒 Feiras e Mercados</h2>
-                <p>Compre direto do produtor e viva a experiência gastronômica local</p>
+                <h2 data-lang-key="sab-feiras-h">🛒 Feiras e Mercados</h2>
+                <p data-lang-key="sab-feiras-sub">Compre direto do produtor e viva a experiência gastronômica local</p>
             </div>
 
             <div class="fairs-grid">
                 
                 <div class="fair-card">
-                    <h4>🍽️ Feira Gastronômica</h4>
+                    <h4 data-lang-key="sab-feira1-h">🍽️ Feira Gastronômica</h4>
                     <div class="schedule">
-                        <span>📅 Quartas e Sextas-feiras</span>
+                        <span data-lang-key="sab-feira1-dias">📅 Quartas e Sextas-feiras</span>
+                        <span data-lang-key="sab-feira1-hora">🕐 17h às 22h</span>
+                        <span data-lang-key="sab-feira1-local">📍 Rua do Mathe</span>
+                    </div>
+                    <p data-lang-key="sab-feira1-desc">Pratos típicos, doces artesanais, bebidas e música ao vivo. O point gastronômico da cidade.</p>
+                </div>
+
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira2-h">🥬 Feira do Produtor</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira2-dias">📅 Sábados</span>
+                        <span data-lang-key="sab-feira2-hora">🕐 7h às 12h</span>
+                        <span>📍 Rua do Mathe</span>
+                    </div>
+                    <p data-lang-key="sab-feira2-desc">Frutas, hortaliças, queijos, embutidos, erva-mate e produtos coloniais direto do campo.</p>
+                </div>
+
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira3-h">🌙 Feira da Lua</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira3-dias">📅 2ª Terça-feira do mês</span>
                         <span>🕐 17h às 22h</span>
-                        <span>📍 Rua do Mathe</span>
+                        <span data-lang-key="sab-feira3-local">📍 Vila Pinheirinho</span>
                     </div>
-                    <p>Pratos típicos, doces artesanais, bebidas e música ao vivo. O point gastronômico da cidade.</p>
+                    <p data-lang-key="sab-feira3-desc">Produtos artesanais do bairro: pastéis, xixo, kafta e delícias caseiras.</p>
                 </div>
 
                 <div class="fair-card">
-                    <h4>🥬 Feira do Produtor</h4>
+                    <h4 data-lang-key="sab-feira4-h">🎉 Polskie Smaki</h4>
                     <div class="schedule">
-                        <span>📅 Sábados</span>
-                        <span>🕐 7h às 12h</span>
+                        <span data-lang-key="sab-feira4-dias">📅 Último sábado de agosto</span>
+                        <span data-lang-key="sab-feira4-hora">🕐 10h às 22h</span>
                         <span>📍 Rua do Mathe</span>
                     </div>
-                    <p>Frutas, hortaliças, queijos, embutidos, erva-mate e produtos coloniais direto do campo.</p>
-                </div>
-
-                <div class="fair-card">
-                    <h4>🌙 Feira da Lua</h4>
-                    <div class="schedule">
-                        <span>📅 2ª Terça-feira do mês</span>
-                        <span>🕐 17h às 22h</span>
-                        <span>📍 Vila Pinheirinho</span>
-                    </div>
-                    <p>Produtos artesanais do bairro: pastéis, xixo, kafta e delícias caseiras.</p>
-                </div>
-
-                <div class="fair-card">
-                    <h4>🎉 Polskie Smaki</h4>
-                    <div class="schedule">
-                        <span>📅 Último sábado de agosto</span>
-                        <span>🕐 10h às 22h</span>
-                        <span>📍 Rua do Mathe</span>
-                    </div>
-                    <p>Festival de comida polonesa com desfile folclórico e concurso Papa Pierogi.</p>
+                    <p data-lang-key="sab-feira4-desc">Festival de comida polonesa com desfile folclórico e concurso Papa Pierogi.</p>
                 </div>
 
             </div>
@@ -650,8 +661,8 @@
         <!-- Restaurantes -->
         <section>
             <div class="section-header">
-                <h2>🍴 Onde Comer</h2>
-                <p>Restaurantes e estabelecimentos gastronômicos</p>
+                <h2 data-lang-key="sab-rest-h">🍴 Onde Comer</h2>
+                <p data-lang-key="sab-rest-sub">Restaurantes e estabelecimentos gastronômicos</p>
             </div>
 
             <div class="restaurants-grid">
@@ -659,11 +670,11 @@
                 <div class="restaurant-card">
                     <div class="restaurant-icon">🍽️</div>
                     <div class="restaurant-info">
-                        <h4>Porto Gastronômico</h4>
+                        <h4 data-lang-key="sab-rest1-h">Porto Gastronômico</h4>
                         <span class="cuisine">Contemporânea • Bar</span>
                         <div class="contact">
-                            <span>📍 Às margens do Rio Iguaçu</span>
-                            <span>🕐 Ter-Dom: 18h às 00h</span>
+                            <span data-lang-key="sab-rest1-local">📍 Às margens do Rio Iguaçu</span>
+                            <span data-lang-key="sab-rest1-hora">🕐 Ter-Dom: 18h às 00h</span>
                         </div>
                     </div>
                 </div>
@@ -671,11 +682,11 @@
                 <div class="restaurant-card">
                     <div class="restaurant-icon">🥟</div>
                     <div class="restaurant-info">
-                        <h4>Restaurante Polonês</h4>
+                        <h4 data-lang-key="sab-rest2-h">Restaurante Polonês</h4>
                         <span class="cuisine">Polonesa Tradicional</span>
                         <div class="contact">
-                            <span>📍 Centro</span>
-                            <span>🕐 Almoço e Jantar</span>
+                            <span data-lang-key="sab-rest2-local">📍 Centro</span>
+                            <span data-lang-key="sab-rest2-hora">🕐 Almoço e Jantar</span>
                         </div>
                     </div>
                 </div>
@@ -683,11 +694,11 @@
                 <div class="restaurant-card">
                     <div class="restaurant-icon">🍖</div>
                     <div class="restaurant-info">
-                        <h4>Churrascarias Locais</h4>
+                        <h4 data-lang-key="sab-rest3-h">Churrascarias Locais</h4>
                         <span class="cuisine">Churrasco • Regional</span>
                         <div class="contact">
-                            <span>📍 Diversos pontos</span>
-                            <span>🕐 Almoço: 11h às 14h</span>
+                            <span data-lang-key="sab-rest3-local">📍 Diversos pontos</span>
+                            <span data-lang-key="sab-rest3-hora">🕐 Almoço: 11h às 14h</span>
                         </div>
                     </div>
                 </div>
@@ -695,11 +706,11 @@
                 <div class="restaurant-card">
                     <div class="restaurant-icon">☕</div>
                     <div class="restaurant-info">
-                        <h4>Cafés e Confeitarias</h4>
+                        <h4 data-lang-key="sab-rest4-h">Cafés e Confeitarias</h4>
                         <span class="cuisine">Café Colonial • Doces</span>
                         <div class="contact">
-                            <span>📍 Centro e bairros</span>
-                            <span>🕐 Manhã e tarde</span>
+                            <span data-lang-key="sab-rest4-local">📍 Centro e bairros</span>
+                            <span data-lang-key="sab-rest4-hora">🕐 Manhã e tarde</span>
                         </div>
                     </div>
                 </div>
@@ -709,45 +720,45 @@
 
         <!-- Produtores Rurais -->
         <section class="producers-section">
-            <h3>🌾 Direto do Produtor</h3>
-            <p>Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
+            <h3 data-lang-key="sab-prod-h">🌾 Direto do Produtor</h3>
+            <p data-lang-key="sab-prod-sub">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
 
             <div class="producers-grid">
                 
                 <div class="producer-card">
                     <div class="icon">🍓</div>
-                    <h4>Morangos</h4>
-                    <p>Colheita própria nas propriedades</p>
+                    <h4 data-lang-key="sab-prod1-h">Morangos</h4>
+                    <p data-lang-key="sab-prod1-p">Colheita própria nas propriedades</p>
                 </div>
 
                 <div class="producer-card">
                     <div class="icon">🍷</div>
-                    <h4>Vinhos</h4>
-                    <p>Vinícolas artesanais</p>
+                    <h4 data-lang-key="sab-prod2-h">Vinhos</h4>
+                    <p data-lang-key="sab-prod2-p">Vinícolas artesanais</p>
                 </div>
 
                 <div class="producer-card">
                     <div class="icon">🧀</div>
-                    <h4>Queijos</h4>
-                    <p>Queijarias coloniais</p>
+                    <h4 data-lang-key="sab-prod3-h">Queijos</h4>
+                    <p data-lang-key="sab-prod3-p">Queijarias coloniais</p>
                 </div>
 
                 <div class="producer-card">
                     <div class="icon">🍯</div>
                     <h4>Mel</h4>
-                    <p>Apiários locais</p>
+                    <p data-lang-key="sab-prod4-p">Apiários locais</p>
                 </div>
 
                 <div class="producer-card">
                     <div class="icon">🧉</div>
-                    <h4>Erva-mate</h4>
-                    <p>Ervateiras certificadas IG</p>
+                    <h4 data-lang-key="sab-prod5-h">Erva-mate</h4>
+                    <p data-lang-key="sab-prod5-p">Ervateiras certificadas IG</p>
                 </div>
 
                 <div class="producer-card">
                     <div class="icon">🥒</div>
-                    <h4>Conservas</h4>
-                    <p>Picles e compotas caseiras</p>
+                    <h4 data-lang-key="sab-prod6-h">Conservas</h4>
+                    <p data-lang-key="sab-prod6-p">Picles e compotas caseiras</p>
                 </div>
 
             </div>

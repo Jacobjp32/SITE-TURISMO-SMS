@@ -546,10 +546,21 @@
     <script src="translations.js"></script>
 </head>
 <body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
     <header class="header">
-        <h2 class="header-title" data-i18n="header.title">Rotas Turísticas</h2>
+        <h2 class="header-title" data-lang-key="rotas-titulo">Rotas Turísticas</h2>
         <p class="header-subtitle">
-            <span data-i18n="header.subtitle">Explore todos os estabelecimentos participantes das rotas turísticas de São Mateus do Sul</span>
+            <span data-lang-key="rotas-subtitulo">Explore todos os estabelecimentos participantes das rotas turísticas de São Mateus do Sul</span>
         </p>
     </header>
 
@@ -560,7 +571,7 @@
                     type="text" 
                     id="searchInput" 
                     class="search-input" 
-                    placeholder="🔍 Buscar por nome, localidade ou tipo de experiência..."
+                    placeholder="🔍 Buscar por nome, localidade ou tipo de experiência..." data-lang-key-placeholder="rotas-busca-ph"
                     oninput="filterEstablishments()"
                 >
             </div>
@@ -575,32 +586,32 @@
                     background: white;
                     cursor: pointer;
                 ">
-                    <option value="all">📍 Todas as Localidades</option>
-                    <option value="divisa">Localidade de Divisa</option>
-                    <option value="fluviópolis">Localidade de Fluviópolis</option>
-                    <option value="taquaral">Localidade de Taquaral / Colônia Taquaral</option>
-                    <option value="água branca">Localidade da Água Branca</option>
-                    <option value="espigãozinho">Localidade do Espigãozinho</option>
-                    <option value="faxinal">Localidade do Faxinal do Ilhéus</option>
-                    <option value="lajeadinho">Localidade do Lajeadinho</option>
-                    <option value="são joaquim">Bairro São Joaquim</option>
-                    <option value="centro">Centro</option>
-                    <option value="iguaçu">Colônia Iguaçu</option>
-                    <option value="potinga">Localidade da Barra do Potinga</option>
-                    <option value="emboque">Localidade do Emboque</option>
-                    <option value="cachoeira">Colônia Cachoeira</option>
-                    <option value="vargem">Localidade da Vargem Grande</option>
-                    <option value="maria rosa">Núcleo Maria Rosa</option>
+                    <option value="all" data-lang-key="rotas-loc-todas">📍 Todas as Localidades</option>
+                    <option value="divisa" data-lang-key="rotas-loc-divisa">Localidade de Divisa</option>
+                    <option value="fluviópolis" data-lang-key="rotas-loc-fluvio">Localidade de Fluviópolis</option>
+                    <option value="taquaral" data-lang-key="rotas-loc-taquaral">Localidade de Taquaral / Colônia Taquaral</option>
+                    <option value="água branca" data-lang-key="rotas-loc-aguabranca">Localidade da Água Branca</option>
+                    <option value="espigãozinho" data-lang-key="rotas-loc-espigao">Localidade do Espigãozinho</option>
+                    <option value="faxinal" data-lang-key="rotas-loc-faxinal">Localidade do Faxinal do Ilhéus</option>
+                    <option value="lajeadinho" data-lang-key="rotas-loc-lajeadinho">Localidade do Lajeadinho</option>
+                    <option value="são joaquim" data-lang-key="rotas-loc-sjoaquim">Bairro São Joaquim</option>
+                    <option value="centro" data-lang-key="rotas-loc-centro">Centro</option>
+                    <option value="iguaçu" data-lang-key="rotas-loc-iguacu">Colônia Iguaçu</option>
+                    <option value="potinga" data-lang-key="rotas-loc-potinga">Localidade da Barra do Potinga</option>
+                    <option value="emboque" data-lang-key="rotas-loc-emboque">Localidade do Emboque</option>
+                    <option value="cachoeira" data-lang-key="rotas-loc-cachoeira">Colônia Cachoeira</option>
+                    <option value="vargem" data-lang-key="rotas-loc-vargem">Localidade da Vargem Grande</option>
+                    <option value="maria rosa" data-lang-key="rotas-loc-mariarosa">Núcleo Maria Rosa</option>
                 </select>
             </div>
             <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterByRoute('all')">Todas</button>
-                <button class="filter-btn" onclick="filterByRoute('sabores')">🍓 Sabores & Memórias</button>
-                <button class="filter-btn" onclick="filterByRoute('mate')">🌿 Erva-Mate</button>
-                <button class="filter-btn" onclick="filterByRoute('polonesa')">⛪ Polonesa</button>
-                <button class="filter-btn" onclick="filterByRoute('aguas')">🌊 Das Águas</button>
-                <button class="filter-btn" onclick="filterByRoute('fluviop')">🏘️ Fluviópolis</button>
-                <button class="filter-btn" onclick="filterByRoute('terra')">🌱 Da Terra</button>
+                <button class="filter-btn active" onclick="filterByRoute('all')" data-lang-key="rotas-btn-todas">Todas</button>
+                <button class="filter-btn" onclick="filterByRoute('sabores')" data-lang-key="rotas-btn-sabores">🍓 Sabores & Memórias</button>
+                <button class="filter-btn" onclick="filterByRoute('mate')" data-lang-key="rotas-btn-ervamate">🌿 Erva-Mate</button>
+                <button class="filter-btn" onclick="filterByRoute('polonesa')" data-lang-key="rotas-btn-polonesa">⛪ Polonesa</button>
+                <button class="filter-btn" onclick="filterByRoute('aguas')" data-lang-key="rotas-btn-aguas">🌊 Das Águas</button>
+                <button class="filter-btn" onclick="filterByRoute('fluviop')" data-lang-key="rotas-btn-fluvio">🏘️ Fluviópolis</button>
+                <button class="filter-btn" onclick="filterByRoute('terra')" data-lang-key="rotas-btn-terra">🌱 Da Terra</button>
             </div>
         </div>
         <div class="results-count" id="resultsCount"></div>

@@ -442,6 +442,17 @@
     <script src="translations.js"></script>
 </head>
 <body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
     <!-- Header -->
     <header class="header">
         <div class="container">
@@ -450,11 +461,11 @@
                 <div class="header-title">São Mateus do Sul</div>
             </a>
             <nav class="header-nav">
-                <a href="index.html">Início</a>
-                <a href="o-que-fazer.html">O Que Fazer</a>
-                <a href="sabores.html">Sabores</a>
-                <a href="eventos.html">Eventos</a>
-                <a href="rotas-completas.html">Roteiros</a>
+                <a href="index.html" data-lang-key="nav-inicio">Início</a>
+                <a href="o-que-fazer.html" data-lang-key="nav-oqfazer">O Que Fazer</a>
+                <a href="sabores.html" data-lang-key="nav-sabores">Sabores</a>
+                <a href="eventos.html" data-lang-key="nav-eventos">Eventos</a>
+                <a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a>
             </nav>
         </div>
     </header>
@@ -468,16 +479,16 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="intro">
-            <h2>Escolha Sua Estadia</h2>
-            <p>São Mateus do Sul oferece diversas opções de hospedagem, desde hotéis tradicionais no centro até pousadas aconchegantes no interior. Sinta-se em casa!</p>
+            <h2 data-lang-key="of-hero-h">Escolha Sua Estadia</h2>
+            <p data-lang-key="of-sub">São Mateus do Sul oferece diversas opções de hospedagem, desde hotéis tradicionais no centro até pousadas aconchegantes no interior. Sinta-se em casa!</p>
         </div>
 
         <!-- Filter -->
         <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all">Todos</button>
-            <button class="filter-btn" data-filter="hotel">Hotéis</button>
-            <button class="filter-btn" data-filter="pousada">Pousadas</button>
-            <button class="filter-btn" data-filter="rural">Turismo Rural</button>
+            <button class="filter-btn active" data-filter="all" data-lang-key="of-btn-todos">Todos</button>
+            <button class="filter-btn" data-filter="hotel" data-lang-key="of-btn-hoteis">Hotéis</button>
+            <button class="filter-btn" data-filter="pousada" data-lang-key="of-btn-pousadas">Pousadas</button>
+            <button class="filter-btn" data-filter="rural" data-lang-key="of-btn-rural">Turismo Rural</button>
         </div>
 
         <!-- Hotels Grid -->
@@ -488,13 +499,13 @@
                 <div class="hotel-image">🏨</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Hotel</span>
-                    <h3>Hotel São Mateus</h3>
-                    <p class="description">Hotel tradicional localizado no coração da cidade, próximo à Igreja Matriz e principais pontos turísticos.</p>
+                    <h3 data-lang-key="of-h1-nome">Hotel São Mateus</h3>
+                    <p class="description" data-lang-key="of-h1-desc">Hotel tradicional localizado no coração da cidade, próximo à Igreja Matriz e principais pontos turísticos.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">📶 Wi-Fi</span>
-                        <span class="amenity">🅿️ Estacionamento</span>
-                        <span class="amenity">☕ Café da manhã</span>
-                        <span class="amenity">❄️ Ar condicionado</span>
+                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
+                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
+                        <span class="amenity" data-lang-key="of-cafe">☕ Café da manhã</span>
+                        <span class="amenity" data-lang-key="of-ar">❄️ Ar condicionado</span>
                     </div>
                     <div class="hotel-contact">
                         <a href="tel:+554232822000">📞 (42) 3282-2000</a>
@@ -508,12 +519,12 @@
                 <div class="hotel-image">🏨</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Hotel</span>
-                    <h3>Hotel Nora</h3>
-                    <p class="description">Acomodações aconchegantes com excelente custo-benefício. Ideal para famílias e viajantes de negócios.</p>
+                    <h3 data-lang-key="of-h2-nome">Hotel Nora</h3>
+                    <p class="description" data-lang-key="of-h2-desc">Acomodações aconchegantes com excelente custo-benefício. Ideal para famílias e viajantes de negócios.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">📶 Wi-Fi</span>
-                        <span class="amenity">🅿️ Estacionamento</span>
-                        <span class="amenity">☕ Café da manhã</span>
+                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
+                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
+                        <span class="amenity" data-lang-key="of-cafe">☕ Café da manhã</span>
                         <span class="amenity">📺 TV</span>
                     </div>
                     <div class="hotel-contact">
@@ -528,13 +539,13 @@
                 <div class="hotel-image">🏨</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Hotel</span>
-                    <h3>Hotel Dom Leopoldo</h3>
-                    <p class="description">Charme polonês em cada detalhe. Decoração temática que celebra a herança cultural da cidade.</p>
+                    <h3 data-lang-key="of-h3-nome">Hotel Dom Leopoldo</h3>
+                    <p class="description" data-lang-key="of-h3-desc">Charme polonês em cada detalhe. Decoração temática que celebra a herança cultural da cidade.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">📶 Wi-Fi</span>
-                        <span class="amenity">🅿️ Estacionamento</span>
-                        <span class="amenity">☕ Café colonial</span>
-                        <span class="amenity">🛁 Hidromassagem</span>
+                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
+                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
+                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
+                        <span class="amenity" data-lang-key="of-hidro">🛁 Hidromassagem</span>
                     </div>
                     <div class="hotel-contact">
                         <a href="tel:+554232823000">📞 (42) 3282-3000</a>
@@ -548,13 +559,13 @@
                 <div class="hotel-image">🏡</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Pousada</span>
-                    <h3>Pousada da Colônia</h3>
-                    <p class="description">Experiência autêntica nas colônias polonesas. Café da manhã com produtos caseiros da região.</p>
+                    <h3 data-lang-key="of-p1-nome">Pousada da Colônia</h3>
+                    <p class="description" data-lang-key="of-p1-desc">Experiência autêntica nas colônias polonesas. Café da manhã com produtos caseiros da região.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">🌳 Área verde</span>
-                        <span class="amenity">☕ Café colonial</span>
-                        <span class="amenity">🅿️ Estacionamento</span>
-                        <span class="amenity">🐔 Produtos caseiros</span>
+                        <span class="amenity" data-lang-key="of-area-verde">🌳 Área verde</span>
+                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
+                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
+                        <span class="amenity" data-lang-key="of-prod-caseiros">🐔 Produtos caseiros</span>
                     </div>
                     <div class="hotel-contact">
                         <a href="tel:+554299991234">📞 (42) 99999-1234</a>
@@ -568,13 +579,13 @@
                 <div class="hotel-image">🍓</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Turismo Rural</span>
-                    <h3>Sítio Morango Feliz</h3>
-                    <p class="description">Hospedagem na propriedade rural com colheita de morangos. Perfeito para famílias com crianças.</p>
+                    <h3 data-lang-key="of-s1-nome">Sítio Morango Feliz</h3>
+                    <p class="description" data-lang-key="of-s1-desc">Hospedagem na propriedade rural com colheita de morangos. Perfeito para famílias com crianças.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">🍓 Colha e pague</span>
-                        <span class="amenity">🌳 Trilhas</span>
-                        <span class="amenity">👨‍🌾 Vivência rural</span>
-                        <span class="amenity">☕ Café colonial</span>
+                        <span class="amenity" data-lang-key="of-colha-pague">🍓 Colha e pague</span>
+                        <span class="amenity" data-lang-key="of-trilhas">🌳 Trilhas</span>
+                        <span class="amenity" data-lang-key="of-vivencia">👨‍🌾 Vivência rural</span>
+                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
                     </div>
                     <div class="hotel-contact">
                         <a href="tel:+554299995678">📞 (42) 99999-5678</a>
@@ -588,13 +599,13 @@
                 <div class="hotel-image">🏠</div>
                 <div class="hotel-content">
                     <span class="hotel-category">Chalés</span>
-                    <h3>Chalés do Iguaçu</h3>
-                    <p class="description">Chalés privativos às margens do Rio Iguaçu. Contato direto com a natureza e tranquilidade.</p>
+                    <h3 data-lang-key="of-c1-nome">Chalés do Iguaçu</h3>
+                    <p class="description" data-lang-key="of-c1-desc">Chalés privativos às margens do Rio Iguaçu. Contato direto com a natureza e tranquilidade.</p>
                     <div class="hotel-amenities">
-                        <span class="amenity">🌊 Beira-rio</span>
-                        <span class="amenity">🎣 Pesca</span>
-                        <span class="amenity">🔥 Churrasqueira</span>
-                        <span class="amenity">🛶 Canoagem</span>
+                        <span class="amenity" data-lang-key="of-beira-rio">🌊 Beira-rio</span>
+                        <span class="amenity" data-lang-key="of-pesca">🎣 Pesca</span>
+                        <span class="amenity" data-lang-key="of-churras">🔥 Churrasqueira</span>
+                        <span class="amenity" data-lang-key="of-canoagem">🛶 Canoagem</span>
                     </div>
                     <div class="hotel-contact">
                         <a href="tel:+554299994321">📞 (42) 99999-4321</a>
@@ -607,34 +618,34 @@
 
         <!-- Booking Tips -->
         <div class="booking-tips">
-            <h3>💡 Dicas para sua Reserva</h3>
+            <h3 data-lang-key="of-dicas-h">💡 Dicas para sua Reserva</h3>
             <div class="tips-grid">
                 <div class="tip-item">
                     <span class="tip-icon">📅</span>
                     <div>
-                        <h4>Reserve com Antecedência</h4>
-                        <p>Durante o Mês Polonês (agosto) e AgroSamas (setembro), a procura é alta.</p>
+                        <h4 data-lang-key="of-dica1-h">Reserve com Antecedência</h4>
+                        <p data-lang-key="of-dica1-p">Durante o Mês Polonês (agosto) e AgroSamas (setembro), a procura é alta.</p>
                     </div>
                 </div>
                 <div class="tip-item">
                     <span class="tip-icon">🗓️</span>
                     <div>
-                        <h4>Fins de Semana</h4>
-                        <p>As feiras gastronômicas acontecem quartas, sextas e sábados.</p>
+                        <h4 data-lang-key="of-dica2-h">Fins de Semana</h4>
+                        <p data-lang-key="of-dica2-p">As feiras gastronômicas acontecem quartas, sextas e sábados.</p>
                     </div>
                 </div>
                 <div class="tip-item">
                     <span class="tip-icon">🚗</span>
                     <div>
-                        <h4>Localização</h4>
-                        <p>Hotéis no centro facilitam acesso a pé às principais atrações.</p>
+                        <h4 data-lang-key="of-dica3-h">Localização</h4>
+                        <p data-lang-key="of-dica3-p">Hotéis no centro facilitam acesso a pé às principais atrações.</p>
                     </div>
                 </div>
                 <div class="tip-item">
                     <span class="tip-icon">☎️</span>
                     <div>
-                        <h4>Contato Direto</h4>
-                        <p>Ligue diretamente para melhores preços e disponibilidade.</p>
+                        <h4 data-lang-key="of-dica4-h">Contato Direto</h4>
+                        <p data-lang-key="of-dica4-p">Ligue diretamente para melhores preços e disponibilidade.</p>
                     </div>
                 </div>
             </div>
@@ -642,8 +653,8 @@
 
         <!-- CTA -->
         <div class="cta-section">
-            <h3>Planeje Sua Visita</h3>
-            <p>Confira os eventos e monte seu roteiro personalizado pela Capital Polonesa do Paraná.</p>
+            <h3 data-lang-key="of-cta-h">Planeje Sua Visita</h3>
+            <p data-lang-key="of-cta-p">Confira os eventos e monte seu roteiro personalizado pela Capital Polonesa do Paraná.</p>
             <a href="eventos.html" class="cta-btn">📅 Ver Calendário de Eventos</a>
         </div>
     </main>
