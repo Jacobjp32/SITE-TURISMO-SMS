@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <title>Painel Admin | Turismo SMS</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #0a3d2e;
+            --primary-light: #0d5a3e;
+            --accent: #d4a574;
+            --bg: #f5f5f5;
+            --card: #ffffff;
+            --text: #333;
+            --text-light: #666;
+            --danger: #e74c3c;
+            --success: #27ae60;
+            --warning: #f39c12;
+            --info: #3498db;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        }
+        
+        .login-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-box img {
+            width: 80px;
+            margin-bottom: 1rem;
+        }
+        
+        .login-box h1 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .login-box p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+        
+        .login-form button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .login-form button:hover {
+            background: var(--primary-light);
+        }
+
+        .login-form button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+        
+        .dashboard.active {
+            display: flex;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-logo img {
+            width: 40px;
+        }
+        
+        .sidebar-logo span {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.8rem 1rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .sidebar-menu a.active {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        
+        .sidebar-footer {
+            position: absolute;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            right: 1.5rem;
+        }
+        
+        .btn-logout {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-family: inherit;
+        }
+        
+        .btn-logout:hover {
+            background: var(--danger);
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            min-height: 100vh;
+            flex: 1;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+            font-family: inherit;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+
+        .btn-primary:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .stat-card .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-card .label {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .card-header h2 {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        /* Tables */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table th {
+            background: #f8f8f8;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .data-table tr:hover {
+            background: #fafafa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-success { background: #d4edda; color: #155724; }
+        .badge-warning { background: #fff3cd; color: #856404; }
+        .badge-danger { background: #f8d7da; color: #721c24; }
+        .badge-info { background: #d1ecf1; color: #0c5460; }
+        
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-right: 0.3rem;
+            font-family: inherit;
+        }
+
+        .btn-sm:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-approve { background: #d4edda; color: #155724; }
+        .btn-reject { background: #f8d7da; color: #721c24; }
+        .btn-edit { background: #e3f2fd; color: #1976d2; }
+        .btn-delete { background: #ffebee; color: #c62828; }
+        
+        /* Sections */
+        .admin-section {
+            display: none;
+        }
+        
+        .admin-section.active {
+            display: block;
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+
+        /* Select */
+        select {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .sidebar {
+                width: 70px;
+                padding: 1rem 0.5rem;
+            }
+            
+            .sidebar-logo span,
+            .sidebar-menu a span {
+                display: none;
+            }
+            
+            .sidebar-menu a {
+                justify-content: center;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .data-table {
+                font-size: 0.85rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-box">
+            <img src="images/logo_pin_turismo_3d.png" alt="Logo">
+            <h1>Painel Administrativo</h1>
+            <p>Turismo São Mateus do Sul</p>
+            
+            <form class="login-form" id="adminLoginForm">
+                <input type="email" id="loginEmail" placeholder="E-mail" required>
+                <input type="password" id="loginPass" placeholder="Senha" required>
+                <button type="submit" id="loginBtn">Entrar</button>
+            </form>
+            
+            <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #999;">
+                Acesso restrito a administradores
+            </p>
+        </div>
+    </div>
+    
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="Logo">
+                <span>Admin</span>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li><a class="active" data-section="home">📊 <span>Dashboard</span></a></li>
+                <li><a data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
+                <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
+                <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
+                <li><a href="index.html" target="_blank">🌐 <span>Ver Site</span></a></li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <button class="btn-logout" onclick="handleLogout()">🚪 Sair</button>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Home Section -->
+            <section class="admin-section active" id="section-home">
+                <div class="page-header">
+                    <h1>Dashboard</h1>
+                    <span id="currentDate"></span>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="icon">👥</div>
+                        <div class="number" id="stat-usuarios">-</div>
+                        <div class="label">Usuários cadastrados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">⏳</div>
+                        <div class="number" id="stat-pendentes">-</div>
+                        <div class="label">Eventos pendentes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">✅</div>
+                        <div class="number" id="stat-aprovados">-</div>
+                        <div class="label">Eventos aprovados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="icon">🏨</div>
+                        <div class="number" id="stat-estabelecimentos">-</div>
+                        <div class="label">Estab. pendentes</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>⚡ Ações Rápidas</h2>
+                    </div>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <button class="btn-primary" onclick="showSection('aprovacoes')">✅ Ver Aprovações</button>
+                        <button class="btn-primary" onclick="showSection('usuarios')">👥 Gerenciar Usuários</button>
+                        <a href="portal-usuario.html" target="_blank" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Aprovações Section -->
+            <section class="admin-section" id="section-aprovacoes">
+                <div class="page-header">
+                    <h1>✅ Aprovações Pendentes</h1>
+                    <button class="btn-primary" onclick="loadPendingData()">🔄 Atualizar</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🎪 Eventos Aguardando Aprovação</h2>
+                    </div>
+                    <div id="eventos-pendentes-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
+                    </div>
+                    <div id="estabelecimentos-pendentes-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usuários Section -->
+            <section class="admin-section" id="section-usuarios">
+                <div class="page-header">
+                    <h1>👥 Gerenciar Usuários</h1>
+                    <button class="btn-primary" onclick="loadUsers()">🔄 Atualizar</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Lista de Usuários</h2>
+                    </div>
+                    <div id="usuarios-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Eventos Section -->
+            <section class="admin-section" id="section-eventos">
+                <div class="page-header">
+                    <h1>📅 Eventos Aprovados</h1>
+                </div>
+                
+                <div class="card">
+                    <div id="eventos-aprovados-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/firebase-auth.js"></script>
+    <script>
+        // Aguardar Firebase e verificar autenticação
+        window.addEventListener('authStateChanged', function(e) {
+            checkAdminAuth();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Setup login form
+            document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
+            
+            // Setup menu
+            document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
+                link.addEventListener('click', () => showSection(link.dataset.section));
+            });
+
+            // Atualizar data
+            updateDate();
+
+            // Verificar auth após delay
+            setTimeout(checkAdminAuth, 1500);
+        });
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const btn = document.getElementById('loginBtn');
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginPass').value;
+
+            const result = await FirebaseSystem.login(email, senha);
+            
+            if (result.success) {
+                // Aguardar dados do usuário carregarem
+                setTimeout(checkAdminAuth, 1000);
+            } else {
+                alert(result.message);
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+            }
+        }
+
+        function checkAdminAuth() {
+            const user = window.currentUser;
+            
+            if (user && user.role === 'admin') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('dashboard').classList.add('active');
+                loadDashboardData();
+            } else if (user && user.role !== 'admin') {
+                alert('Acesso negado. Você não tem permissão de administrador.');
+                FirebaseSystem.logout();
+            } else {
+                document.getElementById('loginScreen').style.display = 'flex';
+                document.getElementById('dashboard').classList.remove('active');
+            }
+        }
+
+        async function handleLogout() {
+            await FirebaseSystem.logout();
+            location.reload();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('section-' + section).classList.add('active');
+            
+            document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+            document.querySelector(`.sidebar-menu a[data-section="${section}"]`)?.classList.add('active');
+
+            // Carregar dados da seção
+            if (section === 'aprovacoes') loadPendingData();
+            if (section === 'usuarios') loadUsers();
+            if (section === 'eventos') loadApprovedEvents();
+        }
+
+        function updateDate() {
+            const hoje = new Date();
+            document.getElementById('currentDate').textContent = hoje.toLocaleDateString('pt-BR', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        async function loadDashboardData() {
+            const stats = await FirebaseSystem.getAdminStats();
+            if (stats) {
+                document.getElementById('stat-usuarios').textContent = stats.totalUsers;
+                document.getElementById('stat-pendentes').textContent = stats.pendingEvents;
+                document.getElementById('stat-aprovados').textContent = stats.approvedEvents;
+                document.getElementById('stat-estabelecimentos').textContent = stats.pendingEstablishments;
+            }
+        }
+
+        async function loadPendingData() {
+            // Eventos pendentes
+            const eventos = await FirebaseSystem.getPendingEvents();
+            const eventosContainer = document.getElementById('eventos-pendentes-container');
+            
+            if (eventos.length === 0) {
+                eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum evento pendente!</p>';
+            } else {
+                eventosContainer.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Solicitante</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${eventos.map(e => `
+                                <tr>
+                                    <td><strong>${e.nome}</strong><br><small>${e.categoria || ''}</small></td>
+                                    <td>${formatDate(e.dataInicio)}</td>
+                                    <td>${e.local}</td>
+                                    <td>${e.submittedByName}<br><small>${e.submittedByEmail}</small></td>
+                                    <td>
+                                        <button class="btn-sm btn-approve" onclick="approveEvent('${e.id}')">✅ Aprovar</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${e.id}')">❌ Rejeitar</button>
+                                        <button class="btn-sm btn-edit" onclick="viewEvent('${e.id}')">👁️</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+
+            // Estabelecimentos pendentes
+            const estabelecimentos = await FirebaseSystem.getPendingEstablishments();
+            const estContainer = document.getElementById('estabelecimentos-pendentes-container');
+            
+            if (estabelecimentos.length === 0) {
+                estContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum estabelecimento pendente!</p>';
+            } else {
+                estContainer.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Endereço</th>
+                                <th>Solicitante</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${estabelecimentos.map(e => `
+                                <tr>
+                                    <td><strong>${e.nome}</strong></td>
+                                    <td>${e.categoria || ''}</td>
+                                    <td>${e.endereco}</td>
+                                    <td>${e.submittedByName}</td>
+                                    <td>
+                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${e.id}')">✅</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${e.id}')">❌</button>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            }
+        }
+
+        async function loadUsers() {
+            const users = await FirebaseSystem.getUsers();
+            const container = document.getElementById('usuarios-container');
+            
+            if (users.length === 0) {
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhum usuário encontrado.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Tipo</th>
+                            <th>Permissão</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${users.map(u => `
+                            <tr>
+                                <td><strong>${u.nome}</strong></td>
+                                <td>${u.email}</td>
+                                <td>${u.tipo || 'turista'}</td>
+                                <td>
+                                    <select onchange="changeUserRole('${u.id}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
+                                        <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
+                                        <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
+                                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <span class="badge ${u.ativo !== false ? 'badge-success' : 'badge-danger'}">
+                                        ${u.ativo !== false ? 'Ativo' : 'Inativo'}
+                                    </span>
+                                </td>
+                                <td>
+                                    ${u.id !== window.currentUser?.uid ? `
+                                        <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" 
+                                                onclick="toggleUserStatus('${u.id}', ${u.ativo === false})">
+                                            ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
+                                        </button>
+                                    ` : '<small style="color:#888;">Você</small>'}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        async function loadApprovedEvents() {
+            // Buscar eventos aprovados diretamente
+            try {
+                const { db, collection, getDocs, orderBy, query } = window.firebaseDB;
+                const q = query(collection(db, 'eventos_aprovados'));
+                const snapshot = await getDocs(q);
+                const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                const container = document.getElementById('eventos-aprovados-container');
+                
+                if (eventos.length === 0) {
+                    container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhum evento aprovado ainda.</p>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Local</th>
+                                <th>Organizador</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${eventos.map(e => `
+                                <tr>
+                                    <td><strong>${e.nome}</strong></td>
+                                    <td>${formatDate(e.dataInicio)}</td>
+                                    <td>${e.local}</td>
+                                    <td>${e.submittedByName}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                `;
+            } catch (error) {
+                console.error('Erro ao carregar eventos aprovados:', error);
+            }
+        }
+
+        // Ações
+        async function approveEvent(eventId) {
+            if (!confirm('Aprovar este evento?')) return;
+            const result = await FirebaseSystem.approveEvent(eventId);
+            alert(result.message);
+            loadPendingData();
+            loadDashboardData();
+        }
+
+        async function rejectEvent(eventId) {
+            const reason = prompt('Motivo da rejeição (opcional):');
+            if (reason === null) return;
+            const result = await FirebaseSystem.rejectEvent(eventId, reason);
+            alert(result.message);
+            loadPendingData();
+        }
+
+        function viewEvent(eventId) {
+            // Implementar visualização detalhada se necessário
+            alert('Funcionalidade de visualização detalhada em desenvolvimento.');
+        }
+
+        async function approveEstablishment(estId) {
+            if (!confirm('Aprovar este estabelecimento?')) return;
+            // Implementar aprovação de estabelecimento
+            alert('Estabelecimento aprovado!');
+            loadPendingData();
+        }
+
+        async function rejectEstablishment(estId) {
+            if (!confirm('Rejeitar este estabelecimento?')) return;
+            // Implementar rejeição de estabelecimento
+            alert('Estabelecimento rejeitado.');
+            loadPendingData();
+        }
+
+        async function changeUserRole(userId, newRole) {
+            const result = await FirebaseSystem.setUserRole(userId, newRole);
+            alert(result.message);
+        }
+
+        async function toggleUserStatus(userId, ativar) {
+            const result = await FirebaseSystem.toggleUserStatus(userId, ativar);
+            alert(result.message);
+            loadUsers();
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '-';
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('pt-BR');
+            } catch {
+                return dateStr;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Gastronomia de São Mateus do Sul: pierogi, bigos, kielbasa, culinária polonesa autêntica. Feiras gastronômicas, restaurantes e produtores locais na Capital Polonesa do Paraná.">
+    <meta name="keywords" content="gastronomia São Mateus do Sul, comida polonesa, pierogi, restaurantes, feira gastronômica, culinária típica, Paraná">
+    <link rel="canonical" href="https://saomateusdosul.tur.br/sabores.html">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Sabores de São Mateus | Gastronomia Polonesa">
+    <meta property="og:description" content="Descubra os sabores autênticos da culinária polonesa na Capital Polonesa do Paraná.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saomateusdosul.tur.br/sabores.html">
+    <meta property="og:locale" content="pt_BR">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <!-- Schema.org - Culinária Local -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Gastronomia Polonesa de São Mateus do Sul",
+        "description": "Pratos típicos da culinária polonesa preservada pelos descendentes de imigrantes",
+        "itemListElement": [
+            {"@type": "MenuItem", "position": 1, "name": "Pierogi", "description": "Massa recheada com batata e requeijão, servida com cebola e nata"},
+            {"@type": "MenuItem", "position": 2, "name": "Bigos", "description": "Ensopado de repolho fermentado com carnes - o prato do caçador"},
+            {"@type": "MenuItem", "position": 3, "name": "Gołąbki", "description": "Repolho recheado com carne e arroz em molho de tomate"},
+            {"@type": "MenuItem", "position": 4, "name": "Kielbasa", "description": "Linguiça polonesa defumada tradicionalmente"}
+        ]
+    }
+    </script>
+    
+    <!-- Schema.org - Feira Gastronômica -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": "Feira Gastronômica de São Mateus do Sul",
+        "description": "Feira semanal com gastronomia local e música ao vivo",
+        "eventSchedule": {
+            "@type": "Schedule",
+            "byDay": ["Wednesday", "Friday"],
+            "startTime": "17:00",
+            "endTime": "22:00"
+        },
+        "location": {
+            "@type": "Place",
+            "name": "Rua do Mathe",
+            "address": "São Mateus do Sul, PR, Brasil"
+        }
+    }
+    </script>
+    
+    <!-- Schema.org - Breadcrumb -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Início", "item": "https://saomateusdosul.tur.br/"},
+            {"@type": "ListItem", "position": 2, "name": "Sabores", "item": "https://saomateusdosul.tur.br/sabores.html"}
+        ]
+    }
+    </script>
+    
+    <title>Sabores de São Mateus | Gastronomia Polonesa</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --white-pure: #ffffff;
+            --cream-light: #f8f6f0;
+            --polish-red: #dc143c;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .header-logo img {
+            width: 50px;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+        }
+
+        .header-nav {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .header-nav a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .header-nav a:hover {
+            opacity: 1;
+            color: var(--gold-polish);
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Section Title */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Pratos Típicos */
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .dish-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+
+        .dish-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .dish-card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .dish-card-image .origin-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--polish-red);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .dish-card-content {
+            padding: 1.5rem;
+        }
+
+        .dish-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.25rem;
+        }
+
+        .dish-card .polish-name {
+            color: var(--gold-polish);
+            font-style: italic;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .dish-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .dish-card .where-to-find {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .dish-card .where-to-find strong {
+            color: var(--forest-deep);
+        }
+
+        /* Feiras Section */
+        .fairs-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .fairs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .fair-card {
+            background: var(--cream-light);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--gold-polish);
+        }
+
+        .fair-card h4 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fair-card .schedule {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        .fair-card .schedule span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fair-card p {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Restaurantes */
+        .restaurants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.06);
+            display: flex;
+            gap: 1rem;
+            align-items: start;
+        }
+
+        .restaurant-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .restaurant-info h4 {
+            font-family: var(--font-display);
+            font-size: 1.2rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.25rem;
+        }
+
+        .restaurant-info .cuisine {
+            color: var(--gold-polish);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .restaurant-info .contact {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .restaurant-info .contact span {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        /* Produtores */
+        .producers-section {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            color: white;
+        }
+
+        .producers-section h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .producers-section > p {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            max-width: 600px;
+        }
+
+        .producers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .producer-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.25rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .producer-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .producer-card h4 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .producer-card p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .dishes-grid,
+            .restaurants-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-nav {
+                display: none;
+            }
+
+            .restaurant-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .restaurant-icon {
+                margin: 0 auto;
+            }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div class="header-title">São Mateus do Sul</div>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" data-lang-key="nav-inicio">Início</a>
+                <a href="o-que-fazer.html" data-lang-key="nav-oqfazer">O Que Fazer</a>
+                <a href="eventos.html" data-lang-key="nav-eventos">Eventos</a>
+                <a href="index.html#onde-ficar" data-lang-key="nav-ondeficar">Onde Ficar</a>
+                <a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang-key="page-sabores-titulo">🍽️ Sabores de São Mateus</h1>
+        <p data-lang-key="page-sabores-subtitulo">Da tradição polonesa aos sabores do campo. Descubra a gastronomia autêntica da Capital Polonesa do Paraná.</p>
+    </section>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <!-- Pratos Típicos Poloneses -->
+        <section>
+            <div class="section-header">
+                <h2 data-lang-key="sab-pratos-h">🥟 Pratos Típicos Poloneses</h2>
+                <p data-lang-key="sab-pratos-sub">A herança culinária dos imigrantes preservada com amor</p>
+            </div>
+
+            <div class="dishes-grid">
+                
+                <!-- Pierogi -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg');">
+                        <span class="origin-badge" data-lang-key="sab-tag-polones">🇵🇱 Polonês</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-pierogi-h">Pierogi</h3>
+                        <span class="polish-name" data-lang-key="sab-pierogi-nome">Pierogi Ruskie</span>
+                        <p data-lang-key="sab-pierogi-desc">Massa recheada com batata e requeijão, servida com cebola dourada e nata. O prato mais emblemático da culinária polonesa.</p>
+                        <div class="where-to-find">
+                            <strong data-lang-key="sab-onde-provar">Onde provar:</strong> Polskie Smaki, Feira Gastronômica, Baile do Pierogi
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Bigos -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__5_.jpg');">
+                        <span class="origin-badge">🇵🇱 Polonês</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-bigos-h">Bigos</h3>
+                        <span class="polish-name">Bigos - Caçador Polonês</span>
+                        <p data-lang-key="sab-bigos-desc">Ensopado de repolho fermentado (chucrute) com carnes variadas. Conhecido como "o prato do caçador".</p>
+                        <div class="where-to-find">
+                            <strong>Onde provar:</strong> Festas das comunidades, Mês Polonês
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Repolho Recheado -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__6_.jpg');">
+                        <span class="origin-badge">🇵🇱 Polonês</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-golabki-h">Repolho Recheado</h3>
+                        <span class="polish-name" data-lang-key="sab-golabki-pl">Gołąbki</span>
+                        <p>Folhas de repolho recheadas com carne e arroz, cobertas com molho de tomate. Tradição em todas as festas.</p>
+                        <div class="where-to-find">
+                            <strong>Onde provar:</strong> Restaurantes típicos, Festas religiosas
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Kielbasa -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/PARRERAL__4_.jpg');">
+                        <span class="origin-badge">🇵🇱 Polonês</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-kielbasa-h">Kielbasa</h3>
+                        <span class="polish-name" data-lang-key="sab-kielbasa-pl">Kiełbasa</span>
+                        <p data-lang-key="sab-kielbasa-desc">Linguiça polonesa defumada artesanalmente. Servida grelhada com mostarda e pão preto.</p>
+                        <div class="where-to-find">
+                            <strong>Onde provar:</strong> Feira do Produtor, Açougues locais
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Pães Artesanais -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/PARRERAL__6_.jpg');">
+                        <span class="origin-badge">🇵🇱 Polonês</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-paes-h">Pães e Cucas</h3>
+                        <span class="polish-name" data-lang-key="sab-paes-pl">Chleb, Kołacz</span>
+                        <p data-lang-key="sab-paes-desc">Pães de fermentação natural e cucas doces com farofa. Receitas centenárias passadas de geração em geração.</p>
+                        <div class="where-to-find">
+                            <strong>Onde provar:</strong> Padarias locais, Feira do Produtor
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Chimarrão -->
+                <article class="dish-card">
+                    <div class="dish-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
+                        <span class="origin-badge" data-lang-key="sab-tag-regional">🧉 Regional</span>
+                    </div>
+                    <div class="dish-card-content">
+                        <h3 data-lang-key="sab-chimarrao-h">Chimarrão</h3>
+                        <span class="polish-name" data-lang-key="sab-chimarrao-ig">Erva-mate IG São Matheus</span>
+                        <p data-lang-key="sab-chimarrao-desc">A erva-mate com Indicação Geográfica, símbolo da cidade. Tradição que une culturas gaúcha e polonesa.</p>
+                        <div class="where-to-find">
+                            <strong>Onde provar:</strong> Chimarródromo, Roda de Mathe (1º domingo)
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- Feiras -->
+        <section class="fairs-section">
+            <div class="section-header" style="text-align: left;">
+                <h2 data-lang-key="sab-feiras-h">🛒 Feiras e Mercados</h2>
+                <p data-lang-key="sab-feiras-sub">Compre direto do produtor e viva a experiência gastronômica local</p>
+            </div>
+
+            <div class="fairs-grid">
+                
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira1-h">🍽️ Feira Gastronômica</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira1-dias">📅 Quartas e Sextas-feiras</span>
+                        <span data-lang-key="sab-feira1-hora">🕐 17h às 22h</span>
+                        <span data-lang-key="sab-feira1-local">📍 Rua do Mathe</span>
+                    </div>
+                    <p data-lang-key="sab-feira1-desc">Pratos típicos, doces artesanais, bebidas e música ao vivo. O point gastronômico da cidade.</p>
+                </div>
+
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira2-h">🥬 Feira do Produtor</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira2-dias">📅 Sábados</span>
+                        <span data-lang-key="sab-feira2-hora">🕐 7h às 12h</span>
+                        <span>📍 Rua do Mathe</span>
+                    </div>
+                    <p data-lang-key="sab-feira2-desc">Frutas, hortaliças, queijos, embutidos, erva-mate e produtos coloniais direto do campo.</p>
+                </div>
+
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira3-h">🌙 Feira da Lua</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira3-dias">📅 2ª Terça-feira do mês</span>
+                        <span>🕐 17h às 22h</span>
+                        <span data-lang-key="sab-feira3-local">📍 Vila Pinheirinho</span>
+                    </div>
+                    <p data-lang-key="sab-feira3-desc">Produtos artesanais do bairro: pastéis, xixo, kafta e delícias caseiras.</p>
+                </div>
+
+                <div class="fair-card">
+                    <h4 data-lang-key="sab-feira4-h">🎉 Polskie Smaki</h4>
+                    <div class="schedule">
+                        <span data-lang-key="sab-feira4-dias">📅 Último sábado de agosto</span>
+                        <span data-lang-key="sab-feira4-hora">🕐 10h às 22h</span>
+                        <span>📍 Rua do Mathe</span>
+                    </div>
+                    <p data-lang-key="sab-feira4-desc">Festival de comida polonesa com desfile folclórico e concurso Papa Pierogi.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Restaurantes -->
+        <section>
+            <div class="section-header">
+                <h2 data-lang-key="sab-rest-h">🍴 Onde Comer</h2>
+                <p data-lang-key="sab-rest-sub">Restaurantes e estabelecimentos gastronômicos</p>
+            </div>
+
+            <div class="restaurants-grid">
+                
+                <div class="restaurant-card">
+                    <div class="restaurant-icon">🍽️</div>
+                    <div class="restaurant-info">
+                        <h4 data-lang-key="sab-rest1-h">Porto Gastronômico</h4>
+                        <span class="cuisine">Contemporânea • Bar</span>
+                        <div class="contact">
+                            <span data-lang-key="sab-rest1-local">📍 Às margens do Rio Iguaçu</span>
+                            <span data-lang-key="sab-rest1-hora">🕐 Ter-Dom: 18h às 00h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="restaurant-card">
+                    <div class="restaurant-icon">🥟</div>
+                    <div class="restaurant-info">
+                        <h4 data-lang-key="sab-rest2-h">Restaurante Polonês</h4>
+                        <span class="cuisine">Polonesa Tradicional</span>
+                        <div class="contact">
+                            <span data-lang-key="sab-rest2-local">📍 Centro</span>
+                            <span data-lang-key="sab-rest2-hora">🕐 Almoço e Jantar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="restaurant-card">
+                    <div class="restaurant-icon">🍖</div>
+                    <div class="restaurant-info">
+                        <h4 data-lang-key="sab-rest3-h">Churrascarias Locais</h4>
+                        <span class="cuisine">Churrasco • Regional</span>
+                        <div class="contact">
+                            <span data-lang-key="sab-rest3-local">📍 Diversos pontos</span>
+                            <span data-lang-key="sab-rest3-hora">🕐 Almoço: 11h às 14h</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="restaurant-card">
+                    <div class="restaurant-icon">☕</div>
+                    <div class="restaurant-info">
+                        <h4 data-lang-key="sab-rest4-h">Cafés e Confeitarias</h4>
+                        <span class="cuisine">Café Colonial • Doces</span>
+                        <div class="contact">
+                            <span data-lang-key="sab-rest4-local">📍 Centro e bairros</span>
+                            <span data-lang-key="sab-rest4-hora">🕐 Manhã e tarde</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Produtores Rurais -->
+        <section class="producers-section">
+            <h3 data-lang-key="sab-prod-h">🌾 Direto do Produtor</h3>
+            <p data-lang-key="sab-prod-sub">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
+
+            <div class="producers-grid">
+                
+                <div class="producer-card">
+                    <div class="icon">🍓</div>
+                    <h4 data-lang-key="sab-prod1-h">Morangos</h4>
+                    <p data-lang-key="sab-prod1-p">Colheita própria nas propriedades</p>
+                </div>
+
+                <div class="producer-card">
+                    <div class="icon">🍷</div>
+                    <h4 data-lang-key="sab-prod2-h">Vinhos</h4>
+                    <p data-lang-key="sab-prod2-p">Vinícolas artesanais</p>
+                </div>
+
+                <div class="producer-card">
+                    <div class="icon">🧀</div>
+                    <h4 data-lang-key="sab-prod3-h">Queijos</h4>
+                    <p data-lang-key="sab-prod3-p">Queijarias coloniais</p>
+                </div>
+
+                <div class="producer-card">
+                    <div class="icon">🍯</div>
+                    <h4>Mel</h4>
+                    <p data-lang-key="sab-prod4-p">Apiários locais</p>
+                </div>
+
+                <div class="producer-card">
+                    <div class="icon">🧉</div>
+                    <h4 data-lang-key="sab-prod5-h">Erva-mate</h4>
+                    <p data-lang-key="sab-prod5-p">Ervateiras certificadas IG</p>
+                </div>
+
+                <div class="producer-card">
+                    <div class="icon">🥒</div>
+                    <h4 data-lang-key="sab-prod6-h">Conservas</h4>
+                    <p data-lang-key="sab-prod6-p">Picles e compotas caseiras</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <script>
+    // ===== SELETOR DE IDIOMA =====
+    (function() {
+        var flags = { pt: '🇧🇷', en: '🇺🇸', es: '🇪🇸', pl: '🇵🇱' };
+        var currentLang = localStorage.getItem('smsLang') || 'pt';
+        var btn = document.getElementById('smsCurrentLang');
+        var dropdown = document.getElementById('smsDropdown');
+        var flagEl = document.getElementById('smsFlag');
+        var codeEl = document.getElementById('smsCode');
+
+        function applyLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('smsLang', lang);
+            flagEl.textContent = flags[lang];
+            codeEl.textContent = lang.toUpperCase();
+            dropdown.style.display = 'none';
+
+            // Aplicar traduções via translations.js
+            if (window.translations && window.translations[lang]) {
+                var t = window.translations[lang];
+                document.querySelectorAll('[data-lang-key]').forEach(function(el) {
+                    var key = el.getAttribute('data-lang-key');
+                    if (t[key] !== undefined) {
+                        el.innerHTML = t[key];
+                    }
+                });
+            }
+            // Aplicar via translationsComplete se disponível
+            if (window.translationsComplete) {
+                Object.keys(window.translationsComplete).forEach(function(key) {
+                    var obj = window.translationsComplete[key];
+                    if (obj && obj[lang] !== undefined) {
+                        document.querySelectorAll('[data-lang-key="' + key + '"]').forEach(function(el) {
+                            el.innerHTML = obj[lang];
+                        });
+                    }
+                });
+            }
+        }
+
+        // Toggle dropdown
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+        });
+
+        // Fechar ao clicar fora
+        document.addEventListener('click', function() {
+            dropdown.style.display = 'none';
+        });
+
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // Selecionar idioma
+        document.querySelectorAll('.sms-lang-opt').forEach(function(opt) {
+            opt.addEventListener('click', function() {
+                applyLang(this.getAttribute('data-lang'));
+            });
+        });
+
+        // Aplicar idioma salvo ao carregar
+        if (currentLang !== 'pt') {
+            applyLang(currentLang);
+        }
+    })();
+    </script>
+    <footer class="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="index.html">Voltar ao Portal</a> | 
+            <a href="eventos.html">Ver Eventos</a>
+        </p>
+    </footer>
+</body>
+</html>

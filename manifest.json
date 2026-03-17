@@ -1,0 +1,68 @@
+{
+  "name": "Turismo São Mateus do Sul",
+  "short_name": "Turismo SMS",
+  "description": "Portal de Turismo da Capital Polonesa do Paraná — Eventos, Rotas, Gastronomia e Cultura Polonesa",
+  "start_url": "/index.html?utm_source=pwa",
+  "display": "standalone",
+  "background_color": "#0a3d2e",
+  "theme_color": "#0a3d2e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "pt-BR",
+  "dir": "ltr",
+  "categories": ["travel", "tourism", "lifestyle"],
+  "icons": [
+    {
+      "src": "images/logo_pin_turismo_3d.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo_pin_turismo_3d.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "images/logo_pin_turismo_3d.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Calendário de Eventos",
+      "short_name": "Eventos",
+      "description": "Ver todos os eventos de 2026",
+      "url": "/eventos.html?utm_source=pwa-shortcut",
+      "icons": [{ "src": "images/logo_pin_turismo_3d.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Reservar Experiência",
+      "short_name": "Reservas",
+      "description": "Reserve passeios e experiências turísticas",
+      "url": "/reservas.html?utm_source=pwa-shortcut",
+      "icons": [{ "src": "images/logo_pin_turismo_3d.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "O Que Fazer",
+      "short_name": "Rotas",
+      "description": "Explore as 6 rotas turísticas",
+      "url": "/o-que-fazer.html?utm_source=pwa-shortcut",
+      "icons": [{ "src": "images/logo_pin_turismo_3d.png", "sizes": "96x96" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "Portal de Turismo de São Mateus do Sul"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false
+}

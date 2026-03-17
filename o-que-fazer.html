@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="O que fazer em São Mateus do Sul: rotas temáticas, cultura polonesa, erva-mate, turismo de fé e passeios náuticos na Capital Polonesa do Paraná.">
+    <meta name="keywords" content="o que fazer São Mateus do Sul, rotas turísticas, cultura polonesa, erva-mate, turismo de fé, passeio náutico, Paraná">
+    <link rel="canonical" href="https://saomateusdosul.tur.br/o-que-fazer.html">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="O Que Fazer | São Mateus do Sul">
+    <meta property="og:description" content="Explore as rotas temáticas e experiências únicas da Capital Polonesa do Paraná.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://saomateusdosul.tur.br/o-que-fazer.html">
+    <meta property="og:locale" content="pt_BR">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+
+    <!-- Schema.org - Breadcrumb -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Início", "item": "https://saomateusdosul.tur.br/"},
+            {"@type": "ListItem", "position": 2, "name": "O Que Fazer", "item": "https://saomateusdosul.tur.br/o-que-fazer.html"}
+        ]
+    }
+    </script>
+
+    <title>O Que Fazer | São Mateus do Sul</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --cream-light: #f8f6f0;
+            --polish-red: #dc143c;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body { font-family: var(--font-body); background: var(--cream-light); color: #333; line-height: 1.6; }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white; padding: 1rem 2rem;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .header .container {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .header-logo {
+            display: flex; align-items: center; gap: 1rem;
+            text-decoration: none; color: white;
+        }
+        .header-logo img { width: 50px; }
+        .header-title { font-family: var(--font-display); font-size: 1.3rem; }
+        .header-nav { display: flex; gap: 1.5rem; }
+        .header-nav a {
+            color: white; text-decoration: none;
+            opacity: 0.8; font-size: 0.9rem; transition: opacity 0.2s;
+        }
+        .header-nav a:hover { opacity: 1; color: var(--gold-polish); }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--forest-deep), #062118);
+            color: white; padding: 4rem 2rem; text-align: center;
+        }
+        .hero h1 { font-family: var(--font-display); font-size: 3rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.15rem; opacity: 0.9; max-width: 680px; margin: 0 auto; }
+
+        /* Main */
+        .main-content { max-width: 1300px; margin: 0 auto; padding: 3rem 2rem; }
+
+        /* Section Header */
+        .section-header { text-align: center; margin-bottom: 3rem; }
+        .section-header h2 { font-family: var(--font-display); font-size: 2rem; color: var(--forest-deep); margin-bottom: 0.5rem; }
+        .section-header p { color: #666; }
+
+        /* Rotas Grid */
+        .rotas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .rota-card {
+            background: white; border-radius: 20px;
+            overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .rota-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.13); }
+
+        .rota-card-image {
+            height: 220px; background-size: cover; background-position: center;
+            position: relative;
+            background-color: var(--forest-deep);
+        }
+        .rota-card-image .badge {
+            position: absolute; top: 1rem; left: 1rem;
+            background: white; color: #333;
+            padding: 0.35rem 0.8rem; border-radius: 20px;
+            font-size: 0.78rem; font-weight: 600;
+            display: flex; align-items: center; gap: 0.4rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .rota-card-content { padding: 1.5rem; }
+        .rota-card-content h3 {
+            font-family: var(--font-display); font-size: 1.6rem;
+            color: var(--forest-deep); margin-bottom: 0.6rem;
+        }
+        .rota-card-content p { color: #555; font-size: 0.92rem; margin-bottom: 1.25rem; }
+
+        .rota-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+        .rota-tag {
+            background: var(--cream-light); border-radius: 20px;
+            padding: 0.3rem 0.75rem; font-size: 0.78rem; color: #555;
+            display: flex; align-items: center; gap: 0.3rem;
+        }
+
+        .btn-rota {
+            display: inline-block; padding: 0.75rem 1.5rem;
+            background: var(--forest-deep); color: white;
+            border-radius: 25px; text-decoration: none;
+            font-weight: 600; font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+        .btn-rota:hover { background: #0a5d3e; }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white; border-radius: 20px; padding: 3rem 2rem;
+            text-align: center; margin-top: 2rem;
+        }
+        .cta-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; }
+        .cta-section p { opacity: 0.9; max-width: 500px; margin: 0 auto 1.5rem; }
+        .btn-cta {
+            display: inline-block; padding: 1rem 2rem;
+            background: var(--gold-polish); color: var(--forest-deep);
+            border-radius: 30px; font-weight: 700; text-decoration: none;
+            transition: transform 0.3s;
+        }
+        .btn-cta:hover { transform: translateY(-2px); }
+
+        /* Footer */
+        .footer { background: #111; color: white; padding: 2rem; text-align: center; margin-top: 3rem; }
+        .footer a { color: var(--gold-polish); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+            .header-nav { display: none; }
+            .rotas-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div class="header-title">São Mateus do Sul</div>
+            </a>
+            <nav class="header-nav">
+                <a href="index.html" data-lang-key="nav-inicio">Início</a>
+                <a href="sabores.html" data-lang-key="nav-sabores">Sabores</a>
+                <a href="eventos.html" data-lang-key="nav-eventos">Eventos</a>
+                <a href="onde-ficar.html" data-lang-key="nav-ondeficar">Onde Ficar</a>
+                <a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang-key="page-oqfazer-titulo">🧭 O Que Fazer</h1>
+        <p data-lang-key="page-oqfazer-subtitulo">Explore as rotas temáticas e descubra experiências únicas na Capital Polonesa do Paraná. Da cultura do mate às tradições polonesas, do turismo de fé aos passeios náuticos.</p>
+    </section>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <div class="section-header">
+            <h2 data-lang-key="oqf-rotas-h">🗺️ Rotas Temáticas</h2>
+            <p data-lang-key="oqf-rotas-sub">Escolha sua experiência e mergulhe na cultura de São Mateus do Sul</p>
+        </div>
+
+        <div class="rotas-grid">
+
+            <!-- Rota da Erva-Mate -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
+                    <span class="badge">🌿 <span data-lang-key="oqf-badge-ig">Indicação Geográfica</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-mate-h">Rota da Erva-Mate</h3>
+                    <p data-lang-key="oqf-mate-desc">Conheça a tradição centenária do mate em São Mateus do Sul, terra da erva-mate com selo de Indicação Geográfica IG São Matheus.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">🧉 <span data-lang-key="oqf-tag-chimarrodrom">Chimarródromo</span></span>
+                        <span class="rota-tag">🌿 <span data-lang-key="oqf-tag-ervateiras">Ervateiras</span></span>
+                        <span class="rota-tag">🛤️ <span data-lang-key="oqf-tag-ruamathe">Rua do Mathe</span></span>
+                        <span class="rota-tag">🏅 <span data-lang-key="oqf-tag-seloig">Selo IG</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+            <!-- Cultura Polonesa -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg');">
+                    <span class="badge">🇵🇱 <span data-lang-key="oqf-badge-tradicao">Tradição Viva</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-polonesa-h">Cultura Polonesa</h3>
+                    <p data-lang-key="oqf-polonesa-desc">Mergulhe na herança dos imigrantes poloneses que colonizaram a região. Arquitetura, gastronomia, danças folclóricas e festas tradicionais.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">⛪ <span data-lang-key="oqf-tag-igrejas">Igrejas Históricas</span></span>
+                        <span class="rota-tag">🥟 <span data-lang-key="oqf-tag-pierogi">Pierogi</span></span>
+                        <span class="rota-tag">💃 <span data-lang-key="oqf-tag-folclore">Folclore</span></span>
+                        <span class="rota-tag">🎪 <span data-lang-key="oqf-tag-mespolones">Mês Polonês</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+            <!-- Turismo de Fé -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg');">
+                    <span class="badge">✝️ <span data-lang-key="oqf-badge-fe">Fé e História</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-fe-h">Turismo de Fé</h3>
+                    <p data-lang-key="oqf-fe-desc">Visite os templos centenários construídos pelos imigrantes. A Igreja Matriz neogótica, as capelas das colônias e os santuários de devoção mariana.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">⛪ <span data-lang-key="oqf-tag-igrejam">Igreja Matriz</span></span>
+                        <span class="rota-tag">🕍 <span data-lang-key="oqf-tag-nsczest">N.S. Częstochowa</span></span>
+                        <span class="rota-tag">🏚️ <span data-lang-key="oqf-tag-capelas">Capelas Rurais</span></span>
+                        <span class="rota-tag">✝️ <span data-lang-key="oqf-tag-viasacra">Via Sacra</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+            <!-- Rota das Águas -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/RIO_IGUACU.jpg'); background-color: #0a3d2e;">
+                    <span class="badge">🌊 <span data-lang-key="oqf-badge-natureza">Rio Iguaçu</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-aguas-h">Rota das Águas</h3>
+                    <p data-lang-key="oqf-aguas-desc">Passeios fluviais no Rio Iguaçu, pesca esportiva, canoagem e o belíssimo Porto Gastronômico às margens do rio.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">⛵ <span data-lang-key="oqf-tag-passeio">Passeio Fluvial</span></span>
+                        <span class="rota-tag">🎣 <span data-lang-key="oqf-tag-pesca">Pesca Esportiva</span></span>
+                        <span class="rota-tag">🛶 <span data-lang-key="oqf-tag-canoagem">Canoagem</span></span>
+                        <span class="rota-tag">🍽️ <span data-lang-key="oqf-tag-porto">Porto Gastronômico</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+            <!-- Sabores & Memórias -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/PARRERAL__6_.jpg');">
+                    <span class="badge">🍓 <span data-lang-key="oqf-badge-sabores">Sabores & Memórias</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-sabores-h">Sabores & Memórias</h3>
+                    <p data-lang-key="oqf-sabores-desc">Café colonial, queijos artesanais, morangos colhidos na hora e doces caseiros das colônias rurais de São Mateus do Sul.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">🍓 <span data-lang-key="oqf-tag-morango">Morangos</span></span>
+                        <span class="rota-tag">🧀 <span data-lang-key="oqf-tag-queijo">Queijos</span></span>
+                        <span class="rota-tag">☕ <span data-lang-key="oqf-tag-cafecol">Café Colonial</span></span>
+                        <span class="rota-tag">🥧 <span data-lang-key="oqf-tag-doces">Doces Caseiros</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+            <!-- Rota da Terra -->
+            <article class="rota-card">
+                <div class="rota-card-image" style="background-image: url('images/PARRERAL__4_.jpg');">
+                    <span class="badge">🌱 <span data-lang-key="oqf-badge-terra">Da Terra</span></span>
+                </div>
+                <div class="rota-card-content">
+                    <h3 data-lang-key="oqf-terra-h">Rota da Terra</h3>
+                    <p data-lang-key="oqf-terra-desc">Agroecologia, viveiros, parques aquáticos e propriedades rurais para vivenciar o campo de perto na região de São Mateus do Sul.</p>
+                    <div class="rota-tags">
+                        <span class="rota-tag">🌾 <span data-lang-key="oqf-tag-agroeco">Agroecologia</span></span>
+                        <span class="rota-tag">🌊 <span data-lang-key="oqf-tag-parqueaqua">Parque Aquático</span></span>
+                        <span class="rota-tag">🌸 <span data-lang-key="oqf-tag-viveiro">Viveiros</span></span>
+                        <span class="rota-tag">👨‍🌾 <span data-lang-key="oqf-tag-vivenciar">Vivência Rural</span></span>
+                    </div>
+                    <a href="rotas-completas.html" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section">
+            <h3 data-lang-key="oqf-cta-h">Veja Todos os Estabelecimentos</h3>
+            <p data-lang-key="oqf-cta-p">Mais de 50 estabelecimentos participantes das rotas turísticas. Busque por localidade, rota ou tipo de experiência.</p>
+            <a href="rotas-completas.html" class="btn-cta" data-lang-key="oqf-cta-btn">🗺️ Ver Rotas Completas</a>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="index.html">Voltar ao Portal</a> |
+            <a href="eventos.html">Ver Eventos</a>
+        </p>
+    </footer>
+</body>
+</html>

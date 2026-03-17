@@ -1,0 +1,5 @@
+# Página 404 customizada
+/*    /404.html   404
+
+# SPA fallback (deve vir depois do 404)
+/*    /index.html  200

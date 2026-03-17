@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Informações para empresários do turismo de São Mateus do Sul. CADASTUR, financiamentos, Selo Turismo Responsável, programas de apoio e capacitação.">
+    <meta name="keywords" content="CADASTUR, turismo empresarial, financiamento turismo, Fomento Paraná, trade turístico, São Mateus do Sul">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    
+    <title>Para o Trade | Apoio ao Setor Turístico</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --forest-deep: #0a3d2e;
+            --gold-polish: #d4a574;
+            --cream-light: #f8f6f0;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Raleway', sans-serif;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream-light);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            text-decoration: none;
+            color: white;
+        }
+
+        .header-logo img {
+            width: 50px;
+        }
+
+        .header-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+        }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Main */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Cards */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .service-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--forest-deep);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .service-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card ul {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .service-card li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold-polish);
+            font-weight: bold;
+        }
+
+        .btn-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            background: var(--forest-deep);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn-link:hover {
+            background: #0a5d3e;
+        }
+
+        /* Steps */
+        .steps-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .steps-section h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--forest-deep);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .step-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .step-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+            border-radius: 20px;
+            padding: 2.5rem;
+            color: white;
+            text-align: center;
+        }
+
+        .contact-section h2 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .contact-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.1);
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+        }
+
+        /* Footer */
+        .footer {
+            background: #111;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
+        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
+            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
+        </button>
+        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
+            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
+            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
+            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
+            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
+        </div>
+    </div>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="header-logo">
+                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
+                <div class="header-title">São Mateus do Sul</div>
+            </a>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <h1 data-lang-key="page-trade-titulo">💼 Para o Trade Turístico</h1>
+        <p data-lang-key="page-trade-subtitulo">Informações, capacitações e oportunidades para empresários e prestadores de serviços turísticos de São Mateus do Sul.</p>
+    </section>
+
+    <!-- Main -->
+    <main class="main-content">
+
+        <!-- Services Grid -->
+        <div class="services-grid">
+
+            <!-- CADASTUR -->
+            <article class="service-card">
+                <h3 data-lang-key="trade-cadastur-h">📋 CADASTUR</h3>
+                <p data-lang-key="trade-cadastur-p">O Cadastro de Prestadores de Serviços Turísticos é obrigatório para diversas atividades e dá acesso a benefícios exclusivos.</p>
+                <ul>
+                    <li data-lang-key="trade-cad-li1">Obrigatório para meios de hospedagem</li>
+                    <li data-lang-key="trade-cad-li2">Agências de turismo e guias</li>
+                    <li data-lang-key="trade-cad-li3">Organizadoras de eventos</li>
+                    <li data-lang-key="trade-cad-li4">Parques temáticos e acampamentos</li>
+                    <li data-lang-key="trade-cad-li5">Transportadoras turísticas</li>
+                </ul>
+                <a href="https://cadastur.turismo.gov.br" target="_blank" class="btn-link">
+                    Acessar CADASTUR →
+                </a>
+            </article>
+
+            <!-- Financiamentos -->
+            <article class="service-card">
+                <h3 data-lang-key="trade-financ-h">💰 Financiamentos</h3>
+                <p data-lang-key="trade-financ-p">Linhas de crédito especiais para o setor turístico através do Fomento Paraná e outros programas.</p>
+                <ul>
+                    <li data-lang-key="trade-fin-li1">Fomento Paraná - Turismo</li>
+                    <li data-lang-key="trade-fin-li2">FUNGETUR - Fundo Geral do Turismo</li>
+                    <li data-lang-key="trade-fin-li3">PRONAMPE para turismo</li>
+                    <li data-lang-key="trade-fin-li4">Linhas de microcrédito</li>
+                    <li data-lang-key="trade-fin-li5">Incentivos fiscais estaduais</li>
+                </ul>
+                <a href="https://www.fomento.pr.gov.br" target="_blank" class="btn-link">
+                    Ver Linhas de Crédito →
+                </a>
+            </article>
+
+            <!-- Selo Turismo Responsável -->
+            <article class="service-card">
+                <h3 data-lang-key="trade-selo-h">🏅 Selo Turismo Responsável</h3>
+                <p data-lang-key="trade-selo-p">Certificação que atesta boas práticas de higiene e segurança no seu estabelecimento.</p>
+                <ul>
+                    <li data-lang-key="trade-sel-li1">Aumenta a confiança do turista</li>
+                    <li data-lang-key="trade-sel-li2">Destaque no marketing oficial</li>
+                    <li data-lang-key="trade-sel-li3">Protocolos de biossegurança</li>
+                    <li data-lang-key="trade-sel-li4">Adesão gratuita</li>
+                    <li data-lang-key="trade-sel-li5">Válido nacionalmente</li>
+                </ul>
+                <a href="https://cadastur.turismo.gov.br/hotsite/#!/public/selo-turismo-responsavel" target="_blank" class="btn-link">
+                    Obter o Selo →
+                </a>
+            </article>
+
+            <!-- Capacitação -->
+            <article class="service-card">
+                <h3 data-lang-key="trade-cap-h">📚 Capacitação</h3>
+                <p data-lang-key="trade-cap-p">Cursos gratuitos para profissionais do turismo através do SEBRAE e parceiros.</p>
+                <ul>
+                    <li data-lang-key="trade-cap-li1">Atendimento ao turista</li>
+                    <li data-lang-key="trade-cap-li2">Gestão de meios de hospedagem</li>
+                    <li data-lang-key="trade-cap-li3">Marketing digital para turismo</li>
+                    <li data-lang-key="trade-cap-li4">Gastronomia e boas práticas</li>
+                    <li data-lang-key="trade-cap-li5">Guia de turismo local</li>
+                </ul>
+                <a href="https://www.sebrae.com.br/sites/PortalSebrae/cursosonline" target="_blank" class="btn-link">
+                    Ver Cursos →
+                </a>
+            </article>
+
+        </div>
+
+        <!-- Como se cadastrar -->
+        <section class="steps-section">
+            <h2 data-lang-key="trade-howcad-h">📝 Como Cadastrar seu Estabelecimento</h2>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h4 data-lang-key="trade-step1-h">Acesse o CADASTUR</h4>
+                    <p data-lang-key="trade-step1-p">Entre no site cadastur.turismo.gov.br</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h4 data-lang-key="trade-step2-h">Crie sua Conta</h4>
+                    <p data-lang-key="trade-step2-p">Cadastre-se com CNPJ ou CPF</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h4 data-lang-key="trade-step3-h">Preencha os Dados</h4>
+                    <p data-lang-key="trade-step3-p">Informe dados do estabelecimento</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h4 data-lang-key="trade-step4-h">Envie Documentos</h4>
+                    <p data-lang-key="trade-step4-p">Anexe documentação necessária</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">5</div>
+                    <h4 data-lang-key="trade-step5-h">Aguarde Análise</h4>
+                    <p data-lang-key="trade-step5-p">Prazo de até 30 dias úteis</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Como cadastrar evento -->
+        <section class="steps-section" style="background: linear-gradient(135deg, #fef9e7, #fdebd0);">
+            <h2 data-lang-key="trade-howev-h">🎪 Como Cadastrar seu Evento ou Festa</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                Quer divulgar seu evento no calendário oficial de turismo de São Mateus do Sul? 
+                Cadastre-se em nosso portal e tenha seu evento analisado pelo COMTUR.
+            </p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number" style="background: #e74c3c;">1</div>
+                    <h4>Crie sua Conta</h4>
+                    <p data-lang-key="trade-ev-step1">Acesse o Portal do Usuário e cadastre-se gratuitamente</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number" style="background: #e67e22;">2</div>
+                    <h4>Preencha os Dados</h4>
+                    <p data-lang-key="trade-ev-step2">Informe nome, data, local e descrição do evento</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number" style="background: #f39c12;">3</div>
+                    <h4 data-lang-key="trade-ev-step3-h">Envie para Análise</h4>
+                    <p data-lang-key="trade-ev-step3-p">Sua solicitação será avaliada pelo COMTUR</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number" style="background: #27ae60;">4</div>
+                    <h4 data-lang-key="trade-ev-step4-h">Aprovação</h4>
+                    <p data-lang-key="trade-ev-step4-p">Em até 5 dias úteis você recebe o retorno</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number" style="background: #2980b9;">5</div>
+                    <h4 data-lang-key="trade-ev-step5-h">Publicação</h4>
+                    <p data-lang-key="trade-ev-step5-p">Evento aprovado entra no calendário oficial!</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="portal-usuario.html" class="btn-link" style="background: linear-gradient(135deg, #e74c3c, #c0392b); font-size: 1.1rem; padding: 1rem 2rem;">
+                    🎪 Cadastrar Meu Evento →
+                </a>
+            </div>
+        </section>
+
+        <!-- Programas -->
+        <div class="services-grid">
+            
+            <article class="service-card">
+                <h3 data-lang-key="trade-quali-h">🏆 Selo Qual.i Turismo</h3>
+                <p data-lang-key="trade-quali-p">Programa do SEBRAE para qualificação de estabelecimentos turísticos.</p>
+                <ul>
+                    <li data-lang-key="trade-qua-li1">Diagnóstico empresarial</li>
+                    <li data-lang-key="trade-qua-li2">Plano de melhorias</li>
+                    <li data-lang-key="trade-qua-li3">Consultoria especializada</li>
+                    <li data-lang-key="trade-qua-li4">Certificação reconhecida</li>
+                </ul>
+                <a href="https://www.sebrae.com.br" target="_blank" class="btn-link">
+                    Saiba Mais →
+                </a>
+            </article>
+
+            <article class="service-card">
+                <h3 data-lang-key="trade-inv-h">🗺️ Inventário Turístico</h3>
+                <p data-lang-key="trade-inv-p">Cadastre seu estabelecimento no Inventário Turístico Municipal para aparecer nos materiais oficiais.</p>
+                <ul>
+                    <li data-lang-key="trade-inv-li1">Divulgação no site oficial</li>
+                    <li data-lang-key="trade-inv-li2">Material impresso e digital</li>
+                    <li data-lang-key="trade-inv-li3">Inclusão em roteiros</li>
+                    <li data-lang-key="trade-inv-li4">Cadastro gratuito</li>
+                </ul>
+                <a href="mailto:turismo@saomateusdosul.pr.gov.br?subject=Solicita%C3%A7%C3%A3o%20de%20Cadastro%20no%20Invent%C3%A1rio%20Tur%C3%ADstico" class="btn-link">
+                    Cadastrar →
+                </a>
+            </article>
+
+        </div>
+
+        <!-- Contato -->
+        <section class="contact-section">
+            <h2 data-lang-key="trade-contato-h">📞 Fale com a Secretaria de Turismo</h2>
+            <p data-lang-key="trade-contato-p">Tire suas dúvidas e saiba como podemos ajudar seu negócio a crescer.</p>
+            
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <a href="mailto:turismo@saomateusdosul.pr.gov.br" style="color:white;text-decoration:none;">
+                        📧 turismo@saomateusdosul.pr.gov.br
+                    </a>
+                </div>
+                <div class="contact-item">
+                    <a href="tel:+554235320000" style="color:white;text-decoration:none;">
+                        📞 (42) 3532-0000
+                    </a>
+                </div>
+                <div class="contact-item">
+                    📍 Rua Barão do Rio Branco, s/nº, Centro
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p

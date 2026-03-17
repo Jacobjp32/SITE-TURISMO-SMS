@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <script src="js/loading.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <!-- SEO -->
+    <meta name="description" content="Galeria de fotos e vídeos de São Mateus do Sul - Capital Polonesa do Paraná. Igreja Água Branca, Rio Iguaçu, cultura polonesa, gastronomia e muito mais.">
+    <meta name="keywords" content="São Mateus do Sul, galeria, fotos, vídeos, turismo, Paraná, Igreja Água Branca, cultura polonesa">
+    <meta name="author" content="Prefeitura Municipal de São Mateus do Sul">
+    <!-- Open Graph -->
+    <meta property="og:title" content="Galeria e Vídeos | São Mateus do Sul — Capital Polonesa do Paraná">
+    <meta property="og:description" content="Fotos e vídeos das belezas, cultura polonesa e atrativos turísticos de São Mateus do Sul.">
+    <meta property="og:image" content="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <link rel="apple-touch-icon" href="images/logo_pin_turismo_3d.png">
+    <title>Galeria e Vídeos — São Mateus do Sul | Capital Polonesa do Paraná</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --forest:#0a3d2e;--gold:#d4a574;
+            --white:#fff;--cream:#f8f6f0;
+            --fd:'Cormorant Garamond',serif;
+            --fb:'Raleway',sans-serif;
+        }
+        body{font-family:var(--fb);background:var(--cream)}
+
+        /* NAV */
+        .nav{position:fixed;top:0;left:0;right:0;z-index:9999;padding:1.2rem 2rem;
+            background:linear-gradient(180deg,rgba(10,61,46,.96) 0%,rgba(10,61,46,.7) 70%,transparent 100%);
+            backdrop-filter:blur(18px)}
+        .nav-c{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
+        .nav-c img{width:46px}
+        .nav-links{display:flex;gap:1.5rem;list-style:none}
+        .nav-links a{color:#fff;text-decoration:none;font-weight:500;text-transform:uppercase;
+            font-size:.87rem;padding:.4rem .85rem;border-radius:5px;transition:background .3s}
+        .nav-links a:hover,.nav-links a.active{background:rgba(212,165,116,.35)}
+
+        /* HEADER */
+        .hdr{padding:108px 2rem 3.5rem;text-align:center;
+            background:linear-gradient(135deg,var(--forest),#0d4a37);color:#fff}
+        .hdr h1{font-family:var(--fd);font-size:3.8rem;margin-bottom:1rem;color:var(--gold)}
+        .hdr p{font-size:1.15rem;opacity:.9;max-width:680px;margin:0 auto 2rem}
+        .tabs{display:flex;justify-content:center;gap:.7rem;flex-wrap:wrap}
+        .tab{padding:.6rem 1.5rem;background:rgba(255,255,255,.15);color:#fff;
+            border:2px solid rgba(255,255,255,.3);border-radius:30px;cursor:pointer;
+            font-family:var(--fb);font-size:.93rem;font-weight:600;transition:all .3s;text-decoration:none}
+        .tab:hover,.tab.on{background:var(--gold);border-color:var(--gold);color:var(--forest)}
+
+        /* SECTION */
+        .sec{padding:4rem 2rem;max-width:1600px;margin:0 auto}
+        .sec-alt{background:#fff;border-radius:20px;margin:0 0 2rem}
+        .sec-title{font-family:var(--fd);font-size:2.3rem;color:var(--forest);text-align:center;margin-bottom:2.5rem}
+
+        /* GRID */
+        .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.6rem;margin-bottom:2rem}
+
+        /* CARD */
+        .card{background:#fff;border-radius:13px;overflow:hidden;
+            box-shadow:0 7px 26px rgba(0,0,0,.1);transition:all .3s;cursor:pointer}
+        .card:hover{transform:translateY(-7px);box-shadow:0 16px 36px rgba(0,0,0,.17)}
+        .card img{width:100%;height:235px;object-fit:cover;display:block;transition:transform .4s}
+        .card:hover img{transform:scale(1.06)}
+        .card-body{padding:1.2rem}
+        .badge{display:inline-block;background:var(--gold);color:#fff;
+            padding:.22rem .85rem;border-radius:20px;font-size:.74rem;font-weight:700;
+            margin-bottom:.55rem;text-transform:uppercase;letter-spacing:.4px}
+        .card-body h3{font-family:var(--fd);font-size:1.38rem;color:var(--forest);margin-bottom:.3rem}
+        .card-body p{color:#666;line-height:1.55;font-size:.89rem}
+
+        /* VIDEO SECTION */
+        .vsec{background:linear-gradient(135deg,#0a3d2e,#062118);
+            border-radius:20px;padding:4rem 3rem;margin:2rem 2rem 4rem}
+        .vsec .sec-title{color:var(--gold)}
+        .vsub{text-align:center;color:rgba(255,255,255,.82);font-size:1.03rem;
+            max-width:660px;margin:-1.2rem auto 2.5rem;display:block}
+        .vgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(450px,1fr));
+            gap:2rem;max-width:1400px;margin:0 auto}
+        .vcard{background:rgba(255,255,255,.06);border-radius:13px;overflow:hidden;
+            border:1px solid rgba(212,165,116,.3);transition:border-color .3s}
+        .vcard:hover{border-color:var(--gold)}
+        .vcard video{width:100%;display:block;max-height:285px;background:#000}
+        .vresp{position:relative;padding-bottom:56.25%;height:0;overflow:hidden}
+        .vresp iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:0}
+        .vbody{padding:1.35rem}
+        .vbadge-l{background:var(--gold);color:var(--forest);padding:.25rem .8rem;border-radius:13px;font-size:.73rem;font-weight:700}
+        .vbadge-y{background:#FF0000;color:#fff;padding:.25rem .8rem;border-radius:13px;font-size:.73rem;font-weight:700}
+        .vtitle{font-family:var(--fd);font-size:1.42rem;color:#fff;margin:.65rem 0 .32rem}
+        .vdesc{color:rgba(255,255,255,.72);font-size:.89rem;line-height:1.55}
+        .vfull{grid-column:1/-1;max-width:660px;margin:0 auto;width:100%}
+        .yt-btn{display:inline-flex;align-items:center;gap:.65rem;padding:.9rem 2.3rem;
+            background:#FF0000;color:#fff;text-decoration:none;border-radius:30px;
+            font-weight:600;font-size:1.03rem;transition:transform .3s,box-shadow .3s;
+            box-shadow:0 5px 18px rgba(255,0,0,.4);margin-top:2.5rem}
+        .yt-btn:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,0,0,.5)}
+
+        /* LIGHTBOX */
+        .lb{display:none;position:fixed;inset:0;z-index:100000;animation:fi .3s}
+        .lb-ov{position:absolute;inset:0;background:rgba(0,0,0,.95)}
+        .lb-x{position:absolute;top:18px;right:26px;background:none;border:none;
+            color:#fff;font-size:46px;cursor:pointer;z-index:100001;transition:all .3s;line-height:1}
+        .lb-x:hover{color:var(--gold);transform:rotate(90deg)}
+        .lb-prv,.lb-nxt{position:absolute;top:50%;transform:translateY(-50%);
+            background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);
+            color:#fff;font-size:25px;width:54px;height:54px;border-radius:50%;
+            cursor:pointer;z-index:100001;transition:all .3s;
+            display:flex;align-items:center;justify-content:center}
+        .lb-prv{left:24px}.lb-nxt{right:24px}
+        .lb-prv:hover,.lb-nxt:hover{background:var(--gold);border-color:var(--gold);color:var(--forest)}
+        .lb-c{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+            max-width:86vw;max-height:76vh;text-align:center}
+        .lb-c img{max-width:100%;max-height:66vh;border-radius:10px;box-shadow:0 18px 55px rgba(0,0,0,.5)}
+        .lb-info{background:linear-gradient(135deg,rgba(10,61,46,.95),rgba(10,61,46,.85));
+            color:#fff;padding:1.2rem 1.7rem;border-radius:0 0 10px 10px;margin-top:-5px}
+        .lb-info h3{font-family:var(--fd);font-size:1.35rem;margin-bottom:.35rem}
+        .lb-info p{opacity:.9;font-size:.9rem;margin-bottom:.35rem}
+        .lb-cnt{display:inline-block;background:var(--gold);color:var(--forest);
+            padding:.22rem .85rem;border-radius:20px;font-size:.8rem;font-weight:600}
+        .lb-thumbs{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);
+            display:flex;gap:8px;max-width:80vw;overflow-x:auto;padding:8px}
+        .lb-th{width:56px;height:40px;border-radius:5px;cursor:pointer;opacity:.5;
+            transition:all .3s;object-fit:cover;border:2px solid transparent}
+        .lb-th:hover,.lb-th.on{opacity:1;border-color:var(--gold)}
+
+        /* FOOTER */
+        footer{background:#111;color:#fff;padding:2rem;text-align:center;margin-top:2rem}
+        footer a{color:var(--gold);text-decoration:none}
+
+        @keyframes fi{from{opacity:0}to{opacity:1}}
+
+        @media(max-width:900px){
+            .vgrid{grid-template-columns:1fr}
+            .vsec{padding:3rem 1.5rem;margin:1rem 1rem 3rem}
+            .hdr h1{font-size:2.5rem}
+        }
+        @media(max-width:600px){
+            .nav-links{display:none}
+            .grid{grid-template-columns:1fr}
+            .lb-prv{left:6px}.lb-nxt{right:6px}
+            .lb-x{top:8px;right:12px;font-size:32px}
+            .lb-thumbs{display:none}
+            .lb-c{max-width:96vw}
+        }
+    </style>
+    <script src="translations.js"></script>
+</head>
+<body>
+
+<!-- Navegação -->
+<nav class="nav">
+    <div class="nav-c">
+        <a href="index.html"><img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul"></a>
+        <ul class="nav-links">
+            <li><a href="index.html">Início</a></li>
+            <li><a href="o-que-fazer.html">O Que Fazer</a></li>
+            <li><a href="eventos.html">Eventos</a></li>
+            <li><a href="galeria.html" class="active">Galeria</a></li>
+            <li><a href="rotas-completas.html">Rotas</a></li>
+            <li><a href="reservas.html">Reservas</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Header -->
+<header class="hdr">
+    <h1>📸 Galeria & Vídeos</h1>
+    <p>Explore as belezas, a cultura polonesa e os atrativos turísticos de São Mateus do Sul — Capital Polonesa do Paraná</p>
+    <div class="tabs">
+        <a href="#patrimonio" class="tab">🏛️ Patrimônio</a>
+        <a href="#natureza" class="tab">🌊 Natureza</a>
+        <a href="#gastronomia-g" class="tab">🍽️ Gastronomia</a>
+        <a href="#eventos-g" class="tab">🎭 Eventos</a>
+        <a href="#arte" class="tab">🎨 Arte & História</a>
+        <a href="#videos" class="tab on">🎬 Vídeos</a>
+    </div>
+</header>
+
+<!-- ══════════════════════════════════════
+     PATRIMÔNIO HISTÓRICO
+     ══════════════════════════════════════ -->
+<section class="sec" id="patrimonio">
+    <h2 class="sec-title">🏛️ Patrimônio Histórico</h2>
+    <div class="grid">
+
+        <div class="card">
+            <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" alt="Igreja Matriz" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Patrimônio</div>
+                <h3>Igreja Matriz</h3>
+                <p>Majestosa arquitetura neogótica que marca o centro da cidade há mais de um século.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/PREFEITURA_MUNICIPAL.jpg" alt="Prefeitura Municipal" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Institucional</div>
+                <h3>Prefeitura Municipal</h3>
+                <p>Elegante arquitetura que representa a administração e a história da cidade.</p>
+            </div>
+        </div>
+
+        <!-- Igreja Água Branca — 10 fotos -->
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA.jpg" alt="Igreja Água Branca" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca</h3>
+                <p>Joia da arquitetura polonesa rural, preservando tradições centenárias dos imigrantes.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_2.jpg" alt="Igreja Água Branca — Vista Geral" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Vista</h3>
+                <p>Vista geral da Igreja da Comunidade Água Branca em seu entorno rural.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_3.jpg" alt="Igreja Água Branca — Interior" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Interior</h3>
+                <p>Interior com rica decoração de herança polonesa preservada pelos descendentes.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_4.jpg" alt="Igreja Água Branca — Altar" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Altar</h3>
+                <p>Altar central com detalhes artísticos que revelam a devoção dos colonos poloneses.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_5.jpg" alt="Igreja Água Branca — Nave" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Nave</h3>
+                <p>Nave com bancos e vitrais que contam a história dos imigrantes poloneses.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_6.jpg" alt="Igreja Água Branca — Detalhe" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Detalhe</h3>
+                <p>Detalhes arquitetônicos que revelam o esmero dos construtores poloneses do séc. XIX.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_7.jpg" alt="Igreja Água Branca — Entorno" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Entorno</h3>
+                <p>Vista do entorno da Igreja integrada à paisagem rural de herança polonesa.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_8.jpg" alt="Igreja Água Branca — Painel" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Painel</h3>
+                <p>Painel artístico decorativo preservado pelos descendentes poloneses.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_9.jpg" alt="Igreja Água Branca — Façada" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Façada</h3>
+                <p>Façada principal, símbolo da fé e da tradição polonesa em São Mateus do Sul.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IGREJA_AGUA_BRANCA_10.jpg" alt="Igreja Água Branca — Celebração" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Cultura Polonesa</div>
+                <h3>Igreja Água Branca — Celebração</h3>
+                <p>Momento de celebração religiosa que une gerações da comunidade polonesa.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     BELEZAS NATURAIS
+     ══════════════════════════════════════ -->
+<div class="sec-alt" id="natureza">
+    <section class="sec">
+        <h2 class="sec-title">🌊 Belezas Naturais</h2>
+        <div class="grid">
+
+            <div class="card">
+                <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" alt="Ponte sobre o Rio Iguaçu" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Rio Iguaçu</div>
+                    <h3>Ponte sobre o Rio Iguaçu</h3>
+                    <p>Majestosa ponte que conecta as margens do Rio Iguaçu com vistas espetaculares.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="Praça do Rio Iguaçu" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Lazer</div>
+                    <h3>Praça do Rio Iguaçu</h3>
+                    <p>Espaço de lazer às margens do Rio Iguaçu com quiosques e natureza exuberante.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg" alt="Vista Geral da Cidade" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Paisagem</div>
+                    <h3>Vista Geral da Cidade</h3>
+                    <p>Panorâmica que revela a harmonia entre natureza e arquitetura na Capital Polonesa.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     GASTRONOMIA
+     ══════════════════════════════════════ -->
+<section class="sec" id="gastronomia-g">
+    <h2 class="sec-title">🍽️ Gastronomia e Produtos Locais</h2>
+    <div class="grid">
+
+        <div class="card">
+            <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Polskie Smaki" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Gastronomia Polonesa</div>
+                <h3>Polskie Smaki</h3>
+                <p>Autêntica gastronomia polonesa no coração de São Mateus do Sul durante o festival.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/MORANGO_1.jpg" alt="Morangos das Colônias" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Produtos Rurais</div>
+                <h3>Morangos das Colônias</h3>
+                <p>Morangos frescos colhidos nas propriedades rurais — uma das delícias regionais.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/PARRERAL__1_.jpg" alt="Parreral" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Restaurantes</div>
+                <h3>Parreral</h3>
+                <p>Experiência gastronômica privilegiada com vista para a natureza paranaense.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/RUA_DO_MATHE.jpg" alt="Rua do Mathe" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Erva-Mate IG</div>
+                <h3>Rua do Mathe</h3>
+                <p>Coração gastronômico da cidade — sede das principais feiras, festas e degustações de erva-mate.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     EVENTOS E TRADIÇÕES
+     ══════════════════════════════════════ -->
+<div class="sec-alt" id="eventos-g">
+    <section class="sec">
+        <h2 class="sec-title">🎭 Eventos e Tradições</h2>
+        <div class="grid">
+
+            <div class="card">
+                <img src="images/POLSKIE_SMAKI__5_.jpg" alt="Polskie Smaki — Desfile" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Festival</div>
+                    <h3>Polskie Smaki — Desfile</h3>
+                    <p>Desfile dos grupos folclóricos poloneses durante a maior festa gastronômica da cidade.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/POLSKIE_SMAKI__6_.jpg" alt="Cultura Polonesa no Festival" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Cultura Polonesa</div>
+                    <h3>Cultura no Festival</h3>
+                    <p>Tradições polonesas celebradas com trajes típicos, danças folclóricas e gastronomia.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/FUNDO_ROTAS.jpg" alt="Rotas Rurais" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Ecoturismo</div>
+                    <h3>Rotas Rurais</h3>
+                    <p>As estradas rurais de São Mateus do Sul guardam paisagens e experiências únicas.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/IMG_2295.jpg" alt="Tradições Culinárias" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Tradições</div>
+                    <h3>Tradições Culinárias</h3>
+                    <p>Técnicas culinárias tradicionais mantidas vivas por gerações nas colônias.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/IMG_2304.jpg" alt="Arte Sacra Local" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Arte Sacra</div>
+                    <h3>Arte Sacra Local</h3>
+                    <p>Arte sacra única que demonstra a criatividade e a devoção da comunidade polonesa.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/IMG_2326.jpg" alt="Vida Comunitária" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Comunidade</div>
+                    <h3>Vida Comunitária</h3>
+                    <p>Espírito colaborativo e solidário da comunidade polonesa no cotidiano da cidade.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/IMG_2371.jpg" alt="Personagem Folclórico" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Folclore</div>
+                    <h3>Personagem Folclórico</h3>
+                    <p>Representação viva do folclore e das tradições polonesas de São Mateus do Sul.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img src="images/IMG_2301.jpg" alt="Vida no Campo" loading="lazy">
+                <div class="card-body">
+                    <div class="badge">Vida Rural</div>
+                    <h3>Vida no Campo</h3>
+                    <p>Conexão com a terra e as tradições agrícolas das colônias rurais polonesas.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+<!-- ══════════════════════════════════════
+     ARTE & HISTÓRIA
+     ══════════════════════════════════════ -->
+<section class="sec" id="arte">
+    <h2 class="sec-title">🎨 Arte & História</h2>
+    <div class="grid">
+
+        <div class="card">
+            <img src="images/diorama_sao_mateus.png" alt="Diorama Artístico" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Arte</div>
+                <h3>Diorama Artístico</h3>
+                <p>Representação artística que captura a essência histórica e cultural de São Mateus do Sul.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IMIGRANTES_IA_1.png" alt="Imigrantes Poloneses — Ilustração IA" loading="lazy">
+            <div class="card-body">
+                <div class="badge">História · IA</div>
+                <h3>Imigrantes Poloneses</h3>
+                <p>Recriação imaginária dos corajosos imigrantes poloneses que fundaram a cidade no séc. XIX.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/IMIGRANTES_IA_2.png" alt="Herança Polonesa — Ilustração IA" loading="lazy">
+            <div class="card-body">
+                <div class="badge">História · IA</div>
+                <h3>Herança Polonesa</h3>
+                <p>Cenas do cotidiano dos primeiros colonos poloneses, recriadas com inteligência artificial.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="images/POLACA_ORACAO.jpg" alt="Devoção Polonesa" loading="lazy">
+            <div class="card-body">
+                <div class="badge">Fé e Cultura</div>
+                <h3>Devoção Polonesa</h3>
+                <p>Imagem que representa a profunda fé cristã, pilar da cultura polonesa em São Mateus do Sul.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     VÍDEOS
+     ══════════════════════════════════════ -->
+<section class="vsec" id="videos">
+    <h2 class="sec-title">🎬 Vídeos</h2>
+    <span class="vsub">Conheça São Mateus do Sul em movimento — cultura polonesa, natureza e a essência da Capital Polonesa do Paraná</span>
+
+    <div class="vgrid">
+
+        <!-- Vídeo local 1 -->
+        <div class="vcard">
+            <video controls preload="none" poster="images/POLSKIE_SMAKI__1_.jpg">
+                <source src="videos/INSTITUCIONAL_POLONES.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo HTML5.
+            </video>
+            <div class="vbody">
+                <span class="vbadge-l">INSTITUCIONAL</span>
+                <h3 class="vtitle">Cultura Polonesa de São Mateus do Sul</h3>
+                <p class="vdesc">Vídeo institucional legendado sobre a herança polonesa que define a identidade de São Mateus do Sul — Capital Polonesa do Paraná.</p>
+            </div>
+        </div>
+
+        <!-- Vídeo local 2 -->
+        <div class="vcard">
+            <video controls preload="none" poster="images/PRACA_DO_RIO_IGUACU.jpg">
+                <source src="videos/VIDEO_ABERTURA_4K.mp4" type="video/mp4">
+                Seu navegador não suporta vídeo HTML5.
+            </video>
+            <div class="vbody">
+                <span class="vbadge-l">4K</span>
+                <h3 class="vtitle">São Mateus do Sul — Vídeo de Abertura 4K</h3>
+                <p class="vdesc">Vídeo 4K mostrando as belezas naturais, a cultura e os principais atrativos turísticos da cidade.</p>
+            </div>
+        </div>
+
+        <!-- YouTube 1 -->
+        <div class="vcard">
+            <div class="vresp">
+                <iframe src="https://www.youtube.com/embed/SrPU_gGw-mY"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy" title="São Mateus do Sul — Turismo"></iframe>
+            </div>
+            <div class="vbody">
+                <span class="vbadge-y">▶ YOUTUBE</span>
+                <h3 class="vtitle">São Mateus do Sul — Turismo</h3>
+                <p class="vdesc">Conheça as atrações turísticas e a cultura da Capital Polonesa do Paraná.</p>
+            </div>
+        </div>
+
+        <!-- YouTube 2 -->
+        <div class="vcard">
+            <div class="vresp">
+                <iframe src="https://www.youtube.com/embed/3H7I9-bw6mQ"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy" title="Cultura e Tradições Polonesas"></iframe>
+            </div>
+            <div class="vbody">
+                <span class="vbadge-y">▶ YOUTUBE</span>
+                <h3 class="vtitle">Cultura e Tradições Polonesas</h3>
+                <p class="vdesc">Mergulhe na rica cultura polonesa preservada pelas comunidades de São Mateus do Sul.</p>
+            </div>
+        </div>
+
+        <!-- YouTube 3 — destaque central -->
+        <div class="vcard vfull">
+            <div class="vresp">
+                <iframe src="https://www.youtube.com/embed/20U2Gkqt9yg"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen loading="lazy" title="São Mateus do Sul — Destino Turístico"></iframe>
+            </div>
+            <div class="vbody">
+                <span class="vbadge-y">▶ YOUTUBE</span>
+                <h3 class="vtitle">São Mateus do Sul — Destino Turístico</h3>
+                <p class="vdesc">Descubra por que São Mateus do Sul é um dos destinos turísticos mais autênticos e especiais do Paraná.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div style="text-align:center">
+        <a href="https://youtube.com/@prefeiturasms" target="_blank" rel="noopener" class="yt-btn">
+            ▶️ Ver mais vídeos no YouTube
+        </a>
+    </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lb" class="lb">
+    <div class="lb-ov" onclick="lbClose()"></div>
+    <button class="lb-x" onclick="lbClose()" aria-label="Fechar">&times;</button>
+    <button class="lb-prv" onclick="lbNav(-1)" aria-label="Anterior">❮</button>
+    <button class="lb-nxt" onclick="lbNav(1)" aria-label="Próxima">❯</button>
+    <div class="lb-c" onclick="event.stopPropagation()">
+        <img id="lb-img" src="" alt="">
+        <div class="lb-info">
+            <h3 id="lb-title"></h3>
+            <p id="lb-desc"></p>
+            <span class="lb-cnt" id="lb-cnt"></span>
+        </div>
+    </div>
+    <div class="lb-thumbs" id="lb-thumbs"></div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+    <p style="margin-top:.5rem">
+        <a href="index.html">← Voltar ao Portal</a> |
+        <a href="eventos.html">Calendário de Eventos</a> |
+        <a href="reservas.html">Reservas</a>
+    </p>
+</footer>
+
+<script>
+(function(){
+    var imgs = [], cur = 0;
+
+    document.addEventListener('DOMContentLoaded', function(){
+        document.querySelectorAll('.card').forEach(function(c, i){
+            var img = c.querySelector('img');
+            var ttl = c.querySelector('h3');
+            var dsc = c.querySelector('p');
+            imgs.push({ src: img.src, title: ttl ? ttl.textContent : '', desc: dsc ? dsc.textContent : '' });
+            c.onclick = function(){ lbOpen(i); };
+        });
+    });
+
+    window.lbOpen = function(i){
+        cur = i;
+        lbUpdate();
+        lbThumbs();
+        document.getElementById('lb').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    };
+
+    function lbUpdate(){
+        var d = imgs[cur];
+        document.getElementById('lb-img').src = d.src;
+        document.getElementById('lb-img').alt = d.title;
+        document.getElementById('lb-title').textContent = d.title;
+        document.getElementById('lb-desc').textContent = d.desc;
+        document.getElementById('lb-cnt').textContent = (cur+1) + ' / ' + imgs.length;
+        document.querySelectorAll('.lb-th').forEach(function(t,i){ t.classList.toggle('on', i===cur); });
+    }
+
+    function lbThumbs(){
+        var c = document.getElementById('lb-thumbs');
+        c.innerHTML = '';
+        imgs.forEach(function(d,i){
+            var t = document.createElement('img');
+            t.src = d.src; t.className = 'lb-th' + (i===cur?' on':'');
+            t.onclick = function(e){ e.stopPropagation(); cur=i; lbUpdate(); };
+            c.appendChild(t);
+        });
+    }
+
+    window.lbNav = function(dir){
+        event.stopPropagation();
+        cur = (cur + dir + imgs.length) % imgs.length;
+        lbUpdate();
+    };
+
+    window.lbClose = function(){
+        document.getElementById('lb').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+
+    document.addEventListener('keydown', function(e){
+        if(document.getElementById('lb').style.display === 'block'){
+            if(e.key==='Escape') lbClose();
+            else if(e.key==='ArrowLeft') lbNav(-1);
+            else if(e.key==='ArrowRight') lbNav(1);
+        }
+    });
+})();
+</script>
+
+</body>
+</html>
