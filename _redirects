@@ -1,5 +1,2 @@
-# Página 404 customizada
-/*    /404.html   404
-
-# SPA fallback (deve vir depois do 404)
+# SPA fallback — serve index.html para rotas desconhecidas (status 200)
 /*    /index.html  200
