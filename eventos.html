@@ -823,10 +823,13 @@
             </a>
             <nav class="header-nav">
                 <a href="index.html" data-lang-key="nav-inicio">Início</a>
-                <a href="index.html#attractions" data-lang-key="nav-atracoes">Atrações</a>
-                <a href="index.html#gastronomia" data-lang-key="nav-gastronomia">Gastronomia</a>
-                <a href="rotas-completas.html" data-lang-key="nav-rotas">Rotas</a>
-                <a href="transparencia.html" data-lang-key="nav-transparencia">Transparência</a>
+                <a href="o-que-fazer.html" data-lang-key="nav-oquefazer">O Que Fazer</a>
+                <a href="sabores.html" data-lang-key="nav-sabores">Sabores</a>
+                <a href="eventos.html" style="color:var(--gold-polish);font-weight:700">Eventos</a>
+                <a href="galeria.html" data-lang-key="nav-galeria">Galeria</a>
+                <a href="onde-ficar.html" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                <a href="rotas-completas.html" data-lang-key="nav-rotas">Roteiros</a>
+                <a href="index.html#contato" data-lang-key="nav-contato">Contato</a>
             </nav>
         </div>
     </header>
@@ -1075,99 +1078,26 @@
                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-    // ── Carregar eventos: Firebase primeiro, fallback para JSON ──
+    // ── Carregar eventos direto do JSON ──
     async function loadEvents() {
         try {
-            // Tentar carregar do Firestore (eventos aprovados)
-            let firebaseLoaded = false;
-            try {
-                const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ",
-                    authDomain: "turismo-sms.firebaseapp.com",
-                    projectId: "turismo-sms",
-                    storageBucket: "turismo-sms.firebasestorage.app",
-                    messagingSenderId: "1042825829044",
-                    appId: "1:1042825829044:web:13173093e28be3199955e1"
-                };
-
-                const app = initializeApp(firebaseConfig, 'eventos-app');
-                const db = getFirestore(app);
-                const snap = await getDocs(query(collection(db, 'eventos_aprovados'), orderBy('data', 'asc')));
-
-                if (!snap.empty) {
-                    // Normalizar campos do Firestore para o formato esperado
-                    const fbEventos = snap.docs.map((d, idx) => {
-                        const e = d.data();
-                        return {
-                            id: idx + 10000, // ID único para evitar conflito com JSON
-                            titulo: e.nome || e.titulo || 'Sem título',
-                            data: e.data || e.dataInicio || '',
-                            horario: e.horario || '',
-                            local: e.local || '',
-                            categoria: e.categoria || 'cultural',
-                            descricao: e.descricao || '',
-                            destaque: e.destaque || false,
-                            recorrente: false,
-                            _fonte: 'firebase'
-                        };
-                    });
-                    // Mesclar com JSON estático
-                    firebaseLoaded = true;
-                    const response = await fetch('eventos-2026.json').catch(() => null);
-                    const jsonEventos = response ? await response.json().catch(() => []) : [];
-                    eventos = [...jsonEventos, ...fbEventos];
-                    console.log(`✅ ${fbEventos.length} eventos do Firebase + ${jsonEventos.length} do JSON`);
-                }
-            } catch (fbErr) {
-                console.warn('Firebase indisponível, usando JSON:', fbErr.message);
-            }
-
-            // Fallback: apenas JSON
-            if (!firebaseLoaded) {
-                // Usar path absoluto relativo à raiz do site para evitar erros de path
-                const jsonPath = document.location.origin + (document.location.pathname.replace(/\/[^\/]*$/, '') || '') + '/eventos-2026.json';
-                let response;
-                try {
-                    response = await fetch('eventos-2026.json');
-                    if (!response.ok) throw new Error('Relative path failed');
-                } catch(e) {
-                    response = await fetch('./eventos-2026.json');
-                }
-                eventos = await response.json();
-            }
-
-            // Ordenar por data
+            const response = await fetch('eventos-2026.json');
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            eventos = await response.json();
             eventos.sort((a, b) => new Date(a.data) - new Date(b.data));
-
             updateCounts();
             applyFilters();
             renderFeatured();
-
             document.getElementById('loading').style.display = 'none';
         } catch (error) {
             console.error('Erro ao carregar eventos:', error);
-            // Tentar uma última vez com path alternativo antes de mostrar erro
-            try {
-                const resp = await fetch('./eventos-2026.json');
-                eventos = await resp.json();
-                eventos.sort((a, b) => new Date(a.data) - new Date(b.data));
-                updateCounts();
-                applyFilters();
-                renderFeatured();
-                document.getElementById('loading').style.display = 'none';
-                return;
-            } catch(e2) {
-                document.getElementById('loading').innerHTML = `
-                    <div style="text-align:center;padding:3rem">
-                        <div style="font-size:3rem;margin-bottom:1rem">📅</div>
-                        <h3 style="color:#0a3d2e;margin-bottom:0.5rem">Não foi possível carregar os eventos</h3>
-                        <p style="color:#666;margin-bottom:1.5rem">Verifique sua conexão e tente novamente.</p>
-                        <button onclick="location.reload()" style="background:#0a3d2e;color:white;border:none;padding:0.75rem 2rem;border-radius:25px;cursor:pointer;font-size:1rem">🔄 Tentar Novamente</button>
-                    </div>`;
-            }
+            document.getElementById('loading').innerHTML = `
+                <div style="text-align:center;padding:3rem">
+                    <div style="font-size:3rem;margin-bottom:1rem">📅</div>
+                    <h3 style="color:#0a3d2e;margin-bottom:0.5rem">Não foi possível carregar os eventos</h3>
+                    <p style="color:#666;margin-bottom:1.5rem">Verifique sua conexão e tente novamente.</p>
+                    <button onclick="location.reload()" style="background:#0a3d2e;color:white;border:none;padding:0.75rem 2rem;border-radius:25px;cursor:pointer;font-size:1rem">🔄 Tentar Novamente</button>
+                </div>`;
         }
     }
 

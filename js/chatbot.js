@@ -67,8 +67,21 @@
             'como chegar': '📍 São Mateus do Sul fica a:\n\n• 150 km de Curitiba (BR-376, aprox. 2h)\n• 60 km de União da Vitória\nO aeroporto mais próximo é em Curitiba (Afonso Pena).',
             'curitiba': 'De Curitiba até São Mateus do Sul são cerca de 150 km pela BR-376, aproximadamente 2 horas de carro! 🚗',
 
+            // Galeria
+            'galeria': 'Nossa Galeria tem fotos e vídeos incríveis! 📸\n\n🏠 Patrimônio Histórico (Igreja Água Branca)\n🌊 Belezas Naturais\n🍽️ Gastronomia\n🎭 Eventos e Tradições\n🎨 Arte & História\n🎥 Vídeos das rotas turísticas\n\nAcesse galeria.html para ver tudo!',
+            'foto': 'Temos uma galeria completa de fotos e vídeos! Acesse a página Galeria no menu. 📸',
+            'video': 'Temos vídeos institucionais e das rotas turísticas na Galeria! Incluindo vídeos no YouTube e arquivos locais em alta qualidade. 🎥',
+
+            // Reservas
+            'reserva': 'Você pode reservar atividades turísticas pelo nosso portal! 📝\n\nAcesse a página Reservas para agendar:\n• Passeios de barco no Rio Iguaçu\n• Visitas guiadas\n• Degustações de erva-mate\n• Rotas rurais\n\nOu ligue: (42) 3532-0000',
+            'agendar': 'Para agendar atividades turísticas acesse a página de Reservas ou ligue (42) 3532-0000! 📝',
+
+            // Igreja Água Branca
+            'agua branca': 'A Igreja Água Branca é uma joia da arquitetura polonesa rural! ⛪\n\nConstruida pelos imigrantes poloneses no séc. XIX, é um dos pontos mais fotográficos da região. Veja fotos na nossa Galeria!',
+            'igreja': 'São Mateus tem igrejas históricas incríveis! ⛪\n\n• Igreja Matriz — neogótica no centro\n• Igreja Água Branca — arquitetura polonesa rural\n• Diversas capelas nas colônias\n• Santuário de N. Sra. Częstochowa',
+
             // Default
-            'default': 'Não entendi bem sua pergunta. 🤔\n\nPosso ajudar com:\n• Atrações turísticas e rotas\n• Gastronomia polonesa\n• Eventos 2026 (AgroSamas, Polskie Smaki...)\n• Hospedagem\n• Como chegar\n• Contato da Secretaria'
+            'default': 'Não entendi bem sua pergunta. 🤔\n\nPosso ajudar com:\n• Atrações e rotas turísticas\n• Galeria de fotos e vídeos\n• Gastronomia polonesa\n• Eventos 2026 (AgroSamas, Polskie Smaki...)\n• Reservas de atividades\n• Hospedagem\n• Como chegar\n• Contato da Secretaria'
         },
         
         isOpen: false,
