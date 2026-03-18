@@ -1,2 +1,2 @@
-# SPA fallback — serve index.html para rotas desconhecidas (status 200)
-/*    /index.html  200
+# Netlify redirects
+# Nenhuma regra SPA — site é estático com arquivos reais
