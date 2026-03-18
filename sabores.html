@@ -441,6 +441,33 @@
             text-decoration: none;
         }
 
+        /* Produtor Interativo */
+        .produtor-section { padding: 4rem 2rem; background: linear-gradient(135deg, #f0ebe3 0%, #e8e2d8 100%); }
+        .produtor-container { max-width: 1200px; margin: 0 auto; background: linear-gradient(145deg, #0a3d2e 0%, #0d4a38 100%) !important; border-radius: 30px; padding: 3rem; box-shadow: 0 20px 60px rgba(10,61,46,0.3); }
+        .produtor-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+        .produtor-header span { font-size: 2rem; }
+        .produtor-header h2 { color: #fff !important; font-family: var(--font-display); font-size: 2rem; }
+        .produtor-intro { color: rgba(255,255,255,0.85) !important; margin-bottom: 2rem; font-size: 1.1rem; }
+        .produtor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+        .produtor-item { background: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s ease; }
+        .produtor-item:hover { background: rgba(255,255,255,0.2) !important; transform: translateY(-5px); }
+        .produtor-item.active { background: #d4a574 !important; border-color: #d4a574; }
+        .produtor-item.active .produtor-item-name, .produtor-item.active .produtor-item-desc { color: #0a3d2e !important; }
+        .produtor-item-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .produtor-item-name { font-weight: 600; color: #fff !important; font-size: 1.1rem; margin-bottom: 0.25rem; }
+        .produtor-item-desc { font-size: 0.85rem; color: rgba(255,255,255,0.7) !important; }
+        .produtor-details { display: none; margin-top: 2rem; background: rgba(255,255,255,0.08); border-radius: 16px; padding: 2rem; }
+        .produtor-details.active { display: block; }
+        .produtor-details h3 { color: #d4a574; font-family: var(--font-display); font-size: 1.6rem; margin-bottom: 1.5rem; }
+        .produtor-locais { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+        .local-card { background: rgba(255,255,255,0.1); border-radius: 12px; padding: 1.25rem; display: flex; gap: 1rem; align-items: start; }
+        .local-icon { font-size: 2rem; }
+        .local-info h4 { color: #fff; margin-bottom: 0.5rem; }
+        .local-info p { color: rgba(255,255,255,0.75); font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .local-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap; }
+        .local-btn { padding: 0.4rem 0.9rem; border-radius: 20px; font-size: 0.8rem; cursor: pointer; font-family: inherit; border: none; background: rgba(255,255,255,0.2); color: #fff; text-decoration: none; transition: background 0.2s; }
+        .local-btn:hover { background: #d4a574; color: #0a3d2e; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
@@ -720,56 +747,126 @@
             </div>
         </section>
 
-        <!-- Produtores Rurais -->
-        <section class="producers-section">
-            <h3 data-lang-key="sab-prod-h">🌾 Direto do Produtor</h3>
-            <p data-lang-key="sab-prod-sub">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
-
-            <div class="producers-grid">
-                
-                <div class="producer-card">
-                    <div class="icon">🍓</div>
-                    <h4 data-lang-key="sab-prod1-h">Morangos</h4>
-                    <p data-lang-key="sab-prod1-p">Colheita própria nas propriedades</p>
-                </div>
-
-                <div class="producer-card">
-                    <div class="icon">🍷</div>
-                    <h4 data-lang-key="sab-prod2-h">Vinhos</h4>
-                    <p data-lang-key="sab-prod2-p">Vinícolas artesanais</p>
-                </div>
-
-                <div class="producer-card">
-                    <div class="icon">🧀</div>
-                    <h4 data-lang-key="sab-prod3-h">Queijos</h4>
-                    <p data-lang-key="sab-prod3-p">Queijarias coloniais</p>
-                </div>
-
-                <div class="producer-card">
-                    <div class="icon">🍯</div>
-                    <h4>Mel</h4>
-                    <p data-lang-key="sab-prod4-p">Apiários locais</p>
-                </div>
-
-                <div class="producer-card">
-                    <div class="icon">🧉</div>
-                    <h4 data-lang-key="sab-prod5-h">Erva-mate</h4>
-                    <p data-lang-key="sab-prod5-p">Ervateiras certificadas IG</p>
-                </div>
-
-                <div class="producer-card">
-                    <div class="icon">🥒</div>
-                    <h4 data-lang-key="sab-prod6-h">Conservas</h4>
-                    <p data-lang-key="sab-prod6-p">Picles e compotas caseiras</p>
-                </div>
-
+    <!-- DIRETO DO PRODUTOR - Seção Interativa -->
+    <section class="produtor-section" id="produtor" style="margin-top:3rem">
+        <div class="produtor-container">
+            <div class="produtor-header">
+                <span>🌱</span>
+                <h2 data-lang-key="produtor-titulo">Direto do Produtor</h2>
             </div>
-        </section>
+            <p class="produtor-intro" data-lang-key="produtor-intro">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
+            <div class="produtor-grid">
+                <div class="produtor-item" data-categoria="morangos" onclick="toggleProdutorDetails('morangos')">
+                    <div class="produtor-item-icon">🍓</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-morango">Morangos</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-morango-desc">Colheita própria nas propriedades</div>
+                </div>
+                <div class="produtor-item" data-categoria="vinhos" onclick="toggleProdutorDetails('vinhos')">
+                    <div class="produtor-item-icon">🍷</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-vinho">Vinhos</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-vinho-desc">Vinícolas artesanais</div>
+                </div>
+                <div class="produtor-item" data-categoria="queijos" onclick="toggleProdutorDetails('queijos')">
+                    <div class="produtor-item-icon">🧀</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-queijo">Queijos</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-queijo-desc">Queijarias coloniais</div>
+                </div>
+                <div class="produtor-item" data-categoria="mel" onclick="toggleProdutorDetails('mel')">
+                    <div class="produtor-item-icon">🍯</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-mel">Mel</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-mel-desc">Apiários locais</div>
+                </div>
+                <div class="produtor-item" data-categoria="ervamate" onclick="toggleProdutorDetails('ervamate')">
+                    <div class="produtor-item-icon">🧉</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-ervamate">Erva-mate</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-ervamate-desc">Ervateiras certificadas IG</div>
+                </div>
+                <div class="produtor-item" data-categoria="conservas" onclick="toggleProdutorDetails('conservas')">
+                    <div class="produtor-item-icon">🥒</div>
+                    <div class="produtor-item-name" data-lang-key="prod-nome-conservas">Conservas</div>
+                    <div class="produtor-item-desc" data-lang-key="prod-conservas-desc">Picles e compotas caseiras</div>
+                </div>
+            </div>
+            <div class="produtor-details" id="produtorDetails"></div>
+        </div>
+    </section>
 
     </main>
 
     <!-- Footer -->
     <script>
+    // ===== PRODUTOR INTERATIVO =====
+    var currentProdutor = null;
+
+    var produtoresData = {
+        morangos: {
+            titulo: 'Morangos da Colheita',
+            icon: '🍓',
+            locais: [
+                { nome: 'Colônia Esperança', endereco: 'Linha São Luís, zona rural', telefone: '(42) 99999-0001', horario: 'Jul-Set: 8h-17h', coords: [-25.88, -50.38] },
+                { nome: 'Sítio Moranguinho', endereco: 'Estrada da Colônia, km 12', telefone: '(42) 99999-0002', horario: 'Ago-Out: 8h-17h', coords: [-25.90, -50.40] }
+            ]
+        },
+        vinhos: {
+            titulo: 'Vinícolas Artesanais',
+            icon: '🍷',
+            locais: [
+                { nome: 'Vinícola Colonial Wojcik', endereco: 'Linha Polonêsa, zona rural', telefone: '(42) 99999-0003', horario: 'Seg-Sáb: 8h-18h', coords: [-25.85, -50.42] }
+            ]
+        },
+        queijos: {
+            titulo: 'Queijarias Coloniais',
+            icon: '🧀',
+            locais: [
+                { nome: 'Queijaria Kowalski', endereco: 'Colônia Água Branca', telefone: '(42) 99999-0004', horario: 'Ter-Dom: 8h-12h', coords: [-25.87, -50.36] }
+            ]
+        },
+        mel: {
+            titulo: 'Apiários Locais',
+            icon: '🍯',
+            locais: [
+                { nome: 'Apiário Flores do Iguaçu', endereco: 'Zona Rural - Linha Boa Vista', telefone: '(42) 99999-0005', horario: 'Seg-Sáb: 7h-17h', coords: [-25.92, -50.35] }
+            ]
+        },
+        ervamate: {
+            titulo: 'Ervateiras IG São Matheus',
+            icon: '🧉',
+            locais: [
+                { nome: 'Ervateira São Matheus', endereco: 'Rua do Mathe, Centro', telefone: '(42) 3532-1234', horario: 'Seg-Sex: 8h-18h | Sáb: 8h-12h', coords: [-25.87, -50.39] },
+                { nome: 'Chimarródromo Municipal', endereco: 'Praça do Rio Iguaçu', telefone: '(42) 3532-0000', horario: '1º Dom do mês: 9h-13h', coords: [-25.87, -50.38] }
+            ]
+        },
+        conservas: {
+            titulo: 'Conservas e Compotas',
+            icon: '🥒',
+            locais: [
+                { nome: 'Feira do Produtor', endereco: 'Rua do Mathe', telefone: '(42) 3532-0000', horario: 'Sábados: 7h-12h', coords: [-25.87, -50.39] }
+            ]
+        }
+    };
+
+    function toggleProdutorDetails(categoria) {
+        var items = document.querySelectorAll('.produtor-item');
+        var detailsPanel = document.getElementById('produtorDetails');
+        var data = produtoresData[categoria];
+        items.forEach(function(item) {
+            if (item.dataset.categoria === categoria) item.classList.toggle('active');
+            else item.classList.remove('active');
+        });
+        if (currentProdutor === categoria) {
+            detailsPanel.classList.remove('active');
+            currentProdutor = null;
+            return;
+        }
+        currentProdutor = categoria;
+        var locaisHTML = data.locais.map(function(local) {
+            return '<div class="local-card"><div class="local-icon">' + data.icon + '</div><div class="local-info"><h4>' + local.nome + '</h4><p>📍 ' + local.endereco + '</p><p>📞 ' + local.telefone + ' | 🕐 ' + local.horario + '</p></div></div>';
+        }).join('');
+        detailsPanel.innerHTML = '<h3>' + data.icon + ' ' + data.titulo + '</h3><div class="produtor-locais">' + locaisHTML + '</div>';
+        detailsPanel.classList.add('active');
+        setTimeout(function() { detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+    }
+
     // ===== SELETOR DE IDIOMA =====
     (function() {
         var flags = { pt: '🇧🇷', en: '🇺🇸', es: '🇪🇸', pl: '🇵🇱' };
