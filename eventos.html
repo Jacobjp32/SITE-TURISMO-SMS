@@ -1236,8 +1236,13 @@
 
     // Renderizar eventos
     function renderEvents() {
-        const container = document.getElementById('eventsList');
-        const noResults = document.getElementById('noResults');
+    const container = document.getElementById('eventsList');
+    const noResults = document.getElementById('noResults');
+        
+        // Garantir que a lista esteja visível quando a view for 'list'
+        if (currentView === 'list') {
+            container.style.display = 'grid';
+        }
         
         if (filteredEvents.length === 0) {
             container.innerHTML = '';
