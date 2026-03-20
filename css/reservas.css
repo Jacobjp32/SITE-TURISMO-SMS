@@ -1,0 +1,31 @@
+/* ============================================================ */
+/* reservas.css — Estilos exclusivos: Reservas                  */
+/* Depende de: variables.css, reset.css, components.css         */
+/* ============================================================ */
+
+/* Filtros */
+.filtros {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filtro-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--forest-deep);
+    background: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.filtro-btn:hover,
+.filtro-btn.active {
+    background: var(--forest-deep);
+    color: white;
+}

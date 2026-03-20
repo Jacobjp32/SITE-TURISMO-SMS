@@ -1,0 +1,250 @@
+/* ============================================================ */
+/* transparencia.css — Estilos exclusivos: Transparência
+   Depende de: variables.css, reset.css, components.css       */
+/* ============================================================ */
+
+        /* Barra de Acessibilidade */
+
+        .accessibility-bar a,
+
+        .accessibility-bar a:hover,
+        /* Hero */
+
+        /* Main Content */
+
+        /* Sections */
+        .section {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.08);
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--cream-light);
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--forest-deep);
+            color: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            color: var(--forest-deep);
+        }
+
+        .section-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Info Cards */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .info-card {
+            background: var(--cream-light);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--gold-polish);
+        }
+
+        .info-card h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: var(--forest-deep);
+            color: white;
+            font-weight: 500;
+        }
+
+        .data-table tr:hover {
+            background: rgba(212, 165, 116, 0.1);
+        }
+
+        .data-table .btn-download {
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+            padding: 0.4rem 1rem;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .data-table .btn-download:hover {
+            background: #c49464;
+        }
+
+        /* Placeholder Notice */
+        .placeholder-notice {
+            background: linear-gradient(135deg, #fff9e6, #fff3cc);
+            border: 1px dashed var(--gold-polish);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            color: #856404;
+        }
+
+        .placeholder-notice strong {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Members List */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .member-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--cream-light);
+            border-radius: 10px;
+        }
+
+        .member-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--forest-deep);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .member-info h4 {
+            color: var(--forest-deep);
+            font-size: 0.95rem;
+        }
+
+        .member-info p {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .member-badge {
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            background: var(--gold-polish);
+            color: var(--forest-deep);
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--forest-deep);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .quick-link:hover {
+            background: #0a5d3e;
+            transform: translateY(-2px);
+        }
+
+        /* Accessibility Section */
+        .accessibility-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .accessibility-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--cream-light);
+            border-radius: 10px;
+        }
+
+        .accessibility-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .accessibility-item h4 {
+            color: var(--forest-deep);
+            margin-bottom: 0.5rem;
+        }
+        /* Responsive */
+        @media (max-width: 768px) {
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .data-table {
+                font-size: 0.85rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .accessibility-bar .shortcuts {
+                display: none;
+            }
+        }

@@ -1,0 +1,73 @@
+/* ============================================================ */
+/* onde-ficar.css — Estilos exclusivos da página Onde Ficar     */
+/* Depende de: variables.css, reset.css, components.css         */
+/* ============================================================ */
+
+/* Override: hero com cores escuras + ícone decorativo */
+.hero {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    position: relative;
+}
+
+.hero::before {
+    content: '🏨';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 15rem;
+    opacity: 0.05;
+}
+
+.hero h1, .hero p { position: relative; }
+.hero p { max-width: 600px; }
+
+/* Intro */
+.intro { text-align: center; margin-bottom: 3rem; }
+.intro h2 { font-family: var(--font-display); font-size: 2rem; color: var(--forest-deep); margin-bottom: 1rem; }
+.intro p { color: #666; max-width: 700px; margin: 0 auto; }
+
+/* Filter Tabs */
+.filter-tabs { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.filter-btn {
+    padding: 0.75rem 1.5rem; border: 2px solid var(--forest-deep);
+    background: white; color: var(--forest-deep); border-radius: 30px;
+    cursor: pointer; font-family: inherit; font-weight: 500; transition: all 0.3s;
+}
+.filter-btn:hover, .filter-btn.active { background: var(--forest-deep); color: white; }
+
+/* Hotels Grid */
+.hotels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+.hotel-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 5px 30px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; }
+.hotel-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.12); }
+.hotel-image { height: 200px; background: linear-gradient(135deg, var(--forest-deep), #0a5d3e); display: flex; align-items: center; justify-content: center; font-size: 4rem; color: rgba(255,255,255,0.3); }
+.hotel-content { padding: 1.5rem; }
+.hotel-category { display: inline-block; padding: 0.3rem 0.8rem; background: var(--cream-light); color: var(--forest-deep); border-radius: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.75rem; }
+.hotel-content h3 { font-family: var(--font-display); font-size: 1.4rem; color: var(--forest-deep); margin-bottom: 0.5rem; }
+.hotel-content .description { color: #666; font-size: 0.9rem; margin-bottom: 1rem; }
+.hotel-amenities { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.amenity { display: flex; align-items: center; gap: 0.3rem; font-size: 0.8rem; color: #666; }
+.hotel-contact { border-top: 1px solid #eee; padding-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+.hotel-contact a { display: flex; align-items: center; gap: 0.5rem; color: var(--forest-deep); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+.hotel-contact a:hover { color: var(--gold-polish); }
+
+/* Booking Tips */
+.booking-tips { background: white; border-radius: 20px; padding: 2rem; margin-top: 3rem; box-shadow: 0 5px 30px rgba(0,0,0,0.08); }
+.booking-tips h3 { font-family: var(--font-display); color: var(--forest-deep); font-size: 1.5rem; margin-bottom: 1rem; }
+.tips-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+.tip-item { display: flex; gap: 1rem; align-items: start; }
+.tip-icon { font-size: 2rem; flex-shrink: 0; }
+.tip-item h4 { color: var(--forest-deep); margin-bottom: 0.25rem; }
+.tip-item p { color: #666; font-size: 0.9rem; }
+
+/* CTA Section */
+.cta-section { background: linear-gradient(135deg, var(--forest-deep), #0a5d3e); color: white; padding: 3rem 2rem; border-radius: 20px; margin-top: 3rem; text-align: center; }
+.cta-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; }
+.cta-section p { opacity: 0.9; margin-bottom: 1.5rem; max-width: 500px; margin-left: auto; margin-right: auto; }
+.cta-btn { display: inline-block; padding: 1rem 2rem; background: var(--gold-polish); color: var(--forest-deep); text-decoration: none; border-radius: 30px; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; }
+.cta-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hotels-grid { grid-template-columns: 1fr; }
+}

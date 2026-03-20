@@ -1,0 +1,88 @@
+/* ============================================================ */
+/* o-que-fazer.css — Estilos exclusivos da página O Que Fazer   */
+/* Depende de: variables.css, reset.css, components.css         */
+/* ============================================================ */
+
+/* Override: hero com mesma cor, p ligeiramente diferente */
+.hero p { font-size: 1.15rem; max-width: 680px; }
+
+/* Override: main-content mais largo */
+.main-content { max-width: 1300px; }
+
+/* Section Header */
+.section-header { text-align: center; margin-bottom: 3rem; }
+.section-header h2 { font-family: var(--font-display); font-size: 2rem; color: var(--forest-deep); margin-bottom: 0.5rem; }
+.section-header p { color: #666; }
+
+/* Rotas Grid */
+.rotas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.rota-card {
+    background: white; border-radius: 20px;
+    overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.rota-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.13); }
+
+.rota-card-image {
+    height: 220px; background-size: cover; background-position: center;
+    position: relative;
+    background-color: var(--forest-deep);
+}
+.rota-card-image .badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: white; color: #333;
+    padding: 0.35rem 0.8rem; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 600;
+    display: flex; align-items: center; gap: 0.4rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.rota-card-content { padding: 1.5rem; }
+.rota-card-content h3 {
+    font-family: var(--font-display); font-size: 1.6rem;
+    color: var(--forest-deep); margin-bottom: 0.6rem;
+}
+.rota-card-content p { color: #555; font-size: 0.92rem; margin-bottom: 1.25rem; }
+
+.rota-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
+.rota-tag {
+    background: var(--cream-light); border-radius: 20px;
+    padding: 0.3rem 0.75rem; font-size: 0.78rem; color: #555;
+    display: flex; align-items: center; gap: 0.3rem;
+}
+
+.btn-rota {
+    display: inline-block; padding: 0.75rem 1.5rem;
+    background: var(--forest-deep); color: white;
+    border-radius: 25px; text-decoration: none;
+    font-weight: 600; font-size: 0.9rem;
+    transition: background 0.3s;
+}
+.btn-rota:hover { background: #0a5d3e; }
+
+/* CTA */
+.cta-section {
+    background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+    color: white; border-radius: 20px; padding: 3rem 2rem;
+    text-align: center; margin-top: 2rem;
+}
+.cta-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; }
+.cta-section p { opacity: 0.9; max-width: 500px; margin: 0 auto 1.5rem; }
+.btn-cta {
+    display: inline-block; padding: 1rem 2rem;
+    background: var(--gold-polish); color: var(--forest-deep);
+    border-radius: 30px; font-weight: 700; text-decoration: none;
+    transition: transform 0.3s;
+}
+.btn-cta:hover { transform: translateY(-2px); }
+
+/* Responsivo específico */
+@media (max-width: 768px) {
+    .rotas-grid { grid-template-columns: 1fr; }
+}

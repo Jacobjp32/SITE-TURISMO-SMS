@@ -1,0 +1,38 @@
+/* ============================================================ */
+/* variables.css — Variáveis globais do site Turismo SMS        */
+/* Arquivo único de referência para todas as páginas            */
+/* ============================================================ */
+
+:root {
+    /* Cores principais */
+    --forest-deep: #0a3d2e;
+    --gold-polish: #d4a574;
+    --white-pure: #ffffff;
+    --cream-light: #f8f6f0;
+    --polish-red: #dc143c;
+
+    /* Cores adicionais (usadas em páginas específicas) */
+    --mate-green: #2d5016;
+    --earth-brown: #8b4513;
+    --forest-rich: #1a5d43;
+    --forest-light: #0d5a3e;
+    --gold-light: #e8c9a0;
+
+    /* Status (portal-usuario) */
+    --info: #3498db;
+    --warning: #f39c12;
+    --success: #27ae60;
+    --danger: #e74c3c;
+
+    /* Aliases curtos (compatibilidade galeria.css) */
+    --forest: #0a3d2e;
+    --gold: #d4a574;
+    --cream: #f8f6f0;
+    --white: #ffffff;
+
+    /* Tipografia */
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Raleway', sans-serif;
+    --fd: 'Cormorant Garamond', serif;
+    --fb: 'Raleway', sans-serif;
+}

@@ -1,0 +1,39 @@
+/* ============================================================ */
+/* para-o-trade.css — Estilos exclusivos da página Trade        */
+/* Depende de: variables.css, reset.css, components.css         */
+/* ============================================================ */
+
+/* Override: hero com cores azuis corporativas */
+.hero { background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%); }
+
+/* Cards de Serviço */
+.services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+.service-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+.service-card h3 { font-family: var(--font-display); font-size: 1.5rem; color: var(--forest-deep); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+.service-card p { color: #666; margin-bottom: 1.5rem; }
+.service-card ul { list-style: none; margin-bottom: 1.5rem; }
+.service-card li { padding: 0.5rem 0; padding-left: 1.5rem; position: relative; color: #555; font-size: 0.95rem; }
+.service-card li::before { content: '✓'; position: absolute; left: 0; color: var(--gold-polish); font-weight: bold; }
+.btn-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; background: var(--forest-deep); color: white; text-decoration: none; border-radius: 25px; font-weight: 500; transition: background 0.3s; }
+.btn-link:hover { background: #0a5d3e; }
+
+/* Steps */
+.steps-section { background: white; border-radius: 20px; padding: 2.5rem; margin-bottom: 3rem; }
+.steps-section h2 { font-family: var(--font-display); font-size: 2rem; color: var(--forest-deep); margin-bottom: 2rem; text-align: center; }
+.steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+.step-card { text-align: center; padding: 1.5rem; }
+.step-number { width: 50px; height: 50px; background: var(--gold-polish); color: var(--forest-deep); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; margin: 0 auto 1rem; }
+.step-card h4 { color: var(--forest-deep); margin-bottom: 0.5rem; }
+.step-card p { font-size: 0.9rem; color: #666; }
+
+/* Contact Section */
+.contact-section { background: linear-gradient(135deg, var(--forest-deep), #0a5d3e); border-radius: 20px; padding: 2.5rem; color: white; text-align: center; }
+.contact-section h2 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; }
+.contact-section p { opacity: 0.9; margin-bottom: 2rem; }
+.contact-grid { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+.contact-item { display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.1); padding: 1rem 1.5rem; border-radius: 30px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .services-grid { grid-template-columns: 1fr; }
+}
