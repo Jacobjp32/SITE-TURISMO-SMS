@@ -11,9 +11,15 @@
 
         :root {
             --forest-deep: #0a3d2e;
+            --mate-green: #2d5016;
+            --polish-red: #dc143c;
+            --earth-brown: #8b4513;
             --gold-polish: #d4a574;
-            --white-pure: #ffffff;
+            --gold: #d4a574;
             --cream-light: #f8f6f0;
+            --cream: #f9f7f4;
+            --white-pure: #ffffff;
+            --white: #ffffff;
             --font-display: 'Cormorant Garamond', serif;
             --font-body: 'Raleway', sans-serif;
         }
@@ -1096,20 +1102,6 @@
             opacity: 1;
         }
 
-        .partners-logos .logo-placeholder {
-            width: 120px;
-            height: 50px;
-            background: rgba(255,255,255,0.1);
-            border: 1px dashed rgba(255,255,255,0.3);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.5);
-            text-align: center;
-            padding: 0.5rem;
-        }
 
         .partners-logos .logo-item img {
             max-width: 120px;
@@ -1208,30 +1200,6 @@
     
 
         /* ===== SEÇÃO SOBRE ===== */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --forest-deep: #0a3d2e;
-            --mate-green: #2d5016;
-            --polish-red: #dc143c;
-            --earth-brown: #8b4513;
-            --gold: #d4a574;
-            --cream: #f9f7f4;
-            --white: #ffffff;
-            
-            --font-display: 'Cormorant Garamond', serif;
-            --font-body: 'Raleway', sans-serif;
-        }
-
-        body {
-            font-family: var(--font-body);
-            background: var(--cream);
-        }
 
         /* Hero Section */
         .about-hero {
@@ -1995,81 +1963,11 @@
         /* ============================================
            A CIDADE (História)
         ============================================ */
-        .section-city-history {
-            padding: 5rem 2rem;
-            background: var(--forest-deep);
-            color: white;
-        }
 
-        .city-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 4rem;
-            margin-top: 3rem;
-            align-items: start;
-        }
-
-        .city-text h3 {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            color: var(--gold-polish);
-            margin: 2rem 0 1rem 0;
-        }
-
-        .city-text h3:first-child {
-            margin-top: 0;
-        }
-
-        .city-text p {
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .city-stats-large {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .stat-large {
-            background: rgba(255,255,255,0.1);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            border: 2px solid var(--gold-polish);
-        }
-
-        .stat-number-large {
-            font-family: var(--font-display);
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--gold-polish);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label-large {
-            font-size: 0.9rem;
-            color: rgba(255,255,255,0.8);
-            line-height: 1.4;
-        }
 
         
-        .lang-option .check {
-            margin-left: auto;
-            opacity: 0;
-            color: var(--gold-polish);
-            font-weight: bold;
-        }
 
-        .lang-option.active .check {
-            opacity: 1;
-        }
 @media (max-width: 768px) {
-            .city-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
             
             .hotels-grid {
                 grid-template-columns: 1fr;
@@ -2079,167 +1977,18 @@
         /* ============================================
            CALENDÁRIO DE EVENTOS
         ============================================ */
-        .events-calendar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
 
-        .event-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            border-left: 5px solid var(--forest-deep);
-        }
-
-        .event-card.featured {
-            border-left-color: var(--gold-polish);
-            border-left-width: 8px;
-        }
-
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-        }
-
-        .event-date {
-            background: var(--forest-deep);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-            min-width: 100px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .event-card.featured .event-date {
-            background: var(--gold-polish);
-            color: var(--forest-deep);
-        }
-
-        .event-month {
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
-
-        .event-day {
-            font-size: 2.5rem;
-            font-weight: 700;
-            font-family: var(--font-display);
-            line-height: 1;
-            margin: 0.5rem 0;
-        }
-
-        .event-year {
-            font-size: 0.85rem;
-            opacity: 0.8;
-        }
-
-        .event-content {
-            padding: 1.5rem;
-            flex: 1;
-        }
-
-        .event-category {
-            font-size: 0.85rem;
-            color: var(--gold-polish);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .event-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--forest-deep);
-            margin-bottom: 0.75rem;
-        }
-
-        .event-description {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            font-size: 0.95rem;
-        }
-
-        .event-details {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #eee;
-        }
-
-        .event-location,
-        .event-time {
-            font-size: 0.85rem;
-            color: #666;
-        }
+.event-location,
 
         @media (max-width: 768px) {
-            .events-calendar {
-                grid-template-columns: 1fr;
-            }
             
-            .event-card {
-                flex-direction: column;
-            }
             
-            .event-date {
-                padding: 1rem;
-            }
         }
 
         /* ============================================
            SISTEMA DE BUSCA
         ============================================ */
-        .search-container {
-            position: relative;
-            margin-left: 2rem;
-        }
 
-        .search-input {
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 0.9rem;
-            width: min(300px, 100%);
-            transition: all 0.3s;
-        }
-
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .search-input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.2);
-            border-color: var(--gold-polish);
-            width: min(350px, 100%);
-        }
-
-        .search-results {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            margin-top: 0.5rem;
-            max-height: 400px;
-            overflow-y: auto;
-            display: none;
-            z-index: 10000;
-        }
 
         .search-results.active {
             display: block;
@@ -2280,45 +2029,9 @@
         /* ============================================
            FORMULÁRIO DE CONTATO
         ============================================ */
-        .contact-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 4rem;
-            margin-top: 3rem;
-        }
 
         .contact-info h3,
-        .contact-form-container h3 {
-            font-family: var(--font-heading);
-            font-size: 1.8rem;
-            color: var(--forest-deep);
-            margin-bottom: 2rem;
-        }
 
-        .contact-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            align-items: flex-start;
-        }
-
-        .contact-icon {
-            font-size: 2rem;
-            flex-shrink: 0;
-        }
-
-        .contact-item strong {
-            display: block;
-            color: var(--forest-deep);
-            font-weight: 600;
-            margin-bottom: 0.3rem;
-        }
-
-        .contact-item p {
-            color: #666;
-            line-height: 1.6;
-            margin: 0;
-        }
 
         .contact-form {
             background: white;
@@ -2376,42 +2089,12 @@
             cursor: pointer;
         }
 
-        .btn-submit {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: var(--forest-deep);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-        }
-
-        .btn-submit:hover {
-            background: var(--forest-rich);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
 
         .btn-submit.loading {
             background: #999;
             pointer-events: none;
         }
 
-        .btn-loading {
-            display: none;
-        }
-
-        .btn-submit.loading .btn-text {
-            display: none;
-        }
-
-        .btn-submit.loading .btn-loading {
-            display: inline;
-        }
 
         .form-message {
             margin-top: 1rem;
@@ -2438,80 +2121,7 @@
         /* ============================================
            NEWSLETTER
         ============================================ */
-        .section-newsletter {
-            background: linear-gradient(135deg, var(--forest-deep) 0%, var(--forest-rich) 100%);
-            padding: 4rem 2rem;
-        }
 
-        .newsletter-content {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .newsletter-text h2 {
-            font-family: var(--font-display);
-            font-size: 2.5rem;
-            color: white;
-            margin-bottom: 1rem;
-        }
-
-        .newsletter-text p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-        }
-
-        .newsletter-form {
-            display: flex;
-            gap: 1rem;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .newsletter-form input {
-            flex: 1;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            border: 2px solid rgba(255,255,255,0.3);
-            background: rgba(255,255,255,0.1);
-            color: white;
-            font-size: 1rem;
-        }
-
-        .newsletter-form input::placeholder {
-            color: rgba(255,255,255,0.6);
-        }
-
-        .newsletter-form input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.2);
-            border-color: var(--gold-polish);
-        }
-
-        .btn-newsletter {
-            padding: 1rem 2.5rem;
-            background: var(--gold-polish);
-            color: var(--forest-deep);
-            border: none;
-            border-radius: 50px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            white-space: nowrap;
-        }
-
-        .btn-newsletter:hover {
-            background: var(--gold-light);
-            transform: scale(1.05);
-        }
-
-        .newsletter-message {
-            margin-top: 1rem;
-            padding: 1rem;
-            border-radius: 8px;
-            display: none;
-        }
 
         .newsletter-message.success {
             background: rgba(255,255,255,0.2);
@@ -2520,33 +2130,12 @@
         }
 
         @media (max-width: 768px) {
-            .search-input {
-                width: 200px;
-            }
             
-            .search-input:focus {
-                width: 250px;
-            }
             
-            .contact-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
             
-            .newsletter-form {
-                flex-direction: column;
-            }
             
-            .search-container {
-                margin-left: 0;
-                margin-top: 1rem;
-                width: 100%;
-            }
             
             .search-input,
-            .search-input:focus {
-                width: 100%;
-            }
         }
 
         
@@ -2619,7 +2208,6 @@
             visibility: visible;
             transform: translateY(0);
         }
-
 
 
         .lang-option {
@@ -2716,65 +2304,14 @@
         /* ============================================
            SEÇÃO DIRETO DO PRODUTOR
         ============================================ */
-        .produtor-section {
-            padding: 4rem 2rem;
-            background: linear-gradient(135deg, #f0ebe3 0%, #e8e2d8 100%);
-        }
         
-        .produtor-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: #0a3d2e !important;
-            background-image: linear-gradient(145deg, #0a3d2e 0%, #0d4a38 100%) !important;
-            border-radius: 30px;
-            padding: 3rem;
-            box-shadow: 0 20px 60px rgba(10, 61, 46, 0.3);
-        }
         
-        .produtor-header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
         
-        .produtor-header span {
-            font-size: 2rem;
-        }
         
-        .produtor-header h2 {
-            color: #ffffff !important;
-            font-family: var(--font-display);
-            font-size: 2rem;
-        }
         
-        .produtor-intro {
-            color: rgba(255,255,255,0.85) !important;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
         
-        .produtor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 1rem;
-        }
         
-        .produtor-item {
-            background: rgba(255,255,255,0.1) !important;
-            border: 1px solid rgba(255,255,255,0.15);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
         
-        .produtor-item:hover {
-            background: rgba(255,255,255,0.2) !important;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
         
         .produtor-item.active {
             background: #d4a574 !important;
@@ -2782,36 +2319,11 @@
         }
         
         .produtor-item.active .produtor-item-name,
-        .produtor-item.active .produtor-item-desc {
-            color: #0a3d2e !important;
-        }
         
-        .produtor-item-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.75rem;
-        }
         
-        .produtor-item-name {
-            font-weight: 600;
-            color: #ffffff !important;
-            font-size: 1.1rem;
-            margin-bottom: 0.25rem;
-        }
         
-        .produtor-item-desc {
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.7) !important;
-        }
         
         /* Painel de detalhes */
-        .produtor-details {
-            margin-top: 2rem;
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            display: none;
-            animation: slideDown 0.3s ease;
-        }
         
         .produtor-details.active {
             display: block;
@@ -2822,15 +2334,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        .produtor-details h3 {
-            color: var(--gold-polish);
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-family: var(--font-display);
-        }
         
         .produtor-locais {
             display: grid;
@@ -3041,15 +2544,6 @@
         }
 
         @media (max-width: 768px) {
-            .produtor-container {
-                padding: 2rem 1.5rem;
-            }
-            .produtor-header h2 {
-                font-size: 1.5rem;
-            }
-            .produtor-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
             .produtor-locais {
                 grid-template-columns: 1fr;
             }
@@ -3070,13 +2564,10 @@
             .festas-destaque-section { padding: 3rem 1rem !important; }
             .diorama-section { padding: 2rem 1rem !important; }
             .diorama-title { font-size: 1.8rem !important; }
-            .produtor-section { padding: 2rem 1rem !important; }
-            .produtor-grid { grid-template-columns: repeat(2, 1fr) !important; }
             .gallery-section { padding: 3rem 1rem !important; }
             .gallery-title { font-size: 2rem !important; }
             .reviews-grid { grid-template-columns: 1fr !important; }
             .hotels-grid { grid-template-columns: 1fr !important; }
-            .events-calendar { grid-template-columns: 1fr !important; }
             .contact-section { padding: 3rem 1rem !important; }
             .contact-cards-grid { grid-template-columns: 1fr !important; }
             .about-hero { padding: 2rem 1rem !important; min-height: auto !important; }
@@ -3630,10 +3121,11 @@
         }
         
         .contact-form-wrapper {
-            background: linear-gradient(145deg, #d4a574, #e8c9a0);
+            background: #ffffff;
             padding: 2.5rem;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            border: 1px solid #e8e0d5;
         }
         
         .form-title {

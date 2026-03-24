@@ -332,15 +332,9 @@
     // ── Carregar eventos direto do JSON ──
     async function loadEvents() {
         try {
-            // Tentar path absoluto primeiro (funciona no Netlify), depois relativo
-            let response;
-            try {
-                response = await fetch('/eventos-2026.json');
-                if (!response.ok) throw new Error('abs');
-            } catch(e) {
-                response = await fetch('eventos-2026.json');
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            }
+            // Usar path relativo — funciona tanto local quanto no Netlify
+            const response = await fetch('eventos-2026.json?v=' + Date.now());
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             eventos = await response.json();
             eventos.sort((a, b) => new Date(a.data) - new Date(b.data));
             updateCounts();
