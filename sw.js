@@ -11,21 +11,12 @@ const CACHE_NAME = 'turismo-sms-v8';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
+// Apenas assets estáticos que raramente mudam
+// HTMLs e JSONs são excluídos intencionalmente (sempre buscados da rede)
 const PRECACHE_ASSETS = [
-    './',
-    'index.html',
-    'eventos.html',
-    'reservas.html',
-    'o-que-fazer.html',
-    'sabores.html',
-    'onde-ficar.html',
-    'para-o-trade.html',
-    'rotas-completas.html',
-    'portal-usuario.html',
     'offline.html',
     'translations.js',
     'config.js',
-    'eventos-2026.json',
     'js/chatbot.js',
     'js/reservas.js',
     'js/firebase-auth.js',
@@ -36,7 +27,7 @@ const PRECACHE_ASSETS = [
     'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@400;500;600;700&display=swap'
 ];
 
-// URLs que nunca devem ser cacheadas (APIs externas, Firebase)
+// URLs que nunca devem ser cacheadas
 const NEVER_CACHE = [
     'firebasestorage.googleapis.com',
     'firestore.googleapis.com',
@@ -45,6 +36,9 @@ const NEVER_CACHE = [
     'graph.instagram.com',
     'www.googletagmanager.com'
 ];
+
+// Extensões que nunca devem ser cacheadas (sempre busca da rede)
+const NEVER_CACHE_EXT = ['.json', '.html'];
 
 // Instalação
 self.addEventListener('install', event => {
@@ -88,6 +82,10 @@ self.addEventListener('fetch', event => {
 
     // Nunca cachear APIs externas / Firebase
     if (NEVER_CACHE.some(domain => event.request.url.includes(domain))) return;
+
+    // Nunca cachear JSON e HTML — sempre buscar da rede
+    const url = new URL(event.request.url);
+    if (NEVER_CACHE_EXT.some(ext => url.pathname.endsWith(ext))) return;
     
     event.respondWith(
         caches.match(event.request)
