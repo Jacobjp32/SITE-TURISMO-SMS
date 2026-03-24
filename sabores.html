@@ -80,33 +80,7 @@
     <script src="translations.js"></script>
 </head>
 <body>
-    <div id="smsLangSwitcher" style="position:fixed;top:12px;right:16px;z-index:9999;font-family:sans-serif;">
-        <button id="smsCurrentLang" style="background:rgba(10,61,46,0.92);color:#fff;border:1px solid rgba(212,165,116,0.6);border-radius:20px;padding:6px 12px;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;gap:6px;">
-            <span id="smsFlag">🇧🇷</span><span id="smsCode">PT</span><span style="font-size:0.6rem;">▼</span>
-        </button>
-        <div id="smsDropdown" style="display:none;position:absolute;right:0;top:calc(100% + 4px);background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;min-width:130px;">
-            <button class="sms-lang-opt" data-lang="pt" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇧🇷 Português</button>
-            <button class="sms-lang-opt" data-lang="en" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇺🇸 English</button>
-            <button class="sms-lang-opt" data-lang="es" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇪🇸 Español</button>
-            <button class="sms-lang-opt" data-lang="pl" style="width:100%;padding:8px 14px;text-align:left;border:none;background:none;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;gap:8px;">🇵🇱 Polski</button>
-        </div>
-    </div>
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <a href="index.html" class="header-logo">
-                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
-                <div class="header-title">São Mateus do Sul</div>
-            </a>
-            <nav class="header-nav">
-                <a href="index.html" data-lang-key="nav-inicio">Início</a>
-                <a href="o-que-fazer.html" data-lang-key="nav-oqfazer">O Que Fazer</a>
-                <a href="eventos.html" data-lang-key="nav-eventos">Eventos</a>
-                <a href="index.html#onde-ficar" data-lang-key="nav-ondeficar">Onde Ficar</a>
-                <a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a>
-            </nav>
-        </div>
-    </header>
+    <script src="js/nav-shared.js"></script>
 
     <!-- Hero -->
     <section class="hero">

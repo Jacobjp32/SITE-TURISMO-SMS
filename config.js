@@ -27,7 +27,7 @@ const CONFIG = {
     redesSociais: {
         facebook: 'https://www.facebook.com/share/1CC3pQvqsi/',
         instagram: 'https://instagram.com/depculturaeturismosms',
-        twitter: '#',
+        instagram2: 'https://www.instagram.com/depculturaeturismosms/',
         youtube: 'https://youtube.com/@prefeiturasms',
         tiktok: 'https://www.tiktok.com/@prefeiturasms'
     },
@@ -51,7 +51,7 @@ const CONFIG = {
         // Opção 2: Formspree
         formspree: {
             enabled: false,     // Mude para true se usar Formspree
-            formId: 'YOUR_FORM_ID'  // Substitua pelo seu ID do Formspree
+            formId: 'xpqykpqd'
         },
         
         // Opção 3: Email direto (menos recomendado)

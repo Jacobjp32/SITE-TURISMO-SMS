@@ -25,40 +25,7 @@
     <script src="translations.js"></script>
 </head>
 <body>
-    <!-- Barra de Acessibilidade -->
-    <div class="accessibility-bar">
-        <div class="container">
-            <div class="shortcuts">
-                <a href="#main-content">Conteúdo [1]</a>
-                <a href="index.html">Voltar ao Site</a>
-            </div>
-            <div class="controls">
-                <button onclick="changeFontSize(1)">A+</button>
-                <button onclick="changeFontSize(-1)">A-</button>
-                <button onclick="toggleContrast()">◐ Contraste</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Header -->
-    <header class="header">
-        <div class="container">
-            <a href="index.html" class="header-logo">
-                <img src="images/logo_pin_turismo_3d.png" alt="São Mateus do Sul">
-                <div>
-                    <div class="header-title">São Mateus do Sul</div>
-                    <small style="opacity: 0.8;">Portal de Turismo</small>
-                </div>
-            </a>
-            <nav class="header-nav">
-                <a href="index.html">Início</a>
-                <a href="index.html#attractions">Atrações</a>
-                <a href="rotas-completas.html">Rotas</a>
-                <a href="#comtur">COMTUR</a>
-                <a href="#fumtur">FUMTUR</a>
-            </nav>
-        </div>
-    </header>
+    <script src="js/nav-shared.js"></script>
 
     <!-- Hero -->
     <section class="hero">
@@ -440,4 +407,15 @@
 
     // Alto contraste styles
     var style = document.createElement('style');
-    style.textCo
+    style.textContent = `
+        body.high-contrast { background: #000 !important; color: #fff !important; }
+        body.high-contrast a { color: #ffff00 !important; }
+        body.high-contrast .header, body.high-contrast .hero { background: #000 !important; }
+        body.high-contrast .section, body.high-contrast .info-card { background: #111 !important; border-color: #fff !important; }
+        body.high-contrast .data-table th { background: #333 !important; }
+        body.high-contrast .data-table td { border-color: #555 !important; }
+    `;
+    document.head.appendChild(style);
+    </script>
+</body>
+</html>
