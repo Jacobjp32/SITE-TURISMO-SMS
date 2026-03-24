@@ -1,0 +1,232 @@
+/* ============================================================ */
+/* shared.css — Arquivo unificado: variables + reset + components */
+/* Substitui os 3 imports separados nas páginas secundárias      */
+/* ============================================================ */
+
+/* ===== variables.css ===== */
+/* ============================================================ */
+/* variables.css — Variáveis globais do site Turismo SMS        */
+/* Arquivo único de referência para todas as páginas            */
+/* ============================================================ */
+
+:root {
+    /* Cores principais */
+    --forest-deep: #0a3d2e;
+    --gold-polish: #d4a574;
+    --white-pure: #ffffff;
+    --cream-light: #f8f6f0;
+    --polish-red: #dc143c;
+
+    /* Cores adicionais (usadas em páginas específicas) */
+    --mate-green: #2d5016;
+    --earth-brown: #8b4513;
+    --forest-rich: #1a5d43;
+    --forest-light: #0d5a3e;
+    --gold-light: #e8c9a0;
+
+    /* Status (portal-usuario) */
+    --info: #3498db;
+    --warning: #f39c12;
+    --success: #27ae60;
+    --danger: #e74c3c;
+
+    /* Aliases curtos (compatibilidade galeria.css) */
+    --forest: #0a3d2e;
+    --gold: #d4a574;
+    --cream: #f8f6f0;
+    --white: #ffffff;
+
+    /* Tipografia */
+    --font-display: 'Cormorant Garamond', serif;
+    --font-body: 'Raleway', sans-serif;
+    --fd: 'Cormorant Garamond', serif;
+    --fb: 'Raleway', sans-serif;
+}
+
+/* ===== reset.css ===== */
+/* ============================================================ */
+/* reset.css — Reset base para todas as páginas                 */
+/* ============================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+body {
+    font-family: var(--font-body);
+    background: var(--cream-light);
+    color: #333;
+    line-height: 1.6;
+}
+
+/* ===== components.css ===== */
+/* ============================================================ */
+/* components.css — Componentes compartilhados entre páginas    */
+/* Header, Footer, Hero base, Responsivo header                 */
+/* ============================================================ */
+
+/* ===== HEADER (páginas secundárias) ===== */
+.header {
+    background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
+    color: white;
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    color: white;
+}
+
+.header-logo img {
+    width: 50px;
+    height: auto;
+}
+
+.header-title {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+}
+
+.header-nav {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.header-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    opacity: 0.8;
+    transition: all 0.2s;
+}
+
+.header-nav a:hover {
+    opacity: 1;
+    color: var(--gold-polish);
+}
+
+/* ===== HEADER VARIANTES ===== */
+
+/* Header compacto sticky (noticias, noticia, reservas, mapa-3d, roteiro-ia) */
+.header--compact {
+    background: var(--forest-deep);
+}
+
+.header--compact .header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header--compact .header-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.header--compact .header-nav a {
+    margin-left: 2rem;
+    opacity: 1;
+}
+
+/* Header fixed transparente (mapa-3d, roteiro-ia) */
+.header--fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(10, 61, 46, 0.95);
+    backdrop-filter: blur(10px);
+}
+
+/* ===== HERO (páginas secundárias) ===== */
+.hero {
+    background: linear-gradient(135deg, var(--forest-deep), #062118);
+    color: white;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.hero h1 {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Hero variantes por página */
+.hero--sabores {
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+}
+
+.hero--onde-ficar {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+}
+
+.hero--trade {
+    background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+}
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+/* ===== FOOTER ===== */
+.footer {
+    background: #111;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.footer a {
+    color: var(--gold-polish);
+    text-decoration: none;
+}
+
+/* ===== RESPONSIVO HEADER ===== */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .header-nav {
+        display: none;
+    }
+
+    .header-title {
+        font-size: 1.1rem;
+    }
+}

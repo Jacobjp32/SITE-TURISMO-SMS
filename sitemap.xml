@@ -5,7 +5,7 @@
   <!-- Página Principal -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="https://turismo.saomateusdosul.pr.gov.br/"/>
@@ -17,15 +17,31 @@
   <!-- Calendário de Eventos -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/eventos.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.95</priority>
+  </url>
+
+  <!-- Galeria de Fotos e Vídeos -->
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/galeria.html</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- Notícias -->
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/noticias.html</loc>
+    <lastmod>2026-03-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
   </url>
 
   <!-- O Que Fazer / Rotas -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/o-que-fazer.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -33,7 +49,7 @@
   <!-- Rotas Completas -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/rotas-completas.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
@@ -41,7 +57,7 @@
   <!-- Sabores (Gastronomia) -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/sabores.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -49,7 +65,7 @@
   <!-- Onde Ficar -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/onde-ficar.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -57,7 +73,7 @@
   <!-- Reservas -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/reservas.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -65,7 +81,7 @@
   <!-- Para o Trade -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/para-o-trade.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -73,7 +89,7 @@
   <!-- Transparência -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/transparencia.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -81,7 +97,7 @@
   <!-- Portal do Usuário -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/portal-usuario.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
