@@ -1,6 +1,7 @@
 [build]
   publish = "."
 
+# Headers globais — sem CSP para não bloquear fetch de arquivos estáticos
 [[headers]]
   for = "/*"
   [headers.values]
@@ -8,8 +9,6 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "geolocation=(), camera=(), microphone=()"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.gstatic.com https://apis.google.com https://vlibras.gov.br https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://turismo.saomateusdosul.pr.gov.br https://*.googleapis.com https://*.google.com https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://formspree.io https://graph.instagram.com https://www.googletagmanager.com; frame-src 'self' https://www.google.com https://vlibras.gov.br https://www.youtube.com https://youtube.com https://felt.com; worker-src 'self' blob:;"
 
 # HTMLs: sem cache — sempre busca a versão mais recente
 [[headers]]
@@ -22,8 +21,9 @@
   for = "/*.json"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
+    Access-Control-Allow-Origin = "*"
 
-# JS: cache de 1 hora (não 1 ano) para permitir atualizações chegarem
+# JS: cache de 1 hora
 [[headers]]
   for = "/*.js"
   [headers.values]
@@ -35,12 +35,13 @@
   [headers.values]
     Cache-Control = "public, max-age=3600"
 
-# Imagens e vídeos: cache longo (raramente mudam)
+# Imagens: cache de 30 dias
 [[headers]]
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
 
+# Vídeos: cache de 30 dias
 [[headers]]
   for = "/videos/*"
   [headers.values]

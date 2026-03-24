@@ -329,26 +329,43 @@
                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     const diasSemana = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-    // ── Carregar eventos direto do JSON ──
+    // ── Carregar eventos direto do JSON (3 estratégias de fallback) ──
     async function loadEvents() {
-        try {
-            // Usar path relativo — funciona tanto local quanto no Netlify
-            const response = await fetch('eventos-2026.json?v=' + Date.now());
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            eventos = await response.json();
+        const urls = [
+            'eventos-2026.json',
+            './eventos-2026.json',
+            '/eventos-2026.json'
+        ];
+        let data = null;
+        let lastError = null;
+
+        for (const url of urls) {
+            try {
+                const response = await fetch(url, { cache: 'no-store' });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                data = await response.json();
+                break; // sucesso
+            } catch (err) {
+                lastError = err;
+                console.warn('Tentativa falhou:', url, err.message);
+            }
+        }
+
+        if (data) {
+            eventos = data;
             eventos.sort((a, b) => new Date(a.data) - new Date(b.data));
             updateCounts();
             applyFilters();
             renderFeatured();
             document.getElementById('loading').style.display = 'none';
-        } catch (error) {
-            console.error('Erro ao carregar eventos:', error);
+        } else {
+            console.error('Todas as tentativas falharam:', lastError);
             document.getElementById('loading').innerHTML = `
                 <div style="text-align:center;padding:3rem">
                     <div style="font-size:3rem;margin-bottom:1rem">📅</div>
                     <h3 style="color:#0a3d2e;margin-bottom:0.5rem">Não foi possível carregar os eventos</h3>
                     <p style="color:#666;margin-bottom:1.5rem">Verifique sua conexão e tente novamente.</p>
-                    <button onclick="location.reload()" style="background:#0a3d2e;color:white;border:none;padding:0.75rem 2rem;border-radius:25px;cursor:pointer;font-size:1rem">🔄 Tentar Novamente</button>
+                    <button onclick="loadEvents()" style="background:#0a3d2e;color:white;border:none;padding:0.75rem 2rem;border-radius:25px;cursor:pointer;font-size:1rem">🔄 Tentar Novamente</button>
                 </div>`;
         }
     }
