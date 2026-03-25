@@ -442,7 +442,12 @@
     </footer>
 
     <!-- Scripts -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/firebase-auth.js"></script>
+    <!-- Firebase Compat SDK (v9 compat — carregamento síncrono, sem import() dinâmico) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="js/firebase-auth.js"></script>
     <script>
         // ============================================================
         // switchAuthTab: não depende do Firebase, pode rodar a qualquer momento

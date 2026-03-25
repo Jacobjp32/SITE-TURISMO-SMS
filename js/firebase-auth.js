@@ -1,6 +1,7 @@
 /**
  * Sistema de Autenticação Firebase - Turismo São Mateus do Sul
- * Gerencia login, cadastro, sessões e banco de dados na nuvem
+ * v2 — usa Firebase Compat SDK (scripts globais), sem import() dinâmico
+ * Mais robusto em ambientes Netlify/Cloudflare com CSP restritiva
  */
 
 // Configuração do Firebase
@@ -13,428 +14,291 @@ const firebaseConfig = {
     appId: "1:1042825829044:web:13173093e28be3199955e1"
 };
 
-// Variáveis globais do Firebase
-let app, auth, db;
 let currentUser = null;
 
-// Inicializar Firebase
-async function initFirebase() {
-    try {
-        // Import Firebase modules
-        const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-        const { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-        const { getFirestore, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-
-        // Initialize Firebase
-        app = initializeApp(firebaseConfig);
-        auth = getAuth(app);
-        db = getFirestore(app);
-
-        // Guardar referências globais
-        window.firebaseAuth = { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile };
-        window.firebaseDB = { db, collection, doc, setDoc, getDoc, getDocs, updateDoc, deleteDoc, query, where, orderBy, serverTimestamp };
-
-        // Observar mudanças no estado de autenticação
-        onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                // Usuário logado - buscar dados completos do Firestore
-                const userDoc = await getDoc(doc(db, 'usuarios', user.uid));
-                if (userDoc.exists()) {
-                    currentUser = { uid: user.uid, email: user.email, ...userDoc.data() };
-                } else {
-                    currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
-                }
-                window.currentUser = currentUser;
-                FirebaseSystem.updateUI();
-            } else {
-                currentUser = null;
-                window.currentUser = null;
-                FirebaseSystem.updateUI();
+// Aguarda os SDKs do Firebase carregarem (injetados pelo portal-usuario.html)
+function initFirebase() {
+    return new Promise(function(resolve) {
+        function tryInit() {
+            if (typeof firebase === 'undefined' ||
+                !firebase.auth || !firebase.firestore) {
+                setTimeout(tryInit, 100);
+                return;
             }
-        });
 
-        console.log('✅ Firebase inicializado com sucesso!');
-        return true;
-    } catch (error) {
-        console.error('❌ Erro ao inicializar Firebase:', error);
-        return false;
-    }
+            try {
+                // Inicializar app (evita dupla inicialização)
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                }
+
+                const auth = firebase.auth();
+                const db   = firebase.firestore();
+
+                // Guardar referências globais para compatibilidade
+                window.firebaseAuth = { auth };
+                window.firebaseDB   = { db };
+
+                // Observer de estado de autenticação
+                auth.onAuthStateChanged(async function(user) {
+                    if (user) {
+                        try {
+                            const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                            if (userDoc.exists) {
+                                currentUser = Object.assign({ uid: user.uid, email: user.email }, userDoc.data());
+                            } else {
+                                currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
+                            }
+                        } catch(e) {
+                            currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
+                        }
+                        window.currentUser = currentUser;
+                    } else {
+                        currentUser = null;
+                        window.currentUser = null;
+                    }
+                    FirebaseSystem.updateUI();
+                });
+
+                console.log('✅ Firebase (compat) inicializado com sucesso!');
+                resolve(true);
+            } catch(error) {
+                console.error('❌ Erro ao inicializar Firebase:', error);
+                resolve(false);
+            }
+        }
+        tryInit();
+    });
 }
 
-// Sistema Firebase
 const FirebaseSystem = {
+
     // ========================================
     // AUTENTICAÇÃO
     // ========================================
 
-    // Cadastrar novo usuário
     register: async function(userData) {
         try {
-            const { auth, createUserWithEmailAndPassword, updateProfile } = window.firebaseAuth;
-            const { db, doc, setDoc, serverTimestamp } = window.firebaseDB;
+            const auth = firebase.auth();
+            const db   = firebase.firestore();
 
-            // Criar usuário no Firebase Auth
-            const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.senha);
-            const user = userCredential.user;
+            const cred = await auth.createUserWithEmailAndPassword(userData.email, userData.senha);
+            const user = cred.user;
 
-            // Atualizar nome de exibição
-            await updateProfile(user, { displayName: userData.nome });
+            await user.updateProfile({ displayName: userData.nome });
 
-            // Salvar dados adicionais no Firestore
-            await setDoc(doc(db, 'usuarios', user.uid), {
-                nome: userData.nome,
-                email: userData.email,
-                telefone: userData.telefone || '',
-                tipo: userData.tipo || 'turista',
-                organizacao: userData.organizacao || '',
-                ativo: true,
-                role: 'user', // user, moderator, admin
-                criadoEm: serverTimestamp(),
-                verificado: false
+            await db.collection('usuarios').doc(user.uid).set({
+                nome:         userData.nome,
+                email:        userData.email,
+                telefone:     userData.telefone    || '',
+                tipo:         userData.tipo        || 'turista',
+                organizacao:  userData.organizacao || '',
+                ativo:        true,
+                role:         'user',
+                criadoEm:     firebase.firestore.FieldValue.serverTimestamp(),
+                verificado:   false
             });
 
-            return { 
-                success: true, 
-                message: 'Cadastro realizado com sucesso!',
-                user: user
-            };
-        } catch (error) {
+            return { success: true, message: 'Cadastro realizado com sucesso!', user: user };
+        } catch(error) {
             console.error('Erro no cadastro:', error);
             let message = 'Erro ao criar conta.';
-            
-            if (error.code === 'auth/email-already-in-use') {
-                message = 'Este e-mail já está cadastrado.';
-            } else if (error.code === 'auth/weak-password') {
-                message = 'A senha deve ter pelo menos 6 caracteres.';
-            } else if (error.code === 'auth/invalid-email') {
-                message = 'E-mail inválido.';
-            }
-            
-            return { success: false, message };
+            if (error.code === 'auth/email-already-in-use') message = 'Este e-mail já está cadastrado.';
+            else if (error.code === 'auth/weak-password')   message = 'A senha deve ter pelo menos 6 caracteres.';
+            else if (error.code === 'auth/invalid-email')   message = 'E-mail inválido.';
+            return { success: false, message: message };
         }
     },
 
-    // Fazer login
     login: async function(email, senha) {
         try {
-            const { auth, signInWithEmailAndPassword } = window.firebaseAuth;
-            
-            const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-            
-            return { 
-                success: true, 
-                message: 'Login realizado com sucesso!',
-                user: userCredential.user
-            };
-        } catch (error) {
+            const auth = firebase.auth();
+            const cred = await auth.signInWithEmailAndPassword(email, senha);
+            return { success: true, message: 'Login realizado com sucesso!', user: cred.user };
+        } catch(error) {
             console.error('Erro no login:', error);
             let message = 'E-mail ou senha incorretos.';
-            
-            if (error.code === 'auth/user-not-found') {
-                message = 'Usuário não encontrado.';
-            } else if (error.code === 'auth/wrong-password') {
-                message = 'Senha incorreta.';
-            } else if (error.code === 'auth/too-many-requests') {
-                message = 'Muitas tentativas. Tente novamente mais tarde.';
-            }
-            
-            return { success: false, message };
+            if (error.code === 'auth/user-not-found')         message = 'Usuário não encontrado.';
+            else if (error.code === 'auth/wrong-password')    message = 'Senha incorreta.';
+            else if (error.code === 'auth/invalid-credential') message = 'E-mail ou senha incorretos.';
+            else if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Tente novamente mais tarde.';
+            return { success: false, message: message };
         }
     },
 
-    // Recuperar senha por e-mail
     sendPasswordReset: async function(email) {
         try {
-            const { auth } = window.firebaseAuth;
-            const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
-            await sendPasswordResetEmail(auth, email);
+            await firebase.auth().sendPasswordResetEmail(email);
             return {
                 success: true,
                 message: 'Link de recuperação enviado! Verifique sua caixa de entrada (e a pasta de spam).'
             };
-        } catch (error) {
+        } catch(error) {
             console.error('Erro ao enviar recuperação:', error);
             let message = 'Não foi possível enviar o link.';
-            if (error.code === 'auth/user-not-found') message = 'Nenhuma conta encontrada com este e-mail.';
-            else if (error.code === 'auth/invalid-email') message = 'E-mail inválido.';
+            if (error.code === 'auth/user-not-found')         message = 'Nenhuma conta encontrada com este e-mail.';
+            else if (error.code === 'auth/invalid-email')     message = 'E-mail inválido.';
             else if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Aguarde alguns minutos.';
-            return { success: false, message };
+            return { success: false, message: message };
         }
     },
 
-    // Fazer logout
     logout: async function() {
         try {
-            const { auth, signOut } = window.firebaseAuth;
-            await signOut(auth);
+            await firebase.auth().signOut();
             return { success: true };
-        } catch (error) {
-            console.error('Erro no logout:', error);
+        } catch(error) {
             return { success: false, message: 'Erro ao sair.' };
         }
     },
 
-    // Obter usuário atual
-    getCurrentUser: function() {
-        return currentUser;
-    },
-
-    // Verificar se está logado
-    isLoggedIn: function() {
-        return currentUser !== null;
-    },
-
-    // Verificar se é admin
-    isAdmin: function() {
-        return currentUser && currentUser.role === 'admin';
-    },
-
-    // Verificar se é moderador ou admin
-    isModerator: function() {
-        return currentUser && (currentUser.role === 'admin' || currentUser.role === 'moderator');
-    },
+    getCurrentUser: function() { return currentUser; },
+    isLoggedIn:     function() { return currentUser !== null; },
+    isAdmin:        function() { return currentUser && currentUser.role === 'admin'; },
+    isModerator:    function() { return currentUser && (currentUser.role === 'admin' || currentUser.role === 'moderator'); },
 
     // ========================================
     // GERENCIAMENTO DE USUÁRIOS (ADMIN)
     // ========================================
 
-    // Listar todos os usuários
     getUsers: async function() {
         if (!this.isAdmin()) return [];
-        
         try {
-            const { db, collection, getDocs, orderBy, query } = window.firebaseDB;
-            const q = query(collection(db, 'usuarios'), orderBy('criadoEm', 'desc'));
-            const snapshot = await getDocs(q);
-            
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } catch (error) {
-            console.error('Erro ao listar usuários:', error);
-            return [];
-        }
+            const snap = await firebase.firestore().collection('usuarios').orderBy('criadoEm', 'desc').get();
+            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+        } catch(e) { console.error(e); return []; }
     },
 
-    // Alterar role do usuário
     setUserRole: async function(userId, newRole) {
         if (!this.isAdmin()) return { success: false, message: 'Permissão negada.' };
-        
         try {
-            const { db, doc, updateDoc } = window.firebaseDB;
-            await updateDoc(doc(db, 'usuarios', userId), { role: newRole });
+            await firebase.firestore().collection('usuarios').doc(userId).update({ role: newRole });
             return { success: true, message: 'Permissão atualizada!' };
-        } catch (error) {
-            console.error('Erro ao alterar role:', error);
-            return { success: false, message: 'Erro ao atualizar permissão.' };
-        }
+        } catch(e) { return { success: false, message: 'Erro ao atualizar permissão.' }; }
     },
 
-    // Ativar/Desativar usuário
     toggleUserStatus: async function(userId, ativo) {
         if (!this.isAdmin()) return { success: false, message: 'Permissão negada.' };
-        
         try {
-            const { db, doc, updateDoc } = window.firebaseDB;
-            await updateDoc(doc(db, 'usuarios', userId), { ativo });
+            await firebase.firestore().collection('usuarios').doc(userId).update({ ativo: ativo });
             return { success: true, message: ativo ? 'Usuário ativado!' : 'Usuário desativado!' };
-        } catch (error) {
-            console.error('Erro ao alterar status:', error);
-            return { success: false, message: 'Erro ao atualizar status.' };
-        }
+        } catch(e) { return { success: false, message: 'Erro ao atualizar status.' }; }
     },
 
     // ========================================
     // EVENTOS
     // ========================================
 
-    // Submeter evento para aprovação
     submitEvent: async function(eventData) {
-        if (!this.isLoggedIn()) {
-            return { success: false, message: 'Você precisa estar logado.' };
-        }
-
+        if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
         try {
-            const { db, collection, doc, setDoc, serverTimestamp } = window.firebaseDB;
-            
+            const db = firebase.firestore();
             const eventId = 'evt_' + Date.now();
-            await setDoc(doc(db, 'eventos_pendentes', eventId), {
-                ...eventData,
-                id: eventId,
-                submittedBy: currentUser.uid,
-                submittedByName: currentUser.nome,
-                submittedByEmail: currentUser.email,
-                status: 'pendente',
-                submittedAt: serverTimestamp(),
-                reviewedAt: null,
-                reviewedBy: null,
-                reviewNotes: ''
-            });
-
-            return {
-                success: true,
-                message: 'Evento enviado para análise! Você receberá uma notificação quando for aprovado.'
-            };
-        } catch (error) {
-            console.error('Erro ao submeter evento:', error);
-            return { success: false, message: 'Erro ao enviar evento.' };
-        }
+            await db.collection('eventos_pendentes').doc(eventId).set(
+                Object.assign({}, eventData, {
+                    id: eventId,
+                    submittedBy:      currentUser.uid,
+                    submittedByName:  currentUser.nome,
+                    submittedByEmail: currentUser.email,
+                    status:           'pendente',
+                    submittedAt:      firebase.firestore.FieldValue.serverTimestamp(),
+                    reviewedAt:       null,
+                    reviewedBy:       null,
+                    reviewNotes:      ''
+                })
+            );
+            return { success: true, message: 'Evento enviado para análise! Você receberá uma notificação quando for aprovado.' };
+        } catch(e) { console.error(e); return { success: false, message: 'Erro ao enviar evento.' }; }
     },
 
-    // Obter eventos pendentes (admin/moderador)
     getPendingEvents: async function() {
         if (!this.isModerator()) return [];
-        
         try {
-            const { db, collection, getDocs, query, where, orderBy } = window.firebaseDB;
-            const q = query(
-                collection(db, 'eventos_pendentes'),
-                where('status', '==', 'pendente'),
-                orderBy('submittedAt', 'desc')
+            const snap = await firebase.firestore().collection('eventos_pendentes')
+                .where('status', '==', 'pendente').orderBy('submittedAt', 'desc').get();
+            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+        } catch(e) { console.error(e); return []; }
+    },
+
+    approveEvent: async function(eventId, notes) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+        notes = notes || '';
+        try {
+            const db  = firebase.firestore();
+            const ref = db.collection('eventos_pendentes').doc(eventId);
+            const doc = await ref.get();
+            if (!doc.exists) return { success: false, message: 'Evento não encontrado.' };
+            await db.collection('eventos_aprovados').doc(eventId).set(
+                Object.assign({}, doc.data(), {
+                    status:      'aprovado',
+                    reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
+                    reviewedBy:  currentUser.uid,
+                    reviewNotes: notes
+                })
             );
-            const snapshot = await getDocs(q);
-            
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } catch (error) {
-            console.error('Erro ao listar eventos pendentes:', error);
-            return [];
-        }
-    },
-
-    // Aprovar evento
-    approveEvent: async function(eventId, notes = '') {
-        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
-        
-        try {
-            const { db, doc, getDoc, setDoc, deleteDoc, serverTimestamp } = window.firebaseDB;
-            
-            // Buscar evento pendente
-            const eventDoc = await getDoc(doc(db, 'eventos_pendentes', eventId));
-            if (!eventDoc.exists()) {
-                return { success: false, message: 'Evento não encontrado.' };
-            }
-
-            const eventData = eventDoc.data();
-            
-            // Mover para eventos aprovados
-            await setDoc(doc(db, 'eventos_aprovados', eventId), {
-                ...eventData,
-                status: 'aprovado',
-                reviewedAt: serverTimestamp(),
-                reviewedBy: currentUser.uid,
-                reviewNotes: notes
-            });
-
-            // Remover dos pendentes
-            await deleteDoc(doc(db, 'eventos_pendentes', eventId));
-
+            await ref.delete();
             return { success: true, message: 'Evento aprovado com sucesso!' };
-        } catch (error) {
-            console.error('Erro ao aprovar evento:', error);
-            return { success: false, message: 'Erro ao aprovar evento.' };
-        }
+        } catch(e) { return { success: false, message: 'Erro ao aprovar evento.' }; }
     },
 
-    // Rejeitar evento
-    rejectEvent: async function(eventId, reason = '') {
+    rejectEvent: async function(eventId, reason) {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
-        
+        reason = reason || '';
         try {
-            const { db, doc, updateDoc, serverTimestamp } = window.firebaseDB;
-            
-            await updateDoc(doc(db, 'eventos_pendentes', eventId), {
-                status: 'rejeitado',
-                reviewedAt: serverTimestamp(),
-                reviewedBy: currentUser.uid,
+            await firebase.firestore().collection('eventos_pendentes').doc(eventId).update({
+                status:      'rejeitado',
+                reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedBy:  currentUser.uid,
                 reviewNotes: reason
             });
-
             return { success: true, message: 'Evento rejeitado.' };
-        } catch (error) {
-            console.error('Erro ao rejeitar evento:', error);
-            return { success: false, message: 'Erro ao rejeitar evento.' };
-        }
+        } catch(e) { return { success: false, message: 'Erro ao rejeitar evento.' }; }
     },
 
-    // Obter eventos do usuário atual
     getUserEvents: async function() {
         if (!this.isLoggedIn()) return [];
-        
         try {
-            const { db, collection, getDocs, query, where } = window.firebaseDB;
-            
-            // Buscar pendentes
-            const pendingQuery = query(
-                collection(db, 'eventos_pendentes'),
-                where('submittedBy', '==', currentUser.uid)
-            );
-            const pendingSnapshot = await getDocs(pendingQuery);
-            const pending = pendingSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            // Buscar aprovados
-            const approvedQuery = query(
-                collection(db, 'eventos_aprovados'),
-                where('submittedBy', '==', currentUser.uid)
-            );
-            const approvedSnapshot = await getDocs(approvedQuery);
-            const approved = approvedSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            return [...pending, ...approved];
-        } catch (error) {
-            console.error('Erro ao buscar eventos do usuário:', error);
-            return [];
-        }
+            const db = firebase.firestore();
+            const [pendSnap, appSnap] = await Promise.all([
+                db.collection('eventos_pendentes').where('submittedBy', '==', currentUser.uid).get(),
+                db.collection('eventos_aprovados').where('submittedBy', '==', currentUser.uid).get()
+            ]);
+            const pending  = pendSnap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+            const approved = appSnap.docs.map(function(d)  { return Object.assign({ id: d.id }, d.data()); });
+            return pending.concat(approved);
+        } catch(e) { console.error(e); return []; }
     },
 
     // ========================================
     // ESTABELECIMENTOS
     // ========================================
 
-    // Submeter estabelecimento
     submitEstablishment: async function(estData) {
-        if (!this.isLoggedIn()) {
-            return { success: false, message: 'Você precisa estar logado.' };
-        }
-
+        if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
         try {
-            const { db, doc, setDoc, serverTimestamp } = window.firebaseDB;
-            
+            const db = firebase.firestore();
             const estId = 'est_' + Date.now();
-            await setDoc(doc(db, 'estabelecimentos_pendentes', estId), {
-                ...estData,
-                id: estId,
-                submittedBy: currentUser.uid,
-                submittedByName: currentUser.nome,
-                submittedByEmail: currentUser.email,
-                status: 'pendente',
-                submittedAt: serverTimestamp()
-            });
-
-            return {
-                success: true,
-                message: 'Estabelecimento enviado para análise!'
-            };
-        } catch (error) {
-            console.error('Erro ao submeter estabelecimento:', error);
-            return { success: false, message: 'Erro ao enviar estabelecimento.' };
-        }
+            await db.collection('estabelecimentos_pendentes').doc(estId).set(
+                Object.assign({}, estData, {
+                    id: estId,
+                    submittedBy:      currentUser.uid,
+                    submittedByName:  currentUser.nome,
+                    submittedByEmail: currentUser.email,
+                    status:           'pendente',
+                    submittedAt:      firebase.firestore.FieldValue.serverTimestamp()
+                })
+            );
+            return { success: true, message: 'Estabelecimento enviado para análise!' };
+        } catch(e) { console.error(e); return { success: false, message: 'Erro ao enviar estabelecimento.' }; }
     },
 
-    // Obter estabelecimentos pendentes
     getPendingEstablishments: async function() {
         if (!this.isModerator()) return [];
-        
         try {
-            const { db, collection, getDocs, query, where, orderBy } = window.firebaseDB;
-            const q = query(
-                collection(db, 'estabelecimentos_pendentes'),
-                where('status', '==', 'pendente')
-            );
-            const snapshot = await getDocs(q);
-            
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        } catch (error) {
-            console.error('Erro ao listar estabelecimentos pendentes:', error);
-            return [];
-        }
+            const snap = await firebase.firestore().collection('estabelecimentos_pendentes')
+                .where('status', '==', 'pendente').get();
+            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+        } catch(e) { return []; }
     },
 
     // ========================================
@@ -443,29 +307,21 @@ const FirebaseSystem = {
 
     getAdminStats: async function() {
         if (!this.isAdmin()) return null;
-
         try {
-            const { db, collection, getDocs, query, where } = window.firebaseDB;
-
-            const usersSnapshot = await getDocs(collection(db, 'usuarios'));
-            const pendingEventsSnapshot = await getDocs(
-                query(collection(db, 'eventos_pendentes'), where('status', '==', 'pendente'))
-            );
-            const approvedEventsSnapshot = await getDocs(collection(db, 'eventos_aprovados'));
-            const pendingEstSnapshot = await getDocs(
-                query(collection(db, 'estabelecimentos_pendentes'), where('status', '==', 'pendente'))
-            );
-
+            const db = firebase.firestore();
+            const [usersSnap, pendEvtSnap, appEvtSnap, pendEstSnap] = await Promise.all([
+                db.collection('usuarios').get(),
+                db.collection('eventos_pendentes').where('status','==','pendente').get(),
+                db.collection('eventos_aprovados').get(),
+                db.collection('estabelecimentos_pendentes').where('status','==','pendente').get()
+            ]);
             return {
-                totalUsers: usersSnapshot.size,
-                pendingEvents: pendingEventsSnapshot.size,
-                approvedEvents: approvedEventsSnapshot.size,
-                pendingEstablishments: pendingEstSnapshot.size
+                totalUsers:            usersSnap.size,
+                pendingEvents:         pendEvtSnap.size,
+                approvedEvents:        appEvtSnap.size,
+                pendingEstablishments: pendEstSnap.size
             };
-        } catch (error) {
-            console.error('Erro ao obter estatísticas:', error);
-            return null;
-        }
+        } catch(e) { console.error(e); return null; }
     },
 
     // ========================================
@@ -474,85 +330,51 @@ const FirebaseSystem = {
 
     updateUI: function() {
         const user = this.getCurrentUser();
-        
-        // Atualizar botões de login/logout
-        document.querySelectorAll('.auth-login-btn').forEach(btn => {
+        document.querySelectorAll('.auth-login-btn').forEach(function(btn) {
             btn.style.display = user ? 'none' : 'flex';
         });
-
-        document.querySelectorAll('.auth-user-menu').forEach(menu => {
+        document.querySelectorAll('.auth-user-menu').forEach(function(menu) {
             menu.style.display = user ? 'flex' : 'none';
         });
-
-        document.querySelectorAll('.auth-user-name').forEach(el => {
-            if (user) {
-                el.textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
-            }
+        document.querySelectorAll('.auth-user-name').forEach(function(el) {
+            if (user) el.textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
         });
-
-        // Disparar evento customizado
-        window.dispatchEvent(new CustomEvent('authStateChanged', { detail: { user } }));
+        window.dispatchEvent(new CustomEvent('authStateChanged', { detail: { user: user } }));
     },
 
-    showNotification: function(message, type = 'info') {
-        const existingNotif = document.querySelector('.firebase-notification');
-        if (existingNotif) existingNotif.remove();
-
-        const notification = document.createElement('div');
-        notification.className = `firebase-notification firebase-notif-${type}`;
-        notification.innerHTML = `
-            <span>${message}</span>
-            <button onclick="this.parentElement.remove()">&times;</button>
-        `;
-        notification.style.cssText = `
-            position: fixed;
-            top: 1rem;
-            right: 1rem;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-            background: ${type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db'};
-            color: white;
-        `;
-
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 5000);
+    showNotification: function(message, type) {
+        type = type || 'info';
+        var existing = document.querySelector('.firebase-notification');
+        if (existing) existing.remove();
+        var n = document.createElement('div');
+        n.className = 'firebase-notification firebase-notif-' + type;
+        n.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">&times;</button>';
+        var bg = type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db';
+        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+            'display:flex;align-items:center;gap:1rem;z-index:10000;animation:slideIn 0.3s ease;' +
+            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;';
+        document.body.appendChild(n);
+        setTimeout(function() { n.remove(); }, 5000);
     }
 };
 
-// Criar primeiro admin (executar uma vez)
+// Criar primeiro admin (utilitário de console)
 async function createFirstAdmin(email, senha, nome) {
-    const result = await FirebaseSystem.register({
-        nome: nome,
-        email: email,
-        senha: senha,
-        tipo: 'admin'
-    });
-
+    const result = await FirebaseSystem.register({ nome: nome, email: email, senha: senha, tipo: 'admin' });
     if (result.success) {
-        // Atualizar role para admin diretamente no Firestore
-        const { db, doc, updateDoc } = window.firebaseDB;
-        const { auth } = window.firebaseAuth;
-        await updateDoc(doc(db, 'usuarios', auth.currentUser.uid), { role: 'admin' });
+        await firebase.firestore().collection('usuarios').doc(firebase.auth().currentUser.uid)
+            .update({ role: 'admin' });
         console.log('✅ Admin criado com sucesso!');
     }
-
     return result;
 }
 
-// Inicializar quando o DOM estiver pronto
+// Inicializar quando DOMContentLoaded
 document.addEventListener('DOMContentLoaded', async function() {
     const ok = await initFirebase();
-    // Disparar evento indicando que Firebase está pronto (com ou sem erro)
-    window.dispatchEvent(new CustomEvent('firebaseReady', { detail: { ok } }));
+    window.dispatchEvent(new CustomEvent('firebaseReady', { detail: { ok: ok } }));
 });
 
-// Exportar para uso global
-window.FirebaseSystem = FirebaseSystem;
-window.initFirebase = initFirebase;
+window.FirebaseSystem   = FirebaseSystem;
+window.initFirebase     = initFirebase;
 window.createFirstAdmin = createFirstAdmin;
