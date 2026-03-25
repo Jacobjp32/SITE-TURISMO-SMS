@@ -558,25 +558,18 @@
 
     <script src="js/firebase-auth.js"></script>
     <script>
-        // Aguardar Firebase e verificar autenticação
-        window.addEventListener('authStateChanged', function(e) {
-            checkAdminAuth();
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Setup login form
+        // Aguardar Firebase estar pronto antes de vincular formulário de login
+        window.addEventListener('firebaseReady', function() {
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
-            
-            // Setup menu
             document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
                 link.addEventListener('click', () => showSection(link.dataset.section));
             });
-
-            // Atualizar data
             updateDate();
+        });
 
-            // Verificar auth após delay
-            setTimeout(checkAdminAuth, 1500);
+        // Quando estado de auth mudar, verificar permissão admin
+        window.addEventListener('authStateChanged', function() {
+            checkAdminAuth();
         });
 
         async function handleLogin(e) {
@@ -585,19 +578,17 @@
             btn.disabled = true;
             btn.textContent = 'Entrando...';
 
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginPass').value;
 
             const result = await FirebaseSystem.login(email, senha);
             
-            if (result.success) {
-                // Aguardar dados do usuário carregarem
-                setTimeout(checkAdminAuth, 1000);
-            } else {
+            if (!result.success) {
                 alert(result.message);
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
             }
+            // Se success: onAuthStateChanged em firebase-auth.js dispara authStateChanged -> checkAdminAuth()
         }
 
         function checkAdminAuth() {

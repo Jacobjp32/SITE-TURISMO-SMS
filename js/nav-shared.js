@@ -42,6 +42,7 @@
             </li>
 
             <li><a href="eventos.html" data-lang-key="nav-eventos">Eventos</a></li>
+            <li><a href="noticias.html" data-lang-key="nav-noticias">📰 Notícias</a></li>
             <li><a href="galeria.html" data-lang-key="nav-galeria">Galeria</a></li>
             <li><a href="onde-ficar.html" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
             <li><a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a></li>

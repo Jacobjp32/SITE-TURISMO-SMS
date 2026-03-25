@@ -526,7 +526,11 @@ async function createFirstAdmin(email, senha, nome) {
 }
 
 // Inicializar quando o DOM estiver pronto
-document.addEventListener('DOMContentLoaded', initFirebase);
+document.addEventListener('DOMContentLoaded', async function() {
+    const ok = await initFirebase();
+    // Disparar evento indicando que Firebase está pronto (com ou sem erro)
+    window.dispatchEvent(new CustomEvent('firebaseReady', { detail: { ok } }));
+});
 
 // Exportar para uso global
 window.FirebaseSystem = FirebaseSystem;

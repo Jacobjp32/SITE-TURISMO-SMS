@@ -427,19 +427,19 @@
     <!-- Scripts -->
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/firebase-auth.js"></script>
     <script>
-        // Aguardar Firebase inicializar
-        window.addEventListener('authStateChanged', function(e) {
-            checkAuth();
-        });
-
-        // Verificar autenticação ao carregar
-        document.addEventListener('DOMContentLoaded', function() {
+        // ============================================================
+        // Aguardar Firebase estar pronto antes de vincular formulários
+        // Evita race condition entre DOMContentLoaded e import() async
+        // ============================================================
+        window.addEventListener('firebaseReady', function() {
+            setupForms();
             setupCategorySelectors();
             setupEntradaToggle();
-            setupForms();
-            
-            // Verificar auth após um pequeno delay para Firebase carregar
-            setTimeout(checkAuth, 1000);
+        });
+
+        // Quando estado de auth mudar (login/logout), atualizar UI
+        window.addEventListener('authStateChanged', function() {
+            checkAuth();
         });
 
         function checkAuth() {
@@ -448,13 +448,11 @@
             if (user) {
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('dashboard').classList.add('active');
-                document.getElementById('logoutBtn').style.display = 'block';
                 document.getElementById('userName').textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
                 loadUserEvents();
             } else {
                 document.getElementById('authScreen').style.display = 'flex';
                 document.getElementById('dashboard').classList.remove('active');
-                document.getElementById('logoutBtn').style.display = 'none';
             }
         }
 
@@ -466,7 +464,7 @@
                 btn.disabled = true;
                 btn.textContent = 'Entrando...';
 
-                const email = document.getElementById('loginEmail').value;
+                const email = document.getElementById('loginEmail').value.trim();
                 const senha = document.getElementById('loginSenha').value;
                 
                 const result = await FirebaseSystem.login(email, senha);
@@ -488,23 +486,24 @@
                 btn.disabled = true;
                 btn.textContent = 'Criando conta...';
 
-                const userData = {
-                    nome: document.getElementById('regNome').value,
-                    email: document.getElementById('regEmail').value,
-                    senha: document.getElementById('regSenha').value,
-                    telefone: document.getElementById('regTelefone')?.value || '',
-                    tipo: document.getElementById('regTipo')?.value || 'turista',
-                    organizacao: document.getElementById('regOrganizacao')?.value || ''
-                };
+                const senha = document.getElementById('regSenha').value;
+                const senhaConfirm = document.getElementById('regSenhaConfirm').value;
 
-                // Verificar confirmação de senha
-                const senhaConfirm = document.getElementById('regSenhaConfirm')?.value;
-                if (senhaConfirm && userData.senha !== senhaConfirm) {
+                if (senha !== senhaConfirm) {
                     FirebaseSystem.showNotification('As senhas não coincidem.', 'error');
                     btn.disabled = false;
                     btn.textContent = 'Criar Conta';
                     return;
                 }
+
+                const userData = {
+                    nome: document.getElementById('regNome').value.trim(),
+                    email: document.getElementById('regEmail').value.trim(),
+                    senha: senha,
+                    telefone: document.getElementById('regTelefone').value || '',
+                    tipo: document.getElementById('regTipo').value || 'turista',
+                    organizacao: document.getElementById('regOrganizacao').value || ''
+                };
 
                 const result = await FirebaseSystem.register(userData);
                 
