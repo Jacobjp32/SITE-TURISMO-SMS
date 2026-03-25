@@ -148,16 +148,6 @@
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/index.css">
 
-    <!-- Google Analytics (GA4) -->
-    <!-- INSTRUÇÃO: Substitua 'G-520010346' pelo seu ID do Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-520010346"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-520010346');
-    </script>
-
     <!-- Sistema de Traduções -->
     <script src="translations.js"></script>
     <script src="config.js"></script>
@@ -1081,7 +1071,7 @@
                 <!-- Formulário de Contato -->
                 <div class="contact-form-wrapper">
                     <h3 class="form-title" data-lang-key="form-titulo" data-lang-key="contato-form-title">Envie sua Mensagem</h3>
-                    <form id="contactForm" class="contact-form" onsubmit="return handleFormSubmit(event)">
+                    <form id="contactForm" class="contact-form">
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="nome" data-lang-key="form-nome">Nome *</label>
@@ -1195,52 +1185,6 @@
 
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    function handleFormSubmit(event) {
-        event.preventDefault();
-        
-        var form = document.getElementById('contactForm');
-        var status = document.getElementById('formStatus');
-        var submitBtn = form.querySelector('.form-submit');
-        var originalText = submitBtn.textContent;
-        
-        // Mostrar loading
-        submitBtn.textContent = 'Enviando...';
-        submitBtn.disabled = true;
-        
-        // Coletar dados do formulário
-        var formData = {
-            nome: form.nome.value,
-            email: form.email.value,
-            telefone: form.telefone.value,
-            assunto: form.assunto.value,
-            mensagem: form.mensagem.value,
-            newsletter: form.newsletter.checked
-        };
-        
-        // Simular envio (em produção, usar Netlify Forms, Formspree, ou API)
-        setTimeout(function() {
-            // Para produção com Netlify Forms, adicionar: data-netlify="true" ao form
-            // Para Formspree, alterar action para: https://formspree.io/f/YOUR_ID
-            
-            status.className = 'form-status success';
-            status.innerHTML = '✅ Mensagem enviada com sucesso! Entraremos em contato em breve.';
-            
-            // Limpar formulário
-            form.reset();
-            
-            // Restaurar botão
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-            
-            // Esconder mensagem após 5 segundos
-            setTimeout(function() {
-                status.style.display = 'none';
-            }, 5000);
-            
-        }, 1500);
-        
-        return false;
-    }
     </script>
 
 
@@ -1438,7 +1382,7 @@
                         <span class="feature" data-lang-key="hotel1-estac">✓ Estacionamento</span>
                     </div>
                     <div class="hotel-contact">
-                        <p>📞 (42) 3532-1234</p>
+                        <a href="tel:+554232822000">📞 (42) 3282-2000</a>
                         <p data-lang-key="hotel-loc-centro">📍 Centro</p>
                     </div>
                 </div>
@@ -1454,7 +1398,7 @@
                         <span class="feature" data-lang-key="hotel2-frigobar">✓ Frigobar</span>
                     </div>
                     <div class="hotel-contact">
-                        <p>📞 (42) 3532-2345</p>
+                        <a href="tel:+554232821500">📞 (42) 3282-1500</a>
                         <p data-lang-key="hotel-loc-centro">📍 Centro</p>
                     </div>
                 </div>
@@ -1470,7 +1414,7 @@
                         <span class="feature" data-lang-key="hotel3-gastro">✓ Gastronomia polonesa</span>
                     </div>
                     <div class="hotel-contact">
-                        <p>📞 (42) 3532-3456</p>
+                        <a href="tel:+554232823000">📞 (42) 3282-3000</a>
                         <p data-lang-key="hotel-loc-centro">📍 Centro</p>
                     </div>
                 </div>
