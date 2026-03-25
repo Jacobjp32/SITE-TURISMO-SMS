@@ -95,3 +95,13 @@
     .restaurant-card { flex-direction: column; text-align: center; }
     .restaurant-icon { margin: 0 auto; }
 }
+
+@media (max-width: 480px) {
+    .produtor-container { padding: 1.5rem 1rem; }
+    .produtor-header h2 { font-size: 1.5rem; }
+    .produtor-grid { grid-template-columns: repeat(2, 1fr); }
+    .produtor-item { padding: 1rem; }
+    .produtor-item-icon { font-size: 2rem; }
+    .produtor-item-name { font-size: 0.95rem; }
+    .produtor-section { padding: 2rem 1rem; }
+}

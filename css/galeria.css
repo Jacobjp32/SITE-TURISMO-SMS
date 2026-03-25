@@ -119,6 +119,19 @@
             .vsec{padding:3rem 1.5rem;margin:1rem 1rem 3rem}
             .hdr h1{font-size:2.5rem}
         }
+        @media(max-width:768px){
+            .hdr{padding:80px 1rem 2.5rem}
+            .hdr h1{font-size:2rem}
+            .hdr p{font-size:.98rem}
+            .sec{padding:2.5rem 1rem}
+            .sec-title{font-size:1.8rem}
+            .vsec{padding:2.5rem 1rem;margin:.5rem .5rem 2rem}
+            .vgrid{grid-template-columns:1fr}
+            .grid{grid-template-columns:1fr}
+            .card img{height:190px}
+            .tabs{gap:.5rem}
+            .tab{padding:.5rem 1rem;font-size:.85rem}
+        }
         @media(max-width:600px){
             .nav-links{display:none}
             .grid{grid-template-columns:1fr}
