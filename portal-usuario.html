@@ -61,10 +61,27 @@
                         <input type="password" id="loginSenha" placeholder="Sua senha" required>
                     </div>
                     
-                    <button type="submit" class="btn-primary">Entrar</button>
+                    <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
+
+                    <p style="text-align:center; margin-top:0.75rem;">
+                        <a href="#" id="linkEsqueciSenha" style="color:#888; font-size:0.85rem; text-decoration:underline;">Esqueci minha senha</a>
+                    </p>
                     
-                    <p style="text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem;">
-                        Ainda não tem conta? <a href="#" onclick="switchAuthTab('register')" style="color: var(--forest-deep); font-weight: 600;">Cadastre-se</a>
+                    <p style="text-align: center; margin-top: 0.5rem; color: #888; font-size: 0.9rem;">
+                        Ainda não tem conta? <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--forest-deep); font-weight: 600;">Cadastre-se</a>
+                    </p>
+                </form>
+
+                <!-- Recuperar Senha -->
+                <form class="auth-form" id="forgotForm">
+                    <p style="color:#555; margin-bottom:1.25rem; font-size:0.9rem;">Digite seu e-mail e enviaremos um link para redefinir sua senha.</p>
+                    <div class="form-group">
+                        <label for="forgotEmail">E-mail cadastrado</label>
+                        <input type="email" id="forgotEmail" placeholder="seu@email.com" required>
+                    </div>
+                    <button type="submit" class="btn-primary" id="btnRecuperar">Enviar link de recuperação</button>
+                    <p style="text-align:center; margin-top:1rem; font-size:0.9rem;">
+                        <a href="#" onclick="switchAuthTab('login'); return false;" style="color: var(--forest-deep); font-weight:600;">← Voltar para o login</a>
                     </p>
                 </form>
                 
@@ -428,13 +445,66 @@
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/firebase-auth.js"></script>
     <script>
         // ============================================================
-        // Aguardar Firebase estar pronto antes de vincular formulários
-        // Evita race condition entre DOMContentLoaded e import() async
+        // switchAuthTab: não depende do Firebase, pode rodar a qualquer momento
         // ============================================================
-        window.addEventListener('firebaseReady', function() {
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('active');
+            } else if (tab === 'register') {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('registerForm').classList.add('active');
+            } else if (tab === 'forgot') {
+                // Sem tab ativa (tela de recuperação não tem tab própria)
+                document.getElementById('forgotForm').classList.add('active');
+            }
+        }
+
+        // ============================================================
+        // Aguardar Firebase estar pronto antes de vincular formulários
+        // Usa flag para o caso de firebaseReady disparar antes deste
+        // script terminar de parsear
+        // ============================================================
+        var _firebaseJaEstavaReady = false;
+
+        function _onFirebaseReady() {
+            _firebaseJaEstavaReady = true;
             setupForms();
             setupCategorySelectors();
             setupEntradaToggle();
+        }
+
+        window.addEventListener('firebaseReady', _onFirebaseReady);
+
+        // Garante que se o evento já disparou antes de chegarmos aqui, ainda rodamos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Se firebase-auth.js já inicializou e disparou o evento antes,
+            // window.firebaseAuth já existe; configura os forms manualmente
+            if (!_firebaseJaEstavaReady && window.firebaseAuth) {
+                _onFirebaseReady();
+            }
+
+            // Listener do link "Esqueci minha senha"
+            var linkEsqueci = document.getElementById('linkEsqueciSenha');
+            if (linkEsqueci) {
+                linkEsqueci.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    switchAuthTab('forgot');
+                });
+            }
+
+            // Tipo de conta -> mostrar/esconder organização
+            var regTipo = document.getElementById('regTipo');
+            if (regTipo) {
+                regTipo.addEventListener('change', function() {
+                    var orgField = document.getElementById('orgField');
+                    orgField.style.display =
+                        (this.value === 'organizador' || this.value === 'estabelecimento') ? 'block' : 'none';
+                });
+            }
         });
 
         // Quando estado de auth mudar (login/logout), atualizar UI
@@ -443,8 +513,8 @@
         });
 
         function checkAuth() {
-            const user = window.currentUser || (window.FirebaseSystem && FirebaseSystem.getCurrentUser());
-            
+            var user = window.currentUser || (window.FirebaseSystem && FirebaseSystem.getCurrentUser());
+
             if (user) {
                 document.getElementById('authScreen').style.display = 'none';
                 document.getElementById('dashboard').classList.add('active');
@@ -457,37 +527,40 @@
         }
 
         function setupForms() {
-            // Formulário de Login
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            // --- LOGIN ---
+            var loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const btn = this.querySelector('button[type="submit"]');
+                e.stopPropagation();
+                var btn = document.getElementById('btnEntrar');
                 btn.disabled = true;
                 btn.textContent = 'Entrando...';
 
-                const email = document.getElementById('loginEmail').value.trim();
-                const senha = document.getElementById('loginSenha').value;
-                
-                const result = await FirebaseSystem.login(email, senha);
-                
+                var email = document.getElementById('loginEmail').value.trim();
+                var senha = document.getElementById('loginSenha').value;
+
+                var result = await FirebaseSystem.login(email, senha);
+
                 if (result.success) {
                     FirebaseSystem.showNotification(result.message, 'success');
                 } else {
                     FirebaseSystem.showNotification(result.message, 'error');
+                    btn.disabled = false;
+                    btn.textContent = 'Entrar';
                 }
-
-                btn.disabled = false;
-                btn.textContent = 'Entrar';
             });
 
-            // Formulário de Cadastro
-            document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            // --- CADASTRO ---
+            var registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', async function(e) {
                 e.preventDefault();
-                const btn = this.querySelector('button[type="submit"]');
+                e.stopPropagation();
+                var btn = this.querySelector('button[type="submit"]');
                 btn.disabled = true;
                 btn.textContent = 'Criando conta...';
 
-                const senha = document.getElementById('regSenha').value;
-                const senhaConfirm = document.getElementById('regSenhaConfirm').value;
+                var senha = document.getElementById('regSenha').value;
+                var senhaConfirm = document.getElementById('regSenhaConfirm').value;
 
                 if (senha !== senhaConfirm) {
                     FirebaseSystem.showNotification('As senhas não coincidem.', 'error');
@@ -496,7 +569,7 @@
                     return;
                 }
 
-                const userData = {
+                var userData = {
                     nome: document.getElementById('regNome').value.trim(),
                     email: document.getElementById('regEmail').value.trim(),
                     senha: senha,
@@ -505,11 +578,12 @@
                     organizacao: document.getElementById('regOrganizacao').value || ''
                 };
 
-                const result = await FirebaseSystem.register(userData);
-                
+                var result = await FirebaseSystem.register(userData);
+
                 if (result.success) {
                     FirebaseSystem.showNotification(result.message, 'success');
                     this.reset();
+                    setTimeout(function() { switchAuthTab('login'); }, 1500);
                 } else {
                     FirebaseSystem.showNotification(result.message, 'error');
                 }
@@ -517,35 +591,36 @@
                 btn.disabled = false;
                 btn.textContent = 'Criar Conta';
             });
+
+            // --- RECUPERAR SENHA ---
+            var forgotForm = document.getElementById('forgotForm');
+            forgotForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var btn = document.getElementById('btnRecuperar');
+                btn.disabled = true;
+                btn.textContent = 'Enviando...';
+
+                var email = document.getElementById('forgotEmail').value.trim();
+                var result = await FirebaseSystem.sendPasswordReset(email);
+
+                if (result.success) {
+                    FirebaseSystem.showNotification(result.message, 'success');
+                    this.reset();
+                    setTimeout(function() { switchAuthTab('login'); }, 3000);
+                } else {
+                    FirebaseSystem.showNotification(result.message, 'error');
+                }
+
+                btn.disabled = false;
+                btn.textContent = 'Enviar link de recuperação';
+            });
         }
 
         async function handleLogout() {
             await FirebaseSystem.logout();
             FirebaseSystem.showNotification('Você saiu da conta.', 'info');
         }
-
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-            
-            if (tab === 'login') {
-                document.querySelector('.auth-tab:first-child').classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else {
-                document.querySelector('.auth-tab:last-child').classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-            }
-        }
-
-        // Mostrar/esconder campo de organização
-        document.getElementById('regTipo').addEventListener('change', function() {
-            const orgField = document.getElementById('orgField');
-            if (this.value === 'organizador' || this.value === 'estabelecimento') {
-                orgField.style.display = 'block';
-            } else {
-                orgField.style.display = 'none';
-            }
-        });
 
         function setupCategorySelectors() {
             document.querySelectorAll('.category-option').forEach(option => {

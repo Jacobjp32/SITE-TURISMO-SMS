@@ -142,6 +142,26 @@ const FirebaseSystem = {
         }
     },
 
+    // Recuperar senha por e-mail
+    sendPasswordReset: async function(email) {
+        try {
+            const { auth } = window.firebaseAuth;
+            const { sendPasswordResetEmail } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+            await sendPasswordResetEmail(auth, email);
+            return {
+                success: true,
+                message: 'Link de recuperação enviado! Verifique sua caixa de entrada (e a pasta de spam).'
+            };
+        } catch (error) {
+            console.error('Erro ao enviar recuperação:', error);
+            let message = 'Não foi possível enviar o link.';
+            if (error.code === 'auth/user-not-found') message = 'Nenhuma conta encontrada com este e-mail.';
+            else if (error.code === 'auth/invalid-email') message = 'E-mail inválido.';
+            else if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Aguarde alguns minutos.';
+            return { success: false, message };
+        }
+    },
+
     // Fazer logout
     logout: async function() {
         try {
