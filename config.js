@@ -37,7 +37,7 @@ const CONFIG = {
     // ============================================================
     analytics: {
         enabled: true,
-        measurementId: 'G-YPRT7FFFV8'
+        ga4Id: 'G-YPRT7FFFV8'
     },
 
     // ============================================================
@@ -118,14 +118,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const socialLinks = {
             'facebook': CONFIG.redesSociais.facebook,
             'instagram': CONFIG.redesSociais.instagram,
-            'twitter': CONFIG.redesSociais.twitter,
-            'youtube': CONFIG.redesSociais.youtube
+            'youtube': CONFIG.redesSociais.youtube,
+            'tiktok': CONFIG.redesSociais.tiktok
         };
         
-        document.querySelectorAll('.social-link').forEach(function(link, index) {
-            const platforms = ['facebook', 'instagram', 'twitter', 'youtube'];
-            if (platforms[index] && socialLinks[platforms[index]] !== '#') {
-                link.href = socialLinks[platforms[index]];
+        document.querySelectorAll('[data-social]').forEach(function(link) {
+            const platform = link.getAttribute('data-social');
+            if (platform && socialLinks[platform]) {
+                link.href = socialLinks[platform];
             }
         });
     }

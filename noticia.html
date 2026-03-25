@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="js/loading.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
@@ -8,6 +9,9 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
     <meta name="description" id="meta-description" content="Notícias do turismo em São Mateus do Sul">
+    <link rel="canonical" id="meta-canonical" href="https://turismo.saomateusdosul.pr.gov.br/noticia.html">
+    <meta property="og:url" id="og-url" content="https://turismo.saomateusdosul.pr.gov.br/noticia.html">
+    <meta property="og:type" content="article">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
     <title id="page-title">Notícia | São Mateus do Sul</title>
     
@@ -40,6 +44,9 @@
             
             document.getElementById('page-title').textContent = post.titulo + ' | São Mateus do Sul';
             document.getElementById('meta-description').content = post.resumo;
+            const pageUrl = 'https://turismo.saomateusdosul.pr.gov.br/noticia.html?slug=' + slug;
+            document.getElementById('meta-canonical').href = pageUrl;
+            document.getElementById('og-url').content = pageUrl;
             
             container.innerHTML = `
                 <a href="noticias.html" class="back-link">← Voltar para Notícias</a>

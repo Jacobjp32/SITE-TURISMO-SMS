@@ -26,7 +26,7 @@ const InstagramFeed = {
     // 4. Configure um refresh automático via cron job ou serviço
     // 5. Substitua 'INSTAGRAM_ACCESS_TOKEN' abaixo e mude useEmbed para false
     config: {
-        instagramUser: 'depculturaeturismosms',
+        instagramUser: 'depculturaeturismosms', // https://www.instagram.com/depculturaeturismosms/
         accessToken: 'INSTAGRAM_ACCESS_TOKEN',
         userId: 'me',
         limit: 6,
@@ -107,8 +107,8 @@ const InstagramFeed = {
                     </a>
                 `).join('')}
             </div>
-            <a href="https://instagram.com/turismoSMS" target="_blank" class="instagram-follow">
-                📸 Siga @turismoSMS no Instagram
+            <a href="https://instagram.com/${this.config.instagramUser}" target="_blank" class="instagram-follow">
+                📸 Siga @${this.config.instagramUser} no Instagram
             </a>
         `;
         
@@ -131,7 +131,7 @@ const InstagramFeed = {
                 </div>
                 <p class="instagram-note">
                     Feed do Instagram em breve!<br>
-                    <a href="https://instagram.com/turismoSMS" target="_blank">Siga @turismoSMS</a>
+                    <a href="https://instagram.com/${this.config.instagramUser}" target="_blank">Siga @${this.config.instagramUser}</a>
                 </p>
             </div>
         `;
