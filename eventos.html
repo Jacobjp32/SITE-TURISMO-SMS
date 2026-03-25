@@ -225,6 +225,11 @@
                     Esportivos
                     <span class="badge" id="countEsportivo">0</span>
                 </button>
+                <button class="filter-btn" data-category="bingo">
+                    <span class="cat-dot" style="background:#f0c040;"></span>
+                    Pastéis &amp; Bingos
+                    <span class="badge" id="countBingo">0</span>
+                </button>
             </div>
 
             <div class="filter-card">
@@ -358,6 +363,7 @@
             applyFilters();
             renderFeatured();
             document.getElementById('loading').style.display = 'none';
+            atualizarOGTags(eventos);
         } else {
             console.error('Todas as tentativas falharam:', lastError);
             document.getElementById('loading').innerHTML = `
@@ -377,6 +383,8 @@
         document.getElementById('countFeira').textContent = eventos.filter(e => e.categoria === 'feira').length;
         document.getElementById('countCultural').textContent = eventos.filter(e => e.categoria === 'cultural').length;
         document.getElementById('countEsportivo').textContent = eventos.filter(e => e.categoria === 'esportivo').length;
+        const bingoBadge = document.getElementById('countBingo');
+        if (bingoBadge) bingoBadge.textContent = eventos.filter(e => e.categoria === 'bingo').length;
         document.getElementById('countDestaque').textContent = eventos.filter(e => e.destaque).length;
     }
 
@@ -732,12 +740,7 @@
         }
     }
 
-    // Chamar após carregar eventos
-    const _origLoadEvents = loadEvents;
-    loadEvents = async function() {
-        await _origLoadEvents();
-        if (eventos.length) atualizarOGTags(eventos);
-    };
+
     </script>
 </body>
 </html>
