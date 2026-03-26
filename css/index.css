@@ -3495,6 +3495,14 @@
         .gallery-item:hover .gallery-overlay {
             background: linear-gradient(transparent, rgba(0,0,0,0.9));
         }
+
+        /* Forçar altura responsiva nas imagens da galeria (sobrepõe inline style) */
+        .gallery-section .gallery-item img {
+            height: 280px;
+            width: 100%;
+            object-fit: cover;
+            display: block;
+        }
         
         @media (max-width: 768px) {
             .gallery-section {
@@ -3517,12 +3525,8 @@
                 grid-template-columns: 1fr !important;
                 gap: 1.5rem !important;
             }
-            
-            .gallery-item {
-                height: 250px;
-            }
 
-            .gallery-item img {
+            .gallery-section .gallery-item img {
                 height: 220px !important;
             }
         }
@@ -3532,7 +3536,7 @@
                 font-size: 1.7rem;
             }
 
-            .gallery-item img {
-                height: 200px !important;
+            .gallery-section .gallery-item img {
+                height: 190px !important;
             }
         }

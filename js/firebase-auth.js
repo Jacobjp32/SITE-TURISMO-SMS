@@ -1,7 +1,8 @@
 /**
- * Sistema de Autenticação Firebase - Turismo São Mateus do Sul
- * v2 — usa Firebase Compat SDK (scripts globais), sem import() dinâmico
- * Mais robusto em ambientes Netlify/Cloudflare com CSP restritiva
+ * firebase-auth.js — Turismo São Mateus do Sul
+ * v3 — Firebase Compat SDK, inicialização síncrona, sem eventos customizados
+ * REQUER: firebase-app-compat.js + firebase-auth-compat.js + firebase-firestore-compat.js
+ *         carregados ANTES deste script via <script> no HTML
  */
 
 // Configuração do Firebase

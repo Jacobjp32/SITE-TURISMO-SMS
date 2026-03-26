@@ -3,33 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- SEO Meta Tags -->
     <meta name="description" content="Portal do Usuário - Cadastre eventos e estabelecimentos no site oficial de turismo de São Mateus do Sul.">
     <meta name="robots" content="noindex, nofollow">
-    
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
-    
     <script src="js/loading.js"></script>
-    <title>Portal do Usuário — Cadastre seu Evento | Turismo São Mateus do Sul</title>
-    
-    <!-- Fonts -->
+    <title>Portal do Usuário — Turismo São Mateus do Sul</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/portal-usuario.css">
 </head>
 <body>
     <script src="js/nav-shared.js"></script>
 
-    <!-- Auth Screen (Login/Register) -->
+    <!-- TELA DE AUTENTICAÇÃO -->
     <div class="auth-screen" id="authScreen">
         <div class="auth-container">
+
             <div class="auth-info">
                 <h2>Portal do Turismo</h2>
                 <p>Faça parte do turismo de São Mateus do Sul! Cadastre seus eventos e estabelecimentos no portal oficial da cidade.</p>
-                
                 <ul class="auth-benefits">
                     <li>Cadastre eventos e festas</li>
                     <li>Divulgue seu estabelecimento</li>
@@ -37,756 +29,552 @@
                     <li>Alcance milhares de turistas</li>
                     <li>100% gratuito</li>
                 </ul>
-                
                 <div style="margin-top:2rem;background:rgba(212,165,116,0.2);border:1px solid var(--gold-polish);border-radius:12px;padding:1rem;">
-                    <p style="font-size:0.85rem;opacity:0.95;">📧 Dúvidas? Fale com o COMTUR:<br><strong>(42) 3532-0000</strong><br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b1f1e19021806042b180a04060a1f0e1e180f04181e07451b19450c041d450919">[email&#160;protected]</a></p>
+                    <p style="font-size:0.85rem;opacity:0.95;">📧 Dúvidas? Fale com o COMTUR:<br><strong>(42) 3532-0000</strong></p>
                 </div>
             </div>
-            
+
             <div class="auth-forms">
-                <div class="auth-tabs">
-                    <button class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
-                    <button class="auth-tab" onclick="switchAuthTab('register')">Criar Conta</button>
+
+                <div class="auth-tabs" id="authTabs">
+                    <button class="auth-tab active" id="tabLogin"    onclick="mostrarAba('login')">Entrar</button>
+                    <button class="auth-tab"         id="tabRegister" onclick="mostrarAba('register')">Criar Conta</button>
                 </div>
-                
-                <!-- Login Form -->
-                <form class="auth-form active" id="loginForm">
+
+                <!-- LOGIN -->
+                <div class="auth-form active" id="formLogin">
                     <div class="form-group">
                         <label for="loginEmail">E-mail</label>
-                        <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                        <input type="email" id="loginEmail" placeholder="seu@email.com" autocomplete="email">
                     </div>
-                    
                     <div class="form-group">
                         <label for="loginSenha">Senha</label>
-                        <input type="password" id="loginSenha" placeholder="Sua senha" required>
+                        <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
                     </div>
-                    
-                    <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
-
-                    <p style="text-align:center; margin-top:0.75rem;">
-                        <a href="#" id="linkEsqueciSenha" style="color:#888; font-size:0.85rem; text-decoration:underline;">Esqueci minha senha</a>
+                    <button type="button" class="btn-primary" id="btnEntrar" onclick="fazerLogin()">Entrar</button>
+                    <p style="text-align:center;margin-top:0.75rem;">
+                        <a href="#" onclick="mostrarAba('forgot');return false;" style="color:#888;font-size:0.85rem;text-decoration:underline;">Esqueci minha senha</a>
                     </p>
-                    
-                    <p style="text-align: center; margin-top: 0.5rem; color: #888; font-size: 0.9rem;">
-                        Ainda não tem conta? <a href="#" onclick="switchAuthTab('register'); return false;" style="color: var(--forest-deep); font-weight: 600;">Cadastre-se</a>
+                    <p style="text-align:center;margin-top:0.5rem;color:#888;font-size:0.9rem;">
+                        Ainda não tem conta? <a href="#" onclick="mostrarAba('register');return false;" style="color:var(--forest-deep);font-weight:600;">Cadastre-se</a>
                     </p>
-                </form>
+                </div>
 
-                <!-- Recuperar Senha -->
-                <form class="auth-form" id="forgotForm">
-                    <p style="color:#555; margin-bottom:1.25rem; font-size:0.9rem;">Digite seu e-mail e enviaremos um link para redefinir sua senha.</p>
+                <!-- RECUPERAR SENHA -->
+                <div class="auth-form" id="formForgot">
+                    <p style="color:#555;margin-bottom:1.25rem;font-size:0.9rem;">Digite seu e-mail e enviaremos um link para redefinir sua senha.</p>
                     <div class="form-group">
                         <label for="forgotEmail">E-mail cadastrado</label>
-                        <input type="email" id="forgotEmail" placeholder="seu@email.com" required>
+                        <input type="email" id="forgotEmail" placeholder="seu@email.com" autocomplete="email">
                     </div>
-                    <button type="submit" class="btn-primary" id="btnRecuperar">Enviar link de recuperação</button>
-                    <p style="text-align:center; margin-top:1rem; font-size:0.9rem;">
-                        <a href="#" onclick="switchAuthTab('login'); return false;" style="color: var(--forest-deep); font-weight:600;">← Voltar para o login</a>
+                    <button type="button" class="btn-primary" id="btnRecuperar" onclick="recuperarSenha()">Enviar link de recuperação</button>
+                    <p style="text-align:center;margin-top:1rem;font-size:0.9rem;">
+                        <a href="#" onclick="mostrarAba('login');return false;" style="color:var(--forest-deep);font-weight:600;">← Voltar para o login</a>
                     </p>
-                </form>
-                
-                <!-- Register Form -->
-                <form class="auth-form" id="registerForm">
+                </div>
+
+                <!-- CRIAR CONTA -->
+                <div class="auth-form" id="formRegister">
                     <div class="form-group">
                         <label for="regNome">Nome Completo *</label>
-                        <input type="text" id="regNome" placeholder="Seu nome completo" required>
+                        <input type="text" id="regNome" placeholder="Seu nome completo" autocomplete="name">
                     </div>
-                    
                     <div class="form-group">
                         <label for="regEmail">E-mail *</label>
-                        <input type="email" id="regEmail" placeholder="seu@email.com" required>
+                        <input type="email" id="regEmail" placeholder="seu@email.com" autocomplete="email">
                     </div>
-                    
                     <div class="form-row">
                         <div class="form-group">
                             <label for="regSenha">Senha *</label>
-                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" required>
+                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
                         </div>
                         <div class="form-group">
-                            <label for="regSenhaConfirm">Confirmar Senha *</label>
-                            <input type="password" id="regSenhaConfirm" placeholder="Repita a senha" required>
+                            <label for="regConfirm">Confirmar Senha *</label>
+                            <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
                         </div>
                     </div>
-                    
                     <div class="form-group">
                         <label for="regTelefone">Telefone/WhatsApp</label>
-                        <input type="tel" id="regTelefone" placeholder="(42) 99999-9999">
+                        <input type="tel" id="regTelefone" placeholder="(42) 99999-9999" autocomplete="tel">
                     </div>
-                    
                     <div class="form-group">
                         <label for="regTipo">Tipo de Conta</label>
-                        <select id="regTipo">
+                        <select id="regTipo" onchange="toggleOrgField()">
                             <option value="turista">Turista / Visitante</option>
                             <option value="organizador">Organizador de Eventos</option>
                             <option value="estabelecimento">Proprietário de Estabelecimento</option>
                         </select>
                         <p class="form-hint">Organizadores e proprietários podem cadastrar eventos e estabelecimentos.</p>
                     </div>
-                    
-                    <div class="form-group" id="orgField" style="display: none;">
-                        <label for="regOrganizacao">Nome da Organização/Empresa</label>
-                        <input type="text" id="regOrganizacao" placeholder="Nome da sua empresa ou organização">
+                    <div class="form-group" id="orgField" style="display:none;">
+                        <label for="regOrg">Nome da Organização/Empresa</label>
+                        <input type="text" id="regOrg" placeholder="Nome da sua empresa ou organização">
                     </div>
-                    
-                    <button type="submit" class="btn-primary">Criar Conta</button>
-                    
-                    <p style="text-align: center; margin-top: 1rem; color: #888; font-size: 0.9rem;">
-                        Já tem uma conta? <a href="#" onclick="switchAuthTab('login')" style="color: var(--forest-deep); font-weight: 600;">Faça login</a>
+                    <button type="button" class="btn-primary" id="btnCriar" onclick="criarConta()">Criar Conta</button>
+                    <p style="text-align:center;margin-top:1rem;color:#888;font-size:0.9rem;">
+                        Já tem uma conta? <a href="#" onclick="mostrarAba('login');return false;" style="color:var(--forest-deep);font-weight:600;">Faça login</a>
                     </p>
-                </form>
+                </div>
+
             </div>
         </div>
     </div>
 
-    <!-- Dashboard (após login) -->
+
+    <!-- DASHBOARD -->
     <div class="dashboard" id="dashboard">
         <div class="main-content">
-            <!-- Welcome Banner -->
+
             <div class="welcome-banner">
                 <h1>Bem-vindo(a), <span id="userName">Usuário</span>! 👋</h1>
                 <p>Gerencie seus eventos e estabelecimentos cadastrados no portal de turismo.</p>
+                <button onclick="fazerLogout()" style="margin-top:1rem;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.5);color:white;padding:0.5rem 1.2rem;border-radius:20px;cursor:pointer;font-family:inherit;">Sair da conta</button>
             </div>
-            
-            <!-- Dashboard Cards -->
+
             <div class="dashboard-grid">
                 <div class="dashboard-card">
                     <div class="card-icon">🎪</div>
                     <h3 class="card-title">Cadastrar Evento</h3>
                     <p class="card-desc">Divulgue sua festa, feira ou evento cultural no calendário oficial de São Mateus do Sul.</p>
-                    <button class="card-action" onclick="openEventModal()">
-                        + Novo Evento
-                    </button>
+                    <button class="card-action" onclick="abrirModal('eventModal')">+ Novo Evento</button>
                 </div>
-                
                 <div class="dashboard-card">
                     <div class="card-icon">🏨</div>
                     <h3 class="card-title">Cadastrar Estabelecimento</h3>
                     <p class="card-desc">Adicione seu hotel, restaurante, comércio ou atração turística ao portal.</p>
-                    <button class="card-action" onclick="openEstablishmentModal()">
-                        + Novo Estabelecimento
-                    </button>
+                    <button class="card-action" onclick="abrirModal('establishmentModal')">+ Novo Estabelecimento</button>
                 </div>
-                
                 <div class="dashboard-card">
                     <div class="card-icon">📋</div>
                     <h3 class="card-title">Meus Cadastros</h3>
                     <p class="card-desc">Acompanhe o status de aprovação dos seus eventos e estabelecimentos.</p>
-                    <button class="card-action" onclick="scrollToSection('myEvents')">
-                        Ver Status
-                    </button>
+                    <button class="card-action" onclick="document.getElementById('myEvents').scrollIntoView({behavior:'smooth'})">Ver Status</button>
                 </div>
             </div>
-            
-            <!-- Meus Eventos -->
+
             <section class="section-panel" id="myEvents">
                 <div class="section-header">
                     <h2>📅 Meus Eventos</h2>
-                    <button class="card-action" onclick="openEventModal()">+ Novo Evento</button>
+                    <button class="card-action" onclick="abrirModal('eventModal')">+ Novo Evento</button>
                 </div>
-                
                 <div class="events-list" id="eventsList">
                     <div class="empty-state">
                         <div class="icon">📭</div>
                         <p>Você ainda não cadastrou nenhum evento.</p>
-                        <button class="card-action" style="margin-top: 1rem;" onclick="openEventModal()">
-                            Cadastrar Primeiro Evento
-                        </button>
+                        <button class="card-action" style="margin-top:1rem;" onclick="abrirModal('eventModal')">Cadastrar Primeiro Evento</button>
                     </div>
                 </div>
             </section>
-            
-            <!-- Info sobre aprovação -->
-            <section class="section-panel" style="background: linear-gradient(135deg, #e8f5e9, #c8e6c9);">
-                <h2 style="color: var(--forest-deep); margin-bottom: 1rem;">ℹ️ Como funciona a aprovação?</h2>
+
+            <section class="section-panel" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
+                <h2 style="color:var(--forest-deep);margin-bottom:1rem;">ℹ️ Como funciona a aprovação?</h2>
                 <div class="process-steps">
-                    <div class="step completed">
-                        <div class="step-number">1</div>
-                        <span class="step-label">Cadastro</span>
-                    </div>
-                    <div class="step active">
-                        <div class="step-number">2</div>
-                        <span class="step-label">Análise</span>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">3</div>
-                        <span class="step-label">Aprovação</span>
-                    </div>
-                    <div class="step">
-                        <div class="step-number">4</div>
-                        <span class="step-label">Publicação</span>
-                    </div>
+                    <div class="step completed"><div class="step-number">1</div><span class="step-label">Cadastro</span></div>
+                    <div class="step active">   <div class="step-number">2</div><span class="step-label">Análise</span></div>
+                    <div class="step">           <div class="step-number">3</div><span class="step-label">Aprovação</span></div>
+                    <div class="step">           <div class="step-number">4</div><span class="step-label">Publicação</span></div>
                 </div>
-                <p style="color: #333; font-size: 0.95rem;">
-                    Após o envio, sua solicitação será analisada pela equipe do COMTUR (Conselho Municipal de Turismo). 
-                    O prazo médio de análise é de <strong>3 a 5 dias úteis</strong>. Você receberá uma notificação quando 
-                    seu evento ou estabelecimento for aprovado e publicado no portal.
+                <p style="color:#333;font-size:0.95rem;">
+                    Após o envio, sua solicitação será analisada pelo COMTUR. O prazo médio é de <strong>3 a 5 dias úteis</strong>.
                 </p>
             </section>
+
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Evento -->
-    <div class="modal-overlay" id="eventModal">
-        <div class="modal">
+
+    <!-- MODAL: CADASTRAR EVENTO -->
+    <div class="modal-overlay" id="eventModal" onclick="fecharModalFora(event,'eventModal')">
+        <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h2>🎪 Cadastrar Novo Evento</h2>
-                <button class="modal-close" onclick="closeModal('eventModal')">&times;</button>
+                <button class="modal-close" onclick="fecharModal('eventModal')">&times;</button>
             </div>
-            <form id="eventForm" onsubmit="submitEventForm(event)">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="evtNome">Nome do Evento *</label>
-                        <input type="text" id="evtNome" placeholder="Ex: Festa da Colônia 2026" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Categoria do Evento *</label>
-                        <div class="category-grid">
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="cultural" required>
-                                <span class="icon">🎭</span>
-                                <span class="label">Cultural</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="gastronomico">
-                                <span class="icon">🍽️</span>
-                                <span class="label">Gastronômico</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="religioso">
-                                <span class="icon">⛪</span>
-                                <span class="label">Religioso</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="esportivo">
-                                <span class="icon">🏃</span>
-                                <span class="label">Esportivo</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="musical">
-                                <span class="icon">🎵</span>
-                                <span class="label">Musical</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="evtCategoria" value="feira">
-                                <span class="icon">🛒</span>
-                                <span class="label">Feira</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="evtDataInicio">Data de Início *</label>
-                            <input type="date" id="evtDataInicio" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="evtDataFim">Data de Término</label>
-                            <input type="date" id="evtDataFim">
-                            <p class="form-hint">Deixe em branco se for evento de um dia</p>
-                        </div>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="evtHoraInicio">Horário de Início</label>
-                            <input type="time" id="evtHoraInicio">
-                        </div>
-                        <div class="form-group">
-                            <label for="evtHoraFim">Horário de Término</label>
-                            <input type="time" id="evtHoraFim">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="evtLocal">Local do Evento *</label>
-                        <input type="text" id="evtLocal" placeholder="Ex: Rua do Mathe, Centro" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="evtDescricao">Descrição do Evento *</label>
-                        <textarea id="evtDescricao" placeholder="Descreva detalhadamente o evento, atrações, programação, etc." required></textarea>
-                        <p class="form-hint">Mínimo de 20 caracteres</p>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="evtEntrada">Valor da Entrada</label>
-                            <select id="evtEntrada">
-                                <option value="gratuito">Gratuito</option>
-                                <option value="pago">Pago</option>
-                                <option value="contribuicao">Contribuição Voluntária</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="evtValorGroup" style="display: none;">
-                            <label for="evtValor">Valor (R$)</label>
-                            <input type="text" id="evtValor" placeholder="Ex: 20,00">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="evtContato">Telefone/WhatsApp para Contato</label>
-                        <input type="tel" id="evtContato" placeholder="(42) 99999-9999">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="evtSite">Site ou Rede Social</label>
-                        <input type="url" id="evtSite" placeholder="https://...">
+            <div class="modal-body">
+                <div class="form-group"><label>Nome do Evento *</label><input type="text" id="evtNome" placeholder="Ex: Festa da Colônia 2026"></div>
+                <div class="form-group">
+                    <label>Categoria do Evento *</label>
+                    <div class="category-grid">
+                        <label class="category-option"><input type="radio" name="evtCat" value="cultural"><span class="icon">🎭</span><span class="label">Cultural</span></label>
+                        <label class="category-option"><input type="radio" name="evtCat" value="gastronomico"><span class="icon">🍽️</span><span class="label">Gastronômico</span></label>
+                        <label class="category-option"><input type="radio" name="evtCat" value="religioso"><span class="icon">⛪</span><span class="label">Religioso</span></label>
+                        <label class="category-option"><input type="radio" name="evtCat" value="esportivo"><span class="icon">🏃</span><span class="label">Esportivo</span></label>
+                        <label class="category-option"><input type="radio" name="evtCat" value="musical"><span class="icon">🎵</span><span class="label">Musical</span></label>
+                        <label class="category-option"><input type="radio" name="evtCat" value="feira"><span class="icon">🛒</span><span class="label">Feira</span></label>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-primary btn-secondary" onclick="closeModal('eventModal')">Cancelar</button>
-                    <button type="submit" class="btn-primary">Enviar para Análise</button>
+                <div class="form-row">
+                    <div class="form-group"><label>Data de Início *</label><input type="date" id="evtDataInicio"></div>
+                    <div class="form-group"><label>Data de Término</label><input type="date" id="evtDataFim"><p class="form-hint">Deixe em branco se for evento de um dia</p></div>
                 </div>
-            </form>
+                <div class="form-row">
+                    <div class="form-group"><label>Horário de Início</label><input type="time" id="evtHoraInicio"></div>
+                    <div class="form-group"><label>Horário de Término</label><input type="time" id="evtHoraFim"></div>
+                </div>
+                <div class="form-group"><label>Local do Evento *</label><input type="text" id="evtLocal" placeholder="Ex: Rua do Mathe, Centro"></div>
+                <div class="form-group"><label>Descrição do Evento *</label><textarea id="evtDescricao" placeholder="Descreva detalhadamente o evento, atrações, programação, etc."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Valor da Entrada</label>
+                        <select id="evtEntrada" onchange="document.getElementById('evtValorGroup').style.display=this.value==='pago'?'block':'none'">
+                            <option value="gratuito">Gratuito</option>
+                            <option value="pago">Pago</option>
+                            <option value="contribuicao">Contribuição Voluntária</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="evtValorGroup" style="display:none;"><label>Valor (R$)</label><input type="text" id="evtValor" placeholder="Ex: 20,00"></div>
+                </div>
+                <div class="form-group"><label>Telefone/WhatsApp para Contato</label><input type="tel" id="evtContato" placeholder="(42) 99999-9999"></div>
+                <div class="form-group"><label>Site ou Rede Social</label><input type="url" id="evtSite" placeholder="https://..."></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary btn-secondary" onclick="fecharModal('eventModal')">Cancelar</button>
+                <button type="button" class="btn-primary" id="btnEnviarEvento" onclick="enviarEvento()">Enviar para Análise</button>
+            </div>
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Estabelecimento -->
-    <div class="modal-overlay" id="establishmentModal">
-        <div class="modal">
+
+    <!-- MODAL: CADASTRAR ESTABELECIMENTO -->
+    <div class="modal-overlay" id="establishmentModal" onclick="fecharModalFora(event,'establishmentModal')">
+        <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h2>🏨 Cadastrar Estabelecimento</h2>
-                <button class="modal-close" onclick="closeModal('establishmentModal')">&times;</button>
+                <button class="modal-close" onclick="fecharModal('establishmentModal')">&times;</button>
             </div>
-            <form id="establishmentForm" onsubmit="submitEstablishmentForm(event)">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="estNome">Nome do Estabelecimento *</label>
-                        <input type="text" id="estNome" placeholder="Ex: Pousada das Araucárias" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Categoria *</label>
-                        <div class="category-grid">
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="hospedagem" required>
-                                <span class="icon">🏨</span>
-                                <span class="label">Hospedagem</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="restaurante">
-                                <span class="icon">🍽️</span>
-                                <span class="label">Restaurante</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="atracao">
-                                <span class="icon">🎡</span>
-                                <span class="label">Atração</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="comercio">
-                                <span class="icon">🛍️</span>
-                                <span class="label">Comércio</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="servico">
-                                <span class="icon">🚐</span>
-                                <span class="label">Serviço</span>
-                            </label>
-                            <label class="category-option">
-                                <input type="radio" name="estCategoria" value="produtor">
-                                <span class="icon">🌱</span>
-                                <span class="label">Produtor Rural</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="estEndereco">Endereço Completo *</label>
-                        <input type="text" id="estEndereco" placeholder="Rua, número, bairro" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="estDescricao">Descrição *</label>
-                        <textarea id="estDescricao" placeholder="Descreva seu estabelecimento, serviços oferecidos, diferenciais..." required></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="estTelefone">Telefone *</label>
-                            <input type="tel" id="estTelefone" placeholder="(42) 3532-0000" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="estWhatsapp">WhatsApp</label>
-                            <input type="tel" id="estWhatsapp" placeholder="(42) 99999-9999">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="estSite">Site ou Instagram</label>
-                        <input type="text" id="estSite" placeholder="https://... ou @seuinstagram">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="estHorario">Horário de Funcionamento</label>
-                        <input type="text" id="estHorario" placeholder="Ex: Seg a Sex: 8h às 18h | Sáb: 8h às 12h">
+            <div class="modal-body">
+                <div class="form-group"><label>Nome do Estabelecimento *</label><input type="text" id="estNome" placeholder="Ex: Pousada das Araucárias"></div>
+                <div class="form-group">
+                    <label>Categoria *</label>
+                    <div class="category-grid">
+                        <label class="category-option"><input type="radio" name="estCat" value="hospedagem"><span class="icon">🏨</span><span class="label">Hospedagem</span></label>
+                        <label class="category-option"><input type="radio" name="estCat" value="restaurante"><span class="icon">🍽️</span><span class="label">Restaurante</span></label>
+                        <label class="category-option"><input type="radio" name="estCat" value="atracao"><span class="icon">🎡</span><span class="label">Atração</span></label>
+                        <label class="category-option"><input type="radio" name="estCat" value="comercio"><span class="icon">🛍️</span><span class="label">Comércio</span></label>
+                        <label class="category-option"><input type="radio" name="estCat" value="servico"><span class="icon">🚐</span><span class="label">Serviço</span></label>
+                        <label class="category-option"><input type="radio" name="estCat" value="produtor"><span class="icon">🌱</span><span class="label">Produtor Rural</span></label>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn-primary btn-secondary" onclick="closeModal('establishmentModal')">Cancelar</button>
-                    <button type="submit" class="btn-primary">Enviar para Análise</button>
+                <div class="form-group"><label>Endereço Completo *</label><input type="text" id="estEndereco" placeholder="Rua, número, bairro"></div>
+                <div class="form-group"><label>Descrição *</label><textarea id="estDescricao" placeholder="Descreva seu estabelecimento, serviços, diferenciais..."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Telefone *</label><input type="tel" id="estTelefone" placeholder="(42) 3532-0000"></div>
+                    <div class="form-group"><label>WhatsApp</label><input type="tel" id="estWhatsapp" placeholder="(42) 99999-9999"></div>
                 </div>
-            </form>
+                <div class="form-group"><label>Site ou Instagram</label><input type="text" id="estSite" placeholder="https://... ou @seuinstagram"></div>
+                <div class="form-group"><label>Horário de Funcionamento</label><input type="text" id="estHorario" placeholder="Ex: Seg a Sex: 8h às 18h | Sáb: 8h às 12h"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary btn-secondary" onclick="fecharModal('establishmentModal')">Cancelar</button>
+                <button type="button" class="btn-primary" id="btnEnviarEst" onclick="enviarEstabelecimento()">Enviar para Análise</button>
+            </div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer class="footer">
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="index.html">Portal do Turismo</a> | 
+        <p style="margin-top:0.5rem;">
+            <a href="index.html">Portal do Turismo</a> |
             <a href="transparencia.html">Transparência</a> |
             <a href="para-o-trade.html">Para o Trade</a>
         </p>
     </footer>
 
-    <!-- Scripts -->
-    <!-- Firebase Compat SDK (v9 compat — carregamento síncrono, sem import() dinâmico) -->
+
+    <!-- Firebase Compat SDK — DEVE vir antes de firebase-auth.js -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="js/firebase-auth.js"></script>
+
+
     <script>
-        // ============================================================
-        // switchAuthTab: não depende do Firebase, pode rodar a qualquer momento
-        // ============================================================
-        function switchAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+    // ================================================================
+    // PORTAL DO USUÁRIO v4 — Firebase Compat, sem eventos customizados
+    // Botões chamam funções globais diretamente via onclick
+    // Auth state atualiza UI via listener em authStateChanged
+    // ================================================================
 
-            if (tab === 'login') {
-                document.querySelector('.auth-tab:first-child').classList.add('active');
-                document.getElementById('loginForm').classList.add('active');
-            } else if (tab === 'register') {
-                document.querySelector('.auth-tab:last-child').classList.add('active');
-                document.getElementById('registerForm').classList.add('active');
-            } else if (tab === 'forgot') {
-                // Sem tab ativa (tela de recuperação não tem tab própria)
-                document.getElementById('forgotForm').classList.add('active');
-            }
+    // ── Abas de autenticação ─────────────────────────────────────────
+    function mostrarAba(aba) {
+        ['formLogin','formForgot','formRegister'].forEach(function(id) {
+            document.getElementById(id).classList.remove('active');
+        });
+        document.querySelectorAll('.auth-tab').forEach(function(t) { t.classList.remove('active'); });
+        document.getElementById('authTabs').style.display = (aba === 'forgot') ? 'none' : 'flex';
+
+        if (aba === 'login') {
+            document.getElementById('formLogin').classList.add('active');
+            document.getElementById('tabLogin').classList.add('active');
+        } else if (aba === 'register') {
+            document.getElementById('formRegister').classList.add('active');
+            document.getElementById('tabRegister').classList.add('active');
+        } else if (aba === 'forgot') {
+            document.getElementById('formForgot').classList.add('active');
         }
+    }
 
-        // ============================================================
-        // Aguardar Firebase estar pronto antes de vincular formulários
-        // Usa flag para o caso de firebaseReady disparar antes deste
-        // script terminar de parsear
-        // ============================================================
-        var _firebaseJaEstavaReady = false;
+    function toggleOrgField() {
+        var v = document.getElementById('regTipo').value;
+        document.getElementById('orgField').style.display =
+            (v === 'organizador' || v === 'estabelecimento') ? 'block' : 'none';
+    }
 
-        function _onFirebaseReady() {
-            _firebaseJaEstavaReady = true;
-            setupForms();
-            setupCategorySelectors();
-            setupEntradaToggle();
+    // ── Login ────────────────────────────────────────────────────────
+    async function fazerLogin() {
+        var email = document.getElementById('loginEmail').value.trim();
+        var senha = document.getElementById('loginSenha').value;
+        if (!email || !senha) { mostrarNotif('Preencha e-mail e senha.', 'error'); return; }
+
+        var btn = document.getElementById('btnEntrar');
+        btn.disabled = true; btn.textContent = 'Entrando...';
+
+        var result = await FirebaseSystem.login(email, senha);
+        if (result.success) {
+            mostrarNotif(result.message, 'success');
+            // onAuthStateChanged cuida da transição para o dashboard
+        } else {
+            mostrarNotif(result.message, 'error');
+            btn.disabled = false; btn.textContent = 'Entrar';
         }
+    }
 
-        window.addEventListener('firebaseReady', _onFirebaseReady);
+    // ── Criar Conta ──────────────────────────────────────────────────
+    async function criarConta() {
+        var nome    = document.getElementById('regNome').value.trim();
+        var email   = document.getElementById('regEmail').value.trim();
+        var senha   = document.getElementById('regSenha').value;
+        var confirm = document.getElementById('regConfirm').value;
 
-        // Garante que se o evento já disparou antes de chegarmos aqui, ainda rodamos
-        document.addEventListener('DOMContentLoaded', function() {
-            // Se firebase-auth.js já inicializou e disparou o evento antes,
-            // window.firebaseAuth já existe; configura os forms manualmente
-            if (!_firebaseJaEstavaReady && window.firebaseAuth) {
-                _onFirebaseReady();
-            }
+        if (!nome || !email || !senha) { mostrarNotif('Preencha todos os campos obrigatórios.', 'error'); return; }
+        if (senha !== confirm)          { mostrarNotif('As senhas não coincidem.', 'error'); return; }
+        if (senha.length < 6)           { mostrarNotif('A senha deve ter pelo menos 6 caracteres.', 'error'); return; }
 
-            // Listener do link "Esqueci minha senha"
-            var linkEsqueci = document.getElementById('linkEsqueciSenha');
-            if (linkEsqueci) {
-                linkEsqueci.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    switchAuthTab('forgot');
-                });
-            }
+        var btn = document.getElementById('btnCriar');
+        btn.disabled = true; btn.textContent = 'Criando conta...';
 
-            // Tipo de conta -> mostrar/esconder organização
-            var regTipo = document.getElementById('regTipo');
-            if (regTipo) {
-                regTipo.addEventListener('change', function() {
-                    var orgField = document.getElementById('orgField');
-                    orgField.style.display =
-                        (this.value === 'organizador' || this.value === 'estabelecimento') ? 'block' : 'none';
-                });
-            }
+        var result = await FirebaseSystem.register({
+            nome:        nome,
+            email:       email,
+            senha:       senha,
+            telefone:    document.getElementById('regTelefone').value || '',
+            tipo:        document.getElementById('regTipo').value || 'turista',
+            organizacao: document.getElementById('regOrg').value || ''
         });
 
-        // Quando estado de auth mudar (login/logout), atualizar UI
-        window.addEventListener('authStateChanged', function() {
-            checkAuth();
+        if (result.success) {
+            mostrarNotif(result.message, 'success');
+            ['regNome','regEmail','regSenha','regConfirm','regTelefone','regOrg'].forEach(function(id) {
+                document.getElementById(id).value = '';
+            });
+            setTimeout(function() { mostrarAba('login'); }, 1500);
+        } else {
+            mostrarNotif(result.message, 'error');
+        }
+        btn.disabled = false; btn.textContent = 'Criar Conta';
+    }
+
+    // ── Recuperar Senha ──────────────────────────────────────────────
+    async function recuperarSenha() {
+        var email = document.getElementById('forgotEmail').value.trim();
+        if (!email) { mostrarNotif('Digite seu e-mail.', 'error'); return; }
+
+        var btn = document.getElementById('btnRecuperar');
+        btn.disabled = true; btn.textContent = 'Enviando...';
+
+        var result = await FirebaseSystem.sendPasswordReset(email);
+        if (result.success) {
+            mostrarNotif(result.message, 'success');
+            document.getElementById('forgotEmail').value = '';
+            setTimeout(function() { mostrarAba('login'); }, 3000);
+        } else {
+            mostrarNotif(result.message, 'error');
+        }
+        btn.disabled = false; btn.textContent = 'Enviar link de recuperação';
+    }
+
+    // ── Logout ───────────────────────────────────────────────────────
+    async function fazerLogout() {
+        await FirebaseSystem.logout();
+        mostrarNotif('Você saiu da conta.', 'info');
+    }
+
+    // ── Listener de estado de auth ───────────────────────────────────
+    window.addEventListener('authStateChanged', function() {
+        var user = window.currentUser;
+        if (user) {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+            document.getElementById('userName').textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
+            carregarEventos();
+        } else {
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+        }
+    });
+
+    // ── Eventos do usuário ───────────────────────────────────────────
+    async function carregarEventos() {
+        var container = document.getElementById('eventsList');
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
+        var events = await FirebaseSystem.getUserEvents();
+        if (!events || events.length === 0) {
+            container.innerHTML =
+                '<div class="empty-state"><div class="icon">📭</div>' +
+                '<p>Você ainda não cadastrou nenhum evento.</p>' +
+                '<button class="card-action" style="margin-top:1rem;" onclick="abrirModal(\'eventModal\')">Cadastrar Primeiro Evento</button></div>';
+            return;
+        }
+        container.innerHTML = events.map(function(ev) {
+            return '<div class="event-item">' +
+                '<div class="event-info"><h4>' + (ev.nome||'') + '</h4>' +
+                '<p>📍 ' + (ev.local||'') + ' | 📅 ' + fmtData(ev.dataInicio) + '</p></div>' +
+                '<span class="event-status status-' + (ev.status||'pendente') + '">' + labelStatus(ev.status) + '</span>' +
+                '</div>';
+        }).join('');
+    }
+
+    function fmtData(d) {
+        if (!d) return 'Data não definida';
+        return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
+    }
+
+    function labelStatus(s) {
+        return ({pendente:'⏳ Em Análise', aprovado:'✅ Aprovado', rejeitado:'❌ Não Aprovado'})[s] || (s||'');
+    }
+
+    // ── Modais ───────────────────────────────────────────────────────
+    function abrirModal(id) {
+        document.getElementById(id).classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+    function fecharModal(id) {
+        document.getElementById(id).classList.remove('active');
+        document.body.style.overflow = '';
+    }
+    function fecharModalFora(e, id) {
+        if (e.target === document.getElementById(id)) fecharModal(id);
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.active').forEach(function(m) { fecharModal(m.id); });
+        }
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.category-option').forEach(function(opt) {
+            opt.addEventListener('click', function() {
+                var radio = this.querySelector('input[type="radio"]');
+                document.querySelectorAll('.category-option input[name="' + radio.name + '"]').forEach(function(r) {
+                    r.closest('.category-option').classList.remove('selected');
+                });
+                this.classList.add('selected');
+                radio.checked = true;
+            });
+        });
+    });
+
+    // ── Envio de Evento ──────────────────────────────────────────────
+    async function enviarEvento() {
+        var nome  = document.getElementById('evtNome').value.trim();
+        var cat   = document.querySelector('input[name="evtCat"]:checked');
+        var data  = document.getElementById('evtDataInicio').value;
+        var local = document.getElementById('evtLocal').value.trim();
+        var desc  = document.getElementById('evtDescricao').value.trim();
+        if (!nome || !cat || !data || !local || !desc) {
+            mostrarNotif('Preencha: nome, categoria, data de início, local e descrição.', 'error'); return;
+        }
+        var btn = document.getElementById('btnEnviarEvento');
+        btn.disabled = true; btn.textContent = 'Enviando...';
+
+        var result = await FirebaseSystem.submitEvent({
+            nome: nome, categoria: cat.value, dataInicio: data,
+            dataFim:    document.getElementById('evtDataFim').value,
+            horaInicio: document.getElementById('evtHoraInicio').value,
+            horaFim:    document.getElementById('evtHoraFim').value,
+            local: local, descricao: desc,
+            entrada: document.getElementById('evtEntrada').value,
+            valor:   document.getElementById('evtValor').value,
+            contato: document.getElementById('evtContato').value,
+            site:    document.getElementById('evtSite').value
         });
 
-        function checkAuth() {
-            var user = window.currentUser || (window.FirebaseSystem && FirebaseSystem.getCurrentUser());
-
-            if (user) {
-                document.getElementById('authScreen').style.display = 'none';
-                document.getElementById('dashboard').classList.add('active');
-                document.getElementById('userName').textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
-                loadUserEvents();
-            } else {
-                document.getElementById('authScreen').style.display = 'flex';
-                document.getElementById('dashboard').classList.remove('active');
-            }
-        }
-
-        function setupForms() {
-            // --- LOGIN ---
-            var loginForm = document.getElementById('loginForm');
-            loginForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var btn = document.getElementById('btnEntrar');
-                btn.disabled = true;
-                btn.textContent = 'Entrando...';
-
-                var email = document.getElementById('loginEmail').value.trim();
-                var senha = document.getElementById('loginSenha').value;
-
-                var result = await FirebaseSystem.login(email, senha);
-
-                if (result.success) {
-                    FirebaseSystem.showNotification(result.message, 'success');
-                } else {
-                    FirebaseSystem.showNotification(result.message, 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'Entrar';
-                }
+        if (result.success) {
+            mostrarNotif(result.message, 'success');
+            fecharModal('eventModal');
+            ['evtNome','evtDataInicio','evtDataFim','evtHoraInicio','evtHoraFim',
+             'evtLocal','evtDescricao','evtValor','evtContato','evtSite'].forEach(function(id) {
+                var el = document.getElementById(id); if (el) el.value = '';
             });
-
-            // --- CADASTRO ---
-            var registerForm = document.getElementById('registerForm');
-            registerForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var btn = this.querySelector('button[type="submit"]');
-                btn.disabled = true;
-                btn.textContent = 'Criando conta...';
-
-                var senha = document.getElementById('regSenha').value;
-                var senhaConfirm = document.getElementById('regSenhaConfirm').value;
-
-                if (senha !== senhaConfirm) {
-                    FirebaseSystem.showNotification('As senhas não coincidem.', 'error');
-                    btn.disabled = false;
-                    btn.textContent = 'Criar Conta';
-                    return;
-                }
-
-                var userData = {
-                    nome: document.getElementById('regNome').value.trim(),
-                    email: document.getElementById('regEmail').value.trim(),
-                    senha: senha,
-                    telefone: document.getElementById('regTelefone').value || '',
-                    tipo: document.getElementById('regTipo').value || 'turista',
-                    organizacao: document.getElementById('regOrganizacao').value || ''
-                };
-
-                var result = await FirebaseSystem.register(userData);
-
-                if (result.success) {
-                    FirebaseSystem.showNotification(result.message, 'success');
-                    this.reset();
-                    setTimeout(function() { switchAuthTab('login'); }, 1500);
-                } else {
-                    FirebaseSystem.showNotification(result.message, 'error');
-                }
-
-                btn.disabled = false;
-                btn.textContent = 'Criar Conta';
+            document.querySelectorAll('input[name="evtCat"]').forEach(function(r) {
+                r.checked = false; r.closest('.category-option').classList.remove('selected');
             });
+            carregarEventos();
+        } else {
+            mostrarNotif(result.message, 'error');
+        }
+        btn.disabled = false; btn.textContent = 'Enviar para Análise';
+    }
 
-            // --- RECUPERAR SENHA ---
-            var forgotForm = document.getElementById('forgotForm');
-            forgotForm.addEventListener('submit', async function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                var btn = document.getElementById('btnRecuperar');
-                btn.disabled = true;
-                btn.textContent = 'Enviando...';
+    // ── Envio de Estabelecimento ─────────────────────────────────────
+    async function enviarEstabelecimento() {
+        var nome = document.getElementById('estNome').value.trim();
+        var cat  = document.querySelector('input[name="estCat"]:checked');
+        var end  = document.getElementById('estEndereco').value.trim();
+        var desc = document.getElementById('estDescricao').value.trim();
+        var tel  = document.getElementById('estTelefone').value.trim();
+        if (!nome || !cat || !end || !desc || !tel) {
+            mostrarNotif('Preencha: nome, categoria, endereço, descrição e telefone.', 'error'); return;
+        }
+        var btn = document.getElementById('btnEnviarEst');
+        btn.disabled = true; btn.textContent = 'Enviando...';
 
-                var email = document.getElementById('forgotEmail').value.trim();
-                var result = await FirebaseSystem.sendPasswordReset(email);
+        var result = await FirebaseSystem.submitEstablishment({
+            nome: nome, categoria: cat.value, endereco: end, descricao: desc, telefone: tel,
+            whatsapp: document.getElementById('estWhatsapp').value,
+            site:     document.getElementById('estSite').value,
+            horario:  document.getElementById('estHorario').value
+        });
 
-                if (result.success) {
-                    FirebaseSystem.showNotification(result.message, 'success');
-                    this.reset();
-                    setTimeout(function() { switchAuthTab('login'); }, 3000);
-                } else {
-                    FirebaseSystem.showNotification(result.message, 'error');
-                }
-
-                btn.disabled = false;
-                btn.textContent = 'Enviar link de recuperação';
+        if (result.success) {
+            mostrarNotif(result.message, 'success');
+            fecharModal('establishmentModal');
+            ['estNome','estEndereco','estDescricao','estTelefone','estWhatsapp','estSite','estHorario'].forEach(function(id) {
+                var el = document.getElementById(id); if (el) el.value = '';
             });
-        }
-
-        async function handleLogout() {
-            await FirebaseSystem.logout();
-            FirebaseSystem.showNotification('Você saiu da conta.', 'info');
-        }
-
-        function setupCategorySelectors() {
-            document.querySelectorAll('.category-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    const name = this.querySelector('input').name;
-                    document.querySelectorAll(`.category-option input[name="${name}"]`).forEach(opt => {
-                        opt.closest('.category-option').classList.remove('selected');
-                    });
-                    this.classList.add('selected');
-                    this.querySelector('input').checked = true;
-                });
+            document.querySelectorAll('input[name="estCat"]').forEach(function(r) {
+                r.checked = false; r.closest('.category-option').classList.remove('selected');
             });
+        } else {
+            mostrarNotif(result.message, 'error');
         }
+        btn.disabled = false; btn.textContent = 'Enviar para Análise';
+    }
 
-        function setupEntradaToggle() {
-            const entradaSelect = document.getElementById('evtEntrada');
-            const valorGroup = document.getElementById('evtValorGroup');
-            
-            if (entradaSelect) {
-                entradaSelect.addEventListener('change', function() {
-                    valorGroup.style.display = this.value === 'pago' ? 'block' : 'none';
-                });
-            }
-        }
+    // ── Notificação visual ───────────────────────────────────────────
+    function mostrarNotif(msg, tipo) {
+        var old = document.querySelector('.portal-notif'); if (old) old.remove();
+        var cores = { success:'#27ae60', error:'#e74c3c', info:'#3498db' };
+        var n = document.createElement('div');
+        n.className = 'portal-notif';
+        n.innerHTML = '<span>' + msg + '</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;margin-left:0.5rem;">&times;</button>';
+        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+            'display:flex;align-items:center;gap:0.5rem;z-index:10000;max-width:90vw;' +
+            'box-shadow:0 5px 20px rgba(0,0,0,0.25);background:' + (cores[tipo]||cores.info) + ';color:white;' +
+            'font-family:Raleway,sans-serif;font-size:0.95rem;animation:slideIn 0.3s ease;';
+        document.body.appendChild(n);
+        setTimeout(function() { if (n.parentNode) n.remove(); }, 6000);
+    }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+    </script>
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-            document.body.style.overflow = '';
-        }
+    <style>
+    @keyframes slideIn {
+        from { transform: translateX(110%); opacity: 0; }
+        to   { transform: translateX(0);   opacity: 1; }
+    }
+    </style>
 
-        function openEventModal() {
-            openModal('eventModal');
-        }
-
-        function openEstablishmentModal() {
-            openModal('establishmentModal');
-        }
-
-        function scrollToSection(sectionId) {
-            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
-        }
-
-        async function submitEventForm(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Enviando...';
-            
-            const eventData = {
-                nome: document.getElementById('evtNome').value,
-                categoria: document.querySelector('input[name="evtCategoria"]:checked')?.value,
-                dataInicio: document.getElementById('evtDataInicio').value,
-                dataFim: document.getElementById('evtDataFim').value,
-                horaInicio: document.getElementById('evtHoraInicio').value,
-                horaFim: document.getElementById('evtHoraFim').value,
-                local: document.getElementById('evtLocal').value,
-                descricao: document.getElementById('evtDescricao').value,
-                entrada: document.getElementById('evtEntrada').value,
-                valor: document.getElementById('evtValor').value,
-                contato: document.getElementById('evtContato').value,
-                site: document.getElementById('evtSite').value
-            };
-
-            const result = await FirebaseSystem.submitEvent(eventData);
-            
-            if (result.success) {
-                FirebaseSystem.showNotification(result.message, 'success');
-                closeModal('eventModal');
-                document.getElementById('eventForm').reset();
-                document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
-                loadUserEvents();
-            } else {
-                FirebaseSystem.showNotification(result.message, 'error');
-            }
-
-            btn.disabled = false;
-            btn.textContent = 'Enviar para Análise';
-        }
-
-        async function submitEstablishmentForm(e) {
-            e.preventDefault();
-            const btn = e.target.querySelector('button[type="submit"]');
-            btn.disabled = true;
-            btn.textContent = 'Enviando...';
-            
-            const estData = {
-                nome: document.getElementById('estNome').value,
-                categoria: document.querySelector('input[name="estCategoria"]:checked')?.value,
-                endereco: document.getElementById('estEndereco').value,
-                descricao: document.getElementById('estDescricao').value,
-                telefone: document.getElementById('estTelefone').value,
-                whatsapp: document.getElementById('estWhatsapp').value,
-                site: document.getElementById('estSite').value,
-                horario: document.getElementById('estHorario').value
-            };
-
-            const result = await FirebaseSystem.submitEstablishment(estData);
-            
-            if (result.success) {
-                FirebaseSystem.showNotification(result.message, 'success');
-                closeModal('establishmentModal');
-                document.getElementById('establishmentForm').reset();
-                document.querySelectorAll('.category-option').forEach(o => o.classList.remove('selected'));
-            } else {
-                FirebaseSystem.showNotification(result.message, 'error');
-            }
-
-            btn.disabled = false;
-            btn.textContent = 'Enviar para Análise';
-        }
-
-        async function loadUserEvents() {
-            const container = document.getElementById('eventsList');
-            container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
-
-            const events = await FirebaseSystem.getUserEvents();
-            
-            if (events.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="icon">📭</div>
-                        <p>Você ainda não cadastrou nenhum evento.</p>
-                        <button class="card-action" style="margin-top: 1rem;" onclick="openEventModal()">
-                            Cadastrar Primeiro Evento
-                        </button>
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = events.map(event => `
-                <div class="event-item">
-                    <div class="event-info">
-                        <h4>${event.nome}</h4>
-                        <p>📍 ${event.local} | 📅 ${formatDate(event.dataInicio)}</p>
-                    </div>
-                    <span class="event-status status-${event.status}">${getStatusLabel(event.status)}</span>
-                </div>
-            `).join('');
-        }
-
-        function formatDate(dateStr) {
-            if (!dateStr) return 'Data não definida';
-            const date = new Date(dateStr + 'T00:00:00');
-            return date.toLocaleDateString('pt-BR');
-        }
-
-        function getStatusLabel(status) {
-            const labels = {
-                'pendente': '⏳ Em Análise',
-                'aprovado': '✅ Aprovado',
-                'rejeitado': '❌ Não Aprovado'
-            };
-            return labels[status] || status;
-        }
-
-        // Fechar modal ao clicar fora
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('clic
+</body>
+</html>
