@@ -7,7 +7,7 @@
     const NAV_HTML = `
 <nav class="nav" id="mainNav">
     <div class="nav-container">
-        <a href="index.html" class="nav-logo">
+        <a href="/" class="nav-logo">
             <img src="images/logo_header_branca.png" alt="São Mateus do Sul — Capital Polonesa do Paraná">
         </a>
 
@@ -16,50 +16,50 @@
         </button>
 
         <ul class="nav-links" id="navLinks">
-            <li><a href="index.html" data-lang-key="nav-inicio">Início</a></li>
+            <li><a href="/" data-lang-key="nav-inicio">Início</a></li>
 
             <li>
                 <button class="dropdown-toggle"><span data-lang-key="nav-oquefazer">O Que Fazer</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu">
-                    <a href="o-que-fazer.html" data-lang-key="nav-todas-atracoes">🌿 Todas as Atrações</a>
+                    <a href="/o-que-fazer" data-lang-key="nav-todas-atracoes">🌿 Todas as Atrações</a>
                     <div class="divider"></div>
-                    <a href="o-que-fazer.html#erva-mate" data-lang-key="nav-erva-mate">🧉 Rota da Erva-Mate</a>
-                    <a href="o-que-fazer.html#cultura-polonesa" data-lang-key="nav-cultura-polonesa">🇵🇱 Cultura Polonesa</a>
-                    <a href="o-que-fazer.html#turismo-fe" data-lang-key="nav-turismo-fe">⛪ Turismo de Fé</a>
-                    <a href="o-que-fazer.html#natureza" data-lang-key="nav-natureza">🌊 Náutica e Natureza</a>
+                    <a href="/o-que-fazer#erva-mate" data-lang-key="nav-erva-mate">🧉 Rota da Erva-Mate</a>
+                    <a href="/o-que-fazer#cultura-polonesa" data-lang-key="nav-cultura-polonesa">🇵🇱 Cultura Polonesa</a>
+                    <a href="/o-que-fazer#turismo-fe" data-lang-key="nav-turismo-fe">⛪ Turismo de Fé</a>
+                    <a href="/o-que-fazer#natureza" data-lang-key="nav-natureza">🌊 Náutica e Natureza</a>
                 </div>
             </li>
 
             <li>
                 <button class="dropdown-toggle"><span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu">
-                    <a href="sabores.html" data-lang-key="nav-gastronomia">🍽️ Gastronomia</a>
+                    <a href="/sabores" data-lang-key="nav-gastronomia">🍽️ Gastronomia</a>
                     <div class="divider"></div>
-                    <a href="sabores.html#polonesa" data-lang-key="nav-culinaria-polonesa">🥟 Culinária Polonesa</a>
-                    <a href="sabores.html#feiras" data-lang-key="nav-feiras">🛒 Feiras e Produtores</a>
-                    <a href="sabores.html#restaurantes" data-lang-key="nav-restaurantes">🍴 Restaurantes</a>
+                    <a href="/sabores#polonesa" data-lang-key="nav-culinaria-polonesa">🥟 Culinária Polonesa</a>
+                    <a href="/sabores#feiras" data-lang-key="nav-feiras">🛒 Feiras e Produtores</a>
+                    <a href="/sabores#restaurantes" data-lang-key="nav-restaurantes">🍴 Restaurantes</a>
                 </div>
             </li>
 
-            <li><a href="eventos.html" data-lang-key="nav-eventos">Eventos</a></li>
-            <li><a href="noticias.html" data-lang-key="nav-noticias">📰 Notícias</a></li>
-            <li><a href="galeria.html" data-lang-key="nav-galeria">Galeria</a></li>
-            <li><a href="onde-ficar.html" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
-            <li><a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a></li>
+            <li><a href="/eventos" data-lang-key="nav-eventos">Eventos</a></li>
+            <li><a href="/noticias" data-lang-key="nav-noticias">📰 Notícias</a></li>
+            <li><a href="/galeria" data-lang-key="nav-galeria">Galeria</a></li>
+            <li><a href="/onde-ficar" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
+            <li><a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a></li>
 
             <li>
                 <button class="dropdown-toggle"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu">
-                    <a href="index.html#sobre" data-lang-key="nav-cidade">🏛️ A Cidade</a>
-                    <a href="transparencia.html" data-lang-key="nav-transparencia">📋 Transparência</a>
-                    <a href="para-o-trade.html" data-lang-key="nav-trade">💼 Para o Trade</a>
+                    <a href="/#sobre" data-lang-key="nav-cidade">🏛️ A Cidade</a>
+                    <a href="/transparencia" data-lang-key="nav-transparencia">📋 Transparência</a>
+                    <a href="/para-o-trade" data-lang-key="nav-trade">💼 Para o Trade</a>
                 </div>
             </li>
 
-            <li><a href="index.html#contato" data-lang-key="nav-contato">Contato</a></li>
+            <li><a href="/#contato" data-lang-key="nav-contato">Contato</a></li>
 
             <li>
-                <a href="portal-usuario.html" class="nav-login-btn" data-lang-key="nav-login">👤 Entrar</a>
+                <a href="/portal-usuario" class="nav-login-btn" data-lang-key="nav-login">👤 Entrar</a>
             </li>
 
             <li>

@@ -391,24 +391,13 @@
     // Aplicar filtros
     function applyFilters() {
         filteredEvents = eventos.filter(evento => {
-            const data = new Date(evento.data);
+            const data = new Date(evento.data + 'T12:00:00');
             const month = data.getMonth() + 1;
-            
-            // Filtro de mês
-            if (currentMonth !== 'all' && month !== parseInt(currentMonth)) {
-                return false;
-            }
-            
-            // Filtro de categoria
-            if (currentCategory !== 'all' && evento.categoria !== currentCategory) {
-                return false;
-            }
-            
-            // Filtro de destaques
-            if (showFeaturedOnly && !evento.destaque) {
-                return false;
-            }
-            
+
+            if (currentMonth !== 'all' && month !== parseInt(currentMonth)) return false;
+            if (currentCategory !== 'all' && evento.categoria !== currentCategory) return false;
+            if (showFeaturedOnly && !evento.destaque) return false;
+
             return true;
         });
 
@@ -443,55 +432,68 @@
 
     // Renderizar eventos
     function renderEvents() {
-    const container = document.getElementById('eventsList');
-    const noResults = document.getElementById('noResults');
-        
-        // Garantir que a lista esteja visível quando a view for 'list'
-        if (currentView === 'list') {
-            container.style.display = 'grid';
-        }
-        
+        const container = document.getElementById('eventsList');
+        const noResults  = document.getElementById('noResults');
+
+        if (currentView === 'list') container.style.display = 'grid';
+
         if (filteredEvents.length === 0) {
             container.innerHTML = '';
             noResults.style.display = 'block';
             return;
         }
-        
         noResults.style.display = 'none';
-        
-        // Agrupar por data para evitar repetição visual
-        const uniqueEvents = [];
-        const seen = new Set();
-        
-        for (const evento of filteredEvents) {
-            // Para feiras recorrentes, mostrar apenas alguns
-            if (evento.recorrente && evento.titulo.includes('Feira')) {
-                const key = `${evento.titulo}-${evento.data.substring(0, 7)}`;
-                if (seen.has(key)) continue;
-                seen.add(key);
+
+        // Se mostrando TODOS os meses sem filtro de categoria:
+        // agrupa feiras recorrentes — mostra apenas a 1ª ocorrência por semana do mês
+        // e adiciona um card resumo "X ocorrências no mês"
+        const mostraTodos = currentMonth === 'all' && currentCategory === 'all' && !showFeaturedOnly;
+        const mostrandoFeira = currentCategory === 'feira';
+
+        let listaFinal = [];
+
+        if (mostraTodos) {
+            // Separar destaques + não recorrentes do restante
+            const especiais  = filteredEvents.filter(e => !e.recorrente || e.destaque);
+            const recorrentes = filteredEvents.filter(e => e.recorrente && !e.destaque);
+
+            // Para recorrentes: 1 representação por tipo por mês
+            const vistosRec = new Map();
+            for (const ev of recorrentes) {
+                const chave = `${ev.titulo}-${ev.data.substring(0,7)}`;
+                if (!vistosRec.has(ev.titulo + ev.data.substring(0,7))) {
+                    vistosRec.set(ev.titulo + ev.data.substring(0,7), ev);
+                }
             }
-            uniqueEvents.push(evento);
+            listaFinal = [...especiais, ...Array.from(vistosRec.values())]
+                .sort((a,b) => new Date(a.data) - new Date(b.data))
+                .slice(0, 60);
+        } else if (mostrandoFeira) {
+            // Mostrar todas as feiras do mês selecionado (ou 30 no máximo)
+            listaFinal = filteredEvents.slice(0, 60);
+        } else {
+            listaFinal = filteredEvents.slice(0, 60);
         }
 
-        // Limitar a 50 eventos na visualização
-        const eventsToShow = uniqueEvents.slice(0, 50);
-        
-        container.innerHTML = eventsToShow.map(evento => {
+        container.innerHTML = listaFinal.map(evento => {
             const data = new Date(evento.data + 'T12:00:00');
-            const dia = data.getDate();
-            const mes = meses[data.getMonth() + 1].substring(0, 3);
-            const diaSemana = diasSemana[data.getDay()];
-            
+            const dia  = data.getDate();
+            const mes  = meses[data.getMonth() + 1].substring(0, 3);
+            const dow  = diasSemana[data.getDay()];
+            const badge = evento.recorrente && !evento.destaque
+                ? `<span style="font-size:0.65rem;background:#e8f5e9;color:#2e7d32;padding:0.15rem 0.5rem;border-radius:10px;margin-left:0.5rem;">recorrente</span>`
+                : '';
+
             return `
-                <div class="event-card ${evento.categoria} ${evento.destaque ? 'destaque' : ''}" 
-                     onclick="showEventDetails(${evento.id})">
+                <div class="event-card ${evento.categoria} ${evento.destaque ? 'destaque' : ''}"
+                     onclick="showEventDetails(${evento.id})" style="cursor:pointer">
                     <div class="event-date">
                         <div class="day">${dia}</div>
                         <div class="month">${mes}</div>
-                        <div class="weekday">${diaSemana}</div>
+                        <div class="weekday">${dow}</div>
                     </div>
                     <div class="event-info">
-                        <h4>${evento.destaque ? '⭐ ' : ''}${evento.titulo}</h4>
+                        <h4>${evento.destaque ? '⭐ ' : ''}${evento.titulo}${badge}</h4>
                         <div class="meta">
                             <span>🕐 ${evento.horario}</span>
                             <span>📍 ${evento.local}</span>
@@ -500,16 +502,15 @@
                     <div class="event-actions">
                         <button class="btn-details">Ver mais</button>
                     </div>
-                </div>
-            `;
+                </div>`;
         }).join('');
 
-        if (uniqueEvents.length > 50) {
+        if (filteredEvents.length > 60) {
             container.innerHTML += `
-                <div style="text-align: center; padding: 1rem; color: #666;">
-                    Mostrando 50 de ${uniqueEvents.length} eventos. Use os filtros para refinar.
-                </div>
-            `;
+                <p style="text-align:center;padding:1rem;color:#666;font-size:0.9rem;">
+                    Mostrando ${listaFinal.length} de ${filteredEvents.length} eventos.
+                    Filtre por mês ou categoria para ver todos.
+                </p>`;
         }
     }
 
