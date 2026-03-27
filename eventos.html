@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/eventos.css">
+    <script src="js/scroll-animations.js" defer></script>
     <style>
     /* ── Mês nav compacto ── */
     .mes-nav { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem; }
@@ -341,6 +342,8 @@
         aplicarFiltros();
         renderDestaques();
         mostrarVista('lista');
+        // Animar elementos recém-injetados
+        if (window.animRefresh) setTimeout(window.animRefresh, 60);
     }
 
     // ── Contadores da sidebar ────────────────────────────────────────

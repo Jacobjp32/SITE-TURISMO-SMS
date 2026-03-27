@@ -200,6 +200,15 @@ body { padding-top: 72px; }
     // Injetar nav no início do <body>
     document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
 
+    // Carregar animações de scroll (uma vez por página)
+    if (!document.getElementById('scroll-anim-script')) {
+        var animScript = document.createElement('script');
+        animScript.id  = 'scroll-anim-script';
+        animScript.src = 'js/scroll-animations.js';
+        animScript.defer = true;
+        document.body.appendChild(animScript);
+    }
+
     // Hamburger toggle
     document.addEventListener('DOMContentLoaded', function () {
         var toggle = document.getElementById('navToggle');
