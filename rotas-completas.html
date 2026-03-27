@@ -60,7 +60,133 @@
             transition: background 0.2s;
             white-space: nowrap;
         }
-        .map-toggle-btn:hover { background: rgba(255,255,255,0.22); }
+        /* removido - novo estilo na toolbar abaixo */
+        }
+        .map-toggle-btn-OLD { display:none; }
+
+        /* ══ TOOLBAR INTEGRADA ═══════════════════════════════════ */
+        .map-toolbar {
+            padding: 0.6rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.45rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .toolbar-row1 {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+        .map-header-title {
+            font-family: 'Cormorant Garamond', serif;
+            color: #e8c9a0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin: 0;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .tb-search {
+            flex: 1;
+            min-width: 0;
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .tb-search-icon {
+            position: absolute;
+            left: 0.65rem;
+            color: rgba(255,255,255,0.45);
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+        .tb-search input {
+            width: 100%;
+            padding: 0.38rem 0.75rem 0.38rem 1.85rem;
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 20px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.8rem;
+            outline: none;
+            transition: background 0.2s, border 0.2s;
+        }
+        .tb-search input::placeholder { color: rgba(255,255,255,0.4); }
+        .tb-search input:focus { background: rgba(255,255,255,0.17); border-color: #d4a574; }
+        .tb-select {
+            flex-shrink: 0;
+            padding: 0.38rem 1.6rem 0.38rem 0.65rem;
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 20px;
+            color: white;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.76rem;
+            cursor: pointer;
+            outline: none;
+            max-width: 165px;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(255,255,255,0.55)'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.55rem center;
+            background-color: rgba(255,255,255,0.11);
+            transition: border 0.2s;
+        }
+        .tb-select:focus { border-color: #d4a574; }
+        .tb-select option { background: #0a3d2e; color: white; }
+        .map-toggle-btn {
+            background: rgba(255,255,255,0.09);
+            border: 1px solid rgba(232,201,160,0.3);
+            color: #e8c9a0;
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.73rem;
+            font-family: 'Raleway', sans-serif;
+            cursor: pointer;
+            transition: background 0.2s;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .map-toggle-btn:hover { background: rgba(255,255,255,0.18); }
+        .tb-count {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .toolbar-row2 {
+            display: flex;
+            gap: 0.3rem;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 1px;
+        }
+        .toolbar-row2::-webkit-scrollbar { display: none; }
+        .tb-pill {
+            flex-shrink: 0;
+            padding: 0.24rem 0.8rem;
+            border: 1.5px solid rgba(255,255,255,0.22);
+            border-radius: 20px;
+            background: transparent;
+            color: rgba(255,255,255,0.7);
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.73rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .tb-pill:hover { background: rgba(255,255,255,0.1); color: white; }
+        .tb-pill.active { background: #d4a574; border-color: #d4a574; color: #0a3d2e; }
+        @media (max-width: 600px) {
+            .map-toolbar { padding: 0.45rem 0.75rem; gap: 0.35rem; }
+            .map-header-title { display: none; }
+            .tb-select { max-width: 120px; font-size: 0.7rem; }
+            .tb-count { display: none; }
+        }
+        /* ════════════════════════════════════════════════════════ */
 
         #routeMap {
             width: 100%;
@@ -146,59 +272,64 @@
         </p>
     </header>
 
-    <!-- MAPA INTERATIVO -->
+    <!-- MAPA INTERATIVO + TOOLBAR INTEGRADA -->
     <section class="map-section">
-        <div class="map-header">
-            <h3 class="map-header-title">🗺️ Mapa das Rotas</h3>
-            <button class="map-toggle-btn" id="mapToggleBtn" onclick="toggleMap()">▲ Ocultar mapa</button>
+
+        <!-- Toolbar: busca + localidade + rotas + toggle -->
+        <div class="map-toolbar">
+
+            <!-- Linha 1 -->
+            <div class="toolbar-row1">
+                <h3 class="map-header-title">🗺️ Rotas</h3>
+
+                <div class="tb-search">
+                    <span class="tb-search-icon">🔍</span>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Buscar nome, localidade..."
+                        oninput="filterEstablishments()"
+                    >
+                </div>
+
+                <select id="locationFilter" class="tb-select" onchange="filterByLocation()">
+                    <option value="all">📍 Localidades</option>
+                    <option value="divisa">Divisa</option>
+                    <option value="fluviópolis">Fluviópolis</option>
+                    <option value="taquaral">Taquaral</option>
+                    <option value="água branca">Água Branca</option>
+                    <option value="espigãozinho">Espigãozinho</option>
+                    <option value="faxinal">Faxinal Ilhéus</option>
+                    <option value="lajeadinho">Lajeadinho</option>
+                    <option value="são joaquim">São Joaquim</option>
+                    <option value="centro">Centro</option>
+                    <option value="iguaçu">Col. Iguaçu</option>
+                    <option value="potinga">Barra Potinga</option>
+                    <option value="emboque">Emboque</option>
+                    <option value="cachoeira">Cachoeira</option>
+                    <option value="vargem">Vargem Grande</option>
+                </select>
+
+                <span class="tb-count" id="resultsCount"></span>
+
+                <button class="map-toggle-btn" id="mapToggleBtn" onclick="toggleMap()">▲ Mapa</button>
+            </div>
+
+            <!-- Linha 2: pills de rota -->
+            <div class="toolbar-row2">
+                <button class="tb-pill active" onclick="filterByRoute('all')">Todas</button>
+                <button class="tb-pill" onclick="filterByRoute('sabores')">🍓 Sabores &amp; Memórias</button>
+                <button class="tb-pill" onclick="filterByRoute('mate')">🌿 Erva-Mate</button>
+                <button class="tb-pill" onclick="filterByRoute('polonesa')">⛪ Polonesa</button>
+                <button class="tb-pill" onclick="filterByRoute('aguas')">🌊 Das Águas</button>
+                <button class="tb-pill" onclick="filterByRoute('fluviop')">🏘️ Fluviópolis</button>
+                <button class="tb-pill" onclick="filterByRoute('terra')">🌱 Da Terra</button>
+            </div>
+
         </div>
+
         <div id="routeMap"></div>
     </section>
-
-    <!-- FILTROS -->
-    <div class="filters">
-        <div class="filters-container">
-            <div class="search-box">
-                <input
-                    type="text"
-                    id="searchInput"
-                    class="search-input"
-                    placeholder="🔍 Buscar por nome, localidade ou tipo de experiência..."
-                    data-lang-key-placeholder="rotas-busca-ph"
-                    oninput="filterEstablishments()"
-                >
-            </div>
-            <div style="width:100%;margin-top:1rem;">
-                <select id="locationFilter" onchange="filterByLocation()" style="width:100%;padding:0.55rem 1.2rem;border:2px solid #1a5d43;border-radius:50px;font-size:0.9rem;font-family:var(--font-body);background:white;cursor:pointer;">
-                    <option value="all">📍 Todas as Localidades</option>
-                    <option value="divisa">Localidade de Divisa</option>
-                    <option value="fluviópolis">Localidade de Fluviópolis</option>
-                    <option value="taquaral">Localidade de Taquaral / Colônia Taquaral</option>
-                    <option value="água branca">Localidade da Água Branca</option>
-                    <option value="espigãozinho">Localidade do Espigãozinho</option>
-                    <option value="faxinal">Localidade do Faxinal do Ilhéus</option>
-                    <option value="lajeadinho">Localidade do Lajeadinho</option>
-                    <option value="são joaquim">Bairro São Joaquim</option>
-                    <option value="centro">Centro</option>
-                    <option value="iguaçu">Colônia Iguaçu</option>
-                    <option value="potinga">Localidade da Barra do Potinga</option>
-                    <option value="emboque">Localidade do Emboque</option>
-                    <option value="cachoeira">Colônia Cachoeira</option>
-                    <option value="vargem">Localidade da Vargem Grande</option>
-                </select>
-            </div>
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterByRoute('all')">Todas</button>
-                <button class="filter-btn" onclick="filterByRoute('sabores')">🍓 Sabores & Memórias</button>
-                <button class="filter-btn" onclick="filterByRoute('mate')">🌿 Erva-Mate</button>
-                <button class="filter-btn" onclick="filterByRoute('polonesa')">⛪ Polonesa</button>
-                <button class="filter-btn" onclick="filterByRoute('aguas')">🌊 Das Águas</button>
-                <button class="filter-btn" onclick="filterByRoute('fluviop')">🏘️ Fluviópolis</button>
-                <button class="filter-btn" onclick="filterByRoute('terra')">🌱 Da Terra</button>
-            </div>
-        </div>
-        <div class="results-count" id="resultsCount"></div>
-    </div>
 
     <!-- LISTAGEM -->
     <main class="main" id="mainContent">
@@ -442,9 +573,12 @@
 
     function filterByRoute(route) {
         currentFilter = route;
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        const btn = document.querySelector('.filter-btn[onclick*="\'' + route + '\'"]');
-        if (btn) btn.classList.add('active');
+        // Atualiza pill ativa na toolbar
+        document.querySelectorAll('.tb-pill').forEach(function(b) {
+            b.classList.remove('active');
+            var oc = b.getAttribute('onclick') || '';
+            if (oc.indexOf("'" + route + "'") !== -1) b.classList.add('active');
+        });
         document.getElementById('searchInput').value = '';
         renderContent();
         requestAnimationFrame(applyFilters);
