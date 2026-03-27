@@ -1,158 +1,199 @@
 /**
- * scroll-animations.js — Animações de scroll para o Portal de Turismo SMS
- * Usa Intersection Observer nativo — zero dependências, zero impacto na performance
+ * scroll-animations.js — Portal de Turismo São Mateus do Sul
+ * Animações de scroll via IntersectionObserver — zero dependências
  *
- * Como funciona:
- *  1. Elementos com [data-anim] começam invisíveis (via CSS em shared.css)
- *  2. Quando entram na viewport, ganham a classe .anim-visivel → animam suavemente
- *  3. O script adiciona [data-anim] automaticamente nos elementos certos de cada página
+ * Abordagem: aplica estilos diretamente via JS (estado inicial + transição)
+ * para não ser bloqueado por CSS inline nos elementos ou especificidade de folhas.
  */
 
 (function () {
     'use strict';
 
-    // Seletores que recebem animação automática
-    const AUTO_SELECTORS = [
-        // Seções e cards genéricos
-        '.attraction-card',
-        '.hotel-card',
-        '.dashboard-card',
-        '.review-card',
-        '.blog-card',
-        '.event-card',
-        '.ev-card',
-        '.card',
-        '.filter-card',
-        // Seções de conteúdo
-        '.pilar-item',
-        '.section-panel',
-        '.featured-card',
-        '.destaque-card',
-        '.festa-card',
-        '.contact-card',
-        '.gallery-item',
-        // Banners e blocos grandes
-        '.welcome-banner',
-        '.diorama-section',
-        // Textos de seção
-        '.section-intro',
-        '.section-header',
-        '.about-hero-content',
-        // Grids e painéis
-        '.dashboard-grid',
-        '.events-container',
-        '.events-header',
-        '.featured-section',
-        // Itens de lista
-        '.event-item',
-        '.mes-secao',
-        '.feira-resumo',
-        // Sidebar e filtros
-        '.sidebar',
-        // Posts e artigos
-        '.post-card',
-        '.post-grid > article',
-        // Galeria
-        '.card',
+    // Respeitar prefers-reduced-motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    // ── Configuração ─────────────────────────────────────────────────
+
+    // Elementos que animam sozinhos (seletor → variante)
+    var ALVO = [
+        // index.html
+        { sel: '.attraction-card',   v: 'up'   },
+        { sel: '.blog-card',         v: 'up'   },
+        { sel: '.hotel-card',        v: 'up'   },
+        { sel: '.gallery-item',      v: 'zoom' },
+        { sel: '.review-card',       v: 'up'   },
+        // eventos / portal
+        { sel: '.ev-card',           v: 'up'   },
+        { sel: '.destaque-card',     v: 'zoom' },
+        { sel: '.mes-secao',         v: 'up'   },
+        { sel: '.feira-resumo',      v: 'up'   },
+        { sel: '.filter-card',       v: 'up'   },
+        // portal usuário
+        { sel: '.dashboard-card',    v: 'up'   },
+        { sel: '.section-panel',     v: 'up'   },
+        { sel: '.welcome-banner',    v: 'up'   },
+        // noticias / galeria
+        { sel: '.post-card',         v: 'up'   },
+        { sel: '.card',              v: 'up'   },
+        // genéricos
+        { sel: '.pilar-item',        v: 'up'   },
+        { sel: '.contact-card',      v: 'up'   },
+        { sel: '.featured-card',     v: 'zoom' },
     ];
 
-    // Variantes de animação por seletor (opcional, senão usa o padrão fade-up)
-    const VARIANTES = {
-        '.pilar-item:nth-child(even)': 'fade-right',
-        '.pilar-item:nth-child(odd)':  'fade-left',
-        '.gallery-item':               'fade-zoom',
-        '.destaque-card':              'fade-zoom',
-        '.featured-card':              'fade-zoom',
+    // Transformações iniciais por variante
+    var TRANSFORM = {
+        up:    'translateY(30px)',
+        down:  'translateY(-24px)',
+        left:  'translateX(-30px)',
+        right: 'translateX(30px)',
+        zoom:  'scale(0.93)',
     };
 
-    // Delay escalonado para grids (filhos de container)
-    const CONTAINERS_ESCALONADOS = [
+    // Delay escalonado: filhos diretos desses containers
+    var GRIDS = [
         '.attractions-grid',
-        '.dashboard-grid',
         '.hotels-grid',
-        '.reviews-grid',
         '.blog-grid',
-        '.featured-grid',
-        '.destaque-grid',
         '.gallery-grid',
-        '.events-grid',
+        '.gallery-section',
+        '.reviews-grid',
+        '.destaque-grid',
+        '.featured-grid',
         '.dashboard-grid',
         '.contact-cards-grid',
-        '.category-grid',
-        '.festas-grid',
-        '.destaque-grid',
     ];
 
+    var DURACAO  = '0.55s';
+    var EASING   = 'cubic-bezier(0.4, 0, 0.2, 1)';
+    var DELAY_MS = 90;   // delay entre filhos de grid
+    var MAX_DELAY= 5;    // máximo 5 × 90ms = 450ms
+
+    // Elementos acima da dobra nunca devem ficar invisíveis
+    var EXCLUIR = ['.hero', '.nav', 'header', '.map-overlay', '.loading'];
+
+    // ── Estado invisível inicial ──────────────────────────────────────
+
+    function estiloInicial(el, variante) {
+        el._animVariante = variante || 'up';
+        el.style.opacity    = '0';
+        el.style.transform  = TRANSFORM[el._animVariante] || TRANSFORM.up;
+        el.style.transition = 'none'; // sem transição no estado inicial
+    }
+
+    function estiloFinal(el) {
+        // Força reflow antes de ativar transição (evita flash)
+        el.style.transition =
+            'opacity ' + DURACAO + ' ' + EASING + ', ' +
+            'transform ' + DURACAO + ' ' + EASING;
+        // Pequeno timeout para garantir que o browser registrou o estado inicial
+        requestAnimationFrame(function () {
+            requestAnimationFrame(function () {
+                el.style.opacity   = '1';
+                el.style.transform = 'none';
+            });
+        });
+    }
+
+    // ── Verificar se está acima da dobra ─────────────────────────────
+
+    function acimaDaDobra(el) {
+        var rect = el.getBoundingClientRect();
+        return rect.top < window.innerHeight && rect.bottom > 0 &&
+               rect.top >= 0; // visível na carga inicial
+    }
+
+    function dentroDosExcluidos(el) {
+        return EXCLUIR.some(function (sel) {
+            return el.closest(sel);
+        });
+    }
+
+    // ── Preparar elementos ───────────────────────────────────────────
+
+    var preparados = new WeakSet();
+
+    function preparar(el, variante, delayExtra) {
+        if (preparados.has(el)) return;
+        if (dentroDosExcluidos(el)) return;
+        preparados.add(el);
+
+        estiloInicial(el, variante);
+
+        if (delayExtra) {
+            el._animDelay = delayExtra;
+        }
+    }
+
+    // ── Observer ─────────────────────────────────────────────────────
+
+    var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+
+            var delay = el._animDelay || 0;
+            if (delay > 0) {
+                setTimeout(function () { estiloFinal(el); }, delay);
+            } else {
+                estiloFinal(el);
+            }
+
+            observer.unobserve(el);
+        });
+    }, {
+        threshold: 0.06,
+        rootMargin: '0px 0px -30px 0px',
+    });
+
+    // ── init ─────────────────────────────────────────────────────────
+
     function init() {
-        // Adicionar data-anim nos elementos que ainda não têm
-        AUTO_SELECTORS.forEach(function (sel) {
-            document.querySelectorAll(sel).forEach(function (el) {
-                if (!el.hasAttribute('data-anim')) {
-                    el.setAttribute('data-anim', 'fade-up');
-                }
+
+        // 1. Elementos individuais
+        ALVO.forEach(function (item) {
+            document.querySelectorAll(item.sel).forEach(function (el) {
+                // Evitar duplicata se já está num grid escalonado
+                preparar(el, item.v, 0);
             });
         });
 
-        // Aplicar variantes específicas
-        Object.entries(VARIANTES).forEach(function ([sel, variante]) {
-            document.querySelectorAll(sel).forEach(function (el) {
-                el.setAttribute('data-anim', variante);
-            });
-        });
-
-        // Delay escalonado nos filhos de grids
-        CONTAINERS_ESCALONADOS.forEach(function (containerSel) {
-            document.querySelectorAll(containerSel).forEach(function (container) {
-                Array.from(container.children).forEach(function (filho, i) {
-                    if (!filho.hasAttribute('data-anim')) {
-                        filho.setAttribute('data-anim', 'fade-up');
-                    }
-                    // Máx 6 delays distintos para não esperar demais
-                    var delay = Math.min(i, 5) * 80;
-                    filho.style.transitionDelay = delay + 'ms';
+        // 2. Grids — delay escalonado por filho
+        GRIDS.forEach(function (gridSel) {
+            document.querySelectorAll(gridSel).forEach(function (grid) {
+                var filhos = Array.from(grid.children);
+                filhos.forEach(function (filho, i) {
+                    var delay = Math.min(i, MAX_DELAY) * DELAY_MS;
+                    preparar(filho, 'up', delay);
                 });
             });
         });
 
-        // Observer
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('anim-visivel');
-                    // Não observar mais (animação só uma vez)
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, {
-            threshold: 0.08,       // 8% do elemento visível já dispara
-            rootMargin: '0px 0px -40px 0px'  // 40px antes do fundo da viewport
-        });
-
-        // Observar todos os elementos com data-anim
-        document.querySelectorAll('[data-anim]').forEach(function (el) {
-            observer.observe(el);
+        // 3. Observar tudo que foi preparado
+        //    Elementos já visíveis na carga: animar imediatamente sem observer
+        document.querySelectorAll('*').forEach(function (el) {
+            if (!preparados.has(el)) return;
+            if (acimaDaDobra(el)) {
+                // Já visível — animar com leve delay para não piscar
+                setTimeout(function () { estiloFinal(el); }, 80);
+            } else {
+                observer.observe(el);
+            }
         });
     }
 
-    // Respeitar prefers-reduced-motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        // Sem animações — apenas tornar visível imediatamente
-        document.querySelectorAll('[data-anim]').forEach(function (el) {
-            el.classList.add('anim-visivel');
-        });
-        return;
-    }
+    // ── Rodar ────────────────────────────────────────────────────────
 
-    // Rodar após DOM pronto
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        init();
+        // DOM já pronto (script carregado depois)
+        setTimeout(init, 0);
     }
 
-    // Re-rodar quando conteúdo dinâmico for injetado (eventos, galeria via JS)
+    // API pública para conteúdo injetado via JS
     window.animRefresh = function () {
-        init();
+        setTimeout(init, 60);
     };
 
 })();

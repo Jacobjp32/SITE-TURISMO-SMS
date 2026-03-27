@@ -233,64 +233,15 @@ body {
 
 /* ================================================================
    SCROLL ANIMATIONS
-   Elementos com [data-anim] começam invisíveis e animam ao entrar
-   na viewport via scroll-animations.js (Intersection Observer)
-   Não afeta elementos antes da viewport (above-the-fold)
+   Controladas via scroll-animations.js (IntersectionObserver)
+   Os estados inicial e final são aplicados via JS diretamente
+   no style do elemento para sobrepor qualquer CSS inline.
 ================================================================ */
 
-/* Estado inicial — invisível */
-[data-anim] {
-    opacity: 0;
-    will-change: opacity, transform;
-}
-
-/* fade-up (padão) */
-[data-anim="fade-up"] {
-    transform: translateY(28px);
-}
-
-/* fade-down */
-[data-anim="fade-down"] {
-    transform: translateY(-24px);
-}
-
-/* fade-left — entra da esquerda */
-[data-anim="fade-left"] {
-    transform: translateX(-32px);
-}
-
-/* fade-right — entra da direita */
-[data-anim="fade-right"] {
-    transform: translateX(32px);
-}
-
-/* fade-zoom — cresce levemente */
-[data-anim="fade-zoom"] {
-    transform: scale(0.95);
-}
-
-/* Estado final — visível, com transição suave */
-[data-anim].anim-visivel {
-    opacity: 1;
-    transform: none;
-    transition:
-        opacity 0.55s cubic-bezier(0.4, 0, 0.2, 1),
-        transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Elementos acima da dobra não devem ter delay */
-.hero [data-anim],
-.map-info-panel [data-anim],
-.nav [data-anim] {
-    transition-delay: 0ms !important;
-}
-
-/* Respeitar preferência do sistema */
+/* Garantia de acessibilidade: sem animações para quem prefere */
 @media (prefers-reduced-motion: reduce) {
-    [data-anim],
-    [data-anim].anim-visivel {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
+    * {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
     }
 }
