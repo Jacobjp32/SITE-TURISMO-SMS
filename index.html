@@ -871,6 +871,135 @@
         </div>
     </section>
 
+    <!-- PRÓXIMOS EVENTOS (reposicionado: antes do Contato para melhorar jornada do visitante) -->
+    <section id="eventos" style="background: linear-gradient(180deg, #f8f6f0 0%, #fff 100%); padding: 5rem 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
+                <div>
+                    <span style="display: inline-block; background: #d4a574; color: #0a3d2e; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;" data-lang-key="label-calendario">Calendário 2026</span>
+                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-proximos-eventos">Próximos Eventos</h2>
+                    <p style="color: #666; font-size: 1.1rem;" data-lang-key="section-eventos-desc">Festas, feiras e celebrações da Capital Polonesa</p>
+                </div>
+                <a href="eventos.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
+                    Ver Calendário Completo →
+                </a>
+            </div>
+
+            <div id="proximosEventosHome" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <p style="grid-column: 1/-1; text-align: center; color: #666;" data-lang-key="loading-eventos">Carregando eventos...</p>
+            </div>
+
+            <!-- Eventos Recorrentes -->
+            <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 5px 30px rgba(0,0,0,0.08);">
+                <h3 style="font-family: 'Cormorant Garamond', serif; color: #0a3d2e; margin-bottom: 1.5rem; font-size: 1.5rem;" data-lang-key="section-eventos-fixos">📅 Eventos Semanais Fixos</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
+                        <span style="font-size: 2rem;">🍽️</span>
+                        <div>
+                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-gastro">Feira Gastronômica</strong>
+                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-gastro-horario">Qua e Sex • 17h-22h</p>
+                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
+                        <span style="font-size: 2rem;">🥬</span>
+                        <div>
+                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-produtor">Feira do Produtor</strong>
+                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-produtor-horario">Sábados • 7h-12h</p>
+                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
+                        <span style="font-size: 2rem;">🧉</span>
+                        <div>
+                            <strong style="color: #0a3d2e;" data-lang-key="ev-roda-mathe">Roda de Mathe</strong>
+                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-roda-mathe-horario">1º Domingo • 9h</p>
+                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-chimarrodromo">Chimarródromo</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
+                        <span style="font-size: 2rem;">🌙</span>
+                        <div>
+                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-lua">Feira da Lua</strong>
+                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-lua-horario">2ª Terça • 17h-22h</p>
+                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-vila">Vila Pinheirinho</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ONDE FICAR (reposicionado: antes do Contato para melhorar jornada do visitante) -->
+    <section class="section-where-stay" id="onde-ficar">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label" data-lang-key="hospedagem-label">Hospedagem</span>
+                <h2 class="section-title" data-lang-key="section-onde-ficar">Onde Ficar</h2>
+                <p class="section-description" data-lang-key="hospedagem-desc">Conforto e hospitalidade polonesa para sua estadia</p>
+            </div>
+
+            <div class="hotels-grid">
+                <div class="hotel-card">
+                    <div class="hotel-icon">🏨</div>
+                    <h3 class="hotel-name" data-lang-key="hotel1-nome">Hotel São Mateus</h3>
+                    <p class="hotel-description" data-lang-key="hotel1-desc">Hotel tradicional no centro da cidade com quartos confortáveis e café da manhã colonial.</p>
+                    <div class="hotel-features">
+                        <span class="feature" data-lang-key="hotel1-wifi">✓ Wi-Fi gratuito</span>
+                        <span class="feature" data-lang-key="hotel-cafe">✓ Café colonial</span>
+                        <span class="feature" data-lang-key="hotel1-estac">✓ Estacionamento</span>
+                    </div>
+                    <div class="hotel-contact">
+                        <a href="tel:+554232822000">📞 (42) 3282-2000</a>
+                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
+                    </div>
+                </div>
+                <div class="hotel-card">
+                    <div class="hotel-icon">🏨</div>
+                    <h3 class="hotel-name" data-lang-key="hotel2-nome">Hotel Nora</h3>
+                    <p class="hotel-description" data-lang-key="hotel2-desc">Acomodações aconchegantes com atendimento familiar e localização privilegiada.</p>
+                    <div class="hotel-features">
+                        <span class="feature" data-lang-key="hotel2-ac">✓ Quartos climatizados</span>
+                        <span class="feature" data-lang-key="hotel2-tv">✓ TV a cabo</span>
+                        <span class="feature" data-lang-key="hotel2-frigobar">✓ Frigobar</span>
+                    </div>
+                    <div class="hotel-contact">
+                        <a href="tel:+554232821500">📞 (42) 3282-1500</a>
+                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
+                    </div>
+                </div>
+                <div class="hotel-card">
+                    <div class="hotel-icon">🏨</div>
+                    <h3 class="hotel-name" data-lang-key="hotel3-nome">Hotel Dom Leopoldo</h3>
+                    <p class="hotel-description" data-lang-key="hotel3-desc">Hospedagem com charme polonês, restaurante com pratos típicos e ambiente familiar.</p>
+                    <div class="hotel-features">
+                        <span class="feature" data-lang-key="hotel3-rest">✓ Restaurante próprio</span>
+                        <span class="feature" data-lang-key="hotel3-salao">✓ Salão de eventos</span>
+                        <span class="feature" data-lang-key="hotel3-gastro">✓ Gastronomia polonesa</span>
+                    </div>
+                    <div class="hotel-contact">
+                        <a href="tel:+554232823000">📞 (42) 3282-3000</a>
+                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
+                    </div>
+                </div>
+                <div class="hotel-card">
+                    <div class="hotel-icon">🏡</div>
+                    <h3 class="hotel-name" data-lang-key="hotel4-nome">Pousadas Rurais</h3>
+                    <p class="hotel-description" data-lang-key="hotel4-desc">Experiência autêntica em fazendas e propriedades rurais com contato direto com a natureza.</p>
+                    <div class="hotel-features">
+                        <span class="feature" data-lang-key="hotel-cafe">✓ Café colonial</span>
+                        <span class="feature" data-lang-key="hotel4-ativ">✓ Atividades rurais</span>
+                        <span class="feature" data-lang-key="hotel4-nat">✓ Natureza</span>
+                    </div>
+                    <div class="hotel-contact">
+                        <p data-lang-key="hotel4-tel">📞 Consulte disponibilidade</p>
+                        <p data-lang-key="hotel4-loc">📍 Área Rural</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Seção Depoimentos -->
     <section class="reviews-section">
         <div class="reviews-container">
@@ -1087,8 +1216,10 @@
     </script>
 
 
-    <!-- GALERIA DE FOTOS -->
-    <section class="gallery-section" id="galeria">
+    <!-- GALERIA DE FOTOS — ocultada da home (conteúdo redundante, mal posicionada após contato)
+         Galeria completa disponível em galeria.html (menu de navegação)
+         Para reativar: remova o style="display:none" abaixo -->
+    <section class="gallery-section" id="galeria" style="display:none" aria-hidden="true">
         <div class="gallery-container">
             <!-- Header da Galeria -->
             <div class="gallery-header">
@@ -1201,67 +1332,8 @@
 
     <!-- Footer -->
 
-    <!-- PRÓXIMOS EVENTOS -->
-    <section id="eventos" style="background: linear-gradient(180deg, #f8f6f0 0%, #fff 100%); padding: 5rem 2rem;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
-                <div>
-                    <span style="display: inline-block; background: #d4a574; color: #0a3d2e; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;" data-lang-key="label-calendario">Calendário 2026</span>
-                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-eventos" data-lang-key="section-proximos-eventos">Próximos Eventos</h2>
-                    <p style="color: #666; font-size: 1.1rem;" data-lang-key="section-eventos-desc">Festas, feiras e celebrações da Capital Polonesa</p>
-                </div>
-                <a href="eventos.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
-                    Ver Calendário Completo →
-                </a>
-            </div>
-
-            <div id="proximosEventosHome" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
-                <p style="grid-column: 1/-1; text-align: center; color: #666;" data-lang-key="loading-eventos">Carregando eventos...</p>
-            </div>
-
-            <!-- Eventos Recorrentes -->
-            <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 5px 30px rgba(0,0,0,0.08);">
-                <h3 style="font-family: 'Cormorant Garamond', serif; color: #0a3d2e; margin-bottom: 1.5rem; font-size: 1.5rem;" data-lang-key="section-eventos-semanais" data-lang-key="section-eventos-fixos">📅 Eventos Semanais Fixos</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🍽️</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-gastro">Feira Gastronômica</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-gastro-horario">Qua e Sex • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🥬</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-produtor">Feira do Produtor</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-produtor-horario">Sábados • 7h-12h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🧉</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-roda-mathe">Roda de Mathe</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-roda-mathe-horario">1º Domingo • 9h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-chimarrodromo">Chimarródromo</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🌙</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-lua">Feira da Lua</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-lua-horario">2ª Terça • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-vila">Vila Pinheirinho</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- ONDE FICAR -->
-    <section class="section-where-stay" id="onde-ficar">
+    <!-- ONDE FICAR original removido daqui — bloco reposicionado antes dos Depoimentos -->
+    <section class="section-where-stay" id="onde-ficar-placeholder" style="display:none" aria-hidden="true">
         <div class="container">
             <div class="section-header">
                 <span class="section-label" data-lang-key="hospedagem-label">Hospedagem</span>
