@@ -490,3 +490,86 @@
                 height: 45px;
             }
         }
+
+        /* ============================================
+           MOBILE COMPACTO — Filtros e Mapa
+        ============================================ */
+        @media (max-width: 768px) {
+            /* Header mais compacto */
+            .header {
+                padding: 0.75rem 1rem !important;
+            }
+            .header-title {
+                font-size: 1.4rem !important;
+            }
+            .header-subtitle {
+                font-size: 0.82rem !important;
+            }
+
+            /* Filtros compactos */
+            .filters {
+                padding: 0.6rem 0.75rem !important;
+            }
+            .filters-container {
+                gap: 0.4rem !important;
+            }
+            .search-box {
+                min-width: 0 !important;
+                flex: 1 1 100% !important;
+            }
+            .search-input {
+                padding: 0.5rem 1rem !important;
+                font-size: 0.82rem !important;
+            }
+            /* Select localidade compacto */
+            #locationFilter {
+                padding: 0.45rem 1rem !important;
+                font-size: 0.82rem !important;
+                margin-top: 0.35rem !important;
+            }
+            /* Botões de rota: scroll horizontal em vez de grid empilhado */
+            .filter-buttons {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                overflow-x: auto !important;
+                gap: 0.35rem !important;
+                padding-bottom: 0.25rem !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+            .filter-buttons::-webkit-scrollbar { display: none; }
+            .filter-btn {
+                flex-shrink: 0 !important;
+                padding: 0.35rem 0.75rem !important;
+                font-size: 0.78rem !important;
+                white-space: nowrap !important;
+            }
+            .results-count {
+                padding: 0.4rem 0 !important;
+                font-size: 0.8rem !important;
+            }
+
+            /* Mapa menor no mobile */
+            #routeMap {
+                height: 220px !important;
+            }
+            .map-header {
+                padding: 0.5rem 0.75rem !important;
+            }
+            .map-header-title {
+                font-size: 0.9rem !important;
+            }
+            .map-toggle-btn {
+                font-size: 0.72rem !important;
+                padding: 0.25rem 0.7rem !important;
+            }
+
+            /* Cards de estabelecimento */
+            .main {
+                padding: 1rem !important;
+            }
+            .establishments-grid {
+                grid-template-columns: 1fr !important;
+                gap: 1rem !important;
+            }
+        }

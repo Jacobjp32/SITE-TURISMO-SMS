@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <title>Carregando... | Turismo São Mateus do Sul</title>
+    <meta name="description" content="Informações turísticas de São Mateus do Sul — Capital Polonesa do Paraná.">
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --verde: #0a3d2e;
+            --verde2: #1a5d43;
+            --ouro: #d4a574;
+            --creme: #f9f7f4;
+            --font-d: 'Cormorant Garamond', serif;
+            --font-b: 'Raleway', sans-serif;
+        }
+        body { font-family: var(--font-b); background: var(--creme); color: #333; }
+
+        /* ── HERO ── */
+        .hero {
+            position: relative;
+            height: 55vh;
+            min-height: 320px;
+            overflow: hidden;
+            background: var(--verde);
+        }
+        .hero img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.8s ease;
+        }
+        .hero:hover img { transform: scale(1.03); }
+        .hero-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(10,61,46,0.92) 0%, rgba(10,61,46,0.3) 60%, transparent 100%);
+        }
+        .hero-content {
+            position: absolute; bottom: 2rem; left: 2rem; right: 2rem;
+            color: white;
+        }
+        .hero-badge {
+            display: inline-block;
+            background: var(--ouro);
+            color: var(--verde);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.75rem;
+        }
+        .hero-title {
+            font-family: var(--font-d);
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.4rem;
+        }
+        .hero-sub {
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+        .btn-voltar {
+            position: absolute; top: 1.25rem; left: 1.25rem;
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(8px);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 0.5rem 1.1rem;
+            border-radius: 25px;
+            font-family: var(--font-b);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            z-index: 10;
+        }
+        .btn-voltar:hover { background: rgba(255,255,255,0.25); }
+
+        /* ── LAYOUT PRINCIPAL ── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem;
+            display: grid;
+            grid-template-columns: 1fr 340px;
+            gap: 2.5rem;
+            align-items: start;
+        }
+        @media (max-width: 768px) {
+            .container { grid-template-columns: 1fr; padding: 1.25rem 1rem; gap: 1.5rem; }
+        }
+
+        /* ── COLUNA ESQUERDA ── */
+        .sec-label {
+            display: inline-block;
+            background: var(--verde);
+            color: var(--ouro);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+        .sec-title {
+            font-family: var(--font-d);
+            font-size: clamp(1.5rem, 4vw, 2.2rem);
+            color: var(--verde);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .descricao { font-size: 1.05rem; line-height: 1.8; color: #444; margin-bottom: 2rem; }
+        .historia-box {
+            background: white;
+            border-left: 4px solid var(--ouro);
+            border-radius: 0 12px 12px 0;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+        .historia-box h3 {
+            font-family: var(--font-d);
+            color: var(--verde);
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+        }
+        .historia-box p { font-size: 0.95rem; line-height: 1.7; color: #555; }
+
+        /* ── GALERIA ── */
+        .galeria-section { margin-bottom: 2rem; }
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .galeria-grid img {
+            width: 100%; height: 130px;
+            object-fit: cover;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.25s, box-shadow 0.25s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .galeria-grid img:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+
+        /* ── MAPA ── */
+        .mapa-section { margin-bottom: 2rem; }
+        #local-map {
+            width: 100%; height: 260px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            margin-top: 1rem;
+        }
+        .btn-maps {
+            display: block; width: 100%; text-align: center;
+            background: var(--verde);
+            color: white;
+            padding: 0.9rem;
+            border-radius: 10px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-top: 0.75rem;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+        .btn-maps:hover { background: var(--verde2); }
+
+        /* ── COLUNA DIREITA: CARD INFO ── */
+        .info-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+            overflow: hidden;
+            position: sticky;
+            top: 1rem;
+        }
+        .info-card-header {
+            background: var(--verde);
+            color: white;
+            padding: 1.25rem 1.5rem;
+        }
+        .info-card-header h3 {
+            font-family: var(--font-d);
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+        }
+        .info-card-header p { font-size: 0.82rem; opacity: 0.8; }
+        .info-list { padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+        .info-row {
+            display: flex; align-items: flex-start; gap: 0.85rem;
+        }
+        .info-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 0.1rem; }
+        .info-text strong { display: block; font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem; }
+        .info-text span, .info-text a { font-size: 0.9rem; color: #333; line-height: 1.4; text-decoration: none; }
+        .info-text a { color: var(--verde2); font-weight: 600; }
+        .info-text a:hover { text-decoration: underline; }
+        .info-card-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid #f0ede8;
+            display: flex; flex-direction: column; gap: 0.6rem;
+        }
+        .btn-social {
+            display: flex; align-items: center; gap: 0.6rem;
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-social:hover { opacity: 0.82; }
+        .btn-social.instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: white; }
+        .btn-social.website { background: var(--verde); color: white; }
+        .btn-social.phone { background: #25d366; color: white; }
+        .tag-rota {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.35rem 0.85rem;
+            background: rgba(10,61,46,0.08);
+            color: var(--verde);
+            border: 1px solid rgba(10,61,46,0.2);
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin: 0 0.25rem 0.25rem 0;
+        }
+
+        /* ── LOCAIS RELACIONADOS ── */
+        .relacionados { margin-top: 3rem; }
+        .relacionados-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .rel-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .rel-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.14); }
+        .rel-card img { width: 100%; height: 120px; object-fit: cover; }
+        .rel-card-body { padding: 0.85rem 1rem; }
+        .rel-card-body h4 { font-family: var(--font-d); font-size: 1rem; color: var(--verde); margin-bottom: 0.2rem; }
+        .rel-card-body p { font-size: 0.78rem; color: #777; }
+
+        /* ── NOT FOUND ── */
+        .not-found {
+            text-align: center;
+            padding: 5rem 2rem;
+        }
+        .not-found h2 { font-family: var(--font-d); font-size: 2rem; color: var(--verde); margin-bottom: 1rem; }
+        .not-found p { color: #666; margin-bottom: 2rem; }
+        .not-found a { color: var(--verde2); font-weight: 600; }
+
+        /* ── LIGHTBOX ── */
+        .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; }
+        .lb.open { display: flex; }
+        .lb img { max-width: 90vw; max-height: 85vh; border-radius: 8px; }
+        .lb-close {
+            position: absolute; top: 1rem; right: 1.5rem;
+            color: white; font-size: 2rem; cursor: pointer;
+            background: none; border: none;
+        }
+
+        /* ── FOOTER ── */
+        footer { background: var(--verde); color: rgba(255,255,255,0.7); padding: 1.5rem; text-align: center; font-size: 0.82rem; margin-top: 3rem; }
+        footer a { color: var(--ouro); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<!-- Lightbox -->
+<div class="lb" id="lb" onclick="lbClose()">
+    <button class="lb-close" onclick="lbClose()">×</button>
+    <img id="lb-img" src="" alt="">
+</div>
+
+<div id="page-root"></div>
+
+<script src="js/locais-data.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+(function () {
+    // Pega o slug da URL: local.html?id=igreja-matriz
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    const local = window.locaisData && window.locaisData[id];
+    const root = document.getElementById('page-root');
+
+    if (!local) {
+        root.innerHTML = `
+            <div class="not-found">
+                <h2>Local não encontrado</h2>
+                <p>O local solicitado não existe ou ainda não foi cadastrado.</p>
+                <p><a href="index.html">← Voltar ao Portal</a></p>
+            </div>`;
+        return;
+    }
+
+    // SEO dinâmico
+    document.title = local.nome + ' | Turismo São Mateus do Sul';
+    document.querySelector('meta[name="description"]').content = local.descricao.substring(0, 160);
+
+    // Galeria HTML
+    const galeriaHTML = local.galeria && local.galeria.length > 0
+        ? `<section class="galeria-section">
+            <span class="sec-label">📸 Galeria</span>
+            <div class="galeria-grid">
+                ${local.galeria.map((src, i) => `<img src="${src}" alt="${local.nome} — foto ${i+1}" onclick="lbOpen('${src}','${local.nome}')" loading="lazy">`).join('')}
+            </div>
+           </section>`
+        : '';
+
+    // Mapa HTML
+    const mapaHTML = local.lat
+        ? `<section class="mapa-section">
+            <span class="sec-label">📍 Localização</span>
+            <div id="local-map"></div>
+            <a href="${local.mapsUrl || 'https://www.google.com/maps/search/?api=1&query=' + local.lat + ',' + local.lng}" target="_blank" rel="noopener" class="btn-maps">🗺️ Abrir no Google Maps</a>
+           </section>`
+        : '';
+
+    // Redes sociais
+    const sociais = [];
+    if (local.telefone) sociais.push(`<a class="btn-social phone" href="tel:${local.telefone.replace(/\D/g,'')}">📞 ${local.telefone}</a>`);
+    if (local.instagram) sociais.push(`<a class="btn-social instagram" href="https://instagram.com/${local.instagram.replace('@','')}" target="_blank" rel="noopener">📸 ${local.instagram}</a>`);
+    if (local.site) sociais.push(`<a class="btn-social website" href="${local.site}" target="_blank" rel="noopener">🌐 Site oficial</a>`);
+
+    // Tags de rota
+    const rotaTags = local.rota.split('·').map(r => `<span class="tag-rota">${r.trim()}</span>`).join('');
+
+    // Locais relacionados (até 3, excluindo o atual)
+    const relacionados = Object.values(window.locaisData)
+        .filter(l => l.id !== id)
+        .slice(0, 3)
+        .map(l => `
+            <a href="local.html?id=${l.id}" class="rel-card">
+                <img src="${l.imagem}" alt="${l.nome}" loading="lazy">
+                <div class="rel-card-body">
+                    <h4>${l.nome}</h4>
+                    <p>${l.subtitulo}</p>
+                </div>
+            </a>
+        `).join('');
+
+    root.innerHTML = `
+        <!-- HERO -->
+        <div class="hero">
+            <img src="${local.imagem}" alt="${local.nome}" id="hero-img">
+            <div class="hero-overlay"></div>
+            <a class="btn-voltar" onclick="history.back()" href="index.html">← Voltar</a>
+            <div class="hero-content">
+                <div class="hero-badge">${local.badge}</div>
+                <h1 class="hero-title">${local.nome}</h1>
+                <p class="hero-sub">${local.subtitulo}</p>
+            </div>
+        </div>
+
+        <!-- CONTEÚDO -->
+        <div class="container">
+
+            <!-- COLUNA ESQUERDA -->
+            <div class="col-left">
+                <span class="sec-label">Sobre o Local</span>
+                <h2 class="sec-title">${local.nome}</h2>
+                <p class="descricao">${local.descricao}</p>
+
+                ${local.historia ? `
+                <div class="historia-box">
+                    <h3>📖 História</h3>
+                    <p>${local.historia}</p>
+                </div>` : ''}
+
+                ${galeriaHTML}
+                ${mapaHTML}
+
+                <!-- Locais relacionados -->
+                <div class="relacionados">
+                    <span class="sec-label">Conheça também</span>
+                    <div class="relacionados-grid">${relacionados}</div>
+                </div>
+            </div>
+
+            <!-- COLUNA DIREITA: CARD INFO -->
+            <div class="col-right">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <h3>Informações</h3>
+                        <p>${local.categoria}</p>
+                    </div>
+                    <div class="info-list">
+                        ${local.endereco ? `<div class="info-row"><span class="info-icon">📍</span><div class="info-text"><strong>Endereço</strong><span>${local.endereco}</span></div></div>` : ''}
+                        ${local.horario ? `<div class="info-row"><span class="info-icon">⏰</span><div class="info-text"><strong>Horário</strong><span>${local.horario}</span></div></div>` : ''}
+                        ${local.telefone ? `<div class="info-row"><span class="info-icon">📞</span><div class="info-text"><strong>Telefone</strong><a href="tel:${local.telefone.replace(/\D/g,'')}">${local.telefone}</a></div></div>` : ''}
+                        ${local.acessibilidade ? `<div class="info-row"><span class="info-icon">♿</span><div class="info-text"><strong>Acessibilidade</strong><span>${local.acessibilidade}</span></div></div>` : ''}
+                        <div class="info-row"><span class="info-icon">🗺️</span><div class="info-text"><strong>Rota</strong><div style="margin-top:0.3rem">${rotaTags}</div></div></div>
+                    </div>
+                    ${sociais.length ? `<div class="info-card-footer">${sociais.join('')}</div>` : ''}
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+            <p style="margin-top:.5rem"><a href="index.html">← Portal do Turismo</a> · <a href="rotas-completas.html">Rotas Turísticas</a></p>
+        </footer>
+    `;
+
+    // Inicializa mapa Leaflet se houver coordenadas
+    if (local.lat) {
+        setTimeout(function () {
+            const map = L.map('local-map', { center: [local.lat, local.lng], zoom: 15 });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap',
+                maxZoom: 19
+            }).addTo(map);
+            L.marker([local.lat, local.lng])
+                .addTo(map)
+                .bindPopup('<strong>' + local.nome + '</strong><br>' + (local.endereco || ''))
+                .openPopup();
+        }, 100);
+    }
+})();
+
+// Lightbox simples
+function lbOpen(src, alt) {
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lb-img').alt = alt;
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function lbClose() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
+</script>
+
+</body>
+</html>
