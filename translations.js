@@ -336,6 +336,35 @@ const translations = {
     'ev-local-chimarrodromo': 'Chimarródromo',
     'ev-local-vila': 'Vila Pinheirinho',
     'btn-ver-local': 'Ver mais →',
+    'footer-voltar-portal': '← Voltar para o Portal',
+    'noticias-hero-h': '📰 Notícias & Novidades',
+    'noticias-hero-p': 'Fique por dentro de tudo que acontece no turismo de São Mateus do Sul',
+    'noticias-sidebar-sobre-h': '🏱️ Sobre as notícias',
+    'noticias-sidebar-cat': '📁 Categorias',
+    'noticias-sidebar-tags': '🏷️ Tags',
+    'noticias-sidebar-redes': '📱 Siga-nos',
+    'noticias-sidebar-link': 'Acessar portal da Prefeitura →',
+    'noticias-cta-prefeitura': '📰 Ver todas as notícias no Portal da Prefeitura',
+    'noticias-fonte-texto': 'Notícias fornecidas pelo',
+    'noticias-fonte-cat': 'categoria Cultura e Turismo',
+    'noticias-fonte-link': 'Ver todas as notícias →',
+    'galeria-h1': '📸 Galeria & Vídeos',
+    'galeria-hero-p': 'Explore as belezas, a cultura polonesa e os atrativos turísticos de São Mateus do Sul — Capital Polonesa do Paraná',
+    'galeria-tab-patrimonio': '🏱️ Patrimônio',
+    'galeria-tab-natureza': '🌊 Natureza',
+    'galeria-tab-gastro': '🍽️ Gastronomia',
+    'galeria-tab-eventos': '🎆 Eventos',
+    'galeria-tab-arte': '🎨 Arte & História',
+    'galeria-tab-videos': '🎥 Vídeos',
+    'galeria-sec-patrimonio': '🏱️ Patrimônio Histórico',
+    'galeria-sec-natureza': '🌊 Belezas Naturais',
+    'galeria-sec-gastro': '🍽️ Gastronomia e Produtos Locais',
+    'galeria-sec-eventos': '🎆 Eventos e Tradições',
+    'galeria-sec-arte': '🎨 Arte & História',
+    'galeria-sec-videos': '🎥 Vídeos',
+    'galeria-videos-sub': 'Conheça São Mateus do Sul em movimento — cultura polonesa, natureza e a essência da Capital Polonesa do Paraná',
+    'galeria-yt-btn': '▶️ Ver mais vídeos no YouTube',
+    'rotas-toggle-mapa': '▲ Mapa',
     'blog-ver-todas': '📰 Ver todas as notícias',
     'blog-cat-cultura': 'Cultura',
     'blog-cat-turismo': 'Turismo',
@@ -960,6 +989,35 @@ const translations = {
     'ev-local-chimarrodromo': 'Chimarródromo',
     'ev-local-vila': 'Vila Pinheirinho',
     'btn-ver-local': 'See more →',
+    'footer-voltar-portal': '← Back to Portal',
+    'noticias-hero-h': '📰 News & Updates',
+    'noticias-hero-p': 'Stay up to date with everything happening in tourism in São Mateus do Sul',
+    'noticias-sidebar-sobre-h': '🏱️ About the news',
+    'noticias-sidebar-cat': '📁 Categories',
+    'noticias-sidebar-tags': '🏷️ Tags',
+    'noticias-sidebar-redes': '📱 Follow us',
+    'noticias-sidebar-link': 'Access the City Hall portal →',
+    'noticias-cta-prefeitura': '📰 View all news on the City Hall Portal',
+    'noticias-fonte-texto': 'News provided by the',
+    'noticias-fonte-cat': 'Culture and Tourism category',
+    'noticias-fonte-link': 'View all news →',
+    'galeria-h1': '📸 Gallery & Videos',
+    'galeria-hero-p': 'Explore the beauty, Polish culture and tourist attractions of São Mateus do Sul — Polish Capital of Paraná',
+    'galeria-tab-patrimonio': '🏱️ Heritage',
+    'galeria-tab-natureza': '🌊 Nature',
+    'galeria-tab-gastro': '🍽️ Gastronomy',
+    'galeria-tab-eventos': '🎆 Events',
+    'galeria-tab-arte': '🎨 Art & History',
+    'galeria-tab-videos': '🎥 Videos',
+    'galeria-sec-patrimonio': '🏱️ Historical Heritage',
+    'galeria-sec-natureza': '🌊 Natural Beauty',
+    'galeria-sec-gastro': '🍽️ Gastronomy & Local Products',
+    'galeria-sec-eventos': '🎆 Events & Traditions',
+    'galeria-sec-arte': '🎨 Art & History',
+    'galeria-sec-videos': '🎥 Videos',
+    'galeria-videos-sub': 'Discover São Mateus do Sul in motion — Polish culture, nature and the essence of the Polish Capital of Paraná',
+    'galeria-yt-btn': '▶️ Watch more videos on YouTube',
+    'rotas-toggle-mapa': '▲ Map',
     'blog-ver-todas': '📰 View all news',
     'blog-cat-cultura': 'Culture',
     'blog-cat-turismo': 'Tourism',
@@ -1584,6 +1642,35 @@ const translations = {
     'ev-local-chimarrodromo': 'Chimarródromo',
     'ev-local-vila': 'Vila Pinheirinho',
     'btn-ver-local': 'Ver más →',
+    'footer-voltar-portal': '← Volver al Portal',
+    'noticias-hero-h': '📰 Noticias & Novedades',
+    'noticias-hero-p': 'Entérate de todo lo que ocurre en el turismo de São Mateus do Sul',
+    'noticias-sidebar-sobre-h': '🏱️ Sobre las noticias',
+    'noticias-sidebar-cat': '📁 Categorías',
+    'noticias-sidebar-tags': '🏷️ Etiquetas',
+    'noticias-sidebar-redes': '📱 Síguenos',
+    'noticias-sidebar-link': 'Acceder al portal del Ayuntamiento →',
+    'noticias-cta-prefeitura': '📰 Ver todas las noticias en el Portal del Ayuntamiento',
+    'noticias-fonte-texto': 'Noticias proporcionadas por el',
+    'noticias-fonte-cat': 'categoría Cultura y Turismo',
+    'noticias-fonte-link': 'Ver todas las noticias →',
+    'galeria-h1': '📸 Galería & Videos',
+    'galeria-hero-p': 'Explora la belleza, la cultura polaca y los atractivos turísticos de São Mateus do Sul — Capital Polaca de Paraná',
+    'galeria-tab-patrimonio': '🏱️ Patrimonio',
+    'galeria-tab-natureza': '🌊 Naturaleza',
+    'galeria-tab-gastro': '🍽️ Gastronomía',
+    'galeria-tab-eventos': '🎆 Eventos',
+    'galeria-tab-arte': '🎨 Arte & Historia',
+    'galeria-tab-videos': '🎥 Videos',
+    'galeria-sec-patrimonio': '🏱️ Patrimonio Histórico',
+    'galeria-sec-natureza': '🌊 Bellezas Naturales',
+    'galeria-sec-gastro': '🍽️ Gastronomía y Productos Locales',
+    'galeria-sec-eventos': '🎆 Eventos y Tradiciones',
+    'galeria-sec-arte': '🎨 Arte & Historia',
+    'galeria-sec-videos': '🎥 Videos',
+    'galeria-videos-sub': 'Conoce São Mateus do Sul en movimiento — cultura polaca, naturaleza y la esencia de la Capital Polaca de Paraná',
+    'galeria-yt-btn': '▶️ Ver más videos en YouTube',
+    'rotas-toggle-mapa': '▲ Mapa',
     'blog-ver-todas': '📰 Ver todas las noticias',
     'blog-cat-cultura': 'Cultura',
     'blog-cat-turismo': 'Turismo',
@@ -2208,6 +2295,35 @@ const translations = {
     'ev-local-chimarrodromo': 'Chimarródromo',
     'ev-local-vila': 'Vila Pinheirinho',
     'btn-ver-local': 'Zobacz więcej →',
+    'footer-voltar-portal': '← Powrót do Portalu',
+    'noticias-hero-h': '📰 Aktualności & Nowości',
+    'noticias-hero-p': 'Bądź na bieżąco z tym, co dzieje się w turystyce São Mateus do Sul',
+    'noticias-sidebar-sobre-h': '🏱️ O aktualnościach',
+    'noticias-sidebar-cat': '📁 Kategorie',
+    'noticias-sidebar-tags': '🏷️ Tagi',
+    'noticias-sidebar-redes': '📱 Obserwuj nas',
+    'noticias-sidebar-link': 'Wejdź na portal Urzędu Miejskiego →',
+    'noticias-cta-prefeitura': '📰 Zobacz wszystkie aktualności na Portalu Urzędu Miejskiego',
+    'noticias-fonte-texto': 'Aktualności dostarczane przez',
+    'noticias-fonte-cat': 'kategorię Kultura i Turystyka',
+    'noticias-fonte-link': 'Zobacz wszystkie aktualności →',
+    'galeria-h1': '📸 Galeria & Filmy',
+    'galeria-hero-p': 'Odkryj piękno, polską kulturę i atrakcje turystyczne São Mateus do Sul — Polskiej Stolicy Paraná',
+    'galeria-tab-patrimonio': '🏱️ Dziedzictwo',
+    'galeria-tab-natureza': '🌊 Przyroda',
+    'galeria-tab-gastro': '🍽️ Gastronomia',
+    'galeria-tab-eventos': '🎆 Wydarzenia',
+    'galeria-tab-arte': '🎨 Sztuka & Historia',
+    'galeria-tab-videos': '🎥 Filmy',
+    'galeria-sec-patrimonio': '🏱️ Dziedzictwo Historyczne',
+    'galeria-sec-natureza': '🌊 Piękno Przyrody',
+    'galeria-sec-gastro': '🍽️ Gastronomia i Produkty Lokalne',
+    'galeria-sec-eventos': '🎆 Wydarzenia i Tradycje',
+    'galeria-sec-arte': '🎨 Sztuka & Historia',
+    'galeria-sec-videos': '🎥 Filmy',
+    'galeria-videos-sub': 'Poznaj São Mateus do Sul w ruchu — polska kultura, przyroda i istota Polskiej Stolicy Paraná',
+    'galeria-yt-btn': '▶️ Zobacz więcej filmów na YouTube',
+    'rotas-toggle-mapa': '▲ Mapa',
     'blog-ver-todas': '📰 Zobacz wszystkie aktualności',
     'blog-cat-cultura': 'Kultura',
     'blog-cat-turismo': 'Turystyka',
@@ -2509,16 +2625,38 @@ window.translations = translations;
 // ── FUNÇÕES ────────────────────────────────────────────────────────────────────
 function applyTranslations(lang) {
   var dict = translations[lang] || translations['pt'];
+
+  // 1. data-lang-key padrão (innerHTML ou placeholder)
   document.querySelectorAll('[data-lang-key]').forEach(function(el) {
     var key = el.getAttribute('data-lang-key');
     if (dict[key] !== undefined) {
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = dict[key];
+      } else if (el.tagName === 'OPTION') {
+        // <option> não aceita innerHTML em todos os browsers; usa textContent
+        el.textContent = dict[key];
       } else {
         el.innerHTML = dict[key];
       }
     }
   });
+
+  // 2. data-lang-key-placeholder (input placeholder sem alterar innerHTML)
+  document.querySelectorAll('[data-lang-key-placeholder]').forEach(function(el) {
+    var key = el.getAttribute('data-lang-key-placeholder');
+    if (dict[key] !== undefined) {
+      el.placeholder = dict[key];
+    }
+  });
+
+  // 3. data-lang-key-title (atributo title de elementos)
+  document.querySelectorAll('[data-lang-key-title]').forEach(function(el) {
+    var key = el.getAttribute('data-lang-key-title');
+    if (dict[key] !== undefined) {
+      el.title = dict[key];
+    }
+  });
+
   var langMap = { pt: 'pt-BR', en: 'en', es: 'es', pl: 'pl' };
   document.documentElement.lang = langMap[lang] || 'pt-BR';
 }

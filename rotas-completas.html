@@ -288,42 +288,43 @@
                         type="text"
                         id="searchInput"
                         placeholder="Buscar nome, localidade..."
+                        data-lang-key-placeholder="rotas-busca-ph"
                         oninput="filterEstablishments()"
                     >
                 </div>
 
                 <select id="locationFilter" class="tb-select" onchange="filterByLocation()">
-                    <option value="all">📍 Localidades</option>
-                    <option value="divisa">Divisa</option>
-                    <option value="fluviópolis">Fluviópolis</option>
-                    <option value="taquaral">Taquaral</option>
-                    <option value="água branca">Água Branca</option>
-                    <option value="espigãozinho">Espigãozinho</option>
-                    <option value="faxinal">Faxinal Ilhéus</option>
-                    <option value="lajeadinho">Lajeadinho</option>
-                    <option value="são joaquim">São Joaquim</option>
-                    <option value="centro">Centro</option>
-                    <option value="iguaçu">Col. Iguaçu</option>
-                    <option value="potinga">Barra Potinga</option>
-                    <option value="emboque">Emboque</option>
-                    <option value="cachoeira">Cachoeira</option>
-                    <option value="vargem">Vargem Grande</option>
+                    <option value="all" data-lang-key="rotas-loc-todas">📍 Todas as Localidades</option>
+                    <option value="divisa" data-lang-key="rotas-loc-divisa">Divisa</option>
+                    <option value="fluviópolis" data-lang-key="rotas-loc-fluvio">Fluviópolis</option>
+                    <option value="taquaral" data-lang-key="rotas-loc-taquaral">Taquaral</option>
+                    <option value="água branca" data-lang-key="rotas-loc-aguabranca">Água Branca</option>
+                    <option value="espigãozinho" data-lang-key="rotas-loc-espigao">Espigãozinho</option>
+                    <option value="faxinal" data-lang-key="rotas-loc-faxinal">Faxinal Ilhéus</option>
+                    <option value="lajeadinho" data-lang-key="rotas-loc-lajeadinho">Lajeadinho</option>
+                    <option value="são joaquim" data-lang-key="rotas-loc-sjoaquim">São Joaquim</option>
+                    <option value="centro" data-lang-key="rotas-loc-centro">Centro</option>
+                    <option value="iguaçu" data-lang-key="rotas-loc-iguacu">Col. Iguaçu</option>
+                    <option value="potinga" data-lang-key="rotas-loc-potinga">Barra Potinga</option>
+                    <option value="emboque" data-lang-key="rotas-loc-emboque">Emboque</option>
+                    <option value="cachoeira" data-lang-key="rotas-loc-cachoeira">Cachoeira</option>
+                    <option value="vargem" data-lang-key="rotas-loc-vargem">Vargem Grande</option>
                 </select>
 
                 <span class="tb-count" id="resultsCount"></span>
 
-                <button class="map-toggle-btn" id="mapToggleBtn" onclick="toggleMap()">▲ Mapa</button>
+                <button class="map-toggle-btn" id="mapToggleBtn" onclick="toggleMap()" data-lang-key="rotas-toggle-mapa">▲ Mapa</button>
             </div>
 
             <!-- Linha 2: pills de rota -->
             <div class="toolbar-row2">
-                <button class="tb-pill active" onclick="filterByRoute('all')">Todas</button>
-                <button class="tb-pill" onclick="filterByRoute('sabores')">🍓 Sabores &amp; Memórias</button>
-                <button class="tb-pill" onclick="filterByRoute('mate')">🌿 Erva-Mate</button>
-                <button class="tb-pill" onclick="filterByRoute('polonesa')">⛪ Polonesa</button>
-                <button class="tb-pill" onclick="filterByRoute('aguas')">🌊 Das Águas</button>
-                <button class="tb-pill" onclick="filterByRoute('fluviop')">🏘️ Fluviópolis</button>
-                <button class="tb-pill" onclick="filterByRoute('terra')">🌱 Da Terra</button>
+                <button class="tb-pill active" onclick="filterByRoute('all')" data-lang-key="rotas-btn-todas">Todas</button>
+                <button class="tb-pill" onclick="filterByRoute('sabores')" data-lang-key="rotas-btn-sabores">🍓 Sabores &amp; Memórias</button>
+                <button class="tb-pill" onclick="filterByRoute('mate')" data-lang-key="rotas-btn-ervamate">🌿 Erva-Mate</button>
+                <button class="tb-pill" onclick="filterByRoute('polonesa')" data-lang-key="rotas-btn-polonesa">⛪ Polonesa</button>
+                <button class="tb-pill" onclick="filterByRoute('aguas')" data-lang-key="rotas-btn-aguas">🌊 Das Águas</button>
+                <button class="tb-pill" onclick="filterByRoute('fluviop')" data-lang-key="rotas-btn-fluvio">🏘️ Fluviópolis</button>
+                <button class="tb-pill" onclick="filterByRoute('terra')" data-lang-key="rotas-btn-terra">🌱 Da Terra</button>
             </div>
 
         </div>
