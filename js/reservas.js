@@ -104,7 +104,6 @@ const Reservas = {
     // Inicializar sistema
     init: function() {
         this.carregarReservas();
-        console.log('🎫 Sistema de reservas iniciado');
         return this;
     },
     
@@ -150,7 +149,7 @@ const Reservas = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = {
+            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
                 apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
                 authDomain: 'turismo-sms.firebaseapp.com',
                 projectId: 'turismo-sms',
@@ -165,9 +164,8 @@ const Reservas = {
                 criadoEm: serverTimestamp()
             });
             reserva.firestoreId = docRef.id;
-            console.log('✅ Reserva salva no Firestore:', docRef.id);
         } catch (fbErr) {
-            console.warn('⚠️ Firestore indisponível, salvando só localStorage:', fbErr.message);
+            // Firestore indisponível — continua com localStorage
         }
         
         // Sempre salva no localStorage como fallback

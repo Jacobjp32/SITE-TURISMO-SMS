@@ -93,6 +93,19 @@ const CONFIG = {
     },
 
     // ============================================================
+    // FIREBASE
+    // Configuração centralizada do Firebase
+    // ============================================================
+    firebase: {
+        apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
+        authDomain: 'turismo-sms.firebaseapp.com',
+        projectId: 'turismo-sms',
+        storageBucket: 'turismo-sms.firebasestorage.app',
+        messagingSenderId: '1042825829044',
+        appId: '1:1042825829044:web:13173093e28be3199955e1'
+    },
+
+    // ============================================================
     // FUNCIONALIDADES
     // Ative/desative recursos do site
     // ============================================================
@@ -155,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function() {
         gtag('config', CONFIG.analytics.ga4Id);
     }
     
-    console.log('✅ Configurações do site carregadas');
 });
 
 // Exportar para uso global
