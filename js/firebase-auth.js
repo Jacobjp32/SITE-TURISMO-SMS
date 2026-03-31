@@ -5,8 +5,8 @@
  *         carregados ANTES deste script via <script> no HTML
  */
 
-// Configuração do Firebase
-const firebaseConfig = {
+// Configuração do Firebase — centralizada em config.js (CONFIG.firebase)
+const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
     apiKey: "AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ",
     authDomain: "turismo-sms.firebaseapp.com",
     projectId: "turismo-sms",
@@ -61,11 +61,10 @@ function initFirebase() {
                     FirebaseSystem.updateUI();
                 });
 
-                console.log('✅ Firebase (compat) inicializado com sucesso!');
+                // Firebase (compat) inicializado
                 resolve(true);
             } catch(error) {
-                console.error('❌ Erro ao inicializar Firebase:', error);
-                resolve(false);
+                    resolve(false);
             }
         }
         tryInit();
@@ -359,17 +358,6 @@ const FirebaseSystem = {
     }
 };
 
-// Criar primeiro admin (utilitário de console)
-async function createFirstAdmin(email, senha, nome) {
-    const result = await FirebaseSystem.register({ nome: nome, email: email, senha: senha, tipo: 'admin' });
-    if (result.success) {
-        await firebase.firestore().collection('usuarios').doc(firebase.auth().currentUser.uid)
-            .update({ role: 'admin' });
-        console.log('✅ Admin criado com sucesso!');
-    }
-    return result;
-}
-
 // Inicializar quando DOMContentLoaded
 document.addEventListener('DOMContentLoaded', async function() {
     const ok = await initFirebase();
@@ -378,4 +366,3 @@ document.addEventListener('DOMContentLoaded', async function() {
 
 window.FirebaseSystem   = FirebaseSystem;
 window.initFirebase     = initFirebase;
-window.createFirstAdmin = createFirstAdmin;

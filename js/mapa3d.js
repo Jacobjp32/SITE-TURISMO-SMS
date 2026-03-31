@@ -121,8 +121,6 @@ const Mapa3D = {
         
         // Animação
         this.animar();
-        
-        console.log('🗺️ Mapa 3D iniciado');
     },
     
     // Criar iluminação

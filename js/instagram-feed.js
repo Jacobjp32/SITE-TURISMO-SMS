@@ -89,17 +89,24 @@ const InstagramFeed = {
         }
     },
     
+    // Escapar HTML para prevenir XSS em dados da API
+    escapeAttr: function(str) {
+        if (!str) return '';
+        return str.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    },
+
     // Renderizar feed
     renderFeed: function(posts) {
         const container = document.getElementById(this.config.containerId);
         if (!container) return;
-        
+
+        const self = this;
         const html = `
             <div class="instagram-grid">
                 ${posts.map(post => `
-                    <a href="${post.permalink}" target="_blank" class="instagram-item" rel="noopener">
-                        <img src="${post.media_type === 'VIDEO' ? post.thumbnail_url : post.media_url}" 
-                             alt="${post.caption ? post.caption.substring(0, 50) : 'Post do Instagram'}"
+                    <a href="${self.escapeAttr(post.permalink)}" target="_blank" class="instagram-item" rel="noopener">
+                        <img src="${self.escapeAttr(post.media_type === 'VIDEO' ? post.thumbnail_url : post.media_url)}"
+                             alt="${post.caption ? self.escapeAttr(post.caption.substring(0, 50)) : 'Post do Instagram'}"
                              loading="lazy">
                         <div class="instagram-overlay">
                             <span>${post.media_type === 'VIDEO' ? '▶' : '📷'}</span>
@@ -107,11 +114,11 @@ const InstagramFeed = {
                     </a>
                 `).join('')}
             </div>
-            <a href="https://instagram.com/${this.config.instagramUser}" target="_blank" class="instagram-follow">
-                📸 Siga @${this.config.instagramUser} no Instagram
+            <a href="https://instagram.com/${self.escapeAttr(this.config.instagramUser)}" target="_blank" class="instagram-follow">
+                📸 Siga @${self.escapeAttr(this.config.instagramUser)} no Instagram
             </a>
         `;
-        
+
         container.innerHTML = html;
     },
     
