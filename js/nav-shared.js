@@ -246,16 +246,16 @@ body.font-larger{font-size:140%!important;}
 }
 </style>`;
 
+    // Guardar contra double-injection (ex: script carregado duas vezes)
+    if (document.getElementById('mainNav')) return;
+
     // Injetar CSS no <head>
     document.head.insertAdjacentHTML('beforeend', NAV_CSS);
 
-    // Injetar barra de progresso de scroll
-    if (!document.getElementById('sms-scroll-progress')) {
-        document.body.insertAdjacentHTML('afterbegin', '<div id="sms-scroll-progress" aria-hidden="true"></div>');
-    }
-
-    // Injetar nav (+ barra de acessibilidade) no início do <body>
-    document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
+    // Injetar barra de progresso + nav + barra acessibilidade no início do <body>
+    document.body.insertAdjacentHTML('afterbegin',
+        '<div id="sms-scroll-progress" aria-hidden="true"></div>' + NAV_HTML
+    );
 
     // Injetar botão voltar ao topo (se ainda não existe)
     if (!document.getElementById('backToTop')) {
