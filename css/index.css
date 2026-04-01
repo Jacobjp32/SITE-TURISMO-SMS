@@ -35,6 +35,19 @@
            BARRA DE ACESSIBILIDADE - eMAG
            Conformidade com Lei Brasileira de Inclusão
         ============================================ */
+        /* Barra de progresso de scroll */
+        #sms-scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: var(--gold-polish);
+            z-index: 10002;
+            transition: width .1s linear;
+            pointer-events: none;
+        }
+
         .accessibility-bar {
             background: #1a1a1a;
             color: #ffffff;
@@ -199,7 +212,7 @@
         /* Navigation */
         .nav {
             position: fixed;
-            top: 38px; /* Altura da barra de acessibilidade */
+            top: 42px; /* 4px progresso + 38px barra acessibilidade */
             left: 0;
             right: 0;
             z-index: 9999;
@@ -216,10 +229,10 @@
             scroll-padding-top: 150px;
         }
 
-        /* Barra de acessibilidade fixa no topo */
+        /* Barra de acessibilidade fixa logo abaixo da barra de progresso */
         .accessibility-bar {
             position: fixed;
-            top: 0;
+            top: 4px;
             left: 0;
             right: 0;
             z-index: 10001;

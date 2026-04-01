@@ -154,6 +154,9 @@
 
 </head>
 <body>
+    <!-- Barra de progresso de scroll -->
+    <div id="sms-scroll-progress" aria-hidden="true"></div>
+
     <!-- Skip Links para Acessibilidade (invisíveis até receber foco) -->
     <div class="skip-links">
         <a href="#main-content" accesskey="1">Ir para conteúdo principal [Alt+1]</a>
@@ -1624,6 +1627,17 @@
         // ============================================
         const backToTopBtn = document.getElementById('backToTop');
         
+        // Barra de progresso de scroll
+        const scrollProgressBar = document.getElementById('sms-scroll-progress');
+        if (scrollProgressBar) {
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+                scrollProgressBar.style.width = pct + '%';
+            }, { passive: true });
+        }
+
         if (backToTopBtn) {
             // Mostrar/esconder botão ao rolar
             window.addEventListener('scroll', () => {

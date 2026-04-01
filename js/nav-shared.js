@@ -110,7 +110,7 @@
     const NAV_CSS = `
 <style id="nav-shared-styles">
 .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    position: fixed; top: 42px; left: 0; right: 0; z-index: 9999;
     padding: 0.9rem 2rem;
     background: linear-gradient(180deg, rgba(10,61,46,0.97) 0%, rgba(10,61,46,0.85) 100%);
     backdrop-filter: blur(16px);
@@ -196,10 +196,12 @@
     opacity:0; visibility:hidden; transition:all 0.3s;
 }
 .mobile-menu-overlay.active { opacity:1; visibility:visible; }
-/* Body offset para nav fixo + barra de acessibilidade estática */
-body { padding-top: 72px; }
+/* Body offset para nav fixo + barra de acessibilidade fixa */
+body { padding-top: 110px; }
+/* Barra de progresso de leitura (scroll) */
+#sms-scroll-progress{position:fixed;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
 /* Acessibilidade eMAG */
-.accessibility-bar{background:#1a1a1a;color:#fff;padding:.5rem 1rem;font-size:.8rem;position:relative;z-index:10001;}
+.accessibility-bar{background:#1a1a1a;color:#fff;padding:.5rem 1rem;font-size:.8rem;position:fixed;top:4px;left:0;right:0;z-index:10001;}
 .accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
 .accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
 .accessibility-bar a,.accessibility-bar button{color:#fff;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.3);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
@@ -246,6 +248,11 @@ body.font-larger{font-size:140%!important;}
 
     // Injetar CSS no <head>
     document.head.insertAdjacentHTML('beforeend', NAV_CSS);
+
+    // Injetar barra de progresso de scroll
+    if (!document.getElementById('sms-scroll-progress')) {
+        document.body.insertAdjacentHTML('afterbegin', '<div id="sms-scroll-progress" aria-hidden="true"></div>');
+    }
 
     // Injetar nav (+ barra de acessibilidade) no início do <body>
     document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
@@ -359,6 +366,17 @@ body.font-larger{font-size:140%!important;}
             topBtn.addEventListener('click', function() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+        }
+
+        // Barra de progresso de scroll
+        var progressBar = document.getElementById('sms-scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', function() {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+                progressBar.style.width = pct + '%';
+            }, { passive: true });
         }
 
         // Restaurar preferências de acessibilidade
