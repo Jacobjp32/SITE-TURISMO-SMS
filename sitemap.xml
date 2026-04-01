@@ -102,4 +102,32 @@
     <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-completo.html</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-3d.html</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/roteiro-ia.html</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/local.html</loc>
+    <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
 </urlset>
