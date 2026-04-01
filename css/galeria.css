@@ -11,8 +11,8 @@
         }
         body{font-family:var(--fb);background:var(--cream)}
 
-        /* NAV */
-        .nav{position:fixed;top:0;left:0;right:0;z-index:9999;padding:1.2rem 2rem;
+        /* NAV — top:42px = 4px (barra progresso) + 38px (barra acessibilidade) */
+        .nav{position:fixed;top:42px;left:0;right:0;z-index:9999;padding:1.2rem 2rem;
             background:linear-gradient(180deg,rgba(10,61,46,.96) 0%,rgba(10,61,46,.7) 70%,transparent 100%);
             backdrop-filter:blur(18px)}
         .nav-c{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
