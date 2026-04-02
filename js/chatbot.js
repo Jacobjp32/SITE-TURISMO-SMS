@@ -296,11 +296,13 @@
         config: {
             nome:       'Mathe',
             avatar:     '🧉',
-            corPrimaria:'#0a3d2e'
+            corPrimaria:'#0a3d2e',
+            workerUrl:  'https://turismo-sms-chat-proxy.imprensapmsms.workers.dev'
         },
 
         isOpen:        false,
         isInitialized: false,
+        history:       [],
 
         getLang: function () {
             // Tenta 'sms-lang' (chave do seletor de idiomas do portal) e 'smsLang' como fallback
@@ -404,6 +406,22 @@
             this.renderSugestoes();
         },
 
+        mostrarTyping: function () {
+            var c = document.getElementById('chatbot-messages');
+            if (!c || document.getElementById('chatbot-typing')) return;
+            var t = document.createElement('div');
+            t.id = 'chatbot-typing';
+            t.className = 'chatbot-msg bot chatbot-typing-dots';
+            t.innerHTML = '<span></span><span></span><span></span>';
+            c.appendChild(t);
+            c.scrollTop = c.scrollHeight;
+        },
+
+        esconderTyping: function () {
+            var t = document.getElementById('chatbot-typing');
+            if (t) t.remove();
+        },
+
         injetarEstilos: function (cor) {
             var old = document.getElementById('chatbot-styles');
             if (old) old.remove();
@@ -437,7 +455,12 @@
                 '#chatbot-widget .chatbot-input button[type="submit"]{background:' + cor + ';color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem}' +
                 '@media(max-width:500px){#chatbot-widget .chatbot-window{width:calc(100vw - 30px);height:65vh}}' +
                 '@media(max-width:500px){#chatbot-widget{bottom:80px;right:12px}}' +
-                '#chatbot-widget .chatbot-trigger{position:relative}';
+                '#chatbot-widget .chatbot-trigger{position:relative}' +
+                '#chatbot-widget .chatbot-typing-dots{display:flex;gap:5px;align-items:center;padding:14px 16px}' +
+                '#chatbot-widget .chatbot-typing-dots span{width:8px;height:8px;border-radius:50%;background:#0a3d2e;opacity:.3;animation:chatbotDot .9s infinite}' +
+                '#chatbot-widget .chatbot-typing-dots span:nth-child(2){animation-delay:.2s}' +
+                '#chatbot-widget .chatbot-typing-dots span:nth-child(3){animation-delay:.4s}' +
+                '@keyframes chatbotDot{0%,60%,100%{transform:translateY(0);opacity:.3}30%{transform:translateY(-6px);opacity:1}}';
             document.head.appendChild(s);
         },
 
@@ -499,9 +522,24 @@
         processarMensagem: function (msg) {
             var self = this;
             this.adicionarMensagem(msg, 'user');
-            setTimeout(function () {
-                self.adicionarMensagem(self.encontrarResposta(msg), 'bot');
-            }, 400 + Math.random() * 400);
+            this.history.push({ role: 'user', content: msg });
+            this.mostrarTyping();
+            fetch(this.config.workerUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ message: msg, lang: this.getLang(), history: this.history.slice(-6) })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                self.esconderTyping();
+                var resp = data.response || self.getUI().default;
+                self.adicionarMensagem(resp, 'bot');
+                self.history.push({ role: 'assistant', content: resp });
+            })
+            .catch(function () {
+                self.esconderTyping();
+                self.adicionarMensagem(self.getUI().default, 'bot');
+            });
         },
 
         adicionarMensagem: function (texto, tipo) {
