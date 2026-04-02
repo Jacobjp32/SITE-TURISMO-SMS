@@ -217,7 +217,6 @@ const RoteiroIA = {
         if (!this.container) return;
         
         this.renderizarInicio();
-        console.log('🤖 Roteiro IA iniciado');
     },
     
     // Renderizar tela inicial

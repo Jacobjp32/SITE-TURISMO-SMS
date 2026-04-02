@@ -104,7 +104,6 @@ const Reservas = {
     // Inicializar sistema
     init: function() {
         this.carregarReservas();
-        console.log('🎫 Sistema de reservas iniciado');
         return this;
     },
     
@@ -150,7 +149,7 @@ const Reservas = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = {
+            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
                 apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
                 authDomain: 'turismo-sms.firebaseapp.com',
                 projectId: 'turismo-sms',
@@ -165,9 +164,8 @@ const Reservas = {
                 criadoEm: serverTimestamp()
             });
             reserva.firestoreId = docRef.id;
-            console.log('✅ Reserva salva no Firestore:', docRef.id);
         } catch (fbErr) {
-            console.warn('⚠️ Firestore indisponível, salvando só localStorage:', fbErr.message);
+            // Firestore indisponível — continua com localStorage
         }
         
         // Sempre salva no localStorage como fallback
@@ -324,7 +322,7 @@ const Reservas = {
                         <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.85rem;cursor:pointer;font-weight:400;color:#555;">
                             <input type="checkbox" id="reserva-lgpd" required style="margin-top:3px;flex-shrink:0;">
                             Concordo com o uso dos meus dados para contato sobre esta reserva, conforme a 
-                            <a href="transparencia.html" target="_blank" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
+                            <a href="/transparencia" target="_blank" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
                         </label>
                     </div>
                     <div class="reserva-modal-footer">

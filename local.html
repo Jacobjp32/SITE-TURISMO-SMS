@@ -287,6 +287,7 @@
     </style>
 </head>
 <body>
+<script src="js/nav-shared.js?v=2"></script>
 
 <!-- Lightbox -->
 <div class="lb" id="lb" onclick="lbClose()">
@@ -311,7 +312,7 @@
             <div class="not-found">
                 <h2>Local não encontrado</h2>
                 <p>O local solicitado não existe ou ainda não foi cadastrado.</p>
-                <p><a href="index.html">← Voltar ao Portal</a></p>
+                <p><a href="/">← Voltar ao Portal</a></p>
             </div>`;
         return;
     }
@@ -353,7 +354,7 @@
         .filter(l => l.id !== id)
         .slice(0, 3)
         .map(l => `
-            <a href="local.html?id=${l.id}" class="rel-card">
+            <a href="/local?id=${l.id}" class="rel-card">
                 <img src="${l.imagem}" alt="${l.nome}" loading="lazy">
                 <div class="rel-card-body">
                     <h4>${l.nome}</h4>
@@ -367,7 +368,7 @@
         <div class="hero">
             <img src="${local.imagem}" alt="${local.nome}" id="hero-img">
             <div class="hero-overlay"></div>
-            <a class="btn-voltar" onclick="history.back()" href="index.html">← Voltar</a>
+            <a class="btn-voltar" onclick="history.back()" href="/">← Voltar</a>
             <div class="hero-content">
                 <div class="hero-badge">${local.badge}</div>
                 <h1 class="hero-title">${local.nome}</h1>
@@ -421,7 +422,7 @@
 
         <footer>
             <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-            <p style="margin-top:.5rem"><a href="index.html">← Portal do Turismo</a> · <a href="rotas-completas.html">Rotas Turísticas</a></p>
+            <p style="margin-top:.5rem"><a href="/">← Portal do Turismo</a> · <a href="/rotas-completas">Rotas Turísticas</a></p>
         </footer>
     `;
 

@@ -35,6 +35,19 @@
            BARRA DE ACESSIBILIDADE - eMAG
            Conformidade com Lei Brasileira de Inclusão
         ============================================ */
+        /* Barra de progresso de scroll */
+        #sms-scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: var(--gold-polish);
+            z-index: 10002;
+            transition: width .1s linear;
+            pointer-events: none;
+        }
+
         .accessibility-bar {
             background: #1a1a1a;
             color: #ffffff;
@@ -199,7 +212,7 @@
         /* Navigation */
         .nav {
             position: fixed;
-            top: 38px; /* Altura da barra de acessibilidade */
+            top: 42px; /* 4px progresso + 38px barra acessibilidade */
             left: 0;
             right: 0;
             z-index: 9999;
@@ -216,10 +229,10 @@
             scroll-padding-top: 150px;
         }
 
-        /* Barra de acessibilidade fixa no topo */
+        /* Barra de acessibilidade fixa logo abaixo da barra de progresso */
         .accessibility-bar {
             position: fixed;
-            top: 0;
+            top: 4px;
             left: 0;
             right: 0;
             z-index: 10001;
@@ -3540,3 +3553,136 @@
                 height: 190px !important;
             }
         }
+
+/* ── Mascotes Teaser Section ── */
+.mascotes-teaser-section {
+    background: linear-gradient(135deg, #0a3d2e 0%, #1a5d43 60%, #0d5a3e 100%);
+    padding: 5rem 2rem;
+    overflow: hidden;
+    position: relative;
+}
+
+.mascotes-teaser-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    pointer-events: none;
+}
+
+.mascotes-teaser-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 4rem;
+}
+
+.mascotes-teaser-text {
+    flex: 1;
+    color: #fff;
+    z-index: 1;
+}
+
+.mascotes-teaser-text .section-label {
+    display: inline-block;
+    background: rgba(212,165,116,0.2);
+    color: #d4a574;
+    border: 1px solid rgba(212,165,116,0.4);
+    padding: 0.3rem 1rem;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-family: var(--fb);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 1.2rem;
+}
+
+.mascotes-teaser-text h2 {
+    font-family: var(--fd);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.mascotes-teaser-text p {
+    font-family: var(--fb);
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.82);
+    margin-bottom: 2rem;
+    max-width: 480px;
+}
+
+.mascotes-teaser-btn {
+    display: inline-block;
+    background: #d4a574;
+    color: #0a3d2e;
+    font-family: var(--fb);
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.mascotes-teaser-btn:hover {
+    background: #e8c9a0;
+    transform: translateY(-2px);
+}
+
+.mascotes-disclaimer {
+    display: block;
+    margin-top: 1rem;
+    color: rgba(255,255,255,0.45);
+    font-size: 0.8rem;
+    font-family: var(--fb);
+}
+
+.mascotes-teaser-figures {
+    flex: 1;
+    position: relative;
+    height: 380px;
+    z-index: 1;
+}
+
+.mascote-fig {
+    position: absolute;
+    object-fit: contain;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35));
+}
+
+.mascote-fig--main {
+    width: 260px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+}
+
+.mascote-fig--side {
+    width: 180px;
+    bottom: 0;
+    z-index: 2;
+    opacity: 0.9;
+}
+
+.mascote-fig--left  { left: 0;   transform: scaleX(-1); }
+.mascote-fig--right { right: 0; }
+
+@media (max-width: 900px) {
+    .mascotes-teaser-inner { flex-direction: column; gap: 2rem; text-align: center; }
+    .mascotes-teaser-text p { max-width: 100%; }
+    .mascotes-teaser-figures { width: 100%; height: 260px; }
+    .mascote-fig--main  { width: 180px; }
+    .mascote-fig--side  { width: 120px; }
+}
+
+@media (max-width: 480px) {
+    .mascotes-teaser-figures { height: 200px; }
+    .mascote-fig--main  { width: 140px; }
+    .mascote-fig--side  { width: 90px; }
+}

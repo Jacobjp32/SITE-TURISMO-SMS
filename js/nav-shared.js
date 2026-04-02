@@ -1,10 +1,35 @@
 /**
  * nav-shared.js
  * Injeta o nav padrão do portal em páginas secundárias.
- * Inclui: logo, links, dropdowns, seletor de idioma, botão login, hamburger mobile.
+ * Inclui: barra de acessibilidade eMAG, nav, chatbot, botão voltar ao topo, SW.
  */
 (function () {
     const NAV_HTML = `
+<div class="skip-links">
+  <a href="#main-content" accesskey="1">Ir para conteúdo principal [Alt+1]</a>
+  <a href="#navLinks" accesskey="2">Ir para navegação [Alt+2]</a>
+  <a href="#footer" accesskey="4">Ir para rodapé [Alt+4]</a>
+</div>
+<div class="accessibility-bar" role="navigation" aria-label="Acessibilidade">
+  <div class="container">
+    <div class="shortcuts">
+      <a href="#main-content" title="Atalho: Alt+1">Conteúdo [1]</a>
+      <a href="#navLinks" title="Atalho: Alt+2">Menu [2]</a>
+      <a href="#footer" title="Atalho: Alt+4">Rodapé [4]</a>
+      <a href="/transparencia" title="Transparência e Governança">Transparência</a>
+    </div>
+    <div class="controls">
+      <div class="font-controls">
+        <button onclick="smsChangeFontSize(-1)" title="Diminuir fonte" aria-label="Diminuir tamanho da fonte">A-</button>
+        <button onclick="smsChangeFontSize(0)"  title="Fonte normal"   aria-label="Tamanho de fonte normal">A</button>
+        <button onclick="smsChangeFontSize(1)"  title="Aumentar fonte" aria-label="Aumentar tamanho da fonte">A+</button>
+      </div>
+      <button class="contrast-btn" onclick="smsToggleContrast()" title="Alto contraste" aria-label="Alternar alto contraste">
+        <span>◐</span> Contraste
+      </button>
+    </div>
+  </div>
+</div>
 <nav class="nav" id="mainNav">
     <div class="nav-container">
         <a href="/" class="nav-logo">
@@ -85,7 +110,7 @@
     const NAV_CSS = `
 <style id="nav-shared-styles">
 .nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+    position: fixed; top: 42px; left: 0; right: 0; z-index: 9999;
     padding: 0.9rem 2rem;
     background: linear-gradient(180deg, rgba(10,61,46,0.97) 0%, rgba(10,61,46,0.85) 100%);
     backdrop-filter: blur(16px);
@@ -171,8 +196,35 @@
     opacity:0; visibility:hidden; transition:all 0.3s;
 }
 .mobile-menu-overlay.active { opacity:1; visibility:visible; }
-/* Body offset para o nav fixo */
-body { padding-top: 72px; }
+/* Body offset para nav fixo + barra de acessibilidade fixa */
+body { padding-top: 110px; }
+/* Barra de progresso de leitura (scroll) */
+#sms-scroll-progress{position:fixed;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
+/* Acessibilidade eMAG */
+.accessibility-bar{background:#1a1a1a;color:#fff;padding:.5rem 1rem;font-size:.8rem;position:fixed;top:4px;left:0;right:0;z-index:10001;}
+.accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
+.accessibility-bar a,.accessibility-bar button{color:#fff;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.3);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
+.accessibility-bar a:hover,.accessibility-bar a:focus,.accessibility-bar button:hover,.accessibility-bar button:focus{background:#d4a574;color:#1a1a1a;border-color:#d4a574;outline:2px solid #fff;outline-offset:2px;}
+.accessibility-bar .controls{display:flex;gap:.5rem;align-items:center;}
+.accessibility-bar .font-controls{display:flex;gap:.25rem;}
+.accessibility-bar .font-controls button{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
+.accessibility-bar .contrast-btn{display:flex;align-items:center;gap:.3rem;}
+.skip-links{position:absolute;top:-100px;left:0;z-index:10002;}
+.skip-links a{position:absolute;background:#d4a574;color:#1a1a1a;padding:1rem;font-weight:bold;text-decoration:none;}
+.skip-links a:focus{top:100px;outline:3px solid #1a1a1a;}
+body.high-contrast{background:#000!important;color:#ff0!important;}
+body.high-contrast *{background-color:#000!important;color:#ff0!important;border-color:#ff0!important;}
+body.high-contrast img{filter:grayscale(100%) contrast(120%);}
+body.high-contrast a{color:#0ff!important;text-decoration:underline!important;}
+body.high-contrast .nav,body.high-contrast .accessibility-bar{background:#000!important;border-bottom:2px solid #ff0!important;}
+body.font-large{font-size:120%!important;}
+body.font-larger{font-size:140%!important;}
+/* Botão voltar ao topo */
+.back-to-top{position:fixed;bottom:6rem;right:2rem;width:50px;height:50px;background:#d4a574;color:#0a3d2e;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;visibility:hidden;z-index:9998;}
+.back-to-top.visible{opacity:1;visibility:visible;}
+.back-to-top:hover{background:#e8c9a0;transform:translateY(-5px);box-shadow:0 6px 25px rgba(0,0,0,.4);}
+@media(max-width:768px){.accessibility-bar .shortcuts{display:none;}.accessibility-bar .controls{width:100%;justify-content:center;}}
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }
     .nav-links {
@@ -194,11 +246,40 @@ body { padding-top: 72px; }
 }
 </style>`;
 
+    // Guardar contra double-injection (ex: script carregado duas vezes)
+    if (document.getElementById('mainNav')) return;
+
     // Injetar CSS no <head>
     document.head.insertAdjacentHTML('beforeend', NAV_CSS);
 
-    // Injetar nav no início do <body>
-    document.body.insertAdjacentHTML('afterbegin', NAV_HTML);
+    // Injetar barra de progresso + nav + barra acessibilidade no início do <body>
+    document.body.insertAdjacentHTML('afterbegin',
+        '<div id="sms-scroll-progress" aria-hidden="true"></div>' + NAV_HTML
+    );
+
+    // Injetar botão voltar ao topo (se ainda não existe)
+    if (!document.getElementById('backToTop')) {
+        document.body.insertAdjacentHTML('beforeend',
+            '<button id="backToTop" class="back-to-top" title="Voltar ao topo" aria-label="Voltar ao topo">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+            '<polyline points="18 15 12 9 6 15"></polyline></svg></button>');
+    }
+
+    // Carregar chatbot (se ainda não carregado)
+    if (!document.getElementById('chatbot-script')) {
+        var cbScript = document.createElement('script');
+        cbScript.id  = 'chatbot-script';
+        cbScript.src = 'js/chatbot.js';
+        cbScript.onload = function() {
+            if (typeof Chatbot !== 'undefined') Chatbot.init();
+        };
+        document.body.appendChild(cbScript);
+    }
+
+    // Registrar Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(function(){});
+    }
 
     // Carregar animações de scroll (uma vez por página)
     if (!document.getElementById('scroll-anim-script')) {
@@ -274,5 +355,58 @@ body { padding-top: 72px; }
                 if (opt) opt.click();
             }
         }
+
+        // Botão voltar ao topo — comportamento
+        var topBtn = document.getElementById('backToTop');
+        if (topBtn) {
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) topBtn.classList.add('visible');
+                else topBtn.classList.remove('visible');
+            });
+            topBtn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        // Barra de progresso de scroll
+        var progressBar = document.getElementById('sms-scroll-progress');
+        if (progressBar) {
+            window.addEventListener('scroll', function() {
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                var pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+                progressBar.style.width = pct + '%';
+            }, { passive: true });
+        }
+
+        // Restaurar preferências de acessibilidade
+        var savedFs = localStorage.getItem('sms-font-size');
+        if (savedFs) {
+            var fs = parseInt(savedFs);
+            if (fs === 1) document.body.classList.add('font-large');
+            else if (fs >= 2) document.body.classList.add('font-larger');
+        }
+        if (localStorage.getItem('sms-high-contrast') === 'true') {
+            document.body.classList.add('high-contrast');
+        }
     });
+
+    // Funções de acessibilidade globais (evitar redeclaração se já existirem)
+    if (!window.smsChangeFontSize) {
+        var _smsFontSize = 0;
+        window.smsChangeFontSize = function(dir) {
+            document.body.classList.remove('font-large', 'font-larger');
+            if (dir === 0) { _smsFontSize = 0; }
+            else { _smsFontSize = Math.max(-1, Math.min(2, _smsFontSize + dir)); }
+            if (_smsFontSize === 1) document.body.classList.add('font-large');
+            else if (_smsFontSize >= 2) document.body.classList.add('font-larger');
+            localStorage.setItem('sms-font-size', _smsFontSize);
+        };
+    }
+    if (!window.smsToggleContrast) {
+        window.smsToggleContrast = function() {
+            document.body.classList.toggle('high-contrast');
+            localStorage.setItem('sms-high-contrast', document.body.classList.contains('high-contrast'));
+        };
+    }
 })();

@@ -16,7 +16,6 @@ const AvaliacaoSistema = {
     init: function() {
         this.carregarAvaliacoes();
         this.bindEvents();
-        console.log('⭐ Sistema de avaliações iniciado');
     },
     
     // Carregar avaliações do localStorage

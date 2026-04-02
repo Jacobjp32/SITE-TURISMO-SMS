@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="js/loading.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/loading.js"></script>
     
     <!-- Google Analytics -->
     <!-- Google tag (gtag.js) -->
@@ -154,6 +154,9 @@
 
 </head>
 <body>
+    <!-- Barra de progresso de scroll -->
+    <div id="sms-scroll-progress" aria-hidden="true"></div>
+
     <!-- Skip Links para Acessibilidade (invisíveis até receber foco) -->
     <div class="skip-links">
         <a href="#main-content" accesskey="1">Ir para conteúdo principal [Alt+1]</a>
@@ -172,7 +175,7 @@
                 <a href="#main-content" title="Atalho: Alt+1">Conteúdo [1]</a>
                 <a href="#navLinks" title="Atalho: Alt+2">Menu [2]</a>
                 <a href="#footer" title="Atalho: Alt+4">Rodapé [4]</a>
-                <a href="transparencia.html" title="Transparência e Governança">Transparência</a>
+                <a href="/transparencia" title="Transparência e Governança">Transparência</a>
             </div>
             <div class="controls">
                 <div class="font-controls">
@@ -208,12 +211,12 @@
                 <li>
                     <button class="dropdown-toggle"><span data-lang-key="nav-oquefazer">O Que Fazer</span> <span class="arrow">▼</span></button>
                     <div class="dropdown-menu">
-                        <a href="o-que-fazer.html" data-lang-key="nav-todas-atracoes">🌿 Todas as Atrações</a>
+                        <a href="/o-que-fazer" data-lang-key="nav-todas-atracoes">🌿 Todas as Atrações</a>
                         <div class="divider"></div>
-                        <a href="o-que-fazer.html#erva-mate" data-lang-key="nav-erva-mate">🧉 Rota da Erva-Mate</a>
-                        <a href="o-que-fazer.html#cultura-polonesa" data-lang-key="nav-cultura-polonesa">🇵🇱 Cultura Polonesa</a>
-                        <a href="o-que-fazer.html#turismo-fe" data-lang-key="nav-turismo-fe">⛪ Turismo de Fé</a>
-                        <a href="o-que-fazer.html#natureza" data-lang-key="nav-natureza">🌊 Náutica e Natureza</a>
+                        <a href="/o-que-fazer#erva-mate" data-lang-key="nav-erva-mate">🧉 Rota da Erva-Mate</a>
+                        <a href="/o-que-fazer#cultura-polonesa" data-lang-key="nav-cultura-polonesa">🇵🇱 Cultura Polonesa</a>
+                        <a href="/o-que-fazer#turismo-fe" data-lang-key="nav-turismo-fe">⛪ Turismo de Fé</a>
+                        <a href="/o-que-fazer#natureza" data-lang-key="nav-natureza">🌊 Náutica e Natureza</a>
                     </div>
                 </li>
                 
@@ -221,27 +224,27 @@
                 <li>
                     <button class="dropdown-toggle"><span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span></button>
                     <div class="dropdown-menu">
-                        <a href="sabores.html" data-lang-key="nav-gastronomia">🍽️ Gastronomia</a>
+                        <a href="/sabores" data-lang-key="nav-gastronomia">🍽️ Gastronomia</a>
                         <div class="divider"></div>
-                        <a href="sabores.html#polonesa" data-lang-key="nav-culinaria-polonesa">🥟 Culinária Polonesa</a>
-                        <a href="sabores.html#feiras" data-lang-key="nav-feiras">🛒 Feiras e Produtores</a>
-                        <a href="sabores.html#restaurantes" data-lang-key="nav-restaurantes">🍴 Restaurantes</a>
+                        <a href="/sabores#polonesa" data-lang-key="nav-culinaria-polonesa">🥟 Culinária Polonesa</a>
+                        <a href="/sabores#feiras" data-lang-key="nav-feiras">🛒 Feiras e Produtores</a>
+                        <a href="/sabores#restaurantes" data-lang-key="nav-restaurantes">🍴 Restaurantes</a>
                     </div>
                 </li>
                 
-                <li><a href="eventos.html" data-lang-key="nav-eventos">Eventos</a></li>
-                <li><a href="noticias.html" data-lang-key="nav-noticias">📰 Notícias</a></li>
-                <li><a href="galeria.html" data-lang-key="nav-galeria">Galeria</a></li>
-                <li><a href="onde-ficar.html" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
-                <li><a href="rotas-completas.html" data-lang-key="nav-roteiros">Roteiros</a></li>
+                <li><a href="/eventos" data-lang-key="nav-eventos">Eventos</a></li>
+                <li><a href="/noticias" data-lang-key="nav-noticias">📰 Notícias</a></li>
+                <li><a href="/galeria" data-lang-key="nav-galeria">Galeria</a></li>
+                <li><a href="/onde-ficar" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
+                <li><a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a></li>
                 
                 <!-- Sobre - Dropdown -->
                 <li>
                     <button class="dropdown-toggle"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                     <div class="dropdown-menu">
                         <a href="#sobre" data-lang-key="nav-cidade">🏛️ A Cidade</a>
-                        <a href="transparencia.html" data-lang-key="nav-transparencia">📋 Transparência</a>
-                        <a href="para-o-trade.html" data-lang-key="nav-trade">💼 Para o Trade</a>
+                        <a href="/transparencia" data-lang-key="nav-transparencia">📋 Transparência</a>
+                        <a href="/para-o-trade" data-lang-key="nav-trade">💼 Para o Trade</a>
                     </div>
                 </li>
                 
@@ -249,7 +252,7 @@
                 
                 <!-- Login/Portal do Usuário -->
                 <li>
-                    <a href="portal-usuario.html" class="nav-login-btn" data-lang-key="nav-login">
+                    <a href="/portal-usuario" class="nav-login-btn" data-lang-key="nav-login">
                         👤 Entrar
                     </a>
                 </li>
@@ -315,7 +318,7 @@
                     <a href="https://agrosamas.com.br" target="_blank" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
                         Acesse o Site Oficial →
                     </a>
-                    <a href="eventos.html#setembro" class="agrosamas-btn secondary" data-lang-key="natal-btn">
+                    <a href="/eventos#setembro" class="agrosamas-btn secondary" data-lang-key="natal-btn">
                         Ver Programação
                     </a>
                 </div>
@@ -392,7 +395,7 @@
                 </div>
             </div>
 
-            <a href="rotas-completas.html" class="explore-btn" data-lang-key="btn-ver-rotas">
+            <a href="/rotas-completas" class="explore-btn" data-lang-key="btn-ver-rotas">
                 Ver Todas as Rotas →
             </a>
         </div>
@@ -479,14 +482,14 @@
                         <span data-lang-key="natal-tag3">✨ Iluminação</span>
                         <span data-lang-key="natal-tag4">🎵 Coral</span>
                     </div>
-                    <a href="eventos.html#dezembro" class="festa-btn" data-lang-key="natal-btn-ver">
+                    <a href="/eventos#dezembro" class="festa-btn" data-lang-key="natal-btn-ver">
                         Ver Programação →
                     </a>
                 </div>
             </div>
 
             <div class="festas-cta">
-                <a href="eventos.html" class="festas-ver-mais" data-lang-key="btn-calendario">
+                <a href="/eventos" class="festas-ver-mais" data-lang-key="btn-calendario">
                     📅 Ver Calendário Completo de Eventos 2026
                 </a>
             </div>
@@ -539,6 +542,24 @@
                     <span class="stat-number">⚡</span>
                     <span class="stat-label" data-lang-key="badge-terra-xisto">Terra do Xisto</span>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mascotes Section -->
+    <section class="mascotes-teaser-section">
+        <div class="mascotes-teaser-inner">
+            <div class="mascotes-teaser-text">
+                <span class="section-label">Identidade Visual</span>
+                <h2>Conheça os Mascotes<br>de São Mateus do Sul</h2>
+                <p>Personagens criados para representar a riqueza cultural, natural e econômica da nossa cidade — da herança polonesa ao pinhão, da erva-mate ao xisto.</p>
+                <a href="/galeria#mascotes" class="mascotes-teaser-btn">Ver todos os mascotes →</a>
+                <small class="mascotes-disclaimer">Versões provisórias — nomes e designs em definição</small>
+            </div>
+            <div class="mascotes-teaser-figures">
+                <img src="images/mascotes/MASCOTE_CAPIVARA_PINHAO.png" alt="Capivara Pinhão" class="mascote-fig mascote-fig--main">
+                <img src="images/mascotes/MASCOTE_MENINO_POLONES_1.png" alt="Menino Polonês" class="mascote-fig mascote-fig--side mascote-fig--left">
+                <img src="images/mascotes/MASCOTE_PERY.png" alt="Pery" class="mascote-fig mascote-fig--side mascote-fig--right">
             </div>
         </div>
     </section>
@@ -679,7 +700,7 @@
         </div>
 
         <div class="attractions-grid">
-            <div class="attraction-card" onclick="window.location.href='local.html?id=igreja-matriz'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-matriz'" style="cursor:pointer">
                 <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">⛪</div>
@@ -689,7 +710,7 @@
                 </div>
             </div>
 
-            <div class="attraction-card" onclick="window.location.href='local.html?id=ponte-rio-iguacu'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=ponte-rio-iguacu'" style="cursor:pointer">
                 <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">🌊</div>
@@ -699,7 +720,7 @@
                 </div>
             </div>
 
-            <div class="attraction-card" onclick="window.location.href='local.html?id=praca-rio-iguacu'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=praca-rio-iguacu'" style="cursor:pointer">
                 <img src="images/WEBP/PRACA-DO-IGUACU_1.webp" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">🌳</div>
@@ -709,7 +730,7 @@
                 </div>
             </div>
 
-            <div class="attraction-card" onclick="window.location.href='local.html?id=igreja-agua-branca'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-agua-branca'" style="cursor:pointer">
                 <img src="images/IGREJA_AGUA_BRANCA.jpg" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">⛪</div>
@@ -719,7 +740,7 @@
                 </div>
             </div>
 
-            <div class="attraction-card" onclick="window.location.href='local.html?id=prefeitura-municipal'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=prefeitura-municipal'" style="cursor:pointer">
                 <img src="images/PREFEITURA_MUNICIPAL.jpg" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">🏛️</div>
@@ -729,7 +750,7 @@
                 </div>
             </div>
 
-            <div class="attraction-card" onclick="window.location.href='local.html?id=rua-do-mathe'" style="cursor:pointer">
+            <div class="attraction-card" onclick="window.location.href='/local?id=rua-do-mathe'" style="cursor:pointer">
                 <img src="images/WEBP/RUA-DO-MATHE-_1_.webp" class="attraction-image">
                 <div class="attraction-content">
                     <div class="attraction-icon">🌿</div>
@@ -776,7 +797,7 @@
         </div>
 
         <div style="text-align: center; margin-top: 4rem;">
-            <a href="rotas-completas.html" class="explore-btn" style="display: inline-block; padding: 1.2rem 3rem; text-decoration: none;" data-lang-key="btn-restaurantes">
+            <a href="/rotas-completas" class="explore-btn" style="display: inline-block; padding: 1.2rem 3rem; text-decoration: none;" data-lang-key="btn-restaurantes">
                 Descubra os Restaurantes →
             </a>
         </div>
@@ -821,7 +842,7 @@
 
         <div class="blog-grid">
             <!-- Post 1 — Aldir Blanc -->
-            <a href="noticias.html" class="blog-card" aria-label="Leia mais sobre inscrições para projetos culturais Aldir Blanc">
+            <a href="/noticias" class="blog-card" aria-label="Leia mais sobre inscrições para projetos culturais Aldir Blanc">
                 <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Projetos culturais com recursos da Política Nacional Aldir Blanc em São Mateus do Sul" class="blog-image">
                 <div class="blog-content">
                     <span class="blog-category" data-lang-key="blog-cat-cultura">Cultura</span>
@@ -835,7 +856,7 @@
             </a>
 
             <!-- Post 2 — Eleição COMTUR -->
-            <a href="noticias.html" class="blog-card" aria-label="Leia mais sobre eleição de nova diretoria do COMTUR">
+            <a href="/noticias" class="blog-card" aria-label="Leia mais sobre eleição de nova diretoria do COMTUR">
                 <img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="Reunião do Conselho Municipal de Turismo de São Mateus do Sul" class="blog-image">
                 <div class="blog-content">
                     <span class="blog-category" data-lang-key="blog-cat-turismo">Turismo</span>
@@ -849,7 +870,7 @@
             </a>
 
             <!-- Post 3 — Chamamento artistas -->
-            <a href="noticias.html" class="blog-card" aria-label="Leia mais sobre chamamento para artistas locais">
+            <a href="/noticias" class="blog-card" aria-label="Leia mais sobre chamamento para artistas locais">
                 <img src="images/RUA_DO_MATHE.jpg" alt="Chamamento público para artistas locais participarem de programações culturais" class="blog-image">
                 <div class="blog-content">
                     <span class="blog-category evento" data-lang-key="blog-cat-cultura">Cultura</span>
@@ -867,7 +888,7 @@
 
         <!-- CTA notícias -->
         <div style="text-align:center; margin-top: 3rem;">
-            <a href="noticias.html" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="blog-ver-todas">📰 Ver todas as notícias</a>
+            <a href="/noticias" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="blog-ver-todas">📰 Ver todas as notícias</a>
         </div>
     </section>
 
@@ -880,7 +901,7 @@
                     <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-proximos-eventos">Próximos Eventos</h2>
                     <p style="color: #666; font-size: 1.1rem;" data-lang-key="section-eventos-desc">Festas, feiras e celebrações da Capital Polonesa</p>
                 </div>
-                <a href="eventos.html" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
+                <a href="/eventos" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
                     Ver Calendário Completo →
                 </a>
             </div>
@@ -1321,7 +1342,7 @@
                 <p style="color: #666; margin-bottom: 2rem; font-size: 1.1rem;" data-lang-key="galeria-cta">
                     📸 Venha capturar suas próprias memórias em São Mateus do Sul
                 </p>
-                <a href="rotas-completas.html" style="display: inline-block; padding: 1.2rem 3rem; background: var(--forest-deep); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(10, 61, 46, 0.3);" data-lang-key="galeria-btn">
+                <a href="/rotas-completas" style="display: inline-block; padding: 1.2rem 3rem; background: var(--forest-deep); color: white; text-decoration: none; border-radius: 50px; font-weight: 600; transition: all 0.3s ease; box-shadow: 0 10px 30px rgba(10, 61, 46, 0.3);" data-lang-key="galeria-btn">
                     Planejar Visita →
                 </a>
             </div>
@@ -1432,10 +1453,10 @@
                 <a href="#map-hero" data-lang-key="nav-inicio">Início</a>
                 <a href="#attractions" data-lang-key="footer-link-atracoes">Atrações</a>
                 <a href="#gastronomia" data-lang-key="footer-link-gastro">Gastronomia</a>
-                <a href="galeria.html" data-lang-key="footer-link-galeria">Galeria</a>
-                <a href="noticias.html">📰 Notícias</a>
-                <a href="rotas-completas.html">Rotas</a>
-                <a href="transparencia.html" data-lang-key="footer-transparencia">Transparência</a>
+                <a href="/galeria" data-lang-key="footer-link-galeria">Galeria</a>
+                <a href="/noticias">📰 Notícias</a>
+                <a href="/rotas-completas">Rotas</a>
+                <a href="/transparencia" data-lang-key="footer-transparencia">Transparência</a>
                 <a href="tel:+554235320000">📞 (42) 3532-0000</a>
             </div>
         </div>
@@ -1487,12 +1508,12 @@
 
                 <!-- Links Institucionais -->
                 <div class="institutional-links">
-                    <a href="transparencia.html" data-lang-key="footer-link-transparencia">Transparência Turística</a>
-                    <a href="transparencia.html#comtur" data-lang-key="footer-link-comtur">COMTUR - Conselho Municipal</a>
-                    <a href="transparencia.html#fumtur" data-lang-key="footer-link-fumtur">FUMTUR - Fundo Municipal</a>
+                    <a href="/transparencia" data-lang-key="footer-link-transparencia">Transparência Turística</a>
+                    <a href="/transparencia#comtur" data-lang-key="footer-link-comtur">COMTUR - Conselho Municipal</a>
+                    <a href="/transparencia#fumtur" data-lang-key="footer-link-fumtur">FUMTUR - Fundo Municipal</a>
                     <a href="https://www.saomateusdosul.pr.gov.br" target="_blank" rel="noopener" data-lang-key="footer-link-prefeitura">Portal da Prefeitura</a>
-                    <a href="transparencia.html#acessibilidade" data-lang-key="footer-link-acessibilidade">Acessibilidade</a>
-                    <a href="transparencia.html#lgpd" data-lang-key="footer-link-privacidade">Política de Privacidade</a>
+                    <a href="/transparencia#acessibilidade" data-lang-key="footer-link-acessibilidade">Acessibilidade</a>
+                    <a href="/transparencia#lgpd" data-lang-key="footer-link-privacidade">Política de Privacidade</a>
                 </div>
 
                 <!-- Créditos e Copyright -->
@@ -1606,6 +1627,17 @@
         // ============================================
         const backToTopBtn = document.getElementById('backToTop');
         
+        // Barra de progresso de scroll
+        const scrollProgressBar = document.getElementById('sms-scroll-progress');
+        if (scrollProgressBar) {
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+                scrollProgressBar.style.width = pct + '%';
+            }, { passive: true });
+        }
+
         if (backToTopBtn) {
             // Mostrar/esconder botão ao rolar
             window.addEventListener('scroll', () => {
@@ -2210,7 +2242,7 @@
                 const fonte = evento._fonte === 'firebase' ? ' ✨' : '';
 
                 return `
-                    <a href="eventos.html" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; text-decoration: none; ${isDestaque ? 'border: 2px solid #d4a574;' : ''}">
+                    <a href="/eventos" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; text-decoration: none; ${isDestaque ? 'border: 2px solid #d4a574;' : ''}">
                         <div style="background: ${isDestaque ? 'linear-gradient(135deg, #0a3d2e, #0a5d3e)' : '#0a3d2e'}; color: white; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
                             <div style="text-align: center; min-width: 55px;">
                                 <div style="font-size: 1.8rem; font-weight: 700; line-height: 1;">${dia}</div>

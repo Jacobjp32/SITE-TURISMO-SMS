@@ -28,7 +28,6 @@ const CMS = {
     // Inicializar CMS
     init: async function() {
         await this.carregarPosts();
-        console.log('📝 CMS iniciado com', this.posts.length, 'posts');
         return this;
     },
     
@@ -37,7 +36,7 @@ const CMS = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = {
+            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
                 apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
                 authDomain: 'turismo-sms.firebaseapp.com',
                 projectId: 'turismo-sms',
@@ -65,7 +64,6 @@ const CMS = {
                     destaque: p.destaque || false,
                     publicado: true
                 }));
-                console.log(`✅ CMS: ${this.posts.length} notícias do Firebase`);
                 return this.posts;
             }
         } catch (err) {
@@ -236,23 +234,30 @@ const CMS = {
         });
     },
     
+    // Escapar HTML para prevenir XSS
+    escapeHTML: function(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    },
+
     // Renderizar lista de posts
     renderizarLista: function(containerId, limite = 10) {
         const container = document.getElementById(containerId);
         if (!container) return;
-        
+
         const posts = this.getPostsPublicados().slice(0, limite);
-        
+
         container.innerHTML = posts.map(post => `
-            <article class="post-card" data-id="${post.id}">
-                <div class="post-image" style="background-image: url('${post.imagem}');"></div>
+            <article class="post-card" data-id="${this.escapeHTML(String(post.id))}">
+                <div class="post-image" style="background-image: url('${this.escapeHTML(post.imagem)}');"></div>
                 <div class="post-content">
-                    <span class="post-category">${post.categoria}</span>
-                    <h3 class="post-title">${post.titulo}</h3>
-                    <p class="post-excerpt">${post.resumo}</p>
+                    <span class="post-category">${this.escapeHTML(post.categoria)}</span>
+                    <h3 class="post-title">${this.escapeHTML(post.titulo)}</h3>
+                    <p class="post-excerpt">${this.escapeHTML(post.resumo)}</p>
                     <div class="post-meta">
                         <span>📅 ${this.formatarData(post.dataPublicacao)}</span>
-                        <a href="noticia.html?slug=${post.slug}" class="post-link">Leia mais →</a>
+                        <a href="/noticia?slug=${encodeURIComponent(post.slug)}" class="post-link">Leia mais →</a>
                     </div>
                 </div>
             </article>
