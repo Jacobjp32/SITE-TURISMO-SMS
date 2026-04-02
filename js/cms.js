@@ -257,7 +257,7 @@ const CMS = {
                     <p class="post-excerpt">${this.escapeHTML(post.resumo)}</p>
                     <div class="post-meta">
                         <span>📅 ${this.formatarData(post.dataPublicacao)}</span>
-                        <a href="noticia.html?slug=${encodeURIComponent(post.slug)}" class="post-link">Leia mais →</a>
+                        <a href="/noticia?slug=${encodeURIComponent(post.slug)}" class="post-link">Leia mais →</a>
                     </div>
                 </div>
             </article>

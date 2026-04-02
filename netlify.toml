@@ -1,7 +1,96 @@
 [build]
   publish = "."
 
-# Pretty URLs — /eventos serve eventos.html, sem redirecionar
+# ── 301: redireciona URLs antigas com .html → URLs limpas ──────────────────
+# Qualquer link externo ou bookmark com .html é redirecionado automaticamente
+
+[[redirects]]
+  from = "/index.html"
+  to   = "/"
+  status = 301
+
+[[redirects]]
+  from = "/eventos.html"
+  to   = "/eventos"
+  status = 301
+
+[[redirects]]
+  from = "/galeria.html"
+  to   = "/galeria"
+  status = 301
+
+[[redirects]]
+  from = "/noticias.html"
+  to   = "/noticias"
+  status = 301
+
+[[redirects]]
+  from = "/noticia.html"
+  to   = "/noticia"
+  status = 301
+
+[[redirects]]
+  from = "/o-que-fazer.html"
+  to   = "/o-que-fazer"
+  status = 301
+
+[[redirects]]
+  from = "/onde-ficar.html"
+  to   = "/onde-ficar"
+  status = 301
+
+[[redirects]]
+  from = "/sabores.html"
+  to   = "/sabores"
+  status = 301
+
+[[redirects]]
+  from = "/transparencia.html"
+  to   = "/transparencia"
+  status = 301
+
+[[redirects]]
+  from = "/para-o-trade.html"
+  to   = "/para-o-trade"
+  status = 301
+
+[[redirects]]
+  from = "/rotas-completas.html"
+  to   = "/rotas-completas"
+  status = 301
+
+[[redirects]]
+  from = "/roteiro-ia.html"
+  to   = "/roteiro-ia"
+  status = 301
+
+[[redirects]]
+  from = "/reservas.html"
+  to   = "/reservas"
+  status = 301
+
+[[redirects]]
+  from = "/portal-usuario.html"
+  to   = "/portal-usuario"
+  status = 301
+
+[[redirects]]
+  from = "/mapa-3d.html"
+  to   = "/mapa-3d"
+  status = 301
+
+[[redirects]]
+  from = "/mapa-completo.html"
+  to   = "/mapa-completo"
+  status = 301
+
+[[redirects]]
+  from = "/local.html"
+  to   = "/local"
+  status = 301
+
+# ── 200: serve o .html mantendo a URL limpa no browser ─────────────────────
+
 [[redirects]]
   from = "/eventos"
   to   = "/eventos.html"
@@ -80,6 +169,11 @@
 [[redirects]]
   from = "/mapa-completo"
   to   = "/mapa-completo.html"
+  status = 200
+
+[[redirects]]
+  from = "/local"
+  to   = "/local.html"
   status = 200
 
 # Headers globais — sem CSP para não bloquear fetch de arquivos estáticos

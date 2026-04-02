@@ -16,7 +16,7 @@
       <a href="#main-content" title="Atalho: Alt+1">Conteúdo [1]</a>
       <a href="#navLinks" title="Atalho: Alt+2">Menu [2]</a>
       <a href="#footer" title="Atalho: Alt+4">Rodapé [4]</a>
-      <a href="transparencia.html" title="Transparência e Governança">Transparência</a>
+      <a href="/transparencia" title="Transparência e Governança">Transparência</a>
     </div>
     <div class="controls">
       <div class="font-controls">
