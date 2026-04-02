@@ -2009,12 +2009,6 @@
            CALENDÁRIO DE EVENTOS
         ============================================ */
 
-.event-location,
-
-        @media (max-width: 768px) {
-            
-            
-        }
 
         /* ============================================
            SISTEMA DE BUSCA
@@ -2060,9 +2054,6 @@
         /* ============================================
            FORMULÁRIO DE CONTATO
         ============================================ */
-
-        .contact-info h3,
-
 
         .contact-form {
             background: white;
@@ -2160,14 +2151,6 @@
             display: block;
         }
 
-        @media (max-width: 768px) {
-            
-            
-            
-            
-            
-            .search-input,
-        }
 
         
         /* ============================================
@@ -2348,11 +2331,6 @@
             background: #d4a574 !important;
             border-color: #d4a574;
         }
-        
-        .produtor-item.active .produtor-item-name,
-        
-        
-        
         
         /* Painel de detalhes */
         
