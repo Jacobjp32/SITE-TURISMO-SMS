@@ -9,8 +9,8 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
     <meta name="description" id="meta-description" content="Notícias do turismo em São Mateus do Sul">
-    <link rel="canonical" id="meta-canonical" href="https://turismo.saomateusdosul.pr.gov.br/noticia.html">
-    <meta property="og:url" id="og-url" content="https://turismo.saomateusdosul.pr.gov.br/noticia.html">
+    <link rel="canonical" id="meta-canonical" href="https://turismo.saomateusdosul.pr.gov.br/noticia">
+    <meta property="og:url" id="og-url" content="https://turismo.saomateusdosul.pr.gov.br/noticia">
     <meta property="og:type" content="article">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
     <title id="page-title">Notícia | São Mateus do Sul</title>
@@ -27,7 +27,7 @@
     
     <footer class="footer">
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-        <p><a href="noticias.html">← Voltar para Notícias</a></p>
+        <p><a href="/noticias">← Voltar para Notícias</a></p>
     </footer>
     
     <script src="js/cms.js"></script>
@@ -44,12 +44,12 @@
             
             document.getElementById('page-title').textContent = post.titulo + ' | São Mateus do Sul';
             document.getElementById('meta-description').content = post.resumo;
-            const pageUrl = 'https://turismo.saomateusdosul.pr.gov.br/noticia.html?slug=' + slug;
+            const pageUrl = 'https://turismo.saomateusdosul.pr.gov.br/noticia?slug=' + slug;
             document.getElementById('meta-canonical').href = pageUrl;
             document.getElementById('og-url').content = pageUrl;
             
             container.innerHTML = `
-                <a href="noticias.html" class="back-link">← Voltar para Notícias</a>
+                <a href="/noticias" class="back-link">← Voltar para Notícias</a>
                 <header>
                     <span class="article-category">${post.categoria}</span>
                     <h1 class="article-title">${post.titulo}</h1>
@@ -77,7 +77,7 @@
                 <div class="not-found">
                     <h2>😕 Notícia não encontrada</h2>
                     <p>A notícia que você procura não existe ou foi removida.</p>
-                    <p style="margin-top: 2rem;"><a href="noticias.html" class="back-link">← Voltar para Notícias</a></p>
+                    <p style="margin-top: 2rem;"><a href="/noticias" class="back-link">← Voltar para Notícias</a></p>
                 </div>
             `;
         }
