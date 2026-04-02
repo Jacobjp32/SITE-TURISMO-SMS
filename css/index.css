@@ -35,7 +35,18 @@
            BARRA DE ACESSIBILIDADE - eMAG
            Conformidade com Lei Brasileira de Inclusão
         ============================================ */
-        /* Barra de progresso de scroll */
+        /* Trilho branco da barra de progresso */
+        #sms-scroll-track {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255,255,255,0.55);
+            z-index: 10001;
+            pointer-events: none;
+        }
+        /* Barra de progresso de scroll (preenchimento dourado) */
         #sms-scroll-progress {
             position: fixed;
             top: 0;
@@ -47,6 +58,10 @@
             transition: width .1s linear;
             pointer-events: none;
         }
+        /* Skip links — invisíveis até receber foco via Tab */
+        .skip-links { position: fixed; top: 0; left: 0; z-index: 10010; }
+        .skip-links a { position: absolute; top: -9999px; left: 0; background: var(--gold-polish); color: #1a1a1a; padding: .75rem 1.25rem; font-weight: bold; text-decoration: none; white-space: nowrap; border-radius: 0 0 6px 0; }
+        .skip-links a:focus { top: 0; outline: 3px solid #1a1a1a; outline-offset: 2px; }
 
         .accessibility-bar {
             background: #1a1a1a;

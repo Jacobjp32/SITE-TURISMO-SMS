@@ -199,9 +199,10 @@
 /* Body offset para nav fixo + barra de acessibilidade fixa */
 body { padding-top: 110px; }
 /* Barra de progresso de leitura (scroll) */
-#sms-scroll-progress{position:fixed;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
+#sms-scroll-track{position:fixed!important;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.55);z-index:10001;pointer-events:none;}
+#sms-scroll-progress{position:fixed!important;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
 /* Acessibilidade eMAG */
-.accessibility-bar{background:#1a1a1a;color:#fff;padding:.5rem 1rem;font-size:.8rem;position:fixed;top:4px;left:0;right:0;z-index:10001;}
+.accessibility-bar{background:#1a1a1a!important;color:#fff!important;padding:.5rem 1rem;font-size:.8rem;position:fixed!important;top:4px!important;left:0!important;right:0!important;z-index:10001!important;}
 .accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
 .accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
 .accessibility-bar a,.accessibility-bar button{color:#fff;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.3);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
@@ -210,9 +211,9 @@ body { padding-top: 110px; }
 .accessibility-bar .font-controls{display:flex;gap:.25rem;}
 .accessibility-bar .font-controls button{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
 .accessibility-bar .contrast-btn{display:flex;align-items:center;gap:.3rem;}
-.skip-links{position:absolute;top:-100px;left:0;z-index:10002;}
-.skip-links a{position:absolute;background:#d4a574;color:#1a1a1a;padding:1rem;font-weight:bold;text-decoration:none;}
-.skip-links a:focus{top:100px;outline:3px solid #1a1a1a;}
+.skip-links{position:fixed;top:0;left:0;z-index:10010;}
+.skip-links a{position:absolute;top:-9999px;left:0;background:#d4a574;color:#1a1a1a;padding:.75rem 1.25rem;font-weight:bold;text-decoration:none;white-space:nowrap;border-radius:0 0 6px 0;}
+.skip-links a:focus{top:0;outline:3px solid #1a1a1a;outline-offset:2px;}
 body.high-contrast{background:#000!important;color:#ff0!important;}
 body.high-contrast *{background-color:#000!important;color:#ff0!important;border-color:#ff0!important;}
 body.high-contrast img{filter:grayscale(100%) contrast(120%);}
@@ -254,7 +255,7 @@ body.font-larger{font-size:140%!important;}
 
     // Injetar barra de progresso + nav + barra acessibilidade no início do <body>
     document.body.insertAdjacentHTML('afterbegin',
-        '<div id="sms-scroll-progress" aria-hidden="true"></div>' + NAV_HTML
+        '<div id="sms-scroll-track" aria-hidden="true"></div><div id="sms-scroll-progress" aria-hidden="true"></div>' + NAV_HTML
     );
 
     // Injetar botão voltar ao topo (se ainda não existe)
