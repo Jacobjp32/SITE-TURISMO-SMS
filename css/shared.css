@@ -278,3 +278,62 @@ body {
     .mascote-peek { transition: opacity 0.35s ease !important; transform: none !important; }
 }
 @media (max-width: 480px) { .mascote-wrap { display: none !important; } }
+
+/* ── Hero mascote decoration ─────────────────────────────── */
+.hero { position: relative; overflow: visible; }
+.hero-mascote {
+    position: absolute;
+    right: 4%;
+    bottom: -48px;
+    height: 160px;
+    width: auto;
+    pointer-events: none;
+    filter: drop-shadow(0 8px 24px rgba(0,0,0,0.35));
+    opacity: 0;
+    animation: heroMascoteIn 0.7s ease-out 0.5s forwards;
+    z-index: 5;
+}
+@keyframes heroMascoteIn {
+    from { transform: translateY(50px) rotate(6deg); opacity: 0; }
+    to   { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+@media (max-width: 768px)              { .hero-mascote { display: none; } }
+@media (prefers-reduced-motion: reduce){ .hero-mascote { animation: none; opacity: 1; } }
+
+/* ── Filter navigation tabs ──────────────────────────────── */
+.filter-nav {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+    padding: 0.4rem;
+    background: white;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    justify-content: center;
+}
+.fnav-btn {
+    padding: 0.45rem 1.1rem;
+    border: none;
+    border-radius: 50px;
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #555;
+    transition: background 0.2s, color 0.2s;
+}
+.fnav-btn:hover  { background: rgba(10,61,46,0.08); color: var(--forest-deep); }
+.fnav-btn--active{ background: var(--forest-deep); color: white; }
+
+/* Highlighted card when a filter is active */
+.rota-card--highlighted {
+    box-shadow: 0 0 0 3px var(--gold-polish), 0 20px 50px rgba(212,165,116,0.3) !important;
+    transform: translateY(-4px) !important;
+}
+/* Dimmed cards when filter is active and card is not highlighted */
+.rotas-grid--filtered .rota-card:not(.rota-card--highlighted) {
+    opacity: 0.45;
+    transform: none !important;
+}
