@@ -245,3 +245,36 @@ body {
         animation-duration: 0.01ms !important;
     }
 }
+
+/* ── Mascotes: peek-from-behind ─────────────────────────────── */
+.mascote-wrap {
+    position: absolute;
+    pointer-events: none;
+    z-index: 10;
+    line-height: 0;
+}
+.mascote-wrap img,
+.mascote-wrap video {
+    width: var(--mascote-size, 120px);
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.22));
+}
+.mascote-peek {
+    opacity: 0;
+    transition:
+        opacity 0.55s ease,
+        transform 0.65s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+.mascote-peek[data-peek="slide-up"]    { transform: translateY(70px) rotate(-4deg); }
+.mascote-peek[data-peek="lean-right"]  { transform: translateX(60px) rotate(12deg); }
+.mascote-peek[data-peek="lean-left"]   { transform: translateX(-60px) rotate(-12deg); }
+.mascote-peek[data-peek="pop"]         { transform: scale(0.4) translateY(30px); }
+.mascote-peek.mascote-visible {
+    opacity: 1;
+    transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .mascote-peek { transition: opacity 0.35s ease !important; transform: none !important; }
+}
+@media (max-width: 480px) { .mascote-wrap { display: none !important; } }

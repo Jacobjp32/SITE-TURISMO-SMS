@@ -372,6 +372,34 @@ body.font-larger{font-size:140%!important;}
             }
         }
 
+        // Mascotes: scroll-reveal (ativa .mascote-peek em qualquer página que os use)
+        (function() {
+            var peeks = document.querySelectorAll('.mascote-peek');
+            if (!peeks.length) return;
+            if (!('IntersectionObserver' in window)) {
+                peeks.forEach(function(el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+                return;
+            }
+            function revealMascote(el) {
+                el.style.transition = 'opacity 0.55s ease, transform 0.65s cubic-bezier(0.34,1.4,0.64,1)';
+                el.classList.add('mascote-visible');
+                setTimeout(function() {
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                }, 20);
+            }
+            var mobs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var el = entry.target;
+                        mobs.unobserve(el);
+                        setTimeout(function() { revealMascote(el); }, 450);
+                    }
+                });
+            }, { threshold: 0.15 });
+            peeks.forEach(function(el) { mobs.observe(el); });
+        })();
+
         // Auth state: ler localStorage e atualizar nav
         (function() {
             var session = null;

@@ -358,9 +358,9 @@ const FirebaseSystem = {
         n.className = 'firebase-notification firebase-notif-' + type;
         n.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">&times;</button>';
         var bg = type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db';
-        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
-            'display:flex;align-items:center;gap:1rem;z-index:10000;animation:slideIn 0.3s ease;' +
-            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;';
+        n.style.cssText = 'position:fixed;top:7.5rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+            'display:flex;align-items:center;gap:1rem;z-index:10003;animation:slideIn 0.3s ease;' +
+            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;max-width:90vw;';
         document.body.appendChild(n);
         setTimeout(function() { n.remove(); }, 5000);
     }
