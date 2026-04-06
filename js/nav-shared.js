@@ -114,7 +114,8 @@
     const NAV_CSS = `
 <style id="nav-shared-styles">
 .nav {
-    position: fixed; top: 42px; left: 0; right: 0; z-index: 9999;
+    position: fixed; top: 48px; left: 0; right: 0; z-index: 9999;
+    /* nav starts right below accessibility bar (top:4px + height:44px = 48px) */
     padding: 0.9rem 2rem;
     background: linear-gradient(180deg, rgba(10,61,46,0.97) 0%, rgba(10,61,46,0.85) 100%);
     backdrop-filter: blur(16px);
@@ -201,13 +202,13 @@
 }
 .mobile-menu-overlay.active { opacity:1; visibility:visible; }
 /* Body offset para nav fixo + barra de acessibilidade fixa */
-body { padding-top: 110px; }
+body { padding-top: 136px; }
 /* Barra de progresso de leitura (scroll) */
 #sms-scroll-track{position:fixed!important;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.55);z-index:10001;pointer-events:none;}
 #sms-scroll-progress{position:fixed!important;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
 /* Acessibilidade eMAG */
-.accessibility-bar{background:#1a1a1a!important;color:#fff!important;padding:.5rem 1rem;font-size:.8rem;position:fixed!important;top:4px!important;left:0!important;right:0!important;z-index:10001!important;}
-.accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;}
+.accessibility-bar{background:#1a1a1a!important;color:#fff!important;padding:0 1rem;height:44px;font-size:.8rem;position:fixed!important;top:4px!important;left:0!important;right:0!important;z-index:10001!important;overflow:hidden;}
+.accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:.5rem;height:100%;}
 .accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
 .accessibility-bar a,.accessibility-bar button{color:#fff;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.3);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
 .accessibility-bar a:hover,.accessibility-bar a:focus,.accessibility-bar button:hover,.accessibility-bar button:focus{background:#d4a574;color:#1a1a1a;border-color:#d4a574;outline:2px solid #fff;outline-offset:2px;}
