@@ -54,9 +54,17 @@ function initFirebase() {
                             currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
                         }
                         window.currentUser = currentUser;
+                        // Persistir sessão para outras páginas (sem Firebase)
+                        try {
+                            localStorage.setItem('smsUserSession', JSON.stringify({
+                                nome: currentUser.nome || '',
+                                email: currentUser.email || ''
+                            }));
+                        } catch(ex) {}
                     } else {
                         currentUser = null;
                         window.currentUser = null;
+                        try { localStorage.removeItem('smsUserSession'); } catch(ex) {}
                     }
                     FirebaseSystem.updateUI();
                 });

@@ -252,10 +252,14 @@
                 <li><a href="#contato" data-lang-key="nav-contato">Contato</a></li>
                 
                 <!-- Login/Portal do Usuário -->
-                <li>
-                    <a href="/portal-usuario" class="nav-login-btn" data-lang-key="nav-login">
+                <li class="auth-nav-item">
+                    <a href="/portal-usuario" class="nav-login-btn auth-login-btn" data-lang-key="nav-login">
                         👤 Entrar
                     </a>
+                    <div class="auth-user-menu" style="display:none;">
+                        <a href="/portal-usuario" class="nav-user-link">👤 <span class="auth-user-name">Usuário</span></a>
+                        <button class="nav-logout-link" onclick="smsLogout()">Sair</button>
+                    </div>
                 </li>
                 
                 <li><div class="language-selector">
@@ -2145,6 +2149,12 @@
          SCRIPTS DE ACESSIBILIDADE - eMAG
     ============================================ -->
     <script>
+    // Logout (sem Firebase nesta página — limpa localStorage e redireciona)
+    function smsLogout() {
+        try { localStorage.removeItem('smsUserSession'); } catch(e) {}
+        window.location.href = '/portal-usuario';
+    }
+
     // Controle de tamanho de fonte
     var currentFontSize = 0; // 0 = normal, 1 = grande, -1 = menor
     
@@ -2199,6 +2209,19 @@
         if (savedContrast === 'true') {
             document.body.classList.add('high-contrast');
         }
+
+        // Auth state: refletir login no nav
+        (function() {
+            var session = null;
+            try { session = JSON.parse(localStorage.getItem('smsUserSession')); } catch(e) {}
+            function applyAuthState(user) {
+                document.querySelectorAll('.auth-login-btn').forEach(function(el) { el.style.display = user ? 'none' : ''; });
+                document.querySelectorAll('.auth-user-menu').forEach(function(el) { el.style.display = user ? 'flex' : 'none'; });
+                document.querySelectorAll('.auth-user-name').forEach(function(el) { if (user) el.textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário'; });
+            }
+            if (session) applyAuthState(session);
+            window.addEventListener('authStateChanged', function(e) { applyAuthState(e.detail && e.detail.user); });
+        })();
 
         // ============================================
         // CARREGAR PRÓXIMOS EVENTOS

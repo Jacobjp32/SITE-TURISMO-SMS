@@ -83,8 +83,12 @@
 
             <li><a href="/#contato" data-lang-key="nav-contato">Contato</a></li>
 
-            <li>
-                <a href="/portal-usuario" class="nav-login-btn" data-lang-key="nav-login">👤 Entrar</a>
+            <li class="auth-nav-item">
+                <a href="/portal-usuario" class="nav-login-btn auth-login-btn" data-lang-key="nav-login">👤 Entrar</a>
+                <div class="auth-user-menu" style="display:none;">
+                    <a href="/portal-usuario" class="nav-user-link">👤 <span class="auth-user-name">Usuário</span></a>
+                    <button class="nav-logout-link" onclick="smsLogout()">Sair</button>
+                </div>
             </li>
 
             <li>
@@ -225,6 +229,17 @@ body.font-larger{font-size:140%!important;}
 .back-to-top{position:fixed;bottom:6rem;right:2rem;width:50px;height:50px;background:#d4a574;color:#0a3d2e;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;visibility:hidden;z-index:9998;}
 .back-to-top.visible{opacity:1;visibility:visible;}
 .back-to-top:hover{background:#e8c9a0;transform:translateY(-5px);box-shadow:0 6px 25px rgba(0,0,0,.4);}
+/* Auth nav state */
+.auth-user-menu { display: flex; align-items: center; gap: 0.4rem; }
+.nav-user-link { background: linear-gradient(135deg,#d4a574,#c4956a) !important; color: #0a3d2e !important; font-weight: 600 !important; border-radius: 25px !important; padding: 0.5rem 1.1rem !important; text-decoration: none; white-space: nowrap; }
+.nav-user-link:hover { background: linear-gradient(135deg,#c4956a,#b38559) !important; }
+.nav-logout-link { background: none; border: 1px solid rgba(255,255,255,0.35); color: rgba(255,255,255,0.8); border-radius: 20px; padding: 0.35rem 0.7rem; cursor: pointer; font-size: 0.72rem; font-family: inherit; transition: all 0.2s; white-space: nowrap; }
+.nav-logout-link:hover { background: rgba(220,20,60,0.25); border-color: rgba(220,20,60,0.6); color: #fff; }
+@media(max-width:968px){
+  .auth-user-menu { flex-direction: column; align-items: flex-start; padding: 0.5rem 1.5rem; gap: 0.3rem; }
+  .nav-user-link { padding: 0.5rem 0 !important; background: none !important; color: #d4a574 !important; font-size: 0.9rem !important; border-radius: 0 !important; }
+  .nav-logout-link { font-size: 0.85rem; }
+}
 @media(max-width:768px){.accessibility-bar .shortcuts{display:none;}.accessibility-bar .controls{width:100%;justify-content:center;}}
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }
@@ -357,6 +372,28 @@ body.font-larger{font-size:140%!important;}
             }
         }
 
+        // Auth state: ler localStorage e atualizar nav
+        (function() {
+            var session = null;
+            try { session = JSON.parse(localStorage.getItem('smsUserSession')); } catch(e) {}
+            function applyAuthState(user) {
+                document.querySelectorAll('.auth-login-btn').forEach(function(el) {
+                    el.style.display = user ? 'none' : '';
+                });
+                document.querySelectorAll('.auth-user-menu').forEach(function(el) {
+                    el.style.display = user ? 'flex' : 'none';
+                });
+                document.querySelectorAll('.auth-user-name').forEach(function(el) {
+                    if (user) el.textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário';
+                });
+            }
+            if (session) applyAuthState(session);
+            // Atualizar quando firebase-auth.js disparar (portal-usuario.html)
+            window.addEventListener('authStateChanged', function(e) {
+                applyAuthState(e.detail && e.detail.user);
+            });
+        })();
+
         // Botão voltar ao topo — comportamento
         var topBtn = document.getElementById('backToTop');
         if (topBtn) {
@@ -391,6 +428,18 @@ body.font-larger{font-size:140%!important;}
             document.body.classList.add('high-contrast');
         }
     });
+
+    // Logout global (funciona com ou sem Firebase carregado)
+    if (!window.smsLogout) {
+        window.smsLogout = function() {
+            try { localStorage.removeItem('smsUserSession'); } catch(e) {}
+            if (window.FirebaseSystem) {
+                FirebaseSystem.logout().then(function() { window.location.href = '/'; });
+            } else {
+                window.location.href = '/portal-usuario';
+            }
+        };
+    }
 
     // Funções de acessibilidade globais (evitar redeclaração se já existirem)
     if (!window.smsChangeFontSize) {
