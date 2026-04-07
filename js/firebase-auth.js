@@ -54,9 +54,17 @@ function initFirebase() {
                             currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
                         }
                         window.currentUser = currentUser;
+                        // Persistir sessão para outras páginas (sem Firebase)
+                        try {
+                            localStorage.setItem('smsUserSession', JSON.stringify({
+                                nome: currentUser.nome || '',
+                                email: currentUser.email || ''
+                            }));
+                        } catch(ex) {}
                     } else {
                         currentUser = null;
                         window.currentUser = null;
+                        try { localStorage.removeItem('smsUserSession'); } catch(ex) {}
                     }
                     FirebaseSystem.updateUI();
                 });
@@ -348,11 +356,17 @@ const FirebaseSystem = {
         if (existing) existing.remove();
         var n = document.createElement('div');
         n.className = 'firebase-notification firebase-notif-' + type;
-        n.innerHTML = '<span>' + message + '</span><button onclick="this.parentElement.remove()">&times;</button>';
+        var span = document.createElement('span');
+        span.textContent = message;
+        var btn = document.createElement('button');
+        btn.textContent = '\u00d7';
+        btn.addEventListener('click', function() { n.remove(); });
+        n.appendChild(span);
+        n.appendChild(btn);
         var bg = type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db';
-        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
-            'display:flex;align-items:center;gap:1rem;z-index:10000;animation:slideIn 0.3s ease;' +
-            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;';
+        n.style.cssText = 'position:fixed;top:7.5rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+            'display:flex;align-items:center;gap:1rem;z-index:10003;animation:slideIn 0.3s ease;' +
+            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;max-width:90vw;';
         document.body.appendChild(n);
         setTimeout(function() { n.remove(); }, 5000);
     }

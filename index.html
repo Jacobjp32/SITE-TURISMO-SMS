@@ -252,10 +252,14 @@
                 <li><a href="#contato" data-lang-key="nav-contato">Contato</a></li>
                 
                 <!-- Login/Portal do Usuário -->
-                <li>
-                    <a href="/portal-usuario" class="nav-login-btn" data-lang-key="nav-login">
+                <li class="auth-nav-item">
+                    <a href="/portal-usuario" class="nav-login-btn auth-login-btn" data-lang-key="nav-login">
                         👤 Entrar
                     </a>
+                    <div class="auth-user-menu" style="display:none;">
+                        <a href="/portal-usuario" class="nav-user-link">👤 <span class="auth-user-name">Usuário</span></a>
+                        <button class="nav-logout-link" onclick="smsLogout()">Sair</button>
+                    </div>
                 </li>
                 
                 <li><div class="language-selector">
@@ -617,6 +621,12 @@
                         </div>
                     </div>
                 </div>
+                <!-- Mascote: Capivara Pinhão espiando de baixo do bloco de conteúdo -->
+                <div class="mascote-wrap mascote-peek" data-peek="slide-up"
+                     style="bottom:-55px; right:8%; --mascote-size:115px;"
+                     aria-hidden="true">
+                    <img src="images/mascotes/MASCOTE_CAPIVARA_PINHAO.png" alt="" loading="lazy" width="115">
+                </div>
             </div>
 
             <!-- Pilar 2: Alma Polonesa -->
@@ -650,6 +660,12 @@
                         </div>
                     </div>
                 </div>
+                <!-- Mascote: Menino Polonês inclinando da borda esquerda -->
+                <div class="mascote-wrap mascote-peek" data-peek="lean-left"
+                     style="bottom:30px; left:-45px; --mascote-size:130px;"
+                     aria-hidden="true">
+                    <img src="images/mascotes/MASCOTE_MENINO_POLONES_1.png" alt="" loading="lazy" width="130">
+                </div>
             </div>
 
             <!-- Pilar 3: Terra de Riquezas -->
@@ -682,6 +698,12 @@
                             <div class="highlight-text" data-lang-key="pilar3-destaque3"><strong>Referência Nacional:</strong> Somos conhecidos como "Terra do Xisto" e símbolo da força da erva-mate paranaense.</div>
                         </div>
                     </div>
+                </div>
+                <!-- Mascote: Pery "popando" de baixo do bloco visual -->
+                <div class="mascote-wrap mascote-peek" data-peek="pop"
+                     style="bottom:-50px; left:25%; --mascote-size:105px;"
+                     aria-hidden="true">
+                    <img src="images/mascotes/MASCOTE_PERY.png" alt="" loading="lazy" width="105">
                 </div>
             </div>
         </div>
@@ -1153,7 +1175,7 @@
                         </div>
                         <div class="form-group full-width">
                             <label for="mensagem" data-lang-key="form-mensagem">Mensagem *</label>
-                            <textarea id="mensagem" name="mensagem" rows="5" required placeholder="Como podemos ajudá-lo?" data-lang-key="form-placeholder-mensagem"></textarea>
+                            <textarea id="mensagem" name="mensagem" rows="4" required placeholder="Como podemos ajudá-lo?" data-lang-key="form-placeholder-mensagem"></textarea>
                         </div>
                         <div class="form-group full-width checkbox-group">
                             <label class="checkbox-label">
@@ -1171,30 +1193,30 @@
                 <!-- Cards de Contato -->
                 <div class="contact-cards-wrapper">
                     <div class="contact-cards-grid">
-                        <!-- Telefone -->
-                        <div class="contact-card">
-                            <div class="contact-card-icon">📞</div>
-                            <h3 class="contact-card-title" data-lang-key="contato-telefone">Telefone</h3>
-                            <p class="contact-card-subtitle" data-lang-key="contato-depto">Departamento de Cultura e Turismo</p>
-                            <a href="tel:+554235320000" class="contact-card-link">
-                                (42) 3532-0000
-                            </a>
-                        </div>
 
-                        <!-- Email -->
-                        <div class="contact-card">
-                            <div class="contact-card-icon">📧</div>
-                            <h3 class="contact-card-title" data-lang-key="contato-email">Email</h3>
-                            <p class="contact-card-subtitle" data-lang-key="contato-envie">Envie sua mensagem</p>
-                            <a href="/cdn-cgi/l/email-protection#0c78797e657f61634c7f6d63616d7869797f68637f7960227c7e226b637a226e7e" class="contact-card-link contact-email">
-                                <span class="__cf_email__" data-cfemail="582c2d2a312b3537182b393735392c3d2d2b3c372b2d3476282a763f372e763a2a">[email&#160;protected]</span>
-                            </a>
+                        <!-- Telefone + Email combinados -->
+                        <div class="contact-card contact-card--split">
+                            <div class="contact-card-half">
+                                <div class="contact-card-icon">📞</div>
+                                <h3 class="contact-card-title" data-lang-key="contato-telefone">Telefone</h3>
+                                <p class="contact-card-subtitle" data-lang-key="contato-depto">Departamento de Cultura e Turismo</p>
+                                <a href="tel:+554235320000" class="contact-card-link">(42) 3532-0000</a>
+                            </div>
+                            <div class="contact-card-sep"></div>
+                            <div class="contact-card-half">
+                                <div class="contact-card-icon">📧</div>
+                                <h3 class="contact-card-title" data-lang-key="contato-email">Email</h3>
+                                <p class="contact-card-subtitle" data-lang-key="contato-envie">Envie sua mensagem</p>
+                                <a href="/cdn-cgi/l/email-protection#0c78797e657f61634c7f6d63616d7869797f68637f7960227c7e226b637a226e7e" class="contact-card-link contact-email">
+                                    <span class="__cf_email__" data-cfemail="582c2d2a312b3537182b393735392c3d2d2b3c372b2d3476282a763f372e763a2a">[email&#160;protected]</span>
+                                </a>
+                            </div>
                         </div>
 
                         <!-- Localização -->
                         <div class="contact-card">
                             <div class="contact-card-icon">📍</div>
-                            <h3 class="contact-card-title" data-lang-key="contato-localizacao" data-lang-key="contato-localizacao">Localização</h3>
+                            <h3 class="contact-card-title" data-lang-key="contato-localizacao">Localização</h3>
                             <p class="contact-card-subtitle" data-lang-key="contato-chale">Chalé da Cultura e Turismo/Produtor</p>
                             <p class="contact-card-subtitle">PRAÇA DO RIO IGUAÇU</p>
                             <p class="contact-card-address">
@@ -1214,6 +1236,7 @@
                                 Sábado: 9h - 13h
                             </p>
                         </div>
+
                     </div>
 
                     <!-- Redes Sociais -->
@@ -2145,6 +2168,12 @@
          SCRIPTS DE ACESSIBILIDADE - eMAG
     ============================================ -->
     <script>
+    // Logout (sem Firebase nesta página — limpa localStorage e redireciona)
+    function smsLogout() {
+        try { localStorage.removeItem('smsUserSession'); } catch(e) {}
+        window.location.href = '/portal-usuario';
+    }
+
     // Controle de tamanho de fonte
     var currentFontSize = 0; // 0 = normal, 1 = grande, -1 = menor
     
@@ -2199,6 +2228,50 @@
         if (savedContrast === 'true') {
             document.body.classList.add('high-contrast');
         }
+
+        // Mascotes: scroll-reveal com IntersectionObserver
+        (function() {
+            var peeks = document.querySelectorAll('.mascote-peek');
+            if (!peeks.length) return;
+            if (!('IntersectionObserver' in window)) {
+                peeks.forEach(function(el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+                return;
+            }
+            function revealMascote(el) {
+                // Inline styles override any cascade conflict (inclui pilar-item opacity em transição)
+                el.style.transition = 'opacity 0.55s ease, transform 0.65s cubic-bezier(0.34,1.4,0.64,1)';
+                el.classList.add('mascote-visible');
+                setTimeout(function() {
+                    el.style.opacity = '1';
+                    el.style.transform = 'none';
+                }, 20);
+            }
+            var mobs = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        var el = entry.target;
+                        mobs.unobserve(el);
+                        // 450ms: tempo suficiente para o pilar-item completar sua transição (550ms)
+                        // sem esperar o tempo todo — mascote aparece enquanto pilar termina
+                        setTimeout(function() { revealMascote(el); }, 450);
+                    }
+                });
+            }, { threshold: 0.15 });
+            peeks.forEach(function(el) { mobs.observe(el); });
+        })();
+
+        // Auth state: refletir login no nav
+        (function() {
+            var session = null;
+            try { session = JSON.parse(localStorage.getItem('smsUserSession')); } catch(e) {}
+            function applyAuthState(user) {
+                document.querySelectorAll('.auth-login-btn').forEach(function(el) { el.style.display = user ? 'none' : ''; });
+                document.querySelectorAll('.auth-user-menu').forEach(function(el) { el.style.display = user ? 'flex' : 'none'; });
+                document.querySelectorAll('.auth-user-name').forEach(function(el) { if (user) el.textContent = user.nome ? user.nome.split(' ')[0] : 'Usuário'; });
+            }
+            if (session) applyAuthState(session);
+            window.addEventListener('authStateChanged', function(e) { applyAuthState(e.detail && e.detail.user); });
+        })();
 
         // ============================================
         // CARREGAR PRÓXIMOS EVENTOS

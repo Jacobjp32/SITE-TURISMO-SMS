@@ -158,11 +158,21 @@ INSTRUKCJE:
 // ─────────────────────────────────────────────────────────────
 // CORS headers
 // ─────────────────────────────────────────────────────────────
-function corsHeaders() {
+const ALLOWED_ORIGINS = [
+    'https://turismo.saomateusdosul.pr.gov.br',
+    'http://localhost:8080',
+    'http://localhost:3000'
+];
+
+function corsHeaders(origin) {
+    const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+        ? origin
+        : ALLOWED_ORIGINS[0];
     return {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Vary': 'Origin'
     };
 }
 
@@ -172,9 +182,11 @@ function corsHeaders() {
 export default {
     async fetch(request, env) {
 
+        const origin = request.headers.get('Origin') || '';
+
         // Preflight CORS
         if (request.method === 'OPTIONS') {
-            return new Response(null, { status: 204, headers: corsHeaders() });
+            return new Response(null, { status: 204, headers: corsHeaders(origin) });
         }
 
         if (request.method !== 'POST') {
@@ -185,7 +197,7 @@ export default {
         if (!apiKey) {
             return new Response(
                 JSON.stringify({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
@@ -195,7 +207,21 @@ export default {
         } catch {
             return new Response(
                 JSON.stringify({ error: 'Payload JSON inválido' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+
+        // Input validation
+        if (!message || typeof message !== 'string') {
+            return new Response(
+                JSON.stringify({ error: 'Campo "message" obrigatório' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+        if (message.length > 500) {
+            return new Response(
+                JSON.stringify({ error: 'Mensagem muito longa (máx. 500 caracteres)' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
@@ -231,13 +257,13 @@ export default {
 
             return new Response(
                 JSON.stringify({ response: text }),
-                { headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
 
         } catch (err) {
             return new Response(
                 JSON.stringify({ error: err.message }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
     }
