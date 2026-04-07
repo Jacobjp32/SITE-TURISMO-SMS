@@ -78,8 +78,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             gap: 0.5rem;
+            height: 100%;
         }
 
         .accessibility-bar .shortcuts {
@@ -227,7 +228,7 @@
         /* Navigation */
         .nav {
             position: fixed;
-            top: 42px; /* 4px progresso + 38px barra acessibilidade */
+            top: 48px; /* 4px progresso + 44px barra acessibilidade */
             left: 0;
             right: 0;
             z-index: 9999;
@@ -251,6 +252,8 @@
             left: 0;
             right: 0;
             z-index: 10001;
+            height: 44px;
+            overflow: hidden;
         }
 
         .nav-container {
@@ -2584,7 +2587,7 @@
            MOBILE FIXES CONSOLIDADOS v2
         ============================================ */
         @media (max-width: 768px) {
-            .nav { top: 0 !important; padding: 0.75rem 1rem !important; }
+            .nav { top: 48px !important; padding: 0.75rem 1rem !important; }
             html { scroll-padding-top: 80px; }
             .section { padding: 3rem 1rem !important; }
             .pilares-section { padding: 3rem 1rem !important; }

@@ -326,6 +326,19 @@ body {
 }
 .fnav-btn:hover  { background: rgba(10,61,46,0.08); color: var(--forest-deep); }
 .fnav-btn--active{ background: var(--forest-deep); color: white; }
+@media (max-width: 768px) {
+    .filter-nav {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        justify-content: flex-start;
+        border-radius: 16px;
+        padding: 0.35rem 0.5rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .filter-nav::-webkit-scrollbar { display: none; }
+    .fnav-btn { white-space: nowrap; flex-shrink: 0; }
+}
 
 /* Highlighted card when a filter is active */
 .rota-card--highlighted {
