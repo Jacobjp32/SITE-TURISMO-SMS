@@ -2333,7 +2333,7 @@
 
         @media (max-width: 768px) {
             .back-to-top {
-                bottom: 6rem; /* mantém acima do chatbot no mobile */
+                bottom: 160px; /* acima do chatbot mobile (bottom:80px + height:65px = 145px) */
                 right: 1rem;
                 width: 45px;
                 height: 45px;
@@ -2609,7 +2609,7 @@
             .about-badge { white-space: normal !important; font-size: 0.7rem !important; padding: 0.5rem 1rem !important; text-align: center !important; }
             .footer-main { padding: 2rem 1rem !important; }
             .footer-links { flex-direction: column !important; gap: 0.75rem !important; align-items: center !important; }
-            .back-to-top { bottom: 6rem !important; right: 1rem !important; } /* acima do chatbot */
+            .back-to-top { bottom: 160px !important; right: 1rem !important; } /* acima do chatbot mobile (80px+65px=145px) */
         }
         @media (max-width: 480px) {
             .nav-logo img { height: 50px !important; max-width: 180px !important; }

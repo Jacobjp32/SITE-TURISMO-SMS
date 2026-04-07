@@ -230,6 +230,7 @@ body.font-larger{font-size:140%!important;}
 .back-to-top{position:fixed;bottom:6rem;right:2rem;width:50px;height:50px;background:#d4a574;color:#0a3d2e;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;visibility:hidden;z-index:9998;}
 .back-to-top.visible{opacity:1;visibility:visible;}
 .back-to-top:hover{background:#e8c9a0;transform:translateY(-5px);box-shadow:0 6px 25px rgba(0,0,0,.4);}
+@media(max-width:500px){.back-to-top{bottom:160px!important;right:1rem!important;width:45px!important;height:45px!important;}}
 /* Auth nav state */
 .auth-user-menu { display: flex; align-items: center; gap: 0.4rem; }
 .nav-user-link { background: linear-gradient(135deg,#d4a574,#c4956a) !important; color: #0a3d2e !important; font-weight: 600 !important; border-radius: 25px !important; padding: 0.5rem 1.1rem !important; text-decoration: none; white-space: nowrap; }
