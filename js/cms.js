@@ -3,14 +3,8 @@
  * SISTEMA CMS SIMPLES - VERSÃO 3.0
  * ============================================================
  * 
- * CMS básico para gerenciar notícias sem necessidade de backend.
- * Usa localStorage para armazenar rascunhos e JSON para publicação.
- * 
- * Para uso em produção, integre com:
- * - Netlify CMS
- * - Contentful
- * - Strapi
- * - ou qualquer headless CMS
+ * CMS básico para gerenciar notícias.
+ * Firebase Firestore como fonte primária, localStorage como fallback.
  */
 
 const CMS = {
@@ -36,14 +30,8 @@ const CMS = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
-                apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
-                authDomain: 'turismo-sms.firebaseapp.com',
-                projectId: 'turismo-sms',
-                storageBucket: 'turismo-sms.firebasestorage.app',
-                messagingSenderId: '1042825829044',
-                appId: '1:1042825829044:web:13173093e28be3199955e1'
-            };
+            if (typeof CONFIG === 'undefined' || !CONFIG.firebase) throw new Error('CONFIG.firebase ausente');
+            const firebaseConfig = CONFIG.firebase;
             const existingApp = getApps().find(a => a.name === 'cms-app');
             const app = existingApp || initializeApp(firebaseConfig, 'cms-app');
             const db = getFirestore(app);
