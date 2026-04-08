@@ -36,6 +36,9 @@
         .map-section {
             width: 100%;
             background: #0a3d2e;
+            position: relative;
+            z-index: 1;
+            isolation: isolate;
         }
         .map-header {
             padding: 0.9rem 1.5rem 0.6rem;
@@ -45,28 +48,7 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        .map-header-title {
-            font-family: 'Cormorant Garamond', serif;
-            color: #e8c9a0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0;
-        }
-        .map-toggle-btn {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(232,201,160,0.4);
-            color: #e8c9a0;
-            padding: 0.35rem 0.9rem;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-family: 'Raleway', sans-serif;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        /* removido - novo estilo na toolbar abaixo */
-        }
-        .map-toggle-btn-OLD { display:none; }
+        /* map-header-title e map-toggle-btn definidos na toolbar abaixo */
 
         /* ══ TOOLBAR INTEGRADA ═══════════════════════════════════ */
         .map-toolbar {
@@ -197,6 +179,8 @@
             height: 440px;
             transition: height 0.35s ease;
             border-bottom: 3px solid #d4a574;
+            position: relative;
+            z-index: 0;
         }
         #routeMap.map-collapsed { height: 0; overflow: hidden; }
 
