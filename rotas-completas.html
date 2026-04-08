@@ -36,6 +36,9 @@
         .map-section {
             width: 100%;
             background: #0a3d2e;
+            position: relative;
+            z-index: 1;
+            isolation: isolate;
         }
         .map-header {
             padding: 0.9rem 1.5rem 0.6rem;
@@ -176,6 +179,8 @@
             height: 440px;
             transition: height 0.35s ease;
             border-bottom: 3px solid #d4a574;
+            position: relative;
+            z-index: 0;
         }
         #routeMap.map-collapsed { height: 0; overflow: hidden; }
 
