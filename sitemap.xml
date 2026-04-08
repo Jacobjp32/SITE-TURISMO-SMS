@@ -94,13 +94,7 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Portal do Usuário -->
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/portal-usuario.html</loc>
-    <lastmod>2026-03-24</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
+  <!-- Portal do Usuário removido do sitemap (página autenticada, bloqueada no robots.txt) -->
 
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-completo.html</loc>

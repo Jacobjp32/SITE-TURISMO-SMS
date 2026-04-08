@@ -156,10 +156,11 @@ INSTRUKCJE:
 };
 
 // ─────────────────────────────────────────────────────────────
-// CORS headers
+// CORS — restrito às origens confiáveis
 // ─────────────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
     'https://turismo.saomateusdosul.pr.gov.br',
+    'https://www.turismo.saomateusdosul.pr.gov.br',
     'http://localhost:8080',
     'http://localhost:3000'
 ];
@@ -174,6 +175,25 @@ function corsHeaders(origin) {
         'Access-Control-Allow-Headers': 'Content-Type',
         'Vary': 'Origin'
     };
+}
+
+// ─────────────────────────────────────────────────────────────
+// RATE LIMITING simples (por IP, via in-memory Map)
+// ─────────────────────────────────────────────────────────────
+const rateLimitMap = new Map();
+const RATE_LIMIT_MAX = 20;       // máx requisições
+const RATE_LIMIT_WINDOW = 60000; // janela de 1 minuto (ms)
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip);
+    if (!entry || now - entry.start > RATE_LIMIT_WINDOW) {
+        rateLimitMap.set(ip, { start: now, count: 1 });
+        return true;
+    }
+    entry.count++;
+    if (entry.count > RATE_LIMIT_MAX) return false;
+    return true;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -193,10 +213,19 @@ export default {
             return new Response('Method Not Allowed', { status: 405 });
         }
 
+        // Rate limiting por IP
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        if (!checkRateLimit(clientIP)) {
+            return new Response(
+                JSON.stringify({ error: 'Muitas requisições. Tente novamente em 1 minuto.' }),
+                { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+
         const apiKey = env.ANTHROPIC_API_KEY;
         if (!apiKey) {
             return new Response(
-                JSON.stringify({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }),
+                JSON.stringify({ error: 'Serviço temporariamente indisponível.' }),
                 { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
@@ -212,7 +241,7 @@ export default {
         }
 
         // Input validation
-        if (!message || typeof message !== 'string') {
+        if (!message || typeof message !== 'string' || message.trim().length === 0) {
             return new Response(
                 JSON.stringify({ error: 'Campo "message" obrigatório' }),
                 { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
@@ -223,6 +252,9 @@ export default {
                 JSON.stringify({ error: 'Mensagem muito longa (máx. 500 caracteres)' }),
                 { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
+        }
+        if (!Array.isArray(history)) {
+            history = [];
         }
 
         const systemPrompt = SYSTEM_PROMPTS[lang] || SYSTEM_PROMPTS['pt'];
@@ -262,7 +294,7 @@ export default {
 
         } catch (err) {
             return new Response(
-                JSON.stringify({ error: err.message }),
+                JSON.stringify({ error: 'Erro interno do servidor.' }),
                 { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }

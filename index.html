@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob:; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <script src="js/loading.js"></script>
     
     <!-- Google Analytics -->
@@ -320,7 +324,7 @@
                     <span data-lang-key="agrosamas-tag4">🦕 Parque dos Dinossauros</span>
                 </div>
                 <div class="agrosamas-buttons">
-                    <a href="https://agrosamas.com.br" target="_blank" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
+                    <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
                         Acesse o Site Oficial →
                     </a>
                     <a href="/eventos#setembro" class="agrosamas-btn secondary" data-lang-key="natal-btn">
@@ -465,7 +469,7 @@
                         <span data-lang-key="agrosamas-tag3">🦕 Dinossauros</span>
                         <span data-lang-key="agrosamas-tag4">🎪 Parque</span>
                     </div>
-                    <a href="https://agrosamas.com.br" target="_blank" class="festa-btn" data-lang-key="agrosamas-btn">
+                    <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="festa-btn" data-lang-key="agrosamas-btn">
                         Acesse o Site Oficial →
                     </a>
                 </div>
@@ -814,14 +818,14 @@
                 <button class="map-modal-close" onclick="closeMapModal()">×</button>
             </div>
             <div class="map-modal-map" id="mapModalMap">
-                <iframe id="mapModalIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                <iframe id="mapModalIframe" width="100%" height="100%" frameborder="0" style="border:0" allowfullscreen sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
             </div>
             <div class="map-modal-info">
                 <p><strong data-lang-key="modal-endereco">Endereço:</strong> <span id="mapModalAddress">-</span></p>
                 <p><strong data-lang-key="modal-telefone">Telefone:</strong> <span id="mapModalPhone">-</span></p>
                 <p><strong data-lang-key="modal-horario">Horário:</strong> <span id="mapModalHours">-</span></p>
                 <div class="map-modal-actions">
-                    <a class="map-modal-btn primary" id="mapModalGoogleLink" href="#" target="_blank">
+                    <a class="map-modal-btn primary" id="mapModalGoogleLink" href="#" target="_blank" rel="noopener noreferrer">
                         🗺️ Abrir no Google Maps
                     </a>
                     <button class="map-modal-btn secondary" onclick="closeMapModal()">
@@ -1225,10 +1229,10 @@
                             Siga-nos nas Redes Sociais
                         </h3>
                         <div class="social-links">
-                            <a href="https://www.facebook.com/share/1CC3pQvqsi/" target="_blank" class="social-link" title="Facebook">📘</a>
-                            <a href="https://instagram.com/depculturaeturismosms" target="_blank" class="social-link" title="Instagram">📸</a>
-                            <a href="https://www.tiktok.com/@prefeiturasms" target="_blank" class="social-link" title="TikTok">🎵</a>
-                            <a href="https://youtube.com/@prefeiturasms" target="_blank" class="social-link" title="YouTube">▶️</a>
+                            <a href="https://www.facebook.com/share/1CC3pQvqsi/" target="_blank" rel="noopener noreferrer" class="social-link" title="Facebook">📘</a>
+                            <a href="https://instagram.com/depculturaeturismosms" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">📸</a>
+                            <a href="https://www.tiktok.com/@prefeiturasms" target="_blank" rel="noopener noreferrer" class="social-link" title="TikTok">🎵</a>
+                            <a href="https://youtube.com/@prefeiturasms" target="_blank" rel="noopener noreferrer" class="social-link" title="YouTube">▶️</a>
                         </div>
                     </div>
                 </div>
