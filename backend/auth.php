@@ -39,9 +39,12 @@ class Auth {
                 return ['success' => false, 'message' => 'Este e-mail já está cadastrado.'];
             }
 
-            // Validar senha (mínimo 6 caracteres)
-            if (strlen($data['senha']) < 6) {
-                return ['success' => false, 'message' => 'A senha deve ter pelo menos 6 caracteres.'];
+            // Validar senha (mínimo 8 caracteres, com letra maiúscula, minúscula e número)
+            if (strlen($data['senha']) < 8) {
+                return ['success' => false, 'message' => 'A senha deve ter pelo menos 8 caracteres.'];
+            }
+            if (!preg_match('/[A-Z]/', $data['senha']) || !preg_match('/[a-z]/', $data['senha']) || !preg_match('/[0-9]/', $data['senha'])) {
+                return ['success' => false, 'message' => 'A senha deve conter letra maiúscula, minúscula e número.'];
             }
 
             // Gerar UID único

@@ -26,11 +26,13 @@ define('SITE_NAME', 'Turismo São Mateus do Sul');
 define('SITE_URL', 'https://turismo.saomateusdosul.pr.gov.br'); // Altere para sua URL
 define('SITE_EMAIL', 'turismo@saomateusdosul.pr.gov.br');
 
-// Chave secreta para tokens JWT (ALTERE PARA UMA CHAVE ÚNICA!)
-define('JWT_SECRET', 'sua_chave_secreta_muito_longa_e_segura_aqui_12345');
+// Chave secreta para tokens JWT
+// IMPORTANTE: Defina JWT_SECRET como variável de ambiente no servidor!
+// Nunca use o valor padrão em produção.
+define('JWT_SECRET', getenv('JWT_SECRET') ?: 'ALTERE_ESTA_CHAVE_EM_PRODUCAO_' . php_uname('n'));
 
-// Tempo de expiração da sessão (em segundos)
-define('SESSION_LIFETIME', 86400 * 7); // 7 dias
+// Tempo de expiração da sessão (em segundos) — 24 horas
+define('SESSION_LIFETIME', 86400); // 1 dia
 
 // ============================================
 // CONFIGURAÇÕES DE UPLOAD
@@ -82,7 +84,18 @@ if (ENVIRONMENT === 'development') {
     ini_set('error_log', __DIR__ . '/../logs/php_errors.log');
 }
 
+// Configurar cookies de sessão seguros
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_secure', 1);
+ini_set('session.cookie_samesite', 'Strict');
+ini_set('session.use_strict_mode', 1);
+
 // Iniciar sessão se não iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+
+// Alerta em produção se JWT_SECRET não foi definida via env
+if (ENVIRONMENT === 'production' && !getenv('JWT_SECRET')) {
+    error_log('[SEGURANCA] JWT_SECRET não definida como variável de ambiente! Configure-a imediatamente.');
 }
