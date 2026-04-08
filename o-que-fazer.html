@@ -47,12 +47,13 @@
     <script src="translations.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- Hero -->
     <section class="hero">
         <h1 data-lang-key="page-oqfazer-titulo">🧭 O Que Fazer</h1>
         <p data-lang-key="page-oqfazer-subtitulo">Explore as rotas temáticas e descubra experiências únicas na Capital Polonesa do Paraná. Da cultura do mate às tradições polonesas, do turismo de fé aos passeios náuticos.</p>
+        <img src="images/mascotes/MASCOTE_CAPIVARA_PINHAO.png" class="hero-mascote" alt="" aria-hidden="true">
     </section>
 
     <!-- Main -->
@@ -63,10 +64,19 @@
             <p data-lang-key="oqf-rotas-sub">Escolha sua experiência e mergulhe na cultura de São Mateus do Sul</p>
         </div>
 
+        <!-- Filter nav -->
+        <nav class="filter-nav" aria-label="Filtrar rotas">
+            <button class="fnav-btn fnav-btn--active" data-filter="">Todas</button>
+            <button class="fnav-btn" data-filter="erva-mate">🧉 Erva-Mate</button>
+            <button class="fnav-btn" data-filter="cultura-polonesa">🇵🇱 Cultura Polonesa</button>
+            <button class="fnav-btn" data-filter="turismo-fe">⛪ Turismo de Fé</button>
+            <button class="fnav-btn" data-filter="natureza">🌊 Náutica e Natureza</button>
+        </nav>
+
         <div class="rotas-grid">
 
             <!-- Rota da Erva-Mate -->
-            <article class="rota-card">
+            <article class="rota-card" id="erva-mate">
                 <div class="rota-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
                     <span class="badge">🌿 <span data-lang-key="oqf-badge-ig">Indicação Geográfica</span></span>
                 </div>
@@ -84,7 +94,7 @@
             </article>
 
             <!-- Cultura Polonesa -->
-            <article class="rota-card">
+            <article class="rota-card" id="cultura-polonesa">
                 <div class="rota-card-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg');">
                     <span class="badge">🇵🇱 <span data-lang-key="oqf-badge-tradicao">Tradição Viva</span></span>
                 </div>
@@ -102,7 +112,7 @@
             </article>
 
             <!-- Turismo de Fé -->
-            <article class="rota-card">
+            <article class="rota-card" id="turismo-fe">
                 <div class="rota-card-image" style="background-image: url('images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg');">
                     <span class="badge">✝️ <span data-lang-key="oqf-badge-fe">Fé e História</span></span>
                 </div>
@@ -120,7 +130,7 @@
             </article>
 
             <!-- Rota das Águas -->
-            <article class="rota-card">
+            <article class="rota-card" id="natureza">
                 <div class="rota-card-image" style="background-image: url('images/PRACA_DO_RIO_IGUACU.jpg'); background-color: #0a3d2e;">
                     <span class="badge">🌊 <span data-lang-key="oqf-badge-natureza">Rio Iguaçu</span></span>
                 </div>
@@ -192,5 +202,54 @@
             <a href="/eventos">Ver Eventos</a>
         </p>
     </footer>
+
+    <script>
+    (function() {
+        var grid  = document.querySelector('.rotas-grid');
+        var btns  = document.querySelectorAll('.fnav-btn');
+
+        function activateFilter(filterId, scroll) {
+            btns.forEach(function(b) {
+                b.classList.toggle('fnav-btn--active', b.dataset.filter === filterId);
+            });
+            document.querySelectorAll('.rota-card').forEach(function(card) {
+                card.classList.remove('rota-card--highlighted');
+            });
+            if (filterId) {
+                grid.classList.add('rotas-grid--filtered');
+                var target = document.getElementById(filterId);
+                if (target) {
+                    target.classList.add('rota-card--highlighted');
+                    if (scroll) {
+                        setTimeout(function() {
+                            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                    }
+                }
+            } else {
+                grid.classList.remove('rotas-grid--filtered');
+            }
+        }
+
+        // Wire filter buttons
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var f = btn.dataset.filter;
+                if (f) window.location.hash = f;
+                else history.pushState('', document.title, window.location.pathname);
+                activateFilter(f, true);
+            });
+        });
+
+        // Activate on page load from hash
+        var hash = window.location.hash.slice(1);
+        if (hash) activateFilter(hash, true);
+
+        // React to hash changes (browser back/forward)
+        window.addEventListener('hashchange', function() {
+            activateFilter(window.location.hash.slice(1), true);
+        });
+    })();
+    </script>
 </body>
 </html>

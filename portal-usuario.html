@@ -18,7 +18,7 @@
     <script src="js/scroll-animations.js" defer></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- TELA DE AUTENTICAÇÃO -->
     <div class="auth-screen" id="authScreen">
@@ -564,7 +564,7 @@
         var n = document.createElement('div');
         n.className = 'portal-notif';
         n.innerHTML = '<span>' + msg + '</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;margin-left:0.5rem;">&times;</button>';
-        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+        n.style.cssText = 'position:fixed;top:140px;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
             'display:flex;align-items:center;gap:0.5rem;z-index:10000;max-width:90vw;' +
             'box-shadow:0 5px 20px rgba(0,0,0,0.25);background:' + (cores[tipo]||cores.info) + ';color:white;' +
             'font-family:Raleway,sans-serif;font-size:0.95rem;animation:slideIn 0.3s ease;';

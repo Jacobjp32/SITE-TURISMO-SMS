@@ -161,13 +161,14 @@ INSTRUKCJE:
 const ALLOWED_ORIGINS = [
     'https://turismo.saomateusdosul.pr.gov.br',
     'https://www.turismo.saomateusdosul.pr.gov.br',
-    'http://localhost:8888',
+    'http://localhost:8080',
     'http://localhost:3000'
 ];
 
-function corsHeaders(request) {
-    const origin = request.headers.get('Origin') || '';
-    const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+function corsHeaders(origin) {
+    const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+        ? origin
+        : ALLOWED_ORIGINS[0];
     return {
         'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -177,7 +178,7 @@ function corsHeaders(request) {
 }
 
 // ─────────────────────────────────────────────────────────────
-// RATE LIMITING simples (por IP, via KV ou in-memory Map)
+// RATE LIMITING simples (por IP, via in-memory Map)
 // ─────────────────────────────────────────────────────────────
 const rateLimitMap = new Map();
 const RATE_LIMIT_MAX = 20;       // máx requisições
@@ -201,9 +202,11 @@ function checkRateLimit(ip) {
 export default {
     async fetch(request, env) {
 
+        const origin = request.headers.get('Origin') || '';
+
         // Preflight CORS
         if (request.method === 'OPTIONS') {
-            return new Response(null, { status: 204, headers: corsHeaders(request) });
+            return new Response(null, { status: 204, headers: corsHeaders(origin) });
         }
 
         if (request.method !== 'POST') {
@@ -215,7 +218,7 @@ export default {
         if (!checkRateLimit(clientIP)) {
             return new Response(
                 JSON.stringify({ error: 'Muitas requisições. Tente novamente em 1 minuto.' }),
-                { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
@@ -223,7 +226,7 @@ export default {
         if (!apiKey) {
             return new Response(
                 JSON.stringify({ error: 'Serviço temporariamente indisponível.' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
@@ -233,21 +236,21 @@ export default {
         } catch {
             return new Response(
                 JSON.stringify({ error: 'Payload JSON inválido' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
-        // Validação de entrada
+        // Input validation
         if (!message || typeof message !== 'string' || message.trim().length === 0) {
             return new Response(
-                JSON.stringify({ error: 'Mensagem não pode estar vazia.' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                JSON.stringify({ error: 'Campo "message" obrigatório' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
-        if (message.length > 2000) {
+        if (message.length > 500) {
             return new Response(
-                JSON.stringify({ error: 'Mensagem muito longa (máx. 2000 caracteres).' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                JSON.stringify({ error: 'Mensagem muito longa (máx. 500 caracteres)' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
         if (!Array.isArray(history)) {
@@ -286,13 +289,13 @@ export default {
 
             return new Response(
                 JSON.stringify({ response: text }),
-                { headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                { headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
 
         } catch (err) {
             return new Response(
                 JSON.stringify({ error: 'Erro interno do servidor.' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(request) } }
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
     }
