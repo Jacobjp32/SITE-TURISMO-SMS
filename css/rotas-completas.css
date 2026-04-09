@@ -272,11 +272,11 @@
             margin-bottom: 1rem;
         }
 
-        /* Back Button */
+        /* Back Button — lado esquerdo para não colidir com chatbot (direito) */
         .back-button {
             position: fixed;
             bottom: 2rem;
-            right: 2rem;
+            left: 2rem;
             background: var(--forest-deep);
             color: white;
             width: 60px;
