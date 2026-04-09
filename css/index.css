@@ -3679,3 +3679,419 @@
     .mascote-fig--main  { width: 140px; }
     .mascote-fig--side  { width: 90px; }
 }
+
+/* ================================================================
+   CTA STRIPS — Faixas de Chamada para Ação
+================================================================ */
+.section-cta-strip {
+    background: var(--forest-deep);
+    padding: 2rem 2rem;
+    margin-top: 3rem;
+}
+
+.section-cta-strip--gold {
+    background: linear-gradient(135deg, #b8863e 0%, var(--gold-polish) 100%);
+}
+
+.cta-strip-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.cta-strip-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.cta-strip-text strong {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.section-cta-strip--gold .cta-strip-text strong {
+    color: var(--forest-deep);
+}
+
+.cta-strip-text span {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.section-cta-strip--gold .cta-strip-text span {
+    color: rgba(10,61,46,0.75);
+}
+
+.cta-strip-buttons {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.cta-strip-btn {
+    display: inline-block;
+    padding: 0.75rem 1.75rem;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    border: 2px solid transparent;
+    white-space: nowrap;
+}
+
+.cta-strip-btn--primary {
+    background: var(--gold-polish);
+    color: var(--forest-deep);
+}
+
+.cta-strip-btn--primary:hover {
+    background: var(--gold-light);
+}
+
+.cta-strip-btn--secondary {
+    background: transparent;
+    color: rgba(255,255,255,0.9);
+    border-color: rgba(255,255,255,0.5);
+}
+
+.cta-strip-btn--secondary:hover {
+    background: rgba(255,255,255,0.1);
+    border-color: #fff;
+    color: #fff;
+}
+
+.cta-strip-btn--dark {
+    background: var(--forest-deep);
+    color: #fff;
+}
+
+.cta-strip-btn--dark:hover {
+    background: #062118;
+}
+
+.cta-strip-btn--outline-dark {
+    background: transparent;
+    color: var(--forest-deep);
+    border-color: var(--forest-deep);
+}
+
+.cta-strip-btn--outline-dark:hover {
+    background: var(--forest-deep);
+    color: #fff;
+}
+
+@media (max-width: 700px) {
+    .cta-strip-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cta-strip-buttons {
+        width: 100%;
+    }
+
+    .cta-strip-btn {
+        flex: 1;
+        text-align: center;
+    }
+}
+
+/* ================================================================
+   SEÇÃO INFORMAÇÕES ESSENCIAIS
+================================================================ */
+.essential-info-section {
+    background: var(--cream-light);
+    padding: 5rem 2rem;
+    border-top: 1px solid rgba(10,61,46,0.08);
+}
+
+.essential-info-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.essential-info-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.essential-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.essential-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.essential-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 32px rgba(10,61,46,0.12);
+}
+
+.essential-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.essential-card h3 {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--forest-deep);
+    margin-bottom: 0.85rem;
+    font-weight: 600;
+}
+
+.essential-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.essential-card ul li {
+    font-size: 0.875rem;
+    color: #555;
+    line-height: 1.5;
+    padding-left: 0.75rem;
+    border-left: 2px solid var(--gold-polish);
+}
+
+.essential-card ul li strong {
+    color: var(--forest-deep);
+}
+
+.essential-cta {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.essential-btn {
+    display: inline-block;
+    padding: 0.9rem 2.25rem;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.25s;
+    background: var(--forest-deep);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(10,61,46,0.25);
+}
+
+.essential-btn:hover {
+    background: #0d5a3e;
+    box-shadow: 0 6px 24px rgba(10,61,46,0.35);
+    transform: translateY(-2px);
+}
+
+.essential-btn--secondary {
+    background: transparent;
+    color: var(--forest-deep);
+    border: 2px solid var(--forest-deep);
+    box-shadow: none;
+}
+
+.essential-btn--secondary:hover {
+    background: var(--forest-deep);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(10,61,46,0.25);
+}
+
+@media (max-width: 1024px) {
+    .essential-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .essential-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .essential-info-section {
+        padding: 3.5rem 1.25rem;
+    }
+}
+
+/* ================================================================
+   FORMULÁRIO DE SUGESTÕES
+================================================================ */
+.suggestions-section {
+    background: linear-gradient(135deg, #f0f7f4 0%, #fff 100%);
+    padding: 5rem 2rem;
+    border-top: 1px solid rgba(10,61,46,0.08);
+}
+
+.suggestions-container {
+    max-width: 860px;
+    margin: 0 auto;
+}
+
+.suggestions-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.suggestions-form {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 8px 40px rgba(10,61,46,0.1);
+}
+
+.sug-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+}
+
+.sug-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
+}
+
+.sug-form-group.sug-full {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+}
+
+.sug-form-group label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--forest-deep);
+}
+
+.sug-form-group input,
+.sug-form-group select,
+.sug-form-group textarea {
+    padding: 0.75rem 1rem;
+    border: 1.5px solid #ddd;
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: #333;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+}
+
+.sug-form-group input:focus,
+.sug-form-group select:focus,
+.sug-form-group textarea:focus {
+    outline: none;
+    border-color: var(--forest-deep);
+    box-shadow: 0 0 0 3px rgba(10,61,46,0.1);
+    background: #fff;
+}
+
+.sug-form-group textarea {
+    resize: vertical;
+    min-height: 110px;
+}
+
+.sug-error {
+    display: none;
+    font-size: 0.78rem;
+    color: #e74c3c;
+    margin-top: 0.15rem;
+}
+
+.sug-form-actions {
+    margin-top: 1.75rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.sug-submit-btn {
+    padding: 0.85rem 2.5rem;
+    background: var(--forest-deep);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: 0 4px 16px rgba(10,61,46,0.25);
+}
+
+.sug-submit-btn:hover:not(:disabled) {
+    background: #0d5a3e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(10,61,46,0.35);
+}
+
+.sug-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.sug-status {
+    margin-top: 1rem;
+    padding: 0.85rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: none;
+}
+
+.sug-status:not(:empty) { display: block; }
+
+.sug-status--success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.sug-status--error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 640px) {
+    .sug-form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .suggestions-form {
+        padding: 1.5rem;
+    }
+
+    .sug-form-actions {
+        justify-content: stretch;
+    }
+
+    .sug-submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

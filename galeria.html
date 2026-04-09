@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/loading.js"></script>
+    <script src="js/breadcrumbs.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -677,7 +678,7 @@
     <button class="lb-prv" onclick="lbNav(-1)" aria-label="Anterior">❮</button>
     <button class="lb-nxt" onclick="lbNav(1)" aria-label="Próxima">❯</button>
     <div class="lb-c" onclick="event.stopPropagation()">
-        <img id="lb-img" src="" alt="">
+        <img id="lb-img" src="" alt="" loading="lazy">
         <div class="lb-info">
             <h3 id="lb-title"></h3>
             <p id="lb-desc"></p>
@@ -761,5 +762,6 @@
 })();
 </script>
 
+    <script src="js/cookies.js"></script>
 </body>
 </html>

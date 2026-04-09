@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="js/loading.js"></script>
+    <script src="js/breadcrumbs.js"></script>
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
@@ -58,7 +59,7 @@
                         <span>✍️ ${post.autor}</span>
                     </div>
                 </header>
-                <img src="${post.imagem}" alt="${post.titulo}" class="article-image">
+                <img src="${post.imagem}" alt="${post.titulo}" class="article-image" loading="lazy">
                 <div class="article-content">
                     ${post.conteudo.split('\n\n').map(p => '<p>' + p + '</p>').join('')}
                 </div>
@@ -82,5 +83,6 @@
             `;
         }
     </script>
+    <script src="js/cookies.js"></script>
 </body>
 </html>
