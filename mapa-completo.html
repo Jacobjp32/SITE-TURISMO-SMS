@@ -6,29 +6,26 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <script src="js/loading.js"></script>
     <script src="js/breadcrumbs.js"></script>
     <meta name="description" content="Mapa completo das rotas turísticas de São Mateus do Sul — explore a Capital Polonesa do Paraná com todos os pontos turísticos, culturais e gastronômicos.">
     <title>Mapa Completo - Rotas Turísticas São Mateus do Sul</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/mapa-completo.css">
 </head>
 <body>
     <script src="js/nav-shared.js?v=4"></script>
+    <script src="js/locais-data.js"></script>
 
-    <!-- Felt Map Embed -->
-    <iframe
-        id="felt-map"
-        title="Mapa Turístico - São Mateus do Sul"
-        src="https://felt.com/embed/map/Getting-started-with-Felt-XXWOlvfeQvuVZbxeb89AWGB?loc=-25.87203%2C-50.38498%2C15z&legend=1&cooperativeGestures=1&link=1&geolocation=0&zoomControls=1&scaleBar=1"
-        referrerpolicy="strict-origin-when-cross-origin"
-        sandbox="allow-scripts allow-same-origin allow-popups"
-        allowfullscreen>
-    </iframe>
+    <!-- Mapa Leaflet (ocupa tela inteira abaixo da nav) -->
+    <div id="leaflet-map"></div>
 
     <!-- Botão toggle para mobile -->
     <button class="toggle-panel-btn" id="toggleBtn" onclick="togglePanel()">📍 Legenda</button>
@@ -36,43 +33,39 @@
     <!-- Painel de Informações -->
     <div class="info-panel" id="infoPanel">
         <h1>📍 Mapa Completo</h1>
-        <p>38 estabelecimentos mapeados em 6 rotas turísticas</p>
-        
+        <p id="totalLocais">Carregando locais...</p>
+
         <div class="legend">
             <div class="legend-item">
-                <span class="legend-icon">🍓</span>
-                <span>Sabores & Memórias</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">🌿</span>
+                <span class="legend-dot" style="background:#2d5016;"></span>
                 <span>Erva-Mate</span>
             </div>
             <div class="legend-item">
-                <span class="legend-icon">⛪</span>
-                <span>Polonesa</span>
+                <span class="legend-dot" style="background:#1565C0;"></span>
+                <span>Turismo de Fé</span>
             </div>
             <div class="legend-item">
-                <span class="legend-icon">🌊</span>
-                <span>Das Águas</span>
+                <span class="legend-dot" style="background:#dc143c;"></span>
+                <span>Cultura Polonesa</span>
             </div>
             <div class="legend-item">
-                <span class="legend-icon">🏘️</span>
-                <span>Fluviópolis</span>
+                <span class="legend-dot" style="background:#0288D1;"></span>
+                <span>Rota das Águas</span>
             </div>
             <div class="legend-item">
-                <span class="legend-icon">🌱</span>
-                <span>Da Terra</span>
+                <span class="legend-dot" style="background:#d4a574;"></span>
+                <span>Centro Histórico</span>
+            </div>
+            <div class="legend-item">
+                <span class="legend-dot" style="background:#e65100;"></span>
+                <span>Sabores</span>
             </div>
         </div>
 
         <div class="stats">
             <div class="stat">
                 <span>Total de Pins:</span>
-                <span class="stat-number">38</span>
-            </div>
-            <div class="stat">
-                <span>Localidades:</span>
-                <span class="stat-number">15</span>
+                <span class="stat-number" id="statPins">—</span>
             </div>
             <div class="stat">
                 <span>Rotas:</span>
@@ -81,15 +74,123 @@
         </div>
     </div>
 
+    <!-- Botão Voltar (esquerda para não conflitar com chatbot) -->
     <a href="/" class="back-btn">← Voltar ao Site</a>
 
     <script>
-        function togglePanel() {
-            const panel = document.getElementById('infoPanel');
-            const btn = document.getElementById('toggleBtn');
-            panel.classList.toggle('collapsed');
-            btn.textContent = panel.classList.contains('collapsed') ? '📍 Legenda' : '✕ Fechar';
+    (function () {
+        // ── Aguarda nav-shared e locais-data carregarem ──────────────────
+        function initMap() {
+            var navEl = document.querySelector('nav') || document.querySelector('header');
+            var navH  = navEl ? navEl.offsetHeight : 0;
+
+            // Ajusta painel e mapa abaixo da nav
+            var panel = document.getElementById('infoPanel');
+            var toggleBtn = document.getElementById('toggleBtn');
+            if (navH > 0) {
+                panel.style.top = (navH + 12) + 'px';
+                toggleBtn.style.top = (navH + 12) + 'px';
+                document.getElementById('leaflet-map').style.top = navH + 'px';
+            }
+
+            // ── Cores por rota ──────────────────────────────────────────
+            var rotaCores = {
+                'erva-mate':    '#2d5016',
+                'mate':         '#2d5016',
+                'fe':           '#1565C0',
+                'polonesa':     '#dc143c',
+                'aguas':        '#0288D1',
+                'agua':         '#0288D1',
+                'historico':    '#b8863e',
+                'centro':       '#b8863e',
+                'sabores':      '#e65100',
+                'memorias':     '#e65100',
+                'terra':        '#6D4C41',
+                'fluviopolis':  '#7B1FA2',
+            };
+
+            function getColor(rota) {
+                if (!rota) return '#0a3d2e';
+                var r = rota.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                for (var key in rotaCores) {
+                    if (r.includes(key)) return rotaCores[key];
+                }
+                return '#0a3d2e';
+            }
+
+            function makeIcon(color) {
+                var svg = encodeURIComponent(
+                    '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="36" viewBox="0 0 28 36">' +
+                    '<path fill="' + color + '" stroke="white" stroke-width="1.5" d="M14 1C7.4 1 2 6.4 2 13c0 9 12 22 12 22s12-13 12-22C26 6.4 20.6 1 14 1z"/>' +
+                    '<circle fill="white" cx="14" cy="13" r="5"/>' +
+                    '</svg>'
+                );
+                return L.icon({
+                    iconUrl: 'data:image/svg+xml,' + svg,
+                    iconSize: [28, 36],
+                    iconAnchor: [14, 36],
+                    popupAnchor: [0, -36]
+                });
+            }
+
+            // ── Inicializa mapa ─────────────────────────────────────────
+            var map = L.map('leaflet-map', {
+                center: [-25.8775, -50.3838],
+                zoom: 13,
+                zoomControl: true
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 19
+            }).addTo(map);
+
+            // ── Adiciona markers ────────────────────────────────────────
+            var locais = window.locaisData ? Object.values(window.locaisData) : [];
+            var count = 0;
+
+            locais.forEach(function (local) {
+                if (!local.lat || !local.lng) return;
+                var color = getColor(local.rota);
+                var icon  = makeIcon(color);
+
+                var popupHtml =
+                    '<div style="font-family:Raleway,sans-serif;min-width:180px;">' +
+                    '<strong style="color:#0a3d2e;font-size:0.95rem;">' + local.nome + '</strong><br>' +
+                    '<span style="font-size:0.75rem;color:#888;">' + (local.rota || '') + '</span>' +
+                    (local.endereco ? '<br><span style="font-size:0.8rem;">📍 ' + local.endereco + '</span>' : '') +
+                    (local.horario  ? '<br><span style="font-size:0.8rem;">🕐 ' + local.horario  + '</span>' : '') +
+                    '<br><a href="/local?id=' + local.id + '" style="display:inline-block;margin-top:8px;padding:5px 12px;background:#0a3d2e;color:white;text-decoration:none;border-radius:20px;font-size:0.78rem;font-weight:600;">Ver mais →</a>' +
+                    '</div>';
+
+                L.marker([local.lat, local.lng], { icon: icon })
+                    .addTo(map)
+                    .bindPopup(popupHtml, { maxWidth: 260 });
+                count++;
+            });
+
+            document.getElementById('statPins').textContent = count;
+            document.getElementById('totalLocais').textContent =
+                count + ' estabelecimentos em 6 rotas turísticas';
+
+            // Reajusta mapa após nav render
+            setTimeout(function () { map.invalidateSize(); }, 300);
         }
+
+        // Espera DOM + scripts carregarem
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initMap);
+        } else {
+            setTimeout(initMap, 100);
+        }
+    })();
+
+    function togglePanel() {
+        var panel = document.getElementById('infoPanel');
+        var btn   = document.getElementById('toggleBtn');
+        panel.classList.toggle('collapsed');
+        btn.textContent = panel.classList.contains('collapsed') ? '📍 Legenda' : '✕ Fechar';
+    }
     </script>
 
     <script src="js/cookies.js"></script>

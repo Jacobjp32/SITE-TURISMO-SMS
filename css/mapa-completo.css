@@ -1,155 +1,165 @@
 /* ============================================================ */
-/* Origem: mapa-completo.html linhas 10–162 */
+/* mapa-completo.css — Mapa Leaflet + painel de informações     */
 /* ============================================================ */
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: 'Raleway', sans-serif;
-            overflow: hidden;
-        }
+body {
+    font-family: 'Raleway', sans-serif;
+    overflow: hidden;
+}
 
-        /* Felt Map iframe ocupa tela inteira */
-        #felt-map {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-            z-index: 0;
-        }
+/* Mapa Leaflet ocupa tela inteira abaixo da nav */
+#leaflet-map {
+    position: fixed;
+    top: 0;      /* ajustado via JS após calcular altura da nav */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
 
-        /* Painel de informações sobreposto */
-        .info-panel {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-            z-index: 1000;
-            max-width: 300px;
-        }
+/* Painel de informações sobreposto */
+.info-panel {
+    position: fixed;
+    top: 80px;   /* fallback; JS ajusta para altura real da nav */
+    left: 16px;
+    background: white;
+    padding: 18px 20px;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+    z-index: 1000;
+    max-width: 280px;
+    width: calc(100% - 32px);
+    max-width: 280px;
+}
 
-        .info-panel h1 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            color: #0a3d2e;
-        }
+.info-panel h1 {
+    font-size: 1.15rem;
+    margin-bottom: 6px;
+    color: #0a3d2e;
+}
 
-        .info-panel p {
-            color: #666;
-            font-size: 0.85rem;
-            margin-bottom: 12px;
-        }
+.info-panel > p {
+    color: #666;
+    font-size: 0.82rem;
+    margin-bottom: 12px;
+}
 
-        .legend {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
+/* Legenda */
+.legend {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px 10px;
+    margin-bottom: 12px;
+}
 
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 0.8rem;
-        }
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: #333;
+}
 
-        .legend-icon {
-            font-size: 1.1rem;
-        }
+.legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1.5px solid rgba(0,0,0,0.12);
+}
 
-        .stats {
-            margin-top: 12px;
-            padding-top: 12px;
-            border-top: 2px solid #f0f0f0;
-        }
+/* Estatísticas */
+.stats {
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
 
-        .stat {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-            font-size: 0.85rem;
-        }
+.stat {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 0.82rem;
+    color: #555;
+}
 
-        .stat-number {
-            font-weight: 700;
-            color: #0a3d2e;
-        }
+.stat-number {
+    font-weight: 700;
+    color: #0a3d2e;
+}
 
-        /* Botão voltar */
-        .back-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 14px 28px;
-            background: #0a3d2e;
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-family: 'Raleway', sans-serif;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            z-index: 1000;
-            transition: all 0.3s;
-        }
+/* Botão voltar — lado esquerdo, acima do painel no mobile
+   ou canto inferior esquerdo no desktop para não colidir com chatbot */
+.back-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 12px 24px;
+    background: #0a3d2e;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 700;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.88rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    z-index: 1000;
+    transition: background 0.2s, transform 0.2s;
+}
 
-        .back-btn:hover {
-            background: #d4a574;
-            color: #0a3d2e;
-            transform: translateY(-2px);
-        }
+.back-btn:hover {
+    background: #d4a574;
+    color: #0a3d2e;
+    transform: translateY(-2px);
+}
 
-        /* Botão recolher painel (mobile) */
-        .toggle-panel-btn {
-            display: none;
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: #0a3d2e;
-            color: white;
-            border: none;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            z-index: 1001;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
+/* Botão toggle para mobile */
+.toggle-panel-btn {
+    display: none;
+    position: fixed;
+    top: 80px;   /* fallback; JS ajusta */
+    left: 16px;
+    background: #0a3d2e;
+    color: white;
+    border: none;
+    padding: 9px 15px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 1001;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
 
-        /* Responsivo */
-        @media (max-width: 768px) {
-            .info-panel {
-                top: 70px;
-                left: 10px;
-                right: 10px;
-                max-width: none;
-                padding: 15px;
-                transition: all 0.3s;
-            }
+/* ── Responsivo ───────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .info-panel {
+        left: 10px;
+        right: 10px;
+        max-width: none;
+        width: auto;
+        padding: 14px;
+        transition: opacity 0.2s, transform 0.2s;
+    }
 
-            .info-panel.collapsed {
-                display: none;
-            }
+    .info-panel.collapsed {
+        display: none;
+    }
 
-            .toggle-panel-btn {
-                display: block;
-            }
+    .toggle-panel-btn {
+        display: block;
+    }
 
-            .back-btn {
-                bottom: 15px;
-                right: 10px;
-                padding: 12px 20px;
-                font-size: 0.85rem;
-            }
-        }
+    .back-btn {
+        bottom: 14px;
+        left: 10px;
+        padding: 10px 18px;
+        font-size: 0.82rem;
+    }
+}
