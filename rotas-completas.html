@@ -39,6 +39,7 @@
             position: relative;
             z-index: 1;
             isolation: isolate;
+            overflow: hidden;
         }
         .map-header {
             padding: 0.9rem 1.5rem 0.6rem;
@@ -181,8 +182,27 @@
             border-bottom: 3px solid #d4a574;
             position: relative;
             z-index: 0;
+            overflow: hidden;
         }
-        #routeMap.map-collapsed { height: 0; overflow: hidden; }
+        #routeMap.map-collapsed { height: 0; }
+        /* Forçar panes do Leaflet a ficarem contidos */
+        .map-section .leaflet-pane,
+        .map-section .leaflet-top,
+        .map-section .leaflet-bottom {
+            z-index: auto !important;
+        }
+        .map-section .leaflet-tile-pane {
+            z-index: 1 !important;
+        }
+        .map-section .leaflet-overlay-pane {
+            z-index: 2 !important;
+        }
+        .map-section .leaflet-marker-pane {
+            z-index: 3 !important;
+        }
+        .map-section .leaflet-popup-pane {
+            z-index: 4 !important;
+        }
 
         /* ── POPUP LEAFLET CUSTOMIZADO ──────────────────────── */
         .leaflet-popup-content-wrapper {
