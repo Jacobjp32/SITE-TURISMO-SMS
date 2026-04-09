@@ -23,6 +23,41 @@ body {
     z-index: 0;
 }
 
+/* ── Marcador tipo diamante (igual ao rotas-completas) ────── */
+.marker-pin {
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+/* ── Popup Leaflet customizado ──────────────────────────────── */
+.leaflet-popup-content-wrapper {
+    border-radius: 10px !important;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25) !important;
+    padding: 0 !important;
+    overflow: hidden;
+}
+.leaflet-popup-content {
+    margin: 0 !important;
+    width: 240px !important;
+}
+.map-popup { font-family: 'Raleway', sans-serif; }
+.map-popup-header { padding: 0.75rem 1rem 0.5rem; color: white; }
+.map-popup-name  { font-size: 0.9rem; font-weight: 700; margin: 0 0 0.1rem; line-height: 1.3; }
+.map-popup-route { font-size: 0.7rem; opacity: 0.9; margin: 0; }
+.map-popup-body  { padding: 0.55rem 1rem 0.75rem; background: #fff; }
+.map-popup-info  { font-size: 0.78rem; color: #555; margin-bottom: 0.3rem; }
+.map-popup-link  {
+    display: block; text-align: center;
+    background: #1a5d43; color: white;
+    padding: 0.4rem; border-radius: 6px;
+    font-size: 0.78rem; font-weight: 600;
+    text-decoration: none; transition: background 0.2s;
+    margin-top: 0.5rem;
+}
+.map-popup-link:hover { background: #0a3d2e; }
+
 /* Painel de informações sobreposto */
 .info-panel {
     position: fixed;
@@ -33,20 +68,19 @@ body {
     border-radius: 14px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.18);
     z-index: 1000;
-    max-width: 280px;
     width: calc(100% - 32px);
     max-width: 280px;
 }
 
 .info-panel h1 {
-    font-size: 1.15rem;
-    margin-bottom: 6px;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
     color: #0a3d2e;
 }
 
 .info-panel > p {
     color: #666;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     margin-bottom: 12px;
 }
 
@@ -54,7 +88,7 @@ body {
 .legend {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 7px 10px;
+    gap: 6px 10px;
     margin-bottom: 12px;
 }
 
@@ -62,16 +96,17 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.78rem;
+    font-size: 0.77rem;
     color: #333;
 }
 
 .legend-dot {
     width: 12px;
     height: 12px;
-    border-radius: 50%;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
     flex-shrink: 0;
-    border: 1.5px solid rgba(0,0,0,0.12);
+    border: 1.5px solid rgba(0,0,0,0.15);
 }
 
 /* Estatísticas */
@@ -84,7 +119,7 @@ body {
     display: flex;
     justify-content: space-between;
     margin-bottom: 4px;
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     color: #555;
 }
 
@@ -93,8 +128,7 @@ body {
     color: #0a3d2e;
 }
 
-/* Botão voltar — lado esquerdo, acima do painel no mobile
-   ou canto inferior esquerdo no desktop para não colidir com chatbot */
+/* Botão voltar — lado esquerdo para não colidir com chatbot (direito) */
 .back-btn {
     position: fixed;
     bottom: 20px;
