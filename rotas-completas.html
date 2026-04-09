@@ -6,7 +6,7 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -38,8 +38,6 @@
             background: #0a3d2e;
             position: relative;
             z-index: 1;
-            isolation: isolate;
-            overflow: hidden;
         }
         .map-header {
             padding: 0.9rem 1.5rem 0.6rem;
@@ -180,29 +178,8 @@
             height: 440px;
             transition: height 0.35s ease;
             border-bottom: 3px solid #d4a574;
-            position: relative;
-            z-index: 0;
-            overflow: hidden;
         }
-        #routeMap.map-collapsed { height: 0; }
-        /* Forçar panes do Leaflet a ficarem contidos */
-        .map-section .leaflet-pane,
-        .map-section .leaflet-top,
-        .map-section .leaflet-bottom {
-            z-index: auto !important;
-        }
-        .map-section .leaflet-tile-pane {
-            z-index: 1 !important;
-        }
-        .map-section .leaflet-overlay-pane {
-            z-index: 2 !important;
-        }
-        .map-section .leaflet-marker-pane {
-            z-index: 3 !important;
-        }
-        .map-section .leaflet-popup-pane {
-            z-index: 4 !important;
-        }
+        #routeMap.map-collapsed { height: 0; overflow: hidden; }
 
         /* ── POPUP LEAFLET CUSTOMIZADO ──────────────────────── */
         .leaflet-popup-content-wrapper {
