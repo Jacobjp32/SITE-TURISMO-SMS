@@ -74,14 +74,19 @@
         }
 
         function initPage(navH) {
-            // ── Ajusta posições abaixo da nav ────────────────────────
+            // ── Calcula offset total (barra acessibilidade + nav) ────
+            // Pega a posição real do fundo da nav na viewport
+            var navEl = document.querySelector('nav');
+            var realBottom = navEl ? navEl.getBoundingClientRect().bottom : navH;
+            var offset = Math.max(realBottom, navH);
+
             var panel     = document.getElementById('infoPanel');
             var toggleBtn = document.getElementById('toggleBtn');
             var mapEl     = document.getElementById('leaflet-map');
 
-            panel.style.top     = (navH + 14) + 'px';
-            toggleBtn.style.top = (navH + 14) + 'px';
-            mapEl.style.top     = navH + 'px';
+            panel.style.top     = (offset + 14) + 'px';
+            toggleBtn.style.top = (offset + 14) + 'px';
+            mapEl.style.top     = offset + 'px';
 
             // ── Gera legenda a partir de routeInfo ───────────────────
             var legendEl = document.getElementById('legendContainer');
