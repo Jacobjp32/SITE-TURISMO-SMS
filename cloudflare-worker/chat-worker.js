@@ -156,14 +156,44 @@ INSTRUKCJE:
 };
 
 // ─────────────────────────────────────────────────────────────
-// CORS headers
+// CORS — restrito às origens confiáveis
 // ─────────────────────────────────────────────────────────────
-function corsHeaders() {
+const ALLOWED_ORIGINS = [
+    'https://turismo.saomateusdosul.pr.gov.br',
+    'https://www.turismo.saomateusdosul.pr.gov.br',
+    'http://localhost:8080',
+    'http://localhost:3000'
+];
+
+function corsHeaders(origin) {
+    const allowedOrigin = ALLOWED_ORIGINS.includes(origin)
+        ? origin
+        : ALLOWED_ORIGINS[0];
     return {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Vary': 'Origin'
     };
+}
+
+// ─────────────────────────────────────────────────────────────
+// RATE LIMITING simples (por IP, via in-memory Map)
+// ─────────────────────────────────────────────────────────────
+const rateLimitMap = new Map();
+const RATE_LIMIT_MAX = 20;       // máx requisições
+const RATE_LIMIT_WINDOW = 60000; // janela de 1 minuto (ms)
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip);
+    if (!entry || now - entry.start > RATE_LIMIT_WINDOW) {
+        rateLimitMap.set(ip, { start: now, count: 1 });
+        return true;
+    }
+    entry.count++;
+    if (entry.count > RATE_LIMIT_MAX) return false;
+    return true;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -172,20 +202,31 @@ function corsHeaders() {
 export default {
     async fetch(request, env) {
 
+        const origin = request.headers.get('Origin') || '';
+
         // Preflight CORS
         if (request.method === 'OPTIONS') {
-            return new Response(null, { status: 204, headers: corsHeaders() });
+            return new Response(null, { status: 204, headers: corsHeaders(origin) });
         }
 
         if (request.method !== 'POST') {
             return new Response('Method Not Allowed', { status: 405 });
         }
 
+        // Rate limiting por IP
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        if (!checkRateLimit(clientIP)) {
+            return new Response(
+                JSON.stringify({ error: 'Muitas requisições. Tente novamente em 1 minuto.' }),
+                { status: 429, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+
         const apiKey = env.ANTHROPIC_API_KEY;
         if (!apiKey) {
             return new Response(
-                JSON.stringify({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                JSON.stringify({ error: 'Serviço temporariamente indisponível.' }),
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
 
@@ -195,8 +236,25 @@ export default {
         } catch {
             return new Response(
                 JSON.stringify({ error: 'Payload JSON inválido' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
+        }
+
+        // Input validation
+        if (!message || typeof message !== 'string' || message.trim().length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Campo "message" obrigatório' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+        if (message.length > 500) {
+            return new Response(
+                JSON.stringify({ error: 'Mensagem muito longa (máx. 500 caracteres)' }),
+                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
+            );
+        }
+        if (!Array.isArray(history)) {
+            history = [];
         }
 
         const systemPrompt = SYSTEM_PROMPTS[lang] || SYSTEM_PROMPTS['pt'];
@@ -231,13 +289,13 @@ export default {
 
             return new Response(
                 JSON.stringify({ response: text }),
-                { headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
 
         } catch (err) {
             return new Response(
-                JSON.stringify({ error: err.message }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                JSON.stringify({ error: 'Erro interno do servidor.' }),
+                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders(origin) } }
             );
         }
     }

@@ -32,6 +32,8 @@
             color: white;
             padding: 1.5rem 2rem;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
         .header-logo {
@@ -138,6 +140,8 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .route-section {

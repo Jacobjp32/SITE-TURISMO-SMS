@@ -1,10 +1,11 @@
 User-agent: *
 Allow: /
 
-# Páginas privadas — não indexar
-Disallow: /admin.html
-Disallow: /admin-firebase.html
-Disallow: /portal-usuario.html
+# Páginas que não devem ser indexadas
+Disallow: /admin*
+Disallow: /portal-usuario*
+Disallow: /backend/
+Disallow: /database/
 
 # Sitemap
 Sitemap: https://turismo.saomateusdosul.pr.gov.br/sitemap.xml

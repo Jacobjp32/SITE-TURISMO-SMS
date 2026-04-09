@@ -42,19 +42,12 @@ const CONFIG = {
 
     // ============================================================
     // FORMULÁRIO DE CONTATO
-    // Configure uma das opções abaixo
     // ============================================================
     formulario: {
-        // Opção 1: Netlify Forms (recomendado se hospedado no Netlify)
-        netlifyForms: false,    // Mude para true se usar Netlify
-        
-        // Opção 2: Formspree
         formspree: {
-            enabled: false,     // Mude para true se usar Formspree
+            enabled: false,
             formId: 'xpqykpqd'
         },
-        
-        // Opção 3: Email direto (menos recomendado)
         emailDireto: 'turismo@saomateusdosul.pr.gov.br'
     },
 
