@@ -67,7 +67,7 @@
 `;
 
   function getLang() {
-    try { return localStorage.getItem('smsLang') || 'pt'; } catch (e) { return 'pt'; }
+    try { return localStorage.getItem('sms-lang') || 'pt'; } catch (e) { return 'pt'; }
   }
 
   function getLabel(path, lang) {

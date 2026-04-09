@@ -363,11 +363,11 @@ body.font-larger{font-size:140%!important;}
                             if (t[el.dataset.langKey]) el.innerHTML = t[el.dataset.langKey];
                         });
                     }
-                    localStorage.setItem('smsLang', lang);
+                    localStorage.setItem('sms-lang', lang);
                 });
             });
             // Restaurar idioma salvo
-            var saved = localStorage.getItem('smsLang');
+            var saved = localStorage.getItem('sms-lang');
             if (saved && saved !== 'pt') {
                 var opt = langDrop.querySelector('[data-lang="' + saved + '"]');
                 if (opt) opt.click();
