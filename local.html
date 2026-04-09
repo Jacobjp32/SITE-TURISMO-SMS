@@ -289,6 +289,7 @@
         footer { background: var(--verde); color: rgba(255,255,255,0.7); padding: 1.5rem; text-align: center; font-size: 0.82rem; margin-top: 3rem; }
         footer a { color: var(--ouro); text-decoration: none; }
     </style>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
 <script src="js/nav-shared.js?v=4"></script>
@@ -296,7 +297,7 @@
 <!-- Lightbox -->
 <div class="lb" id="lb" onclick="lbClose()">
     <button class="lb-close" onclick="lbClose()">×</button>
-    <img id="lb-img" src="" alt="">
+    <img id="lb-img" src="" alt="" loading="lazy">
 </div>
 
 <div id="page-root"></div>
@@ -370,7 +371,7 @@
     root.innerHTML = `
         <!-- HERO -->
         <div class="hero">
-            <img src="${local.imagem}" alt="${local.nome}" id="hero-img">
+            <img src="${local.imagem}" alt="${local.nome}" id="hero-img" loading="lazy">
             <div class="hero-overlay"></div>
             <a class="btn-voltar" onclick="history.back()" href="/">← Voltar</a>
             <div class="hero-content">
@@ -460,5 +461,6 @@ function lbClose() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
 </script>
 
+    <script src="js/cookies.js"></script>
 </body>
 </html>

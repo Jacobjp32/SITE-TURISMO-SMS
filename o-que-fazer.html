@@ -45,6 +45,7 @@
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/o-que-fazer.css">
     <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
     <script src="js/nav-shared.js?v=4"></script>
@@ -202,8 +203,8 @@
             <a href="/eventos">Ver Eventos</a>
         </p>
     </footer>
-
-    <script>
+    <script src="js/cookies.js"></script>
+<script>
     (function() {
         var grid  = document.querySelector('.rotas-grid');
         var btns  = document.querySelectorAll('.fnav-btn');
@@ -250,6 +251,5 @@
             activateFilter(window.location.hash.slice(1), true);
         });
     })();
-    </script>
-</body>
+    </script></body>
 </html>
