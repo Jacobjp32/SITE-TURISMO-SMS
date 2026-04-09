@@ -919,10 +919,10 @@
             overflow: hidden;
         }
 
-        /* Info Panel */
+        /* Info Panel — abaixo da nav + barra de acessibilidade */
         .map-info-panel {
             position: absolute;
-            top: 120px;
+            top: 160px;
             left: 2rem;
             width: 400px;
             max-width: calc(100vw - 4rem);
