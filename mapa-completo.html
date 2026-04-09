@@ -14,15 +14,16 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Leaflet.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/mapa-completo.css">
 </head>
 <body>
     <script src="js/nav-shared.js?v=4"></script>
-    <script src="js/locais-data.js"></script>
+    <!-- Mesma fonte de dados do Rotas Turísticas (coordenadas reais) -->
+    <script src="js/rotas-data.js"></script>
 
     <!-- Mapa Leaflet (ocupa tela inteira abaixo da nav) -->
     <div id="leaflet-map"></div>
@@ -35,31 +36,8 @@
         <h1>📍 Mapa Completo</h1>
         <p id="totalLocais">Carregando locais...</p>
 
-        <div class="legend">
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#2d5016;"></span>
-                <span>Erva-Mate</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#1565C0;"></span>
-                <span>Turismo de Fé</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#dc143c;"></span>
-                <span>Cultura Polonesa</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#0288D1;"></span>
-                <span>Rota das Águas</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#d4a574;"></span>
-                <span>Centro Histórico</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-dot" style="background:#e65100;"></span>
-                <span>Sabores</span>
-            </div>
+        <div class="legend" id="legendContainer">
+            <!-- gerado via JS a partir de routeInfo -->
         </div>
 
         <div class="stats">
@@ -69,7 +47,7 @@
             </div>
             <div class="stat">
                 <span>Rotas:</span>
-                <span class="stat-number">6</span>
+                <span class="stat-number" id="statRotas">—</span>
             </div>
         </div>
     </div>
@@ -78,74 +56,25 @@
     <a href="/" class="back-btn">← Voltar ao Site</a>
 
     <script>
-    // ── Cores por palavra-chave de rota (igual ao rotas-completas) ──────
-    var ROTA_CORES = {
-        'erva-mate': '#2d5016', 'mate':      '#2d5016',
-        'fe':        '#1565C0',
-        'polonesa':  '#dc143c',
-        'aguas':     '#0288D1', 'agua':      '#0288D1',
-        'historico': '#b8863e', 'centro':    '#b8863e',
-        'sabores':   '#e65100', 'memorias':  '#e65100',
-        'terra':     '#6D4C41',
-        'fluviopolis': '#7B1FA2',
-        'eventos':   '#6a1b9a',
-    };
-
-    function getRotaColor(rota) {
-        if (!rota) return '#0a3d2e';
-        var r = rota.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-        for (var key in ROTA_CORES) {
-            if (r.indexOf(key) !== -1) return ROTA_CORES[key];
-        }
-        return '#0a3d2e';
-    }
-
-    function makeDivIcon(color, sz) {
-        sz = sz || 26;
-        return L.divIcon({
-            className: '',
-            html: '<div class="marker-pin" style="background:' + color + ';width:' + sz + 'px;height:' + sz + 'px;"></div>',
-            iconSize:   [sz, sz],
-            iconAnchor: [sz / 2, sz],
-            popupAnchor:[0, -sz]
-        });
-    }
-
-    function buildPopup(local, color) {
-        var endereco = local.endereco
-            ? '<div class="map-popup-info">📍 ' + local.endereco + '</div>' : '';
-        var horario  = local.horario
-            ? '<div class="map-popup-info">🕐 ' + local.horario  + '</div>' : '';
-        return '<div class="map-popup">'
-            + '<div class="map-popup-header" style="background:' + color + '">'
-            + '<p class="map-popup-name">'  + local.nome + '</p>'
-            + '<p class="map-popup-route">' + (local.rota || '') + '</p>'
-            + '</div>'
-            + '<div class="map-popup-body">'
-            + endereco + horario
-            + '<a class="map-popup-link" href="/local?id=' + local.id
-            + '" >Ver detalhes →</a>'
-            + '</div></div>';
-    }
-
     (function () {
-        // ── Aguarda a nav renderizar com retry (nav-shared.js é async) ──
         var _retries = 0;
 
+        // ── Aguarda a nav renderizar (nav-shared.js injeta assincronamente) ──
         function waitForNav() {
             var navEl = document.querySelector('nav') || document.querySelector('header');
             var navH  = navEl ? navEl.getBoundingClientRect().height : 0;
 
-            if (navH < 10 && _retries < 40) {   // até ~2s (40 × 50ms)
+            if (navH < 10 && _retries < 40) {
                 _retries++;
                 setTimeout(waitForNav, 50);
                 return;
             }
 
-            applyNavOffset(navH || 70);  // 70px de fallback seguro
+            initPage(navH || 70);
         }
 
-        function applyNavOffset(navH) {
+        function initPage(navH) {
+            // ── Ajusta posições abaixo da nav ────────────────────────
             var panel     = document.getElementById('infoPanel');
             var toggleBtn = document.getElementById('toggleBtn');
             var mapEl     = document.getElementById('leaflet-map');
@@ -154,11 +83,20 @@
             toggleBtn.style.top = (navH + 14) + 'px';
             mapEl.style.top     = navH + 'px';
 
-            startLeaflet();
-        }
+            // ── Gera legenda a partir de routeInfo ───────────────────
+            var legendEl = document.getElementById('legendContainer');
+            var routeKeys = Object.keys(routeInfo);
+            legendEl.innerHTML = routeKeys.map(function (key) {
+                var r = routeInfo[key];
+                return '<div class="legend-item">'
+                    + '<span class="legend-dot" style="background:' + r.color + ';"></span>'
+                    + '<span>' + r.icon + ' ' + r.name + '</span>'
+                    + '</div>';
+            }).join('');
 
-        function startLeaflet() {
-            // ── Inicializa mapa sem center fixo — usaremos fitBounds ───
+            document.getElementById('statRotas').textContent = routeKeys.length;
+
+            // ── Inicializa Leaflet ───────────────────────────────────
             var map = L.map('leaflet-map', { zoomControl: true });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -166,43 +104,69 @@
                 maxZoom: 19
             }).addTo(map);
 
-            // Fallback enquanto fitBounds não executa
-            map.setView([-25.88, -50.40], 12);
+            // Fallback view
+            map.setView([-25.88, -50.42], 11);
 
-            // ── Adiciona markers ────────────────────────────────────────
-            var locais = window.locaisData ? Object.values(window.locaisData) : [];
+            // ── Adiciona markers (mesma lógica do rotas-completas) ───
             var bounds = [];
             var count  = 0;
 
-            locais.forEach(function (local) {
-                if (!local.lat || !local.lng) return;
+            establishments.forEach(function (est) {
+                if (est.lat === null || est.lng === null) return;
 
-                var color  = getRotaColor(local.rota);
-                var icon   = makeDivIcon(color);
-                var popup  = buildPopup(local, color);
+                var rInfo = routeInfo[est.route] || { color: '#666', icon: '📍', name: est.route };
+                var color = rInfo.color;
+                var icon  = makeDivIcon(color);
 
-                L.marker([local.lat, local.lng], { icon: icon, title: local.nome })
+                var gmaps = est.mapsUrl
+                    || ('https://www.google.com/maps/search/?api=1&query=' + est.lat + ',' + est.lng);
+
+                var phone = est.phone
+                    ? '<div class="map-popup-info">📞 ' + est.phone + '</div>' : '';
+
+                var popup = '<div class="map-popup">'
+                    + '<div class="map-popup-header" style="background:' + color + '">'
+                    + '<p class="map-popup-name">'  + est.name + '</p>'
+                    + '<p class="map-popup-route">' + rInfo.icon + ' ' + rInfo.name + '</p>'
+                    + '</div>'
+                    + '<div class="map-popup-body">'
+                    + '<div class="map-popup-info">📍 ' + est.location + '</div>'
+                    + phone
+                    + '<div class="map-popup-info">🕐 ' + est.hours + '</div>'
+                    + '<a class="map-popup-link" href="' + gmaps + '" target="_blank" rel="noopener">Abrir no Google Maps ↗</a>'
+                    + '</div></div>';
+
+                L.marker([est.lat, est.lng], { icon: icon, title: est.name })
                     .addTo(map)
                     .bindPopup(popup, { maxWidth: 260 });
 
-                bounds.push([local.lat, local.lng]);
+                bounds.push([est.lat, est.lng]);
                 count++;
             });
 
-            // ── Ajusta zoom para mostrar todos os pins ─────────────────
+            // ── Ajusta zoom para enquadrar todos os pins ─────────────
             if (bounds.length > 0) {
-                map.fitBounds(bounds, { padding: [55, 55], maxZoom: 14 });
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
             }
 
             document.getElementById('statPins').textContent = count;
             document.getElementById('totalLocais').textContent =
-                count + ' estabelecimentos em 6 rotas turísticas';
+                count + ' estabelecimentos em ' + routeKeys.length + ' rotas turísticas';
 
-            // Força redimensionamento após nav + painel renderizarem
             setTimeout(function () { map.invalidateSize(); }, 400);
         }
 
-        // Garante que DOM + scripts carregaram antes de rodar
+        function makeDivIcon(color, sz) {
+            sz = sz || 26;
+            return L.divIcon({
+                className: '',
+                html: '<div class="marker-pin" style="background:' + color + ';width:' + sz + 'px;height:' + sz + 'px;"></div>',
+                iconSize:    [sz, sz],
+                iconAnchor:  [sz / 2, sz],
+                popupAnchor: [0, -sz]
+            });
+        }
+
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', waitForNav);
         } else {
