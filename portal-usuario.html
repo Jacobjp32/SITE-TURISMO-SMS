@@ -54,7 +54,10 @@
                     </div>
                     <div class="form-group">
                         <label for="loginSenha">Senha</label>
-                        <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
+                        <div class="password-wrapper">
+                            <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
+                            <button type="button" class="password-toggle" onclick="toggleSenha('loginSenha', this)" title="Mostrar senha">👁️</button>
+                        </div>
                     </div>
                     <button type="button" class="btn-primary" id="btnEntrar" onclick="fazerLogin()">Entrar</button>
                     <p style="text-align:center;margin-top:0.75rem;">
@@ -91,11 +94,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="regSenha">Senha *</label>
-                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                            <div class="password-wrapper">
+                                <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regSenha', this)" title="Mostrar senha">👁️</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="regConfirm">Confirmar Senha *</label>
-                            <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
+                            <div class="password-wrapper">
+                                <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regConfirm', this)" title="Mostrar senha">👁️</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -288,6 +297,8 @@
     </footer>
 
 
+    <!-- Config DEVE vir antes de firebase-auth.js -->
+    <script src="config.js"></script>
     <!-- Firebase Compat SDK — DEVE vir antes de firebase-auth.js -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -301,6 +312,20 @@
     // Botões chamam funções globais diretamente via onclick
     // Auth state atualiza UI via listener em authStateChanged
     // ================================================================
+
+    // ── Toggle de visibilidade da senha ─────────────────────────────
+    function toggleSenha(inputId, btn) {
+        var input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = '🙈';
+            btn.title = 'Ocultar senha';
+        } else {
+            input.type = 'password';
+            btn.textContent = '👁️';
+            btn.title = 'Mostrar senha';
+        }
+    }
 
     // ── Abas de autenticação ─────────────────────────────────────────
     function mostrarAba(aba) {
