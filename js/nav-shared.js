@@ -424,26 +424,33 @@ body.font-larger{font-size:140%!important;}
             });
         })();
 
-        // Botão voltar ao topo — comportamento
+        // Botão voltar ao topo + Barra de progresso (listener único com rAF throttle)
         var topBtn = document.getElementById('backToTop');
+        var progressBar = document.getElementById('sms-scroll-progress');
         if (topBtn) {
-            window.addEventListener('scroll', function() {
-                if (window.pageYOffset > 300) topBtn.classList.add('visible');
-                else topBtn.classList.remove('visible');
-            });
             topBtn.addEventListener('click', function() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         }
-
-        // Barra de progresso de scroll
-        var progressBar = document.getElementById('sms-scroll-progress');
-        if (progressBar) {
+        if (topBtn || progressBar) {
+            var scrollTicking = false;
             window.addEventListener('scroll', function() {
-                var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                var pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
-                progressBar.style.width = pct + '%';
+                if (!scrollTicking) {
+                    scrollTicking = true;
+                    requestAnimationFrame(function() {
+                        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                        if (topBtn) {
+                            if (scrollTop > 300) topBtn.classList.add('visible');
+                            else topBtn.classList.remove('visible');
+                        }
+                        if (progressBar) {
+                            var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                            var pct = docHeight > 0 ? Math.round((scrollTop / docHeight) * 100) : 0;
+                            progressBar.style.width = pct + '%';
+                        }
+                        scrollTicking = false;
+                    });
+                }
             }, { passive: true });
         }
 

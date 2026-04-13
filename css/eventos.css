@@ -212,7 +212,7 @@
 
         .event-date .weekday {
             font-size: 0.65rem;
-            color: #999;
+            color: #767676;
         }
 
         .event-info h4 {
@@ -388,7 +388,7 @@
             right: 0;
             bottom: 0;
             background: rgba(0,0,0,0.6);
-            z-index: 2000;
+            z-index: var(--z-modal);
             align-items: center;
             justify-content: center;
             padding: 2rem;
@@ -426,7 +426,7 @@
             border: none;
             font-size: 1.5rem;
             cursor: pointer;
-            color: #999;
+            color: #767676;
         }
 
         .modal-body {
@@ -450,7 +450,7 @@
 
         .modal-body .info-row .label {
             font-size: 0.75rem;
-            color: #999;
+            color: #767676;
             text-transform: uppercase;
         }
 

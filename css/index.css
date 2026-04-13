@@ -1788,7 +1788,7 @@
 
         .review-author-info p {
             font-size: 0.9rem;
-            color: #999;
+            color: #767676;
         }
 
         .review-badge {
@@ -1920,7 +1920,7 @@
             padding-top: 1.5rem;
             border-top: 1px solid #f0f0f0;
             font-size: 0.9rem;
-            color: #999;
+            color: #767676;
         }
 
         .blog-date {
@@ -3207,7 +3207,7 @@
         
         .contact-form input::placeholder,
         .contact-form textarea::placeholder {
-            color: #999;
+            color: #767676;
         }
         
         .contact-form input:focus,
