@@ -3,16 +3,11 @@
 /* ============================================================ */
 
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{
-            --forest:#0a3d2e;--gold:#d4a574;
-            --white:#fff;--cream:#f8f6f0;
-            --fd:'Cormorant Garamond',serif;
-            --fb:'Raleway',sans-serif;
-        }
+        /* Variáveis definidas em variables.css */
         body{font-family:var(--fb);background:var(--cream)}
 
         /* NAV — top:42px = 4px (barra progresso) + 38px (barra acessibilidade) */
-        .nav{position:fixed;top:42px;left:0;right:0;z-index:9999;padding:1.2rem 2rem;
+        .nav{position:fixed;top:42px;left:0;right:0;z-index:var(--z-fixed);padding:1.2rem 2rem;
             background:linear-gradient(180deg,rgba(10,61,46,.96) 0%,rgba(10,61,46,.7) 70%,transparent 100%);
             backdrop-filter:blur(18px)}
         .nav-c{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center}
@@ -82,15 +77,15 @@
         .yt-btn:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(255,0,0,.5)}
 
         /* LIGHTBOX */
-        .lb{display:none;position:fixed;inset:0;z-index:100000;animation:fi .3s}
+        .lb{display:none;position:fixed;inset:0;z-index:var(--z-modal);animation:fi .3s}
         .lb-ov{position:absolute;inset:0;background:rgba(0,0,0,.95)}
         .lb-x{position:absolute;top:18px;right:26px;background:none;border:none;
-            color:#fff;font-size:46px;cursor:pointer;z-index:100001;transition:all .3s;line-height:1}
+            color:#fff;font-size:46px;cursor:pointer;z-index:var(--z-popover);transition:all .3s;line-height:1}
         .lb-x:hover{color:var(--gold);transform:rotate(90deg)}
         .lb-prv,.lb-nxt{position:absolute;top:50%;transform:translateY(-50%);
             background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.3);
             color:#fff;font-size:25px;width:54px;height:54px;border-radius:50%;
-            cursor:pointer;z-index:100001;transition:all .3s;
+            cursor:pointer;z-index:var(--z-popover);transition:all .3s;
             display:flex;align-items:center;justify-content:center}
         .lb-prv{left:24px}.lb-nxt{right:24px}
         .lb-prv:hover,.lb-nxt:hover{background:var(--gold);border-color:var(--gold);color:var(--forest)}

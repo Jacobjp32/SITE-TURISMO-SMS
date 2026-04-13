@@ -112,11 +112,13 @@
     // ── Preparar elementos ───────────────────────────────────────────
 
     var preparados = new WeakSet();
+    var preparadosLista = []; // lista para iteração eficiente (evita querySelectorAll('*'))
 
     function preparar(el, variante, delayExtra) {
         if (preparados.has(el)) return;
         if (dentroDosExcluidos(el)) return;
         preparados.add(el);
+        preparadosLista.push(el);
 
         estiloInicial(el, variante);
 
@@ -169,12 +171,9 @@
             });
         });
 
-        // 3. Observar tudo que foi preparado
-        //    Elementos já visíveis na carga: animar imediatamente sem observer
-        document.querySelectorAll('*').forEach(function (el) {
-            if (!preparados.has(el)) return;
+        // 3. Observar somente elementos preparados (sem iterar todo o DOM)
+        preparadosLista.forEach(function (el) {
             if (acimaDaDobra(el)) {
-                // Já visível — animar com leve delay para não piscar
                 setTimeout(function () { estiloFinal(el); }, 80);
             } else {
                 observer.observe(el);

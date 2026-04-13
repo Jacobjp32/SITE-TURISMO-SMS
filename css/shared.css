@@ -76,6 +76,18 @@ body {
     line-height: 1.6;
 }
 
+/* ===== Focus & Acessibilidade ===== */
+/* Estilo de foco visível para navegação via teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+    outline: 2px solid var(--gold-polish);
+    outline-offset: 2px;
+}
+
 /* ===== components.css ===== */
 /* ============================================================ */
 /* components.css — Componentes compartilhados entre páginas    */
@@ -124,16 +136,14 @@ body {
 }
 
 .header-nav a {
-    color: white;
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
-    opacity: 0.8;
     transition: all 0.2s;
 }
 
 .header-nav a:hover {
-    opacity: 1;
     color: var(--gold-polish);
 }
 
