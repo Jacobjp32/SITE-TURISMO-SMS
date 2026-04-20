@@ -2,8 +2,12 @@ User-agent: *
 Allow: /
 
 # Páginas que não devem ser indexadas
-Disallow: /admin*
-Disallow: /portal-usuario*
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin-firebase
+Disallow: /admin-firebase/
+Disallow: /portal-usuario
+Disallow: /portal-usuario/
 Disallow: /backend/
 Disallow: /database/
 
