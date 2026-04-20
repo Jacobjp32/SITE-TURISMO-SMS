@@ -158,12 +158,62 @@ INSTRUKCJE:
 // ─────────────────────────────────────────────────────────────
 // CORS headers
 // ─────────────────────────────────────────────────────────────
-function corsHeaders() {
+const ALLOWED_ORIGINS = [
+    'https://turismo.saomateusdosul.pr.gov.br',
+    'http://localhost',
+    'http://127.0.0.1'
+];
+
+const MAX_MESSAGE_LENGTH = 1000;
+const MAX_HISTORY_ITEMS = 6;
+const MAX_HISTORY_TEXT_LENGTH = 1200;
+
+function getAllowedOrigin(request) {
+    const origin = request.headers.get('Origin') || ALLOWED_ORIGINS[0];
+    if (ALLOWED_ORIGINS.includes(origin)) return origin;
+
+    try {
+        const url = new URL(origin);
+        if ((url.hostname === 'localhost' || url.hostname === '127.0.0.1') &&
+            (url.protocol === 'http:' || url.protocol === 'https:')) {
+            return origin;
+        }
+    } catch {
+        // Invalid Origin header.
+    }
+
+    return null;
+}
+
+function corsHeaders(request) {
+    const origin = getAllowedOrigin(request);
+    if (!origin) return null;
+
     return {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': origin,
+        'Vary': 'Origin',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type'
     };
+}
+
+function jsonResponse(payload, status, cors) {
+    return new Response(
+        JSON.stringify(payload),
+        { status, headers: { 'Content-Type': 'application/json', ...cors } }
+    );
+}
+
+function sanitizeHistory(history) {
+    if (!Array.isArray(history)) return [];
+    return history
+        .slice(-MAX_HISTORY_ITEMS)
+        .filter(item => item && (item.role === 'user' || item.role === 'assistant'))
+        .map(item => ({
+            role: item.role,
+            content: String(item.content || '').slice(0, MAX_HISTORY_TEXT_LENGTH)
+        }))
+        .filter(item => item.content.trim().length > 0);
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -171,37 +221,46 @@ function corsHeaders() {
 // ─────────────────────────────────────────────────────────────
 export default {
     async fetch(request, env) {
+        const cors = corsHeaders(request);
+        if (!cors) {
+            return new Response('Forbidden origin', { status: 403 });
+        }
 
         // Preflight CORS
         if (request.method === 'OPTIONS') {
-            return new Response(null, { status: 204, headers: corsHeaders() });
+            return new Response(null, { status: 204, headers: cors });
         }
 
         if (request.method !== 'POST') {
-            return new Response('Method Not Allowed', { status: 405 });
+            return new Response('Method Not Allowed', { status: 405, headers: cors });
         }
 
         const apiKey = env.ANTHROPIC_API_KEY;
         if (!apiKey) {
-            return new Response(
-                JSON.stringify({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }, 500, cors);
         }
 
         let message, lang, history;
         try {
             ({ message, lang = 'pt', history = [] } = await request.json());
         } catch {
-            return new Response(
-                JSON.stringify({ error: 'Payload JSON inválido' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: 'Payload JSON inválido' }, 400, cors);
         }
+
+        message = String(message || '').trim();
+        if (!message) {
+            return jsonResponse({ error: 'Mensagem vazia' }, 400, cors);
+        }
+        if (message.length > MAX_MESSAGE_LENGTH) {
+            return jsonResponse({ error: 'Mensagem muito longa' }, 413, cors);
+        }
+
+        lang = ['pt', 'en', 'es', 'pl'].includes(lang) ? lang : 'pt';
+        history = sanitizeHistory(history);
 
         const systemPrompt = SYSTEM_PROMPTS[lang] || SYSTEM_PROMPTS['pt'];
         const messages = [
-            ...history.slice(-6),
+            ...history,
             { role: 'user', content: message }
         ];
 
@@ -231,14 +290,11 @@ export default {
 
             return new Response(
                 JSON.stringify({ response: text }),
-                { headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { headers: { 'Content-Type': 'application/json', ...cors } }
             );
 
         } catch (err) {
-            return new Response(
-                JSON.stringify({ error: err.message }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: err.message }, 500, cors);
         }
     }
 };

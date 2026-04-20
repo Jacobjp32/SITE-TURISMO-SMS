@@ -532,6 +532,7 @@
 <!-- ════════════════════════════════════════════
      SCRIPTS
 ════════════════════════════════════════════ -->
+<script src="js/security-utils.js"></script>
 <script type="module">
 // ─── Imports Firebase ───────────────────────────────────────
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
@@ -565,6 +566,7 @@ const db = getFirestore(app);
 // ─── State ───────────────────────────────────────────────────
 let adminUser = null;
 let pendingTarget = null; // { type: 'evento'|'estabelecimento', id, data }
+const SEC = window.SMSecurity;
 
 // ─── Auth State ───────────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
@@ -705,11 +707,11 @@ function renderHomePreview(evtDocs, estDocs) {
         <tbody>${combined.map(item => `
             <tr>
                 <td><span class="badge ${item._tipo==='Evento' ? 'badge-info' : 'badge-warning'}">${item._tipo}</span></td>
-                <td>${item.nome}</td>
-                <td>${item.submittedByName || '—'}<small>${item.submittedByEmail || ''}</small></td>
+                <td>${SEC.html(item.nome, '—')}</td>
+                <td>${SEC.html(item.submittedByName, '—')}<small>${SEC.html(item.submittedByEmail)}</small></td>
                 <td>
-                    <button class="btn-sm btn-approve" onclick="window._aprovar('${item._tipo.toLowerCase()}','${item._id}')">✅ Aprovar</button>
-                    <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('${item._tipo.toLowerCase()}','${item._id}')">❌</button>
+                    <button class="btn-sm btn-approve" onclick="window._aprovar('${item._tipo.toLowerCase()}','${SEC.js(item._id)}')">✅ Aprovar</button>
+                    <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('${item._tipo.toLowerCase()}','${SEC.js(item._id)}')">❌</button>
                 </td>
             </tr>
         `).join('')}</tbody>
@@ -736,15 +738,15 @@ window.loadAprovacoes = async function() {
                         const e = d.data();
                         const sub = e.submittedAt?.toDate?.()?.toLocaleDateString('pt-BR') || '—';
                         return `<tr>
-                            <td><strong>${e.nome}</strong><small>${e.categoria || ''}</small></td>
-                            <td>${e.dataInicio || e.data || '—'}</td>
-                            <td>${e.local || '—'}</td>
-                            <td>${e.submittedByName || '—'}<small>${e.submittedByEmail || ''}</small></td>
+                            <td><strong>${SEC.html(e.nome, '—')}</strong><small>${SEC.html(e.categoria)}</small></td>
+                            <td>${SEC.html(e.dataInicio || e.data, '—')}</td>
+                            <td>${SEC.html(e.local, '—')}</td>
+                            <td>${SEC.html(e.submittedByName, '—')}<small>${SEC.html(e.submittedByEmail)}</small></td>
                             <td>${sub}</td>
                             <td>
-                                <button class="btn-sm btn-view" onclick="window._verDetalhe('evento','${d.id}')">👁️ Ver</button>
-                                <button class="btn-sm btn-approve" onclick="window._aprovar('evento','${d.id}')">✅ Aprovar</button>
-                                <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('evento','${d.id}')">❌ Rejeitar</button>
+                                <button class="btn-sm btn-view" onclick="window._verDetalhe('evento','${SEC.js(d.id)}')">👁️ Ver</button>
+                                <button class="btn-sm btn-approve" onclick="window._aprovar('evento','${SEC.js(d.id)}')">✅ Aprovar</button>
+                                <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('evento','${SEC.js(d.id)}')">❌ Rejeitar</button>
                             </td>
                         </tr>`;
                     }).join('')}</tbody>
@@ -764,14 +766,14 @@ window.loadAprovacoes = async function() {
                     <tbody>${estSnap.docs.map(d => {
                         const e = d.data();
                         return `<tr>
-                            <td><strong>${e.nome}</strong></td>
-                            <td>${e.categoria || '—'}</td>
-                            <td>${e.endereco || '—'}</td>
-                            <td>${e.submittedByName || '—'}<small>${e.submittedByEmail || ''}</small></td>
+                            <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                            <td>${SEC.html(e.categoria, '—')}</td>
+                            <td>${SEC.html(e.endereco, '—')}</td>
+                            <td>${SEC.html(e.submittedByName, '—')}<small>${SEC.html(e.submittedByEmail)}</small></td>
                             <td>
-                                <button class="btn-sm btn-view" onclick="window._verDetalhe('estabelecimento','${d.id}')">👁️ Ver</button>
-                                <button class="btn-sm btn-approve" onclick="window._aprovar('estabelecimento','${d.id}')">✅ Aprovar</button>
-                                <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('estabelecimento','${d.id}')">❌ Rejeitar</button>
+                                <button class="btn-sm btn-view" onclick="window._verDetalhe('estabelecimento','${SEC.js(d.id)}')">👁️ Ver</button>
+                                <button class="btn-sm btn-approve" onclick="window._aprovar('estabelecimento','${SEC.js(d.id)}')">✅ Aprovar</button>
+                                <button class="btn-sm btn-reject" onclick="window._abrirRejeicao('estabelecimento','${SEC.js(d.id)}')">❌ Rejeitar</button>
                             </td>
                         </tr>`;
                     }).join('')}</tbody>
@@ -780,7 +782,7 @@ window.loadAprovacoes = async function() {
 
     } catch (err) {
         console.error('Erro aprovações:', err);
-        document.getElementById('tabela-eventos-pend').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${err.message}</p>`;
+        document.getElementById('tabela-eventos-pend').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${SEC.html(err.message)}</p>`;
     }
 };
 
@@ -791,21 +793,22 @@ window._verDetalhe = async function(tipo, id) {
     if (!snap.exists()) return;
     const d = snap.data();
 
-    document.getElementById('modalDetalheTitle').textContent = (tipo === 'evento' ? '🎪 Evento: ' : '🏨 Estabelecimento: ') + d.nome;
+    document.getElementById('modalDetalheTitle').textContent = (tipo === 'evento' ? '🎪 Evento: ' : '🏨 Estabelecimento: ') + SEC.value(d.nome, 'Sem nome');
 
+    const entradaInfo = d.entrada ? d.entrada + (d.valor ? ' (R$ '+d.valor+')' : '') : '';
     const fields = tipo === 'evento'
-        ? [['Categoria', d.categoria],['Data Início', d.dataInicio || d.data],['Data Fim', d.dataFim || '—'],['Horário', (d.horaInicio||'') + (d.horaFim ? ' - '+d.horaFim : '')],['Local', d.local],['Entrada', d.entrada + (d.valor ? ' (R$ '+d.valor+')' : '')],['Contato', d.contato],['Site', d.site]]
+        ? [['Categoria', d.categoria],['Data Início', d.dataInicio || d.data],['Data Fim', d.dataFim || '—'],['Horário', (d.horaInicio||'') + (d.horaFim ? ' - '+d.horaFim : '')],['Local', d.local],['Entrada', entradaInfo],['Contato', d.contato],['Site', d.site]]
         : [['Categoria', d.categoria],['Endereço', d.endereco],['Telefone', d.telefone],['WhatsApp', d.whatsapp],['Site/Insta', d.site],['Horário', d.horario]];
 
     document.getElementById('modalDetalheBody').innerHTML = `
-        ${fields.filter(f=>f[1]).map(f=>`<div class="detail-row"><span class="label">${f[0]}:</span><span class="value">${f[1]}</span></div>`).join('')}
-        <div class="detail-row"><span class="label">Solicitante:</span><span class="value">${d.submittedByName} — ${d.submittedByEmail}</span></div>
-        ${d.descricao ? `<div class="detail-desc">${d.descricao}</div>` : ''}
+        ${fields.filter(f=>f[1]).map(f=>`<div class="detail-row"><span class="label">${SEC.html(f[0])}:</span><span class="value">${SEC.html(f[1])}</span></div>`).join('')}
+        <div class="detail-row"><span class="label">Solicitante:</span><span class="value">${SEC.html(d.submittedByName, '—')} — ${SEC.html(d.submittedByEmail, '—')}</span></div>
+        ${d.descricao ? `<div class="detail-desc">${SEC.html(d.descricao)}</div>` : ''}
     `;
 
     document.getElementById('modalDetalheActions').innerHTML = `
-        <button class="btn-primary" style="background:var(--success);" onclick="window._aprovar('${tipo}','${id}');closeModal('modalDetalhe')">✅ Aprovar</button>
-        <button class="btn-primary" style="background:var(--danger);" onclick="closeModal('modalDetalhe');window._abrirRejeicao('${tipo}','${id}')">❌ Rejeitar</button>
+        <button class="btn-primary" style="background:var(--success);" onclick="window._aprovar('${SEC.js(tipo)}','${SEC.js(id)}');closeModal('modalDetalhe')">✅ Aprovar</button>
+        <button class="btn-primary" style="background:var(--danger);" onclick="closeModal('modalDetalhe');window._abrirRejeicao('${SEC.js(tipo)}','${SEC.js(id)}')">❌ Rejeitar</button>
     `;
 
     openModal('modalDetalhe');
@@ -882,19 +885,19 @@ async function loadEventos() {
                 <tbody>${snap.docs.map(d => {
                     const e = d.data();
                     return `<tr>
-                        <td><strong>${e.nome}</strong></td>
-                        <td>${e.data || e.dataInicio || '—'}</td>
-                        <td>${e.local || '—'}</td>
-                        <td>${e.categoria || '—'}</td>
+                        <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                        <td>${SEC.html(e.data || e.dataInicio, '—')}</td>
+                        <td>${SEC.html(e.local, '—')}</td>
+                        <td>${SEC.html(e.categoria, '—')}</td>
                         <td>${e.destaque ? '⭐' : '—'}</td>
                         <td>
-                            <button class="btn-sm btn-delete" onclick="window._deleteEvento('${d.id}')">🗑️ Remover</button>
+                            <button class="btn-sm btn-delete" onclick="window._deleteEvento('${SEC.js(d.id)}')">🗑️ Remover</button>
                         </td>
                     </tr>`;
                 }).join('')}</tbody>
             </table>`;
     } catch (err) {
-        document.getElementById('tabela-eventos').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${err.message}</p>`;
+        document.getElementById('tabela-eventos').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${SEC.html(err.message)}</p>`;
     }
 }
 
@@ -951,15 +954,15 @@ async function loadNoticias() {
                 <tbody>${snap.docs.map(d => {
                     const n = d.data();
                     return `<tr>
-                        <td><strong>${n.titulo}</strong></td>
-                        <td>${n.categoria || '—'}</td>
-                        <td>${n.data || '—'}</td>
-                        <td><button class="btn-sm btn-delete" onclick="window._deleteNoticia('${d.id}')">🗑️</button></td>
+                        <td><strong>${SEC.html(n.titulo, '—')}</strong></td>
+                        <td>${SEC.html(n.categoria, '—')}</td>
+                        <td>${SEC.html(n.data, '—')}</td>
+                        <td><button class="btn-sm btn-delete" onclick="window._deleteNoticia('${SEC.js(d.id)}')">🗑️</button></td>
                     </tr>`;
                 }).join('')}</tbody>
             </table>`;
     } catch (err) {
-        document.getElementById('tabela-noticias').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${err.message}</p>`;
+        document.getElementById('tabela-noticias').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${SEC.html(err.message)}</p>`;
     }
 }
 
@@ -1008,20 +1011,20 @@ window.loadReservas = async function() {
                     const r = d.data();
                     const cor = r.status==='confirmada' ? 'badge-success' : r.status==='cancelada' ? 'badge-danger' : 'badge-warning';
                     return `<tr>
-                        <td>${r.nome}<small>${r.email||''}</small></td>
-                        <td>${r.experienciaNome||r.experiencia||'—'}</td>
-                        <td>${r.data||'—'}</td>
-                        <td>${r.pessoas||1}</td>
-                        <td><span class="badge ${cor}">${r.status||'pendente'}</span></td>
+                        <td>${SEC.html(r.nome, '—')}<small>${SEC.html(r.email)}</small></td>
+                        <td>${SEC.html(r.experienciaNome||r.experiencia, '—')}</td>
+                        <td>${SEC.html(r.data, '—')}</td>
+                        <td>${SEC.html(r.pessoas || 1)}</td>
+                        <td><span class="badge ${cor}">${SEC.html(r.status || 'pendente')}</span></td>
                         <td>
-                            <button class="btn-sm btn-approve" onclick="window._confirmarReserva('${d.id}')">✅</button>
-                            <button class="btn-sm btn-reject" onclick="window._cancelarReserva('${d.id}')">❌</button>
+                            <button class="btn-sm btn-approve" onclick="window._confirmarReserva('${SEC.js(d.id)}')">✅</button>
+                            <button class="btn-sm btn-reject" onclick="window._cancelarReserva('${SEC.js(d.id)}')">❌</button>
                         </td>
                     </tr>`;
                 }).join('')}</tbody>
             </table>`;
     } catch (err) {
-        document.getElementById('tabela-reservas').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${err.message}</p>`;
+        document.getElementById('tabela-reservas').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${SEC.html(err.message)}</p>`;
     }
 };
 
@@ -1049,20 +1052,20 @@ window.loadUsuarios = async function() {
                     const u = d.data();
                     const roleCor = u.role==='admin' ? 'badge-danger' : u.role==='moderator' ? 'badge-warning' : 'badge-info';
                     return `<tr>
-                        <td>${u.nome||'—'}</td>
-                        <td>${u.email}</td>
-                        <td>${u.tipo||'turista'}</td>
-                        <td><span class="badge ${roleCor}">${u.role||'user'}</span></td>
+                        <td>${SEC.html(u.nome, '—')}</td>
+                        <td>${SEC.html(u.email, '—')}</td>
+                        <td>${SEC.html(u.tipo || 'turista')}</td>
+                        <td><span class="badge ${roleCor}">${SEC.html(u.role || 'user')}</span></td>
                         <td>
-                            <button class="btn-sm btn-edit" onclick="window._setRole('${d.id}','moderator')" title="Tornar moderador">🛡️ Mod</button>
-                            <button class="btn-sm btn-approve" onclick="window._setRole('${d.id}','admin')" title="Tornar admin">👑 Admin</button>
-                            <button class="btn-sm btn-reject" onclick="window._setRole('${d.id}','user')" title="Remover permissões">👤 User</button>
+                            <button class="btn-sm btn-edit" onclick="window._setRole('${SEC.js(d.id)}','moderator')" title="Tornar moderador">🛡️ Mod</button>
+                            <button class="btn-sm btn-approve" onclick="window._setRole('${SEC.js(d.id)}','admin')" title="Tornar admin">👑 Admin</button>
+                            <button class="btn-sm btn-reject" onclick="window._setRole('${SEC.js(d.id)}','user')" title="Remover permissões">👤 User</button>
                         </td>
                     </tr>`;
                 }).join('')}</tbody>
             </table>`;
     } catch (err) {
-        document.getElementById('tabela-usuarios').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${err.message}</p>`;
+        document.getElementById('tabela-usuarios').innerHTML = `<p style="color:red;padding:1rem;">Erro: ${SEC.html(err.message)}</p>`;
     }
 };
 
@@ -1123,7 +1126,7 @@ window.showNotif = function(msg, type = 'info') {
     const n = document.createElement('div');
     n.className = 'admin-notif';
     n.style.background = bg;
-    n.innerHTML = `<span>${msg}</span><button onclick="this.parentElement.remove()">×</button>`;
+    n.innerHTML = `<span>${SEC.html(msg)}</span><button onclick="this.parentElement.remove()">×</button>`;
     document.body.appendChild(n);
     setTimeout(() => n.remove(), 5000);
 };
