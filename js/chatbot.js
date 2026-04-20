@@ -529,7 +529,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: msg, lang: this.getLang(), history: this.history.slice(-6) })
             })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                return r.json().catch(function () { return {}; }).then(function (data) {
+                    if (!r.ok) {
+                        throw data;
+                    }
+                    return data;
+                });
+            })
             .then(function (data) {
                 self.esconderTyping();
                 var resp = data.response || self.getUI().default;

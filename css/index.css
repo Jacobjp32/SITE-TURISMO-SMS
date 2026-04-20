@@ -1165,7 +1165,7 @@
 
         .partners-logos .logo-item span {
             font-size: 0.65rem;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.72);
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
@@ -1181,7 +1181,7 @@
         }
 
         .institutional-links a {
-            color: rgba(255,255,255,0.6);
+            color: rgba(255,255,255,0.72);
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -1207,7 +1207,7 @@
             padding-top: 1.5rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             font-size: 0.75rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.72);
         }
 
         .footer-credits p {
@@ -1215,7 +1215,7 @@
         }
 
         .footer-credits a {
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.78);
             text-decoration: none;
         }
 
@@ -1372,6 +1372,10 @@
             font-weight: 700;
             color: var(--gold);
             margin-bottom: 0.5rem;
+        }
+
+        .map-info-panel .stat-number {
+            color: var(--primary);
         }
 
         .stat-label {
@@ -1779,7 +1783,8 @@
             color: white;
         }
 
-        .review-author-info h4 {
+        .review-author-name {
+            display: block;
             font-family: var(--font-display);
             font-size: 1.3rem;
             color: var(--forest-deep);

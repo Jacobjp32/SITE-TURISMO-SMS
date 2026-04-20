@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <script src="js/loading.js"></script>
@@ -163,10 +162,9 @@
     <div id="sms-scroll-progress" aria-hidden="true"></div>
 
     <!-- Skip Links para Acessibilidade (invisíveis até receber foco) -->
-    <div class="skip-links">
+    <div class="skip-links" role="navigation" aria-label="Atalhos de acessibilidade">
         <a href="#main-content" accesskey="1">Ir para conteúdo principal [Alt+1]</a>
-        <a href="#nav-links" accesskey="2">Ir para navegação [Alt+2]</a>
-        <a href="#search" accesskey="3">Ir para busca [Alt+3]</a>
+        <a href="#navLinks" accesskey="2">Ir para navegação [Alt+2]</a>
         <a href="#footer" accesskey="4">Ir para rodapé [Alt+4]</a>
     </div>
 
@@ -209,7 +207,7 @@
                 <span></span>
             </button>
             
-            <ul class="nav-links" id="navLinks">
+            <ul class="nav-links" id="navLinks" tabindex="-1">
                 <li><a href="#map-hero" data-lang-key="nav-inicio">Início</a></li>
                 
                 <!-- O Que Fazer - Dropdown -->
@@ -301,6 +299,8 @@
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileOverlay"></div>
 
+    <main id="main-content" tabindex="-1">
+
     <!-- ============================================================
          BANNER AGROSAMAS - DESATIVADO POR PADRÃO
          Para ativar: remova a classe "agrosamas-hidden" da section
@@ -372,10 +372,10 @@
                 muted
                 loop
                 playsinline
-                preload="metadata"
+                preload="none"
+                data-video-src="videos/ROTA_DO_TURISMO.mp4"
                 style="width:100%;height:100%;object-fit:cover;display:block;"
                 poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
-                <source src="videos/ROTA_DO_TURISMO.mp4" type="video/mp4">
             </video>
             <!-- Overlay escuro sutil para o painel de info ser legível -->
             <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);pointer-events:none;z-index:1;"></div>
@@ -414,6 +414,31 @@
             <p data-lang-key="scroll-explorar">Role para explorar mais</p>
         </div>
     </section>
+
+    <script>
+        (function loadHeroVideoWhenUseful() {
+            const video = document.querySelector('#map video[data-video-src]');
+            if (!video || !window.matchMedia('(min-width: 769px) and (prefers-reduced-motion: no-preference)').matches) {
+                return;
+            }
+
+            const loadVideo = function() {
+                if (video.querySelector('source')) return;
+                const source = document.createElement('source');
+                source.src = video.dataset.videoSrc;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+                video.load();
+                video.play().catch(function() {});
+            };
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(loadVideo, { timeout: 2500 });
+            } else {
+                setTimeout(loadVideo, 1200);
+            }
+        })();
+    </script>
 
     <!-- Seção Diorama - Logo após o mapa -->
     <section class="diorama-section">
@@ -1061,7 +1086,7 @@
                         <div>
                             <strong style="color: #0a3d2e;" data-lang-key="ev-feira-gastro">Feira Gastronômica</strong>
                             <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-gastro-horario">Qua e Sex • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
+                            <span style="font-size: 0.75rem; color: #5f5f5f;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
@@ -1069,7 +1094,7 @@
                         <div>
                             <strong style="color: #0a3d2e;" data-lang-key="ev-feira-produtor">Feira do Produtor</strong>
                             <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-produtor-horario">Sábados • 7h-12h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
+                            <span style="font-size: 0.75rem; color: #5f5f5f;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
@@ -1077,7 +1102,7 @@
                         <div>
                             <strong style="color: #0a3d2e;" data-lang-key="ev-roda-mathe">Roda de Mathe</strong>
                             <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-roda-mathe-horario">1º Domingo • 9h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-chimarrodromo">Chimarródromo</span>
+                            <span style="font-size: 0.75rem; color: #5f5f5f;" data-lang-key="ev-local-chimarrodromo">Chimarródromo</span>
                         </div>
                     </div>
                     <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
@@ -1085,7 +1110,7 @@
                         <div>
                             <strong style="color: #0a3d2e;" data-lang-key="ev-feira-lua">Feira da Lua</strong>
                             <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-lua-horario">2ª Terça • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-vila">Vila Pinheirinho</span>
+                            <span style="font-size: 0.75rem; color: #5f5f5f;" data-lang-key="ev-local-vila">Vila Pinheirinho</span>
                         </div>
                     </div>
                 </div>
@@ -1203,7 +1228,7 @@
                     <div class="review-author">
                         <div class="review-avatar">👤</div>
                         <div class="review-author-info">
-                            <h4 data-lang-key="review1-nome">Maria Silva</h4>
+                            <strong class="review-author-name" data-lang-key="review1-nome">Maria Silva</strong>
                             <p data-lang-key="review1-local">Curitiba, PR • Janeiro 2025</p>
                         </div>
                     </div>
@@ -1221,7 +1246,7 @@
                     <div class="review-author">
                         <div class="review-avatar">👤</div>
                         <div class="review-author-info">
-                            <h4 data-lang-key="review2-nome">João Santos</h4>
+                            <strong class="review-author-name" data-lang-key="review2-nome">João Santos</strong>
                             <p data-lang-key="review2-local">São Paulo, SP • Dezembro 2024</p>
                         </div>
                     </div>
@@ -1239,7 +1264,7 @@
                     <div class="review-author">
                         <div class="review-avatar">👤</div>
                         <div class="review-author-info">
-                            <h4 data-lang-key="review3-nome">Ana Costa</h4>
+                            <strong class="review-author-name" data-lang-key="review3-nome">Ana Costa</strong>
                             <p data-lang-key="review3-local">Florianópolis, SC • Novembro 2024</p>
                         </div>
                     </div>
@@ -1513,8 +1538,8 @@
                                 <div class="contact-card-icon">📧</div>
                                 <h3 class="contact-card-title" data-lang-key="contato-email">Email</h3>
                                 <p class="contact-card-subtitle" data-lang-key="contato-envie">Envie sua mensagem</p>
-                                <a href="/cdn-cgi/l/email-protection#0c78797e657f61634c7f6d63616d7869797f68637f7960227c7e226b637a226e7e" class="contact-card-link contact-email">
-                                    <span class="__cf_email__" data-cfemail="582c2d2a312b3537182b393735392c3d2d2b3c372b2d3476282a763f372e763a2a">[email&#160;protected]</span>
+                                <a href="mailto:turismo@saomateusdosul.pr.gov.br" class="contact-card-link contact-email">
+                                    turismo@saomateusdosul.pr.gov.br
                                 </a>
                             </div>
                         </div>
@@ -1561,10 +1586,6 @@
             </div>
         </div>
     </section>
-
-
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-    </script>
 
 
     <!-- GALERIA DE FOTOS — ocultada da home (conteúdo redundante, mal posicionada após contato)
@@ -1760,6 +1781,8 @@
         </div>
     </section>
 
+    </main>
+
     
     <!-- BOTÃO VOLTAR AO TOPO -->
     <button id="backToTop" class="back-to-top" title="Voltar ao topo">
@@ -1772,7 +1795,7 @@
          FOOTER INSTITUCIONAL COMPLETO
          Conformidade com SETU, IGR e Lei de Transparência
     ============================================ -->
-    <footer class="footer" id="footer">
+    <footer class="footer" id="footer" tabindex="-1">
         <!-- Seção Principal do Footer -->
         <div class="footer-main">
             <img src="images/LOGO_PIN_TURISMO_3D_COM_TEXTO_BRANCA.png" alt="São Mateus do Sul" style="height: 120px; width: auto; margin-bottom: 0.75rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));" loading="lazy">
@@ -1849,9 +1872,9 @@
                 <!-- Créditos e Copyright -->
                 <div class="footer-credits">
                     <p data-lang-key="footer-copyright">© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-                    <p data-lang-key="footer-endereco">Rua Barão do Rio Branco, Centro • CEP 83900-000 • São Mateus do Sul - PR</p>
+                    <p data-lang-key="footer-endereco">Rua João Gabriel Martins s/n • CEP 83900-114 • São Mateus do Sul - PR</p>
                     <p style="margin-top: 0.5rem;">
-                        <a href="/cdn-cgi/l/email-protection#631716110a100e0c2310020c0e0217061610070c10160f4d13114d040c154d0111"><span class="__cf_email__" data-cfemail="453130372c36282a0536242a282431203036212a3630296b35376b222a336b2737">[email&#160;protected]</span></a> • 
+                        <a href="mailto:turismo@saomateusdosul.pr.gov.br">turismo@saomateusdosul.pr.gov.br</a> •
                         <a href="tel:+554235320000">(42) 3532-0000</a>
                     </p>
                     <p style="margin-top: 1rem; font-size: 0.65rem;">
@@ -1867,13 +1890,15 @@
          VLibras - Widget de Libras (Obrigatório eMAG)
          Tradução automática para Língua Brasileira de Sinais
     ============================================ -->
-    <div vw class="enabled">
-        <div vw-access-button class="active"></div>
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
+    <aside class="vlibras-region" aria-label="VLibras">
+        <div vw class="enabled">
+            <div vw-access-button class="active"></div>
+            <div vw-plugin-wrapper>
+                <div class="vw-plugin-top-wrapper"></div>
+            </div>
         </div>
-    </div>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    </aside>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
         new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
@@ -2629,7 +2654,7 @@
                                 <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.9;">${mes}</div>
                             </div>
                             <div>
-                                <h4 style="font-size: 1rem; margin: 0 0 0.25rem 0; color: white;">${isDestaque ? '⭐ ' : ''}${titulo}${fonte}</h4>
+                                <div style="font-size: 1rem; margin: 0 0 0.25rem 0; color: white; font-weight: 700;">${isDestaque ? '⭐ ' : ''}${titulo}${fonte}</div>
                                 <span style="font-size: 0.8rem; opacity: 0.8;">${diaSemana}</span>
                             </div>
                         </div>
@@ -2708,15 +2733,10 @@
                     var navLinks = document.getElementById('navLinks');
                     if (navLinks) navLinks.focus();
                     break;
-                case '3':
-                    e.preventDefault();
-                    var search = document.getElementById('search');
-                    if (search) search.focus();
-                    break;
                 case '4':
                     e.preventDefault();
                     var footer = document.getElementById('footer');
-                    if (footer) footer.scrollIntoView({ behavior: 'smooth' });
+                    if (footer) footer.focus();
                     break;
             }
         }
