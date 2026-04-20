@@ -39,5 +39,5 @@ Data: 2026-04-20
 ## Pontos Para Revisão Humana
 
 - Notícias e testemunhos contêm datas de 2024/2025. Isso pode ser aceitável como histórico, mas deve ser revisado editorialmente.
-- Há variação de endereço/CEP entre seções: `Rua João Gabriel Martins s/n, CEP 83900-114` e `Rua Barão do Rio Branco, CEP 83900-000`. Confirmar qual deve ser a referência oficial.
+- Endereço institucional confirmado e padronizado: `Rua João Gabriel Martins s/n, CEP 83900-114`.
 - Vídeos grandes continuam existindo no repo e são incompatíveis com deploys Cloudflare que limitem assets individuais a 25 MB.
