@@ -560,8 +560,15 @@
         </main>
     </div>
 
+    <script src="js/security-utils.js"></script>
+    <!-- Painel legado/alternativo: mantido por compatibilidade com o fluxo Firebase compat. -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="js/firebase-auth.js"></script>
     <script>
+        const SEC = window.SMSecurity;
+
         // Aguardar Firebase estar pronto antes de vincular formulário de login
         window.addEventListener('firebaseReady', function() {
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
@@ -671,14 +678,14 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong><br><small>${e.categoria || ''}</small></td>
-                                    <td>${formatDate(e.dataInicio)}</td>
-                                    <td>${e.local}</td>
-                                    <td>${e.submittedByName}<br><small>${e.submittedByEmail}</small></td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong><br><small>${SEC.html(e.categoria)}</small></td>
+                                    <td>${SEC.html(formatDate(e.dataInicio))}</td>
+                                    <td>${SEC.html(e.local, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}<br><small>${SEC.html(e.submittedByEmail)}</small></td>
                                     <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEvent('${e.id}')">✅ Aprovar</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${e.id}')">❌ Rejeitar</button>
-                                        <button class="btn-sm btn-edit" onclick="viewEvent('${e.id}')">👁️</button>
+                                        <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
+                                        <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -708,13 +715,13 @@
                         <tbody>
                             ${estabelecimentos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong></td>
-                                    <td>${e.categoria || ''}</td>
-                                    <td>${e.endereco}</td>
-                                    <td>${e.submittedByName}</td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                                    <td>${SEC.html(e.categoria)}</td>
+                                    <td>${SEC.html(e.endereco, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}</td>
                                     <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${e.id}')">✅</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${e.id}')">❌</button>
+                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${SEC.js(e.id)}')">✅</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${SEC.js(e.id)}')">❌</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -748,11 +755,11 @@
                     <tbody>
                         ${users.map(u => `
                             <tr>
-                                <td><strong>${u.nome}</strong></td>
-                                <td>${u.email}</td>
-                                <td>${u.tipo || 'turista'}</td>
+                                <td><strong>${SEC.html(u.nome, '—')}</strong></td>
+                                <td>${SEC.html(u.email, '—')}</td>
+                                <td>${SEC.html(u.tipo || 'turista')}</td>
                                 <td>
-                                    <select onchange="changeUserRole('${u.id}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
+                                    <select onchange="changeUserRole('${SEC.js(u.id)}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
                                         <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
                                         <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
                                         <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
@@ -766,7 +773,7 @@
                                 <td>
                                     ${u.id !== window.currentUser?.uid ? `
                                         <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" 
-                                                onclick="toggleUserStatus('${u.id}', ${u.ativo === false})">
+                                                onclick="toggleUserStatus('${SEC.js(u.id)}', ${u.ativo === false})">
                                             ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
                                         </button>
                                     ` : '<small style="color:#888;">Você</small>'}
@@ -781,9 +788,9 @@
         async function loadApprovedEvents() {
             // Buscar eventos aprovados diretamente
             try {
-                const { db, collection, getDocs, orderBy, query } = window.firebaseDB;
-                const q = query(collection(db, 'eventos_aprovados'));
-                const snapshot = await getDocs(q);
+                const db = window.firebaseDB && window.firebaseDB.db;
+                if (!db) throw new Error('Firestore não inicializado.');
+                const snapshot = await db.collection('eventos_aprovados').get();
                 const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 const container = document.getElementById('eventos-aprovados-container');
@@ -806,10 +813,10 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong></td>
-                                    <td>${formatDate(e.dataInicio)}</td>
-                                    <td>${e.local}</td>
-                                    <td>${e.submittedByName}</td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                                    <td>${SEC.html(formatDate(e.dataInicio || e.data))}</td>
+                                    <td>${SEC.html(e.local, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -844,15 +851,17 @@
 
         async function approveEstablishment(estId) {
             if (!confirm('Aprovar este estabelecimento?')) return;
-            // Implementar aprovação de estabelecimento
-            alert('Estabelecimento aprovado!');
+            const result = await FirebaseSystem.approveEstablishment(estId);
+            alert(result.message);
             loadPendingData();
+            loadDashboardData();
         }
 
         async function rejectEstablishment(estId) {
-            if (!confirm('Rejeitar este estabelecimento?')) return;
-            // Implementar rejeição de estabelecimento
-            alert('Estabelecimento rejeitado.');
+            const reason = prompt('Motivo da rejeição (opcional):');
+            if (reason === null) return;
+            const result = await FirebaseSystem.rejectEstablishment(estId, reason);
+            alert(result.message);
             loadPendingData();
         }
 

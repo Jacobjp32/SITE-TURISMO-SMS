@@ -312,6 +312,41 @@ const FirebaseSystem = {
         } catch(e) { return []; }
     },
 
+    approveEstablishment: async function(estId, notes) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+        notes = notes || '';
+        try {
+            const db  = firebase.firestore();
+            const ref = db.collection('estabelecimentos_pendentes').doc(estId);
+            const doc = await ref.get();
+            if (!doc.exists) return { success: false, message: 'Estabelecimento não encontrado.' };
+            await db.collection('estabelecimentos_aprovados').doc(estId).set(
+                Object.assign({}, doc.data(), {
+                    status:      'aprovado',
+                    reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
+                    reviewedBy:  currentUser.uid,
+                    reviewNotes: notes
+                })
+            );
+            await ref.delete();
+            return { success: true, message: 'Estabelecimento aprovado com sucesso!' };
+        } catch(e) { return { success: false, message: 'Erro ao aprovar estabelecimento.' }; }
+    },
+
+    rejectEstablishment: async function(estId, reason) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+        reason = reason || '';
+        try {
+            await firebase.firestore().collection('estabelecimentos_pendentes').doc(estId).update({
+                status:      'rejeitado',
+                reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedBy:  currentUser.uid,
+                reviewNotes: reason
+            });
+            return { success: true, message: 'Estabelecimento rejeitado.' };
+        } catch(e) { return { success: false, message: 'Erro ao rejeitar estabelecimento.' }; }
+    },
+
     // ========================================
     // ESTATÍSTICAS (ADMIN)
     // ========================================

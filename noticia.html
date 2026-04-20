@@ -35,9 +35,12 @@
         <p><a href="/noticias">← Voltar para Notícias</a></p>
     </footer>
     
+    <script src="js/security-utils.js"></script>
     <script src="js/cms.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
+            const SEC = window.SMSecurity;
+            await CMS.init();
             const params = new URLSearchParams(window.location.search);
             const slug = params.get('slug');
             const container = document.getElementById('article-container');
@@ -47,8 +50,8 @@
             const post = CMS.getPostPorSlug(slug);
             if (!post) { mostrarNaoEncontrado(); return; }
             
-            document.getElementById('page-title').textContent = post.titulo + ' | São Mateus do Sul';
-            document.getElementById('meta-description').content = post.resumo;
+            document.getElementById('page-title').textContent = SEC.value(post.titulo, 'Notícia') + ' | São Mateus do Sul';
+            document.getElementById('meta-description').content = SEC.value(post.resumo, 'Notícias do turismo em São Mateus do Sul');
             const pageUrl = 'https://turismo.saomateusdosul.pr.gov.br/noticia?slug=' + slug;
             document.getElementById('meta-canonical').href = pageUrl;
             document.getElementById('og-url').content = pageUrl;
@@ -56,21 +59,21 @@
             container.innerHTML = `
                 <a href="/noticias" class="back-link">← Voltar para Notícias</a>
                 <header>
-                    <span class="article-category">${post.categoria}</span>
-                    <h1 class="article-title">${post.titulo}</h1>
+                    <span class="article-category">${SEC.html(post.categoria, 'Notícia')}</span>
+                    <h1 class="article-title">${SEC.html(post.titulo, 'Sem título')}</h1>
                     <div class="article-meta">
                         <span>📅 ${CMS.formatarData(post.dataPublicacao)}</span>
-                        <span>✍️ ${post.autor}</span>
+                        <span>✍️ ${SEC.html(post.autor, 'Departamento de Turismo')}</span>
                     </div>
                 </header>
-                <img src="${post.imagem}" alt="${post.titulo}" class="article-image" loading="lazy">
+                <img src="${SEC.url(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}" alt="${SEC.attr(post.titulo, 'Notícia')}" class="article-image" loading="lazy">
                 <div class="article-content">
-                    ${post.conteudo.split('\n\n').map(p => '<p>' + p + '</p>').join('')}
+                    ${SEC.value(post.conteudo).split('\n\n').map(p => '<p>' + SEC.html(p) + '</p>').join('')}
                 </div>
                 <div class="article-share">
                     <h4>Compartilhar:</h4>
                     <div class="share-buttons">
-                        <a href="https://wa.me/?text=${encodeURIComponent(post.titulo + ' - ' + window.location.href)}" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp">📱 WhatsApp</a>
+                        <a href="https://wa.me/?text=${encodeURIComponent(SEC.value(post.titulo, 'Notícia') + ' - ' + window.location.href)}" target="_blank" rel="noopener noreferrer" class="share-btn whatsapp">📱 WhatsApp</a>
                         <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}" target="_blank" rel="noopener noreferrer" class="share-btn facebook">📘 Facebook</a>
                     </div>
                 </div>

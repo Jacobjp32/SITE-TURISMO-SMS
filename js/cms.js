@@ -18,11 +18,14 @@ const CMS = {
     
     // Posts armazenados
     posts: [],
+    _initPromise: null,
     
     // Inicializar CMS
     init: async function() {
-        await this.carregarPosts();
-        return this;
+        if (!this._initPromise) {
+            this._initPromise = this.carregarPosts().then(() => this);
+        }
+        return this._initPromise;
     },
     
     // Carregar posts — Firebase primeiro, localStorage como fallback
@@ -224,9 +227,15 @@ const CMS = {
     
     // Escapar HTML para prevenir XSS
     escapeHTML: function(str) {
+        if (window.SMSecurity) return window.SMSecurity.html(str);
         var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    },
+
+    safeURL: function(url, fallback) {
+        if (window.SMSecurity) return window.SMSecurity.url(url, fallback || '');
+        return this.escapeHTML(url || fallback || '');
     },
 
     // Renderizar lista de posts
@@ -238,7 +247,7 @@ const CMS = {
 
         container.innerHTML = posts.map(post => `
             <article class="post-card" data-id="${this.escapeHTML(String(post.id))}">
-                <div class="post-image" style="background-image: url('${this.escapeHTML(post.imagem)}');"></div>
+                <div class="post-image" style="background-image: url('${this.safeURL(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}');"></div>
                 <div class="post-content">
                     <span class="post-category">${this.escapeHTML(post.categoria)}</span>
                     <h3 class="post-title">${this.escapeHTML(post.titulo)}</h3>
