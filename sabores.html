@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -78,21 +82,31 @@
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/sabores.css">
     <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- Hero -->
-    <section class="hero">
+    <section class="hero hero--sabores">
         <h1 data-lang-key="page-sabores-titulo">🍽️ Sabores de São Mateus</h1>
         <p data-lang-key="page-sabores-subtitulo">Da tradição polonesa aos sabores do campo. Descubra a gastronomia autêntica da Capital Polonesa do Paraná.</p>
+        <img src="images/mascotes/MASCOTE_MENINO_POLONES_1.png" class="hero-mascote" alt="" aria-hidden="true">
     </section>
 
     <!-- Main -->
     <main class="main-content">
 
+        <!-- Filter nav -->
+        <nav class="filter-nav" aria-label="Filtrar seção">
+            <button class="fnav-btn fnav-btn--active" data-filter="">Tudo</button>
+            <button class="fnav-btn" data-filter="polonesa">🥟 Culinária Polonesa</button>
+            <button class="fnav-btn" data-filter="feiras">🛒 Feiras e Produtores</button>
+            <button class="fnav-btn" data-filter="restaurantes">🍴 Restaurantes</button>
+        </nav>
+
         <!-- Pratos Típicos Poloneses -->
-        <section>
+        <section id="polonesa">
             <div class="section-header">
                 <h2 data-lang-key="sab-pratos-h">🥟 Pratos Típicos Poloneses</h2>
                 <p data-lang-key="sab-pratos-sub">A herança culinária dos imigrantes preservada com amor</p>
@@ -194,7 +208,7 @@
         </section>
 
         <!-- Feiras -->
-        <section class="fairs-section">
+        <section class="fairs-section" id="feiras">
             <div class="section-header" style="text-align: left;">
                 <h2 data-lang-key="sab-feiras-h">🛒 Feiras e Mercados</h2>
                 <p data-lang-key="sab-feiras-sub">Compre direto do produtor e viva a experiência gastronômica local</p>
@@ -246,7 +260,7 @@
         </section>
 
         <!-- Restaurantes -->
-        <section>
+        <section id="restaurantes">
             <div class="section-header">
                 <h2 data-lang-key="sab-rest-h">🍴 Onde Comer</h2>
                 <p data-lang-key="sab-rest-sub">Restaurantes e estabelecimentos gastronômicos</p>
@@ -495,9 +509,55 @@
     <footer class="footer">
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
         <p style="margin-top: 0.5rem;">
-            <a href="/">Voltar ao Portal</a> | 
+            <a href="/">Voltar ao Portal</a> |
             <a href="/eventos">Ver Eventos</a>
         </p>
     </footer>
-</body>
+    <script src="js/cookies.js"></script>
+<script>
+    (function() {
+        var btns     = document.querySelectorAll('.fnav-btn');
+        var sections = ['polonesa', 'feiras', 'restaurantes'];
+
+        function activateFilter(filterId, scroll) {
+            btns.forEach(function(b) {
+                b.classList.toggle('fnav-btn--active', b.dataset.filter === filterId);
+            });
+            sections.forEach(function(id) {
+                var sec = document.getElementById(id);
+                if (!sec) return;
+                if (!filterId || id === filterId) {
+                    sec.style.display = '';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+            if (filterId && scroll) {
+                var target = document.getElementById(filterId);
+                if (target) {
+                    setTimeout(function() {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        }
+
+        btns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var f = btn.dataset.filter;
+                if (f) window.location.hash = f;
+                else history.pushState('', document.title, window.location.pathname);
+                activateFilter(f, true);
+            });
+        });
+
+        var hash = window.location.hash.slice(1);
+        if (hash && sections.indexOf(hash) !== -1) activateFilter(hash, true);
+
+        window.addEventListener('hashchange', function() {
+            var h = window.location.hash.slice(1);
+            activateFilter(sections.indexOf(h) !== -1 ? h : '', true);
+        });
+    })();
+    </script></body>
 </html>

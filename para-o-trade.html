@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -23,9 +27,10 @@
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/para-o-trade.css">
     <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- Hero -->
     <section class="hero">
@@ -50,7 +55,7 @@
                     <li data-lang-key="trade-cad-li4">Parques temáticos e acampamentos</li>
                     <li data-lang-key="trade-cad-li5">Transportadoras turísticas</li>
                 </ul>
-                <a href="https://cadastur.turismo.gov.br" target="_blank" class="btn-link">
+                <a href="https://cadastur.turismo.gov.br" target="_blank" rel="noopener noreferrer" class="btn-link">
                     Acessar CADASTUR →
                 </a>
             </article>
@@ -66,7 +71,7 @@
                     <li data-lang-key="trade-fin-li4">Linhas de microcrédito</li>
                     <li data-lang-key="trade-fin-li5">Incentivos fiscais estaduais</li>
                 </ul>
-                <a href="https://www.fomento.pr.gov.br" target="_blank" class="btn-link">
+                <a href="https://www.fomento.pr.gov.br" target="_blank" rel="noopener noreferrer" class="btn-link">
                     Ver Linhas de Crédito →
                 </a>
             </article>
@@ -82,7 +87,7 @@
                     <li data-lang-key="trade-sel-li4">Adesão gratuita</li>
                     <li data-lang-key="trade-sel-li5">Válido nacionalmente</li>
                 </ul>
-                <a href="https://cadastur.turismo.gov.br/hotsite/#!/public/selo-turismo-responsavel" target="_blank" class="btn-link">
+                <a href="https://cadastur.turismo.gov.br/hotsite/#!/public/selo-turismo-responsavel" target="_blank" rel="noopener noreferrer" class="btn-link">
                     Obter o Selo →
                 </a>
             </article>
@@ -98,7 +103,7 @@
                     <li data-lang-key="trade-cap-li4">Gastronomia e boas práticas</li>
                     <li data-lang-key="trade-cap-li5">Guia de turismo local</li>
                 </ul>
-                <a href="https://www.sebrae.com.br/sites/PortalSebrae/cursosonline" target="_blank" class="btn-link">
+                <a href="https://www.sebrae.com.br/sites/PortalSebrae/cursosonline" target="_blank" rel="noopener noreferrer" class="btn-link">
                     Ver Cursos →
                 </a>
             </article>
@@ -193,7 +198,7 @@
                     <li data-lang-key="trade-qua-li3">Consultoria especializada</li>
                     <li data-lang-key="trade-qua-li4">Certificação reconhecida</li>
                 </ul>
-                <a href="https://www.sebrae.com.br" target="_blank" class="btn-link">
+                <a href="https://www.sebrae.com.br" target="_blank" rel="noopener noreferrer" class="btn-link">
                     Saiba Mais →
                 </a>
             </article>
@@ -230,4 +235,24 @@
                         📞 (42) 3532-0000
                     </a>
                 </div>
-                
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-main">
+            <p>© 2026 Secretaria Municipal de Cultura e Turismo de São Mateus do Sul</p>
+            <div class="footer-links" style="margin-top:1rem;">
+                <a href="/">Início</a>
+                <a href="/transparencia">Transparência</a>
+                <a href="/privacidade">Política de Privacidade</a>
+                <a href="tel:+554235320000">📞 (42) 3532-0000</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/cookies.js"></script>
+</body>
+</html>

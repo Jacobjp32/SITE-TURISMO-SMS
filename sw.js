@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v10';
+const CACHE_NAME = 'turismo-sms-v11';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -38,8 +38,6 @@ const NEVER_CACHE = [
     'firebasestorage.googleapis.com',
     'firestore.googleapis.com',
     'identitytoolkit.googleapis.com',
-    'formspree.io',
-    'graph.instagram.com',
     'www.googletagmanager.com'
 ];
 
@@ -48,31 +46,21 @@ const NEVER_CACHE_EXT = ['.json', '.html'];
 
 // Instalação
 self.addEventListener('install', event => {
-    console.log('[SW] Instalando...');
-    
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => {
-                console.log('[SW] Cacheando arquivos');
-                return cache.addAll(PRECACHE_ASSETS);
-            })
+            .then(cache => cache.addAll(PRECACHE_ASSETS))
             .then(() => self.skipWaiting())
     );
 });
 
 // Ativação
 self.addEventListener('activate', event => {
-    console.log('[SW] Ativando...');
-    
     event.waitUntil(
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames
                     .filter(name => name !== CACHE_NAME)
-                    .map(name => {
-                        console.log('[SW] Removendo cache antigo:', name);
-                        return caches.delete(name);
-                    })
+                    .map(name => caches.delete(name))
             );
         }).then(() => self.clients.claim())
     );
@@ -161,4 +149,3 @@ self.addEventListener('notificationclick', event => {
     );
 });
 
-console.log('[SW] Service Worker carregado');

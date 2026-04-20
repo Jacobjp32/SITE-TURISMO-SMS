@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <script src="js/loading.js"></script>
+    <script src="js/breadcrumbs.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -26,7 +31,7 @@
     <script src="js/scroll-animations.js" defer></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
 <!-- Header -->
 <header class="hdr">
@@ -292,7 +297,7 @@
         <div class="grid">
 
             <div class="card">
-                <img src="images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp" alt="Grupo folclórico poloneses com trajes típicos no desfile da Polskie Smaki" loading="lazy">
+                <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Grupo folclórico poloneses com trajes típicos no desfile da Polskie Smaki" loading="lazy">
                 <div class="card-body">
                     <div class="badge">Festival</div>
                     <h3>Polskie Smaki — Trajes Poloneses</h3>
@@ -623,7 +628,8 @@
         <div class="vcard">
             <div class="vresp">
                 <iframe src="https://www.youtube.com/embed/SrPU_gGw-mY"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-popups"
                     allowfullscreen loading="lazy" title="São Mateus do Sul — Turismo"></iframe>
             </div>
             <div class="vbody">
@@ -637,7 +643,8 @@
         <div class="vcard">
             <div class="vresp">
                 <iframe src="https://www.youtube.com/embed/3H7I9-bw6mQ"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-popups"
                     allowfullscreen loading="lazy" title="Cultura e Tradições Polonesas"></iframe>
             </div>
             <div class="vbody">
@@ -651,7 +658,8 @@
         <div class="vcard vfull">
             <div class="vresp">
                 <iframe src="https://www.youtube.com/embed/20U2Gkqt9yg"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                    sandbox="allow-scripts allow-same-origin allow-popups"
                     allowfullscreen loading="lazy" title="São Mateus do Sul — Destino Turístico"></iframe>
             </div>
             <div class="vbody">
@@ -677,7 +685,7 @@
     <button class="lb-prv" onclick="lbNav(-1)" aria-label="Anterior">❮</button>
     <button class="lb-nxt" onclick="lbNav(1)" aria-label="Próxima">❯</button>
     <div class="lb-c" onclick="event.stopPropagation()">
-        <img id="lb-img" src="" alt="">
+        <img id="lb-img" src="" alt="" loading="lazy">
         <div class="lb-info">
             <h3 id="lb-title"></h3>
             <p id="lb-desc"></p>
@@ -689,7 +697,7 @@
 
 <!-- Footer -->
 <footer>
-    <p data-lang-key="footer-copyright">© 2025 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+    <p data-lang-key="footer-copyright">© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
     <p style="margin-top:.5rem">
         <a href="/" data-lang-key="footer-voltar-portal">← Voltar ao Portal</a> |
         <a href="/eventos" data-lang-key="nav-eventos">Calendário de Eventos</a> |
@@ -761,5 +769,6 @@
 })();
 </script>
 
+    <script src="js/cookies.js"></script>
 </body>
 </html>

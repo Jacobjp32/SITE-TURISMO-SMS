@@ -5,21 +5,24 @@
  *         carregados ANTES deste script via <script> no HTML
  */
 
-// Configuração do Firebase — centralizada em config.js (CONFIG.firebase)
-const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
-    apiKey: "AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ",
-    authDomain: "turismo-sms.firebaseapp.com",
-    projectId: "turismo-sms",
-    storageBucket: "turismo-sms.firebasestorage.app",
-    messagingSenderId: "1042825829044",
-    appId: "1:1042825829044:web:13173093e28be3199955e1"
-};
+// Configuração do Firebase — DEVE vir de config.js (CONFIG.firebase)
+// Nunca hardcode credenciais aqui; garanta que config.js carregue antes deste script
+const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : null;
+
+if (!firebaseConfig) {
+    console.error('[firebase-auth] CONFIG.firebase não encontrado. Verifique se config.js foi carregado antes deste script.');
+}
 
 let currentUser = null;
 
 // Aguarda os SDKs do Firebase carregarem (injetados pelo portal-usuario.html)
 function initFirebase() {
     return new Promise(function(resolve) {
+        if (!firebaseConfig) {
+            console.error('[firebase-auth] Configuração Firebase ausente. Abortando inicialização.');
+            resolve(false);
+            return;
+        }
         function tryInit() {
             if (typeof firebase === 'undefined' ||
                 !firebase.auth || !firebase.firestore) {
@@ -54,9 +57,17 @@ function initFirebase() {
                             currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
                         }
                         window.currentUser = currentUser;
+                        // Persistir sessão para outras páginas (sem Firebase)
+                        try {
+                            localStorage.setItem('smsUserSession', JSON.stringify({
+                                nome: currentUser.nome || '',
+                                email: currentUser.email || ''
+                            }));
+                        } catch(ex) {}
                     } else {
                         currentUser = null;
                         window.currentUser = null;
+                        try { localStorage.removeItem('smsUserSession'); } catch(ex) {}
                     }
                     FirebaseSystem.updateUI();
                 });
@@ -383,14 +394,19 @@ const FirebaseSystem = {
         if (existing) existing.remove();
         var n = document.createElement('div');
         n.className = 'firebase-notification firebase-notif-' + type;
-        var safeMessage = window.SMSecurity ? window.SMSecurity.html(message) : String(message).replace(/[&<>"']/g, function(ch) {
-            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch];
-        });
-        n.innerHTML = '<span>' + safeMessage + '</span><button onclick="this.parentElement.remove()">&times;</button>';
+        var span = document.createElement('span');
+        span.textContent = message;
+        var btn = document.createElement('button');
+        btn.textContent = '\u00d7';
+        btn.setAttribute('aria-label', 'Fechar notificação');
+        btn.addEventListener('click', function() { n.remove(); });
+        n.appendChild(span);
+        n.appendChild(btn);
         var bg = type === 'success' ? '#27ae60' : type === 'error' ? '#e74c3c' : '#3498db';
-        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
-            'display:flex;align-items:center;gap:1rem;z-index:10000;animation:slideIn 0.3s ease;' +
-            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;';
+        n.style.cssText = 'position:fixed;top:7.5rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+            'display:flex;align-items:center;gap:1rem;z-index:10003;animation:slideIn 0.3s ease;' +
+            'box-shadow:0 5px 20px rgba(0,0,0,0.2);background:' + bg + ';color:white;max-width:90vw;';
+        btn.style.cssText = 'background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;padding:0 0.25rem;';
         document.body.appendChild(n);
         setTimeout(function() { n.remove(); }, 5000);
     }

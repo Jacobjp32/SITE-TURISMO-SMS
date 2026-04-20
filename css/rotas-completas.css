@@ -8,17 +8,7 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --forest-deep: #0a3d2e;
-            --forest-rich: #1a5d43;
-            --gold-polish: #d4a574;
-            --gold-light: #e8c9a0;
-            --cream-light: #f9f7f4;
-            --white-pure: #ffffff;
-            
-            --font-display: 'Cormorant Garamond', serif;
-            --font-body: 'Raleway', sans-serif;
-        }
+        /* Variáveis definidas em variables.css */
 
         body {
             font-family: var(--font-body);
@@ -32,6 +22,8 @@
             color: white;
             padding: 1.5rem 2rem;
             text-align: center;
+            position: relative;
+            z-index: 2;
         }
 
         .header-logo {
@@ -138,6 +130,8 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 2;
         }
 
         .route-section {
@@ -259,7 +253,7 @@
         .no-results {
             text-align: center;
             padding: 4rem 2rem;
-            color: #999;
+            color: #767676;
         }
 
         .no-results h2 {
@@ -268,11 +262,11 @@
             margin-bottom: 1rem;
         }
 
-        /* Back Button */
+        /* Back Button — lado esquerdo para não colidir com chatbot (direito) */
         .back-button {
             position: fixed;
             bottom: 2rem;
-            right: 2rem;
+            left: 2rem;
             background: var(--forest-deep);
             color: white;
             width: 60px;
@@ -402,24 +396,9 @@
             background-repeat: no-repeat;
         }
         
-        /* Suporte para diferentes formatos e nomes */
-        @supports (background-image: url('../images/FUNDO_ROTAS.jpg')) {
-            .page-header-with-bg {
-                background-image: url('../images/FUNDO_ROTAS.jpg');
-            }
-        }
-        
-        @supports (background-image: url('../images/FUNDO_ROTAS.jpg')) {
-            .page-header-with-bg {
-                background-image: url('../images/FUNDO_ROTAS.jpg');
-            }
-        }
-        
-        /* Fallback com foto geral se FUNDO_ROTAS não existir */
+        /* Fallback: se FUNDO_ROTAS não carregar, usa foto geral */
         .page-header-with-bg {
-            background-image: 
-                url('../images/FUNDO_ROTAS.jpg'),
-                url('../images/FUNDO_ROTAS.jpg'),
+            background-image:
                 url('../images/FUNDO_ROTAS.jpg'),
                 url('../images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg');
         }

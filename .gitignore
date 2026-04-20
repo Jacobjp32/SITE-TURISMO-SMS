@@ -1,15 +1,35 @@
+# Large video files
 videos/VIDEO_ABERTURA_4K.mp4
 videos/INSTITUCIONAL_POLONES.mp4
+
+# Environment and secrets
+.env
+.env.*
+*.env
+config.local.js
+secrets.js
 
 # Local assistant/worktree artifacts
 .claude/worktrees/
 bfg.jar
 
-# Local/runtime noise
+# Dependency directories
+node_modules/
+
+# Build output
+dist/
+.output/
+build/
+.cache/
+
+# OS files
 .DS_Store
 Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Logs
 *.log
-node_modules/
-.cache/
-dist/
-build/
+npm-debug.log*

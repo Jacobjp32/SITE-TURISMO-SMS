@@ -94,6 +94,8 @@
     <priority>0.6</priority>
   </url>
 
+  <!-- Portal do Usuário removido do sitemap (página autenticada, bloqueada no robots.txt) -->
+
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-completo</loc>
     <lastmod>2026-04-01</lastmod>

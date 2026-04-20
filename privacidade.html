@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
+    <script src="js/loading.js"></script>
+    <script src="js/breadcrumbs.js"></script>
+    <meta name="description" content="Política de Privacidade do Portal de Turismo de São Mateus do Sul. Informações sobre coleta, uso e proteção de dados pessoais em conformidade com a LGPD.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://turismo.saomateusdosul.pr.gov.br/privacidade">
+    <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <title>Política de Privacidade | Portal de Turismo São Mateus do Sul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared.css">
+    <style>
+        .privacy-hero {
+            background: linear-gradient(135deg, var(--forest-deep), #062118);
+            color: white;
+            padding: 4rem 2rem 3rem;
+            text-align: center;
+        }
+        .privacy-hero h1 {
+            font-family: var(--font-display);
+            font-size: 2.8rem;
+            margin-bottom: 0.75rem;
+        }
+        .privacy-hero p {
+            opacity: 0.85;
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .privacy-hero .update-badge {
+            display: inline-block;
+            background: rgba(212,165,116,0.2);
+            border: 1px solid var(--gold-polish);
+            color: var(--gold-polish);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.5px;
+        }
+        .privacy-content {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+        .privacy-toc {
+            background: var(--cream-light);
+            border-left: 4px solid var(--forest-deep);
+            padding: 1.5rem 2rem;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 3rem;
+        }
+        .privacy-toc h2 {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--forest-deep);
+            margin-bottom: 0.75rem;
+        }
+        .privacy-toc ol {
+            margin: 0;
+            padding-left: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+        .privacy-toc a {
+            color: var(--forest-deep);
+            text-decoration: none;
+            font-size: 0.88rem;
+            opacity: 0.8;
+            transition: opacity 0.15s;
+        }
+        .privacy-toc a:hover { opacity: 1; text-decoration: underline; }
+        .privacy-section {
+            margin-bottom: 3rem;
+            scroll-margin-top: 80px;
+        }
+        .privacy-section h2 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--forest-deep);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--cream-light);
+        }
+        .privacy-section h3 {
+            font-size: 1.05rem;
+            color: var(--forest-deep);
+            margin: 1.5rem 0 0.5rem;
+            font-weight: 600;
+        }
+        .privacy-section p {
+            font-size: 0.93rem;
+            color: #444;
+            line-height: 1.75;
+            margin-bottom: 0.85rem;
+        }
+        .privacy-section ul, .privacy-section ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .privacy-section li {
+            font-size: 0.93rem;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 0.35rem;
+        }
+        .privacy-section li strong { color: #222; }
+        .privacy-highlight {
+            background: #f0f7f4;
+            border: 1px solid rgba(10,61,46,0.15);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin: 1.25rem 0;
+        }
+        .privacy-highlight p { margin: 0; }
+        .privacy-contact-box {
+            background: var(--forest-deep);
+            color: white;
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+        }
+        .privacy-contact-box h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+        .privacy-contact-box p {
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .privacy-contact-box a {
+            color: var(--gold-polish);
+            text-decoration: none;
+        }
+        .privacy-contact-box a:hover { text-decoration: underline; }
+        @media (max-width: 600px) {
+            .privacy-hero h1 { font-size: 2rem; }
+            .privacy-content { padding: 2.5rem 1.25rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Skip Links -->
+    <div class="skip-links">
+        <a href="#main-content" accesskey="1">Ir para conteúdo principal [Alt+1]</a>
+        <a href="#footer" accesskey="4">Ir para rodapé [Alt+4]</a>
+    </div>
+
+    <!-- Header -->
+    <header class="header header--compact">
+        <div class="header--compact header-container">
+            <a href="/" class="header-logo">
+                <img src="images/logo_header_branca.png" alt="Portal de Turismo São Mateus do Sul" style="height:50px;width:auto;">
+            </a>
+            <nav class="header-nav">
+                <a href="/">Início</a>
+                <a href="/o-que-fazer">O Que Fazer</a>
+                <a href="/eventos">Eventos</a>
+                <a href="/transparencia">Transparência</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <div class="privacy-hero">
+        <div class="update-badge">Atualizado em abril de 2026 • LGPD</div>
+        <h1>🔒 Política de Privacidade</h1>
+        <p>Como coletamos, usamos e protegemos seus dados pessoais no Portal de Turismo de São Mateus do Sul.</p>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <main id="main-content" class="privacy-content">
+
+        <!-- Índice -->
+        <div class="privacy-toc">
+            <h2>📋 Neste documento</h2>
+            <ol>
+                <li><a href="#controlador">1. Quem somos (Controlador de Dados)</a></li>
+                <li><a href="#dados-coletados">2. Quais dados coletamos</a></li>
+                <li><a href="#finalidade">3. Para que usamos seus dados</a></li>
+                <li><a href="#base-legal">4. Base legal (LGPD)</a></li>
+                <li><a href="#compartilhamento">5. Compartilhamento de dados</a></li>
+                <li><a href="#cookies">6. Cookies e tecnologias semelhantes</a></li>
+                <li><a href="#retencao">7. Tempo de retenção dos dados</a></li>
+                <li><a href="#direitos">8. Seus direitos como titular</a></li>
+                <li><a href="#seguranca">9. Segurança dos dados</a></li>
+                <li><a href="#menores">10. Menores de idade</a></li>
+                <li><a href="#alteracoes">11. Alterações nesta Política</a></li>
+                <li><a href="#contato-dpo">12. Contato e DPO</a></li>
+            </ol>
+        </div>
+
+        <!-- 1. Controlador -->
+        <section class="privacy-section" id="controlador">
+            <h2>1. Quem somos — Controlador de Dados</h2>
+            <p>
+                Este portal é mantido pela <strong>Prefeitura Municipal de São Mateus do Sul</strong>,
+                por meio da <strong>Secretaria Municipal de Cultura e Turismo</strong>.
+            </p>
+            <ul>
+                <li><strong>Razão Social:</strong> Município de São Mateus do Sul</li>
+                <li><strong>CNPJ:</strong> 76.175.256/0001-60</li>
+                <li><strong>Endereço:</strong> Rua Barão do Rio Branco, s/n — Centro, São Mateus do Sul — PR, CEP 83900-000</li>
+                <li><strong>Email:</strong> turismo@saomateusdosul.pr.gov.br</li>
+                <li><strong>Telefone:</strong> (42) 3532-0000</li>
+            </ul>
+        </section>
+
+        <!-- 2. Dados coletados -->
+        <section class="privacy-section" id="dados-coletados">
+            <h2>2. Quais dados coletamos</h2>
+
+            <h3>2.1 Dados fornecidos diretamente por você</h3>
+            <ul>
+                <li><strong>Formulário de contato:</strong> nome, e-mail, telefone (opcional) e mensagem.</li>
+                <li><strong>Formulário de sugestões:</strong> nome, e-mail, tipo e descrição da sugestão.</li>
+                <li><strong>Portal do Usuário:</strong> nome, e-mail e senha (autenticação via Firebase).</li>
+                <li><strong>Newsletter:</strong> e-mail (somente se você marcar a opção voluntariamente).</li>
+            </ul>
+
+            <h3>2.2 Dados coletados automaticamente</h3>
+            <ul>
+                <li><strong>Dados de navegação:</strong> páginas visitadas, tempo na página, origem do acesso — via Google Analytics 4 (apenas com seu consentimento).</li>
+                <li><strong>Preferências de acessibilidade:</strong> tamanho de fonte e modo de contraste, armazenados localmente no seu dispositivo (localStorage).</li>
+                <li><strong>Idioma selecionado:</strong> armazenado no localStorage do seu navegador.</li>
+                <li><strong>Endereço IP:</strong> coletado pela Cloudflare para fins de segurança e proteção contra ataques.</li>
+            </ul>
+
+            <div class="privacy-highlight">
+                <p>ℹ️ <strong>Não coletamos</strong> dados sensíveis como origem racial, crença religiosa, dados de saúde ou biometria.</p>
+            </div>
+        </section>
+
+        <!-- 3. Finalidade -->
+        <section class="privacy-section" id="finalidade">
+            <h2>3. Para que usamos seus dados</h2>
+            <ul>
+                <li>Responder dúvidas, pedidos de informação turística e sugestões enviadas via formulários.</li>
+                <li>Enviar novidades e eventos (apenas se você optou pela newsletter).</li>
+                <li>Melhorar o desempenho, usabilidade e conteúdo do portal com base em estatísticas de acesso.</li>
+                <li>Garantir a segurança do site e prevenir acessos maliciosos.</li>
+                <li>Cumprir obrigações legais aplicáveis à administração pública.</li>
+            </ul>
+        </section>
+
+        <!-- 4. Base legal -->
+        <section class="privacy-section" id="base-legal">
+            <h2>4. Base legal (LGPD — Lei 13.709/2018)</h2>
+            <p>O tratamento dos seus dados é fundamentado nas seguintes bases legais:</p>
+            <ul>
+                <li><strong>Consentimento (Art. 7º, I):</strong> para cookies analíticos (Google Analytics) e newsletter.</li>
+                <li><strong>Execução de contrato ou procedimentos preliminares (Art. 7º, V):</strong> para atender solicitações feitas por você via formulários.</li>
+                <li><strong>Legítimo interesse (Art. 7º, IX):</strong> para segurança do site e prevenção de fraudes.</li>
+                <li><strong>Obrigação legal (Art. 7º, II):</strong> quando exigido pela legislação aplicável à administração pública.</li>
+            </ul>
+        </section>
+
+        <!-- 5. Compartilhamento -->
+        <section class="privacy-section" id="compartilhamento">
+            <h2>5. Compartilhamento de dados</h2>
+            <p>Seus dados <strong>não são vendidos</strong> a terceiros. Podemos compartilhá-los somente com:</p>
+            <ul>
+                <li><strong>Google LLC</strong> — Google Analytics 4 (estatísticas de acesso, somente com consentimento). <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Política do Google</a>.</li>
+                <li><strong>Cloudflare Inc.</strong> — proteção de segurança e CDN. <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Política da Cloudflare</a>.</li>
+                <li><strong>Google Firebase (Alphabet Inc.)</strong> — autenticação de usuários no Portal. <a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener">Política do Firebase</a>.</li>
+                <li><strong>Secretarias e órgãos municipais</strong> — quando necessário para responder adequadamente à sua solicitação.</li>
+                <li><strong>Autoridades públicas</strong> — quando exigido por lei ou ordem judicial.</li>
+            </ul>
+        </section>
+
+        <!-- 6. Cookies -->
+        <section class="privacy-section" id="cookies">
+            <h2>6. Cookies e tecnologias semelhantes</h2>
+            <p>Utilizamos os seguintes tipos de cookies:</p>
+
+            <h3>Cookies estritamente necessários</h3>
+            <p>Necessários para o funcionamento básico do site. Não podem ser recusados.</p>
+            <ul>
+                <li><code>smsLang</code> — idioma selecionado pelo visitante.</li>
+                <li><code>sms_font_size</code>, <code>sms_contrast</code> — preferências de acessibilidade.</li>
+                <li><code>sms_cookie_consent</code> — registro do seu consentimento.</li>
+            </ul>
+
+            <h3>Cookies analíticos (somente com consentimento)</h3>
+            <ul>
+                <li><code>_ga</code>, <code>_ga_*</code> — Google Analytics 4, utilizados para analisar o tráfego do site de forma agregada e anônima.</li>
+            </ul>
+
+            <h3>Cookies de segurança</h3>
+            <ul>
+                <li>Cookies da Cloudflare para proteção contra ataques DDoS e bots maliciosos.</li>
+            </ul>
+
+            <div class="privacy-highlight">
+                <p>🍪 Você pode gerenciar seus cookies a qualquer momento clicando em <strong>"Apenas essenciais"</strong> no banner de cookies exibido ao acessar o site, ou nas configurações do seu navegador.</p>
+            </div>
+        </section>
+
+        <!-- 7. Retenção -->
+        <section class="privacy-section" id="retencao">
+            <h2>7. Tempo de retenção dos dados</h2>
+            <ul>
+                <li><strong>Mensagens de formulários:</strong> mantidas por até 2 anos ou enquanto necessário para a resposta.</li>
+                <li><strong>Dados do Portal do Usuário:</strong> mantidos enquanto a conta estiver ativa. Você pode solicitar exclusão a qualquer momento.</li>
+                <li><strong>Dados de analytics:</strong> retidos por 14 meses conforme padrão do Google Analytics 4.</li>
+                <li><strong>Preferências locais (localStorage):</strong> armazenadas apenas no seu dispositivo, sem prazo de expiração automático.</li>
+            </ul>
+        </section>
+
+        <!-- 8. Direitos -->
+        <section class="privacy-section" id="direitos">
+            <h2>8. Seus direitos como titular dos dados</h2>
+            <p>Conforme a LGPD (Art. 18), você tem direito a:</p>
+            <ul>
+                <li><strong>Confirmação:</strong> saber se tratamos seus dados pessoais.</li>
+                <li><strong>Acesso:</strong> obter uma cópia dos dados que temos sobre você.</li>
+                <li><strong>Correção:</strong> corrigir dados incompletos, inexatos ou desatualizados.</li>
+                <li><strong>Anonimização, bloqueio ou eliminação:</strong> de dados desnecessários ou tratados em desconformidade com a LGPD.</li>
+                <li><strong>Portabilidade:</strong> receber seus dados em formato estruturado.</li>
+                <li><strong>Revogação do consentimento:</strong> retirar seu consentimento a qualquer momento.</li>
+                <li><strong>Oposição:</strong> se opor ao tratamento realizado com base em legítimo interesse.</li>
+                <li><strong>Informação:</strong> ser informado sobre com quem compartilhamos seus dados.</li>
+                <li><strong>Reclamação:</strong> peticionar à Autoridade Nacional de Proteção de Dados (ANPD) em caso de descumprimento.</li>
+            </ul>
+            <p>Para exercer qualquer um desses direitos, entre em contato conforme indicado na <a href="#contato-dpo">seção 12</a>.</p>
+        </section>
+
+        <!-- 9. Segurança -->
+        <section class="privacy-section" id="seguranca">
+            <h2>9. Segurança dos dados</h2>
+            <p>Adotamos medidas técnicas e organizacionais para proteger seus dados pessoais, incluindo:</p>
+            <ul>
+                <li>Protocolo HTTPS em todas as páginas (certificado SSL/TLS).</li>
+                <li>Proteção de infraestrutura via Cloudflare (firewall, DDoS mitigation).</li>
+                <li>Autenticação segura via Firebase Authentication (Google).</li>
+                <li>Acesso restrito a dados pessoais apenas a funcionários autorizados.</li>
+                <li>Backups periódicos do sistema.</li>
+            </ul>
+            <p>Em caso de incidente de segurança que afete seus dados, notificaremos os titulares e a ANPD nos prazos legais.</p>
+        </section>
+
+        <!-- 10. Menores -->
+        <section class="privacy-section" id="menores">
+            <h2>10. Menores de idade</h2>
+            <p>
+                Este portal é destinado ao público em geral. Não coletamos intencionalmente dados pessoais
+                de crianças (menores de 12 anos) sem consentimento expresso dos responsáveis legais.
+                Se você acredita que coletamos dados de uma criança sem o devido consentimento,
+                entre em contato conosco para que possamos excluí-los imediatamente.
+            </p>
+        </section>
+
+        <!-- 11. Alterações -->
+        <section class="privacy-section" id="alteracoes">
+            <h2>11. Alterações nesta Política</h2>
+            <p>
+                Esta Política pode ser atualizada periodicamente para refletir mudanças legais,
+                tecnológicas ou operacionais. A data da última atualização estará sempre indicada
+                no topo desta página. Alterações substanciais serão comunicadas no próprio site.
+            </p>
+            <p><strong>Versão atual:</strong> 1.0 — Abril de 2026.</p>
+        </section>
+
+        <!-- 12. Contato DPO -->
+        <section class="privacy-section" id="contato-dpo">
+            <h2>12. Contato e Encarregado de Dados (DPO)</h2>
+            <p>
+                Para exercer seus direitos, tirar dúvidas ou registrar reclamações sobre o tratamento
+                de dados pessoais neste portal, entre em contato:
+            </p>
+
+            <div class="privacy-contact-box">
+                <h3>📬 Fale com a Secretaria de Turismo</h3>
+                <p><strong>Email:</strong> <a href="mailto:turismo@saomateusdosul.pr.gov.br">turismo@saomateusdosul.pr.gov.br</a></p>
+                <p><strong>Telefone:</strong> <a href="tel:+554235320000">(42) 3532-0000</a></p>
+                <p><strong>Atendimento presencial:</strong> Chalé da Cultura e Turismo — Praça do Rio Iguaçu</p>
+                <p><strong>Horário:</strong> Segunda a Sexta, 8h–17h | Sábado 9h–13h</p>
+                <p style="margin-top:1rem;font-size:0.82rem;opacity:0.7;">
+                    Você também pode registrar reclamações junto à
+                    <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">ANPD — Autoridade Nacional de Proteção de Dados</a>.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" id="footer">
+        <div class="footer-main">
+            <p style="opacity:0.85;">© 2026 Secretaria Municipal de Cultura e Turismo de São Mateus do Sul</p>
+            <div class="footer-links" style="margin-top:1rem;">
+                <a href="/">Início</a>
+                <a href="/transparencia">Transparência</a>
+                <a href="/transparencia#lgpd">LGPD</a>
+                <a href="/transparencia#acessibilidade">Acessibilidade</a>
+                <a href="tel:+554235320000">📞 (42) 3532-0000</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="translations.js"></script>
+    <script src="js/cookies.js"></script>
+</body>
+</html>
