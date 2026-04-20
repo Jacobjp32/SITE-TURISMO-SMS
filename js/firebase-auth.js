@@ -15,7 +15,7 @@ if (!firebaseConfig) {
 
 let currentUser = null;
 
-// Aguarda os SDKs do Firebase carregarem (injetados pelo portal-usuario.html)
+// Aguarda os SDKs do Firebase carregarem nas páginas que usam autenticação.
 function initFirebase() {
     return new Promise(function(resolve) {
         if (!firebaseConfig) {
