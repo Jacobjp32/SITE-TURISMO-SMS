@@ -1,7 +1,0 @@
-# wrangler.toml — Cloudflare Pages (site estático)
-# Projeto: site-turismo-sms
-# Sem build command — serve os arquivos HTML/CSS/JS diretamente da raiz
-
-name = "site-turismo-sms"
-pages_build_output_dir = "."
-compatibility_date = "2025-04-01"

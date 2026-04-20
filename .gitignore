@@ -1,6 +1,7 @@
 # Large video files
 videos/VIDEO_ABERTURA_4K.mp4
 videos/INSTITUCIONAL_POLONES.mp4
+videos/ROTA_DO_TURISMO.mp4
 
 # Environment and secrets
 .env
