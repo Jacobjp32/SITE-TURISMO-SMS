@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -32,6 +35,8 @@
         .map-section {
             width: 100%;
             background: #0a3d2e;
+            position: relative;
+            z-index: 1;
         }
         .map-header {
             padding: 0.9rem 1.5rem 0.6rem;
@@ -41,28 +46,7 @@
             flex-wrap: wrap;
             gap: 0.5rem;
         }
-        .map-header-title {
-            font-family: 'Cormorant Garamond', serif;
-            color: #e8c9a0;
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin: 0;
-        }
-        .map-toggle-btn {
-            background: rgba(255,255,255,0.12);
-            border: 1px solid rgba(232,201,160,0.4);
-            color: #e8c9a0;
-            padding: 0.35rem 0.9rem;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-family: 'Raleway', sans-serif;
-            cursor: pointer;
-            transition: background 0.2s;
-            white-space: nowrap;
-        }
-        /* removido - novo estilo na toolbar abaixo */
-        }
-        .map-toggle-btn-OLD { display:none; }
+        /* map-header-title e map-toggle-btn definidos na toolbar abaixo */
 
         /* ══ TOOLBAR INTEGRADA ═══════════════════════════════════ */
         .map-toolbar {
@@ -260,9 +244,10 @@
     </style>
 
     <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- HEADER -->
     <header class="header">
@@ -353,6 +338,31 @@
     let markersMap = {};     // id → leaflet marker
     let mapCollapsed = false;
 
+    function getRouteKeys(est) {
+        return Array.isArray(est.routes) && est.routes.length ? est.routes : [est.route];
+    }
+
+    function getPrimaryRoute(est) {
+        return est.route || getRouteKeys(est)[0];
+    }
+
+    function matchesRoute(est, routeKey) {
+        return getRouteKeys(est).includes(routeKey);
+    }
+
+    function getRouteSummary(est) {
+        return getRouteKeys(est).map(key => {
+            const info = routeInfo[key];
+            return info ? (info.icon + ' ' + info.name) : key;
+        }).join(' • ');
+    }
+
+    function getMapNote(est) {
+        if (est.coordStatus === 'aproximada') return est.coordNote || 'Localização aproximada no mapa.';
+        if (est.coordStatus === 'pendente') return est.coordNote || 'Localização em validação.';
+        return '';
+    }
+
     // ─────────────────────────────────────────────
     // MAPA
     // ─────────────────────────────────────────────
@@ -381,10 +391,14 @@
     }
 
     function buildPopupHTML(est) {
-        const color = routeInfo[est.route].color;
-        const rName = routeInfo[est.route].icon + ' ' + routeInfo[est.route].name;
+        const primaryRoute = getPrimaryRoute(est);
+        const color = routeInfo[primaryRoute] ? routeInfo[primaryRoute].color : '#666';
+        const rName = getRouteSummary(est);
         const gmaps = est.mapsUrl || ('https://www.google.com/maps/search/?api=1&query=' + est.lat + ',' + est.lng);
         const phone = est.phone ? '<div class="map-popup-phone">📞 ' + est.phone + '</div>' : '';
+        const note = getMapNote(est)
+            ? '<div class="map-popup-location">ℹ️ ' + getMapNote(est) + '</div>'
+            : '';
         return '<div class="map-popup">'
             + '<div class="map-popup-header" style="background:' + color + '">'
             + '<p class="map-popup-name">' + est.name + '</p>'
@@ -393,6 +407,7 @@
             + '<div class="map-popup-body">'
             + '<div class="map-popup-location">📍 ' + est.location + '</div>'
             + phone
+            + note
             + '<a class="map-popup-gmaps" href="' + gmaps + '" target="_blank" rel="noopener">Abrir no Google Maps ↗</a>'
             + '</div></div>';
     }
@@ -402,8 +417,9 @@
         markersMap = {};
         const bounds = [];
         list.filter(e => e.lat !== null).forEach(est => {
+            const primaryRoute = getPrimaryRoute(est);
             const marker = L.marker([est.lat, est.lng], {
-                icon: makeIcon(est.route, false),
+                icon: makeIcon(primaryRoute, false),
                 title: est.name
             });
             marker.bindPopup(buildPopupHTML(est), { maxWidth: 260 });
@@ -421,17 +437,17 @@
         Object.entries(markersMap).forEach(([mid, m]) => {
             const est = establishments.find(e => e.id === mid);
             if (!est) return;
-            m.setIcon(makeIcon(est.route, mid === id));
+            m.setIcon(makeIcon(getPrimaryRoute(est), mid === id));
             m.setZIndexOffset(mid === id ? 1000 : 0);
         });
     }
 
     function highlightCard(id) {
         document.querySelectorAll('.establishment-card').forEach(c => c.classList.remove('map-active'));
-        const card = document.querySelector('[data-est-id="' + id + '"]');
-        if (card) {
-            card.classList.add('map-active');
-            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const cards = document.querySelectorAll('[data-est-id="' + id + '"]');
+        if (cards.length) {
+            cards.forEach(card => card.classList.add('map-active'));
+            cards[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
         highlightMarker(id);
     }
@@ -465,10 +481,12 @@
     // RENDER DE CARDS
     // ─────────────────────────────────────────────
     function renderCard(est) {
-        const route = routeInfo[est.route];
+        const primaryRoute = getPrimaryRoute(est);
+        const route = routeInfo[primaryRoute] || { icon: '📍', color: '#666' };
         const color = route.color;
-        const mapsLink = est.mapsUrl
-            ? '<a href="' + est.mapsUrl + '" target="_blank" rel="noopener" class="info-link" style="font-size:0.78rem;display:inline-block;margin-top:0.3rem;">📌 Ver no Google Maps</a>'
+        const gmaps = est.mapsUrl || (est.lat !== null ? ('https://www.google.com/maps/search/?api=1&query=' + est.lat + ',' + est.lng) : '');
+        const mapsLink = gmaps
+            ? '<a href="' + gmaps + '" target="_blank" rel="noopener" class="info-link" style="font-size:0.78rem;display:inline-block;margin-top:0.3rem;">📌 Ver no Google Maps</a>'
             : '';
         const phoneHtml = est.phone
             ? '<div class="info-item"><span class="info-icon">📞</span><div class="info-text"><strong>Contato</strong><a href="tel:' + est.phone.replace(/[^\d]/g,'') + '" class="info-link">' + est.phone + '</a></div></div>'
@@ -482,12 +500,15 @@
         const subtitle = est.subtitle
             ? '<p style="font-size:0.79rem;color:#777;font-style:italic;margin:-0.2rem 0 0.45rem;">' + est.subtitle + '</p>'
             : '';
+        const noteHtml = getMapNote(est)
+            ? '<div class="info-item"><span class="info-icon">ℹ️</span><div class="info-text"><strong>Mapa</strong>' + getMapNote(est) + '</div></div>'
+            : '';
         return '<div class="establishment-card" '
             + 'data-est-id="' + est.id + '" '
             + 'data-name="' + est.name.toLowerCase() + '" '
             + 'data-location="' + est.location.toLowerCase() + '" '
             + 'data-desc="' + est.desc.toLowerCase() + '" '
-            + 'data-route="' + est.route + '">'
+            + 'data-route="' + getRouteKeys(est).join(' ') + '">'
             + '<div class="establishment-header">'
             + '<h3 class="establishment-name">' + est.name + '</h3>'
             + '<span class="establishment-badge">' + route.icon + '</span>'
@@ -499,6 +520,7 @@
             + phoneHtml
             + '<div class="info-item"><span class="info-icon">⏰</span><div class="info-text"><strong>Horário</strong>' + est.hours + '</div></div>'
             + socialHtml
+            + noteHtml
             + '</div>'
             + mapBtn
             + '</div>';
@@ -511,7 +533,7 @@
         if (currentFilter === 'all') {
             Object.keys(routeInfo).forEach(rKey => {
                 const route = routeInfo[rKey];
-                const items = establishments.filter(e => e.route === rKey);
+                const items = establishments.filter(e => matchesRoute(e, rKey));
                 if (!items.length) return;
                 html += '<section class="route-section" data-route="' + rKey + '">'
                     + '<div class="route-section-header">'
@@ -523,7 +545,7 @@
                     + '</div></section>';
             });
         } else {
-            const items = establishments.filter(e => e.route === currentFilter);
+            const items = establishments.filter(e => matchesRoute(e, currentFilter));
             const route = routeInfo[currentFilter];
             html = '<section class="route-section" data-route="' + currentFilter + '">'
                 + '<div class="route-section-header">'
@@ -545,7 +567,7 @@
         const search = document.getElementById('searchInput').value.toLowerCase().trim();
         const loc = document.getElementById('locationFilter').value.toLowerCase();
         return establishments.filter(est => {
-            const matchRoute = currentFilter === 'all' || est.route === currentFilter;
+            const matchRoute = currentFilter === 'all' || matchesRoute(est, currentFilter);
             const matchLoc = loc === 'all' || est.location.toLowerCase().includes(loc);
             const matchSearch = !search
                 || est.name.toLowerCase().includes(search)
@@ -611,5 +633,6 @@
         ? document.addEventListener('DOMContentLoaded', init)
         : init();
     </script>
+    <script src="js/cookies.js"></script>
 </body>
 </html>

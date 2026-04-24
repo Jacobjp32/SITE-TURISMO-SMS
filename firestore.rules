@@ -1,0 +1,107 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/usuarios/$(request.auth.uid));
+    }
+
+    function hasRole(roles) {
+      return signedIn() && userDoc().data.role in roles && userDoc().data.ativo != false;
+    }
+
+    function isAdmin() {
+      return hasRole(['admin']);
+    }
+
+    function isModerator() {
+      return hasRole(['admin', 'moderator']);
+    }
+
+    function owns(resourceData) {
+      return signedIn() && resourceData.submittedBy == request.auth.uid;
+    }
+
+    match /usuarios/{userId} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
+      allow create: if isAdmin() || (
+        signedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.role == 'user' &&
+        request.resource.data.ativo == true
+      );
+      allow update: if isAdmin() || (
+        signedIn() &&
+        request.auth.uid == userId &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['nome', 'telefone', 'tipo', 'organizacao']) &&
+        request.resource.data.role == resource.data.role &&
+        request.resource.data.ativo == resource.data.ativo
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /eventos_pendentes/{eventId} {
+      allow read: if isModerator() || owns(resource.data);
+      allow create: if signedIn() &&
+        request.resource.data.submittedBy == request.auth.uid &&
+        request.resource.data.status == 'pendente';
+      allow update: if isModerator();
+      allow delete: if isModerator();
+    }
+
+    match /estabelecimentos_pendentes/{estId} {
+      allow read: if isModerator() || owns(resource.data);
+      allow create: if signedIn() &&
+        request.resource.data.submittedBy == request.auth.uid &&
+        request.resource.data.status == 'pendente';
+      allow update: if isModerator();
+      allow delete: if isModerator();
+    }
+
+    match /eventos_aprovados/{eventId} {
+      allow read: if true;
+      allow write: if isModerator();
+    }
+
+    match /estabelecimentos_aprovados/{estId} {
+      allow read: if true;
+      allow write: if isModerator();
+    }
+
+    match /noticias/{noticiaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /reservas/{reservaId} {
+      allow create: if request.resource.data.status == 'pendente' &&
+        request.resource.data.keys().hasOnly([
+          'id',
+          'experienciaId',
+          'experienciaNome',
+          'data',
+          'horario',
+          'pessoas',
+          'nome',
+          'email',
+          'telefone',
+          'observacoes',
+          'valorTotal',
+          'status',
+          'criadaEm',
+          'criadoEm',
+          'firestoreId'
+        ]);
+      allow read, update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

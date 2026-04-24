@@ -145,25 +145,19 @@ const Reservas = {
             criadaEm: new Date().toISOString()
         };
         
-        // Tentar salvar no Firestore
+        // Tentar salvar no Firestore (config vem de CONFIG.firebase via config.js)
         try {
-            const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-            const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
-                apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
-                authDomain: 'turismo-sms.firebaseapp.com',
-                projectId: 'turismo-sms',
-                storageBucket: 'turismo-sms.firebasestorage.app',
-                messagingSenderId: '1042825829044',
-                appId: '1:1042825829044:web:13173093e28be3199955e1'
-            };
-            const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig, 'reservas-app');
-            const db = getFirestore(app);
-            const docRef = await addDoc(collection(db, 'reservas'), {
-                ...reserva,
-                criadoEm: serverTimestamp()
-            });
-            reserva.firestoreId = docRef.id;
+            if (typeof CONFIG !== 'undefined' && CONFIG.firebase) {
+                const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+                const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const app = getApps().length ? getApps()[0] : initializeApp(CONFIG.firebase, 'reservas-app');
+                const db = getFirestore(app);
+                const docRef = await addDoc(collection(db, 'reservas'), {
+                    ...reserva,
+                    criadoEm: serverTimestamp()
+                });
+                reserva.firestoreId = docRef.id;
+            }
         } catch (fbErr) {
             // Firestore indisponível — continua com localStorage
         }

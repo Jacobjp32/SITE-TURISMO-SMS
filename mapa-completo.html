@@ -3,26 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <script src="js/loading.js"></script>
+    <script src="js/breadcrumbs.js"></script>
     <meta name="description" content="Mapa completo das rotas turísticas de São Mateus do Sul — explore a Capital Polonesa do Paraná com todos os pontos turísticos, culturais e gastronômicos.">
     <title>Mapa Completo - Rotas Turísticas São Mateus do Sul</title>
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
-    
+    <!-- Leaflet.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
     <link rel="stylesheet" href="css/variables.css">
     <link rel="stylesheet" href="css/mapa-completo.css">
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
+    <!-- Mesma fonte de dados do Rotas Turísticas (coordenadas reais) -->
+    <script src="js/rotas-data.js"></script>
 
-    <!-- Felt Map Embed -->
-    <iframe
-        id="felt-map"
-        title="Mapa Turístico - São Mateus do Sul"
-        src="https://felt.com/embed/map/Getting-started-with-Felt-XXWOlvfeQvuVZbxeb89AWGB?loc=-25.87203%2C-50.38498%2C15z&legend=1&cooperativeGestures=1&link=1&geolocation=0&zoomControls=1&scaleBar=1"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-    </iframe>
+    <!-- Mapa Leaflet (ocupa tela inteira abaixo da nav) -->
+    <div id="leaflet-map"></div>
 
     <!-- Botão toggle para mobile -->
     <button class="toggle-panel-btn" id="toggleBtn" onclick="togglePanel()">📍 Legenda</button>
@@ -30,61 +33,185 @@
     <!-- Painel de Informações -->
     <div class="info-panel" id="infoPanel">
         <h1>📍 Mapa Completo</h1>
-        <p>38 estabelecimentos mapeados em 6 rotas turísticas</p>
-        
-        <div class="legend">
-            <div class="legend-item">
-                <span class="legend-icon">🍓</span>
-                <span>Sabores & Memórias</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">🌿</span>
-                <span>Erva-Mate</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">⛪</span>
-                <span>Polonesa</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">🌊</span>
-                <span>Das Águas</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">🏘️</span>
-                <span>Fluviópolis</span>
-            </div>
-            <div class="legend-item">
-                <span class="legend-icon">🌱</span>
-                <span>Da Terra</span>
-            </div>
+        <p id="totalLocais">Carregando locais...</p>
+
+        <div class="legend" id="legendContainer">
+            <!-- gerado via JS a partir de routeInfo -->
         </div>
 
         <div class="stats">
             <div class="stat">
                 <span>Total de Pins:</span>
-                <span class="stat-number">38</span>
-            </div>
-            <div class="stat">
-                <span>Localidades:</span>
-                <span class="stat-number">15</span>
+                <span class="stat-number" id="statPins">—</span>
             </div>
             <div class="stat">
                 <span>Rotas:</span>
-                <span class="stat-number">6</span>
+                <span class="stat-number" id="statRotas">—</span>
             </div>
         </div>
     </div>
 
+    <!-- Botão Voltar (esquerda para não conflitar com chatbot) -->
     <a href="/" class="back-btn">← Voltar ao Site</a>
 
     <script>
-        function togglePanel() {
-            const panel = document.getElementById('infoPanel');
-            const btn = document.getElementById('toggleBtn');
-            panel.classList.toggle('collapsed');
-            btn.textContent = panel.classList.contains('collapsed') ? '📍 Legenda' : '✕ Fechar';
+    (function () {
+        var _retries = 0;
+
+        // ── Aguarda a nav renderizar (nav-shared.js injeta assincronamente) ──
+        function waitForNav() {
+            var navEl = document.querySelector('nav') || document.querySelector('header');
+            var navH  = navEl ? navEl.getBoundingClientRect().height : 0;
+
+            if (navH < 10 && _retries < 40) {
+                _retries++;
+                setTimeout(waitForNav, 50);
+                return;
+            }
+
+            initPage(navH || 70);
         }
+
+        function initPage(navH) {
+            // ── Calcula offset total (barra acessibilidade + nav) ────
+            // Pega a posição real do fundo da nav na viewport
+            var navEl = document.querySelector('nav');
+            var realBottom = navEl ? navEl.getBoundingClientRect().bottom : navH;
+            var offset = Math.max(realBottom, navH);
+
+            function getRouteKeys(est) {
+                return Array.isArray(est.routes) && est.routes.length ? est.routes : [est.route];
+            }
+
+            function getPrimaryRoute(est) {
+                return est.route || getRouteKeys(est)[0];
+            }
+
+            function getRouteSummary(est) {
+                return getRouteKeys(est).map(function (key) {
+                    var info = routeInfo[key];
+                    return info ? (info.icon + ' ' + info.name) : key;
+                }).join(' • ');
+            }
+
+            function getMapNote(est) {
+                if (est.coordStatus === 'aproximada') return est.coordNote || 'Localização aproximada no mapa.';
+                if (est.coordStatus === 'pendente') return est.coordNote || 'Localização em validação.';
+                return '';
+            }
+
+            var panel     = document.getElementById('infoPanel');
+            var toggleBtn = document.getElementById('toggleBtn');
+            var mapEl     = document.getElementById('leaflet-map');
+
+            panel.style.top     = (offset + 14) + 'px';
+            toggleBtn.style.top = (offset + 14) + 'px';
+            mapEl.style.top     = offset + 'px';
+
+            // ── Gera legenda a partir de routeInfo ───────────────────
+            var legendEl = document.getElementById('legendContainer');
+            var routeKeys = Object.keys(routeInfo);
+            legendEl.innerHTML = routeKeys.map(function (key) {
+                var r = routeInfo[key];
+                return '<div class="legend-item">'
+                    + '<span class="legend-dot" style="background:' + r.color + ';"></span>'
+                    + '<span>' + r.icon + ' ' + r.name + '</span>'
+                    + '</div>';
+            }).join('');
+
+            document.getElementById('statRotas').textContent = routeKeys.length;
+
+            // ── Inicializa Leaflet ───────────────────────────────────
+            var map = L.map('leaflet-map', { zoomControl: true });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Fallback view
+            map.setView([-25.88, -50.42], 11);
+
+            // ── Adiciona markers (mesma lógica do rotas-completas) ───
+            var bounds = [];
+            var count  = 0;
+
+            establishments.forEach(function (est) {
+                if (est.lat === null || est.lng === null) return;
+
+                var primaryRoute = getPrimaryRoute(est);
+                var rInfo = routeInfo[primaryRoute] || { color: '#666', icon: '📍', name: primaryRoute };
+                var color = rInfo.color;
+                var icon  = makeDivIcon(color);
+
+                var gmaps = est.mapsUrl
+                    || ('https://www.google.com/maps/search/?api=1&query=' + est.lat + ',' + est.lng);
+
+                var phone = est.phone
+                    ? '<div class="map-popup-info">📞 ' + est.phone + '</div>' : '';
+                var note = getMapNote(est)
+                    ? '<div class="map-popup-info">ℹ️ ' + getMapNote(est) + '</div>' : '';
+
+                var popup = '<div class="map-popup">'
+                    + '<div class="map-popup-header" style="background:' + color + '">'
+                    + '<p class="map-popup-name">'  + est.name + '</p>'
+                    + '<p class="map-popup-route">' + getRouteSummary(est) + '</p>'
+                    + '</div>'
+                    + '<div class="map-popup-body">'
+                    + '<div class="map-popup-info">📍 ' + est.location + '</div>'
+                    + phone
+                    + '<div class="map-popup-info">🕐 ' + est.hours + '</div>'
+                    + note
+                    + '<a class="map-popup-link" href="' + gmaps + '" target="_blank" rel="noopener">Abrir no Google Maps ↗</a>'
+                    + '</div></div>';
+
+                L.marker([est.lat, est.lng], { icon: icon, title: est.name })
+                    .addTo(map)
+                    .bindPopup(popup, { maxWidth: 260 });
+
+                bounds.push([est.lat, est.lng]);
+                count++;
+            });
+
+            // ── Ajusta zoom para enquadrar todos os pins ─────────────
+            if (bounds.length > 0) {
+                map.fitBounds(bounds, { padding: [50, 50], maxZoom: 14 });
+            }
+
+            document.getElementById('statPins').textContent = count;
+            document.getElementById('totalLocais').textContent =
+                count + ' estabelecimentos em ' + routeKeys.length + ' rotas turísticas';
+
+            setTimeout(function () { map.invalidateSize(); }, 400);
+        }
+
+        function makeDivIcon(color, sz) {
+            sz = sz || 26;
+            return L.divIcon({
+                className: '',
+                html: '<div class="marker-pin" style="background:' + color + ';width:' + sz + 'px;height:' + sz + 'px;"></div>',
+                iconSize:    [sz, sz],
+                iconAnchor:  [sz / 2, sz],
+                popupAnchor: [0, -sz]
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForNav);
+        } else {
+            waitForNav();
+        }
+    })();
+
+    function togglePanel() {
+        var panel = document.getElementById('infoPanel');
+        var btn   = document.getElementById('toggleBtn');
+        panel.classList.toggle('collapsed');
+        btn.textContent = panel.classList.contains('collapsed') ? '📍 Legenda' : '✕ Fechar';
+    }
     </script>
 
+    <script src="translations.js"></script>
+    <script src="js/cookies.js"></script>
 </body>
 </html>

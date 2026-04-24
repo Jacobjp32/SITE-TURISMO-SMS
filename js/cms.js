@@ -3,14 +3,8 @@
  * SISTEMA CMS SIMPLES - VERSÃO 3.0
  * ============================================================
  * 
- * CMS básico para gerenciar notícias sem necessidade de backend.
- * Usa localStorage para armazenar rascunhos e JSON para publicação.
- * 
- * Para uso em produção, integre com:
- * - Netlify CMS
- * - Contentful
- * - Strapi
- * - ou qualquer headless CMS
+ * CMS básico para gerenciar notícias.
+ * Firebase Firestore como fonte primária, localStorage como fallback.
  */
 
 const CMS = {
@@ -24,11 +18,14 @@ const CMS = {
     
     // Posts armazenados
     posts: [],
+    _initPromise: null,
     
     // Inicializar CMS
     init: async function() {
-        await this.carregarPosts();
-        return this;
+        if (!this._initPromise) {
+            this._initPromise = this.carregarPosts().then(() => this);
+        }
+        return this._initPromise;
     },
     
     // Carregar posts — Firebase primeiro, localStorage como fallback
@@ -36,14 +33,8 @@ const CMS = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-            const firebaseConfig = (typeof CONFIG !== 'undefined' && CONFIG.firebase) ? CONFIG.firebase : {
-                apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
-                authDomain: 'turismo-sms.firebaseapp.com',
-                projectId: 'turismo-sms',
-                storageBucket: 'turismo-sms.firebasestorage.app',
-                messagingSenderId: '1042825829044',
-                appId: '1:1042825829044:web:13173093e28be3199955e1'
-            };
+            if (typeof CONFIG === 'undefined' || !CONFIG.firebase) throw new Error('CONFIG.firebase ausente');
+            const firebaseConfig = CONFIG.firebase;
             const existingApp = getApps().find(a => a.name === 'cms-app');
             const app = existingApp || initializeApp(firebaseConfig, 'cms-app');
             const db = getFirestore(app);
@@ -236,9 +227,15 @@ const CMS = {
     
     // Escapar HTML para prevenir XSS
     escapeHTML: function(str) {
+        if (window.SMSecurity) return window.SMSecurity.html(str);
         var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    },
+
+    safeURL: function(url, fallback) {
+        if (window.SMSecurity) return window.SMSecurity.url(url, fallback || '');
+        return this.escapeHTML(url || fallback || '');
     },
 
     // Renderizar lista de posts
@@ -250,7 +247,7 @@ const CMS = {
 
         container.innerHTML = posts.map(post => `
             <article class="post-card" data-id="${this.escapeHTML(String(post.id))}">
-                <div class="post-image" style="background-image: url('${this.escapeHTML(post.imagem)}');"></div>
+                <div class="post-image" style="background-image: url('${this.safeURL(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}');"></div>
                 <div class="post-content">
                     <span class="post-category">${this.escapeHTML(post.categoria)}</span>
                     <h3 class="post-title">${this.escapeHTML(post.titulo)}</h3>

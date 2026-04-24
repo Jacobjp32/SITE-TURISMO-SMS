@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <meta name="robots" content="noindex, nofollow">
     
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
@@ -446,7 +449,7 @@
                 <li><a data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
                 <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
-                <li><a href="/" target="_blank">🌐 <span>Ver Site</span></a></li>
+                <li><a href="/" target="_blank" rel="noopener">🌐 <span>Ver Site</span></a></li>
             </ul>
             
             <div class="sidebar-footer">
@@ -493,7 +496,7 @@
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <button class="btn-primary" onclick="showSection('aprovacoes')">✅ Ver Aprovações</button>
                         <button class="btn-primary" onclick="showSection('usuarios')">👥 Gerenciar Usuários</button>
-                        <a href="/portal-usuario" target="_blank" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
+                        <a href="/portal-usuario" target="_blank" rel="noopener" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
                     </div>
                 </div>
             </section>
@@ -556,8 +559,15 @@
         </main>
     </div>
 
+    <script src="js/security-utils.js"></script>
+    <!-- Painel administrativo principal: permissões controladas por usuarios/{uid}.role no Firebase. -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="js/firebase-auth.js"></script>
     <script>
+        const SEC = window.SMSecurity;
+
         // Aguardar Firebase estar pronto antes de vincular formulário de login
         window.addEventListener('firebaseReady', function() {
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
@@ -667,14 +677,14 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong><br><small>${e.categoria || ''}</small></td>
-                                    <td>${formatDate(e.dataInicio)}</td>
-                                    <td>${e.local}</td>
-                                    <td>${e.submittedByName}<br><small>${e.submittedByEmail}</small></td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong><br><small>${SEC.html(e.categoria)}</small></td>
+                                    <td>${SEC.html(formatDate(e.dataInicio))}</td>
+                                    <td>${SEC.html(e.local, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}<br><small>${SEC.html(e.submittedByEmail)}</small></td>
                                     <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEvent('${e.id}')">✅ Aprovar</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${e.id}')">❌ Rejeitar</button>
-                                        <button class="btn-sm btn-edit" onclick="viewEvent('${e.id}')">👁️</button>
+                                        <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
+                                        <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -704,13 +714,13 @@
                         <tbody>
                             ${estabelecimentos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong></td>
-                                    <td>${e.categoria || ''}</td>
-                                    <td>${e.endereco}</td>
-                                    <td>${e.submittedByName}</td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                                    <td>${SEC.html(e.categoria)}</td>
+                                    <td>${SEC.html(e.endereco, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}</td>
                                     <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${e.id}')">✅</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${e.id}')">❌</button>
+                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${SEC.js(e.id)}')">✅</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${SEC.js(e.id)}')">❌</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -744,11 +754,11 @@
                     <tbody>
                         ${users.map(u => `
                             <tr>
-                                <td><strong>${u.nome}</strong></td>
-                                <td>${u.email}</td>
-                                <td>${u.tipo || 'turista'}</td>
+                                <td><strong>${SEC.html(u.nome, '—')}</strong></td>
+                                <td>${SEC.html(u.email, '—')}</td>
+                                <td>${SEC.html(u.tipo || 'turista')}</td>
                                 <td>
-                                    <select onchange="changeUserRole('${u.id}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
+                                    <select onchange="changeUserRole('${SEC.js(u.id)}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
                                         <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
                                         <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
                                         <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
@@ -762,7 +772,7 @@
                                 <td>
                                     ${u.id !== window.currentUser?.uid ? `
                                         <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" 
-                                                onclick="toggleUserStatus('${u.id}', ${u.ativo === false})">
+                                                onclick="toggleUserStatus('${SEC.js(u.id)}', ${u.ativo === false})">
                                             ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
                                         </button>
                                     ` : '<small style="color:#888;">Você</small>'}
@@ -777,9 +787,9 @@
         async function loadApprovedEvents() {
             // Buscar eventos aprovados diretamente
             try {
-                const { db, collection, getDocs, orderBy, query } = window.firebaseDB;
-                const q = query(collection(db, 'eventos_aprovados'));
-                const snapshot = await getDocs(q);
+                const db = window.firebaseDB && window.firebaseDB.db;
+                if (!db) throw new Error('Firestore não inicializado.');
+                const snapshot = await db.collection('eventos_aprovados').get();
                 const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 const container = document.getElementById('eventos-aprovados-container');
@@ -802,10 +812,10 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${e.nome}</strong></td>
-                                    <td>${formatDate(e.dataInicio)}</td>
-                                    <td>${e.local}</td>
-                                    <td>${e.submittedByName}</td>
+                                    <td><strong>${SEC.html(e.nome, '—')}</strong></td>
+                                    <td>${SEC.html(formatDate(e.dataInicio || e.data))}</td>
+                                    <td>${SEC.html(e.local, '—')}</td>
+                                    <td>${SEC.html(e.submittedByName, '—')}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -840,15 +850,17 @@
 
         async function approveEstablishment(estId) {
             if (!confirm('Aprovar este estabelecimento?')) return;
-            // Implementar aprovação de estabelecimento
-            alert('Estabelecimento aprovado!');
+            const result = await FirebaseSystem.approveEstablishment(estId);
+            alert(result.message);
             loadPendingData();
+            loadDashboardData();
         }
 
         async function rejectEstablishment(estId) {
-            if (!confirm('Rejeitar este estabelecimento?')) return;
-            // Implementar rejeição de estabelecimento
-            alert('Estabelecimento rejeitado.');
+            const reason = prompt('Motivo da rejeição (opcional):');
+            if (reason === null) return;
+            const result = await FirebaseSystem.rejectEstablishment(estId, reason);
+            alert(result.message);
             loadPendingData();
         }
 

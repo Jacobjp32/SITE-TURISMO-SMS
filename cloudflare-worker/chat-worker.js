@@ -156,14 +156,85 @@ INSTRUKCJE:
 };
 
 // ─────────────────────────────────────────────────────────────
-// CORS headers
+// CORS — restrito às origens confiáveis
 // ─────────────────────────────────────────────────────────────
-function corsHeaders() {
+const ALLOWED_ORIGINS = [
+    'https://turismo.saomateusdosul.pr.gov.br',
+    'https://www.turismo.saomateusdosul.pr.gov.br',
+    'http://localhost',
+    'http://127.0.0.1',
+    'http://localhost:8080',
+    'http://localhost:3000'
+];
+
+const MAX_HISTORY_ITEMS = 6;
+const MAX_HISTORY_TEXT_LENGTH = 1200;
+
+function corsHeaders(origin) {
+    const allowedOrigin = getAllowedOrigin(origin);
+    if (!allowedOrigin) return null;
+
     return {
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': allowedOrigin,
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Vary': 'Origin'
     };
+}
+
+function getAllowedOrigin(origin) {
+    if (!origin) return ALLOWED_ORIGINS[0];
+    if (ALLOWED_ORIGINS.includes(origin)) return origin;
+
+    try {
+        const url = new URL(origin);
+        if ((url.hostname === 'localhost' || url.hostname === '127.0.0.1') &&
+            (url.protocol === 'http:' || url.protocol === 'https:')) {
+            return origin;
+        }
+    } catch {
+        // Invalid Origin header.
+    }
+
+    return null;
+}
+
+function jsonResponse(payload, status, cors) {
+    return new Response(
+        JSON.stringify(payload),
+        { status, headers: { 'Content-Type': 'application/json', ...cors } }
+    );
+}
+
+function sanitizeHistory(history) {
+    if (!Array.isArray(history)) return [];
+    return history
+        .slice(-MAX_HISTORY_ITEMS)
+        .filter(item => item && (item.role === 'user' || item.role === 'assistant'))
+        .map(item => ({
+            role: item.role,
+            content: String(item.content || '').slice(0, MAX_HISTORY_TEXT_LENGTH)
+        }))
+        .filter(item => item.content.trim().length > 0);
+}
+
+// ─────────────────────────────────────────────────────────────
+// RATE LIMITING simples (por IP, via in-memory Map)
+// ─────────────────────────────────────────────────────────────
+const rateLimitMap = new Map();
+const RATE_LIMIT_MAX = 20;       // máx requisições
+const RATE_LIMIT_WINDOW = 60000; // janela de 1 minuto (ms)
+
+function checkRateLimit(ip) {
+    const now = Date.now();
+    const entry = rateLimitMap.get(ip);
+    if (!entry || now - entry.start > RATE_LIMIT_WINDOW) {
+        rateLimitMap.set(ip, { start: now, count: 1 });
+        return true;
+    }
+    entry.count++;
+    if (entry.count > RATE_LIMIT_MAX) return false;
+    return true;
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -172,36 +243,54 @@ function corsHeaders() {
 export default {
     async fetch(request, env) {
 
+        const origin = request.headers.get('Origin') || '';
+        const cors = corsHeaders(origin);
+        if (!cors) {
+            return new Response('Forbidden origin', { status: 403 });
+        }
+
         // Preflight CORS
         if (request.method === 'OPTIONS') {
-            return new Response(null, { status: 204, headers: corsHeaders() });
+            return new Response(null, { status: 204, headers: cors });
         }
 
         if (request.method !== 'POST') {
-            return new Response('Method Not Allowed', { status: 405 });
+            return new Response('Method Not Allowed', { status: 405, headers: cors });
+        }
+
+        // Rate limiting por IP
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        if (!checkRateLimit(clientIP)) {
+            return new Response(
+                JSON.stringify({ error: 'Muitas requisições. Tente novamente em 1 minuto.' }),
+                { status: 429, headers: { 'Content-Type': 'application/json', ...cors } }
+            );
         }
 
         const apiKey = env.ANTHROPIC_API_KEY;
         if (!apiKey) {
-            return new Response(
-                JSON.stringify({ error: 'ANTHROPIC_API_KEY não configurada no Worker' }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: 'Serviço temporariamente indisponível.' }, 500, cors);
         }
 
         let message, lang, history;
         try {
             ({ message, lang = 'pt', history = [] } = await request.json());
         } catch {
-            return new Response(
-                JSON.stringify({ error: 'Payload JSON inválido' }),
-                { status: 400, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: 'Payload JSON inválido' }, 400, cors);
         }
+
+        // Input validation
+        if (!message || typeof message !== 'string' || message.trim().length === 0) {
+            return jsonResponse({ error: 'Campo "message" obrigatório' }, 400, cors);
+        }
+        if (message.length > 500) {
+            return jsonResponse({ error: 'Mensagem muito longa (máx. 500 caracteres)' }, 400, cors);
+        }
+        history = sanitizeHistory(history);
 
         const systemPrompt = SYSTEM_PROMPTS[lang] || SYSTEM_PROMPTS['pt'];
         const messages = [
-            ...history.slice(-6),
+            ...history,
             { role: 'user', content: message }
         ];
 
@@ -231,14 +320,11 @@ export default {
 
             return new Response(
                 JSON.stringify({ response: text }),
-                { headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
+                { headers: { 'Content-Type': 'application/json', ...cors } }
             );
 
         } catch (err) {
-            return new Response(
-                JSON.stringify({ error: err.message }),
-                { status: 500, headers: { 'Content-Type': 'application/json', ...corsHeaders() } }
-            );
+            return jsonResponse({ error: 'Erro interno do servidor.' }, 500, cors);
         }
     }
 };

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <meta name="description" content="Portal do Usuário - Cadastre eventos e estabelecimentos no site oficial de turismo de São Mateus do Sul.">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
@@ -14,7 +17,7 @@
     <script src="js/scroll-animations.js" defer></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- TELA DE AUTENTICAÇÃO -->
     <div class="auth-screen" id="authScreen">
@@ -50,7 +53,10 @@
                     </div>
                     <div class="form-group">
                         <label for="loginSenha">Senha</label>
-                        <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
+                        <div class="password-wrapper">
+                            <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
+                            <button type="button" class="password-toggle" onclick="toggleSenha('loginSenha', this)" title="Mostrar senha">👁️</button>
+                        </div>
                     </div>
                     <button type="button" class="btn-primary" id="btnEntrar" onclick="fazerLogin()">Entrar</button>
                     <p style="text-align:center;margin-top:0.75rem;">
@@ -87,11 +93,17 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="regSenha">Senha *</label>
-                            <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                            <div class="password-wrapper">
+                                <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regSenha', this)" title="Mostrar senha">👁️</button>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="regConfirm">Confirmar Senha *</label>
-                            <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
+                            <div class="password-wrapper">
+                                <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regConfirm', this)" title="Mostrar senha">👁️</button>
+                            </div>
                         </div>
                     </div>
                     <div class="form-group">
@@ -284,6 +296,8 @@
     </footer>
 
 
+    <!-- Config DEVE vir antes de firebase-auth.js -->
+    <script src="config.js"></script>
     <!-- Firebase Compat SDK — DEVE vir antes de firebase-auth.js -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
@@ -297,6 +311,20 @@
     // Botões chamam funções globais diretamente via onclick
     // Auth state atualiza UI via listener em authStateChanged
     // ================================================================
+
+    // ── Toggle de visibilidade da senha ─────────────────────────────
+    function toggleSenha(inputId, btn) {
+        var input = document.getElementById(inputId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = '🙈';
+            btn.title = 'Ocultar senha';
+        } else {
+            input.type = 'password';
+            btn.textContent = '👁️';
+            btn.title = 'Mostrar senha';
+        }
+    }
 
     // ── Abas de autenticação ─────────────────────────────────────────
     function mostrarAba(aba) {
@@ -560,7 +588,7 @@
         var n = document.createElement('div');
         n.className = 'portal-notif';
         n.innerHTML = '<span>' + msg + '</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;margin-left:0.5rem;">&times;</button>';
-        n.style.cssText = 'position:fixed;top:1rem;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
+        n.style.cssText = 'position:fixed;top:140px;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
             'display:flex;align-items:center;gap:0.5rem;z-index:10000;max-width:90vw;' +
             'box-shadow:0 5px 20px rgba(0,0,0,0.25);background:' + (cores[tipo]||cores.info) + ';color:white;' +
             'font-family:Raleway,sans-serif;font-size:0.95rem;animation:slideIn 0.3s ease;';
@@ -577,5 +605,8 @@
     }
     </style>
 
+    <script src="js/breadcrumbs.js"></script>
+    <script src="translations.js"></script>
+    <script src="js/cookies.js"></script>
 </body>
 </html>

@@ -18,7 +18,7 @@ const CONFIG = {
         url: 'https://turismo.saomateusdosul.pr.gov.br',
         email: 'turismo@saomateusdosul.pr.gov.br',
         telefone: '(42) 3532-0000',
-        endereco: 'Rua Barão do Rio Branco, Centro • CEP 83900-000 • São Mateus do Sul - PR'
+        endereco: 'Rua João Gabriel Martins s/n • CEP 83900-114 • São Mateus do Sul - PR'
     },
 
     // ============================================================
@@ -42,19 +42,12 @@ const CONFIG = {
 
     // ============================================================
     // FORMULÁRIO DE CONTATO
-    // Configure uma das opções abaixo
     // ============================================================
     formulario: {
-        // Opção 1: Netlify Forms (recomendado se hospedado no Netlify)
-        netlifyForms: false,    // Mude para true se usar Netlify
-        
-        // Opção 2: Formspree
         formspree: {
-            enabled: false,     // Mude para true se usar Formspree
+            enabled: false,
             formId: 'xpqykpqd'
         },
-        
-        // Opção 3: Email direto (menos recomendado)
         emailDireto: 'turismo@saomateusdosul.pr.gov.br'
     },
 
@@ -155,7 +148,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Google Analytics
-    if (CONFIG.analytics && CONFIG.analytics.enabled && CONFIG.analytics.ga4Id) {
+    if (CONFIG.analytics && CONFIG.analytics.enabled && CONFIG.analytics.ga4Id && !window.__SMS_GA_INITIALIZED) {
+        if (typeof window.gtag === 'function') {
+            window.__SMS_GA_INITIALIZED = true;
+            return;
+        }
+
         // Carregar script do GA4
         const script = document.createElement('script');
         script.async = true;
@@ -166,6 +164,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', CONFIG.analytics.ga4Id);
+        window.__SMS_GA_INITIALIZED = true;
     }
     
 });

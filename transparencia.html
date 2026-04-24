@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
@@ -25,9 +28,10 @@
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/transparencia.css">
     <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=2"></script>
+    <script src="js/nav-shared.js?v=4"></script>
 
     <!-- Hero -->
     <section class="hero">
@@ -356,7 +360,7 @@
             <div class="info-grid">
                 <div class="info-card">
                     <h4>📧 Encarregado de Dados (DPO)</h4>
-                    <p>Entre em contato: <a href="/cdn-cgi/l/email-protection#bcd0dbccd8fccfddd3d1ddc8d9c9cfd8d3cfc9d092ccce92dbd3ca92dece"><span class="__cf_email__" data-cfemail="a4c8c3d4c0e4d7c5cbc9c5d0c1d1d7c0cbd7d1c88ad4d68ac3cbd28ac6d6">[email&#160;protected]</span></a></p>
+                    <p>Entre em contato: <a href="mailto:lgpd@saomateusdosul.pr.gov.br">lgpd@saomateusdosul.pr.gov.br</a></p>
                 </div>
                 <div class="info-card">
                     <h4>📄 Política Completa</h4>
@@ -372,7 +376,7 @@
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
         <p style="margin-top: 0.5rem;">
             <a href="/">Voltar ao Portal de Turismo</a> | 
-            <a href="/cdn-cgi/l/email-protection#dca8a9aeb5afb1b39cafbdb3b1bda8b9a9afb8b3afa9b0f2acaef2bbb3aaf2beae"><span class="__cf_email__" data-cfemail="dfabaaadb6acb2b09facbeb0b2beabbaaaacbbb0acaab3f1afadf1b8b0a9f1bdad">[email&#160;protected]</span></a>
+            <a href="mailto:turismo@saomateusdosul.pr.gov.br">turismo@saomateusdosul.pr.gov.br</a>
         </p>
     </footer>
 
@@ -383,7 +387,7 @@
             <div class="vw-plugin-top-wrapper"></div>
         </div>
     </div>
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
     <script>
         new window.VLibras.Widget('https://vlibras.gov.br/app');
     </script>
@@ -414,5 +418,6 @@
     `;
     document.head.appendChild(style);
     </script>
+    <script src="js/cookies.js"></script>
 </body>
 </html>

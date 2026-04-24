@@ -102,7 +102,7 @@
             'erva':             'Nossa erva-mate tem Indicação Geográfica (IG São Matheus)! 🧉\nVisite a Rua do Mathe, o Chimarródromo e as ervateiras da região.',
             'mate':             'A erva-mate de São Mateus tem Indicação Geográfica! 🧉\nVisite a Rua do Mathe, o Chimarródromo e as ervateiras.',
             'chimarrao':        'O Chimarródromo fica na Praça do Rio Iguaçu e acontece todo 1º domingo do mês! 🧉 Degustação gratuita.',
-            'ervateira':        'Ervateiras na Rota da Erva-Mate: 🧉\n\n• Ervateira Rei Verde — Fluviópolis\n• Parada do Chimarrão — Fluviópolis\n• Ervateira Taquaral — Taquaral do Bugre\n• Vivenda do Mate — Faxinal do Ilhéus\n• Viveiro Santana — Lajeadinho\n\nTodas com erva-mate de Indicação Geográfica!',
+            'ervateira':        'Ervateiras na Rota da Erva-Mate: 🧉\n\n• Ervateira Rei Verde — Fluviópolis\n• Baldo — Colônia Iguaçu\n• Parada do Chimarrão — Fluviópolis\n• Ervateira Taquaral — Taquaral do Bugre\n• Vivenda do Mate — Faxinal do Ilhéus\n• Viveiro Santana — Lajeadinho\n\nTodas com erva-mate de Indicação Geográfica!',
             // Cultura polonesa
             'polones':          'Somos a Capital Polonesa do Paraná! 🇵🇱\n\n• Igrejas centenárias dos imigrantes\n• Gastronomia: Pierogi, Gołąbki, Borscht\n• Baile do Pierogi (Abril) e Polskie Smaki (Agosto)\n• Mês Polonês — agosto inteiro de eventos!',
             'polonesa':         'Somos a Capital Polonesa do Paraná! 🇵🇱\n\n• Igrejas centenárias dos imigrantes\n• Gastronomia: Pierogi, Gołąbki, Borscht\n• Baile do Pierogi (Abril) e Polskie Smaki (Agosto)\n• Mês Polonês — agosto inteiro de eventos!',
@@ -529,7 +529,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ message: msg, lang: this.getLang(), history: this.history.slice(-6) })
             })
-            .then(function (r) { return r.json(); })
+            .then(function (r) {
+                return r.json().catch(function () { return {}; }).then(function (data) {
+                    if (!r.ok) {
+                        throw data;
+                    }
+                    return data;
+                });
+            })
             .then(function (data) {
                 self.esconderTyping();
                 var resp = data.response || self.getUI().default;
