@@ -109,6 +109,21 @@ const establishments = [
         coordStatus: 'ok'
     },
     {
+        id: 'ervateira-baldo',
+        route: 'mate',
+        name: 'Baldo S/A Comércio, Indústria e Exportação',
+        subtitle: 'Indústria de erva-mate',
+        desc: 'Indústria de erva-mate na BR-476, com tradição no beneficiamento e exportação. Atendimento e visitação sob consulta com a empresa.',
+        location: 'BR-476, Km 285 — Colônia Iguaçu, São Mateus do Sul/PR, CEP 83905-060',
+        phone: '(42) 3520-1100 / (42) 98815-7391',
+        hours: 'Horário e visitação sob consulta',
+        social: '@matebaldo',
+        mapsUrl: 'https://maps.app.goo.gl/ebTHTCucyfKG8biE8',
+        lat: -25.907978,
+        lng: -50.4431114,
+        coordStatus: 'ok'
+    },
+    {
         id: 'parada-do-chimarrao',
         route: 'mate',
         routes: ['mate', 'fluviop'],
