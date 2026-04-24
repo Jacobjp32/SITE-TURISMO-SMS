@@ -4153,7 +4153,185 @@
         text-align: center;
     }
 }
-=======
+
+/* ================================================================
+   HOME COMPACTA
+================================================================ */
+:root {
+    --landing-space: clamp(3rem, 5vw, 4.75rem);
+    --landing-space-tight: clamp(2.25rem, 4vw, 3.25rem);
+}
+
+.home-secondary-section {
+    display: none !important;
+}
+
+.section,
+.festas-destaque-section,
+.essential-info-section,
+.section-where-stay,
+.contact-section,
+.about-hero,
+.diorama-section,
+.home-events-section {
+    padding-top: var(--landing-space) !important;
+    padding-bottom: var(--landing-space) !important;
+}
+
+.diorama-section {
+    padding-left: 1.75rem !important;
+    padding-right: 1.75rem !important;
+}
+
+.about-hero--compact {
+    min-height: auto;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+.about-hero--compact .about-badges-container {
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.about-hero--compact .about-badge {
+    padding: 0.55rem 1.25rem;
+    font-size: 0.78rem;
+    letter-spacing: 1px;
+}
+
+.about-hero--compact .about-hero-subtitle {
+    max-width: 760px;
+    margin-bottom: 1.75rem;
+    line-height: 1.65;
+}
+
+.about-hero--compact .about-stats {
+    gap: 1rem;
+    max-width: 980px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.about-hero--compact .stat-item {
+    padding: 1rem;
+}
+
+.about-hero--compact .stat-number {
+    font-size: 2rem;
+}
+
+.essential-info-section--compact .essential-info-header {
+    margin-bottom: 2rem;
+}
+
+.essential-info-section--compact .essential-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.essential-info-section--compact .essential-card {
+    padding: 1.35rem;
+}
+
+.essential-info-section--compact .essential-card:nth-child(n+5) {
+    display: none;
+}
+
+.section-cta-strip {
+    margin-top: 1.5rem;
+    padding: 1.25rem 1.5rem;
+}
+
+.section-where-stay--compact .hotels-grid {
+    margin-top: 2rem;
+    gap: 1.25rem;
+}
+
+.section-where-stay--compact .hotel-card {
+    padding: 1.5rem;
+}
+
+.section-where-stay--compact .hotel-icon {
+    font-size: 2.3rem;
+}
+
+.section-where-stay--compact .hotel-name {
+    font-size: 1.3rem;
+}
+
+.section-where-stay--compact .hotel-description {
+    margin-bottom: 1rem;
+}
+
+.section-where-stay--compact .hotel-features {
+    padding: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+#eventos.home-events-section {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+#eventos.home-events-section > div > div:first-child {
+    margin-bottom: 2rem !important;
+}
+
+#eventos.home-events-section #proximosEventosHome {
+    margin-bottom: 2rem !important;
+}
+
+#eventos.home-events-section > div > div:last-child {
+    padding: 1.5rem !important;
+}
+
+@media (max-width: 768px) {
+    .section,
+    .festas-destaque-section,
+    .essential-info-section,
+    .section-where-stay,
+    .contact-section,
+    .about-hero,
+    .diorama-section,
+    .home-events-section {
+        padding-top: var(--landing-space-tight) !important;
+        padding-bottom: var(--landing-space-tight) !important;
+    }
+
+    .about-hero--compact,
+    #eventos.home-events-section,
+    .diorama-section {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    .about-hero--compact .about-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .essential-info-section--compact .essential-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .essential-info-section--compact .essential-card:nth-child(n+4) {
+        display: none;
+    }
+
+    .section-cta-strip {
+        margin-top: 1rem;
+        padding: 1rem;
+    }
+
+    .section-where-stay--compact .hotel-card {
+        padding: 1.25rem;
+    }
+
+    #eventos.home-events-section > div > div:last-child {
+        padding: 1.25rem !important;
+    }
+}
+
 /* ── Mascotes: peek-from-behind ─────────────────────────────── */
 .mascote-wrap {
     position: absolute;
