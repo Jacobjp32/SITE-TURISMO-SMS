@@ -6,6 +6,13 @@
 /* Override: hero com mesma cor, p ligeiramente diferente */
 .hero p { font-size: 1.15rem; max-width: 680px; }
 
+.hero--oqfazer .hero-mascote {
+    right: clamp(1.5rem, 6vw, 5rem);
+    bottom: -34px;
+    height: clamp(185px, 18vw, 250px);
+    transform-origin: bottom right;
+}
+
 /* Override: main-content mais largo */
 .main-content { max-width: 1300px; }
 
@@ -85,4 +92,19 @@
 /* Responsivo específico */
 @media (max-width: 768px) {
     .rotas-grid { grid-template-columns: 1fr; }
+    .hero--oqfazer .hero-mascote {
+        display: block;
+        right: 1rem;
+        bottom: -18px;
+        height: 140px;
+    }
+}
+
+@media (max-width: 540px) {
+    .hero--oqfazer .hero-mascote {
+        height: 110px;
+        right: 0.35rem;
+        bottom: -10px;
+        opacity: 0.92;
+    }
 }

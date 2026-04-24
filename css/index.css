@@ -800,6 +800,16 @@
                 font-size: 0.75rem;
             }
 
+            .about-more-wrap {
+                margin-top: 1.25rem;
+            }
+
+            .about-more-bubble {
+                padding: 0.75rem 1.3rem;
+                font-size: 0.72rem;
+                letter-spacing: 0.1em;
+            }
+
             /* Reviews Grid */
             .reviews-grid {
                 grid-template-columns: 1fr;
@@ -1041,6 +1051,17 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 3rem;
+        }
+
+        .attractions-grid--home {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 2rem;
+        }
+
+        @media (max-width: 1200px) {
+            .attractions-grid--home {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
 
         .attraction-card {
@@ -1351,6 +1372,45 @@
             animation: fadeInUp 1s ease-out 0.6s both;
         }
 
+        .about-more-wrap {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            animation: fadeInUp 1s ease-out 0.75s both;
+        }
+
+        .about-more-bubble {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            padding: 0.85rem 1.7rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.32);
+            color: var(--white-pure);
+            font-weight: 700;
+            font-size: 0.82rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+            backdrop-filter: blur(10px);
+            transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+        }
+
+        .about-more-bubble::after {
+            content: '↓';
+            font-size: 0.95rem;
+            line-height: 1;
+        }
+
+        .about-more-bubble:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.48);
+        }
+
         .stat-item {
             text-align: center;
             padding: 1.5rem;
@@ -1391,6 +1451,7 @@
             padding: 8rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
+            scroll-margin-top: 110px;
         }
 
         .section-intro {
