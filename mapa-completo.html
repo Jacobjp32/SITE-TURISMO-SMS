@@ -79,6 +79,27 @@
             var realBottom = navEl ? navEl.getBoundingClientRect().bottom : navH;
             var offset = Math.max(realBottom, navH);
 
+            function getRouteKeys(est) {
+                return Array.isArray(est.routes) && est.routes.length ? est.routes : [est.route];
+            }
+
+            function getPrimaryRoute(est) {
+                return est.route || getRouteKeys(est)[0];
+            }
+
+            function getRouteSummary(est) {
+                return getRouteKeys(est).map(function (key) {
+                    var info = routeInfo[key];
+                    return info ? (info.icon + ' ' + info.name) : key;
+                }).join(' • ');
+            }
+
+            function getMapNote(est) {
+                if (est.coordStatus === 'aproximada') return est.coordNote || 'Localização aproximada no mapa.';
+                if (est.coordStatus === 'pendente') return est.coordNote || 'Localização em validação.';
+                return '';
+            }
+
             var panel     = document.getElementById('infoPanel');
             var toggleBtn = document.getElementById('toggleBtn');
             var mapEl     = document.getElementById('leaflet-map');
@@ -118,7 +139,8 @@
             establishments.forEach(function (est) {
                 if (est.lat === null || est.lng === null) return;
 
-                var rInfo = routeInfo[est.route] || { color: '#666', icon: '📍', name: est.route };
+                var primaryRoute = getPrimaryRoute(est);
+                var rInfo = routeInfo[primaryRoute] || { color: '#666', icon: '📍', name: primaryRoute };
                 var color = rInfo.color;
                 var icon  = makeDivIcon(color);
 
@@ -127,16 +149,19 @@
 
                 var phone = est.phone
                     ? '<div class="map-popup-info">📞 ' + est.phone + '</div>' : '';
+                var note = getMapNote(est)
+                    ? '<div class="map-popup-info">ℹ️ ' + getMapNote(est) + '</div>' : '';
 
                 var popup = '<div class="map-popup">'
                     + '<div class="map-popup-header" style="background:' + color + '">'
                     + '<p class="map-popup-name">'  + est.name + '</p>'
-                    + '<p class="map-popup-route">' + rInfo.icon + ' ' + rInfo.name + '</p>'
+                    + '<p class="map-popup-route">' + getRouteSummary(est) + '</p>'
                     + '</div>'
                     + '<div class="map-popup-body">'
                     + '<div class="map-popup-info">📍 ' + est.location + '</div>'
                     + phone
                     + '<div class="map-popup-info">🕐 ' + est.hours + '</div>'
+                    + note
                     + '<a class="map-popup-link" href="' + gmaps + '" target="_blank" rel="noopener">Abrir no Google Maps ↗</a>'
                     + '</div></div>';
 

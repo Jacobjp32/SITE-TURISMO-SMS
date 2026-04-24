@@ -111,6 +111,7 @@ const establishments = [
     {
         id: 'parada-do-chimarrao',
         route: 'mate',
+        routes: ['mate', 'fluviop'],
         name: 'Parada do Chimarrão',
         subtitle: 'Tradição da erva-mate e cultura do chimarrão',
         desc: 'Aprenda a preparar chimarrão, decore cuias e descubra artesanato local.',
@@ -133,11 +134,11 @@ const establishments = [
         phone: '(42) 98834-0858',
         hours: 'Sob agendamento',
         social: '@ervamatetaquaral',
-        mapsUrl: 'https://maps.app.goo.gl/QjXCfjBUFiteu9FJA',
-        lat: -25.9997023,
-        lng: -50.5898926,
-        coordStatus: 'pendente',
-        coordNote: 'Link duplicado com Parada do Chimarrão — validar coordenada real com o empreendimento'
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Ervateira+Taquaral+Taquaral+do+Bugre+Sao+Mateus+do+Sul+PR',
+        lat: -25.82,
+        lng: -50.35,
+        coordStatus: 'aproximada',
+        coordNote: 'O PDF repete o link da Parada do Chimarrão; por enquanto o mapa usa uma posição aproximada em Taquaral do Bugre.'
     },
     {
         id: 'vivenda-do-mate',
@@ -157,6 +158,7 @@ const establishments = [
     {
         id: 'viveiro-santana',
         route: 'mate',
+        routes: ['mate', 'terra'],
         name: 'Viveiro Santana',
         subtitle: 'Vivencie a tradição e o cuidado na produção da erva-mate',
         desc: 'Processo produtivo completo da erva-mate, do cultivo à colheita.',
@@ -326,6 +328,7 @@ const establishments = [
     {
         id: 'ulbrich',
         route: 'aguas',
+        routes: ['aguas', 'fluviop'],
         name: 'Área de Lazer Ulbrich',
         subtitle: 'Lazer, esportes e descanso às margens do Rio Potinga',
         desc: 'Casas para locação, piscinas, pesca e almoços às margens do Rio Potinga.',
@@ -341,6 +344,7 @@ const establishments = [
     {
         id: 'pesqueiro-tio-ivo',
         route: 'aguas',
+        routes: ['aguas', 'fluviop'],
         name: 'Pesqueiro Tio Ivo',
         subtitle: 'Tranquilidade e momentos marcantes',
         desc: 'Pesque e pague, pedalinho, campo de futebol e churrasqueira.',
@@ -356,6 +360,7 @@ const establishments = [
     {
         id: 'pesqueiro-da-joana',
         route: 'aguas',
+        routes: ['aguas', 'fluviop'],
         name: 'Pesqueiro da Joana',
         subtitle: 'Conforto e pesca às margens do Rio Iguaçu',
         desc: 'Pesca de barranco, camping, quiosque, casas para locação e parquinho.',
@@ -371,6 +376,7 @@ const establishments = [
     {
         id: 'pesqueiro-do-luizao',
         route: 'aguas',
+        routes: ['aguas', 'fluviop'],
         name: 'Pesqueiro do Luizão',
         subtitle: 'Pesca, descanso e história à beira do Rio Iguaçu',
         desc: 'Pesca, camping, hospedagem familiar, churrasqueiras e artesanato em ferro.',
@@ -386,6 +392,7 @@ const establishments = [
     {
         id: 'pesqueiro-do-kiko',
         route: 'aguas',
+        routes: ['aguas', 'fluviop'],
         name: 'Pesqueiro do Kiko',
         subtitle: 'Pesca e belas paisagens',
         desc: 'Pesca de barranco, pesca no rio e área de camping.',
@@ -412,6 +419,23 @@ const establishments = [
         lat: -25.8654225,
         lng: -50.4458589,
         coordStatus: 'ok'
+    },
+    {
+        id: 'pesqueiro-do-pedrao',
+        route: 'aguas',
+        routes: ['aguas', 'fluviop'],
+        name: 'Pesqueiro do Pedrão',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Pesqueiro citado no material oficial do turismo rural e em fase de detalhamento para atendimento ao visitante.',
+        location: 'Localidade de Fluviópolis',
+        phone: '',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Pesqueiro+do+Pedrao+Fluviopolis+Sao+Mateus+do+Sul+PR',
+        lat: -25.9718696,
+        lng: -50.5267363,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região de Fluviópolis até a validação final.'
     },
 
     // ── ROTA CAMINHOS DE FLUVIÓPOLIS ────────────────────────
@@ -516,10 +540,74 @@ const establishments = [
         hours: 'Fins de semana Jan–Abr (agendamento)',
         social: '@pitayasdragaodoiguacu',
         mapsUrl: 'https://maps.app.goo.gl/ou9JKXgPQGvRnMfX7',
-        lat: null,
-        lng: null,
-        coordStatus: 'pendente',
-        coordNote: 'URL retornou endereço textual sem coordenadas — validar in loco'
+        lat: -25.9660091,
+        lng: -50.5398216,
+        coordStatus: 'aproximada',
+        coordNote: 'O link do Google Maps abre corretamente, mas sem coordenada numérica estável; o mapa usa uma posição aproximada em Fluviópolis.'
+    },
+    {
+        id: 'posto-pelanda',
+        route: 'fluviop',
+        name: 'Posto Pelanda',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Ponto de apoio rodoviário citado no material oficial da Rota Caminhos de Fluviópolis.',
+        location: 'BR-476 — Comunidade Potinga / Fluviópolis',
+        phone: '(41) 99701-7327',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Posto+Pelanda+Fluviopolis+Sao+Mateus+do+Sul+PR',
+        lat: -25.9660091,
+        lng: -50.5398216,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região de Fluviópolis até a validação final.'
+    },
+    {
+        id: 'viveiro-fluviopolis',
+        route: 'fluviop',
+        name: 'Viveiro Fluviópolis',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Viveiro citado no material oficial da Rota Caminhos de Fluviópolis e pendente de detalhamento complementar.',
+        location: 'Localidade de Fluviópolis',
+        phone: '(42) 98811-4104',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Viveiro+Fluviopolis+Sao+Mateus+do+Sul+PR',
+        lat: -25.9660091,
+        lng: -50.5398216,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região de Fluviópolis até a validação final.'
+    },
+    {
+        id: 'prop-seu-luiz',
+        route: 'fluviop',
+        name: 'Propriedade do Seu Luiz',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Propriedade rural mencionada no material oficial da rota e ainda em fase de validação de dados públicos.',
+        location: 'Localidade de Fluviópolis',
+        phone: '',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Propriedade+do+Seu+Luiz+Fluviopolis+Sao+Mateus+do+Sul+PR',
+        lat: -25.9660091,
+        lng: -50.5398216,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região de Fluviópolis até a validação final.'
+    },
+    {
+        id: 'sitio-pica-pau-vermelho',
+        route: 'fluviop',
+        name: 'Sítio Pica-pau Vermelho',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Sítio citado no material oficial da Rota Caminhos de Fluviópolis e mantido em validação para inclusão completa.',
+        location: 'Localidade de Fluviópolis',
+        phone: '',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sitio+Pica-pau+Vermelho+Fluviopolis+Sao+Mateus+do+Sul+PR',
+        lat: -25.9660091,
+        lng: -50.5398216,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região de Fluviópolis até a validação final.'
     },
 
     // ── ROTA DA TERRA ────────────────────────────────────────
@@ -541,6 +629,7 @@ const establishments = [
     {
         id: 'sawe-parque',
         route: 'terra',
+        routes: ['terra', 'aguas'],
         name: 'Sawe Parque Aquático',
         subtitle: 'Um refúgio de lazer e diversão para todas as idades',
         desc: 'Day use com piscina, toboágua, pedalinho, tirolesa e casas para locação.',
@@ -574,15 +663,15 @@ const establishments = [
         name: 'Propriedade do Tico',
         subtitle: 'Venda de produtos, sementes e mudas',
         desc: 'Guardião de sementes, produção orgânica agroecológica. Práticas biodinâmicas.',
-        location: 'Localidade de Fluviópolis',
+        location: 'Localização em validação',
         phone: '(42) 98807-7985',
         hours: 'Sábados e domingos (por agendamento)',
         social: '',
-        mapsUrl: 'https://maps.app.goo.gl/DB1eEBjYqrB56gbL',
-        lat: null,
-        lng: null,
-        coordStatus: 'pendente',
-        coordNote: 'Link retornou 404 — validar localização com o empreendedor'
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Propriedade+do+Tico+Sao+Mateus+do+Sul+PR',
+        lat: -25.9023988,
+        lng: -50.2760447,
+        coordStatus: 'aproximada',
+        coordNote: 'O PDF marca a localização como "Verificar"; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
     },
     {
         id: 'sitio-sapopema',
@@ -590,15 +679,15 @@ const establishments = [
         name: 'Sítio Sapopema',
         subtitle: 'Sabor, agroecologia e artesanato no campo',
         desc: 'Certificação orgânica ECOVIDA. Pão no bafo (tigrão) e almoço rural.',
-        location: 'Localidade de Fluviópolis',
+        location: 'Localização em validação',
         phone: '(42) 98869-8709',
         hours: 'Qualquer dia (sob agendamento)',
         social: '',
-        mapsUrl: null,
-        lat: null,
-        lng: null,
-        coordStatus: 'pendente',
-        coordNote: 'Marcado como "Verificar" no PDF — sem coordenada disponível'
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sitio+Sapopema+Sao+Mateus+do+Sul+PR',
+        lat: -25.9023988,
+        lng: -50.2760447,
+        coordStatus: 'aproximada',
+        coordNote: 'O PDF marca a localização como "Verificar"; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
     },
     {
         id: 'prop-da-sabrina',
@@ -614,5 +703,53 @@ const establishments = [
         lat: -25.895775,
         lng: -50.256225,
         coordStatus: 'ok'
+    },
+    {
+        id: 'prop-antonia-gabriel',
+        route: 'terra',
+        name: 'Propriedade da Antonia e Gabriel',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Propriedade rural listada como potencial no material oficial da Rota da Terra.',
+        location: 'Localização em validação',
+        phone: '',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Propriedade+da+Antonia+e+Gabriel+Sao+Mateus+do+Sul+PR',
+        lat: -25.9023988,
+        lng: -50.2760447,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
+    },
+    {
+        id: 'prop-do-beto',
+        route: 'terra',
+        name: 'Propriedade do Beto',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Propriedade rural citada no material oficial da Rota da Terra, com referência à região de Vista Alegre.',
+        location: 'Vista Alegre',
+        phone: '(42) 98828-6195',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Propriedade+do+Beto+Vista+Alegre+Sao+Mateus+do+Sul+PR',
+        lat: -25.9023988,
+        lng: -50.2760447,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
+    },
+    {
+        id: 'sitio-ludevico',
+        route: 'terra',
+        name: 'Sítio Ludevico',
+        subtitle: 'Empreendimento potencial',
+        desc: 'Sítio mencionado como potencial no material oficial da Rota da Terra.',
+        location: 'Vista Alegre',
+        phone: '(42) 98839-5278',
+        hours: 'Empreendimento potencial em validação',
+        social: '',
+        mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Sitio+Ludevico+Vista+Alegre+Sao+Mateus+do+Sul+PR',
+        lat: -25.9023988,
+        lng: -50.2760447,
+        coordStatus: 'aproximada',
+        coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
     }
 ];
