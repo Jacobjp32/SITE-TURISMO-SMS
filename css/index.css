@@ -4278,3 +4278,278 @@
         padding: 1rem;
     }
 }
+
+/* ============================================================ */
+/* MENU REORGANIZADO + BUSCA                                     */
+/* ============================================================ */
+.nav-container {
+    gap: 1.25rem;
+}
+
+.nav-links {
+    gap: 0.35rem;
+    align-items: center;
+}
+
+.nav-links a,
+.nav-links .dropdown-toggle,
+.nav-search-btn {
+    min-height: 42px;
+    border-radius: 999px;
+    padding: 0.65rem 0.95rem;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+}
+
+.nav-links > li.dropdown-open .dropdown-menu,
+.nav-links > li:focus-within .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-links > li.dropdown-open .dropdown-toggle .arrow,
+.nav-links > li:focus-within .dropdown-toggle .arrow {
+    transform: rotate(180deg);
+}
+
+.dropdown-menu {
+    min-width: 240px;
+    border: 1px solid rgba(10, 61, 46, 0.08);
+    box-shadow: 0 18px 48px rgba(10, 61, 46, 0.16);
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+}
+
+.nav-search-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: var(--white-pure);
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.25s ease;
+}
+
+.nav-search-btn:hover,
+.nav-search-btn:focus {
+    background: rgba(212, 165, 116, 0.18);
+    border-color: rgba(212, 165, 116, 0.5);
+    outline: none;
+}
+
+.nav-search-icon {
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.nav-search-text {
+    display: none;
+}
+
+.nav-login-btn {
+    background: rgba(255,255,255,0.08) !important;
+    color: var(--white-pure) !important;
+    border: 1px solid rgba(255,255,255,0.22);
+    font-weight: 600 !important;
+    border-radius: 999px !important;
+    padding: 0.65rem 1rem !important;
+}
+
+.nav-login-btn:hover {
+    background: rgba(212, 165, 116, 0.18) !important;
+    color: var(--white-pure) !important;
+    border-color: rgba(212, 165, 116, 0.5) !important;
+    transform: none !important;
+}
+
+.search-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: rgba(6, 33, 24, 0.62);
+    backdrop-filter: blur(10px);
+    z-index: 10030;
+}
+
+.search-modal.active {
+    display: flex;
+}
+
+.search-modal-dialog {
+    width: min(760px, 100%);
+    max-height: min(80vh, 760px);
+    overflow: auto;
+    padding: 1.5rem;
+    border-radius: 24px;
+    background: linear-gradient(180deg, #fffdf8 0%, #f6efe4 100%);
+    border: 1px solid rgba(212, 165, 116, 0.35);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+}
+
+.search-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.search-modal-kicker {
+    display: inline-block;
+    margin-bottom: 0.4rem;
+    color: #8b6a47;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.search-modal-header h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 4vw, 2.7rem);
+    color: var(--forest-deep);
+}
+
+.search-close-btn {
+    width: 42px;
+    height: 42px;
+    border: 1px solid rgba(10, 61, 46, 0.14);
+    border-radius: 50%;
+    background: rgba(255,255,255,0.72);
+    color: var(--forest-deep);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.search-modal-input {
+    width: 100%;
+    min-height: 56px;
+    padding: 0 1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(10, 61, 46, 0.14);
+    background: rgba(255,255,255,0.88);
+    color: var(--forest-deep);
+    font-size: 1rem;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.search-modal-input:focus {
+    outline: 2px solid rgba(212, 165, 116, 0.72);
+    outline-offset: 2px;
+    border-color: rgba(10, 61, 46, 0.3);
+}
+
+.search-modal-results {
+    display: grid;
+    gap: 0.85rem;
+    margin-top: 1rem;
+}
+
+.search-result-card,
+.search-empty-state {
+    display: block;
+    padding: 1rem 1.05rem;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.92);
+    border: 1px solid rgba(10, 61, 46, 0.08);
+    box-shadow: 0 12px 30px rgba(10, 61, 46, 0.08);
+}
+
+.search-result-card {
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.search-result-card:hover,
+.search-result-card:focus {
+    transform: translateY(-2px);
+    border-color: rgba(212, 165, 116, 0.5);
+    box-shadow: 0 16px 36px rgba(10, 61, 46, 0.12);
+    outline: none;
+}
+
+.search-result-category {
+    display: inline-flex;
+    margin-bottom: 0.45rem;
+    color: #8b6a47;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.search-result-title {
+    display: block;
+    color: var(--forest-deep);
+    font-size: 1.08rem;
+    margin-bottom: 0.35rem;
+}
+
+.search-result-description,
+.search-empty-state p {
+    color: #5f625d;
+    line-height: 1.55;
+    font-size: 0.94rem;
+}
+
+.search-empty-state strong {
+    display: block;
+    color: var(--forest-deep);
+    margin-bottom: 0.35rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+@media (max-width: 1180px) {
+    .nav-links .nav-search-text {
+        display: inline;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-links a,
+    .nav-links .dropdown-toggle,
+    .nav-search-btn {
+        width: 100% !important;
+        justify-content: flex-start !important;
+        border-radius: 0 !important;
+    }
+
+    .nav-search-btn {
+        background: transparent;
+        border: none;
+    }
+
+    .search-modal {
+        padding: 1rem;
+        align-items: flex-start;
+    }
+
+    .search-modal-dialog {
+        width: 100%;
+        margin-top: 5rem;
+        padding: 1rem;
+        border-radius: 20px;
+    }
+}

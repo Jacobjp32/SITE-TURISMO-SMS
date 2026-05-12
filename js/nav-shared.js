@@ -44,47 +44,68 @@
             <li><a href="/" data-lang-key="nav-inicio">Início</a></li>
 
             <li>
-                <button class="dropdown-toggle"><span data-lang-key="nav-oquefazer">O Que Fazer</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu">
-                    <a href="/o-que-fazer" data-lang-key="nav-todas-atracoes">🌿 Todas as Atrações</a>
-                    <div class="divider"></div>
-                    <a href="/o-que-fazer#erva-mate" data-lang-key="nav-erva-mate">🧉 Rota da Erva-Mate</a>
-                    <a href="/o-que-fazer#cultura-polonesa" data-lang-key="nav-cultura-polonesa">🇵🇱 Cultura Polonesa</a>
-                    <a href="/o-que-fazer#turismo-fe" data-lang-key="nav-turismo-fe">⛪ Turismo de Fé</a>
-                    <a href="/o-que-fazer#natureza" data-lang-key="nav-natureza">🌊 Náutica e Natureza</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="/mapa-completo" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
+                    <a href="/o-que-fazer" data-lang-key="nav-pontos-turisticos">Pontos Turísticos</a>
+                    <a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a>
+                    <a href="/galeria" data-lang-key="nav-galeria">Galeria</a>
+                    <a href="/o-que-fazer" data-lang-key="nav-experiencias">Experiências</a>
                 </div>
             </li>
 
             <li>
-                <button class="dropdown-toggle"><span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu">
-                    <a href="/sabores" data-lang-key="nav-gastronomia">🍽️ Gastronomia</a>
-                    <div class="divider"></div>
-                    <a href="/sabores#polonesa" data-lang-key="nav-culinaria-polonesa">🥟 Culinária Polonesa</a>
-                    <a href="/sabores#feiras" data-lang-key="nav-feiras">🛒 Feiras e Produtores</a>
-                    <a href="/sabores#restaurantes" data-lang-key="nav-restaurantes">🍴 Restaurantes</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="/sabores#polonesa" data-lang-key="nav-gastronomia-polonesa">Gastronomia Polonesa</a>
+                    <a href="/o-que-fazer#erva-mate" data-lang-key="nav-erva-mate-menu">Erva-mate</a>
+                    <a href="/sabores#restaurantes" data-lang-key="nav-restaurantes-clean">Restaurantes</a>
+                    <a href="/sabores#feiras" data-lang-key="nav-produtos-locais">Produtos Locais</a>
                 </div>
             </li>
-
-            <li><a href="/eventos" data-lang-key="nav-eventos">Eventos</a></li>
-            <li><a href="/noticias" data-lang-key="nav-noticias">📰 Notícias</a></li>
-            <li><a href="/galeria" data-lang-key="nav-galeria">Galeria</a></li>
-            <li><a href="/onde-ficar" data-lang-key="nav-onde-ficar">Onde Ficar</a></li>
-            <li><a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a></li>
 
             <li>
-                <button class="dropdown-toggle"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu">
-                    <a href="/#sobre" data-lang-key="nav-cidade">🏛️ A Cidade</a>
-                    <a href="/transparencia" data-lang-key="nav-transparencia">📋 Transparência</a>
-                    <a href="/para-o-trade" data-lang-key="nav-trade">💼 Para o Trade</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="/eventos" data-lang-key="nav-eventos">Eventos</a>
+                    <a href="/eventos" data-lang-key="nav-calendario">Calendário</a>
+                    <a href="/noticias" data-lang-key="nav-noticias-clean">Notícias</a>
+                    <a href="/eventos" data-lang-key="nav-festas-tradicionais">Festas Tradicionais</a>
                 </div>
             </li>
 
-            <li><a href="/#contato" data-lang-key="nav-contato">Contato</a></li>
+            <li>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="/onde-ficar" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                    <a href="/mapa-completo" data-lang-key="nav-como-chegar">Como Chegar</a>
+                    <a href="/#visitor-guide-title" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
+                    <a href="/#weather-title" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
+                    <a href="/#contato" data-lang-key="nav-contato">Contato</a>
+                </div>
+            </li>
+
+            <li>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" role="menu">
+                    <a href="/#sobre" data-lang-key="nav-sao-mateus">São Mateus do Sul</a>
+                    <a href="/#sobre" data-lang-key="nav-historia">História</a>
+                    <a href="/o-que-fazer#cultura-polonesa" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
+                    <a href="/o-que-fazer#erva-mate" data-lang-key="nav-terra-erva-mate">Terra da Erva-mate</a>
+                    <a href="/#sobre" data-lang-key="nav-xisto">Xisto</a>
+                    <a href="/transparencia" data-lang-key="nav-institucional">Institucional</a>
+                </div>
+            </li>
+
+            <li class="nav-search-item">
+                <button class="nav-search-btn" type="button" aria-label="Buscar no turismo" data-search-open data-lang-key-title="search-open">
+                    <span class="nav-search-icon" aria-hidden="true">🔍</span>
+                    <span class="nav-search-text" data-lang-key="search-open-short">Buscar</span>
+                </button>
+            </li>
 
             <li class="auth-nav-item">
-                <a href="/portal-usuario" class="nav-login-btn auth-login-btn" data-lang-key="nav-login">👤 Entrar</a>
+                <a href="/portal-usuario" class="nav-login-btn auth-login-btn" data-lang-key="nav-area-restrita">👤 Área Restrita</a>
                 <div class="auth-user-menu" style="display:none;">
                     <a href="/portal-usuario" class="nav-user-link">👤 <span class="auth-user-name">Usuário</span></a>
                     <button class="nav-logout-link" onclick="smsLogout()">Sair</button>
@@ -109,7 +130,21 @@
         </ul>
     </div>
 </nav>
-<div class="mobile-menu-overlay" id="menuOverlay"></div>`;
+<div class="mobile-menu-overlay" id="menuOverlay"></div>
+<div class="search-modal" id="searchModal" aria-hidden="true">
+    <div class="search-modal-dialog" id="searchDialog" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+        <div class="search-modal-header">
+            <div>
+                <span class="search-modal-kicker" data-lang-key="search-results-label">Resultados da busca</span>
+                <h2 id="searchModalTitle" data-lang-key="search-open">Buscar no turismo</h2>
+            </div>
+            <button class="search-close-btn" type="button" data-search-close aria-label="Fechar busca" data-lang-key-title="search-close">×</button>
+        </div>
+        <label class="sr-only" for="search" data-lang-key="search-open">Buscar no turismo</label>
+        <input type="search" id="search" class="search-modal-input" autocomplete="off" placeholder="Buscar no turismo..." data-lang-key-placeholder="search-input-placeholder">
+        <div class="search-modal-results" id="searchResults" role="list" aria-live="polite"></div>
+    </div>
+</div>`;
 
     const NAV_CSS = `
 <style id="nav-shared-styles">
@@ -123,43 +158,48 @@
 .nav-container {
     max-width: 1800px; margin: 0 auto;
     display: flex; justify-content: space-between; align-items: center;
+    gap: 1.25rem;
 }
 .nav-logo img { height: 56px; width: auto; }
-.nav-links { display: flex; gap: 0.5rem; list-style: none; align-items: center; }
+.nav-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; }
 .nav-links > li { position: relative; }
-.nav-links a, .nav-links .dropdown-toggle {
+.nav-links a, .nav-links .dropdown-toggle, .nav-search-btn {
     color: #fff; text-decoration: none; font-weight: 500;
     text-transform: uppercase; font-size: 0.78rem;
-    padding: 0.45rem 0.7rem; border-radius: 5px;
+    min-height: 42px; padding: 0.65rem 0.95rem; border-radius: 999px;
     transition: all 0.2s; cursor: pointer;
     display: flex; align-items: center; gap: 0.25rem;
     background: none; border: none; font-family: inherit;
 }
-.nav-links a:hover, .nav-links .dropdown-toggle:hover {
+.nav-links a:hover, .nav-links .dropdown-toggle:hover, .nav-search-btn:hover {
     background: rgba(212,165,116,0.2);
 }
 .nav-login-btn {
-    background: linear-gradient(135deg, #d4a574, #c4956a) !important;
-    color: #0a3d2e !important; font-weight: 600 !important;
-    border-radius: 25px !important; padding: 0.5rem 1.1rem !important;
+    background: rgba(255,255,255,0.08) !important;
+    color: #fff !important; font-weight: 600 !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+    border-radius: 999px !important; padding: 0.65rem 1rem !important;
 }
-.nav-login-btn:hover { background: linear-gradient(135deg,#c4956a,#b38559) !important; }
+.nav-login-btn:hover { background: rgba(212,165,116,0.18) !important; border-color: rgba(212,165,116,0.5) !important; }
 .dropdown-toggle .arrow { font-size: 0.55rem; transition: transform 0.3s; }
-.nav-links li:hover .dropdown-toggle .arrow { transform: rotate(180deg); }
+.nav-links li:hover .dropdown-toggle .arrow, .nav-links li.dropdown-open .dropdown-toggle .arrow, .nav-links li:focus-within .dropdown-toggle .arrow { transform: rotate(180deg); }
 .dropdown-menu {
     position: absolute; top: calc(100% + 4px); left: 0;
-    background: white; min-width: 210px; border-radius: 10px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    background: white; min-width: 240px; border-radius: 12px;
+    border: 1px solid rgba(10,61,46,0.08); box-shadow: 0 18px 48px rgba(10,61,46,0.16);
     opacity: 0; visibility: hidden; transform: translateY(8px);
     transition: all 0.25s; z-index: 1000; padding: 0.4rem 0;
 }
-.nav-links li:hover .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
+.nav-links li:hover .dropdown-menu, .nav-links li.dropdown-open .dropdown-menu, .nav-links li:focus-within .dropdown-menu { opacity:1; visibility:visible; transform:translateY(0); }
 .dropdown-menu a {
-    display: block; color: #0a3d2e !important; padding: 0.65rem 1.2rem;
+    display: flex; align-items: center; min-height: 42px; color: #0a3d2e !important; padding: 0.65rem 1.2rem;
     font-size: 0.83rem; text-transform: none; border-radius: 0;
 }
 .dropdown-menu a:hover { background: #f8f6f0 !important; color: #d4a574 !important; }
 .dropdown-menu .divider { height: 1px; background: #eee; margin: 0.35rem 0; }
+.nav-search-btn { border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.08); }
+.nav-search-text { display: none; }
+.nav-search-icon { font-size: 1rem; line-height: 1; }
 /* Language selector */
 .language-selector { position: relative; }
 .current-language {
@@ -201,6 +241,23 @@
     opacity:0; visibility:hidden; transition:all 0.3s;
 }
 .mobile-menu-overlay.active { opacity:1; visibility:visible; }
+.search-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(6,33,24,0.62); backdrop-filter: blur(10px); z-index: 10030; }
+.search-modal.active { display: flex; }
+.search-modal-dialog { width: min(760px, 100%); max-height: min(80vh, 760px); overflow: auto; padding: 1.5rem; border-radius: 24px; background: linear-gradient(180deg,#fffdf8 0%,#f6efe4 100%); border: 1px solid rgba(212,165,116,0.35); box-shadow: 0 28px 80px rgba(0,0,0,0.28); }
+.search-modal-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.search-modal-kicker { display: inline-block; margin-bottom: 0.4rem; color: #8b6a47; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.search-modal-header h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 4vw, 2.7rem); color: #0a3d2e; }
+.search-close-btn { width: 42px; height: 42px; border: 1px solid rgba(10,61,46,0.14); border-radius: 50%; background: rgba(255,255,255,0.72); color: #0a3d2e; font-size: 1.6rem; line-height: 1; cursor: pointer; }
+.search-modal-input { width: 100%; min-height: 56px; padding: 0 1rem; border-radius: 16px; border: 1px solid rgba(10,61,46,0.14); background: rgba(255,255,255,0.88); color: #0a3d2e; font-size: 1rem; }
+.search-modal-results { display: grid; gap: 0.85rem; margin-top: 1rem; }
+.search-result-card, .search-empty-state { display: block; padding: 1rem 1.05rem; border-radius: 16px; background: rgba(255,255,255,0.92); border: 1px solid rgba(10,61,46,0.08); box-shadow: 0 12px 30px rgba(10,61,46,0.08); }
+.search-result-card { text-decoration: none; transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+.search-result-card:hover, .search-result-card:focus { transform: translateY(-2px); border-color: rgba(212,165,116,0.5); box-shadow: 0 16px 36px rgba(10,61,46,0.12); outline: none; }
+.search-result-category { display: inline-flex; margin-bottom: 0.45rem; color: #8b6a47; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.search-result-title { display: block; color: #0a3d2e; font-size: 1.08rem; margin-bottom: 0.35rem; }
+.search-result-description, .search-empty-state p { color: #5f625d; line-height: 1.55; font-size: 0.94rem; }
+.search-empty-state strong { display: block; color: #0a3d2e; margin-bottom: 0.35rem; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 /* Body offset para nav fixo + barra de acessibilidade fixa */
 body { padding-top: 136px; }
 /* Barra de progresso de leitura (scroll) */
@@ -256,11 +313,14 @@ body.font-larger{font-size:140%!important;}
     }
     .nav-links.active { right:0 !important; }
     .nav-links li { width:100% !important; border-bottom:1px solid rgba(255,255,255,0.1) !important; }
-    .nav-links a, .nav-links .dropdown-toggle { padding:0.9rem 1.5rem !important; font-size:0.9rem !important; }
+    .nav-links a, .nav-links .dropdown-toggle, .nav-search-btn { width:100% !important; justify-content:flex-start !important; padding:0.9rem 1.5rem !important; font-size:0.9rem !important; border-radius:0 !important; }
     .dropdown-menu { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; background:rgba(0,0,0,0.2) !important; border-radius:0 !important; display:none; }
     .dropdown-menu.open { display:block !important; }
     .dropdown-menu a { color:#d4a574 !important; padding:0.6rem 2rem !important; }
     .nav-logo img { height:48px; }
+    .nav-search-text { display: inline; }
+    .search-modal { padding: 1rem; align-items: flex-start; }
+    .search-modal-dialog { width: 100%; margin-top: 5rem; padding: 1rem; border-radius: 20px; }
 }
 </style>`;
 
@@ -308,6 +368,20 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(animScript);
     }
 
+    if (!document.querySelector('script[src="js/search-index.js"]')) {
+        var searchIndexScript = document.createElement('script');
+        searchIndexScript.src = 'js/search-index.js';
+        searchIndexScript.defer = true;
+        document.body.appendChild(searchIndexScript);
+    }
+
+    if (!document.querySelector('script[src="js/search.js"]')) {
+        var searchScript = document.createElement('script');
+        searchScript.src = 'js/search.js';
+        searchScript.defer = true;
+        document.body.appendChild(searchScript);
+    }
+
     // Hamburger toggle
     document.addEventListener('DOMContentLoaded', function () {
         var toggle = document.getElementById('navToggle');
@@ -329,11 +403,62 @@ body.font-larger{font-size:140%!important;}
             });
         }
 
-        // Dropdowns mobile — abre ao clicar
+        function closeAllDropdowns() {
+            document.querySelectorAll('.nav-links li.dropdown-open').forEach(function(li) {
+                li.classList.remove('dropdown-open');
+                var button = li.querySelector('.dropdown-toggle');
+                if (button) button.setAttribute('aria-expanded', 'false');
+                var menu = li.querySelector('.dropdown-menu');
+                if (menu) menu.classList.remove('open');
+            });
+        }
+
+        // Dropdowns acessíveis
         document.querySelectorAll('.nav-links .dropdown-toggle').forEach(function(btn) {
-            btn.addEventListener('click', function () {
-                var menu = this.parentElement.querySelector('.dropdown-menu');
-                if (menu) menu.classList.toggle('open');
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                var parent = this.parentElement;
+                var menu = parent.querySelector('.dropdown-menu');
+                var wasOpen = parent.classList.contains('dropdown-open');
+                closeAllDropdowns();
+                if (!wasOpen) {
+                    parent.classList.add('dropdown-open');
+                    this.setAttribute('aria-expanded', 'true');
+                    if (menu) menu.classList.add('open');
+                }
+            });
+            btn.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    this.click();
+                }
+                if (event.key === 'Escape') {
+                    closeAllDropdowns();
+                    this.focus();
+                }
+            });
+        });
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.nav-links li')) {
+                closeAllDropdowns();
+            }
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeAllDropdowns();
+            }
+        });
+
+        // Search triggers close the mobile drawer first
+        document.querySelectorAll('[data-search-open]').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                toggle && toggle.classList.remove('active');
+                links && links.classList.remove('active');
+                overlay && overlay.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
 
@@ -464,6 +589,7 @@ body.font-larger{font-size:140%!important;}
         if (localStorage.getItem('sms-high-contrast') === 'true') {
             document.body.classList.add('high-contrast');
         }
+
     });
 
     // Logout global (funciona com ou sem Firebase carregado)
