@@ -368,19 +368,23 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(animScript);
     }
 
-    if (!document.querySelector('script[src="js/search-index.js"]')) {
-        var searchIndexScript = document.createElement('script');
-        searchIndexScript.src = 'js/search-index.js';
-        searchIndexScript.defer = true;
-        document.body.appendChild(searchIndexScript);
-    }
-
-    if (!document.querySelector('script[src="js/search.js"]')) {
-        var searchScript = document.createElement('script');
-        searchScript.src = 'js/search.js';
-        searchScript.defer = true;
-        document.body.appendChild(searchScript);
-    }
+    [
+        'js/data/pontos-turisticos.js',
+        'js/data/rotas.js',
+        'js/data/hospedagens.js',
+        'js/data/restaurantes.js',
+        'js/data/eventos.js',
+        'js/data/informacoes-essenciais.js',
+        'js/search-index.js',
+        'js/search.js'
+    ].forEach(function(src) {
+        if (!document.querySelector('script[src="' + src + '"]')) {
+            var script = document.createElement('script');
+            script.src = src;
+            script.async = false;
+            document.body.appendChild(script);
+        }
+    });
 
     // Hamburger toggle
     document.addEventListener('DOMContentLoaded', function () {
