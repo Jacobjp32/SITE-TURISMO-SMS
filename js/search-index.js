@@ -16,6 +16,21 @@
     return collection.map(mapper).filter(Boolean);
   }
 
+  function getData() {
+    if (window.TURISMO_DATA) {
+      return window.TURISMO_DATA;
+    }
+
+    return {
+      pontos: window.TURISMO_PONTOS,
+      rotas: window.TURISMO_ROTAS,
+      hospedagens: window.TURISMO_HOSPEDAGENS,
+      restaurantes: window.TURISMO_RESTAURANTES,
+      eventos: window.TURISMO_EVENTOS,
+      informacoesEssenciais: window.TURISMO_INFORMACOES_ESSENCIAIS
+    };
+  }
+
   var fixedEntries = [
     makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-completo", ["mapa", "turistico", "rotas", "pontos", "guia"]),
     makeEntry("Roteiros", "Explore", "Roteiros completos para organizar a visita por tema e região.", "/rotas-completas", ["roteiros", "rotas", "experiencias", "trajeto"]),
@@ -31,27 +46,29 @@
     makeEntry("Institucional", "Sobre", "Transparência, conselho, fundo municipal e informações oficiais.", "/transparencia", ["institucional", "transparencia", "comtur", "fumtur", "prefeitura"])
   ];
 
-  var pontoEntries = fromCollection(window.TURISMO_PONTOS, function (item) {
+  var data = getData();
+
+  var pontoEntries = fromCollection(data.pontos, function (item) {
     return makeEntry(item.nome, "Ponto Turístico", item.descricao, item.url || "/o-que-fazer", item.tags || []);
   });
 
-  var rotaEntries = fromCollection(window.TURISMO_ROTAS, function (item) {
+  var rotaEntries = fromCollection(data.rotas, function (item) {
     return makeEntry(item.nome, "Agenda" === item.categoria ? item.categoria : "Explore", item.descricao, item.url || "/rotas-completas", item.tags || []);
   });
 
-  var hospedagemEntries = fromCollection(window.TURISMO_HOSPEDAGENS, function (item) {
+  var hospedagemEntries = fromCollection(data.hospedagens, function (item) {
     return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/onde-ficar", (item.tags || []).concat([item.categoria || "hospedagem", item.localizacao || ""]));
   });
 
-  var restauranteEntries = fromCollection(window.TURISMO_RESTAURANTES, function (item) {
+  var restauranteEntries = fromCollection(data.restaurantes, function (item) {
     return makeEntry(item.nome, "Sabores", item.descricao, item.url || "/sabores#restaurantes", (item.tags || []).concat([item.categoria || "restaurantes"]));
   });
 
-  var eventoEntries = fromCollection(window.TURISMO_EVENTOS, function (item) {
+  var eventoEntries = fromCollection(data.eventos, function (item) {
     return makeEntry(item.nome, "Agenda", item.descricao, item.url || "/eventos", (item.tags || []).concat([item.categoria || "evento", item.periodo || "", item.local || ""]));
   });
 
-  var infoEntries = fromCollection(window.TURISMO_INFORMACOES_ESSENCIAIS, function (item) {
+  var infoEntries = fromCollection(data.informacoesEssenciais, function (item) {
     return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/#visitor-guide-title", item.tags || []);
   });
 

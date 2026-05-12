@@ -375,6 +375,7 @@ body.font-larger{font-size:140%!important;}
         'js/data/restaurantes.js',
         'js/data/eventos.js',
         'js/data/informacoes-essenciais.js',
+        'js/data/turismo-data.js',
         'js/search-index.js',
         'js/search.js'
     ].forEach(function(src) {

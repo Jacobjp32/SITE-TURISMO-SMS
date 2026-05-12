@@ -12,6 +12,31 @@ Arquivos atuais:
 - `js/data/restaurantes.js`
 - `js/data/eventos.js`
 - `js/data/informacoes-essenciais.js`
+- `js/data/turismo-data.js`
+
+## Papel de `js/data/turismo-data.js`
+
+`js/data/turismo-data.js` é a camada centralizadora atual do portal.
+
+Ele:
+
+- reúne os arrays globais principais em `window.TURISMO_DATA`
+- mantém compatibilidade com JavaScript puro, sem `import`/`export`
+- expõe helpers simples em `window.TURISMO_DATA_HELPERS`
+- permite que busca, mapa, chatbot, roteiros e páginas futuras passem a consumir uma fonte comum
+
+Estrutura atual:
+
+```js
+window.TURISMO_DATA = {
+  pontos: window.TURISMO_PONTOS || [],
+  rotas: window.TURISMO_ROTAS || [],
+  hospedagens: window.TURISMO_HOSPEDAGENS || [],
+  restaurantes: window.TURISMO_RESTAURANTES || [],
+  eventos: window.TURISMO_EVENTOS || [],
+  informacoesEssenciais: window.TURISMO_INFORMACOES_ESSENCIAIS || []
+};
+```
 
 ## Onde os dados ainda estão hoje
 
@@ -23,10 +48,11 @@ Nem tudo foi migrado nesta rodada. Ainda existem dados relevantes nestes pontos:
 - `js/roteiro-ia.js`: base própria para sugestões automáticas de roteiro
 - `js/reservas.js`: base própria para experiências reserváveis
 - `js/chatbot.js`: respostas prontas com conteúdo turístico
+- `js/mapa3d.js`: pontos próprios para o mapa 3D experimental
 
 ## Como os novos arquivos devem ser usados
 
-Os arquivos de `js/data/` foram criados como camada simples de catálogo. Eles podem alimentar:
+Os arquivos de `js/data/` são as fontes primárias resumidas desta fase. Eles podem alimentar:
 
 - busca estática
 - cards de listagem
@@ -34,7 +60,7 @@ Os arquivos de `js/data/` foram criados como camada simples de catálogo. Eles p
 - mapa interativo futuro
 - páginas temáticas
 
-Nesta rodada, a busca já passou a ler esses arquivos.
+Nesta rodada, a busca já passou a ler a camada central `window.TURISMO_DATA`.
 
 ## Formato padrão
 
@@ -66,6 +92,14 @@ window.TURISMO_PONTOS = [
 2. Adicione um novo objeto ao array `window.TURISMO_PONTOS`.
 3. Preencha `id`, `nome`, `categoria`, `descricao`, `url` e `tags`.
 4. Se houver coordenadas confiáveis, preencha `lat` e `lng`.
+5. O `window.TURISMO_DATA` será montado automaticamente a partir desse arquivo.
+
+## Como adicionar uma nova rota
+
+1. Abra `js/data/rotas.js`.
+2. Adicione um novo objeto em `window.TURISMO_ROTAS`.
+3. Informe `id`, `nome`, `categoria`, `descricao`, `url` e `tags`.
+4. Se a rota tiver cor ou ícone próprios, mantenha esses campos.
 
 ## Como adicionar uma nova hospedagem
 
@@ -90,11 +124,20 @@ window.TURISMO_PONTOS = [
 
 Rodadas futuras podem:
 
-- fazer `js/locais-data.js` e `js/rotas-data.js` virarem fontes principais
+- fundir parte de `js/locais-data.js` em `js/data/pontos-turisticos.js`
+- transformar `js/rotas-data.js` em fonte principal de rotas, hospedagens e empreendimentos
 - renderizar cards da HOME a partir dos arrays
 - alimentar mapa interativo com `coordenadas`
 - unificar chatbot, busca e roteiros sobre a mesma base
 - reduzir duplicação entre HTML, busca e scripts auxiliares
+
+## Arquivos antigos que ainda precisam de migração
+
+- `js/locais-data.js`: manter até páginas de locais passarem a usar a camada central
+- `js/rotas-data.js`: manter até rotas completas, hospedagens e restaurantes consumirem uma fonte única
+- `js/roteiro-ia.js`: ainda usa uma base própria simplificada
+- `js/chatbot.js`: ainda usa respostas fixas por texto
+- `js/mapa3d.js`: ainda usa coordenadas próprias
 
 ## Observação importante
 
