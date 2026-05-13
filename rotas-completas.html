@@ -3,148 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotas Turisticas - Sao Mateus do Sul</title>
-    <meta name="description" content="As rotas e pontos turisticos agora estao reunidos no Mapa Turistico Interativo de Sao Mateus do Sul.">
+    <title>Roteiros | São Mateus do Sul</title>
+    <meta name="description" content="Os roteiros agora estão reunidos no Mapa Turístico Interativo de São Mateus do Sul.">
     <meta name="robots" content="noindex,follow">
     <link rel="canonical" href="https://turismo.saomateusdosul.pr.gov.br/mapa-turistico.html?grupo=roteiros">
-    <meta http-equiv="refresh" content="2; url=/mapa-turistico.html?grupo=roteiros">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --legacy-forest: #0a3d2e;
-            --legacy-forest-soft: #1c5b47;
-            --legacy-cream: #f8f1e5;
-            --legacy-gold: #d4a574;
-            --legacy-text: #173d31;
-            --legacy-muted: #5f625d;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
-            padding: 1.25rem;
-            background:
-                radial-gradient(circle at top right, rgba(212, 165, 116, 0.18), transparent 28%),
-                linear-gradient(180deg, #fbf7ef 0%, #f1e7d8 100%);
-            color: var(--legacy-text);
-            font-family: 'Raleway', sans-serif;
-        }
-
-        .legacy-card {
-            width: min(720px, 100%);
-            padding: 2rem;
-            border-radius: 28px;
-            background: rgba(255, 253, 248, 0.96);
-            border: 1px solid rgba(10, 61, 46, 0.08);
-            box-shadow: 0 24px 60px rgba(10, 61, 46, 0.12);
-        }
-
-        .legacy-kicker {
-            display: inline-flex;
-            align-items: center;
-            min-height: 32px;
-            padding: 0 0.85rem;
-            border-radius: 999px;
-            background: rgba(212, 165, 116, 0.18);
-            color: #8a6b49;
-            font-size: 0.78rem;
-            font-weight: 800;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-        }
-
-        h1 {
-            margin: 0.9rem 0 0.7rem;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: clamp(2.3rem, 5vw, 3.5rem);
-            line-height: 0.96;
-            color: var(--legacy-forest);
-        }
-
-        p {
-            margin: 0;
-            color: var(--legacy-muted);
-            line-height: 1.7;
-        }
-
-        .legacy-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.85rem;
-            margin-top: 1.4rem;
-        }
-
-        .legacy-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 48px;
-            padding: 0 1.15rem;
-            border-radius: 999px;
-            text-decoration: none;
-            font-weight: 700;
-            border: 1px solid rgba(10, 61, 46, 0.12);
-            background: #fff;
-            color: var(--legacy-forest);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .legacy-btn.primary {
-            background: var(--legacy-forest);
-            border-color: var(--legacy-forest);
-            color: #fff;
-        }
-
-        .legacy-btn:hover,
-        .legacy-btn:focus-visible {
-            transform: translateY(-1px);
-            box-shadow: 0 14px 30px rgba(10, 61, 46, 0.12);
-        }
-
-        .legacy-note {
-            margin-top: 1rem;
-            font-size: 0.85rem;
-        }
-
-        @media (max-width: 520px) {
-            .legacy-card {
-                padding: 1.35rem;
-                border-radius: 22px;
-            }
-
-            .legacy-actions {
-                flex-direction: column;
-            }
-
-            .legacy-btn {
-                width: 100%;
-            }
-        }
-    </style>
+    <meta http-equiv="refresh" content="4; url=/mapa-turistico.html?grupo=roteiros">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/o-que-fazer.css">
+    <script src="translations.js"></script>
+    <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <main class="legacy-card" id="main-content">
-        <span class="legacy-kicker">Pagina legada</span>
-        <h1>As rotas agora estao reunidas no Mapa Turistico Interativo.</h1>
-        <p>Esta URL continua disponivel para compatibilidade, mas a experiencia principal de exploracao turistica foi centralizada em <strong>/mapa-turistico.html</strong>.</p>
-        <div class="legacy-actions">
-            <a class="legacy-btn primary" href="/mapa-turistico.html?grupo=roteiros">Acessar Mapa Turistico</a>
-            <a class="legacy-btn" href="/mapa-turistico.html">Explorar todos os locais</a>
-        </div>
-        <p class="legacy-note">Redirecionamento automatico em alguns segundos.</p>
+    <script src="js/nav-shared.js?v=5"></script>
+
+    <section class="hero hero--oqfazer bridge-hero">
+        <h1 data-lang-key="rotas-legacy-title">🗺️ Roteiros</h1>
+        <p data-lang-key="rotas-legacy-subtitle">As rotas e experiências agora estão reunidas no Mapa Turístico Interativo, com filtros e atalhos em uma navegação única.</p>
+    </section>
+
+    <main class="main-content bridge-main" id="main-content">
+        <section class="bridge-intro">
+            <span class="bridge-kicker" data-lang-key="rotas-legacy-kicker">Página legada</span>
+            <h2 data-lang-key="rotas-legacy-desc">A exploração principal de roteiros foi consolidada no mapa turístico.</h2>
+            <p data-lang-key="rotas-legacy-note">Esta URL continua ativa por compatibilidade, mas agora direciona para uma experiência única com mapa, filtros e cards integrados.</p>
+        </section>
+
+        <section class="bridge-grid" aria-label="Atalhos de roteiros">
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🗺️</span>
+                <h3 data-lang-key="rotas-legacy-map-title">Mapa com roteiros</h3>
+                <p data-lang-key="rotas-legacy-map-desc">Abra o grupo de roteiros já filtrado e navegue pelas experiências temáticas disponíveis.</p>
+                <a href="/mapa-turistico.html?grupo=roteiros" class="bridge-card-link" data-lang-key="rotas-legacy-map">Acessar mapa turístico →</a>
+            </article>
+
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🍽️</span>
+                <h3 data-lang-key="rotas-legacy-gastro-title">Ver gastronomia</h3>
+                <p data-lang-key="rotas-legacy-gastro-desc">Cruze os roteiros com restaurantes, sabores locais e experiências ligadas ao mate.</p>
+                <a href="/mapa-turistico.html?categoria=Gastronomia" class="bridge-card-link" data-lang-key="rotas-legacy-gastro">Ver gastronomia →</a>
+            </article>
+
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🛏️</span>
+                <h3 data-lang-key="rotas-legacy-lodging-title">Ver hospedagem</h3>
+                <p data-lang-key="rotas-legacy-lodging-desc">Planeje a estadia junto da rota escolhida sem sair do fluxo principal de exploração.</p>
+                <a href="/mapa-turistico.html?categoria=Hospedagem" class="bridge-card-link" data-lang-key="rotas-legacy-lodging">Ver hospedagem →</a>
+            </article>
+        </section>
     </main>
+
+    <footer class="footer bridge-footer" id="footer">
+        <p data-lang-key="rotas-legacy-footer">Redirecionamento automático disponível em alguns segundos.</p>
+        <p class="bridge-footer-links">
+            <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="rotas-legacy-map">Acessar mapa turístico →</a>
+            <a href="/mapa-turistico.html" data-lang-key="rotas-legacy-all">Explorar todos os locais →</a>
+        </p>
+    </footer>
+
     <script>
         window.setTimeout(function () {
             window.location.replace("/mapa-turistico.html?grupo=roteiros");
-        }, 1400);
+        }, 3200);
     </script>
 </body>
 </html>

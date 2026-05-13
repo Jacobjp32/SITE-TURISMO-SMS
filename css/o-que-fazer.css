@@ -1,110 +1,165 @@
 /* ============================================================ */
-/* o-que-fazer.css — Estilos exclusivos da página O Que Fazer   */
-/* Depende de: variables.css, reset.css, components.css         */
+/* o-que-fazer.css — página ponte para o mapa turístico         */
 /* ============================================================ */
 
-/* Override: hero com mesma cor, p ligeiramente diferente */
-.hero p { font-size: 1.15rem; max-width: 680px; }
-
-.hero--oqfazer .hero-mascote {
-    right: clamp(1.5rem, 6vw, 5rem);
-    bottom: -34px;
-    height: clamp(185px, 18vw, 250px);
-    transform-origin: bottom right;
+.hero--oqfazer {
+    background:
+        radial-gradient(circle at top right, rgba(212, 165, 116, 0.16), transparent 28%),
+        linear-gradient(135deg, var(--forest-deep) 0%, #0d4e3b 62%, #49683b 100%);
+    padding: 3.4rem 2rem 3rem;
 }
 
-/* Override: main-content mais largo */
-.main-content { max-width: 1300px; }
+.hero--oqfazer p {
+    max-width: 760px;
+    font-size: 1.08rem;
+}
 
-/* Section Header */
-.section-header { text-align: center; margin-bottom: 3rem; }
-.section-header h2 { font-family: var(--font-display); font-size: 2rem; color: var(--forest-deep); margin-bottom: 0.5rem; }
-.section-header p { color: #666; }
+.bridge-main {
+    max-width: 1320px;
+    padding: 2.8rem 2rem 4rem;
+}
 
-/* Rotas Grid */
-.rotas-grid {
+.bridge-intro {
+    max-width: 760px;
+    margin: 0 auto 2rem;
+    text-align: center;
+}
+
+.bridge-kicker {
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    padding: 0 0.9rem;
+    border-radius: 999px;
+    background: rgba(212, 165, 116, 0.18);
+    color: #8a6b49;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.bridge-intro h2 {
+    margin: 1rem 0 0.75rem;
+    font-family: var(--font-display);
+    font-size: clamp(2.1rem, 4vw, 3.4rem);
+    color: var(--forest-deep);
+    line-height: 1.05;
+}
+
+.bridge-intro p {
+    color: #5e625f;
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+.bridge-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
 }
 
-.rota-card {
-    background: white; border-radius: 20px;
-    overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-.rota-card:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,0.13); }
-
-.rota-card-image {
-    height: 220px; background-size: cover; background-position: center;
-    position: relative;
-    background-color: var(--forest-deep);
-}
-.rota-card-image .badge {
-    position: absolute; top: 1rem; left: 1rem;
-    background: white; color: #333;
-    padding: 0.35rem 0.8rem; border-radius: 20px;
-    font-size: 0.78rem; font-weight: 600;
-    display: flex; align-items: center; gap: 0.4rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+.bridge-card {
+    display: grid;
+    gap: 0.85rem;
+    padding: 1.45rem;
+    min-height: 100%;
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(10, 61, 46, 0.08);
+    border-radius: 24px;
+    box-shadow: 0 16px 36px rgba(10, 61, 46, 0.08);
 }
 
-.rota-card-content { padding: 1.5rem; }
-.rota-card-content h3 {
-    font-family: var(--font-display); font-size: 1.6rem;
-    color: var(--forest-deep); margin-bottom: 0.6rem;
-}
-.rota-card-content p { color: #555; font-size: 0.92rem; margin-bottom: 1.25rem; }
-
-.rota-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.25rem; }
-.rota-tag {
-    background: var(--cream-light); border-radius: 20px;
-    padding: 0.3rem 0.75rem; font-size: 0.78rem; color: #555;
-    display: flex; align-items: center; gap: 0.3rem;
+.bridge-card-icon {
+    width: 52px;
+    height: 52px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    background: rgba(10, 61, 46, 0.08);
+    font-size: 1.35rem;
 }
 
-.btn-rota {
-    display: inline-block; padding: 0.75rem 1.5rem;
-    background: var(--forest-deep); color: white;
-    border-radius: 25px; text-decoration: none;
-    font-weight: 600; font-size: 0.9rem;
-    transition: background 0.3s;
+.bridge-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    color: var(--forest-deep);
 }
-.btn-rota:hover { background: #0a5d3e; }
 
-/* CTA */
-.cta-section {
-    background: linear-gradient(135deg, var(--forest-deep), #0a5d3e);
-    color: white; border-radius: 20px; padding: 3rem 2rem;
-    text-align: center; margin-top: 2rem;
+.bridge-card p {
+    margin: 0;
+    color: #5e625f;
+    line-height: 1.62;
+    font-size: 0.92rem;
 }
-.cta-section h3 { font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem; }
-.cta-section p { opacity: 0.9; max-width: 500px; margin: 0 auto 1.5rem; }
-.btn-cta {
-    display: inline-block; padding: 1rem 2rem;
-    background: var(--gold-polish); color: var(--forest-deep);
-    border-radius: 30px; font-weight: 700; text-decoration: none;
-    transition: transform 0.3s;
-}
-.btn-cta:hover { transform: translateY(-2px); }
 
-/* Responsivo específico */
+.bridge-card-link {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 1rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+    background: var(--forest-deep);
+    color: var(--white-pure);
+    box-shadow: 0 10px 24px rgba(10, 61, 46, 0.14);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.bridge-card-link:hover,
+.bridge-card-link:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 30px rgba(10, 61, 46, 0.18);
+    background: #0d4e3b;
+}
+
+.bridge-note {
+    margin-top: 1.5rem;
+    padding: 1.15rem 1.35rem;
+    border-radius: 20px;
+    background: rgba(10, 61, 46, 0.05);
+    text-align: center;
+}
+
+.bridge-note p {
+    margin: 0;
+    color: #466055;
+    font-weight: 600;
+}
+
+.bridge-footer {
+    margin-top: 0;
+    background: linear-gradient(180deg, var(--forest-deep) 0%, #062118 100%);
+    padding: 2rem 1.5rem;
+}
+
+.bridge-footer p {
+    margin: 0;
+}
+
+.bridge-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem !important;
+}
+
 @media (max-width: 768px) {
-    .rotas-grid { grid-template-columns: 1fr; }
-    .hero--oqfazer .hero-mascote {
-        display: block;
-        right: 1rem;
-        bottom: -18px;
-        height: 140px;
+    .hero--oqfazer {
+        padding: 2.6rem 1rem 2.35rem;
     }
-}
 
-@media (max-width: 540px) {
-    .hero--oqfazer .hero-mascote {
-        height: 110px;
-        right: 0.35rem;
-        bottom: -10px;
-        opacity: 0.92;
+    .bridge-main {
+        padding: 2rem 1rem 3rem;
+    }
+
+    .bridge-grid {
+        grid-template-columns: 1fr;
     }
 }

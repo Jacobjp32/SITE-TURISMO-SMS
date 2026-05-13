@@ -55,7 +55,7 @@ window.TURISMO_PONTOS = [
     categoria: "História",
     descricao: "Acervo e memória local reunidos em um espaço ligado à formação histórica do município.",
     imagem: "images/CASA_DA_MEMORIA.png",
-    url: "/o-que-fazer",
+    url: "/local?id=casa-da-memoria",
     coordenadas: { lat: -25.877, lng: -50.3835 },
     tags: ["casa da memória", "história", "patrimônio", "museu", "memória local", "cultura"]
   },

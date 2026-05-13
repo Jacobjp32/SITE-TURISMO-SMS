@@ -3843,8 +3843,51 @@
     bottom: 1.15rem !important;
 }
 
+.about-hero {
+    min-height: clamp(480px, 62vh, 620px) !important;
+    padding: 3.25rem 2rem !important;
+}
+
+.about-hero-content {
+    max-width: 1260px !important;
+}
+
+.about-hero-subtitle {
+    max-width: 760px !important;
+    margin-bottom: 2.2rem !important;
+}
+
+.about-stats {
+    max-width: 820px !important;
+    gap: 1.15rem !important;
+}
+
+.about-stats .stat-item {
+    padding: 1.05rem 0.9rem !important;
+}
+
+.pilares-section {
+    max-width: var(--home-container) !important;
+}
+
+.section-intro {
+    margin-bottom: 3.4rem !important;
+}
+
+.pilares-timeline {
+    gap: 2.5rem !important;
+}
+
+.pilar-item {
+    gap: 2.6rem !important;
+}
+
+.pilar-visual {
+    height: 340px !important;
+}
+
 .visitor-guide-section {
-    padding: 4.5rem 2rem;
+    padding: 4rem 2rem;
     background: linear-gradient(180deg, #fff 0%, var(--cream-light) 100%);
 }
 
@@ -3986,14 +4029,14 @@
 .reviews-section,
 .section-where-stay,
 .festas-destaque-section {
-    padding-top: 4.5rem !important;
-    padding-bottom: 4.5rem !important;
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
 }
 
 .section-header,
 .section-intro,
 .festas-header {
-    margin-bottom: 2.5rem !important;
+    margin-bottom: 2.1rem !important;
 }
 
 .attractions-grid,
@@ -4015,9 +4058,152 @@
     border-radius: var(--card-radius) !important;
 }
 
+/* Evita vazios falsos na HOME quando o reveal por scroll ainda nao disparou */
+.pilares-section .pilar-item,
+.attractions-grid > .attraction-card,
+.blog-grid > .blog-card,
+.section-where-stay .hotel-card,
+.experience-links-grid > .experience-link-card {
+    opacity: 1 !important;
+    transform: none !important;
+}
+
 .section-where-stay .container {
     max-width: var(--home-container);
     margin: 0 auto;
+}
+
+.blog-section {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+.blog-grid {
+    gap: 1.35rem !important;
+}
+
+.section-where-stay {
+    background: linear-gradient(180deg, #fcfaf5 0%, #ffffff 100%) !important;
+}
+
+.contact-section {
+    padding: 3rem 2rem 2.75rem !important;
+}
+
+.contact-intro {
+    max-width: 620px !important;
+    margin-bottom: 2.4rem !important;
+}
+
+.contact-cards-grid {
+    margin-bottom: 2.25rem !important;
+    gap: 1.25rem !important;
+}
+
+.social-section {
+    margin-top: 2rem !important;
+    padding-top: 2rem !important;
+}
+
+.weather-strip {
+    padding-bottom: 1.35rem !important;
+}
+
+.reviews-section {
+    background: linear-gradient(180deg, #fffdf8 0%, #f8f4eb 100%) !important;
+}
+
+.reviews-section::before {
+    content: none !important;
+}
+
+.reviews-container {
+    max-width: var(--home-container) !important;
+}
+
+.experience-links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.15rem;
+    margin-top: 2rem;
+}
+
+.experience-link-card {
+    display: grid;
+    gap: 0.8rem;
+    min-height: 100%;
+    padding: 1.35rem;
+    text-decoration: none;
+    color: inherit;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(10, 61, 46, 0.09);
+    border-radius: 22px;
+    box-shadow: 0 12px 32px rgba(10, 61, 46, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.experience-link-card:hover,
+.experience-link-card:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 40px rgba(10, 61, 46, 0.12);
+    border-color: rgba(10, 61, 46, 0.18);
+}
+
+.experience-link-icon {
+    width: 48px;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(212, 165, 116, 0.2);
+    font-size: 1.35rem;
+}
+
+.experience-link-card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    color: var(--forest-deep);
+}
+
+.experience-link-card p {
+    margin: 0;
+    color: #5d625e;
+    line-height: 1.6;
+    font-size: 0.92rem;
+}
+
+.experience-link-cta {
+    margin-top: auto;
+    color: var(--forest-deep);
+    font-size: 0.84rem;
+    font-weight: 700;
+}
+
+.experience-links-summary {
+    margin-top: 1.6rem;
+    padding: 1.35rem 1.5rem;
+    border-radius: 20px;
+    background: rgba(10, 61, 46, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.experience-links-summary p {
+    margin: 0;
+    color: #42544c;
+    font-weight: 600;
+}
+
+.experience-summary-btn {
+    display: inline-flex !important;
+    width: auto !important;
+    padding: 0.95rem 1.5rem !important;
+    text-decoration: none !important;
 }
 
 .hotels-grid {
@@ -4313,6 +4499,10 @@
     .map-info-panel .stat-number {
         font-size: 1.45rem !important;
     }
+
+    .experience-links-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 768px) {
@@ -4389,6 +4579,19 @@
         padding: 3rem 1rem !important;
     }
 
+    .experience-links-grid {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+    }
+
+    .experience-link-card {
+        padding: 1.1rem;
+    }
+
+    .experience-links-summary {
+        padding: 1.1rem;
+    }
+
     .visitor-guide-section .diorama-image-wrapper,
     .visitor-guide-section .diorama-image {
         min-height: 300px;
@@ -4427,6 +4630,10 @@
 
     .map-info-panel .stats-grid {
         grid-template-columns: 1fr 1fr !important;
+    }
+
+    .experience-link-card h3 {
+        font-size: 1.35rem;
     }
 
     .visitor-info-card {

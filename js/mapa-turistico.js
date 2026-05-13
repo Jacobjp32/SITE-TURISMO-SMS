@@ -44,6 +44,8 @@
       noCoordinates: "Sem localizacao cadastrada",
       noImage: "Sem imagem",
       noDescription: "Descricao em atualizacao.",
+      routeBadge: "Roteiro tematico",
+      routeSupport: "Pontos relacionados disponiveis no mapa.",
       cardSelected: "Selecionado no mapa",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} itens",
@@ -127,6 +129,8 @@
       noCoordinates: "Location not registered",
       noImage: "No image",
       noDescription: "Description pending update.",
+      routeBadge: "Themed route",
+      routeSupport: "Related places remain available on the map.",
       cardSelected: "Selected on map",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} items",
@@ -210,6 +214,8 @@
       noCoordinates: "Sin ubicacion registrada",
       noImage: "Sin imagen",
       noDescription: "Descripcion en actualizacion.",
+      routeBadge: "Ruta tematica",
+      routeSupport: "Los puntos relacionados siguen disponibles en el mapa.",
       cardSelected: "Seleccionado en el mapa",
       groupItemsSingle: "1 elemento",
       groupItemsMany: "{count} elementos",
@@ -293,6 +299,8 @@
       noCoordinates: "Brak zapisanej lokalizacji",
       noImage: "Brak zdjecia",
       noDescription: "Opis jest aktualizowany.",
+      routeBadge: "Trasa tematyczna",
+      routeSupport: "Powiazane miejsca pozostaja dostepne na mapie.",
       cardSelected: "Wybrane na mapie",
       groupItemsSingle: "1 element",
       groupItemsMany: "{count} elementow",
@@ -414,16 +422,14 @@
     var source = normalizeText([rawCategory, description, Array.isArray(tags) ? tags.join(" ") : tags].join(" "));
 
     if (normalizedCategory.indexOf("historia") !== -1) return "history";
-    if (normalizedCategory.indexOf("cultura") !== -1) return "culture";
+    if (normalizedCategory.indexOf("cultura") !== -1 || normalizedCategory.indexOf("cultural") !== -1) return "culture";
     if (normalizedCategory.indexOf("natureza") !== -1) return "nature";
-    if (normalizedCategory.indexOf("gastronomia") !== -1) return "gastronomy";
+    if (normalizedCategory.indexOf("gastronomia") !== -1 || normalizedCategory.indexOf("gastronom") !== -1) return "gastronomy";
     if (normalizedCategory.indexOf("hospedagem") !== -1) return "lodging";
     if (normalizedCategory.indexOf("evento") !== -1) return "events";
     if (normalizedCategory.indexOf("servico") !== -1) return "services";
-    if (normalizedCategory.indexOf("roteiro") !== -1) return "services";
     if (normalizedCategory.indexOf("institucional") !== -1) return "services";
 
-    if (itemType === "rota") return "services";
     if (itemType === "hospedagem") return "lodging";
     if (itemType === "restaurante") return "gastronomy";
     if (itemType === "evento") return "events";
@@ -444,7 +450,13 @@
     if (source.indexOf("servico") !== -1 || source.indexOf("atendimento") !== -1 || source.indexOf("contato") !== -1 || source.indexOf("informacoes") !== -1 || source.indexOf("roteiro") !== -1 || source.indexOf("institucional") !== -1) {
       return "services";
     }
+
+    if (itemType === "rota") return "culture";
     return "culture";
+  }
+
+  function isRouteItem(item) {
+    return !!item && item.panelGroup === "routes";
   }
 
   function getPanelGroup(itemType) {
@@ -716,6 +728,9 @@
 
   function getImageHtml(item, className) {
     if (!item.imagem) {
+      if (isRouteItem(item)) {
+        return '<div class="' + className + ' map-image-fallback is-route" aria-hidden="true"><span>RO</span><small>' + t("routeBadge") + '</small><em>' + t("routeSupport") + "</em></div>";
+      }
       return '<div class="' + className + ' map-image-fallback" aria-hidden="true"><span>' + getCategoryConfig(item.categoriaMapa).icon + '</span><small>' + t("noImage") + "</small></div>";
     }
     return '<img src="' + item.imagem + '" alt="' + item.nome + '" class="' + className + '">';
@@ -876,7 +891,8 @@
     if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + item.telefone + "</span>");
     if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + item.periodo + "</span>");
     if (item.categoriaOriginal && item.panelGroup === "routes") meta.push('<span class="map-meta-chip">🗺️ ' + item.categoriaOriginal + "</span>");
-    if (!item.possuiCoordenadas) meta.push('<span class="map-meta-chip">' + t("noCoordinates") + "</span>");
+    if (isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("routeBadge") + "</span>");
+    if (!item.possuiCoordenadas && !isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("noCoordinates") + "</span>");
 
     container.innerHTML = ""
       + '<div class="map-detail">'
@@ -889,6 +905,7 @@
       + '<span class="map-detail-badge">' + t("cardSelected") + "</span>"
       + "</div>"
       + "<p>" + (item.descricao || t("noDescription")) + "</p>"
+      + (isRouteItem(item) ? '<p class="map-detail-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-detail-meta">' + meta.join("") + "</div>"
       + '<div class="map-detail-actions">'
       + (item.url ? '<a class="map-button primary" href="' + item.url + '">' + t("details") + "</a>" : "")
@@ -904,9 +921,10 @@
 
     tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + item.categoriaLabel + "</span>");
     if (item.panelGroup === "routes" && item.categoriaOriginal) {
+      tags.push('<span class="map-list-badge is-route">' + t("routeBadge") + "</span>");
       tags.push('<span class="map-list-badge is-neutral">RO ' + item.categoriaOriginal + "</span>");
     }
-    if (!item.possuiCoordenadas) {
+    if (!item.possuiCoordenadas && !isRouteItem(item)) {
       tags.push('<span class="map-list-badge is-missing">' + t("noCoordinates") + "</span>");
     }
 
@@ -917,6 +935,7 @@
       + '<div class="map-list-content">'
       + "<h4>" + item.nome + "</h4>"
       + "<p>" + (item.descricao || t("noDescription")) + "</p>"
+      + (isRouteItem(item) ? '<p class="map-list-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-list-card-tags">' + tags.join("") + "</div>"
       + "</div>"
       + "</button>"

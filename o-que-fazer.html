@@ -5,250 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YPRT7FFFV8"></script>
-    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="O que fazer em São Mateus do Sul: rotas temáticas, cultura polonesa, erva-mate, turismo de fé e passeios náuticos na Capital Polonesa do Paraná.">
-    <meta name="keywords" content="o que fazer São Mateus do Sul, rotas turísticas, cultura polonesa, erva-mate, turismo de fé, passeio náutico, Paraná">
+    <meta name="description" content="As experiências, roteiros e pontos turísticos de São Mateus do Sul agora estão reunidos no Mapa Turístico Interativo.">
+    <meta name="keywords" content="mapa turístico São Mateus do Sul, roteiros, gastronomia, hospedagem, pontos turísticos">
     <link rel="canonical" href="https://turismo.saomateusdosul.pr.gov.br/o-que-fazer">
-
-    <!-- Open Graph -->
     <meta property="og:title" content="O Que Fazer | São Mateus do Sul">
-    <meta property="og:description" content="Explore as rotas temáticas e experiências únicas da Capital Polonesa do Paraná.">
+    <meta property="og:description" content="As experiências e pontos turísticos agora estão centralizados no Mapa Turístico Interativo.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://turismo.saomateusdosul.pr.gov.br/o-que-fazer">
     <meta property="og:locale" content="pt_BR">
-
-    <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
-
-    <!-- Schema.org - Breadcrumb -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Início", "item": "https://turismo.saomateusdosul.pr.gov.br/"},
-            {"@type": "ListItem", "position": 2, "name": "O Que Fazer", "item": "https://turismo.saomateusdosul.pr.gov.br/o-que-fazer"}
-        ]
-    }
-    </script>
-
     <title>O Que Fazer | São Mateus do Sul</title>
-
-    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="css/shared.css">
     <link rel="stylesheet" href="css/o-que-fazer.css">
     <script src="translations.js"></script>
     <script src="js/breadcrumbs.js"></script>
 </head>
 <body>
-    <script src="js/nav-shared.js?v=4"></script>
+    <script src="js/nav-shared.js?v=5"></script>
 
-    <!-- Hero -->
-    <section class="hero hero--oqfazer">
+    <section class="hero hero--oqfazer bridge-hero">
         <h1 data-lang-key="page-oqfazer-titulo">🧭 O Que Fazer</h1>
-        <p data-lang-key="page-oqfazer-subtitulo">Explore as rotas temáticas e descubra experiências únicas na Capital Polonesa do Paraná. Da cultura do mate às tradições polonesas, do turismo de fé aos passeios náuticos.</p>
-        <img src="images/mascotes/MASCOTE_CAPIVARA_PINHAO.png" class="hero-mascote" alt="" aria-hidden="true">
+        <p data-lang-key="page-oqfazer-subtitulo">As experiências, roteiros e pontos turísticos agora estão reunidos no Mapa Turístico Interativo.</p>
     </section>
 
-    <!-- Main -->
-    <main class="main-content">
+    <main class="main-content bridge-main" id="main-content">
+        <section class="bridge-intro">
+            <span class="bridge-kicker" data-lang-key="oqf-bridge-kicker">Exploração consolidada</span>
+            <h2 data-lang-key="oqf-bridge-title">Tudo agora parte do mapa turístico</h2>
+            <p data-lang-key="oqf-bridge-desc">Use o mapa como porta de entrada para atrações, roteiros, gastronomia, hospedagem e serviços, sem depender de catálogos paralelos.</p>
+        </section>
 
-        <div class="section-header">
-            <h2 data-lang-key="oqf-rotas-h">🗺️ Rotas Temáticas</h2>
-            <p data-lang-key="oqf-rotas-sub">Escolha sua experiência e mergulhe na cultura de São Mateus do Sul</p>
-        </div>
-
-        <!-- Filter nav -->
-        <nav class="filter-nav" aria-label="Filtrar rotas">
-            <button class="fnav-btn fnav-btn--active" data-filter="">Todas</button>
-            <button class="fnav-btn" data-filter="erva-mate">🧉 Erva-Mate</button>
-            <button class="fnav-btn" data-filter="cultura-polonesa">🇵🇱 Cultura Polonesa</button>
-            <button class="fnav-btn" data-filter="turismo-fe">⛪ Turismo de Fé</button>
-            <button class="fnav-btn" data-filter="natureza">🌊 Náutica e Natureza</button>
-        </nav>
-
-        <div class="rotas-grid">
-
-            <!-- Rota da Erva-Mate -->
-            <article class="rota-card" id="erva-mate">
-                <div class="rota-card-image" style="background-image: url('images/RUA_DO_MATHE.jpg');">
-                    <span class="badge">🌿 <span data-lang-key="oqf-badge-ig">Indicação Geográfica</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-mate-h">Rota da Erva-Mate</h3>
-                    <p data-lang-key="oqf-mate-desc">Conheça a tradição centenária do mate em São Mateus do Sul, terra da erva-mate com selo de Indicação Geográfica IG São Matheus.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">🧉 <span data-lang-key="oqf-tag-chimarrodrom">Chimarródromo</span></span>
-                        <span class="rota-tag">🌿 <span data-lang-key="oqf-tag-ervateiras">Ervateiras</span></span>
-                        <span class="rota-tag">🛤️ <span data-lang-key="oqf-tag-ruamathe">Rua do Mathe</span></span>
-                        <span class="rota-tag">🏅 <span data-lang-key="oqf-tag-seloig">Selo IG</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
+        <section class="bridge-grid" aria-label="Atalhos para o mapa turístico">
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🗺️</span>
+                <h3 data-lang-key="oqf-bridge-card-1-title">Mapa Turístico</h3>
+                <p data-lang-key="oqf-bridge-card-1-desc">Visualização geral dos pontos, filtros e resumo do destino em uma única página.</p>
+                <a href="/mapa-turistico.html" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
             </article>
 
-            <!-- Cultura Polonesa -->
-            <article class="rota-card" id="cultura-polonesa">
-                <div class="rota-card-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg');">
-                    <span class="badge">🇵🇱 <span data-lang-key="oqf-badge-tradicao">Tradição Viva</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-polonesa-h">Cultura Polonesa</h3>
-                    <p data-lang-key="oqf-polonesa-desc">Mergulhe na herança dos imigrantes poloneses que colonizaram a região. Arquitetura, gastronomia, danças folclóricas e festas tradicionais.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">⛪ <span data-lang-key="oqf-tag-igrejas">Igrejas Históricas</span></span>
-                        <span class="rota-tag">🥟 <span data-lang-key="oqf-tag-pierogi">Pierogi</span></span>
-                        <span class="rota-tag">💃 <span data-lang-key="oqf-tag-folclore">Folclore</span></span>
-                        <span class="rota-tag">🎪 <span data-lang-key="oqf-tag-mespolones">Mês Polonês</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🧭</span>
+                <h3 data-lang-key="oqf-bridge-card-2-title">Roteiros</h3>
+                <p data-lang-key="oqf-bridge-card-2-desc">Rotas temáticas e experiências organizadas como ponto de partida para explorar a cidade.</p>
+                <a href="/mapa-turistico.html?grupo=roteiros" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
             </article>
 
-            <!-- Turismo de Fé -->
-            <article class="rota-card" id="turismo-fe">
-                <div class="rota-card-image" style="background-image: url('images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg');">
-                    <span class="badge">✝️ <span data-lang-key="oqf-badge-fe">Fé e História</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-fe-h">Turismo de Fé</h3>
-                    <p data-lang-key="oqf-fe-desc">Visite os templos centenários construídos pelos imigrantes. A Igreja Matriz neogótica, as capelas das colônias e os santuários de devoção mariana.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">⛪ <span data-lang-key="oqf-tag-igrejam">Igreja Matriz</span></span>
-                        <span class="rota-tag">🕍 <span data-lang-key="oqf-tag-nsczest">N.S. Częstochowa</span></span>
-                        <span class="rota-tag">🏚️ <span data-lang-key="oqf-tag-capelas">Capelas Rurais</span></span>
-                        <span class="rota-tag">✝️ <span data-lang-key="oqf-tag-viasacra">Via Sacra</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🍽️</span>
+                <h3 data-lang-key="oqf-bridge-card-3-title">Gastronomia</h3>
+                <p data-lang-key="oqf-bridge-card-3-desc">Restaurantes, sabores locais e experiências ligadas ao mate e à culinária regional.</p>
+                <a href="/mapa-turistico.html?categoria=Gastronomia" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
             </article>
 
-            <!-- Rota das Águas -->
-            <article class="rota-card" id="natureza">
-                <div class="rota-card-image" style="background-image: url('images/PRACA_DO_RIO_IGUACU.jpg'); background-color: #0a3d2e;">
-                    <span class="badge">🌊 <span data-lang-key="oqf-badge-natureza">Rio Iguaçu</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-aguas-h">Rota das Águas</h3>
-                    <p data-lang-key="oqf-aguas-desc">Passeios fluviais no Rio Iguaçu, pesca esportiva, canoagem e o belíssimo Porto Gastronômico às margens do rio.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">⛵ <span data-lang-key="oqf-tag-passeio">Passeio Fluvial</span></span>
-                        <span class="rota-tag">🎣 <span data-lang-key="oqf-tag-pesca">Pesca Esportiva</span></span>
-                        <span class="rota-tag">🛶 <span data-lang-key="oqf-tag-canoagem">Canoagem</span></span>
-                        <span class="rota-tag">🍽️ <span data-lang-key="oqf-tag-porto">Porto Gastronômico</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
+            <article class="bridge-card">
+                <span class="bridge-card-icon">🛏️</span>
+                <h3 data-lang-key="oqf-bridge-card-4-title">Hospedagem</h3>
+                <p data-lang-key="oqf-bridge-card-4-desc">Hotéis, pousadas e opções para planejar a estadia junto do restante da jornada.</p>
+                <a href="/mapa-turistico.html?categoria=Hospedagem" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
             </article>
 
-            <!-- Sabores & Memórias -->
-            <article class="rota-card">
-                <div class="rota-card-image" style="background-image: url('images/PARRERAL__6_.jpg');">
-                    <span class="badge">🍓 <span data-lang-key="oqf-badge-sabores">Sabores & Memórias</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-sabores-h">Sabores & Memórias</h3>
-                    <p data-lang-key="oqf-sabores-desc">Café colonial, queijos artesanais, morangos colhidos na hora e doces caseiros das colônias rurais de São Mateus do Sul.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">🍓 <span data-lang-key="oqf-tag-morango">Morangos</span></span>
-                        <span class="rota-tag">🧀 <span data-lang-key="oqf-tag-queijo">Queijos</span></span>
-                        <span class="rota-tag">☕ <span data-lang-key="oqf-tag-cafecol">Café Colonial</span></span>
-                        <span class="rota-tag">🥧 <span data-lang-key="oqf-tag-doces">Doces Caseiros</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
+            <article class="bridge-card">
+                <span class="bridge-card-icon">📅</span>
+                <h3 data-lang-key="oqf-bridge-card-5-title">Eventos</h3>
+                <p data-lang-key="oqf-bridge-card-5-desc">Feiras, festas e programação cultural integradas à exploração turística do município.</p>
+                <a href="/mapa-turistico.html?categoria=Eventos" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
             </article>
+        </section>
 
-            <!-- Rota da Terra -->
-            <article class="rota-card">
-                <div class="rota-card-image" style="background-image: url('images/PARRERAL__4_.jpg');">
-                    <span class="badge">🌱 <span data-lang-key="oqf-badge-terra">Da Terra</span></span>
-                </div>
-                <div class="rota-card-content">
-                    <h3 data-lang-key="oqf-terra-h">Rota da Terra</h3>
-                    <p data-lang-key="oqf-terra-desc">Agroecologia, viveiros, parques aquáticos e propriedades rurais para vivenciar o campo de perto na região de São Mateus do Sul.</p>
-                    <div class="rota-tags">
-                        <span class="rota-tag">🌾 <span data-lang-key="oqf-tag-agroeco">Agroecologia</span></span>
-                        <span class="rota-tag">🌊 <span data-lang-key="oqf-tag-parqueaqua">Parque Aquático</span></span>
-                        <span class="rota-tag">🌸 <span data-lang-key="oqf-tag-viveiro">Viveiros</span></span>
-                        <span class="rota-tag">👨‍🌾 <span data-lang-key="oqf-tag-vivenciar">Vivência Rural</span></span>
-                    </div>
-                    <a href="/rotas-completas" class="btn-rota" data-lang-key="oqf-btn-explorar">Explorar Rota →</a>
-                </div>
-            </article>
-
-        </div>
-
-        <!-- CTA -->
-        <div class="cta-section">
-            <h3 data-lang-key="oqf-cta-h">Veja Todos os Estabelecimentos</h3>
-            <p data-lang-key="oqf-cta-p">Mais de 50 estabelecimentos participantes das rotas turísticas. Busque por localidade, rota ou tipo de experiência.</p>
-            <a href="/rotas-completas" class="btn-cta" data-lang-key="oqf-cta-btn">🗺️ Ver Rotas Completas</a>
-        </div>
-
+        <section class="bridge-note">
+            <p data-lang-key="oqf-compatibility-note">Esta página foi mantida por compatibilidade, mas a experiência principal de exploração turística agora acontece no mapa.</p>
+        </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="/">Voltar ao Portal</a> |
-            <a href="/eventos">Ver Eventos</a>
+    <footer class="footer bridge-footer" id="footer">
+        <p data-lang-key="oqf-footer-note">Mapa, roteiros e categorias agora estão centralizados no Mapa Turístico Interativo.</p>
+        <p class="bridge-footer-links">
+            <a href="/mapa-turistico.html" data-lang-key="oqf-footer-map">Abrir mapa</a>
+            <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="oqf-footer-routes">Ver roteiros</a>
+            <a href="/" data-lang-key="oqf-footer-home">Voltar à HOME</a>
         </p>
     </footer>
-    <script src="js/cookies.js"></script>
-<script>
-    (function() {
-        var grid  = document.querySelector('.rotas-grid');
-        var btns  = document.querySelectorAll('.fnav-btn');
-
-        function activateFilter(filterId, scroll) {
-            btns.forEach(function(b) {
-                b.classList.toggle('fnav-btn--active', b.dataset.filter === filterId);
-            });
-            document.querySelectorAll('.rota-card').forEach(function(card) {
-                card.classList.remove('rota-card--highlighted');
-            });
-            if (filterId) {
-                grid.classList.add('rotas-grid--filtered');
-                var target = document.getElementById(filterId);
-                if (target) {
-                    target.classList.add('rota-card--highlighted');
-                    if (scroll) {
-                        setTimeout(function() {
-                            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }, 100);
-                    }
-                }
-            } else {
-                grid.classList.remove('rotas-grid--filtered');
-            }
-        }
-
-        // Wire filter buttons
-        btns.forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var f = btn.dataset.filter;
-                if (f) window.location.hash = f;
-                else history.pushState('', document.title, window.location.pathname);
-                activateFilter(f, true);
-            });
-        });
-
-        // Activate on page load from hash
-        var hash = window.location.hash.slice(1);
-        if (hash) activateFilter(hash, true);
-
-        // React to hash changes (browser back/forward)
-        window.addEventListener('hashchange', function() {
-            activateFilter(window.location.hash.slice(1), true);
-        });
-    })();
-    </script></body>
+</body>
 </html>
