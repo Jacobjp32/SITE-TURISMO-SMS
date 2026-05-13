@@ -149,18 +149,17 @@
     const NAV_CSS = `
 <style id="nav-shared-styles">
 .nav {
-    position: fixed; top: 48px; left: 0; right: 0; z-index: 9999;
-    /* nav starts right below accessibility bar (top:4px + height:44px = 48px) */
-    padding: 0.9rem 2rem;
-    background: linear-gradient(180deg, rgba(10,61,46,0.97) 0%, rgba(10,61,46,0.85) 100%);
+    position: fixed; top: 36px; left: 0; right: 0; z-index: 9999;
+    padding: 1rem 2rem;
+    background: linear-gradient(180deg, rgba(10,61,46,0.95) 0%, rgba(10,61,46,0.84) 100%);
     backdrop-filter: blur(16px);
 }
 .nav-container {
-    max-width: 1800px; margin: 0 auto;
+    max-width: 1360px; margin: 0 auto;
     display: flex; justify-content: space-between; align-items: center;
     gap: 1.25rem;
 }
-.nav-logo img { height: 56px; width: auto; }
+.nav-logo img { height: 70px; width: auto; max-width: 280px; }
 .nav-links { display: flex; gap: 0.35rem; list-style: none; align-items: center; }
 .nav-links > li { position: relative; }
 .nav-links a, .nav-links .dropdown-toggle, .nav-search-btn {
@@ -259,16 +258,16 @@
 .search-empty-state strong { display: block; color: #0a3d2e; margin-bottom: 0.35rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 /* Body offset para nav fixo + barra de acessibilidade fixa */
-body { padding-top: 136px; }
+body { padding-top: 132px; }
 /* Barra de progresso de leitura (scroll) */
 #sms-scroll-track{position:fixed!important;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.55);z-index:10001;pointer-events:none;}
 #sms-scroll-progress{position:fixed!important;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
 /* Acessibilidade eMAG */
-.accessibility-bar{background:#1a1a1a!important;color:#fff!important;padding:0 1rem;height:44px;font-size:.8rem;position:fixed!important;top:4px!important;left:0!important;right:0!important;z-index:10001!important;overflow:hidden;}
-.accessibility-bar .container{max-width:1800px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:.5rem;height:100%;}
+.accessibility-bar{background:rgba(248,246,240,0.96)!important;color:#0a3d2e!important;padding:0.35rem 1.25rem!important;min-height:36px;position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:10001!important;border-bottom:1px solid rgba(10,61,46,0.10)!important;backdrop-filter:blur(14px);overflow:hidden;}
+.accessibility-bar .container{max-width:1480px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:.5rem;min-height:36px;}
 .accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
-.accessibility-bar a,.accessibility-bar button{color:#fff;text-decoration:none;background:transparent;border:1px solid rgba(255,255,255,.3);padding:.25rem .6rem;border-radius:4px;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
-.accessibility-bar a:hover,.accessibility-bar a:focus,.accessibility-bar button:hover,.accessibility-bar button:focus{background:#d4a574;color:#1a1a1a;border-color:#d4a574;outline:2px solid #fff;outline-offset:2px;}
+.accessibility-bar a,.accessibility-bar button{color:#0a3d2e;text-decoration:none;background:rgba(255,255,255,0.58)!important;border:1px solid rgba(10,61,46,0.18)!important;padding:.25rem .6rem;border-radius:999px!important;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
+.accessibility-bar a:hover,.accessibility-bar a:focus,.accessibility-bar button:hover,.accessibility-bar button:focus{background:#0a3d2e!important;color:#fff!important;border-color:#0a3d2e!important;outline:2px solid #d4a574;outline-offset:2px;}
 .accessibility-bar .controls{display:flex;gap:.5rem;align-items:center;}
 .accessibility-bar .font-controls{display:flex;gap:.25rem;}
 .accessibility-bar .font-controls button{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-weight:bold;}
@@ -299,7 +298,13 @@ body.font-larger{font-size:140%!important;}
   .nav-user-link { padding: 0.5rem 0 !important; background: none !important; color: #d4a574 !important; font-size: 0.9rem !important; border-radius: 0 !important; }
   .nav-logout-link { font-size: 0.85rem; }
 }
-@media(max-width:768px){.accessibility-bar .shortcuts{display:none;}.accessibility-bar .controls{width:100%;justify-content:center;}}
+@media(max-width:768px){
+  body{padding-top:84px;}
+  .accessibility-bar{position:static!important;padding:0.4rem 1rem!important;min-height:auto;height:auto;}
+  .accessibility-bar .shortcuts{display:none;}
+  .accessibility-bar .controls{width:100%;justify-content:center;}
+  .nav{top:0!important;padding:0.75rem 1rem!important;}
+}
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }
     .nav-links {
@@ -317,7 +322,7 @@ body.font-larger{font-size:140%!important;}
     .dropdown-menu { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; background:rgba(0,0,0,0.2) !important; border-radius:0 !important; display:none; }
     .dropdown-menu.open { display:block !important; }
     .dropdown-menu a { color:#d4a574 !important; padding:0.6rem 2rem !important; }
-    .nav-logo img { height:48px; }
+    .nav-logo img { height:50px; max-width:180px; }
     .nav-search-text { display: inline; }
     .search-modal { padding: 1rem; align-items: flex-start; }
     .search-modal-dialog { width: 100%; margin-top: 5rem; padding: 1rem; border-radius: 20px; }
@@ -369,12 +374,15 @@ body.font-larger{font-size:140%!important;}
     }
 
     [
+        'js/locais-data.js',
+        'js/rotas-data.js',
         'js/data/pontos-turisticos.js',
         'js/data/rotas.js',
         'js/data/hospedagens.js',
         'js/data/restaurantes.js',
         'js/data/eventos.js',
         'js/data/informacoes-essenciais.js',
+        'js/data/turismo-data-adapter.js',
         'js/data/turismo-data.js',
         'js/search-index.js',
         'js/search.js'

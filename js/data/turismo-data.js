@@ -14,7 +14,7 @@
   }
 
   function createSnapshot() {
-    return {
+    var snapshot = {
       pontos: ensureArray(window.TURISMO_PONTOS),
       rotas: ensureArray(window.TURISMO_ROTAS),
       hospedagens: ensureArray(window.TURISMO_HOSPEDAGENS),
@@ -22,6 +22,12 @@
       eventos: ensureArray(window.TURISMO_EVENTOS),
       informacoesEssenciais: ensureArray(window.TURISMO_INFORMACOES_ESSENCIAIS)
     };
+
+    if (window.TURISMO_DATA_ADAPTER && typeof window.TURISMO_DATA_ADAPTER.mergeSnapshot === "function") {
+      snapshot = window.TURISMO_DATA_ADAPTER.mergeSnapshot(snapshot);
+    }
+
+    return snapshot;
   }
 
   function getCollection(name) {
@@ -61,6 +67,25 @@
       .concat(ensureArray(data.informacoesEssenciais));
   }
 
+  function getStats() {
+    var data = window.TURISMO_DATA || createSnapshot();
+
+    if (window.TURISMO_DATA_ADAPTER && typeof window.TURISMO_DATA_ADAPTER.summarizeSnapshot === "function") {
+      return window.TURISMO_DATA_ADAPTER.summarizeSnapshot(data);
+    }
+
+    return {
+      totalItems: getAllItems().length,
+      withCoordinates: getAllItems().filter(function (item) {
+        return item && item.coordenadas
+          && typeof item.coordenadas.lat === "number"
+          && isFinite(item.coordenadas.lat)
+          && typeof item.coordenadas.lng === "number"
+          && isFinite(item.coordenadas.lng);
+      }).length
+    };
+  }
+
   function searchAll(query) {
     var normalizedQuery = normalizeText(query);
     if (!normalizedQuery) return [];
@@ -90,7 +115,8 @@
       "js/data/hospedagens.js",
       "js/data/restaurantes.js",
       "js/data/eventos.js",
-      "js/data/informacoes-essenciais.js"
+      "js/data/informacoes-essenciais.js",
+      "js/data/turismo-data-adapter.js"
     ],
     legacySources: [
       "js/locais-data.js",
@@ -98,11 +124,18 @@
       "js/roteiro-ia.js",
       "js/chatbot.js",
       "js/mapa3d.js"
-    ]
+    ],
+    stats: getStats(),
+    legacyIntegration: window.TURISMO_DATA.legacyMeta || {
+      locaisData: { total: 0, withCoordinates: 0 },
+      rotasData: { total: 0, withCoordinates: 0 }
+    }
   };
   window.TURISMO_DATA_HELPERS = {
     refresh: function () {
       window.TURISMO_DATA = createSnapshot();
+      window.TURISMO_DATA_META.stats = getStats();
+      window.TURISMO_DATA_META.legacyIntegration = window.TURISMO_DATA.legacyMeta || window.TURISMO_DATA_META.legacyIntegration;
       return window.TURISMO_DATA;
     },
     getCollection: getCollection,
@@ -110,6 +143,7 @@
     getPontosByCategoria: getPontosByCategoria,
     getRotasByCategoria: getRotasByCategoria,
     getAllItems: getAllItems,
-    searchAll: searchAll
+    searchAll: searchAll,
+    getStats: getStats
   };
 })();

@@ -12,6 +12,7 @@ Arquivos atuais:
 - `js/data/restaurantes.js`
 - `js/data/eventos.js`
 - `js/data/informacoes-essenciais.js`
+- `js/data/turismo-data-adapter.js`
 - `js/data/turismo-data.js`
 
 ## Papel de `js/data/turismo-data.js`
@@ -21,6 +22,7 @@ Arquivos atuais:
 Ele:
 
 - reúne os arrays globais principais em `window.TURISMO_DATA`
+- incorpora dados legados de `js/locais-data.js` e `js/rotas-data.js` por meio de um adaptador dedicado
 - mantém compatibilidade com JavaScript puro, sem `import`/`export`
 - expõe helpers simples em `window.TURISMO_DATA_HELPERS`
 - permite que busca, mapa, chatbot, roteiros e páginas futuras passem a consumir uma fonte comum
@@ -38,6 +40,14 @@ window.TURISMO_DATA = {
 };
 ```
 
+Na versão atual, esse snapshot base ainda passa por `js/data/turismo-data-adapter.js`, que:
+
+- lê `window.locaisData`
+- lê `window.ROTAS_LEGADO_ESTABLISHMENTS`
+- classifica itens legados em categorias padronizadas
+- deduplica contra a base nova
+- enriquece o snapshot final sem apagar as bases antigas
+
 ## Como o mapa consome `TURISMO_DATA`
 
 A primeira versão do mapa 2D usa `window.TURISMO_DATA` como fonte principal.
@@ -52,6 +62,14 @@ Consumo atual:
 - `TURISMO_DATA.informacoesEssenciais`
 
 Itens de `informacoesEssenciais` continuam entrando mesmo sem coordenadas, para apoiar busca, painel e atalhos de planejamento.
+
+Contagem consolidada atual:
+
+- `83` itens totais em `window.TURISMO_DATA`
+- `66` itens com coordenadas
+- `17` itens sem coordenadas
+- legado lido pelo adaptador: `15` registros de `js/locais-data.js` e `48` registros de `js/rotas-data.js`
+- efeito líquido da integração: `46` novos itens e `17` fusões por deduplicação
 
 ## Pagina principal de exploracao
 
@@ -166,7 +184,7 @@ Nem tudo foi migrado nesta rodada. Ainda existem dados relevantes nestes pontos:
 
 ## Como os novos arquivos devem ser usados
 
-Os arquivos de `js/data/` são as fontes primárias resumidas desta fase. Eles podem alimentar:
+Os arquivos de `js/data/` são as fontes primárias resumidas desta fase, agora combinados com a camada adaptadora legada. Eles podem alimentar:
 
 - busca estática
 - cards de listagem
@@ -239,8 +257,8 @@ window.TURISMO_PONTOS = [
 
 Rodadas futuras podem:
 
-- fundir parte de `js/locais-data.js` em `js/data/pontos-turisticos.js`
-- transformar `js/rotas-data.js` em fonte principal de rotas, hospedagens e empreendimentos
+- consolidar parte de `js/locais-data.js` direto nas bases novas quando as páginas de local estiverem estáveis
+- migrar `js/rotas-data.js` para uma fonte editorial mais organizada, sem perder a camada adaptadora
 - renderizar cards da HOME a partir dos arrays
 - alimentar mapa interativo com `coordenadas`
 - unificar chatbot, busca e roteiros sobre a mesma base

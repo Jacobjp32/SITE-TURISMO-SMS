@@ -12,8 +12,11 @@
 - `js/data/hospedagens.js`
 - `js/data/restaurantes.js`
 - `js/data/eventos.js`
+- `js/data/turismo-data-adapter.js`
 - `js/data/turismo-data.js`
 - `js/nav-shared.js`
+- `js/locais-data.js`
+- `js/rotas-data.js`
 
 ## Pagina principal
 
@@ -28,6 +31,22 @@ Uso recomendado:
 
 A URL antiga `/rotas-completas` foi mantida como camada legada com redirecionamento suave para o mapa.
 
+## Contagem atual
+
+Contagem consolidada apos a integracao da base legada:
+
+- `83` itens em `window.TURISMO_DATA`
+- `66` itens com coordenadas validas
+- `66` markers renderizaveis no mapa
+- `17` itens sem coordenadas
+
+Origem da ampliacao:
+
+- `15` registros de `js/locais-data.js`
+- `48` registros de `js/rotas-data.js`
+- `46` entradas legadas foram incorporadas como novos itens
+- `17` entradas legadas foram fundidas por deduplicacao com itens ja existentes
+
 ## Como o mapa funciona
 
 O mapa usa:
@@ -35,6 +54,8 @@ O mapa usa:
 - Leaflet via CDN
 - OpenStreetMap como base
 - `window.TURISMO_DATA` como fonte principal
+
+Na versao atual, `window.TURISMO_DATA` tambem aproveita a base legada via `js/data/turismo-data-adapter.js`, sem apagar `js/locais-data.js` nem `js/rotas-data.js`.
 
 O script `js/mapa-turistico.js` normaliza os dados e cria:
 
@@ -56,6 +77,7 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 - os cards ganharam leitura mais próxima da antiga lógica de `rotas-completas`, com miniatura, descrição curta, tags e ações rápidas consistentes
 - markers customizados por categoria com destaque visual para o item selecionado
 - seção de itens sem coordenadas mantida ao final da grade em formato recolhível, sem aumentar a altura do painel lateral
+- header do mapa alinhado ao mesmo padrão visual recente da HOME por meio do `nav-shared`
 
 ## Seleção marker, card e painel
 
@@ -71,11 +93,24 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 - os filtros continuam trabalhando sobre as categorias amplas do mapa: `Todos`, `História`, `Cultura`, `Natureza`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços`
 - os grupos da grade foram organizados em `Todos`, `Pontos Turísticos`, `Roteiros`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços`
 - a base `TURISMO_DATA.rotas` agora tambem entra no mapa como grupo `Roteiros`
+- a base legada de `js/rotas-data.js` passa a alimentar o mapa com empreendimentos rurais, gastronomia, hospedagens e experiencias antes ausentes
+- a base legada de `js/locais-data.js` continua enriquecendo pontos turisticos e ajustando coordenadas quando a fonte antiga e mais confiavel
 - itens originalmente marcados como `Roteiros` e `Institucional` continuam sem filtro proprio no topo para evitar excesso visual; na grade, `Roteiros` ganhou grupo dedicado
 - a busca combina nome, categoria, descrição, localização, período, telefone e tags normalizadas
 - quando não há resultado dentro de um filtro específico, a interface orienta o usuário a tentar `Todos`
 - a busca e os filtros atualizam ao mesmo tempo markers, grade e painel de destaque
 - itens sem coordenadas continuam aparecendo na grade e na busca, mesmo sem marker no mapa
+
+## Deduplicacao
+
+A integracao legada usa uma camada adaptadora com deduplicacao segura por:
+
+- `id` quando coincide
+- nome normalizado
+- URL quando coincide
+- coordenadas proximas apenas como apoio, junto com nome inicial e categoria
+
+Quando um item legado bate com um item atual, o mapa nao cria duplicata; ele funde tags, telefones, localizacao e, quando necessario, pode priorizar coordenadas da base antiga mais confiavel.
 
 ## Query string e hash
 

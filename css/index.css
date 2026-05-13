@@ -3780,8 +3780,8 @@
 }
 
 #map-hero {
-    height: min(760px, 86vh) !important;
-    min-height: 620px;
+    height: clamp(560px, 74vh, 680px) !important;
+    min-height: 560px;
     background: #071f18;
 }
 
@@ -3791,7 +3791,7 @@
 }
 
 .map-info-panel {
-    top: 132px !important;
+    top: 118px !important;
     left: max(2rem, calc((100vw - var(--home-container-wide)) / 2 + 2rem)) !important;
     width: min(430px, calc(100vw - 4rem)) !important;
     padding: 1.75rem !important;
@@ -4256,16 +4256,16 @@
     }
 
     #map-hero {
-        min-height: 700px;
+        min-height: 560px;
         height: auto !important;
     }
 
     #map {
-        height: 700px;
+        height: 560px;
     }
 
     .map-info-panel {
-        top: 96px !important;
+        top: 82px !important;
         left: 1rem !important;
         right: auto !important;
         width: calc(100vw - 2rem) !important;

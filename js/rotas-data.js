@@ -768,3 +768,6 @@ const establishments = [
         coordNote: 'Listado como empreendimento potencial no PDF; o mapa usa uma posição aproximada na região da Rota da Terra até a validação final.'
     }
 ];
+
+window.ROTAS_LEGADO_ROUTE_INFO = routeInfo;
+window.ROTAS_LEGADO_ESTABLISHMENTS = establishments;
