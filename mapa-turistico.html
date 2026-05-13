@@ -31,25 +31,56 @@
     <main class="map-page" id="main-content">
         <div class="map-page-shell">
             <section class="map-hero">
-                <span class="map-kicker" data-map-i18n="pageKicker">Explorar o Destino</span>
-                <h1 data-map-i18n="pageTitle">Mapa Turístico Interativo</h1>
-                <p data-map-i18n="pageSubtitle">Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.</p>
-                <div class="map-actions">
-                    <a class="map-action-link primary" href="/" data-map-i18n="actionHome">Voltar à HOME</a>
-                    <a class="map-action-link" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                <div class="map-hero-grid">
+                    <div class="map-hero-content">
+                        <span class="map-kicker" data-map-i18n="pageKicker">Explorar o Destino</span>
+                        <h1 data-map-i18n="pageTitle">Mapa Turístico Interativo</h1>
+                        <p class="map-hero-subtitle" data-map-i18n="pageSubtitle">Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.</p>
+                        <p class="map-hero-support" data-map-i18n="pageSupport">Navegue pelos principais atrativos de São Mateus do Sul, descubra experiências por categoria e use o mapa como ponto de partida para montar sua visita.</p>
+                        <div class="map-actions">
+                            <a class="map-action-link primary" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                            <a class="map-action-link" href="/o-que-fazer" data-map-i18n="actionPlan">Planejar visita</a>
+                            <a class="map-action-link subtle" href="/" data-map-i18n="actionHome">Voltar à HOME</a>
+                        </div>
+                    </div>
+                    <div class="map-hero-panel" aria-label="Resumo do mapa">
+                        <div class="map-hero-panel-head">
+                            <span class="map-hero-panel-kicker" data-map-i18n="heroPanelKicker">Visão rápida</span>
+                            <p data-map-i18n="heroPanelText">Uma leitura organizada para explorar o destino com mapa, filtros e atalhos de consulta.</p>
+                        </div>
+                        <div class="map-hero-stats" aria-live="polite">
+                            <article class="map-hero-stat-card">
+                                <strong id="mapHeroPoints">0</strong>
+                                <span data-map-i18n="heroPointsLabel">pontos no mapa</span>
+                            </article>
+                            <article class="map-hero-stat-card">
+                                <strong id="mapHeroPlaces">0</strong>
+                                <span data-map-i18n="heroPlacesLabel">locais cadastrados</span>
+                            </article>
+                            <article class="map-hero-stat-card">
+                                <strong id="mapHeroCategories">0</strong>
+                                <span data-map-i18n="heroCategoriesLabel">categorias</span>
+                            </article>
+                        </div>
+                        <div class="map-hero-note" data-map-i18n="heroNote">Itens sem coordenadas continuam disponíveis no painel para consulta e futura geolocalização.</div>
+                    </div>
                 </div>
             </section>
 
             <section class="map-toolbar" aria-label="Controles do mapa">
                 <div class="map-toolbar-main">
-                    <label class="map-search">
-                        <input id="mapSearchInput" type="search" autocomplete="off" data-map-i18n-placeholder="searchPlaceholder" data-map-i18n-aria="searchPlaceholder" placeholder="Buscar no mapa por nome, categoria ou palavra-chave" aria-label="Buscar no mapa por nome, categoria ou palavra-chave">
-                    </label>
+                    <div class="map-search-stack">
+                        <label class="map-search">
+                            <input id="mapSearchInput" type="search" autocomplete="off" data-map-i18n-placeholder="searchPlaceholder" data-map-i18n-aria="searchPlaceholder" placeholder="Buscar no mapa por nome, categoria ou palavra-chave" aria-label="Buscar no mapa por nome, categoria ou palavra-chave">
+                            <button id="mapSearchClear" class="map-search-clear" type="button" data-map-i18n="clearSearch" aria-label="Limpar busca">Limpar</button>
+                        </label>
+                        <p class="map-search-help" id="mapSearchStatus" data-map-i18n="searchHint">Busque por igreja, hotel, erva-mate, praça, evento ou serviço.</p>
+                    </div>
                     <div class="map-toolbar-stats" aria-live="polite">
                         <span class="map-stat-chip"><strong id="mapVisibleItems">0</strong> <span id="mapVisibleLabel">itens visíveis</span></span>
                         <span class="map-stat-chip"><strong id="mapLocatedItems">0</strong> <span id="mapLocatedLabel">com localização</span></span>
                     </div>
-                    <a class="map-action-link" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                    <a class="map-action-link" href="/o-que-fazer" data-map-i18n="actionGuide">Voltar ao guia do visitante</a>
                 </div>
                 <div class="map-filters" id="mapFilters" role="tablist" aria-label="Filtros do mapa"></div>
             </section>
@@ -80,8 +111,9 @@
                         </div>
                     </article>
 
-                    <article class="map-panel-card" style="margin-top: 1rem;">
+                    <article class="map-panel-card map-list-panel">
                         <h2 class="map-panel-title" data-map-i18n="listTitle">Locais e experiências</h2>
+                        <p class="map-panel-intro" data-map-i18n="listIntro">Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir ações rápidas.</p>
                         <div id="mapItemList"></div>
                         <div id="mapMissingItems"></div>
                     </article>

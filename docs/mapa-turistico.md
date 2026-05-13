@@ -28,6 +28,31 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 - painel lateral com detalhes
 - lista de itens sem coordenadas
 
+## Melhorias visuais implementadas
+
+- hero premium com apresentação institucional, texto de apoio e indicadores rápidos
+- busca com placeholder mais amigável, botão para limpar e mensagem dinâmica de resultado
+- filtros em chips com contagem, estado ativo mais claro e leitura melhor no mobile
+- layout principal reorganizado em mapa de destaque + painel lateral de exploração
+- cards com visual mais turístico, fallback elegante sem imagem e ações rápidas consistentes
+- markers customizados por categoria com destaque visual para o item selecionado
+- seção de itens sem coordenadas com texto explicativo e lista compacta
+
+## Seleção marker e card
+
+- clicar em um marker destaca o card correspondente e atualiza o painel de detalhes
+- clicar em um card com coordenadas centraliza o mapa no local e abre o popup do marker
+- o marker selecionado recebe destaque visual sem depender de animação pesada
+- o popup do Leaflet continua ativo para consulta rápida e link externo de rota
+
+## Como funcionam filtros e busca
+
+- os filtros continuam trabalhando sobre as categorias amplas do mapa: `Todos`, `História`, `Cultura`, `Natureza`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços`
+- itens originalmente marcados como `Roteiros` e `Institucional` permanecem cadastrados, mas entram visualmente no grupo `Serviços` para evitar excesso de filtros
+- a busca combina nome, categoria, descrição, localização, período, telefone e tags normalizadas
+- quando não há resultado dentro de um filtro específico, a interface orienta o usuário a tentar `Todos`
+- itens sem coordenadas continuam aparecendo na lista e na busca, mesmo sem marker no mapa
+
 ## Como revisar os dados do mapa
 
 1. Abra os arquivos em `js/data/`.
@@ -159,4 +184,5 @@ node --check js/mapa-turistico.js
 - transformar categorias em camadas opcionais
 - integrar rotas e linhas no mapa
 - conectar páginas de local com fotos adicionais
-- usar o mapa 2D como base de navegação para futura experiência 3D
+- explorar molduras, camadas e microinterações mais ricas sem perder desempenho
+- usar o mapa 2D como base de navegação para futura experiência visual 3D
