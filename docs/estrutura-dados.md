@@ -38,6 +38,77 @@ window.TURISMO_DATA = {
 };
 ```
 
+## Como o mapa consome `TURISMO_DATA`
+
+A primeira versão do mapa 2D usa `window.TURISMO_DATA` como fonte principal.
+
+Consumo atual:
+
+- `TURISMO_DATA.pontos`
+- `TURISMO_DATA.hospedagens`
+- `TURISMO_DATA.restaurantes`
+- `TURISMO_DATA.eventos`
+
+Itens de `informacoesEssenciais` só entram no mapa se no futuro receberem coordenadas válidas.
+
+## Campos necessários para um item aparecer no mapa
+
+Campos mínimos:
+
+- `id`
+- `nome`
+- `categoria`
+- `descricao`
+- `url` ou destino relacionado
+- `coordenadas.lat`
+- `coordenadas.lng`
+
+Se `lat` ou `lng` forem `null`, o item continua válido para busca e listagem, mas não gera marcador no mapa.
+
+## Como cadastrar coordenadas
+
+Padrão recomendado:
+
+```js
+coordenadas: {
+  lat: -25.8775,
+  lng: -50.3822
+}
+```
+
+Use coordenadas apenas quando houver fonte interna confiável. Se não houver, mantenha:
+
+```js
+coordenadas: {
+  lat: null,
+  lng: null
+}
+```
+
+## Como cadastrar categoria, URL e imagem
+
+- `categoria`: ajuda filtros e agrupamento visual
+- `url`: alimenta o botão "Ver detalhes"
+- `imagem`: alimenta cards e painel lateral do mapa
+
+Exemplo:
+
+```js
+{
+  id: "igreja-matriz",
+  nome: "Igreja Matriz São Mateus",
+  categoria: "Patrimônio Histórico",
+  descricao: "Arquitetura neogótica preservada e símbolo histórico da cidade.",
+  imagem: "images/IGREJA_MATRIZ_FRONTAL.jpg",
+  url: "/local?id=igreja-matriz",
+  coordenadas: {
+    lat: -25.8769,
+    lng: -50.3838
+  },
+  tags: ["igreja", "matriz", "historia"]
+}
+```
+
 ## Onde os dados ainda estão hoje
 
 Nem tudo foi migrado nesta rodada. Ainda existem dados relevantes nestes pontos:

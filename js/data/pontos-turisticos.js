@@ -54,9 +54,9 @@ window.TURISMO_PONTOS = [
     nome: "Casa da Memória Padre Bauer",
     categoria: "História",
     descricao: "Patrimônio e memória local ligados à formação do município.",
-    imagem: "images/CASA_DA_MEMORIA.jpg",
+    imagem: "images/CASA_DA_MEMORIA.png",
     url: "/o-que-fazer",
-    coordenadas: { lat: null, lng: null },
+    coordenadas: { lat: -25.877, lng: -50.3835 },
     tags: ["casa da memoria", "historia", "patrimonio", "cultura"]
   },
   {
@@ -76,7 +76,7 @@ window.TURISMO_PONTOS = [
     descricao: "Ponto ligado à cultura do mate e às experiências locais.",
     imagem: "images/PRACA_DO_RIO_IGUACU.jpg",
     url: "/local?id=chimarrodromo",
-    coordenadas: { lat: null, lng: null },
+    coordenadas: { lat: -25.8762, lng: -50.3856 },
     tags: ["chimarrodromo", "chimarrao", "erva-mate", "roda de mathe"]
   }
 ];

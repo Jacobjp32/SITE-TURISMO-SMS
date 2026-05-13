@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mapa Turístico Interativo de São Mateus do Sul com pontos turísticos, gastronomia, hospedagem e experiências do destino.">
+    <title>Mapa Turístico Interativo - São Mateus do Sul</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/mapa-turistico.css">
+
+    <script src="translations.js"></script>
+    <script src="config.js"></script>
+    <script src="js/data/pontos-turisticos.js" defer></script>
+    <script src="js/data/rotas.js" defer></script>
+    <script src="js/data/hospedagens.js" defer></script>
+    <script src="js/data/restaurantes.js" defer></script>
+    <script src="js/data/eventos.js" defer></script>
+    <script src="js/data/informacoes-essenciais.js" defer></script>
+    <script src="js/data/turismo-data.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
+    <script src="js/mapa-turistico.js" defer></script>
+</head>
+<body>
+    <script src="js/nav-shared.js"></script>
+
+    <main class="map-page" id="main-content">
+        <div class="map-page-shell">
+            <section class="map-hero">
+                <span class="map-kicker" data-map-i18n="pageKicker">Explorar o Destino</span>
+                <h1 data-map-i18n="pageTitle">Mapa Turístico Interativo</h1>
+                <p data-map-i18n="pageSubtitle">Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.</p>
+                <div class="map-actions">
+                    <a class="map-action-link primary" href="/" data-map-i18n="actionHome">Voltar à HOME</a>
+                    <a class="map-action-link" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                </div>
+            </section>
+
+            <section class="map-toolbar" aria-label="Controles do mapa">
+                <div class="map-toolbar-main">
+                    <label class="map-search">
+                        <input id="mapSearchInput" type="search" autocomplete="off" data-map-i18n-placeholder="searchPlaceholder" data-map-i18n-aria="searchPlaceholder" placeholder="Buscar no mapa por nome, categoria ou palavra-chave" aria-label="Buscar no mapa por nome, categoria ou palavra-chave">
+                    </label>
+                    <div class="map-toolbar-stats" aria-live="polite">
+                        <span class="map-stat-chip"><strong id="mapVisibleItems">0</strong> <span id="mapVisibleLabel">itens visíveis</span></span>
+                        <span class="map-stat-chip"><strong id="mapLocatedItems">0</strong> <span id="mapLocatedLabel">com localização</span></span>
+                    </div>
+                    <a class="map-action-link" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                </div>
+                <div class="map-filters" id="mapFilters" role="tablist" aria-label="Filtros do mapa"></div>
+            </section>
+
+            <section class="map-layout">
+                <div class="map-stage">
+                    <article class="map-stage-card">
+                        <div class="map-stage-head">
+                            <div>
+                                <h2 data-map-i18n="stageTitle">Exploração no mapa</h2>
+                                <p data-map-i18n="stageSubtitle">Clique em um marcador ou item da lista para ver detalhes.</p>
+                            </div>
+                            <span class="map-stage-badge" data-map-i18n="stageBadge">OpenStreetMap</span>
+                        </div>
+                        <div id="tourismMap" aria-label="Mapa turístico de São Mateus do Sul"></div>
+                        <div class="map-stage-foot">
+                            <p data-map-i18n="stageSummary">Use os filtros para destacar categorias turísticas.</p>
+                            <p><strong id="mapTotalItems">0</strong> <span id="mapTotalLabel" data-map-i18n="totalItemsLabel">itens catalogados</span></p>
+                        </div>
+                    </article>
+                </div>
+
+                <aside class="map-sidebar">
+                    <article class="map-panel-card">
+                        <h2 class="map-panel-title" data-map-i18n="selectedTitle">Detalhes do local</h2>
+                        <div id="mapSelectedItem">
+                            <div class="map-selected-empty" data-map-i18n="selectedEmpty">Selecione um ponto no mapa ou na lista para ver imagem, categoria, descrição e ações rápidas.</div>
+                        </div>
+                    </article>
+
+                    <article class="map-panel-card" style="margin-top: 1rem;">
+                        <h2 class="map-panel-title" data-map-i18n="listTitle">Locais e experiências</h2>
+                        <div id="mapItemList"></div>
+                        <div id="mapMissingItems"></div>
+                    </article>
+                </aside>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

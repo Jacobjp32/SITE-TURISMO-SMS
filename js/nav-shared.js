@@ -46,7 +46,7 @@
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-completo" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
+                    <a href="/mapa-turistico.html" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
                     <a href="/o-que-fazer" data-lang-key="nav-pontos-turisticos">Pontos Turísticos</a>
                     <a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a>
                     <a href="/galeria" data-lang-key="nav-galeria">Galeria</a>
@@ -78,7 +78,7 @@
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
                     <a href="/onde-ficar" data-lang-key="nav-onde-ficar">Onde Ficar</a>
-                    <a href="/mapa-completo" data-lang-key="nav-como-chegar">Como Chegar</a>
+                    <a href="/mapa-turistico.html" data-lang-key="nav-como-chegar">Como Chegar</a>
                     <a href="/#visitor-guide-title" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
                     <a href="/#weather-title" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
                     <a href="/#contato" data-lang-key="nav-contato">Contato</a>
