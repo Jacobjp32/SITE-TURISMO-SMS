@@ -60,6 +60,7 @@ Campos mínimos:
 - `categoria`
 - `descricao`
 - `url` ou destino relacionado
+- `tags`
 - `coordenadas.lat`
 - `coordenadas.lng`
 
@@ -91,23 +92,47 @@ coordenadas: {
 - `url`: alimenta o botão "Ver detalhes"
 - `imagem`: alimenta cards e painel lateral do mapa
 
+Categorias preferenciais nesta fase:
+
+- `História`
+- `Cultura`
+- `Natureza`
+- `Gastronomia`
+- `Hospedagem`
+- `Eventos`
+- `Serviços`
+- `Roteiros`
+- `Institucional`
+
 Exemplo:
 
 ```js
-{
+  {
   id: "igreja-matriz",
   nome: "Igreja Matriz São Mateus",
-  categoria: "Patrimônio Histórico",
-  descricao: "Arquitetura neogótica preservada e símbolo histórico da cidade.",
+  categoria: "História",
+  descricao: "Arquitetura neogótica preservada e um dos marcos históricos do centro da cidade.",
   imagem: "images/IGREJA_MATRIZ_FRONTAL.jpg",
   url: "/local?id=igreja-matriz",
   coordenadas: {
     lat: -25.8769,
     lng: -50.3838
   },
-  tags: ["igreja", "matriz", "historia"]
+  tags: ["igreja matriz", "história", "patrimônio histórico"]
 }
 ```
+
+## Como revisar dados do mapa
+
+Use esta sequência curta:
+
+1. confirme se a categoria está dentro do conjunto preferencial
+2. confirme se a descrição funciona bem em card curto
+3. confirme se a URL leva a página ou âncora segura
+4. confirme se a imagem existe no projeto
+5. confirme se `lat/lng` estão como número ou `null`
+
+Se houver lacuna, registre em `docs/pendencias-mapa.md`.
 
 ## Onde os dados ainda estão hoje
 

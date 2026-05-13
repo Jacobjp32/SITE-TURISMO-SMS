@@ -248,7 +248,16 @@
   }
 
   function classifyCategory(itemType, rawCategory, tags, description) {
+    var normalizedCategory = normalizeText(rawCategory);
     var source = normalizeText([rawCategory, description, Array.isArray(tags) ? tags.join(" ") : tags].join(" "));
+
+    if (normalizedCategory.indexOf("historia") !== -1) return "history";
+    if (normalizedCategory.indexOf("cultura") !== -1) return "culture";
+    if (normalizedCategory.indexOf("natureza") !== -1) return "nature";
+    if (normalizedCategory.indexOf("gastronomia") !== -1) return "gastronomy";
+    if (normalizedCategory.indexOf("hospedagem") !== -1) return "lodging";
+    if (normalizedCategory.indexOf("evento") !== -1) return "events";
+    if (normalizedCategory.indexOf("servico") !== -1) return "services";
 
     if (itemType === "hospedagem") return "lodging";
     if (itemType === "restaurante") return "gastronomy";

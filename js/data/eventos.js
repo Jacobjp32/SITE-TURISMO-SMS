@@ -2,97 +2,105 @@ window.TURISMO_EVENTOS = [
   {
     id: "agrosamas",
     nome: "AgroSamas",
-    categoria: "Evento Anual",
-    descricao: "Maior evento do município, com shows, feira gastronômica, exposição agropecuária e atrações para toda a família.",
+    categoria: "Eventos",
+    descricao: "Grande evento do município com shows, feira gastronômica, exposição agropecuária e atrações para toda a família.",
     imagem: "",
-    url: "/eventos#setembro",
+    url: "/eventos",
     periodo: "Setembro",
     local: "Parque de Exposições",
     recorrencia: "anual",
-    tags: ["agrosamas", "feira", "shows", "agropecuaria"]
+    coordenadas: { lat: -25.88, lng: -50.39 },
+    tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "setembro"]
   },
   {
     id: "natal-ouro-verde",
     nome: "Natal Ouro Verde",
-    categoria: "Evento Anual",
-    descricao: "Programação natalina com desfiles, iluminação especial, shows e feira gastronômica.",
+    categoria: "Eventos",
+    descricao: "Programação natalina com desfiles, iluminação especial, shows e ativações no centro da cidade.",
     imagem: "images/WEBP/NATAL-_17_.webp",
-    url: "/eventos#dezembro",
+    url: "/eventos",
     periodo: "Dezembro",
     local: "Centro da Cidade",
     recorrencia: "anual",
-    tags: ["natal", "ouro verde", "dezembro", "familia"]
+    coordenadas: { lat: -25.8775, lng: -50.384 },
+    tags: ["eventos", "natal ouro verde", "dezembro", "família", "centro", "programação natalina"]
   },
   {
     id: "polskie-smaki",
     nome: "Polskie Smaki",
-    categoria: "Festa Tradicional",
-    descricao: "Festival gastronômico e cultural voltado à herança polonesa de São Mateus do Sul.",
+    categoria: "Eventos",
+    descricao: "Festival gastronômico e cultural voltado à herança polonesa e aos sabores tradicionais do município.",
     imagem: "images/POLSKIE_SMAKI__1_.jpg",
     url: "/eventos",
     periodo: "Agosto",
-    local: "São Mateus do Sul",
+    local: "Rua do Mathe",
     recorrencia: "anual",
-    tags: ["polskie smaki", "polonesa", "festival", "gastronomia"]
+    coordenadas: { lat: -25.878, lng: -50.385 },
+    tags: ["eventos", "polskie smaki", "cultura polonesa", "festival", "gastronomia", "agosto"]
   },
   {
     id: "miss-sao-mateus",
     nome: "Miss São Mateus do Sul",
-    categoria: "Evento Cultural",
-    descricao: "Concurso que celebra a identidade cultural e a tradição local.",
+    categoria: "Eventos",
+    descricao: "Concurso ligado ao calendário cultural que valoriza identidade local, tradição e representação do município.",
     imagem: "images/POLSKIE_SMAKI__1_.jpg",
     url: "/eventos",
     periodo: "Calendário anual",
     local: "São Mateus do Sul",
     recorrencia: "anual",
-    tags: ["miss", "cultura", "tradicao", "evento"]
+    coordenadas: { lat: -25.8775, lng: -50.384 },
+    tags: ["eventos", "miss são mateus do sul", "cultura", "tradição", "calendário anual", "cidade"]
   },
   {
     id: "feira-gastronomica",
     nome: "Feira Gastronômica",
-    categoria: "Evento Recorrente",
-    descricao: "Feira semanal com comidas típicas, artesanato e encontros locais.",
+    categoria: "Eventos",
+    descricao: "Feira semanal com comidas típicas, artesanato e convivência na Rua do Mathe.",
     imagem: "",
-    url: "/#eventos",
+    url: "/eventos",
     periodo: "Quartas e sextas, 17h-22h",
     local: "Rua do Mathe",
     recorrencia: "semanal",
-    tags: ["feira gastronomica", "rua do mathe", "comida", "semanal"]
+    coordenadas: { lat: -25.878, lng: -50.385 },
+    tags: ["eventos", "feira gastronômica", "rua do mathe", "comida típica", "semanal", "gastronomia"]
   },
   {
     id: "feira-do-produtor",
     nome: "Feira do Produtor",
-    categoria: "Evento Recorrente",
-    descricao: "Produtos locais, alimentos frescos e contato direto com produtores.",
+    categoria: "Eventos",
+    descricao: "Encontro semanal de produtos locais, alimentos frescos e contato direto com produtores da região.",
     imagem: "",
-    url: "/#eventos",
+    url: "/eventos",
     periodo: "Sábados, 7h-12h",
     local: "Rua do Mathe",
     recorrencia: "semanal",
-    tags: ["feira do produtor", "produtos locais", "sabado"]
+    coordenadas: { lat: -25.878, lng: -50.385 },
+    tags: ["eventos", "feira do produtor", "produtos locais", "sábado", "agricultura familiar", "rua do mathe"]
   },
   {
     id: "roda-de-mathe",
     nome: "Roda de Mathe",
-    categoria: "Evento Recorrente",
-    descricao: "Encontro mensal para celebrar a cultura do chimarrão e da erva-mate.",
+    categoria: "Eventos",
+    descricao: "Encontro mensal dedicado ao chimarrão, à erva-mate e à convivência em torno da cultura local.",
     imagem: "",
-    url: "/#eventos",
+    url: "/eventos",
     periodo: "1º domingo, 9h",
     local: "Chimarródromo",
     recorrencia: "mensal",
-    tags: ["roda de mathe", "chimarrao", "erva-mate", "mensal"]
+    coordenadas: { lat: -25.8762, lng: -50.3856 },
+    tags: ["eventos", "roda de mathe", "chimarrão", "erva-mate", "mensal", "cultura"]
   },
   {
     id: "feira-da-lua",
     nome: "Feira da Lua",
-    categoria: "Evento Recorrente",
-    descricao: "Feira local com gastronomia, convivência e produtos regionais.",
+    categoria: "Eventos",
+    descricao: "Feira local com gastronomia, convivência comunitária e circulação de produtos regionais.",
     imagem: "",
-    url: "/#eventos",
+    url: "/eventos",
     periodo: "2ª terça, 17h-22h",
     local: "Vila Pinheirinho",
     recorrencia: "mensal",
-    tags: ["feira da lua", "vila pinheirinho", "gastronomia"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["eventos", "feira da lua", "vila pinheirinho", "gastronomia", "mensal", "produtos regionais"]
   }
 ];

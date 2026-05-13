@@ -2,56 +2,61 @@ window.TURISMO_RESTAURANTES = [
   {
     id: "ancestral-gastronomia",
     nome: "Ancestral Gastronomia",
-    categoria: "Gastronomia Polonesa",
-    descricao: "Culinária polonesa, pães de fermentação natural e eventos temáticos.",
+    categoria: "Gastronomia",
+    descricao: "Culinária polonesa, pães de fermentação natural e experiências temáticas na Colônia Taquaral.",
     imagem: "",
     url: "/sabores#restaurantes",
     telefone: "(42) 98804-0535",
     localizacao: "Colônia Taquaral",
-    tags: ["restaurante", "polonesa", "paes", "eventos tematicos"]
+    coordenadas: { lat: -25.8465617, lng: -50.3827306 },
+    tags: ["gastronomia", "restaurante", "culinária polonesa", "pães artesanais", "colônia taquaral", "experiência local"]
   },
   {
     id: "marina-barra-iguacu",
     nome: "Marina Barra do Iguaçu",
-    categoria: "Restaurante",
-    descricao: "Restaurante de frutos do mar, centro náutico e lazer à beira-rio.",
+    categoria: "Gastronomia",
+    descricao: "Restaurante com perfil náutico, frutos do mar e lazer à beira do Rio Iguaçu.",
     imagem: "",
     url: "/sabores#restaurantes",
     telefone: "(42) 98841-6009",
     localizacao: "Colônia Iguaçu",
-    tags: ["restaurante", "frutos do mar", "rio", "nautico"]
+    coordenadas: { lat: -25.8899745, lng: -50.4340955 },
+    tags: ["gastronomia", "restaurante", "frutos do mar", "rio iguaçu", "náutico", "lazer"]
   },
   {
     id: "restaurante-dallas",
     nome: "Restaurante e Churrascaria Dallas",
-    categoria: "Restaurante",
-    descricao: "Buffet variado, carnes selecionadas, saladas frescas e sobremesas caseiras.",
+    categoria: "Gastronomia",
+    descricao: "Buffet variado, carnes selecionadas e almoço de apoio para quem circula por Fluviópolis.",
     imagem: "",
     url: "/sabores#restaurantes",
     telefone: "(42) 98845-6741",
     localizacao: "Fluviópolis",
-    tags: ["restaurante", "churrascaria", "buffet", "fluviopolis"]
+    coordenadas: { lat: -25.9572075, lng: -50.5168741 },
+    tags: ["gastronomia", "restaurante", "churrascaria", "buffet", "fluviópolis", "almoço"]
   },
   {
     id: "parada-pinoli",
     nome: "Parada Pinoli",
-    categoria: "Parada Gastronômica",
-    descricao: "Restaurante, panificação fresquinha, espaço pet e kids na estrada.",
+    categoria: "Gastronomia",
+    descricao: "Parada gastronômica em Fluviópolis com panificação, refeições e estrutura para famílias em viagem.",
     imagem: "",
     url: "/sabores#restaurantes",
     telefone: "(42) 99960-0496",
     localizacao: "Fluviópolis",
-    tags: ["restaurante", "panificacao", "familia", "estrada"]
+    coordenadas: { lat: -25.9989864, lng: -50.5866816 },
+    tags: ["gastronomia", "parada gastronômica", "panificação", "família", "estrada", "fluviópolis"]
   },
   {
     id: "rua-do-mathe",
     nome: "Rua do Mathe",
-    categoria: "Polo Gastronômico",
-    descricao: "Espaço gastronômico e cultural com feiras, erva-mate e experiências locais.",
+    categoria: "Gastronomia",
+    descricao: "Polo gastronômico e cultural com feiras, erva-mate e experiências ligadas aos produtos locais.",
     imagem: "images/RUA_DO_MATHE.jpg",
     url: "/local?id=rua-do-mathe",
     telefone: "(42) 3532-0000",
     localizacao: "Centro",
-    tags: ["rua do mathe", "gastronomia", "feira", "erva-mate", "produtos locais"]
+    coordenadas: { lat: -25.878, lng: -50.385 },
+    tags: ["rua do mathe", "gastronomia", "feiras", "erva-mate", "produtos locais", "cultura"]
   }
 ];

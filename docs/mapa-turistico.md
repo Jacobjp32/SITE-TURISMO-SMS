@@ -28,11 +28,31 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 - painel lateral com detalhes
 - lista de itens sem coordenadas
 
+## Como revisar os dados do mapa
+
+1. Abra os arquivos em `js/data/`.
+2. Confirme `categoria`, `descricao`, `imagem`, `url`, `tags` e `coordenadas`.
+3. Use `docs/pendencias-mapa.md` como fila de correção manual.
+4. Sempre prefira dados já existentes no projeto antes de completar um campo.
+
+Categorias preferenciais nesta fase:
+
+- `História`
+- `Cultura`
+- `Natureza`
+- `Gastronomia`
+- `Hospedagem`
+- `Eventos`
+- `Serviços`
+- `Roteiros`
+- `Institucional`
+
 ## Como adicionar um novo ponto no mapa
 
 1. Abra `js/data/pontos-turisticos.js`.
-2. Adicione o item com `id`, `nome`, `categoria`, `descricao`, `url` e `coordenadas`.
-3. Se `coordenadas.lat` e `coordenadas.lng` forem numéricos, o item aparecerá no mapa.
+2. Adicione o item com `id`, `nome`, `categoria`, `descricao`, `url`, `tags` e `coordenadas`.
+3. Se existir `imagem`, ela entra no card de detalhe e na lista.
+4. Se `coordenadas.lat` e `coordenadas.lng` forem numéricos, o item aparecerá no mapa como marker.
 
 ## Como adicionar uma nova hospedagem
 
@@ -56,6 +76,33 @@ Checklist:
 4. Verifique se a busca não está escondendo o item.
 5. Rode `window.TURISMO_DATA_HELPERS.refresh()` no console após alterar dados em ambiente local.
 
+Se o item estiver na lista, mas não no mapa, quase sempre o motivo é um destes:
+
+- `lat` ou `lng` estão `null`
+- `lat` ou `lng` vieram como texto e não como número
+- a busca atual removeu o item da visão
+- o filtro ativo não corresponde à categoria normalizada
+
+## Campos mínimos por item
+
+Campos mínimos recomendados para boa qualidade no mapa:
+
+- `id`
+- `nome`
+- `categoria`
+- `descricao`
+- `url`
+- `tags`
+- `coordenadas`
+
+Campos opcionais, mas desejáveis:
+
+- `imagem`
+- `telefone`
+- `localizacao`
+- `periodo`
+- `local`
+
 ## Itens sem coordenadas
 
 Itens sem coordenadas não geram marker, mas continuam:
@@ -63,6 +110,48 @@ Itens sem coordenadas não geram marker, mas continuam:
 - disponíveis para evolução futura
 - listados no painel quando filtrados
 - válidos para busca em outras camadas do portal
+
+## Como cadastrar coordenadas depois
+
+Use este padrão:
+
+```js
+coordenadas: {
+  lat: -25.8769,
+  lng: -50.3838
+}
+```
+
+Se a coordenada ainda não for confiável, mantenha:
+
+```js
+coordenadas: {
+  lat: null,
+  lng: null
+}
+```
+
+## Como testar o mapa após editar dados
+
+1. Rode:
+
+```powershell
+node --check js/data/pontos-turisticos.js
+node --check js/data/hospedagens.js
+node --check js/data/restaurantes.js
+node --check js/data/eventos.js
+node --check js/data/informacoes-essenciais.js
+node --check js/data/turismo-data.js
+node --check js/mapa-turistico.js
+```
+
+2. Abra `mapa-turistico.html` em servidor local.
+3. Confirme:
+   - markers visíveis
+   - itens sem coordenadas listados
+   - busca funcionando
+   - filtros atualizando contagem e cards
+   - mobile sem `overflow` horizontal
 
 ## Próximos passos para versão premium / 3D
 

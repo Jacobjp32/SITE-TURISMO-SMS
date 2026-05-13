@@ -2,56 +2,61 @@ window.TURISMO_HOSPEDAGENS = [
   {
     id: "hotel-sao-mateus",
     nome: "Hotel São Mateus",
-    categoria: "Hotel",
-    descricao: "Hotel tradicional no centro da cidade com quartos confortáveis e café da manhã colonial.",
+    categoria: "Hospedagem",
+    descricao: "Hotel tradicional no centro, com acesso fácil à Igreja Matriz e aos principais pontos turísticos.",
     imagem: "",
     url: "/onde-ficar",
     telefone: "(42) 3282-2000",
     localizacao: "Centro",
-    tags: ["hotel", "centro", "wifi", "cafe colonial", "estacionamento"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["hospedagem", "hotel", "centro", "café da manhã", "estacionamento", "turismo"]
   },
   {
     id: "hotel-nora",
     nome: "Hotel Nora",
-    categoria: "Hotel",
-    descricao: "Acomodações aconchegantes com atendimento familiar e localização privilegiada.",
+    categoria: "Hospedagem",
+    descricao: "Hospedagem confortável com perfil acolhedor, café da manhã e localização prática na cidade.",
     imagem: "",
     url: "/onde-ficar",
     telefone: "(42) 3282-1500",
     localizacao: "Centro",
-    tags: ["hotel", "centro", "quartos climatizados", "tv", "frigobar"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["hospedagem", "hotel", "centro", "família", "café da manhã", "quartos"]
   },
   {
     id: "hotel-dom-leopoldo",
     nome: "Hotel Dom Leopoldo",
-    categoria: "Hotel",
-    descricao: "Hospedagem com charme polonês, restaurante com pratos típicos e ambiente familiar.",
+    categoria: "Hospedagem",
+    descricao: "Hospedagem com referência à herança polonesa, ambiente acolhedor e estrutura para estadia no centro.",
     imagem: "",
     url: "/onde-ficar",
     telefone: "(42) 3282-3000",
     localizacao: "Centro",
-    tags: ["hotel", "restaurante", "gastronomia polonesa", "eventos"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["hospedagem", "hotel", "centro", "cultura polonesa", "estadia", "turismo"]
   },
   {
     id: "pousadas-rurais",
     nome: "Pousadas Rurais",
-    categoria: "Pousada",
-    descricao: "Experiência autêntica em fazendas e propriedades rurais com contato direto com a natureza.",
+    categoria: "Hospedagem",
+    descricao: "Opções em áreas rurais e colônias, com contato direto com a paisagem local e experiências do campo.",
     imagem: "",
     url: "/onde-ficar",
     telefone: "",
     localizacao: "Área Rural",
-    tags: ["pousada", "rural", "natureza", "cafe colonial", "atividades"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["hospedagem", "pousada", "turismo rural", "natureza", "café colonial", "experiência no campo"]
   },
   {
     id: "hotel-moro",
     nome: "Hotel Moro",
-    categoria: "Hotel",
-    descricao: "Hospedagem confortável com café da manhã e estacionamento gratuito em Fluviópolis.",
+    categoria: "Hospedagem",
+    descricao: "Hospedagem em Fluviópolis com café da manhã, estacionamento e apoio à visita pela região.",
     imagem: "",
-    url: "/rotas-completas",
+    url: "/onde-ficar",
     telefone: "(42) 98887-4202",
     localizacao: "Fluviópolis",
-    tags: ["hotel", "fluviopolis", "cafe da manha", "estacionamento"]
+    coordenadas: { lat: -25.9980108, lng: -50.5880208 },
+    tags: ["hospedagem", "hotel", "fluviópolis", "café da manhã", "estacionamento", "roteiros"]
   }
 ];

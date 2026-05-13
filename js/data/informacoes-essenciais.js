@@ -2,46 +2,56 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
   {
     id: "mapa-turistico",
     nome: "Mapa Turístico",
-    categoria: "Planeje sua visita",
-    descricao: "Visualização geral de pontos, rotas e referências do turismo local.",
-    url: "/mapa-completo",
+    categoria: "Serviços",
+    descricao: "Visualização interativa de pontos, rotas e referências para organizar a visita.",
+    imagem: "",
+    url: "/mapa-turistico.html",
     destaque: "Explorar no mapa",
-    tags: ["mapa", "roteiros", "pontos", "localizacao"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["mapa turístico", "serviços", "localização", "pontos turísticos", "planejamento", "roteiros"]
   },
   {
     id: "roteiros",
     nome: "Roteiros",
-    categoria: "Planeje sua visita",
-    descricao: "Cultura polonesa, erva-mate, Rio Iguaçu, gastronomia e turismo rural.",
+    categoria: "Roteiros",
+    descricao: "Percursos temáticos com cultura polonesa, erva-mate, Rio Iguaçu, gastronomia e turismo rural.",
+    imagem: "",
     url: "/rotas-completas",
     destaque: "Ver rotas",
-    tags: ["roteiros", "rotas", "trajetos", "experiencias"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["roteiros", "rotas", "trajetos", "experiências", "planejamento", "mapa"]
   },
   {
     id: "onde-ficar",
     nome: "Onde Ficar",
-    categoria: "Planeje sua visita",
-    descricao: "Hospedagens, hotéis e pousadas para organizar a estadia.",
+    categoria: "Hospedagem",
+    descricao: "Hotéis, pousadas e opções de estadia para apoiar a visita ao destino.",
+    imagem: "",
     url: "/onde-ficar",
     destaque: "Hospedagem",
-    tags: ["hospedagem", "hotel", "pousada"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["hospedagem", "hotel", "pousada", "estadias", "planeje sua visita", "turismo"]
   },
   {
     id: "previsao-do-tempo",
     nome: "Previsão do Tempo",
-    categoria: "Planeje sua visita",
-    descricao: "Consulta rápida do clima para planejar o passeio.",
+    categoria: "Serviços",
+    descricao: "Consulta rápida do clima para escolher melhor o dia e o tipo de passeio.",
+    imagem: "",
     url: "/#weather-title",
     destaque: "Clima",
-    tags: ["tempo", "clima", "temperatura"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["previsão do tempo", "clima", "temperatura", "serviços", "planejamento", "passeio"]
   },
   {
     id: "contato-turismo",
     nome: "Contato",
-    categoria: "Planeje sua visita",
-    descricao: "Atendimento do Departamento de Cultura e Turismo.",
+    categoria: "Institucional",
+    descricao: "Canal de atendimento do Departamento de Cultura e Turismo para apoio ao visitante.",
+    imagem: "",
     url: "/#contato",
     destaque: "Atendimento",
-    tags: ["contato", "telefone", "email", "turismo"]
+    coordenadas: { lat: null, lng: null },
+    tags: ["contato", "atendimento", "departamento de turismo", "telefone", "email", "institucional"]
   }
 ];
