@@ -18,6 +18,7 @@
     '/noticia':          { pt: 'Notícia',              en: 'Article',        es: 'Artículo',       pl: 'Artykuł' },
     '/onde-ficar':       { pt: 'Onde Ficar',           en: 'Where to Stay',  es: 'Dónde Quedarse', pl: 'Noclegi' },
     '/rotas-completas':  { pt: 'Roteiros',             en: 'Itineraries',    es: 'Itinerarios',    pl: 'Trasy' },
+    '/mapa-turistico':   { pt: 'Mapa Turístico',       en: 'Tourism Map',    es: 'Mapa Turístico', pl: 'Mapa Turystyczna' },
     '/roteiro-ia':       { pt: 'Roteiro com IA',       en: 'AI Itinerary',   es: 'Itinerario IA',  pl: 'Trasa AI' },
     '/mapa-completo':    { pt: 'Mapa Completo',        en: 'Full Map',       es: 'Mapa Completo',  pl: 'Pełna Mapa' },
     '/mapa-3d':          { pt: 'Mapa 3D',              en: '3D Map',         es: 'Mapa 3D',        pl: 'Mapa 3D' },

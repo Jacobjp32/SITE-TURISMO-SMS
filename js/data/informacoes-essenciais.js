@@ -16,7 +16,7 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
     categoria: "Roteiros",
     descricao: "Percursos temáticos com cultura polonesa, erva-mate, Rio Iguaçu, gastronomia e turismo rural.",
     imagem: "",
-    url: "/rotas-completas",
+    url: "/mapa-turistico.html?grupo=roteiros",
     destaque: "Ver rotas",
     coordenadas: { lat: null, lng: null },
     tags: ["roteiros", "rotas", "trajetos", "experiências", "planejamento", "mapa"]

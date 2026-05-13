@@ -45,11 +45,29 @@ A primeira versão do mapa 2D usa `window.TURISMO_DATA` como fonte principal.
 Consumo atual:
 
 - `TURISMO_DATA.pontos`
+- `TURISMO_DATA.rotas`
 - `TURISMO_DATA.hospedagens`
 - `TURISMO_DATA.restaurantes`
 - `TURISMO_DATA.eventos`
+- `TURISMO_DATA.informacoesEssenciais`
 
-Itens de `informacoesEssenciais` só entram no mapa se no futuro receberem coordenadas válidas.
+Itens de `informacoesEssenciais` continuam entrando mesmo sem coordenadas, para apoiar busca, painel e atalhos de planejamento.
+
+## Pagina principal de exploracao
+
+`mapa-turistico.html` virou a pagina principal/oficial para exploracao turistica.
+
+Consequencias atuais:
+
+- `js/data/rotas.js` deve apontar para o mapa principal quando o destino for explorar roteiros
+- `rotas-completas` permanece como URL legada
+- links internos podem usar `?grupo=` e `?categoria=` para abrir o mapa em um recorte especifico
+
+Exemplos:
+
+- `/mapa-turistico.html?grupo=roteiros`
+- `/mapa-turistico.html?categoria=Hospedagem`
+- `/mapa-turistico.html?categoria=Gastronomia`
 
 ## Campos necessários para um item aparecer no mapa
 
@@ -196,6 +214,7 @@ window.TURISMO_PONTOS = [
 2. Adicione um novo objeto em `window.TURISMO_ROTAS`.
 3. Informe `id`, `nome`, `categoria`, `descricao`, `url` e `tags`.
 4. Se a rota tiver cor ou ícone próprios, mantenha esses campos.
+5. Para manter a experiencia unificada, prefira URL ligada ao mapa principal, como `/mapa-turistico.html?grupo=roteiros`.
 
 ## Como adicionar uma nova hospedagem
 

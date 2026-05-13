@@ -38,8 +38,8 @@
                         <p class="map-hero-subtitle" data-map-i18n="pageSubtitle">Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.</p>
                         <p class="map-hero-support" data-map-i18n="pageSupport">Navegue pelos principais atrativos de São Mateus do Sul, descubra experiências por categoria e use o mapa como ponto de partida para montar sua visita.</p>
                         <div class="map-actions">
-                            <a class="map-action-link primary" href="/rotas-completas" data-map-i18n="actionRoutes">Explorar roteiros</a>
-                            <a class="map-action-link" href="/o-que-fazer" data-map-i18n="actionPlan">Planejar visita</a>
+                            <a class="map-action-link primary" href="/mapa-turistico.html?grupo=roteiros" data-map-i18n="actionRoutes">Explorar roteiros</a>
+                            <a class="map-action-link" href="/mapa-turistico.html?categoria=Hospedagem" data-map-i18n="actionPlan">Planejar visita</a>
                             <a class="map-action-link subtle" href="/" data-map-i18n="actionHome">Voltar à HOME</a>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                         <div class="map-stage-head">
                             <div>
                                 <h2 data-map-i18n="stageTitle">Exploração no mapa</h2>
-                                <p data-map-i18n="stageSubtitle">Clique em um marcador ou item da lista para ver detalhes.</p>
+                                <p data-map-i18n="stageSubtitle">Clique em um marcador ou card para ver detalhes.</p>
                             </div>
                             <span class="map-stage-badge" data-map-i18n="stageBadge">OpenStreetMap</span>
                         </div>
@@ -104,20 +104,46 @@
                 </div>
 
                 <aside class="map-sidebar">
-                    <article class="map-panel-card">
-                        <h2 class="map-panel-title" data-map-i18n="selectedTitle">Detalhes do local</h2>
-                        <div id="mapSelectedItem">
-                            <div class="map-selected-empty" data-map-i18n="selectedEmpty">Selecione um ponto no mapa ou na lista para ver imagem, categoria, descrição e ações rápidas.</div>
+                    <article class="map-panel-card map-overview-card">
+                        <p class="map-panel-kicker" data-map-i18n="summaryTitle">Resumo da exploração</p>
+                        <div class="map-overview-grid" aria-label="Resumo da exploração">
+                            <div class="map-overview-stat">
+                                <strong id="mapSidebarVisible">0</strong>
+                                <span data-map-i18n="summaryVisible">visíveis</span>
+                            </div>
+                            <div class="map-overview-stat">
+                                <strong id="mapSidebarMarkers">0</strong>
+                                <span data-map-i18n="summaryMarkers">com marker</span>
+                            </div>
+                            <div class="map-overview-stat">
+                                <strong id="mapSidebarGroups">0</strong>
+                                <span data-map-i18n="summaryGroups">grupos ativos</span>
+                            </div>
                         </div>
+                        <p class="map-overview-note" data-map-i18n="summaryNote">Use os grupos abaixo do mapa para alternar entre roteiros, serviços e demais experiências.</p>
                     </article>
 
-                    <article class="map-panel-card map-list-panel">
-                        <h2 class="map-panel-title" data-map-i18n="listTitle">Locais e experiências</h2>
-                        <p class="map-panel-intro" data-map-i18n="listIntro">Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir ações rápidas.</p>
-                        <div id="mapItemList"></div>
-                        <div id="mapMissingItems"></div>
+                    <article class="map-panel-card">
+                        <h2 class="map-panel-title" data-map-i18n="selectedTitle">Local em destaque</h2>
+                        <div id="mapSelectedItem">
+                            <div class="map-selected-empty" data-map-i18n="selectedEmpty">Selecione um ponto no mapa ou nos cards para ver imagem, categoria, descrição e ações rápidas.</div>
+                        </div>
                     </article>
                 </aside>
+            </section>
+
+            <section class="map-explore-section">
+                <article class="map-panel-card map-list-panel">
+                    <div class="map-list-panel-head">
+                        <div>
+                            <h2 class="map-panel-title" data-map-i18n="listTitle">Locais e experiências</h2>
+                            <p class="map-panel-intro" data-map-i18n="listIntro">Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir ações rápidas.</p>
+                        </div>
+                    </div>
+                    <div class="map-panel-groups" id="mapPanelGroups" role="tablist" aria-label="Grupos de exploração do mapa"></div>
+                    <div id="mapItemList"></div>
+                    <div id="mapMissingItems"></div>
+                </article>
             </section>
         </div>
     </main>

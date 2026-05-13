@@ -5,12 +5,28 @@
 - `mapa-turistico.html`
 - `css/mapa-turistico.css`
 - `js/mapa-turistico.js`
+- `rotas-completas.html`
+- `rotas-completas/index.html`
 - `js/data/pontos-turisticos.js`
+- `js/data/rotas.js`
 - `js/data/hospedagens.js`
 - `js/data/restaurantes.js`
 - `js/data/eventos.js`
 - `js/data/turismo-data.js`
 - `js/nav-shared.js`
+
+## Pagina principal
+
+`mapa-turistico.html` passou a ser a pagina principal de exploracao turistica do portal.
+
+Uso recomendado:
+
+- mapa oficial: `/mapa-turistico.html`
+- roteiros no mapa: `/mapa-turistico.html?grupo=roteiros`
+- hospedagem no mapa: `/mapa-turistico.html?categoria=Hospedagem`
+- gastronomia no mapa: `/mapa-turistico.html?categoria=Gastronomia`
+
+A URL antiga `/rotas-completas` foi mantida como camada legada com redirecionamento suave para o mapa.
 
 ## Como o mapa funciona
 
@@ -24,34 +40,53 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 
 - markers no mapa para itens com coordenadas válidas
 - filtros por categoria
+- grupos de cards na grade principal abaixo do mapa
 - busca local por nome, categoria e palavras-chave
-- painel lateral com detalhes
-- lista de itens sem coordenadas
+- painel lateral compacto com resumo e destaque do item selecionado
+- grade responsiva de cards com itens sem coordenadas identificados por badge
 
 ## Melhorias visuais implementadas
 
 - hero premium com apresentação institucional, texto de apoio e indicadores rápidos
 - busca com placeholder mais amigável, botão para limpar e mensagem dinâmica de resultado
 - filtros em chips com contagem, estado ativo mais claro e leitura melhor no mobile
-- layout principal reorganizado em mapa de destaque + painel lateral de exploração
-- cards com visual mais turístico, fallback elegante sem imagem e ações rápidas consistentes
+- layout principal reorganizado em mapa de destaque + painel lateral compacto de resumo e destaque
+- a lista lateral foi substituída por uma grade de exploração abaixo do mapa, distribuída por toda a largura útil da página
+- os grupos `Todos`, `Pontos Turísticos`, `Roteiros`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços` passaram a controlar a grade de cards
+- os cards ganharam leitura mais próxima da antiga lógica de `rotas-completas`, com miniatura, descrição curta, tags e ações rápidas consistentes
 - markers customizados por categoria com destaque visual para o item selecionado
-- seção de itens sem coordenadas com texto explicativo e lista compacta
+- seção de itens sem coordenadas mantida ao final da grade em formato recolhível, sem aumentar a altura do painel lateral
 
-## Seleção marker e card
+## Seleção marker, card e painel
 
-- clicar em um marker destaca o card correspondente e atualiza o painel de detalhes
+- clicar em um marker destaca o card correspondente, atualiza o painel de destaque e mantém o popup do Leaflet disponível
 - clicar em um card com coordenadas centraliza o mapa no local e abre o popup do marker
+- clicar em um card sem coordenadas atualiza apenas o painel de destaque, sem tentar centralizar o mapa
 - o marker selecionado recebe destaque visual sem depender de animação pesada
-- o popup do Leaflet continua ativo para consulta rápida e link externo de rota
+- o card selecionado recebe realce visual na grade
+- se o marker clicado estiver fora do grupo visível atual, a grade troca automaticamente para o grupo correto
 
 ## Como funcionam filtros e busca
 
 - os filtros continuam trabalhando sobre as categorias amplas do mapa: `Todos`, `História`, `Cultura`, `Natureza`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços`
-- itens originalmente marcados como `Roteiros` e `Institucional` permanecem cadastrados, mas entram visualmente no grupo `Serviços` para evitar excesso de filtros
+- os grupos da grade foram organizados em `Todos`, `Pontos Turísticos`, `Roteiros`, `Gastronomia`, `Hospedagem`, `Eventos` e `Serviços`
+- a base `TURISMO_DATA.rotas` agora tambem entra no mapa como grupo `Roteiros`
+- itens originalmente marcados como `Roteiros` e `Institucional` continuam sem filtro proprio no topo para evitar excesso visual; na grade, `Roteiros` ganhou grupo dedicado
 - a busca combina nome, categoria, descrição, localização, período, telefone e tags normalizadas
 - quando não há resultado dentro de um filtro específico, a interface orienta o usuário a tentar `Todos`
-- itens sem coordenadas continuam aparecendo na lista e na busca, mesmo sem marker no mapa
+- a busca e os filtros atualizam ao mesmo tempo markers, grade e painel de destaque
+- itens sem coordenadas continuam aparecendo na grade e na busca, mesmo sem marker no mapa
+
+## Query string e hash
+
+O mapa aceita atalho simples por URL:
+
+- `?grupo=roteiros`
+- `?grupo=pontos-turisticos`
+- `?categoria=Gastronomia`
+- `?categoria=Hospedagem`
+
+Tambem ha suporte a hash simples para grupos, como `#roteiros`, quando isso fizer sentido em links internos.
 
 ## Como revisar os dados do mapa
 
@@ -133,8 +168,9 @@ Campos opcionais, mas desejáveis:
 Itens sem coordenadas não geram marker, mas continuam:
 
 - disponíveis para evolução futura
-- listados no painel quando filtrados
+- visíveis nos cards quando filtrados, com badge discreta
 - válidos para busca em outras camadas do portal
+- recolhidos no fim da grade em um bloco auxiliar para não aumentar a sensação de página longa
 
 ## Como cadastrar coordenadas depois
 
@@ -173,10 +209,19 @@ node --check js/mapa-turistico.js
 2. Abra `mapa-turistico.html` em servidor local.
 3. Confirme:
    - markers visíveis
-   - itens sem coordenadas listados
+   - grupos da grade funcionando
+   - painel lateral mostrando resumo e destaque
+   - cards distribuídos em grade, sem sidebar infinita
+   - itens sem coordenadas acessíveis
    - busca funcionando
    - filtros atualizando contagem e cards
    - mobile sem `overflow` horizontal
+
+## Legado de rotas
+
+- `/rotas-completas` e `rotas-completas.html` foram mantidos como camada legada
+- o destino principal agora e `/mapa-turistico.html?grupo=roteiros`
+- a pagina legada informa a mudanca e redireciona automaticamente para o mapa
 
 ## Próximos passos para versão premium / 3D
 

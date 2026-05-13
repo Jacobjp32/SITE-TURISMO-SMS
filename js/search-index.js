@@ -32,8 +32,8 @@
   }
 
   var fixedEntries = [
-    makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-completo", ["mapa", "turistico", "rotas", "pontos", "guia"]),
-    makeEntry("Roteiros", "Explore", "Roteiros completos para organizar a visita por tema e região.", "/rotas-completas", ["roteiros", "rotas", "experiencias", "trajeto"]),
+    makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-turistico.html", ["mapa", "turistico", "rotas", "pontos", "guia"]),
+    makeEntry("Roteiros", "Explore", "As rotas e experiencias agora estao reunidas no mapa turistico interativo.", "/mapa-turistico.html?grupo=roteiros", ["roteiros", "rotas", "experiencias", "trajeto", "mapa"]),
     makeEntry("Galeria", "Explore", "Fotos e registros visuais das paisagens, cultura e eventos.", "/galeria", ["galeria", "fotos", "midias", "imagens"]),
     makeEntry("Pontos Turísticos", "Explore", "Atrações e locais de interesse para conhecer em São Mateus do Sul.", "/o-que-fazer", ["atracoes", "pontos", "turisticos", "locais"]),
     makeEntry("Experiências", "Explore", "Vivências culturais, rurais, gastronômicas e náuticas.", "/o-que-fazer", ["experiencias", "vivencias", "turismo", "rural", "cultura"]),
@@ -53,7 +53,7 @@
   });
 
   var rotaEntries = fromCollection(data.rotas, function (item) {
-    return makeEntry(item.nome, "Agenda" === item.categoria ? item.categoria : "Explore", item.descricao, item.url || "/rotas-completas", item.tags || []);
+    return makeEntry(item.nome, "Agenda" === item.categoria ? item.categoria : "Explore", item.descricao, item.url || "/mapa-turistico.html?grupo=roteiros", item.tags || []);
   });
 
   var hospedagemEntries = fromCollection(data.hospedagens, function (item) {

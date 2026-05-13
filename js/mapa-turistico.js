@@ -5,44 +5,52 @@
     pt: {
       pageTitle: "Mapa Turístico Interativo",
       pageSubtitle: "Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.",
-      pageSupport: "Navegue pelos principais atrativos de São Mateus do Sul, descubra experiências por categoria e use o mapa como ponto de partida para montar sua visita.",
+      pageSupport: "Navegue pelos principais atrativos de São Mateus do Sul, descubra experiencias por categoria e use o mapa como ponto de partida para montar sua visita.",
       pageKicker: "Explorar o Destino",
-      heroPanelKicker: "Visão rápida",
+      heroPanelKicker: "Visao rapida",
       heroPanelText: "Uma leitura organizada para explorar o destino com mapa, filtros e atalhos de consulta.",
       heroPointsLabel: "pontos no mapa",
       heroPlacesLabel: "locais cadastrados",
       heroCategoriesLabel: "categorias",
-      heroNote: "Itens sem coordenadas continuam disponíveis no painel para consulta e futura geolocalização.",
-      actionHome: "Voltar à HOME",
+      heroNote: "Itens sem coordenadas continuam disponiveis no painel para consulta e futura geolocalizacao.",
+      actionHome: "Voltar a HOME",
       actionGuide: "Voltar ao guia do visitante",
       actionPlan: "Planejar visita",
       actionRoutes: "Explorar roteiros",
       searchPlaceholder: "Busque por igreja, hotel, erva-mate...",
-      searchHint: "Busque por igreja, hotel, erva-mate, praça, evento ou serviço.",
+      searchHint: "Busque por igreja, hotel, erva-mate, praca, evento ou servico.",
       clearSearch: "Limpar",
-      resultsCount: "itens visíveis",
-      locatedCount: "com localização",
-      stageTitle: "Exploração no mapa",
-      stageSubtitle: "Clique em um marcador ou item da lista para ver detalhes.",
+      resultsCount: "itens visiveis",
+      locatedCount: "com localizacao",
+      stageTitle: "Exploracao no mapa",
+      stageSubtitle: "Clique em um marcador ou card para ver detalhes.",
       stageBadge: "OpenStreetMap",
-      stageSummary: "Use os filtros para destacar categorias turísticas.",
-      stageMissing: "Itens sem coordenadas continuam listados no painel.",
+      stageSummary: "Use os filtros para destacar categorias turisticas.",
       totalItemsLabel: "itens catalogados",
-      selectedTitle: "Detalhes do local",
-      selectedEmpty: "Selecione um ponto no mapa ou na lista para ver imagem, categoria, descrição e ações rápidas.",
-      listTitle: "Locais e experiências",
-      listIntro: "Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir ações rápidas.",
+      summaryTitle: "Resumo da exploracao",
+      summaryVisible: "visiveis",
+      summaryMarkers: "com marker",
+      summaryGroups: "grupos ativos",
+      summaryNote: "Use os grupos abaixo do mapa para alternar entre roteiros, servicos e demais experiencias.",
+      selectedTitle: "Local em destaque",
+      selectedEmpty: "Selecione um ponto no mapa ou nos cards para ver imagem, categoria, descricao e acoes rapidas.",
+      listTitle: "Locais e experiencias",
+      listIntro: "Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir acoes rapidas.",
       listEmpty: "Nenhum item encontrado com os filtros atuais.",
       listEmptyFiltered: "Nenhum resultado neste filtro. Tente buscar em Todos.",
       listEmptySearch: "Nenhum local corresponde a essa busca no momento.",
       details: "Ver detalhes",
       directions: "Como chegar",
-      noCoordinates: "Sem localização cadastrada",
+      noCoordinates: "Sem localizacao cadastrada",
       noImage: "Sem imagem",
-      noDescription: "Descrição em atualização.",
+      noDescription: "Descricao em atualizacao.",
       cardSelected: "Selecionado no mapa",
-      missingTitle: "Ainda sem coordenadas",
-      missingDescription: "Alguns itens ainda não possuem localização cadastrada, mas continuam disponíveis para consulta e podem ser completados futuramente.",
+      groupItemsSingle: "1 item",
+      groupItemsMany: "{count} itens",
+      missingTitle: "Itens sem localizacao exata",
+      missingDescription: "Alguns itens ainda nao possuem localizacao cadastrada, mas continuam disponiveis para consulta e podem ser completados futuramente.",
+      missingSummarySingle: "1 item sem localizacao exata",
+      missingSummaryMany: "{count} itens sem localizacao exata",
       popupDetails: "Ver detalhes",
       popupDirections: "Como chegar",
       searchResultsSingle: "1 local encontrado.",
@@ -50,22 +58,31 @@
       searchResultsFiltered: "{count} locais neste filtro.",
       categories: {
         all: "Todos",
-        history: "História",
+        history: "Historia",
         culture: "Cultura",
         nature: "Natureza",
         gastronomy: "Gastronomia",
         lodging: "Hospedagem",
         events: "Eventos",
-        services: "Serviços"
+        services: "Servicos"
       },
       categoryLabels: {
-        history: "História",
+        history: "Historia",
         culture: "Cultura",
         nature: "Natureza",
         gastronomy: "Gastronomia",
         lodging: "Hospedagem",
         events: "Eventos",
-        services: "Serviços"
+        services: "Servicos"
+      },
+      panelGroups: {
+        all: "Todos",
+        points: "Pontos Turisticos",
+        routes: "Roteiros",
+        gastronomy: "Gastronomia",
+        lodging: "Hospedagem",
+        events: "Eventos",
+        services: "Servicos"
       }
     },
     en: {
@@ -89,13 +106,17 @@
       resultsCount: "visible items",
       locatedCount: "with location",
       stageTitle: "Map exploration",
-      stageSubtitle: "Click a marker or list item to see details.",
+      stageSubtitle: "Click a marker or card to see details.",
       stageBadge: "OpenStreetMap",
       stageSummary: "Use filters to highlight tourism categories.",
-      stageMissing: "Items without coordinates remain listed in the panel.",
       totalItemsLabel: "cataloged items",
-      selectedTitle: "Place details",
-      selectedEmpty: "Select a map marker or list item to view image, category, description and quick actions.",
+      summaryTitle: "Exploration summary",
+      summaryVisible: "visible",
+      summaryMarkers: "with marker",
+      summaryGroups: "active groups",
+      summaryNote: "Use the groups below the map to switch between routes, services and other experiences.",
+      selectedTitle: "Featured place",
+      selectedEmpty: "Select a map marker or card to view image, category, description and quick actions.",
       listTitle: "Places and experiences",
       listIntro: "Cards below follow search and filters. Click a place to highlight it on the map and open quick actions.",
       listEmpty: "No items found with the current filters.",
@@ -107,8 +128,12 @@
       noImage: "No image",
       noDescription: "Description pending update.",
       cardSelected: "Selected on map",
-      missingTitle: "Still without coordinates",
+      groupItemsSingle: "1 item",
+      groupItemsMany: "{count} items",
+      missingTitle: "Items without exact location",
       missingDescription: "Some items do not yet have a registered location, but remain available for consultation and can be completed later.",
+      missingSummarySingle: "1 item without exact location",
+      missingSummaryMany: "{count} items without exact location",
       popupDetails: "View details",
       popupDirections: "Directions",
       searchResultsSingle: "1 place found.",
@@ -132,51 +157,68 @@
         lodging: "Lodging",
         events: "Events",
         services: "Services"
+      },
+      panelGroups: {
+        all: "All",
+        points: "Attractions",
+        routes: "Routes",
+        gastronomy: "Food",
+        lodging: "Lodging",
+        events: "Events",
+        services: "Services"
       }
     },
     es: {
-      pageTitle: "Mapa Turístico Interactivo",
-      pageSubtitle: "Explora atractivos, rutas, gastronomía, hospedaje y servicios en una primera visión del destino.",
-      pageSupport: "Recorre los principales atractivos de Sao Mateus do Sul, descubre experiencias por categoría y usa el mapa como punto de partida para planificar tu visita.",
+      pageTitle: "Mapa Turistico Interactivo",
+      pageSubtitle: "Explora atractivos, rutas, gastronomia, hospedaje y servicios en una primera vision del destino.",
+      pageSupport: "Recorre los principales atractivos de Sao Mateus do Sul, descubre experiencias por categoria y usa el mapa como punto de partida para planificar tu visita.",
       pageKicker: "Explorar el Destino",
-      heroPanelKicker: "Vista rápida",
-      heroPanelText: "Una lectura organizada para explorar el destino con mapa, filtros y accesos rápidos.",
+      heroPanelKicker: "Vista rapida",
+      heroPanelText: "Una lectura organizada para explorar el destino con mapa, filtros y accesos rapidos.",
       heroPointsLabel: "puntos en el mapa",
       heroPlacesLabel: "lugares registrados",
-      heroCategoriesLabel: "categorías",
-      heroNote: "Los elementos sin coordenadas siguen disponibles en el panel para consulta y futura geolocalización.",
+      heroCategoriesLabel: "categorias",
+      heroNote: "Los elementos sin coordenadas siguen disponibles en el panel para consulta y futura geolocalizacion.",
       actionHome: "Volver al inicio",
-      actionGuide: "Volver a la guía del visitante",
+      actionGuide: "Volver a la guia del visitante",
       actionPlan: "Planificar visita",
       actionRoutes: "Explorar rutas",
       searchPlaceholder: "Busca iglesia, hotel, yerba mate...",
       searchHint: "Busca iglesia, hotel, yerba mate, plaza, evento o servicio.",
       clearSearch: "Limpiar",
       resultsCount: "elementos visibles",
-      locatedCount: "con ubicación",
-      stageTitle: "Exploración en el mapa",
-      stageSubtitle: "Haz clic en un marcador o elemento de la lista para ver detalles.",
+      locatedCount: "con ubicacion",
+      stageTitle: "Exploracion en el mapa",
+      stageSubtitle: "Haz clic en un marcador o tarjeta para ver detalles.",
       stageBadge: "OpenStreetMap",
-      stageSummary: "Usa los filtros para destacar categorías turísticas.",
-      stageMissing: "Los elementos sin coordenadas siguen listados en el panel.",
+      stageSummary: "Usa los filtros para destacar categorias turisticas.",
       totalItemsLabel: "elementos catalogados",
-      selectedTitle: "Detalles del lugar",
-      selectedEmpty: "Selecciona un marcador o elemento de la lista para ver imagen, categoría, descripción y acciones rápidas.",
+      summaryTitle: "Resumen de exploracion",
+      summaryVisible: "visibles",
+      summaryMarkers: "con marcador",
+      summaryGroups: "grupos activos",
+      summaryNote: "Usa los grupos debajo del mapa para alternar entre rutas, servicios y otras experiencias.",
+      selectedTitle: "Lugar destacado",
+      selectedEmpty: "Selecciona un marcador o tarjeta para ver imagen, categoria, descripcion y acciones rapidas.",
       listTitle: "Lugares y experiencias",
-      listIntro: "Las tarjetas de abajo acompañan la búsqueda y los filtros. Haz clic en un lugar para destacarlo en el mapa y abrir acciones rápidas.",
+      listIntro: "Las tarjetas de abajo acompanhan la busqueda y los filtros. Haz clic en un lugar para destacarlo en el mapa y abrir acciones rapidas.",
       listEmpty: "No se encontraron elementos con los filtros actuales.",
       listEmptyFiltered: "No hay resultados en este filtro. Intenta buscar en Todos.",
-      listEmptySearch: "Ningún lugar coincide con esta búsqueda.",
+      listEmptySearch: "Ningun lugar coincide con esta busqueda.",
       details: "Ver detalles",
-      directions: "Cómo llegar",
-      noCoordinates: "Sin ubicación registrada",
+      directions: "Como llegar",
+      noCoordinates: "Sin ubicacion registrada",
       noImage: "Sin imagen",
-      noDescription: "Descripción en actualización.",
+      noDescription: "Descripcion en actualizacion.",
       cardSelected: "Seleccionado en el mapa",
-      missingTitle: "Todavía sin coordenadas",
-      missingDescription: "Algunos elementos aún no tienen ubicación registrada, pero siguen disponibles para consulta y pueden completarse más adelante.",
+      groupItemsSingle: "1 elemento",
+      groupItemsMany: "{count} elementos",
+      missingTitle: "Elementos sin ubicacion exacta",
+      missingDescription: "Algunos elementos aun no tienen ubicacion registrada, pero siguen disponibles para consulta y pueden completarse mas adelante.",
+      missingSummarySingle: "1 elemento sin ubicacion exacta",
+      missingSummaryMany: "{count} elementos sin ubicacion exacta",
       popupDetails: "Ver detalles",
-      popupDirections: "Cómo llegar",
+      popupDirections: "Como llegar",
       searchResultsSingle: "1 lugar encontrado.",
       searchResultsMany: "{count} lugares encontrados.",
       searchResultsFiltered: "{count} lugares en este filtro.",
@@ -185,7 +227,7 @@
         history: "Historia",
         culture: "Cultura",
         nature: "Naturaleza",
-        gastronomy: "Gastronomía",
+        gastronomy: "Gastronomia",
         lodging: "Hospedaje",
         events: "Eventos",
         services: "Servicios"
@@ -194,7 +236,16 @@
         history: "Historia",
         culture: "Cultura",
         nature: "Naturaleza",
-        gastronomy: "Gastronomía",
+        gastronomy: "Gastronomia",
+        lodging: "Hospedaje",
+        events: "Eventos",
+        services: "Servicios"
+      },
+      panelGroups: {
+        all: "Todos",
+        points: "Puntos turisticos",
+        routes: "Rutas",
+        gastronomy: "Gastronomia",
         lodging: "Hospedaje",
         events: "Eventos",
         services: "Servicios"
@@ -202,7 +253,7 @@
     },
     pl: {
       pageTitle: "Interaktywna Mapa Turystyczna",
-      pageSubtitle: "Odkrywaj atrakcje, trasy, gastronomię, noclegi i usługi w pierwszej wersji mapy destynacji.",
+      pageSubtitle: "Odkrywaj atrakcje, trasy, gastronomie, noclegi i uslugi w pierwszej wersji mapy destynacji.",
       pageSupport: "Przegladaj glowne atrakcje Sao Mateus do Sul, odkrywaj miejsca wedlug kategorii i wykorzystaj mape jako punkt startowy do planowania wizyty.",
       pageKicker: "Odkryj Kierunek",
       heroPanelKicker: "Szybki podglad",
@@ -221,13 +272,17 @@
       resultsCount: "widocznych elementow",
       locatedCount: "z lokalizacja",
       stageTitle: "Eksploracja mapy",
-      stageSubtitle: "Kliknij znacznik lub element listy, aby zobaczyc szczegoly.",
+      stageSubtitle: "Kliknij znacznik lub karte, aby zobaczyc szczegoly.",
       stageBadge: "OpenStreetMap",
       stageSummary: "Uzyj filtrow, aby wyroznic kategorie turystyczne.",
-      stageMissing: "Elementy bez wspolrzednych pozostaja na liscie panelu.",
       totalItemsLabel: "skatalogowanych elementow",
-      selectedTitle: "Szczegoly miejsca",
-      selectedEmpty: "Wybierz znacznik mapy lub element listy, aby zobaczyc zdjecie, kategorie, opis i szybkie akcje.",
+      summaryTitle: "Podsumowanie eksploracji",
+      summaryVisible: "widoczne",
+      summaryMarkers: "z markerem",
+      summaryGroups: "aktywne grupy",
+      summaryNote: "Uzyj grup pod mapa, aby przelaczac trasy, uslugi i pozostale doswiadczenia.",
+      selectedTitle: "Wyroznione miejsce",
+      selectedEmpty: "Wybierz znacznik mapy lub karte, aby zobaczyc zdjecie, kategorie, opis i szybkie akcje.",
       listTitle: "Miejsca i doswiadczenia",
       listIntro: "Karty ponizej reaguja na wyszukiwanie i filtry. Kliknij miejsce, aby wyroznic je na mapie i otworzyc szybkie akcje.",
       listEmpty: "Brak elementow dla biezacych filtrow.",
@@ -239,8 +294,12 @@
       noImage: "Brak zdjecia",
       noDescription: "Opis jest aktualizowany.",
       cardSelected: "Wybrane na mapie",
-      missingTitle: "Nadal bez wspolrzednych",
+      groupItemsSingle: "1 element",
+      groupItemsMany: "{count} elementow",
+      missingTitle: "Elementy bez dokladnej lokalizacji",
       missingDescription: "Niektore elementy nie maja jeszcze zapisanej lokalizacji, ale nadal sa dostepne do przegladania i moga zostac uzupelnione pozniej.",
+      missingSummarySingle: "1 element bez dokladnej lokalizacji",
+      missingSummaryMany: "{count} elementow bez dokladnej lokalizacji",
       popupDetails: "Zobacz szczegoly",
       popupDirections: "Jak dojechac",
       searchResultsSingle: "Znaleziono 1 miejsce.",
@@ -264,6 +323,15 @@
         lodging: "Noclegi",
         events: "Wydarzenia",
         services: "Uslugi"
+      },
+      panelGroups: {
+        all: "Wszystko",
+        points: "Atrakcje",
+        routes: "Trasy",
+        gastronomy: "Gastronomia",
+        lodging: "Noclegi",
+        events: "Wydarzenia",
+        services: "Uslugi"
       }
     }
   };
@@ -279,7 +347,18 @@
     services: { color: "#5d6673", accent: "#dde1e8", icon: "SE" }
   };
 
+  var PANEL_GROUP_CONFIG = {
+    all: { icon: "TO", slug: "todos" },
+    points: { icon: "PT", slug: "pontos-turisticos" },
+    routes: { icon: "RO", slug: "roteiros" },
+    gastronomy: { icon: "GA", slug: "gastronomia" },
+    lodging: { icon: "HO", slug: "hospedagem" },
+    events: { icon: "EV", slug: "eventos" },
+    services: { icon: "SE", slug: "servicos" }
+  };
+
   var FILTER_ORDER = ["all", "history", "culture", "nature", "gastronomy", "lodging", "events", "services"];
+  var PANEL_GROUP_ORDER = ["all", "points", "routes", "gastronomy", "lodging", "events", "services"];
 
   var state = {
     map: null,
@@ -290,6 +369,7 @@
     missingItems: [],
     selectedItemId: null,
     activeFilter: "all",
+    panelGroup: "all",
     searchTerm: "",
     searchValue: "",
     lang: "pt"
@@ -343,6 +423,7 @@
     if (normalizedCategory.indexOf("roteiro") !== -1) return "services";
     if (normalizedCategory.indexOf("institucional") !== -1) return "services";
 
+    if (itemType === "rota") return "services";
     if (itemType === "hospedagem") return "lodging";
     if (itemType === "restaurante") return "gastronomy";
     if (itemType === "evento") return "events";
@@ -357,10 +438,22 @@
     if (source.indexOf("gastronomia") !== -1 || source.indexOf("erva-mate") !== -1 || source.indexOf("mate") !== -1 || source.indexOf("chimarrao") !== -1 || source.indexOf("culinaria") !== -1 || source.indexOf("sabores") !== -1) {
       return "gastronomy";
     }
+    if (source.indexOf("evento") !== -1 || source.indexOf("agenda") !== -1 || source.indexOf("festa") !== -1) {
+      return "events";
+    }
     if (source.indexOf("servico") !== -1 || source.indexOf("atendimento") !== -1 || source.indexOf("contato") !== -1 || source.indexOf("informacoes") !== -1 || source.indexOf("roteiro") !== -1 || source.indexOf("institucional") !== -1) {
       return "services";
     }
     return "culture";
+  }
+
+  function getPanelGroup(itemType) {
+    if (itemType === "rota") return "routes";
+    if (itemType === "ponto") return "points";
+    if (itemType === "restaurante") return "gastronomy";
+    if (itemType === "hospedagem") return "lodging";
+    if (itemType === "evento") return "events";
+    return "services";
   }
 
   function createGoogleMapsLink(item, coordinates) {
@@ -372,13 +465,16 @@
 
   function normalizeItem(item, itemType) {
     if (!item || !item.nome) return null;
+
     var coordinates = getCoordinates(item);
     var broadCategory = classifyCategory(itemType, item.categoria, item.tags, item.descricao);
+    var panelGroup = getPanelGroup(itemType);
 
     return {
       id: item.id || item.nome,
       nome: item.nome,
       tipo: itemType,
+      panelGroup: panelGroup,
       categoriaOriginal: item.categoria || "",
       categoriaMapa: broadCategory,
       categoriaLabel: t("categoryLabels." + broadCategory, item.categoria || ""),
@@ -409,12 +505,124 @@
   function buildItems() {
     var data = window.TURISMO_DATA || {};
     var points = (data.pontos || []).map(function (item) { return normalizeItem(item, "ponto"); });
+    var routes = (data.rotas || []).map(function (item) { return normalizeItem(item, "rota"); });
     var lodging = (data.hospedagens || []).map(function (item) { return normalizeItem(item, "hospedagem"); });
     var restaurants = (data.restaurantes || []).map(function (item) { return normalizeItem(item, "restaurante"); });
     var events = (data.eventos || []).map(function (item) { return normalizeItem(item, "evento"); });
     var services = (data.informacoesEssenciais || []).map(function (item) { return normalizeItem(item, "servico"); });
 
-    return points.concat(lodging, restaurants, events, services).filter(Boolean);
+    return points.concat(routes, lodging, restaurants, events, services).filter(Boolean);
+  }
+
+  function resolveFilterAlias(value) {
+    var normalized = normalizeText(value);
+    var aliases = {
+      all: "all",
+      todos: "all",
+      historia: "history",
+      history: "history",
+      cultura: "culture",
+      culture: "culture",
+      natureza: "nature",
+      nature: "nature",
+      gastronomia: "gastronomy",
+      gastronomy: "gastronomy",
+      food: "gastronomy",
+      hospedagem: "lodging",
+      hospedaje: "lodging",
+      lodging: "lodging",
+      eventos: "events",
+      event: "events",
+      events: "events",
+      servicos: "services",
+      servicoss: "services",
+      servicoses: "services",
+      services: "services"
+    };
+    return aliases[normalized] || null;
+  }
+
+  function resolvePanelGroupAlias(value) {
+    var normalized = normalizeText(value).replace(/^#/, "");
+    var aliases = {
+      all: "all",
+      todos: "all",
+      points: "points",
+      ponto: "points",
+      pontos: "points",
+      pontosturisticos: "points",
+      "pontos-turisticos": "points",
+      attractions: "points",
+      routes: "routes",
+      route: "routes",
+      roteiro: "routes",
+      roteiros: "routes",
+      rotas: "routes",
+      gastronomy: "gastronomy",
+      gastronomia: "gastronomy",
+      food: "gastronomy",
+      hospedagem: "lodging",
+      lodging: "lodging",
+      events: "events",
+      eventos: "events",
+      services: "services",
+      servicos: "services",
+      servicoss: "services",
+      servicoses: "services"
+    };
+    return aliases[normalized] || null;
+  }
+
+  function getPanelGroupSlug(groupId) {
+    return (PANEL_GROUP_CONFIG[groupId] || PANEL_GROUP_CONFIG.all).slug;
+  }
+
+  function getDefaultPanelGroupForFilter(filterId) {
+    if (filterId === "gastronomy") return "gastronomy";
+    if (filterId === "lodging") return "lodging";
+    if (filterId === "events") return "events";
+    if (filterId === "services") return "services";
+    if (filterId === "history" || filterId === "culture" || filterId === "nature") return "points";
+    return "all";
+  }
+
+  function applyInitialStateFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var requestedFilter = resolveFilterAlias(params.get("categoria") || params.get("filter"));
+    var requestedGroup = resolvePanelGroupAlias(params.get("grupo") || window.location.hash.replace(/^#/, ""));
+
+    if (requestedFilter) {
+      state.activeFilter = requestedFilter;
+      state.panelGroup = getDefaultPanelGroupForFilter(requestedFilter);
+    }
+
+    if (requestedGroup) {
+      state.panelGroup = requestedGroup;
+    }
+
+    var rawCategory = normalizeText(params.get("categoria"));
+    if (rawCategory === "roteiros" || rawCategory === "rotas") {
+      state.activeFilter = "all";
+      state.panelGroup = "routes";
+    }
+  }
+
+  function syncUrlState() {
+    if (!window.history || !window.history.replaceState) return;
+
+    var params = new URLSearchParams();
+    if (state.activeFilter !== "all") {
+      params.set("categoria", t("categories." + state.activeFilter, state.activeFilter));
+    }
+    if (state.panelGroup !== "all") {
+      params.set("grupo", getPanelGroupSlug(state.panelGroup));
+    }
+
+    var query = params.toString();
+    var nextUrl = window.location.pathname + (query ? "?" + query : "");
+    if (nextUrl !== window.location.pathname + window.location.search) {
+      window.history.replaceState(null, "", nextUrl);
+    }
   }
 
   function filterItems() {
@@ -444,23 +652,43 @@
     return CATEGORY_CONFIG[filterId] || CATEGORY_CONFIG.all;
   }
 
-  function createMarkerIcon(filterId, isSelected) {
-    var config = getCategoryConfig(filterId);
-    return L.divIcon({
-      className: "",
-      html: '<span class="map-marker' + (isSelected ? " is-active" : "") + '" style="--marker-color:' + config.color + ';--marker-accent:' + config.accent + ';"><span class="map-marker-core">' + config.icon + "</span></span>",
-      iconSize: [34, 46],
-      iconAnchor: [17, 40],
-      popupAnchor: [0, -30]
-    });
+  function getPanelGroupLabel(groupId) {
+    return t("panelGroups." + groupId, groupId);
+  }
+
+  function getPanelGroupCount(groupId) {
+    if (groupId === "all") return state.filteredItems.length;
+    return state.filteredItems.filter(function (item) { return item.panelGroup === groupId; }).length;
+  }
+
+  function getPanelItems(groupId) {
+    if (groupId === "all") return state.filteredItems.slice();
+    return state.filteredItems.filter(function (item) { return item.panelGroup === groupId; });
+  }
+
+  function getCurrentListItems() {
+    return getPanelItems(state.panelGroup);
+  }
+
+  function getCurrentMissingItems() {
+    return getCurrentListItems().filter(function (item) { return !item.possuiCoordenadas; });
+  }
+
+  function getSelectedItem() {
+    var selected = getItemById(state.selectedItemId);
+    var scopedItems = getCurrentListItems();
+
+    if (selected && state.filteredItems.some(function (entry) { return entry.id === selected.id; })) {
+      if (state.panelGroup === "all" || selected.panelGroup === state.panelGroup) {
+        return selected;
+      }
+    }
+
+    return scopedItems[0] || state.filteredItems[0] || state.items.find(function (entry) { return entry.possuiCoordenadas; }) || null;
   }
 
   function getItemById(id) {
     return state.items.find(function (item) { return item.id === id; }) || null;
-  }
-
-  function getSelectedItem() {
-    return getItemById(state.selectedItemId) || state.filteredItems[0] || state.items.find(function (entry) { return entry.possuiCoordenadas; }) || null;
   }
 
   function getSearchStatusMessage() {
@@ -476,6 +704,16 @@
     return replaceCount(t("searchResultsMany"), state.filteredItems.length);
   }
 
+  function getGroupCountLabel(count) {
+    if (count === 1) return t("groupItemsSingle");
+    return replaceCount(t("groupItemsMany"), count);
+  }
+
+  function getMissingSummary(count) {
+    if (count === 1) return t("missingSummarySingle");
+    return replaceCount(t("missingSummaryMany"), count);
+  }
+
   function getImageHtml(item, className) {
     if (!item.imagem) {
       return '<div class="' + className + ' map-image-fallback" aria-hidden="true"><span>' + getCategoryConfig(item.categoriaMapa).icon + '</span><small>' + t("noImage") + "</small></div>";
@@ -483,15 +721,28 @@
     return '<img src="' + item.imagem + '" alt="' + item.nome + '" class="' + className + '">';
   }
 
+  function createMarkerIcon(filterId, isSelected) {
+    var config = getCategoryConfig(filterId);
+    return L.divIcon({
+      className: "",
+      html: '<span class="map-marker' + (isSelected ? " is-active" : "") + '" style="--marker-color:' + config.color + ';--marker-accent:' + config.accent + ';"><span class="map-marker-core">' + config.icon + "</span></span>",
+      iconSize: [34, 46],
+      iconAnchor: [17, 40],
+      popupAnchor: [0, -30]
+    });
+  }
+
   function updateSearchUi() {
     var clearButton = document.getElementById("mapSearchClear");
     var searchStatus = document.getElementById("mapSearchStatus");
+
     if (clearButton) {
       var hasValue = !!state.searchValue;
       clearButton.disabled = !hasValue;
       clearButton.classList.toggle("is-visible", hasValue);
       clearButton.setAttribute("aria-hidden", hasValue ? "false" : "true");
     }
+
     if (searchStatus) {
       searchStatus.textContent = getSearchStatusMessage();
     }
@@ -512,6 +763,21 @@
     }).join("");
   }
 
+  function renderPanelGroups() {
+    var container = document.getElementById("mapPanelGroups");
+    if (!container) return;
+
+    container.innerHTML = PANEL_GROUP_ORDER.map(function (groupId) {
+      var count = getPanelGroupCount(groupId);
+      var config = PANEL_GROUP_CONFIG[groupId] || PANEL_GROUP_CONFIG.all;
+      var activeClass = state.panelGroup === groupId ? " is-active" : "";
+      return '<button type="button" class="map-panel-group-btn' + activeClass + '" data-group="' + groupId + '" aria-pressed="' + (state.panelGroup === groupId ? "true" : "false") + '">'
+        + '<span class="map-panel-group-icon">' + config.icon + '</span>'
+        + '<span class="map-panel-group-text">' + getPanelGroupLabel(groupId) + "</span>"
+        + '<span class="map-panel-group-count">' + count + "</span></button>";
+    }).join("");
+  }
+
   function renderStats() {
     var total = document.getElementById("mapTotalItems");
     var located = document.getElementById("mapLocatedItems");
@@ -519,8 +785,15 @@
     var heroPoints = document.getElementById("mapHeroPoints");
     var heroPlaces = document.getElementById("mapHeroPlaces");
     var heroCategories = document.getElementById("mapHeroCategories");
+    var sidebarVisible = document.getElementById("mapSidebarVisible");
+    var sidebarMarkers = document.getElementById("mapSidebarMarkers");
+    var sidebarGroups = document.getElementById("mapSidebarGroups");
 
     var locatedCount = state.items.filter(function (item) { return item.possuiCoordenadas; }).length;
+    var visibleMarkersCount = state.filteredItems.filter(function (item) { return item.possuiCoordenadas; }).length;
+    var activeGroupCount = PANEL_GROUP_ORDER.filter(function (groupId) {
+      return groupId !== "all" && getPanelGroupCount(groupId) > 0;
+    }).length;
 
     if (total) total.textContent = state.items.length;
     if (located) located.textContent = locatedCount;
@@ -528,6 +801,9 @@
     if (heroPoints) heroPoints.textContent = locatedCount;
     if (heroPlaces) heroPlaces.textContent = state.items.length;
     if (heroCategories) heroCategories.textContent = getAvailableCategoryCount();
+    if (sidebarVisible) sidebarVisible.textContent = state.filteredItems.length;
+    if (sidebarMarkers) sidebarMarkers.textContent = visibleMarkersCount;
+    if (sidebarGroups) sidebarGroups.textContent = activeGroupCount;
   }
 
   function updateMarkerSelection() {
@@ -536,16 +812,13 @@
       var item = getItemById(itemId);
       if (!marker || !item) return;
       marker.setIcon(createMarkerIcon(item.categoriaMapa, itemId === state.selectedItemId));
-      if (itemId === state.selectedItemId) {
-        marker.setZIndexOffset(200);
-      } else {
-        marker.setZIndexOffset(0);
-      }
+      marker.setZIndexOffset(itemId === state.selectedItemId ? 200 : 0);
     });
   }
 
   function renderMarkers() {
     if (!state.map || !state.markersLayer) return;
+
     state.markersLayer.clearLayers();
     state.markerIndex = {};
 
@@ -586,27 +859,6 @@
     updateMarkerSelection();
   }
 
-  function selectItem(id, centerOnMap) {
-    var item = getItemById(id);
-    if (!item) return;
-
-    state.selectedItemId = id;
-    renderSelectedItem();
-    renderList();
-    updateMarkerSelection();
-
-    if (item.possuiCoordenadas && state.map) {
-      if (centerOnMap !== false) {
-        state.map.flyTo([item.coordenadas.lat, item.coordenadas.lng], Math.max(state.map.getZoom(), 14), {
-          duration: 0.45
-        });
-      }
-      if (state.markerIndex[item.id]) {
-        state.markerIndex[item.id].openPopup();
-      }
-    }
-  }
-
   function renderSelectedItem() {
     var container = document.getElementById("mapSelectedItem");
     if (!container) return;
@@ -623,6 +875,7 @@
     if (item.localizacao) meta.push('<span class="map-meta-chip">📍 ' + item.localizacao + "</span>");
     if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + item.telefone + "</span>");
     if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + item.periodo + "</span>");
+    if (item.categoriaOriginal && item.panelGroup === "routes") meta.push('<span class="map-meta-chip">🗺️ ' + item.categoriaOriginal + "</span>");
     if (!item.possuiCoordenadas) meta.push('<span class="map-meta-chip">' + t("noCoordinates") + "</span>");
 
     container.innerHTML = ""
@@ -644,61 +897,139 @@
       + "</div>";
   }
 
-  function renderList() {
-    var container = document.getElementById("mapItemList");
-    var missingContainer = document.getElementById("mapMissingItems");
-    if (!container || !missingContainer) return;
+  function renderListCard(item) {
+    var selectedClass = item.id === state.selectedItemId ? " is-selected" : "";
+    var config = getCategoryConfig(item.categoriaMapa);
+    var tags = [];
 
-    var listItems = state.filteredItems;
-    if (!listItems.length) {
-      container.innerHTML = '<div class="map-list-empty">' + getSearchStatusMessage() + "</div>";
+    tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + item.categoriaLabel + "</span>");
+    if (item.panelGroup === "routes" && item.categoriaOriginal) {
+      tags.push('<span class="map-list-badge is-neutral">RO ' + item.categoriaOriginal + "</span>");
+    }
+    if (!item.possuiCoordenadas) {
+      tags.push('<span class="map-list-badge is-missing">' + t("noCoordinates") + "</span>");
+    }
+
+    return ""
+      + '<article class="map-list-card' + selectedClass + '">'
+      + '<button type="button" class="map-list-card-select" data-item-id="' + item.id + '" aria-label="' + item.nome + '">'
+      + getImageHtml(item, "map-list-thumb")
+      + '<div class="map-list-content">'
+      + "<h4>" + item.nome + "</h4>"
+      + "<p>" + (item.descricao || t("noDescription")) + "</p>"
+      + '<div class="map-list-card-tags">' + tags.join("") + "</div>"
+      + "</div>"
+      + "</button>"
+      + '<div class="map-list-card-actions">'
+      + (item.url ? '<a class="map-button primary" href="' + item.url + '">' + t("details") + "</a>" : "")
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + item.mapsUrl + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
+      + "</div>"
+      + "</article>";
+  }
+
+  function renderGroupedList(items) {
+    return PANEL_GROUP_ORDER.filter(function (groupId) { return groupId !== "all"; }).map(function (groupId) {
+      var groupItems = items.filter(function (item) { return item.panelGroup === groupId; });
+      if (!groupItems.length) return "";
+
+      return '<section class="map-list-group-section">'
+        + '<div class="map-list-group-head">'
+        + '<h3>' + getPanelGroupLabel(groupId) + "</h3>"
+        + '<span>' + getGroupCountLabel(groupItems.length) + "</span>"
+        + "</div>"
+        + '<div class="map-list-group-grid">' + groupItems.map(renderListCard).join("") + "</div>"
+        + "</section>";
+    }).join("");
+  }
+
+  function renderMissingItems() {
+    var missingContainer = document.getElementById("mapMissingItems");
+    if (!missingContainer) return;
+
+    var missingItems = getCurrentMissingItems();
+    if (!missingItems.length) {
       missingContainer.innerHTML = "";
       return;
     }
 
-    container.innerHTML = listItems.map(function (item) {
-      var selectedClass = item.id === state.selectedItemId ? " is-selected" : "";
-      var config = getCategoryConfig(item.categoriaMapa);
-      var tags = [];
-      tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + item.categoriaLabel + "</span>");
-      if (!item.possuiCoordenadas) tags.push('<span class="map-list-badge is-missing">' + t("noCoordinates") + "</span>");
+    missingContainer.innerHTML = '<details class="map-missing-list"><summary>'
+      + '<span class="map-missing-summary-label">' + getMissingSummary(missingItems.length) + "</span>"
+      + '<span class="map-missing-summary-hint">▼</span>'
+      + "</summary>"
+      + "<p>" + t("missingDescription") + "</p><ul>"
+      + missingItems.map(function (item) { return "<li>" + item.nome + "</li>"; }).join("")
+      + "</ul></details>";
+  }
 
-      return ""
-        + '<article class="map-list-card' + selectedClass + '">'
-        + '<button type="button" class="map-list-card-select" data-item-id="' + item.id + '" aria-label="' + item.nome + '">'
-        + getImageHtml(item, "map-list-thumb")
-        + '<div class="map-list-content">'
-        + "<h4>" + item.nome + "</h4>"
-        + "<p>" + (item.descricao || t("noDescription")) + "</p>"
-        + '<div class="map-list-card-tags">' + tags.join("") + "</div>"
-        + "</div>"
-        + "</button>"
-        + '<div class="map-list-card-actions">'
-        + (item.url ? '<a class="map-button primary" href="' + item.url + '">' + t("details") + "</a>" : "")
-        + (item.possuiCoordenadas ? '<a class="map-button" href="' + item.mapsUrl + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
-        + "</div>"
-        + "</article>";
-    }).join("");
+  function renderList() {
+    var container = document.getElementById("mapItemList");
+    if (!container) return;
 
-    if (state.missingItems.length) {
-      missingContainer.innerHTML = '<div class="map-missing-list"><h3>' + t("missingTitle") + "</h3><p>" + t("missingDescription") + "</p><ul>"
-        + state.missingItems.map(function (item) { return "<li>" + item.nome + "</li>"; }).join("")
-        + "</ul></div>";
+    var listItems = getCurrentListItems();
+    if (!listItems.length) {
+      container.innerHTML = '<div class="map-list-empty">' + getSearchStatusMessage() + "</div>";
+      renderMissingItems();
+      return;
+    }
+
+    if (state.panelGroup === "all") {
+      container.innerHTML = renderGroupedList(state.filteredItems);
     } else {
-      missingContainer.innerHTML = "";
+      container.innerHTML = '<section class="map-list-group-section is-focused">'
+        + '<div class="map-list-group-head">'
+        + '<h3>' + getPanelGroupLabel(state.panelGroup) + "</h3>"
+        + '<span>' + getGroupCountLabel(listItems.length) + "</span>"
+        + "</div>"
+        + '<div class="map-list-group-grid">' + listItems.map(renderListCard).join("") + "</div>"
+        + "</section>";
+    }
+
+    renderMissingItems();
+  }
+
+  function syncSelectedItemVisibility(item) {
+    if (state.panelGroup !== "all" && item.panelGroup !== state.panelGroup) {
+      state.panelGroup = item.panelGroup;
+    }
+  }
+
+  function selectItem(id, centerOnMap) {
+    var item = getItemById(id);
+    if (!item) return;
+
+    syncSelectedItemVisibility(item);
+    state.selectedItemId = id;
+    renderPanelGroups();
+    renderSelectedItem();
+    renderList();
+    updateMarkerSelection();
+    syncUrlState();
+
+    if (item.possuiCoordenadas && state.map) {
+      if (centerOnMap !== false) {
+        state.map.flyTo([item.coordenadas.lat, item.coordenadas.lng], Math.max(state.map.getZoom(), 14), {
+          duration: 0.45
+        });
+      }
+      if (state.markerIndex[item.id]) {
+        state.markerIndex[item.id].openPopup();
+      }
     }
   }
 
   function applyPageText() {
     document.body.classList.add("map-page-body");
+
     document.querySelectorAll("[data-map-i18n]").forEach(function (el) {
       var key = el.getAttribute("data-map-i18n");
       el.innerHTML = t(key, el.innerHTML);
     });
+
     document.querySelectorAll("[data-map-i18n-placeholder]").forEach(function (el) {
       var key = el.getAttribute("data-map-i18n-placeholder");
       el.setAttribute("placeholder", t(key, el.getAttribute("placeholder")));
     });
+
     document.querySelectorAll("[data-map-i18n-aria]").forEach(function (el) {
       var key = el.getAttribute("data-map-i18n-aria");
       el.setAttribute("aria-label", t(key, el.getAttribute("aria-label")));
@@ -707,6 +1038,7 @@
     var resultLabel = document.getElementById("mapVisibleLabel");
     var locatedLabel = document.getElementById("mapLocatedLabel");
     var totalLabel = document.getElementById("mapTotalLabel");
+
     if (resultLabel) resultLabel.textContent = t("resultsCount");
     if (locatedLabel) locatedLabel.textContent = t("locatedCount");
     if (totalLabel) totalLabel.textContent = t("totalItemsLabel");
@@ -716,6 +1048,7 @@
     var searchInput = document.getElementById("mapSearchInput");
     var searchClear = document.getElementById("mapSearchClear");
     var filters = document.getElementById("mapFilters");
+    var groups = document.getElementById("mapPanelGroups");
     var list = document.getElementById("mapItemList");
 
     if (searchInput) {
@@ -741,7 +1074,20 @@
         var button = event.target.closest("[data-filter]");
         if (!button) return;
         state.activeFilter = button.getAttribute("data-filter");
+        state.panelGroup = getDefaultPanelGroupForFilter(state.activeFilter);
         refreshView();
+      });
+    }
+
+    if (groups) {
+      groups.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-group]");
+        if (!button) return;
+        state.panelGroup = button.getAttribute("data-group");
+        renderPanelGroups();
+        renderSelectedItem();
+        renderList();
+        syncUrlState();
       });
     }
 
@@ -757,6 +1103,7 @@
       state.lang = getLang();
       applyPageText();
       renderFilters();
+      renderPanelGroups();
       renderStats();
       renderSelectedItem();
       renderList();
@@ -768,17 +1115,24 @@
   function refreshView() {
     filterItems();
     renderFilters();
+    renderPanelGroups();
     renderStats();
     renderMarkers();
     renderSelectedItem();
     renderList();
     updateSearchUi();
+    syncUrlState();
   }
 
   function initMap() {
     state.lang = getLang();
     state.items = buildItems();
-    state.map = L.map("tourismMap", { zoomControl: true, scrollWheelZoom: true });
+    applyInitialStateFromUrl();
+
+    state.map = L.map("tourismMap", {
+      zoomControl: true,
+      scrollWheelZoom: true
+    });
     state.markersLayer = L.layerGroup().addTo(state.map);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {

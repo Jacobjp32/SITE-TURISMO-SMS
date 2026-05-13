@@ -48,7 +48,7 @@
                 <div class="dropdown-menu" role="menu">
                     <a href="/mapa-turistico.html" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
                     <a href="/o-que-fazer" data-lang-key="nav-pontos-turisticos">Pontos Turísticos</a>
-                    <a href="/rotas-completas" data-lang-key="nav-roteiros">Roteiros</a>
+                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-roteiros">Roteiros</a>
                     <a href="/galeria" data-lang-key="nav-galeria">Galeria</a>
                     <a href="/o-que-fazer" data-lang-key="nav-experiencias">Experiências</a>
                 </div>
