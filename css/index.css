@@ -3780,39 +3780,67 @@
 }
 
 #map-hero {
-    height: clamp(560px, 74vh, 680px) !important;
-    min-height: 560px;
+    height: clamp(500px, 64vh, 620px) !important;
+    min-height: 500px;
     background: #071f18;
 }
 
 #map {
-    border-bottom-left-radius: 28px;
-    border-bottom-right-radius: 28px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
 }
 
 .map-info-panel {
-    top: 118px !important;
+    top: 104px !important;
     left: max(2rem, calc((100vw - var(--home-container-wide)) / 2 + 2rem)) !important;
-    width: min(430px, calc(100vw - 4rem)) !important;
-    padding: 1.75rem !important;
+    width: min(380px, calc(100vw - 4rem)) !important;
+    padding: 1.35rem 1.35rem 1.55rem !important;
     border-radius: var(--card-radius) !important;
+    box-shadow: 0 18px 42px rgba(0, 0, 0, 0.22) !important;
 }
 
 .map-info-panel h1 {
-    font-size: clamp(2.2rem, 4vw, 3.6rem) !important;
+    font-size: clamp(2rem, 3.2vw, 3rem) !important;
+    margin-bottom: 0.4rem !important;
+}
+
+.map-info-panel > p {
+    font-size: 0.95rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 1rem !important;
 }
 
 .map-info-panel .stats-grid {
-    gap: 0.75rem !important;
+    gap: 0.6rem !important;
+    margin-bottom: 1rem !important;
 }
 
 .map-info-panel .stat-item {
-    padding: 0.9rem !important;
+    padding: 0.75rem 0.65rem !important;
     border-radius: 12px !important;
 }
 
+.map-info-panel .stat-number {
+    font-size: 1.65rem !important;
+}
+
+.map-info-panel .stat-label {
+    font-size: 0.67rem !important;
+    letter-spacing: 0.04em !important;
+}
+
+.map-info-panel .explore-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 50px !important;
+    padding: 0.9rem 1.1rem !important;
+    font-size: 0.95rem !important;
+    margin-top: 0.2rem !important;
+}
+
 .scroll-indicator {
-    bottom: 1.5rem !important;
+    bottom: 1.15rem !important;
 }
 
 .visitor-guide-section {
@@ -4245,6 +4273,48 @@
     }
 }
 
+@media (max-width: 1440px) {
+    #map-hero {
+        height: clamp(500px, 60vh, 590px) !important;
+        min-height: 500px;
+    }
+
+    .map-info-panel {
+        top: 92px !important;
+        width: min(360px, calc(100vw - 4rem)) !important;
+    }
+}
+
+@media (max-width: 1024px) {
+    #map-hero {
+        height: clamp(500px, 58vh, 560px) !important;
+        min-height: 500px;
+    }
+
+    .map-info-panel {
+        top: 94px !important;
+        left: 1.5rem !important;
+        width: min(340px, calc(100vw - 3rem)) !important;
+        padding: 1.15rem 1.15rem 1.3rem !important;
+    }
+
+    .map-info-panel h1 {
+        font-size: clamp(1.8rem, 3vw, 2.5rem) !important;
+    }
+
+    .map-info-panel > p {
+        font-size: 0.9rem !important;
+    }
+
+    .map-info-panel .stat-item {
+        padding: 0.7rem 0.55rem !important;
+    }
+
+    .map-info-panel .stat-number {
+        font-size: 1.45rem !important;
+    }
+}
+
 @media (max-width: 768px) {
     .accessibility-bar {
         position: static !important;
@@ -4256,21 +4326,55 @@
     }
 
     #map-hero {
-        min-height: 560px;
+        min-height: auto;
         height: auto !important;
     }
 
     #map {
-        height: 560px;
+        height: clamp(300px, 40vh, 360px) !important;
+        min-height: 300px !important;
     }
 
     .map-info-panel {
-        top: 82px !important;
-        left: 1rem !important;
+        top: 0 !important;
+        left: auto !important;
         right: auto !important;
         width: calc(100vw - 2rem) !important;
         max-width: calc(100vw - 2rem) !important;
-        padding: 1.25rem !important;
+        margin: -42px auto 0 !important;
+        padding: 1.1rem 1.1rem 1.25rem !important;
+        border-radius: 18px 18px 0 0 !important;
+    }
+
+    .map-info-panel h1 {
+        font-size: 1.7rem !important;
+    }
+
+    .map-info-panel > p {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.9rem !important;
+    }
+
+    .map-info-panel .stats-grid {
+        gap: 0.55rem !important;
+        margin-bottom: 0.9rem !important;
+    }
+
+    .map-info-panel .stat-item {
+        padding: 0.65rem 0.45rem !important;
+    }
+
+    .map-info-panel .stat-number {
+        font-size: 1.3rem !important;
+    }
+
+    .map-info-panel .stat-label {
+        font-size: 0.66rem !important;
+    }
+
+    .map-info-panel .explore-btn {
+        min-height: 48px !important;
+        font-size: 0.92rem !important;
     }
 
     .visitor-guide-section,
@@ -4309,6 +4413,18 @@
 }
 
 @media (max-width: 480px) {
+    #map {
+        height: clamp(280px, 36vh, 320px) !important;
+        min-height: 280px !important;
+    }
+
+    .map-info-panel {
+        width: calc(100vw - 1.5rem) !important;
+        max-width: calc(100vw - 1.5rem) !important;
+        margin-top: -34px !important;
+        padding: 1rem 1rem 1.15rem !important;
+    }
+
     .map-info-panel .stats-grid {
         grid-template-columns: 1fr 1fr !important;
     }
