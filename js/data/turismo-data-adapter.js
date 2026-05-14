@@ -37,6 +37,75 @@
     return isFiniteNumber(coordinates.lat) && isFiniteNumber(coordinates.lng);
   }
 
+  function classifyBroadCategory(itemType, item) {
+    var rawCategory = item && item.categoria;
+    var source = normalizeText([
+      rawCategory,
+      item && item.nome,
+      item && item.descricao,
+      Array.isArray(item && item.tags) ? item.tags.join(" ") : item && item.tags
+    ].join(" "));
+    var normalizedCategory = normalizeText(rawCategory);
+
+    if (normalizedCategory.indexOf("historia") !== -1) return "history";
+    if (normalizedCategory.indexOf("cultura") !== -1 || normalizedCategory.indexOf("cultural") !== -1) return "culture";
+    if (normalizedCategory.indexOf("natureza") !== -1) return "nature";
+    if (normalizedCategory.indexOf("gastronomia") !== -1 || normalizedCategory.indexOf("gastronom") !== -1) return "gastronomy";
+    if (normalizedCategory.indexOf("hospedagem") !== -1) return "lodging";
+    if (normalizedCategory.indexOf("evento") !== -1) return "events";
+    if (normalizedCategory.indexOf("servico") !== -1 || normalizedCategory.indexOf("institucional") !== -1) return "services";
+
+    if (itemType === "hospedagem") return "lodging";
+    if (itemType === "restaurante") return "gastronomy";
+    if (itemType === "evento") return "events";
+    if (itemType === "servico") return "services";
+
+    if (source.indexOf("historia") !== -1 || source.indexOf("historico") !== -1 || source.indexOf("patrimonio") !== -1 || source.indexOf("memoria") !== -1 || source.indexOf("vapor") !== -1) {
+      return "history";
+    }
+    if (source.indexOf("natureza") !== -1 || source.indexOf("rio") !== -1 || source.indexOf("iguacu") !== -1 || source.indexOf("lazer") !== -1 || source.indexOf("parque") !== -1 || source.indexOf("mirante") !== -1) {
+      return "nature";
+    }
+    if (source.indexOf("gastronomia") !== -1 || source.indexOf("erva-mate") !== -1 || source.indexOf("mate") !== -1 || source.indexOf("chimarrao") !== -1 || source.indexOf("culinaria") !== -1 || source.indexOf("sabores") !== -1) {
+      return "gastronomy";
+    }
+    if (source.indexOf("evento") !== -1 || source.indexOf("agenda") !== -1 || source.indexOf("festa") !== -1) {
+      return "events";
+    }
+    if (source.indexOf("servico") !== -1 || source.indexOf("atendimento") !== -1 || source.indexOf("contato") !== -1 || source.indexOf("informacoes") !== -1 || source.indexOf("roteiro") !== -1 || source.indexOf("institucional") !== -1) {
+      return "services";
+    }
+
+    if (itemType === "rota") return "culture";
+    return "culture";
+  }
+
+  function collectBroadCategories(snapshot) {
+    var categoryOrder = ["history", "culture", "nature", "gastronomy", "lodging", "events", "services"];
+    var found = {};
+    var collections = [
+      { key: "pontos", itemType: "ponto" },
+      { key: "rotas", itemType: "rota" },
+      { key: "hospedagens", itemType: "hospedagem" },
+      { key: "restaurantes", itemType: "restaurante" },
+      { key: "eventos", itemType: "evento" },
+      { key: "informacoesEssenciais", itemType: "servico" }
+    ];
+
+    collections.forEach(function (entry) {
+      ensureArray(snapshot[entry.key]).forEach(function (item) {
+        var broadCategory = classifyBroadCategory(entry.itemType, item);
+        if (broadCategory) {
+          found[broadCategory] = true;
+        }
+      });
+    });
+
+    return categoryOrder.filter(function (categoryId) {
+      return !!found[categoryId];
+    });
+  }
+
   function uniqueTags() {
     var values = [];
     Array.prototype.slice.call(arguments).forEach(function (entry) {
@@ -310,11 +379,14 @@
       .concat(ensureArray(snapshot.restaurantes))
       .concat(ensureArray(snapshot.eventos))
       .concat(ensureArray(snapshot.informacoesEssenciais));
+    var categories = collectBroadCategories(snapshot);
 
     return {
       totalItems: items.length,
       withCoordinates: items.filter(hasCoordinates).length,
       withoutCoordinates: items.filter(function (item) { return !hasCoordinates(item); }).length,
+      categoryCount: categories.length,
+      categories: categories,
       points: ensureArray(snapshot.pontos).length,
       routes: ensureArray(snapshot.rotas).length,
       lodging: ensureArray(snapshot.hospedagens).length,

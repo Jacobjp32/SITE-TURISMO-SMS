@@ -161,6 +161,7 @@
     <script src="js/data/informacoes-essenciais.js" defer></script>
     <script src="js/data/turismo-data-adapter.js" defer></script>
     <script src="js/data/turismo-data.js" defer></script>
+    <script src="js/site-stats.js" defer></script>
     <script src="js/search-index.js" defer></script>
     <script src="js/search.js" defer></script>
 
@@ -211,7 +212,7 @@
             </a>
             
             <!-- Menu Hamburger -->
-            <button class="nav-toggle" id="navToggle" aria-label="Menu">
+            <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -440,20 +441,20 @@
             
             <div class="stats-grid">
                 <div class="stat-item">
-                    <span class="stat-number">12</span>
-                    <span class="stat-label" data-lang-key="stat-pontos">Pontos Turísticos</span>
+                    <span class="stat-number" data-site-stat="withCoordinates">66</span>
+                    <span class="stat-label" data-lang-key="stat-pontos-mapa">Pontos no mapa</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">6</span>
+                    <span class="stat-number" data-site-stat="totalItems">83</span>
+                    <span class="stat-label" data-lang-key="stat-locais-cadastrados">Locais cadastrados</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-site-stat="categoryCount">7</span>
+                    <span class="stat-label" data-lang-key="stat-categorias">Categorias</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" data-site-stat="routes">6</span>
                     <span class="stat-label" data-lang-key="stat-rotas">Rotas Temáticas</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">50+</span>
-                    <span class="stat-label" data-lang-key="stat-estabelecimentos">Estabelecimentos</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">148</span>
-                    <span class="stat-label" data-lang-key="stat-historia">Anos de História</span>
                 </div>
             </div>
 
@@ -624,11 +625,11 @@
 
             <div class="about-stats">
                 <div class="stat-item">
-                    <span class="stat-number">1908</span>
+                    <span class="stat-number" data-site-stat="foundingYear">1908</span>
                     <span class="stat-label" data-lang-key="sobre-fundacao">Fundação</span>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">116</span>
+                    <span class="stat-number" data-site-stat="yearsSinceFoundation">118</span>
                     <span class="stat-label" data-lang-key="sobre-anos-historia">Anos de História</span>
                 </div>
                 <div class="stat-item">
@@ -1683,8 +1684,9 @@
                 menuOpen = true;
                 navToggle.classList.add('active');
                 navLinks.classList.add('active');
+                navToggle.setAttribute('aria-expanded', 'true');
                 if (mobileOverlay) mobileOverlay.classList.add('active');
-                document.body.style.overflow = 'hidden';
+                document.body.classList.add('nav-menu-open');
                 console.log('Menu ABERTO');
             }
 
@@ -1692,8 +1694,10 @@
                 menuOpen = false;
                 navToggle.classList.remove('active');
                 navLinks.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
                 if (mobileOverlay) mobileOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                document.body.classList.remove('nav-menu-open');
+                closeAllDropdowns();
                 console.log('Menu FECHADO');
             }
 
@@ -1725,6 +1729,13 @@
             for (var i = 0; i < links.length; i++) {
                 links[i].addEventListener('click', function() {
                     setTimeout(fecharMenu, 100);
+                });
+            }
+
+            var searchTriggers = document.querySelectorAll('[data-search-open]');
+            for (var j = 0; j < searchTriggers.length; j++) {
+                searchTriggers[j].addEventListener('click', function() {
+                    fecharMenu();
                 });
             }
 
@@ -1776,10 +1787,10 @@
 
             // Resize fecha
             window.onresize = function() {
-                if (window.innerWidth > 968 && menuOpen) {
+                if (window.innerWidth > 1180 && menuOpen) {
                     fecharMenu();
                 }
-                if (window.innerWidth > 968) {
+                if (window.innerWidth > 1180) {
                     closeAllDropdowns();
                 }
             };

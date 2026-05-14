@@ -14,6 +14,7 @@ Arquivos atuais:
 - `js/data/informacoes-essenciais.js`
 - `js/data/turismo-data-adapter.js`
 - `js/data/turismo-data.js`
+- `js/site-stats.js`
 
 ## Papel de `js/data/turismo-data.js`
 
@@ -47,6 +48,31 @@ Na versão atual, esse snapshot base ainda passa por `js/data/turismo-data-adapt
 - classifica itens legados em categorias padronizadas
 - deduplica contra a base nova
 - enriquece o snapshot final sem apagar as bases antigas
+- resume estatísticas consolidadas em `window.TURISMO_DATA_META.stats`
+
+## Estatísticas automáticas da HOME
+
+Os números do hero da HOME e do bloco histórico da seção `Sobre` não dependem mais de valores fixos no HTML.
+
+Fluxo atual:
+
+- `js/data/turismo-data.js` monta `window.TURISMO_DATA`
+- `js/data/turismo-data-adapter.js` resume a base em `window.TURISMO_DATA_META.stats`
+- `js/site-stats.js` lê esses dados e preenche os spans marcados com `data-site-stat`
+
+Contadores usados na HOME:
+
+- `withCoordinates` -> `Pontos no mapa`
+- `totalItems` -> `Locais cadastrados`
+- `categoryCount` -> `Categorias`
+- `routes` -> `Rotas temáticas`
+- `CONFIG.site.anoFundacao` -> `Fundação`
+- `ano atual - CONFIG.site.anoFundacao` -> `Anos de História`
+
+Fallback atual:
+
+- se `TURISMO_DATA` não carregar, `js/site-stats.js` mantém os valores seguros `66`, `83`, `7`, `6` e `1908`
+- com isso a HOME não quebra e não exibe `undefined`
 
 ## Como o mapa consome `TURISMO_DATA`
 
@@ -68,6 +94,8 @@ Contagem consolidada atual:
 - `83` itens totais em `window.TURISMO_DATA`
 - `66` itens com coordenadas
 - `17` itens sem coordenadas
+- `7` categorias amplas usadas no mapa e na HOME (`História`, `Cultura`, `Natureza`, `Gastronomia`, `Hospedagem`, `Eventos`, `Serviços`)
+- `6` rotas temáticas vindas de `window.TURISMO_DATA.rotas`
 - legado lido pelo adaptador: `15` registros de `js/locais-data.js` e `48` registros de `js/rotas-data.js`
 - efeito líquido da integração: `46` novos itens e `17` fusões por deduplicação
 
@@ -225,6 +253,8 @@ window.TURISMO_PONTOS = [
 3. Preencha `id`, `nome`, `categoria`, `descricao`, `url` e `tags`.
 4. Se houver coordenadas confiáveis, preencha `lat` e `lng`.
 5. O `window.TURISMO_DATA` será montado automaticamente a partir desse arquivo.
+6. Se o item tiver coordenadas válidas, ele aumenta `Locais cadastrados` e `Pontos no mapa`.
+7. Se ele for o primeiro item de uma categoria ampla ainda ausente, também aumenta `Categorias`.
 
 ## Como adicionar uma nova rota
 
@@ -233,6 +263,23 @@ window.TURISMO_PONTOS = [
 3. Informe `id`, `nome`, `categoria`, `descricao`, `url` e `tags`.
 4. Se a rota tiver cor ou ícone próprios, mantenha esses campos.
 5. Para manter a experiencia unificada, prefira URL ligada ao mapa principal, como `/mapa-turistico.html?grupo=roteiros`.
+6. Cada nova rota aumenta `Rotas temáticas` automaticamente na HOME.
+
+## Como recalcular as estatísticas
+
+Na navegação normal, basta recarregar a página após alterar algum arquivo de `js/data/`.
+
+Se quiser forçar em tempo de execução:
+
+1. rode `window.TURISMO_DATA_HELPERS.refresh()` no console
+2. rode `window.SITE_STATS.refresh()` para reaplicar os números na HOME
+
+Resumo do efeito por tipo:
+
+- novo item com `lat/lng` válidos -> aumenta `Locais cadastrados` e `Pontos no mapa`
+- novo item sem coordenadas -> aumenta apenas `Locais cadastrados`
+- nova rota em `js/data/rotas.js` -> aumenta `Rotas temáticas`
+- nova categoria ampla reconhecida pelo mapa -> aumenta `Categorias`
 
 ## Como adicionar uma nova hospedagem
 

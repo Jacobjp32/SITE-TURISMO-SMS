@@ -36,7 +36,7 @@
             <img src="images/logo_header_branca.png" alt="São Mateus do Sul — Capital Polonesa do Paraná">
         </a>
 
-        <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
             <span></span><span></span><span></span>
         </button>
 
@@ -228,7 +228,7 @@
     display: none; flex-direction: column; justify-content: center; align-items: center;
     width: 44px; height: 44px;
     background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.35);
-    border-radius: 10px; cursor: pointer; transition: all 0.3s;
+    border-radius: 10px; cursor: pointer; transition: all 0.3s; position: relative; z-index: 10020;
 }
 .nav-toggle span { display:block; width:22px; height:3px; background:white; margin:3px 0; border-radius:3px; transition:all 0.3s; }
 .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
@@ -236,10 +236,11 @@
 .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
 .mobile-menu-overlay {
     position:fixed; top:0; left:0; right:0; bottom:0;
-    background:rgba(0,0,0,0.55); z-index:9997;
+    background:rgba(0,0,0,0.55); z-index:10018;
     opacity:0; visibility:hidden; transition:all 0.3s;
 }
 .mobile-menu-overlay.active { opacity:1; visibility:visible; }
+body.nav-menu-open { overflow: hidden !important; }
 .search-modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(6,33,24,0.62); backdrop-filter: blur(10px); z-index: 10030; }
 .search-modal.active { display: flex; }
 .search-modal-dialog { width: min(760px, 100%); max-height: min(80vh, 760px); overflow: auto; padding: 1.5rem; border-radius: 24px; background: linear-gradient(180deg,#fffdf8 0%,#f6efe4 100%); border: 1px solid rgba(212,165,116,0.35); box-shadow: 0 28px 80px rgba(0,0,0,0.28); }
@@ -304,7 +305,7 @@ body.font-larger{font-size:140%!important;}
   .accessibility-bar{position:static!important;padding:0.4rem 1rem!important;min-height:auto;height:auto;}
   .accessibility-bar .shortcuts{display:none;}
   .accessibility-bar .controls{width:100%;justify-content:center;}
-  .nav{top:0!important;width:100vw!important;max-width:100vw!important;min-height:78px!important;padding:0.7rem 1rem!important;overflow:hidden!important;}
+  .nav{top:0!important;width:100vw!important;max-width:100vw!important;min-height:78px!important;padding:0.7rem 1rem!important;overflow:visible!important;}
   .nav-container{width:100%!important;max-width:100%!important;gap:0.75rem!important;}
   .nav-logo{min-width:0!important;max-width:calc(100vw - 6rem)!important;}
   .nav-logo img{height:50px!important;max-width:170px!important;}
@@ -320,12 +321,13 @@ body.font-larger{font-size:140%!important;}
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }
     .nav-links {
-        position:fixed !important; top:0 !important; right:-100% !important;
-        width:82% !important; max-width:300px !important; height:100vh !important;
+        position:fixed !important; top:78px !important; right:-100% !important;
+        width:82% !important; max-width:300px !important; height:calc(100dvh - 78px) !important;
         background: linear-gradient(180deg,#0a3d2e 0%,#062118 100%) !important;
-        flex-direction:column !important; padding:80px 0 2rem !important;
+        flex-direction:column !important; padding:0 0 calc(1.5rem + env(safe-area-inset-bottom)) !important;
         gap:0 !important; transition:right 0.35s ease !important;
-        z-index:9998 !important; overflow-y:auto !important;
+        z-index:10019 !important; overflow-y:auto !important; overflow-x:hidden !important;
+        overscroll-behavior: contain !important; -webkit-overflow-scrolling: touch !important;
         box-shadow:-8px 0 40px rgba(0,0,0,0.4) !important;
     }
     .nav-links.active { right:0 !important; }
@@ -417,14 +419,22 @@ body.font-larger{font-size:140%!important;}
             toggle.addEventListener('click', function () {
                 toggle.classList.toggle('active');
                 links.classList.toggle('active');
+                toggle.setAttribute('aria-expanded', links.classList.contains('active') ? 'true' : 'false');
                 if (overlay) overlay.classList.toggle('active');
+                document.body.classList.toggle('nav-menu-open', links.classList.contains('active'));
+                if (!links.classList.contains('active')) {
+                    closeAllDropdowns();
+                }
             });
         }
         if (overlay) {
             overlay.addEventListener('click', function () {
                 toggle && toggle.classList.remove('active');
                 links  && links.classList.remove('active');
+                toggle && toggle.setAttribute('aria-expanded', 'false');
                 overlay.classList.remove('active');
+                document.body.classList.remove('nav-menu-open');
+                closeAllDropdowns();
             });
         }
 
@@ -473,6 +483,11 @@ body.font-larger{font-size:140%!important;}
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
+                toggle && toggle.classList.remove('active');
+                links && links.classList.remove('active');
+                overlay && overlay.classList.remove('active');
+                toggle && toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-menu-open');
                 closeAllDropdowns();
             }
         });
@@ -483,7 +498,18 @@ body.font-larger{font-size:140%!important;}
                 toggle && toggle.classList.remove('active');
                 links && links.classList.remove('active');
                 overlay && overlay.classList.remove('active');
-                document.body.style.overflow = '';
+                toggle && toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-menu-open');
+            });
+        });
+
+        document.querySelectorAll('#navLinks a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                toggle && toggle.classList.remove('active');
+                links && links.classList.remove('active');
+                overlay && overlay.classList.remove('active');
+                toggle && toggle.setAttribute('aria-expanded', 'false');
+                document.body.classList.remove('nav-menu-open');
             });
         });
 
