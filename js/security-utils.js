@@ -52,7 +52,7 @@
                 return escapeAttr(raw);
             }
         } catch (err) {
-            // Relative asset paths such as images/foo.jpg are allowed below.
+            // Relative asset paths under the project's static folders are allowed below.
         }
 
         if (/^(images|videos|docs|css|js)\//i.test(raw) || raw.charAt(0) === '/') {

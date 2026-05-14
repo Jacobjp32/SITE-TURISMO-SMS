@@ -263,7 +263,7 @@ body { padding-top: 132px; }
 #sms-scroll-track{position:fixed!important;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.55);z-index:10001;pointer-events:none;}
 #sms-scroll-progress{position:fixed!important;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
 /* Acessibilidade eMAG */
-.accessibility-bar{background:rgba(248,246,240,0.96)!important;color:#0a3d2e!important;padding:0.35rem 1.25rem!important;min-height:36px;position:fixed!important;top:0!important;left:0!important;right:0!important;z-index:10001!important;border-bottom:1px solid rgba(10,61,46,0.10)!important;backdrop-filter:blur(14px);overflow:hidden;}
+.accessibility-bar{background:rgba(248,246,240,0.96)!important;color:#0a3d2e!important;padding:0.35rem 1.25rem!important;min-height:36px;position:fixed!important;top:4px!important;left:0!important;right:0!important;z-index:10001!important;border-bottom:1px solid rgba(10,61,46,0.10)!important;backdrop-filter:blur(14px);overflow:hidden;}
 .accessibility-bar .container{max-width:1480px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:nowrap;gap:.5rem;min-height:36px;}
 .accessibility-bar .shortcuts{display:flex;gap:.75rem;flex-wrap:wrap;}
 .accessibility-bar a,.accessibility-bar button{color:#0a3d2e;text-decoration:none;background:rgba(255,255,255,0.58)!important;border:1px solid rgba(10,61,46,0.18)!important;padding:.25rem .6rem;border-radius:999px!important;font-size:.75rem;cursor:pointer;transition:all .2s;font-family:inherit;}
@@ -286,7 +286,7 @@ body.font-larger{font-size:140%!important;}
 .back-to-top{position:fixed;bottom:6rem;right:2rem;width:50px;height:50px;background:#d4a574;color:#0a3d2e;border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(0,0,0,.3);transition:all .3s;opacity:0;visibility:hidden;z-index:9998;}
 .back-to-top.visible{opacity:1;visibility:visible;}
 .back-to-top:hover{background:#e8c9a0;transform:translateY(-5px);box-shadow:0 6px 25px rgba(0,0,0,.4);}
-@media(max-width:500px){.back-to-top{bottom:160px!important;right:1rem!important;width:45px!important;height:45px!important;}}
+@media(max-width:500px){.back-to-top{bottom:calc(18px + env(safe-area-inset-bottom))!important;left:1rem!important;right:auto!important;width:44px!important;height:44px!important;}}
 /* Auth nav state */
 .auth-user-menu { display: flex; align-items: center; gap: 0.4rem; }
 .nav-user-link { background: linear-gradient(135deg,#d4a574,#c4956a) !important; color: #0a3d2e !important; font-weight: 600 !important; border-radius: 25px !important; padding: 0.5rem 1.1rem !important; text-decoration: none; white-space: nowrap; }
@@ -299,11 +299,23 @@ body.font-larger{font-size:140%!important;}
   .nav-logout-link { font-size: 0.85rem; }
 }
 @media(max-width:768px){
+  html,body{max-width:100%;overflow-x:hidden!important;}
   body{padding-top:84px;}
   .accessibility-bar{position:static!important;padding:0.4rem 1rem!important;min-height:auto;height:auto;}
   .accessibility-bar .shortcuts{display:none;}
   .accessibility-bar .controls{width:100%;justify-content:center;}
-  .nav{top:0!important;padding:0.75rem 1rem!important;}
+  .nav{top:0!important;width:100vw!important;max-width:100vw!important;min-height:78px!important;padding:0.7rem 1rem!important;overflow:hidden!important;}
+  .nav-container{width:100%!important;max-width:100%!important;gap:0.75rem!important;}
+  .nav-logo{min-width:0!important;max-width:calc(100vw - 6rem)!important;}
+  .nav-logo img{height:50px!important;max-width:170px!important;}
+  .nav-toggle{flex:0 0 44px!important;width:44px!important;height:44px!important;margin-left:auto!important;}
+  div[vw] [vw-access-button]{left:1rem!important;right:auto!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;transform:scale(0.9)!important;transform-origin:left bottom!important;}
+  div[vw] [vw-plugin-wrapper]{left:0!important;right:auto!important;max-width:calc(100vw - 1rem)!important;}
+}
+@media(max-width:420px){
+  .nav{padding-right:0.8rem!important;}
+  .nav-logo img{height:46px!important;max-width:150px!important;}
+  .nav-toggle{flex-basis:42px!important;width:42px!important;height:42px!important;}
 }
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }

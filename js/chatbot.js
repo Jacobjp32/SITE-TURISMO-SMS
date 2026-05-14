@@ -428,7 +428,7 @@
             var s = document.createElement('style');
             s.id  = 'chatbot-styles';
             s.textContent =
-                '#chatbot-widget{position:fixed;bottom:20px;right:20px;z-index:999999;font-family:Raleway,sans-serif}' +
+                '#chatbot-widget{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));right:20px;z-index:999999;font-family:Raleway,sans-serif}' +
                 '#chatbot-widget .chatbot-trigger{width:65px;height:65px;border-radius:50%;background:' + cor + ';border:none;cursor:pointer;box-shadow:0 4px 25px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;transition:transform .3s}' +
                 '#chatbot-widget .chatbot-trigger:hover{transform:scale(1.1)}' +
                 '#chatbot-widget .chatbot-avatar{font-size:2.2rem}' +
@@ -453,8 +453,8 @@
                 '#chatbot-widget .chatbot-input input{flex:1;border:2px solid #e0e0e0;border-radius:25px;padding:.7rem 1rem;font-size:.9rem;outline:none}' +
                 '#chatbot-widget .chatbot-input input:focus{border-color:' + cor + '}' +
                 '#chatbot-widget .chatbot-input button[type="submit"]{background:' + cor + ';color:#fff;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.1rem}' +
-                '@media(max-width:500px){#chatbot-widget .chatbot-window{width:calc(100vw - 30px);height:65vh}}' +
-                '@media(max-width:500px){#chatbot-widget{bottom:80px;right:12px}}' +
+                '@media(max-width:500px){#chatbot-widget .chatbot-window{width:calc(100vw - 30px);height:65vh;bottom:78px;right:0}}' +
+                '@media(max-width:500px){#chatbot-widget{bottom:calc(18px + env(safe-area-inset-bottom));right:12px}}' +
                 '#chatbot-widget .chatbot-trigger{position:relative}' +
                 '#chatbot-widget .chatbot-typing-dots{display:flex;gap:5px;align-items:center;padding:14px 16px}' +
                 '#chatbot-widget .chatbot-typing-dots span{width:8px;height:8px;border-radius:50%;background:#0a3d2e;opacity:.3;animation:chatbotDot .9s infinite}' +

@@ -27,7 +27,7 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
     categoria: "Hospedagem",
     descricao: "Hotéis, pousadas e opções de estadia para apoiar a visita ao destino.",
     imagem: "",
-    url: "/onde-ficar",
+    url: "/mapa-turistico.html?categoria=Hospedagem",
     destaque: "Hospedagem",
     coordenadas: { lat: null, lng: null },
     tags: ["hospedagem", "hotel", "pousada", "estadias", "planeje sua visita", "turismo"]

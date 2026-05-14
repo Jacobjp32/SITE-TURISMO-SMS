@@ -26,10 +26,13 @@ body.map-page-body {
         linear-gradient(180deg, #faf6ef 0%, #f1e8d9 100%);
     color: var(--map-text);
     font-family: 'Raleway', sans-serif;
+    overflow-x: hidden;
 }
 
 .map-page {
     padding: 1.1rem 1.25rem 3rem;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 .map-page-shell {
@@ -1241,6 +1244,7 @@ body.map-page-body {
     .map-hero {
         padding: 1.2rem;
         border-radius: 26px;
+        max-width: 100%;
     }
 
     .map-hero h1 {
@@ -1275,8 +1279,27 @@ body.map-page-body {
 }
 
 @media (max-width: 520px) {
+    body.map-page-body,
+    .map-page,
+    .map-page-shell,
+    .map-hero,
+    .map-toolbar,
+    .map-stage-card,
+    .map-panel-card {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
     .map-hero {
         padding: 1rem;
+    }
+
+    .map-hero h1,
+    .map-hero-subtitle,
+    .map-hero-support,
+    .map-card-title,
+    .map-card-description {
+        overflow-wrap: anywhere;
     }
 
     .map-hero-stats {

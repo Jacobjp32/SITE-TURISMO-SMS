@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onde Ficar | São Mateus do Sul</title>
+    <meta name="description" content="Hospedagem e opções de estadia de São Mateus do Sul agora estão concentradas no Mapa Turístico Interativo.">
+    <meta name="robots" content="noindex,follow">
+    <link rel="canonical" href="https://turismo.saomateusdosul.pr.gov.br/mapa-turistico.html?categoria=Hospedagem">
+    <meta http-equiv="refresh" content="4; url=/mapa-turistico.html?categoria=Hospedagem">
+    <style>
+        :root { --forest:#0a3d2e; --cream:#fbf7ef; --gold:#d4a574; --text:#173d31; --muted:#5f625d; }
+        * { box-sizing: border-box; }
+        body { margin:0; min-height:100vh; display:grid; place-items:center; padding:1.25rem; background:radial-gradient(circle at top right, rgba(212,165,116,0.18), transparent 28%), linear-gradient(180deg, #fbf7ef 0%, #f1e7d8 100%); color:var(--text); font-family: Arial, sans-serif; }
+        .card { width:min(760px,100%); padding:2rem; border-radius:28px; background:rgba(255,253,248,0.96); border:1px solid rgba(10,61,46,0.08); box-shadow:0 24px 60px rgba(10,61,46,0.12); }
+        .kicker { display:inline-flex; min-height:32px; align-items:center; padding:0 0.85rem; border-radius:999px; background:rgba(212,165,116,0.18); color:#8a6b49; font-size:0.78rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; }
+        h1 { margin:0.9rem 0 0.7rem; font-size:clamp(2.1rem, 5vw, 3.1rem); line-height:1.02; color:var(--forest); font-family: Georgia, serif; }
+        p { margin:0; color:var(--muted); line-height:1.7; }
+        .actions { display:flex; flex-wrap:wrap; gap:0.85rem; margin-top:1.4rem; }
+        .btn { display:inline-flex; align-items:center; justify-content:center; min-height:48px; padding:0 1.15rem; border-radius:999px; text-decoration:none; font-weight:700; border:1px solid rgba(10,61,46,0.12); background:#fff; color:var(--forest); }
+        .btn.primary { background:var(--forest); border-color:var(--forest); color:#fff; }
+        .note { margin-top:1rem; font-size:0.85rem; }
+        @media (max-width: 520px) { .card { padding:1.35rem; border-radius:22px; } .actions { flex-direction:column; } .btn { width:100%; } }
+    </style>
+</head>
+<body>
+    <main class="card" id="main-content">
+        <span class="kicker">Pagina ponte</span>
+        <h1>A hospedagem agora está concentrada no Mapa Turístico Interativo.</h1>
+        <p>Hotéis, pousadas e estadias do destino passaram a ser acessados pelo filtro de hospedagem dentro do mapa.</p>
+        <div class="actions">
+            <a class="btn primary" href="/mapa-turistico.html?categoria=Hospedagem">Abrir hospedagem no mapa</a>
+            <a class="btn" href="/mapa-turistico.html">Explorar todos os locais</a>
+        </div>
+        <p class="note">Redirecionamento automático em alguns segundos.</p>
+    </main>
+    <script>
+        window.setTimeout(function () {
+            window.location.replace("/mapa-turistico.html?categoria=Hospedagem");
+        }, 1600);
+    </script>
+</body>
+</html>

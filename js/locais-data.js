@@ -82,7 +82,7 @@ const locaisData = {
         descricao: 'A Praça do Rio Iguaçu é o principal espaço de lazer e contemplação da natureza em São Mateus do Sul. Com deck sobre o rio, playground, ciclovia e vista privilegiada para o Rio Iguaçu, o local atrai moradores e turistas em busca de contato com a natureza e tranquilidade. Também é sede do Chimarródromo, onde acontece a tradicional Roda de Mathe todo 1º domingo do mês.',
         historia: 'Localizada às margens do Rio Iguaçu, a praça representa a relação histórica da cidade com o rio que foi sua origem: um pouso de tropeiros às margens do Iguaçu no século XIX. O espaço foi revitalizado e hoje integra natureza, lazer e cultura em um único local.',
         imagem: 'images/WEBP/PRACA-DO-IGUACU_1.webp',
-        galeria: ['images/WEBP/PRACA-DO-IGUACU_1.webp', 'images/PRACA_DO_RIO_IGUACU.jpg', 'images/PRACA_DO_IGUACU.JPG'],
+        galeria: ['images/WEBP/PRACA-DO-IGUACU_1.webp', 'images/PRACA_DO_RIO_IGUACU.jpg', 'images/PRACA_DO_RIO_IGUACU.jpg'],
         endereco: 'Rua João Gabriel Martins s/n — São Mateus do Sul, PR',
         horario: 'Aberto todos os dias. Roda de Mathe: 1º domingo do mês, 9h.',
         telefone: '(42) 3532-0000',
