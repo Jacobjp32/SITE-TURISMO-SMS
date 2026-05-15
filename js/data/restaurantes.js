@@ -3,25 +3,25 @@ window.TURISMO_RESTAURANTES = [
     id: "ancestral-gastronomia",
     nome: "Ancestral Gastronomia",
     categoria: "Gastronomia",
-    descricao: "Culinária polonesa, pães de fermentação natural e experiências temáticas na Colônia Taquaral.",
-    imagem: "",
+    descricao: "Vivências gastronômicas com receitas típicas, pratos autorais, pães de fermentação natural e experiências junto à natureza.",
+    imagem: "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
     url: "/mapa-turistico.html?categoria=Gastronomia",
     telefone: "(42) 98804-0535",
-    localizacao: "Colônia Taquaral",
+    localizacao: "Avenida Ozy Mendonça de Lima, 3133 — Colônia Taquaral",
     coordenadas: { lat: -25.8465617, lng: -50.3827306 },
-    tags: ["gastronomia", "restaurante", "culinária polonesa", "pães artesanais", "colônia taquaral", "experiência local"]
+    tags: ["gastronomia", "restaurante", "culinária polonesa", "pães artesanais", "fermentação natural", "colônia taquaral", "vivência gastronômica", "personal chef"]
   },
   {
     id: "marina-barra-iguacu",
     nome: "Marina Barra do Iguaçu",
     categoria: "Gastronomia",
-    descricao: "Restaurante com perfil náutico, frutos do mar e lazer à beira do Rio Iguaçu.",
+    descricao: "Restaurante e espaço turístico às margens do Rio Iguaçu, com gastronomia, lazer, garagem náutica e eventos.",
     imagem: "",
     url: "/mapa-turistico.html?categoria=Gastronomia",
-    telefone: "(42) 98841-6009",
-    localizacao: "Colônia Iguaçu",
+    telefone: "(42) 98841-6009 / (42) 98851-4166",
+    localizacao: "BR-476, Km 283 — Colônia Iguaçu",
     coordenadas: { lat: -25.8899745, lng: -50.4340955 },
-    tags: ["gastronomia", "restaurante", "frutos do mar", "rio iguaçu", "náutico", "lazer"]
+    tags: ["gastronomia", "restaurante", "frutos do mar", "rio iguaçu", "náutico", "lazer", "garagem náutica", "eventos"]
   },
   {
     id: "restaurante-dallas",

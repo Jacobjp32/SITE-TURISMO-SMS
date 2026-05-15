@@ -193,7 +193,7 @@
       nome: item.name,
       categoria: category,
       descricao: item.desc || "",
-      imagem: "",
+      imagem: item.imagem || "",
       url: "",
       telefone: item.phone || "",
       localizacao: item.location || "",

@@ -51,12 +51,12 @@ window.TURISMO_HOSPEDAGENS = [
     id: "hotel-moro",
     nome: "Hotel Moro",
     categoria: "Hospedagem",
-    descricao: "Hospedagem em Fluviópolis com café da manhã, estacionamento e apoio à visita pela região.",
+    descricao: "Hospedagem em Fluviópolis, na BR-476, com café da manhã, estacionamento e apoio à visita pela região.",
     imagem: "",
     url: "/mapa-turistico.html?categoria=Hospedagem",
     telefone: "(42) 98887-4202",
-    localizacao: "Fluviópolis",
+    localizacao: "BR-476, Km 167 — Fluviópolis",
     coordenadas: { lat: -25.9980108, lng: -50.5880208 },
-    tags: ["hospedagem", "hotel", "fluviópolis", "café da manhã", "estacionamento", "roteiros"]
+    tags: ["hospedagem", "hotel", "hotel moro", "fluviópolis", "br-476", "café da manhã", "estacionamento", "roteiros", "@htelmoro"]
   }
 ];

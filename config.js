@@ -18,6 +18,7 @@ const CONFIG = {
         url: 'https://turismo.saomateusdosul.pr.gov.br',
         email: 'turismo@saomateusdosul.pr.gov.br',
         telefone: '(42) 3532-0000',
+        anoFundacao: 1908,
         endereco: 'Rua João Gabriel Martins s/n • CEP 83900-114 • São Mateus do Sul - PR'
     },
 
