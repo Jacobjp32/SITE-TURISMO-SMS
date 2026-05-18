@@ -1,0 +1,2441 @@
+{
+  "generatedAt": "2026-05-18T13:03:27.364Z",
+  "totals": {
+    "mediaFiles": 123,
+    "referencedMedia": 88,
+    "likelyOrphans": 35,
+    "duplicateGroups": 0,
+    "missingReferences": 0,
+    "heavyMedia": 21
+  },
+  "assets": [
+    {
+      "path": "images/CASA_DA_MEMORIA.png",
+      "ext": ".png",
+      "bytes": 5020646,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "23db22b6e2c32cdd22e45db6b5dc1e4f27af00cf7e76ebcef6e0c309724fe069",
+      "usedBy": [
+        "js/data/pontos-turisticos.js"
+      ]
+    },
+    {
+      "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
+      "ext": ".png",
+      "bytes": 4410089,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "1b694ff2ab7f2d70e889b0181cfc3cf53596af21e7a94f824855eca26c8fbb15",
+      "usedBy": []
+    },
+    {
+      "path": "images/CUIA_1.JPG",
+      "ext": ".jpg",
+      "bytes": 481303,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "a13c6f0d5cbad8d9bffe210175ef44553f72ef622e908eca70a49a277f3d11a1",
+      "usedBy": []
+    },
+    {
+      "path": "images/CUIA_3.JPG",
+      "ext": ".jpg",
+      "bytes": 536666,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "2cfe1072fea4f6166b85eff0f8891d24af30d80677d1360214d004291c5885a4",
+      "usedBy": []
+    },
+    {
+      "path": "images/diorama_sao_mateus.png",
+      "ext": ".png",
+      "bytes": 1414760,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "7990cb90f0a8a5f7b13e31ed084e0bf737e578401db364a267b574e7e9de9b0a",
+      "usedBy": [
+        "galeria.html",
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/diorama_sao_mateus.webp",
+      "ext": ".webp",
+      "bytes": 94108,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "f4bfcc146356ae58b2f33f6db4f59efbc770fc8b9bd173a851585dfc5ae9bda9",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 74428,
+      "dimensions": {
+        "height": 1046,
+        "width": 1079
+      },
+      "sha256": "20a568cca18d886d1dd5c3527f3453c661a226084f978b3e2c8266deb2bb2a92",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 38255,
+      "dimensions": {
+        "height": 918,
+        "width": 1080
+      },
+      "sha256": "e0ed4cb5e09329ba74afd278ecc88545d9f4650ee7965b18e80fdbe1cb147294",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 409241,
+      "dimensions": {
+        "height": 1057,
+        "width": 1080
+      },
+      "sha256": "bb61a0be613808b665f827f9e5269f3d734875913848db87f77909007d3e6bc6",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 134526,
+      "dimensions": {
+        "height": 1080,
+        "width": 1080
+      },
+      "sha256": "a2091aab66f363dc3481f9d68145c54e6a4ca5bebc280e8f2913247a1d5ad053",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 196666,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "65c0fb96a2f89f39b1e9990c472f6f55be8fa53db8d4410a91bb26f6246765fe",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 186072,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "ce90c49a63f6bd04ffa66c59c6d6f28e278e5ef3a281011824211d9bbf83affe",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 146400,
+      "dimensions": {
+        "height": 1280,
+        "width": 720
+      },
+      "sha256": "b823c466ddef93e21254b2df157739693e241401d63d1b87ad96700bca783219",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 147035,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "012cec0ea503746333d4a39b68147942a2c7984ac6206f318a9b61121f3a20dc",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 212259,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "a83314985c16a0cc4e6f175454aa26a8ad00abf20802060c62bf920b33002ddd",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 201228,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "5f941017c830ce36e8b5a2b40287d7926fe8d62bcf76a88d585233bf2460bdb7",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 141023,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "d9636d3b0ef2174e00be65d3a2e1f0e7adaea0ff814cda2dbd5eb0a20eb5f6aa",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 163345,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "7680f4fcff67d9291324021f8bc380235b80ddb7face8cf02076e25259d33358",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
+      "ext": ".jpg",
+      "bytes": 3360949,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "949d76c71f5a96df92bbb2deee65dd6910f141dceaa00432a8cd20b63f6efec8",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
+      "ext": ".jpg",
+      "bytes": 1826030,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "6a4afb3174c4a70188d2e84844e65b6cc5e4e8b8ea94a53ba7e3fa9e981de696",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
+      "ext": ".jpg",
+      "bytes": 3169922,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "f98ed9acff751c74d398ab581dc5d9a61136c50d581a19e1d74b3b5db56bebe5",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg",
+      "ext": ".jpg",
+      "bytes": 2780546,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "9b569504758c0b45e82627018bb16d7cbd97bd184f55e145cc6b336414fddcff",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 172627,
+      "dimensions": {
+        "height": 856,
+        "width": 1283
+      },
+      "sha256": "2cec889e40f3e15da5e25f7c3b53b1f2c8a3f99039f19e62f0628fe0fe7e8a95",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 282432,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "9ef729d484e6ff5204d65aec4f7255ea7b00811781a6d2b8d2bc2d21a936777c",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 163744,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "d0cd7493ba9616a7ababb2e12a19217f6c7b37948a4732c940a964a2ebcdfd94",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 139724,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "4a1cb53b7d21e76abdfc170e71f6f206b1797aeadccf35be9def401ed1314561",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 146731,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "94f53e54705360a87066bebe6811ea5d9c4705023bc87684783f2d7871013013",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 203493,
+      "dimensions": {
+        "height": 1067,
+        "width": 1600
+      },
+      "sha256": "d957c30f488da229bed861632030b8ccc5f0a8be8aca2f3a6642c796d26b59d2",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 1139631,
+      "dimensions": {
+        "height": 4032,
+        "width": 3024
+      },
+      "sha256": "464bce0f9be5890bd58501ae733c50977f43e4197410e414ada5249e26f34606",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 133992,
+      "dimensions": {
+        "height": 1280,
+        "width": 720
+      },
+      "sha256": "e381deda56600dae613dfff3bf53681042fd1713e72b8789895423fe856a7082",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/EU_AMO_SMS.png",
+      "ext": ".png",
+      "bytes": 5161495,
+      "dimensions": {
+        "width": 1920,
+        "height": 1563
+      },
+      "sha256": "023271182c2a15e6d89b3195d7d20c47a5d369a7d3498f63bb23a07a0e286e24",
+      "usedBy": []
+    },
+    {
+      "path": "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg",
+      "ext": ".jpg",
+      "bytes": 132518,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "91e2e6296d4f48520bd55a3727fef5c1e098e7dd24044be4a5a67077a9ebd874",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/cms.js",
+        "js/locais-data.js",
+        "js/reservas.js",
+        "manifest.json",
+        "noticia.html",
+        "noticias.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/FUNDO_ROTAS.jpg",
+      "ext": ".jpg",
+      "bytes": 166711,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "a2a427ad613b1c09805f20caee8e38721c5cc00b71925682bfceec07b729fe05",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/GINASIO_POLACAO.JPG",
+      "ext": ".jpg",
+      "bytes": 528933,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA.jpg",
+      "ext": ".jpg",
+      "bytes": 130257,
+      "dimensions": {
+        "height": 677,
+        "width": 1200
+      },
+      "sha256": "1d3528d0f0bca949dd983b4f1759dd7e460a5b23d80e6de626190258b87fad97",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/data/pontos-turisticos.js",
+        "js/locais-data.js",
+        "js/reservas.js",
+        "js/roteiro-ia.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_10.jpg",
+      "ext": ".jpg",
+      "bytes": 243570,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "534ebd7f1ddfbb68b8de09c59dcae756b94266d898d5731deb52978126514472",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_2.jpg",
+      "ext": ".jpg",
+      "bytes": 275175,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "3d2c82e7e9f90421e8b2aea7b51206daa5bff4572dadf0c387bfe3d2c1804f83",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_3.jpg",
+      "ext": ".jpg",
+      "bytes": 262090,
+      "dimensions": {
+        "height": 899,
+        "width": 1200
+      },
+      "sha256": "d5d5e304be74127482c52dc98d78a453e0417fe793ebdb81a525aa5cae24cdc8",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_4.jpg",
+      "ext": ".jpg",
+      "bytes": 284520,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "3ff7d03f46c9aa570b6778be8be2894fb3afb523a63f0c7783932eee0c4480eb",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_5.jpg",
+      "ext": ".jpg",
+      "bytes": 364252,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "3c7fd2fe6f9959b8aa4069d8e04017a551d69b5b3cad7471b82a92940e51f014",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_6.jpg",
+      "ext": ".jpg",
+      "bytes": 484862,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "2ded3ee9bf931f0308b2bd0b4454ca9a9d27121fead3c57dd5454c96db331888",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_7.jpg",
+      "ext": ".jpg",
+      "bytes": 236656,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "d6a745d5ddac8691c0242cb1f6bf2a7be2777e370b0db2c7513b8336016eb530",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_8.jpg",
+      "ext": ".jpg",
+      "bytes": 370070,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "decdea6a86b25b20d7fd76a3eabf52199e2f32cf009bece864d738e14d6dc93c",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_9.jpg",
+      "ext": ".jpg",
+      "bytes": 183506,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "3290b40d48cd045edb8889a1d09537f12f3e09086848916fe42280df401016a5",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IGREJA_COLONIA_IGUACU.png",
+      "ext": ".png",
+      "bytes": 3855743,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "8deba3a405b133392936dbe1abcebecac9617220fdec648d92ffad62924fcf7b",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.png",
+      "ext": ".png",
+      "bytes": 3614212,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "209410ab2623510cf0d704bd9254d60beb13dfdf8c0f605a568559bf26a75c5c",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/locais-data.js",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.webp",
+      "ext": ".webp",
+      "bytes": 303620,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "0f5c4194f091e439fada2e83a679d2c6f4a3952540130381b5f99aabd8c9d02d",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_2.png",
+      "ext": ".png",
+      "bytes": 3315073,
+      "dimensions": {
+        "width": 1920,
+        "height": 1284
+      },
+      "sha256": "6373b92f331f9d39d5b4dba336d5102ca38e8b9ae5ab4c3d33045779fad80759",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_FRONTAL.jpg",
+      "ext": ".jpg",
+      "bytes": 170869,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "e074d80f87bc709ee15cbdd795e61d8a1d5197ffb31a6c60f40b2749838d7ba1",
+      "usedBy": [
+        "index.html",
+        "js/data/pontos-turisticos.js",
+        "js/locais-data.js",
+        "js/roteiro-ia.js"
+      ]
+    },
+    {
+      "path": "images/IMG_2295.jpg",
+      "ext": ".jpg",
+      "bytes": 636119,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "f707fb645b8b3f470fd787e439707754eb04ef4d2979df663b0f429c49be6aff",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMG_2301.jpg",
+      "ext": ".jpg",
+      "bytes": 564760,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "270608eae4d34ad800373202513405af21004418daca00299833d55415e8257c",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMG_2304.jpg",
+      "ext": ".jpg",
+      "bytes": 551454,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "a6ce69218fd304f768b44b972ab326f6de8f98870828000a8665ebe955822ef7",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMG_2326.jpg",
+      "ext": ".jpg",
+      "bytes": 1282786,
+      "dimensions": {
+        "height": 2132,
+        "width": 1200
+      },
+      "sha256": "6b3ea45213581a59354e34e43dd2124e9d971611ac4bdb952c03fb512c8a0caa",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMG_2371.jpg",
+      "ext": ".jpg",
+      "bytes": 295455,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "49f3331d8a02b7369c0c6fc4cc8c198b8fc137edc357f070ffb8ff6e0586c128",
+      "usedBy": [
+        "galeria.html",
+        "js/roteiro-ia.js"
+      ]
+    },
+    {
+      "path": "images/IMIGRANTES_IA_1.jpg",
+      "ext": ".jpg",
+      "bytes": 133075,
+      "dimensions": {
+        "height": 669,
+        "width": 1200
+      },
+      "sha256": "c8f8e8722914be13d8f3a6b4d0c3902a423ff870e4be29e5c9688e9e329ee217",
+      "usedBy": []
+    },
+    {
+      "path": "images/IMIGRANTES_IA_1.png",
+      "ext": ".png",
+      "bytes": 1176932,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "61dbb2e030b011a056e3a5ce3b22620ee6a6868bd20b0bb0f4658b0cb38b2942",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMIGRANTES_IA_2.jpg",
+      "ext": ".jpg",
+      "bytes": 184560,
+      "dimensions": {
+        "height": 669,
+        "width": 1200
+      },
+      "sha256": "a6e7dea9fff80d91835e7741c220a8e4e9e4c5456b8fb7599e7cd52041a36cb1",
+      "usedBy": []
+    },
+    {
+      "path": "images/IMIGRANTES_IA_2.png",
+      "ext": ".png",
+      "bytes": 1410765,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "5dc91c6fbffe00ada6f6c26ea153ec122d2dd144b06c7c87de11a562a1e63c2e",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/logos/atema.png",
+      "ext": ".png",
+      "bytes": 84273,
+      "dimensions": {
+        "width": 2226,
+        "height": 718
+      },
+      "sha256": "bd78b6ef7d1b1cee8a903b5b50402317999f8bb33ea09f165b6160e5de379240",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logos/governo-pr.png",
+      "ext": ".png",
+      "bytes": 207927,
+      "dimensions": {
+        "width": 2850,
+        "height": 835
+      },
+      "sha256": "339a98c31eeca5a9b12f242dbb10f526b0020b3718947f8f29d561aae39c1255",
+      "usedBy": [
+        "images/logos/README.txt",
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logos/ig-mathe.png",
+      "ext": ".png",
+      "bytes": 152133,
+      "dimensions": {
+        "width": 2012,
+        "height": 1216
+      },
+      "sha256": "385d1a344728dbe0a84858309fe7816b1652d3c41cc9c26da11ef630ee54df5a",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logos/prefeitura.png",
+      "ext": ".png",
+      "bytes": 77510,
+      "dimensions": {
+        "width": 1280,
+        "height": 244
+      },
+      "sha256": "dd23497ca492e601b86489618eca3d306876303a02ed57bcc624d5d33d2c0aaa",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logos/setu.png",
+      "ext": ".png",
+      "bytes": 426710,
+      "dimensions": {
+        "width": 3543,
+        "height": 1315
+      },
+      "sha256": "d8a3aed7d377cca9cce2069b8aedef1010af763bb03612d1d11a4c7ac7c01ce7",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logos/viaje-parana.png",
+      "ext": ".png",
+      "bytes": 373454,
+      "dimensions": {
+        "width": 4839,
+        "height": 2518
+      },
+      "sha256": "7a4f8f40a60dd33f8e77a32f872741bb7dc7804287f27d397f0998ebda576478",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logo_header.png",
+      "ext": ".png",
+      "bytes": 40753,
+      "dimensions": {
+        "width": 300,
+        "height": 215
+      },
+      "sha256": "6711939cee57bc781ce224c87eb1149173288b27976a220c976bb2e2d4a0cac2",
+      "usedBy": []
+    },
+    {
+      "path": "images/logo_header_branca.png",
+      "ext": ".png",
+      "bytes": 68721,
+      "dimensions": {
+        "width": 400,
+        "height": 286
+      },
+      "sha256": "ceb68e495ab5d8c4b47f3c71cce9d3d108f7443625138b9ef09665a483d3714e",
+      "usedBy": [
+        "index.html",
+        "js/nav-shared.js",
+        "privacidade.html"
+      ]
+    },
+    {
+      "path": "images/logo_pin_turismo.jpg",
+      "ext": ".jpg",
+      "bytes": 14775,
+      "dimensions": {
+        "height": 300,
+        "width": 300
+      },
+      "sha256": "bdcf796bef1bb93acfc7550ef43b56d6a473a216fed8b168c588ed07eab0fb5b",
+      "usedBy": []
+    },
+    {
+      "path": "images/logo_pin_turismo_3d.png",
+      "ext": ".png",
+      "bytes": 39153,
+      "dimensions": {
+        "width": 192,
+        "height": 192
+      },
+      "sha256": "f8b2068a6a014178b7e4273621fec190f330e29a34844fef1c6c4b3a1d126ad9",
+      "usedBy": [
+        "404.html",
+        "admin-firebase.html",
+        "eventos.html",
+        "galeria.html",
+        "index.html",
+        "js/loading.js",
+        "local.html",
+        "manifest.json",
+        "mapa-3d.html",
+        "noticia.html",
+        "noticias.html",
+        "o-que-fazer.html",
+        "offline.html",
+        "onde-ficar.html",
+        "para-o-trade.html",
+        "portal-usuario.html",
+        "privacidade.html",
+        "reservas.html",
+        "roteiro-ia.html",
+        "sabores.html",
+        "sw.js",
+        "transparencia.html"
+      ]
+    },
+    {
+      "path": "images/LOGO_PIN_TURISMO_3D_COM_TEXTO.png",
+      "ext": ".png",
+      "bytes": 62734,
+      "dimensions": {
+        "width": 400,
+        "height": 286
+      },
+      "sha256": "768f876b970f6a88f23523a82ab570b3300633b47074d0472aa0c23fa651b408",
+      "usedBy": []
+    },
+    {
+      "path": "images/LOGO_PIN_TURISMO_3D_COM_TEXTO_BRANCA.png",
+      "ext": ".png",
+      "bytes": 84132,
+      "dimensions": {
+        "width": 400,
+        "height": 286
+      },
+      "sha256": "05d1decbea0d921eebc312d141a2856b99323f3afecfd2410d673aabc61d2d8c",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/logo_turismo_completa.png",
+      "ext": ".png",
+      "bytes": 199454,
+      "dimensions": {
+        "width": 800,
+        "height": 573
+      },
+      "sha256": "01f8c79412bd53dd44693a33d80d600c46b26141657368db8fe475c14919612e",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "ext": ".png",
+      "bytes": 1136738,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "535f2cb7587b17b97b6e5d130887b8388f45ee02208d889f6f3436f3ca836d17",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp",
+      "ext": ".webp",
+      "bytes": 152444,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "9ff2d0aa4f2dc10de5db7f03c209f7712333ec07556460a0e01f92ecd379e48c",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "ext": ".png",
+      "bytes": 1077038,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "2e33cb12ddeca358ee2e5148678c90b6abeeda415b1f5b185060da8ec1f40b6c",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "ext": ".png",
+      "bytes": 1242750,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "dd717c1492cfc94b0bf8064932bae04595c8b5c9e7309e8caec0c3f4d82ce6a7",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "ext": ".png",
+      "bytes": 725003,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "6ad28042363f0eae406dc0728b849f8eb949e7391a0d3e685e822f9fbc252075",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "sabores.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.webp",
+      "ext": ".webp",
+      "bytes": 95512,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "7e3dbc1a988bdd37472a87da9bd1b778a30d01f7f985805711fda0e4ac4037ee",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "ext": ".png",
+      "bytes": 651642,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "794dc9a84c20e329846df8e4461e5d1ad8d1b96e16504d9f0f7ccdc0633cc561",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_PERY.png",
+      "ext": ".png",
+      "bytes": 812748,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "8f2a69f9776f8d4c499b64271403b1095d2fe9737cbf61952718560a0189ae15",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_PERY.webp",
+      "ext": ".webp",
+      "bytes": 92658,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "e25ec73f99533d5e811f13c697988534b343bb218512be789d729b319c400e5b",
+      "usedBy": []
+    },
+    {
+      "path": "images/MORANGO_1.jpg",
+      "ext": ".jpg",
+      "bytes": 311469,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "e29d4806134cf717014e386c81573bf88f02b2a5bbef25eaa1983f6760a205bf",
+      "usedBy": [
+        "galeria.html",
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_1.jpg",
+      "ext": ".jpg",
+      "bytes": 713776,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "c323585da6c6df0f487935c2abdcd3abcf31c6ae8027af9dbdb5db5641eedd20",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_2.jpg",
+      "ext": ".jpg",
+      "bytes": 680379,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_3.jpg",
+      "ext": ".jpg",
+      "bytes": 585692,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "3e6a48a5987c6932c2fb1902de4feb484b62ffc29ed410d79fafdadd3dce5fd6",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_4.jpg",
+      "ext": ".jpg",
+      "bytes": 620134,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "d319f1e90792b5de505d18af7c78b73bc6f700b9366fbe231be20b4a153d41a6",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_5.jpg",
+      "ext": ".jpg",
+      "bytes": 700978,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "1a2ccf2cbb230243a9d0bb1b519ebf64cf5ea28770eafb5bd639ae4fe9453448",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_6.jpg",
+      "ext": ".jpg",
+      "bytes": 448820,
+      "dimensions": {
+        "height": 888,
+        "width": 1920
+      },
+      "sha256": "07e89641c04636094b9c0025c08df81c74f9b1ed5f1aac4377edf4a3ef81f7fb",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_7.jpg",
+      "ext": ".jpg",
+      "bytes": 525567,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "732a578b0f67415493dd9303739c11b9ea1fced1a7e0aa04dc611cedaf7735aa",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARRERAL__1_.jpg",
+      "ext": ".jpg",
+      "bytes": 287724,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "4db82fb3f96e166b265b57bfcf3614b70c7fe5ca14b5f04a72f29c5ea3ac47e4",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/cms.js",
+        "js/reservas.js",
+        "js/roteiro-ia.js",
+        "noticias.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/PARRERAL__4_.jpg",
+      "ext": ".jpg",
+      "bytes": 242809,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "3150725554de88e9373d301e137b7140abe525e4573a47046b3dba1e52f00d86",
+      "usedBy": [
+        "js/roteiro-ia.js",
+        "sabores.html"
+      ]
+    },
+    {
+      "path": "images/PARRERAL__6_.jpg",
+      "ext": ".jpg",
+      "bytes": 329580,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "c8f5b22b6c402532ce4d586c6c1a0ac85c10d9fab59918b84721d5dc6fab5d12",
+      "usedBy": [
+        "sabores.html"
+      ]
+    },
+    {
+      "path": "images/POLACA_ORACAO.jpg",
+      "ext": ".jpg",
+      "bytes": 134305,
+      "dimensions": {
+        "height": 900,
+        "width": 1200
+      },
+      "sha256": "0be7603e63a72419e4bb6365b558ffdcfbd549ba286206e03206ab9d5e7c6caa",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/POLSKIE_SMAKI__1_.jpg",
+      "ext": ".jpg",
+      "bytes": 174896,
+      "dimensions": {
+        "height": 794,
+        "width": 1200
+      },
+      "sha256": "df6775e483018faafc79e3865138f4c7d5794678d1ad47e47b4c46f672ed6a80",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/cms.js",
+        "js/data/eventos.js",
+        "js/locais-data.js",
+        "js/reservas.js",
+        "js/roteiro-ia.js",
+        "noticias.html"
+      ]
+    },
+    {
+      "path": "images/POLSKIE_SMAKI__5_.jpg",
+      "ext": ".jpg",
+      "bytes": 149621,
+      "dimensions": {
+        "height": 794,
+        "width": 1200
+      },
+      "sha256": "965574da10e10098a1e33b4ab3a7eca730e2d673f36b9073c52a774df58107d0",
+      "usedBy": [
+        "js/roteiro-ia.js",
+        "sabores.html"
+      ]
+    },
+    {
+      "path": "images/POLSKIE_SMAKI__6_.jpg",
+      "ext": ".jpg",
+      "bytes": 171286,
+      "dimensions": {
+        "height": 794,
+        "width": 1200
+      },
+      "sha256": "b9d6be1f5abbcf1ee575ce316ebd3e5cdcd592a85760ba4d51eb7c40d50214d7",
+      "usedBy": [
+        "galeria.html",
+        "sabores.html"
+      ]
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1.JPG",
+      "ext": ".jpg",
+      "bytes": 433527,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "a9e91389038e868cb8d03e02e9a530c22d880a69e08914d93490d7695b7228ee",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_2.jpg",
+      "ext": ".jpg",
+      "bytes": 394838,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "7ae0da67deab92c2b61735c056d4a5f4995481c989a77f958299bf0167fb8294",
+      "usedBy": []
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_3.jpg",
+      "ext": ".jpg",
+      "bytes": 254908,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "d7b3d0c1dd1a7476ed9a6d1db2c254d563c66b2e590ac52dd9d9bb7e0f10b70a",
+      "usedBy": []
+    },
+    {
+      "path": "images/PONTE_SOB_O_RIO_IGUACU.jpg",
+      "ext": ".jpg",
+      "bytes": 162066,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "ad4ccbf732285b334da0fdecd395c63b571a8fb29fdcb8971c014aa5f565f61a",
+      "usedBy": [
+        "index.html",
+        "js/data/pontos-turisticos.js",
+        "js/locais-data.js",
+        "js/reservas.js",
+        "js/roteiro-ia.js",
+        "noticias.html"
+      ]
+    },
+    {
+      "path": "images/PRACA_DO_RIO_IGUACU.jpg",
+      "ext": ".jpg",
+      "bytes": 199067,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "6ad72086c10dcf95ec459d9799fca7c6420a8c93f53216c6963470f5c343f14c",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/cms.js",
+        "js/data/pontos-turisticos.js",
+        "js/locais-data.js",
+        "js/reservas.js",
+        "js/roteiro-ia.js",
+        "noticias.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/praca_rio_iguacu.jpg",
+      "ext": ".jpg",
+      "bytes": 197472,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "e7067b468b5b7d132e937a90fb8b1ca97b41704c00d4d8f261ba895161513b70",
+      "usedBy": []
+    },
+    {
+      "path": "images/PREFEITURA_MUNICIPAL.jpg",
+      "ext": ".jpg",
+      "bytes": 174354,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "9a44c0c060cf678db05534afa1649da26f4e02a6f91c656b3fdb6c74e534b80e",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/RUA_DO_MATHE.jpg",
+      "ext": ".jpg",
+      "bytes": 185039,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "912dd6c993e3078f02802f67767d45a9bbcc93155fa6fc1e2b81b46b5d1511d4",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/cms.js",
+        "js/data/pontos-turisticos.js",
+        "js/data/restaurantes.js",
+        "js/locais-data.js",
+        "js/roteiro-ia.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/NATAL-_17_.webp",
+      "ext": ".webp",
+      "bytes": 116774,
+      "dimensions": {
+        "width": 1920,
+        "height": 1279
+      },
+      "sha256": "80cfc35d7b9a3d0a070ae2b84cd5f10994a35172ae6e14d9f6343cc7c1b8cadb",
+      "usedBy": [
+        "galeria.html",
+        "js/data/eventos.js",
+        "js/locais-data.js",
+        "noticias.html"
+      ]
+    },
+    {
+      "path": "images/WEBP/NATAL-_18_.webp",
+      "ext": ".webp",
+      "bytes": 283142,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "515c3a3eed63edfe53bf9c02af48cac44d5f2a384e1d18c8c708424badaa03e1",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/NATAL-_19_.webp",
+      "ext": ".webp",
+      "bytes": 300712,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "4a3a9c27b2ca76d76ced77d178fa8a00c4d3f1d784ddbff3626936f2f947be75",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/NATAL-_20_.webp",
+      "ext": ".webp",
+      "bytes": 501040,
+      "dimensions": {
+        "width": 1440,
+        "height": 1920
+      },
+      "sha256": "a6714756573bc6185dfca56f9877bcc8415b97d5d26bb60c3d0fc63480d9622d",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp",
+      "ext": ".webp",
+      "bytes": 552442,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "6d18bee47d4d8547defb52179c7fee86ae95f5c02906cdbb52d97ec0583bfd8d",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp",
+      "ext": ".webp",
+      "bytes": 644396,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "b4d4620bfb052b13fdbbf55c9275345d12db3edf7174a79c309eca45f1319f15",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp",
+      "ext": ".webp",
+      "bytes": 411048,
+      "dimensions": {
+        "width": 1920,
+        "height": 888
+      },
+      "sha256": "d564d90ce6140ef3c8c2b451ac7cfc689ad3ac87691a0c68b831539449916d00",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp",
+      "ext": ".webp",
+      "bytes": 450726,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "e8f623d0cdab4043fdd6dcf8be3b7a480bb4b69e110816aaab65ff72a9d304db",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "ext": ".webp",
+      "bytes": 298242,
+      "dimensions": {
+        "width": 1920,
+        "height": 1271
+      },
+      "sha256": "d421caf929ae9437b4ef71b36bc5827895ade4888df35e4355114ba4f8f5c70c",
+      "usedBy": [
+        "galeria.html",
+        "noticias.html",
+        "sabores.html"
+      ]
+    },
+    {
+      "path": "images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp",
+      "ext": ".webp",
+      "bytes": 292626,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "858f151dc5e5219cf48292a0cffd2cb5f09a36ec55f6b0c0af0fd5468384df86",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp",
+      "ext": ".webp",
+      "bytes": 178086,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "e6b9fc0b2bbd54bbd262f7516379967aa505653fc337e6900dbb388c65e2bc5a",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/PRACA-DO-IGUACU_1.webp",
+      "ext": ".webp",
+      "bytes": 310104,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "cb49fcbc9b2bbbeedb1fe9807dd25abf2fe349b028d3209ff4391cb987189b8b",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/locais-data.js",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp",
+      "ext": ".webp",
+      "bytes": 377310,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "d944dd80292119249c3cce1d0600015445e4f6d80d80192993c922a2f1cb7d09",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp",
+      "ext": ".webp",
+      "bytes": 552230,
+      "dimensions": {
+        "width": 1920,
+        "height": 1080
+      },
+      "sha256": "804fe00e1282683041d16a2e7e70a1abf1fdf8dff8ba227068972977fe0fc912",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_1_-1.webp",
+      "ext": ".webp",
+      "bytes": 224068,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "a444cc28b82dc93041670370317ac0fa15adc0b8d7ec984758820d23c93c8bec",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "ext": ".webp",
+      "bytes": 326282,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "6eb14cd43a6ed7cf56d4b265079f420d7b0b6474350bf6056a63c7d3f9df8cb4",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/locais-data.js",
+        "noticias.html",
+        "sabores.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "ext": ".webp",
+      "bytes": 254542,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "0de69670a1e0e31f3a8d88aea2d93bc5427c62fd4a94827050debddedb76297e",
+      "usedBy": [
+        "galeria.html",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "videos/INSTITUCIONAL_POLONES.mp4",
+      "ext": ".mp4",
+      "bytes": 97037240,
+      "dimensions": null,
+      "sha256": "409807ec73adc9f73880c6a930b3010b26c9702a73dca4d02f8b79cc73f2f7a5",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.mp4",
+      "ext": ".mp4",
+      "bytes": 91975315,
+      "dimensions": null,
+      "sha256": "a01f9d6a059e110b0dc6ca4ee588761c78093bac8cfa11d8aa8455028ddb90f0",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "videos/VIDEO_ABERTURA_4K.mp4",
+      "ext": ".mp4",
+      "bytes": 98040012,
+      "dimensions": null,
+      "sha256": "91b0bf8968870b03e3ebd3543e968fd540071ae631d15e6134449869339a928b",
+      "usedBy": [
+        "galeria.html"
+      ]
+    }
+  ],
+  "duplicateGroups": [],
+  "similarGroups": [
+    [
+      "images/CUIA_1.JPG",
+      "images/CUIA_3.JPG"
+    ],
+    [
+      "images/diorama_sao_mateus.png",
+      "images/diorama_sao_mateus.webp"
+    ],
+    [
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg"
+    ],
+    [
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg",
+      "images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg"
+    ],
+    [
+      "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
+      "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
+      "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
+      "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg"
+    ],
+    [
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-01.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-03.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-04.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg"
+    ],
+    [
+      "images/IGREJA_AGUA_BRANCA_10.jpg",
+      "images/IGREJA_AGUA_BRANCA_2.jpg",
+      "images/IGREJA_AGUA_BRANCA_3.jpg",
+      "images/IGREJA_AGUA_BRANCA_4.jpg",
+      "images/IGREJA_AGUA_BRANCA_5.jpg",
+      "images/IGREJA_AGUA_BRANCA_6.jpg",
+      "images/IGREJA_AGUA_BRANCA_7.jpg",
+      "images/IGREJA_AGUA_BRANCA_8.jpg",
+      "images/IGREJA_AGUA_BRANCA_9.jpg"
+    ],
+    [
+      "images/IGREJA_MATRIZ_1.png",
+      "images/IGREJA_MATRIZ_1.webp",
+      "images/IGREJA_MATRIZ_2.png"
+    ],
+    [
+      "images/IMG_2295.jpg",
+      "images/IMG_2301.jpg",
+      "images/IMG_2304.jpg",
+      "images/IMG_2326.jpg",
+      "images/IMG_2371.jpg"
+    ],
+    [
+      "images/IMIGRANTES_IA_1.jpg",
+      "images/IMIGRANTES_IA_1.png",
+      "images/IMIGRANTES_IA_2.jpg",
+      "images/IMIGRANTES_IA_2.png"
+    ],
+    [
+      "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp"
+    ],
+    [
+      "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "images/mascotes/MASCOTE_MENINO_POLONES_1.webp",
+      "images/mascotes/MASCOTE_MENINO_POLONES_2.png"
+    ],
+    [
+      "images/mascotes/MASCOTE_PERY.png",
+      "images/mascotes/MASCOTE_PERY.webp"
+    ],
+    [
+      "images/PARQUE_EXPOSICOES_1.jpg",
+      "images/PARQUE_EXPOSICOES_2.jpg",
+      "images/PARQUE_EXPOSICOES_3.jpg",
+      "images/PARQUE_EXPOSICOES_4.jpg",
+      "images/PARQUE_EXPOSICOES_5.jpg",
+      "images/PARQUE_EXPOSICOES_6.jpg",
+      "images/PARQUE_EXPOSICOES_7.jpg"
+    ],
+    [
+      "images/PARRERAL__1_.jpg",
+      "images/PARRERAL__4_.jpg",
+      "images/PARRERAL__6_.jpg"
+    ],
+    [
+      "images/POLSKIE_SMAKI__1_.jpg",
+      "images/POLSKIE_SMAKI__5_.jpg",
+      "images/POLSKIE_SMAKI__6_.jpg"
+    ],
+    [
+      "images/PONTE_ENTRADA_CIDADE_1.JPG",
+      "images/PONTE_ENTRADA_CIDADE_1_2.jpg",
+      "images/PONTE_ENTRADA_CIDADE_1_3.jpg",
+      "images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp",
+      "images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp"
+    ],
+    [
+      "images/WEBP/NATAL-_17_.webp",
+      "images/WEBP/NATAL-_18_.webp",
+      "images/WEBP/NATAL-_19_.webp",
+      "images/WEBP/NATAL-_20_.webp"
+    ],
+    [
+      "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp",
+      "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp",
+      "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp",
+      "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp"
+    ],
+    [
+      "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp",
+      "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp"
+    ],
+    [
+      "images/WEBP/RUA-DO-MATHE-_1_-1.webp",
+      "images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "images/WEBP/RUA-DO-MATHE-_2_.webp"
+    ]
+  ],
+  "missingReferences": [],
+  "orphanLikely": [
+    {
+      "path": "images/EU_AMO_SMS.png",
+      "ext": ".png",
+      "bytes": 5161495,
+      "dimensions": {
+        "width": 1920,
+        "height": 1563
+      },
+      "sha256": "023271182c2a15e6d89b3195d7d20c47a5d369a7d3498f63bb23a07a0e286e24",
+      "usedBy": []
+    },
+    {
+      "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
+      "ext": ".png",
+      "bytes": 4410089,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "1b694ff2ab7f2d70e889b0181cfc3cf53596af21e7a94f824855eca26c8fbb15",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_COLONIA_IGUACU.png",
+      "ext": ".png",
+      "bytes": 3855743,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "8deba3a405b133392936dbe1abcebecac9617220fdec648d92ffad62924fcf7b",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_1.jpg",
+      "ext": ".jpg",
+      "bytes": 713776,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "c323585da6c6df0f487935c2abdcd3abcf31c6ae8027af9dbdb5db5641eedd20",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_5.jpg",
+      "ext": ".jpg",
+      "bytes": 700978,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "1a2ccf2cbb230243a9d0bb1b519ebf64cf5ea28770eafb5bd639ae4fe9453448",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_2.jpg",
+      "ext": ".jpg",
+      "bytes": 680379,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_4.jpg",
+      "ext": ".jpg",
+      "bytes": 620134,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "d319f1e90792b5de505d18af7c78b73bc6f700b9366fbe231be20b4a153d41a6",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_3.jpg",
+      "ext": ".jpg",
+      "bytes": 585692,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "3e6a48a5987c6932c2fb1902de4feb484b62ffc29ed410d79fafdadd3dce5fd6",
+      "usedBy": []
+    },
+    {
+      "path": "images/CUIA_3.JPG",
+      "ext": ".jpg",
+      "bytes": 536666,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "2cfe1072fea4f6166b85eff0f8891d24af30d80677d1360214d004291c5885a4",
+      "usedBy": []
+    },
+    {
+      "path": "images/GINASIO_POLACAO.JPG",
+      "ext": ".jpg",
+      "bytes": 528933,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_7.jpg",
+      "ext": ".jpg",
+      "bytes": 525567,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "732a578b0f67415493dd9303739c11b9ea1fced1a7e0aa04dc611cedaf7735aa",
+      "usedBy": []
+    },
+    {
+      "path": "images/CUIA_1.JPG",
+      "ext": ".jpg",
+      "bytes": 481303,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "a13c6f0d5cbad8d9bffe210175ef44553f72ef622e908eca70a49a277f3d11a1",
+      "usedBy": []
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_6.jpg",
+      "ext": ".jpg",
+      "bytes": 448820,
+      "dimensions": {
+        "height": 888,
+        "width": 1920
+      },
+      "sha256": "07e89641c04636094b9c0025c08df81c74f9b1ed5f1aac4377edf4a3ef81f7fb",
+      "usedBy": []
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_2.jpg",
+      "ext": ".jpg",
+      "bytes": 394838,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "7ae0da67deab92c2b61735c056d4a5f4995481c989a77f958299bf0167fb8294",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.webp",
+      "ext": ".webp",
+      "bytes": 303620,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "0f5c4194f091e439fada2e83a679d2c6f4a3952540130381b5f99aabd8c9d02d",
+      "usedBy": []
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_3.jpg",
+      "ext": ".jpg",
+      "bytes": 254908,
+      "dimensions": {
+        "height": 1080,
+        "width": 1920
+      },
+      "sha256": "d7b3d0c1dd1a7476ed9a6d1db2c254d563c66b2e590ac52dd9d9bb7e0f10b70a",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 212259,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "a83314985c16a0cc4e6f175454aa26a8ad00abf20802060c62bf920b33002ddd",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 201228,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "5f941017c830ce36e8b5a2b40287d7926fe8d62bcf76a88d585233bf2460bdb7",
+      "usedBy": []
+    },
+    {
+      "path": "images/logo_turismo_completa.png",
+      "ext": ".png",
+      "bytes": 199454,
+      "dimensions": {
+        "width": 800,
+        "height": 573
+      },
+      "sha256": "01f8c79412bd53dd44693a33d80d600c46b26141657368db8fe475c14919612e",
+      "usedBy": []
+    },
+    {
+      "path": "images/praca_rio_iguacu.jpg",
+      "ext": ".jpg",
+      "bytes": 197472,
+      "dimensions": {
+        "height": 675,
+        "width": 1200
+      },
+      "sha256": "e7067b468b5b7d132e937a90fb8b1ca97b41704c00d4d8f261ba895161513b70",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 196666,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "65c0fb96a2f89f39b1e9990c472f6f55be8fa53db8d4410a91bb26f6246765fe",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 186072,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "ce90c49a63f6bd04ffa66c59c6d6f28e278e5ef3a281011824211d9bbf83affe",
+      "usedBy": []
+    },
+    {
+      "path": "images/IMIGRANTES_IA_2.jpg",
+      "ext": ".jpg",
+      "bytes": 184560,
+      "dimensions": {
+        "height": 669,
+        "width": 1200
+      },
+      "sha256": "a6e7dea9fff80d91835e7741c220a8e4e9e4c5456b8fb7599e7cd52041a36cb1",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 163345,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "7680f4fcff67d9291324021f8bc380235b80ddb7face8cf02076e25259d33358",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp",
+      "ext": ".webp",
+      "bytes": 152444,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "9ff2d0aa4f2dc10de5db7f03c209f7712333ec07556460a0e01f92ecd379e48c",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 147035,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "012cec0ea503746333d4a39b68147942a2c7984ac6206f318a9b61121f3a20dc",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 146400,
+      "dimensions": {
+        "height": 1280,
+        "width": 720
+      },
+      "sha256": "b823c466ddef93e21254b2df157739693e241401d63d1b87ad96700bca783219",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 141023,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "d9636d3b0ef2174e00be65d3a2e1f0e7adaea0ff814cda2dbd5eb0a20eb5f6aa",
+      "usedBy": []
+    },
+    {
+      "path": "images/IMIGRANTES_IA_1.jpg",
+      "ext": ".jpg",
+      "bytes": 133075,
+      "dimensions": {
+        "height": 669,
+        "width": 1200
+      },
+      "sha256": "c8f8e8722914be13d8f3a6b4d0c3902a423ff870e4be29e5c9688e9e329ee217",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.webp",
+      "ext": ".webp",
+      "bytes": 95512,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "7e3dbc1a988bdd37472a87da9bd1b778a30d01f7f985805711fda0e4ac4037ee",
+      "usedBy": []
+    },
+    {
+      "path": "images/diorama_sao_mateus.webp",
+      "ext": ".webp",
+      "bytes": 94108,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "f4bfcc146356ae58b2f33f6db4f59efbc770fc8b9bd173a851585dfc5ae9bda9",
+      "usedBy": []
+    },
+    {
+      "path": "images/mascotes/MASCOTE_PERY.webp",
+      "ext": ".webp",
+      "bytes": 92658,
+      "dimensions": {
+        "width": 306945,
+        "height": 4997377
+      },
+      "sha256": "e25ec73f99533d5e811f13c697988534b343bb218512be789d729b319c400e5b",
+      "usedBy": []
+    },
+    {
+      "path": "images/LOGO_PIN_TURISMO_3D_COM_TEXTO.png",
+      "ext": ".png",
+      "bytes": 62734,
+      "dimensions": {
+        "width": 400,
+        "height": 286
+      },
+      "sha256": "768f876b970f6a88f23523a82ab570b3300633b47074d0472aa0c23fa651b408",
+      "usedBy": []
+    },
+    {
+      "path": "images/logo_header.png",
+      "ext": ".png",
+      "bytes": 40753,
+      "dimensions": {
+        "width": 300,
+        "height": 215
+      },
+      "sha256": "6711939cee57bc781ce224c87eb1149173288b27976a220c976bb2e2d4a0cac2",
+      "usedBy": []
+    },
+    {
+      "path": "images/logo_pin_turismo.jpg",
+      "ext": ".jpg",
+      "bytes": 14775,
+      "dimensions": {
+        "height": 300,
+        "width": 300
+      },
+      "sha256": "bdcf796bef1bb93acfc7550ef43b56d6a473a216fed8b168c588ed07eab0fb5b",
+      "usedBy": []
+    }
+  ],
+  "heavy": [
+    {
+      "path": "videos/VIDEO_ABERTURA_4K.mp4",
+      "ext": ".mp4",
+      "bytes": 98040012,
+      "dimensions": null,
+      "sha256": "91b0bf8968870b03e3ebd3543e968fd540071ae631d15e6134449869339a928b",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "videos/INSTITUCIONAL_POLONES.mp4",
+      "ext": ".mp4",
+      "bytes": 97037240,
+      "dimensions": null,
+      "sha256": "409807ec73adc9f73880c6a930b3010b26c9702a73dca4d02f8b79cc73f2f7a5",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.mp4",
+      "ext": ".mp4",
+      "bytes": 91975315,
+      "dimensions": null,
+      "sha256": "a01f9d6a059e110b0dc6ca4ee588761c78093bac8cfa11d8aa8455028ddb90f0",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/EU_AMO_SMS.png",
+      "ext": ".png",
+      "bytes": 5161495,
+      "dimensions": {
+        "width": 1920,
+        "height": 1563
+      },
+      "sha256": "023271182c2a15e6d89b3195d7d20c47a5d369a7d3498f63bb23a07a0e286e24",
+      "usedBy": []
+    },
+    {
+      "path": "images/CASA_DA_MEMORIA.png",
+      "ext": ".png",
+      "bytes": 5020646,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "23db22b6e2c32cdd22e45db6b5dc1e4f27af00cf7e76ebcef6e0c309724fe069",
+      "usedBy": [
+        "js/data/pontos-turisticos.js"
+      ]
+    },
+    {
+      "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
+      "ext": ".png",
+      "bytes": 4410089,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "1b694ff2ab7f2d70e889b0181cfc3cf53596af21e7a94f824855eca26c8fbb15",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_COLONIA_IGUACU.png",
+      "ext": ".png",
+      "bytes": 3855743,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "8deba3a405b133392936dbe1abcebecac9617220fdec648d92ffad62924fcf7b",
+      "usedBy": []
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.png",
+      "ext": ".png",
+      "bytes": 3614212,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "209410ab2623510cf0d704bd9254d60beb13dfdf8c0f605a568559bf26a75c5c",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "js/locais-data.js",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
+      "ext": ".jpg",
+      "bytes": 3360949,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "949d76c71f5a96df92bbb2deee65dd6910f141dceaa00432a8cd20b63f6efec8",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_2.png",
+      "ext": ".png",
+      "bytes": 3315073,
+      "dimensions": {
+        "width": 1920,
+        "height": 1284
+      },
+      "sha256": "6373b92f331f9d39d5b4dba336d5102ca38e8b9ae5ab4c3d33045779fad80759",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
+      "ext": ".jpg",
+      "bytes": 3169922,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "f98ed9acff751c74d398ab581dc5d9a61136c50d581a19e1d74b3b5db56bebe5",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg",
+      "ext": ".jpg",
+      "bytes": 2780546,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "9b569504758c0b45e82627018bb16d7cbd97bd184f55e145cc6b336414fddcff",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
+      "ext": ".jpg",
+      "bytes": 1826030,
+      "dimensions": {
+        "height": 2066,
+        "width": 3672
+      },
+      "sha256": "6a4afb3174c4a70188d2e84844e65b6cc5e4e8b8ea94a53ba7e3fa9e981de696",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/diorama_sao_mateus.png",
+      "ext": ".png",
+      "bytes": 1414760,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "7990cb90f0a8a5f7b13e31ed084e0bf737e578401db364a267b574e7e9de9b0a",
+      "usedBy": [
+        "galeria.html",
+        "index.html"
+      ]
+    },
+    {
+      "path": "images/IMIGRANTES_IA_2.png",
+      "ext": ".png",
+      "bytes": 1410765,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "5dc91c6fbffe00ada6f6c26ea153ec122d2dd144b06c7c87de11a562a1e63c2e",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMG_2326.jpg",
+      "ext": ".jpg",
+      "bytes": 1282786,
+      "dimensions": {
+        "height": 2132,
+        "width": 1200
+      },
+      "sha256": "6b3ea45213581a59354e34e43dd2124e9d971611ac4bdb952c03fb512c8a0caa",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "ext": ".png",
+      "bytes": 1242750,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "dd717c1492cfc94b0bf8064932bae04595c8b5c9e7309e8caec0c3f4d82ce6a7",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/IMIGRANTES_IA_1.png",
+      "ext": ".png",
+      "bytes": 1176932,
+      "dimensions": {
+        "width": 1200,
+        "height": 669
+      },
+      "sha256": "61dbb2e030b011a056e3a5ce3b22620ee6a6868bd20b0bb0f4658b0cb38b2942",
+      "usedBy": [
+        "galeria.html"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 1139631,
+      "dimensions": {
+        "height": 4032,
+        "width": 3024
+      },
+      "sha256": "464bce0f9be5890bd58501ae733c50977f43e4197410e414ada5249e26f34606",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "ext": ".png",
+      "bytes": 1136738,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "535f2cb7587b17b97b6e5d130887b8388f45ee02208d889f6f3436f3ca836d17",
+      "usedBy": [
+        "galeria.html",
+        "index.html",
+        "sw.js"
+      ]
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "ext": ".png",
+      "bytes": 1077038,
+      "dimensions": {
+        "width": 1200,
+        "height": 1200
+      },
+      "sha256": "2e33cb12ddeca358ee2e5148678c90b6abeeda415b1f5b185060da8ec1f40b6c",
+      "usedBy": [
+        "galeria.html"
+      ]
+    }
+  ],
+  "canonicalSuggestions": []
+}

@@ -1,0 +1,122 @@
+# Saida da auditoria de assets
+
+Gerado em 2026-05-18T13:03:27.364Z.
+
+## Resumo
+
+- Midias encontradas: 123
+- Midias referenciadas: 88
+- Orfas provaveis: 35
+- Grupos duplicados por SHA-256: 0
+- Referencias quebradas: 0
+- Midias pesadas: 21
+
+## Imagens duplicadas reais
+
+_Nenhum item encontrado._
+
+
+## Imagens com nomes parecidos
+
+| grupo | arquivos |
+| --- | --- |
+| N1 | images/CUIA_1.JPG, images/CUIA_3.JPG |
+| N2 | images/diorama_sao_mateus.png, images/diorama_sao_mateus.webp |
+| N3 | images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg, images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg, images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg, images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg |
+| N4 | images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg, images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg |
+| N5 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg |
+| N6 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-01.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-03.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-04.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg |
+| N7 | images/IGREJA_AGUA_BRANCA_10.jpg, images/IGREJA_AGUA_BRANCA_2.jpg, images/IGREJA_AGUA_BRANCA_3.jpg, images/IGREJA_AGUA_BRANCA_4.jpg, images/IGREJA_AGUA_BRANCA_5.jpg, images/IGREJA_AGUA_BRANCA_6.jpg, images/IGREJA_AGUA_BRANCA_7.jpg, images/IGREJA_AGUA_BRANCA_8.jpg, images/IGREJA_AGUA_BRANCA_9.jpg |
+| N8 | images/IGREJA_MATRIZ_1.png, images/IGREJA_MATRIZ_1.webp, images/IGREJA_MATRIZ_2.png |
+| N9 | images/IMG_2295.jpg, images/IMG_2301.jpg, images/IMG_2304.jpg, images/IMG_2326.jpg, images/IMG_2371.jpg |
+| N10 | images/IMIGRANTES_IA_1.jpg, images/IMIGRANTES_IA_1.png, images/IMIGRANTES_IA_2.jpg, images/IMIGRANTES_IA_2.png |
+| N11 | images/mascotes/MASCOTE_CAPIVARA_PINHAO.png, images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp |
+| N12 | images/mascotes/MASCOTE_MENINO_POLONES_1.png, images/mascotes/MASCOTE_MENINO_POLONES_1.webp, images/mascotes/MASCOTE_MENINO_POLONES_2.png |
+| N13 | images/mascotes/MASCOTE_PERY.png, images/mascotes/MASCOTE_PERY.webp |
+| N14 | images/PARQUE_EXPOSICOES_1.jpg, images/PARQUE_EXPOSICOES_2.jpg, images/PARQUE_EXPOSICOES_3.jpg, images/PARQUE_EXPOSICOES_4.jpg, images/PARQUE_EXPOSICOES_5.jpg, images/PARQUE_EXPOSICOES_6.jpg, images/PARQUE_EXPOSICOES_7.jpg |
+| N15 | images/PARRERAL__1_.jpg, images/PARRERAL__4_.jpg, images/PARRERAL__6_.jpg |
+| N16 | images/POLSKIE_SMAKI__1_.jpg, images/POLSKIE_SMAKI__5_.jpg, images/POLSKIE_SMAKI__6_.jpg |
+| N17 | images/PONTE_ENTRADA_CIDADE_1.JPG, images/PONTE_ENTRADA_CIDADE_1_2.jpg, images/PONTE_ENTRADA_CIDADE_1_3.jpg, images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp, images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp |
+| N18 | images/WEBP/NATAL-_17_.webp, images/WEBP/NATAL-_18_.webp, images/WEBP/NATAL-_19_.webp, images/WEBP/NATAL-_20_.webp |
+| N19 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp |
+| N20 | images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp, images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp |
+| N21 | images/WEBP/RUA-DO-MATHE-_1_-1.webp, images/WEBP/RUA-DO-MATHE-_1_.webp, images/WEBP/RUA-DO-MATHE-_2_.webp |
+
+
+## Referencias sem arquivo
+
+_Nenhum item encontrado._
+
+
+## Orfas provaveis
+
+| arquivo | bytes | dimensoes |
+| --- | --- | --- |
+| images/EU_AMO_SMS.png | 5161495 | 1920x1563 |
+| images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 | 1920x1280 |
+| images/IGREJA_COLONIA_IGUACU.png | 3855743 | 1920x1280 |
+| images/PARQUE_EXPOSICOES_1.jpg | 713776 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_5.jpg | 700978 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_2.jpg | 680379 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_4.jpg | 620134 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_3.jpg | 585692 | 1920x1080 |
+| images/CUIA_3.JPG | 536666 | 1920x1080 |
+| images/GINASIO_POLACAO.JPG | 528933 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_7.jpg | 525567 | 1920x1080 |
+| images/CUIA_1.JPG | 481303 | 1920x1080 |
+| images/PARQUE_EXPOSICOES_6.jpg | 448820 | 1920x888 |
+| images/PONTE_ENTRADA_CIDADE_1_2.jpg | 394838 | 1920x1080 |
+| images/IGREJA_MATRIZ_1.webp | 303620 | 1920x1280 |
+| images/PONTE_ENTRADA_CIDADE_1_3.jpg | 254908 | 1920x1080 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg | 212259 | 960x1280 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg | 201228 | 960x1280 |
+| images/logo_turismo_completa.png | 199454 | 800x573 |
+| images/praca_rio_iguacu.jpg | 197472 | 1200x675 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg | 196666 | 960x1280 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg | 186072 | 960x1280 |
+| images/IMIGRANTES_IA_2.jpg | 184560 | 1200x669 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg | 163345 | 960x1280 |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp | 152444 | 306945x4997377 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg | 147035 | 960x1280 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg | 146400 | 720x1280 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg | 141023 | 960x1280 |
+| images/IMIGRANTES_IA_1.jpg | 133075 | 1200x669 |
+| images/mascotes/MASCOTE_MENINO_POLONES_1.webp | 95512 | 306945x4997377 |
+| images/diorama_sao_mateus.webp | 94108 | 1200x669 |
+| images/mascotes/MASCOTE_PERY.webp | 92658 | 306945x4997377 |
+| images/LOGO_PIN_TURISMO_3D_COM_TEXTO.png | 62734 | 400x286 |
+| images/logo_header.png | 40753 | 300x215 |
+| images/logo_pin_turismo.jpg | 14775 | 300x300 |
+
+
+## Midias pesadas
+
+| arquivo | bytes | uso |
+| --- | --- | --- |
+| videos/VIDEO_ABERTURA_4K.mp4 | 98040012 | galeria.html |
+| videos/INSTITUCIONAL_POLONES.mp4 | 97037240 | galeria.html |
+| videos/ROTA_DO_TURISMO.mp4 | 91975315 | index.html |
+| images/EU_AMO_SMS.png | 5161495 | sem referencia |
+| images/CASA_DA_MEMORIA.png | 5020646 | js/data/pontos-turisticos.js |
+| images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 | sem referencia |
+| images/IGREJA_COLONIA_IGUACU.png | 3855743 | sem referencia |
+| images/IGREJA_MATRIZ_1.png | 3614212 | galeria.html, index.html, js/locais-data.js, sw.js |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 | js/rotas-data.js |
+| images/IGREJA_MATRIZ_2.png | 3315073 | js/locais-data.js |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 | js/rotas-data.js |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 | js/rotas-data.js |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 | js/rotas-data.js |
+| images/diorama_sao_mateus.png | 1414760 | galeria.html, index.html |
+| images/IMIGRANTES_IA_2.png | 1410765 | galeria.html |
+| images/IMG_2326.jpg | 1282786 | galeria.html |
+| images/mascotes/MASCOTE_MATE_XISTO_AGUA.png | 1242750 | galeria.html |
+| images/IMIGRANTES_IA_1.png | 1176932 | galeria.html |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg | 1139631 | js/rotas-data.js |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 | galeria.html, index.html, sw.js |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png | 1077038 | galeria.html |
+
+
+## Sugestao de canonica para duplicatas reais
+
+_Nenhum item encontrado._
+

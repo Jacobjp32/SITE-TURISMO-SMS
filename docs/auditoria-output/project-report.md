@@ -1,0 +1,367 @@
+# Saida da auditoria geral do projeto
+
+Gerado em 2026-05-18T13:03:30.888Z.
+
+## Resumo
+
+- Arquivos mapeados: 248
+- HTMLs: 36
+- CSS: 21
+- JS: 31
+- Diretórios com index.html: 14
+- HTMLs na raiz: 22
+
+## Distribuicao por extensao
+
+| ext | files | bytes |
+| --- | --- | --- |
+| .mp4 | 3 | 287052567 |
+| .png | 27 | 36842588 |
+| .jpg | 51 | 27730696 |
+| .webp | 22 | 6812112 |
+| .jpeg | 20 | 4432852 |
+| .pdf | 6 | 3750140 |
+| .docx | 4 | 3402708 |
+| .js | 31 | 610276 |
+| .html | 36 | 511668 |
+| .css | 21 | 286744 |
+| .md | 12 | 86372 |
+| .json | 3 | 63303 |
+| .mjs | 3 | 29339 |
+| .xml | 1 | 3852 |
+| .rules | 1 | 3105 |
+| (sem ext) | 4 | 1607 |
+| .log | 1 | 1550 |
+| .txt | 2 | 1368 |
+
+
+## Maiores arquivos
+
+| path | bytes |
+| --- | --- |
+| videos/VIDEO_ABERTURA_4K.mp4 | 98040012 |
+| videos/INSTITUCIONAL_POLONES.mp4 | 97037240 |
+| videos/ROTA_DO_TURISMO.mp4 | 91975315 |
+| images/EU_AMO_SMS.png | 5161495 |
+| images/CASA_DA_MEMORIA.png | 5020646 |
+| images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 |
+| images/IGREJA_COLONIA_IGUACU.png | 3855743 |
+| images/IGREJA_MATRIZ_1.png | 3614212 |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 |
+| images/IGREJA_MATRIZ_2.png | 3315073 |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 |
+| docs/comtur/loa-2025.pdf | 2675327 |
+| docs/comtur/atas-comtur-2024-2025.docx | 2034102 |
+| images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 |
+| images/diorama_sao_mateus.png | 1414760 |
+| images/IMIGRANTES_IA_2.png | 1410765 |
+| images/IMG_2326.jpg | 1282786 |
+| images/mascotes/MASCOTE_MATE_XISTO_AGUA.png | 1242750 |
+| docs/comtur/sistema-ministerio-turismo.docx | 1213169 |
+| images/IMIGRANTES_IA_1.png | 1176932 |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg | 1139631 |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png | 1077038 |
+| images/mascotes/MASCOTE_PERY.png | 812748 |
+| images/mascotes/MASCOTE_MENINO_POLONES_1.png | 725003 |
+| images/PARQUE_EXPOSICOES_1.jpg | 713776 |
+| images/PARQUE_EXPOSICOES_5.jpg | 700978 |
+| images/PARQUE_EXPOSICOES_2.jpg | 680379 |
+| images/mascotes/MASCOTE_MENINO_POLONES_2.png | 651642 |
+| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp | 644396 |
+| docs/comtur/convite-conselho-2024.pdf | 638098 |
+| images/IMG_2295.jpg | 636119 |
+| images/PARQUE_EXPOSICOES_4.jpg | 620134 |
+| images/PARQUE_EXPOSICOES_3.jpg | 585692 |
+| images/IMG_2301.jpg | 564760 |
+| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp | 552442 |
+| images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp | 552230 |
+| images/IMG_2304.jpg | 551454 |
+| images/CUIA_3.JPG | 536666 |
+| images/GINASIO_POLACAO.JPG | 528933 |
+| images/PARQUE_EXPOSICOES_7.jpg | 525567 |
+| images/WEBP/NATAL-_20_.webp | 501040 |
+| images/IGREJA_AGUA_BRANCA_6.jpg | 484862 |
+| images/CUIA_1.JPG | 481303 |
+| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp | 450726 |
+| images/PARQUE_EXPOSICOES_6.jpg | 448820 |
+| images/PONTE_ENTRADA_CIDADE_1.JPG | 433527 |
+| images/logos/setu.png | 426710 |
+| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp | 411048 |
+| images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg | 409241 |
+| images/PONTE_ENTRADA_CIDADE_1_2.jpg | 394838 |
+| images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp | 377310 |
+| images/logos/viaje-parana.png | 373454 |
+| images/IGREJA_AGUA_BRANCA_8.jpg | 370070 |
+| images/IGREJA_AGUA_BRANCA_5.jpg | 364252 |
+| images/PARRERAL__6_.jpg | 329580 |
+| images/WEBP/RUA-DO-MATHE-_1_.webp | 326282 |
+| images/MORANGO_1.jpg | 311469 |
+| images/WEBP/PRACA-DO-IGUACU_1.webp | 310104 |
+| images/IGREJA_MATRIZ_1.webp | 303620 |
+| images/WEBP/NATAL-_19_.webp | 300712 |
+| images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp | 298242 |
+| images/IMG_2371.jpg | 295455 |
+| images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp | 292626 |
+| images/PARRERAL__1_.jpg | 287724 |
+| images/IGREJA_AGUA_BRANCA_4.jpg | 284520 |
+| images/WEBP/NATAL-_18_.webp | 283142 |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg | 282432 |
+| images/IGREJA_AGUA_BRANCA_2.jpg | 275175 |
+| images/IGREJA_AGUA_BRANCA_3.jpg | 262090 |
+| images/PONTE_ENTRADA_CIDADE_1_3.jpg | 254908 |
+| images/WEBP/RUA-DO-MATHE-_2_.webp | 254542 |
+| images/IGREJA_AGUA_BRANCA_10.jpg | 243570 |
+| images/PARRERAL__4_.jpg | 242809 |
+| images/IGREJA_AGUA_BRANCA_7.jpg | 236656 |
+| images/WEBP/RUA-DO-MATHE-_1_-1.webp | 224068 |
+| docs/comtur/lei-3250-2024-alteracao.pdf | 213802 |
+| images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg | 212259 |
+| images/logos/governo-pr.png | 207927 |
+
+
+## HTMLs principais na raiz
+
+| path | bytes |
+| --- | --- |
+| 404.html | 2862 |
+| admin-firebase.html | 34182 |
+| eventos.html | 34225 |
+| galeria.html | 38890 |
+| index.html | 145913 |
+| local.html | 20543 |
+| mapa-3d.html | 6253 |
+| mapa-completo.html | 10424 |
+| mapa-turistico.html | 10581 |
+| noticia.html | 6276 |
+| noticias.html | 20635 |
+| o-que-fazer.html | 5797 |
+| offline.html | 2356 |
+| onde-ficar.html | 17711 |
+| para-o-trade.html | 15013 |
+| portal-usuario.html | 37913 |
+| privacidade.html | 22349 |
+| reservas.html | 5654 |
+| rotas-completas.html | 4131 |
+| roteiro-ia.html | 3243 |
+| sabores.html | 30227 |
+| transparencia.html | 21170 |
+
+
+## Rotas com index.html
+
+| path | bytes |
+| --- | --- |
+| eventos/index.html | 730 |
+| galeria/index.html | 719 |
+| local/index.html | 738 |
+| mapa-3d/index.html | 721 |
+| mapa-completo/index.html | 751 |
+| noticia/index.html | 724 |
+| noticias/index.html | 727 |
+| o-que-fazer/index.html | 860 |
+| onde-ficar/index.html | 3160 |
+| portal-usuario/index.html | 756 |
+| privacidade/index.html | 739 |
+| rotas-completas/index.html | 767 |
+| sabores/index.html | 3176 |
+| transparencia/index.html | 752 |
+
+
+## Arquivos legados/compatibilidade provaveis
+
+| path | bytes |
+| --- | --- |
+| .firebaserc | 58 |
+| admin-firebase.html | 34182 |
+| css/mapa-3d.css | 3475 |
+| css/mapa-completo.css | 4962 |
+| css/para-o-trade.css | 2932 |
+| css/portal-usuario.css | 17199 |
+| css/reservas.css | 772 |
+| css/rotas-completas.css | 13962 |
+| css/roteiro-ia.css | 9638 |
+| firebase.json | 61 |
+| js/firebase-auth.js | 19968 |
+| js/reservas.js | 26015 |
+| js/roteiro-ia.js | 21189 |
+| mapa-3d/index.html | 721 |
+| mapa-3d.html | 6253 |
+| mapa-completo/index.html | 751 |
+| mapa-completo.html | 10424 |
+| para-o-trade.html | 15013 |
+| portal-usuario/index.html | 756 |
+| portal-usuario.html | 37913 |
+| reservas.html | 5654 |
+| rotas-completas/index.html | 767 |
+| rotas-completas.html | 4131 |
+| roteiro-ia.html | 3243 |
+
+
+## Scripts mais carregados por HTML
+
+| script | pages | examples |
+| --- | --- | --- |
+| translations.js | 19 | eventos.html, galeria.html, index.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html |
+| js/breadcrumbs.js | 17 | eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html, o-que-fazer.html |
+| js/nav-shared.js | 17 | eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html, noticias.html |
+| js/cookies.js | 16 | 404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html |
+| js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
+| config.js | 5 | index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
+| js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
+| js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
+| cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js | 2 | index.html, index.html |
+| js/data/eventos.js | 2 | index.html, mapa-turistico.html |
+| js/data/hospedagens.js | 2 | index.html, mapa-turistico.html |
+| js/data/informacoes-essenciais.js | 2 | index.html, mapa-turistico.html |
+| js/data/pontos-turisticos.js | 2 | index.html, mapa-turistico.html |
+| js/data/restaurantes.js | 2 | index.html, mapa-turistico.html |
+| js/data/rotas.js | 2 | index.html, mapa-turistico.html |
+| js/data/turismo-data-adapter.js | 2 | index.html, mapa-turistico.html |
+| js/data/turismo-data.js | 2 | index.html, mapa-turistico.html |
+| js/firebase-auth.js | 2 | admin-firebase.html, portal-usuario.html |
+| js/locais-data.js | 2 | index.html, mapa-turistico.html |
+| js/security-utils.js | 2 | admin-firebase.html, noticia.html |
+| js/avaliacoes.js | 1 | index.html |
+| js/chatbot.js | 1 | index.html |
+| js/cms.js | 1 | noticia.html |
+| js/mapa-turistico.js | 1 | mapa-turistico.html |
+| js/mapa3d.js | 1 | mapa-3d.html |
+| js/reservas.js | 1 | reservas.html |
+| js/roteiro-ia.js | 1 | roteiro-ia.html |
+| js/search-index.js | 1 | index.html |
+| js/search.js | 1 | index.html |
+| js/site-stats.js | 1 | index.html |
+
+
+## Loads duplicados no mesmo HTML
+
+| key | count |
+| --- | --- |
+| index.html\|cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js | 2 |
+
+
+## CSS por arquivo
+
+| file | bytes | important | media | selectorCount |
+| --- | --- | --- | --- | --- |
+| css/404.css | 2306 | 0 | 1 | 18 |
+| css/eventos.css | 16158 | 5 | 2 | 99 |
+| css/galeria.css | 8674 | 0 | 3 | 85 |
+| css/index.css | 132714 | 448 | 38 | 752 |
+| css/mapa-3d.css | 3469 | 0 | 1 | 20 |
+| css/mapa-completo.css | 4771 | 5 | 1 | 29 |
+| css/mapa-turistico.css | 32538 | 13 | 7 | 227 |
+| css/noticia.css | 2034 | 0 | 1 | 18 |
+| css/noticias.css | 3926 | 0 | 2 | 40 |
+| css/o-que-fazer.css | 3488 | 1 | 1 | 21 |
+| css/offline.css | 1824 | 0 | 0 | 11 |
+| css/onde-ficar.css | 4423 | 0 | 1 | 35 |
+| css/para-o-trade.css | 2926 | 0 | 1 | 22 |
+| css/portal-usuario.css | 17193 | 0 | 1 | 98 |
+| css/reservas.css | 770 | 0 | 0 | 2 |
+| css/rotas-completas.css | 13946 | 11 | 4 | 73 |
+| css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
+| css/sabores.css | 7813 | 9 | 2 | 72 |
+| css/shared.css | 9793 | 8 | 7 | 51 |
+| css/transparencia.css | 6387 | 0 | 1 | 33 |
+| css/variables.css | 1375 | 0 | 0 | 0 |
+
+
+## Seletores CSS em multiplos arquivos
+
+| selector | files |
+| --- | --- |
+| :root | css/404.css, css/index.css, css/mapa-turistico.css |
+| .accessibility-bar .shortcuts | css/index.css, css/transparencia.css |
+| .back-to-top:hover | css/index.css, css/rotas-completas.css |
+| .back-to-top.visible | css/index.css, css/rotas-completas.css |
+| .btn-primary | css/404.css, css/portal-usuario.css |
+| .btn-primary:hover | css/404.css, css/portal-usuario.css |
+| .event-info h4 | css/eventos.css, css/portal-usuario.css |
+| .filter-btn | css/eventos.css, css/onde-ficar.css, css/rotas-completas.css |
+| .filter-btn:hover | css/eventos.css, css/rotas-completas.css |
+| .filter-btn.active | css/eventos.css, css/rotas-completas.css |
+| .form-group | css/index.css, css/portal-usuario.css |
+| .form-group input,         .form-group select,         .form-group textarea | css/index.css, css/portal-usuario.css |
+| .form-group input:focus,         .form-group select:focus,         .form-group textarea:focus | css/index.css, css/portal-usuario.css |
+| .form-group label | css/index.css, css/portal-usuario.css |
+| .form-group textarea | css/index.css, css/portal-usuario.css |
+| .header-logo | css/rotas-completas.css, css/shared.css |
+| .header-logo img | css/noticias.css, css/rotas-completas.css, css/shared.css |
+| .header-nav a | css/noticias.css, css/shared.css |
+| .header-title | css/rotas-completas.css, css/shared.css |
+| .hero p | css/onde-ficar.css, css/shared.css |
+| .hotel-card | css/index.css, css/onde-ficar.css |
+| .hotel-card:hover | css/index.css, css/onde-ficar.css |
+| .hotel-contact | css/index.css, css/onde-ficar.css |
+| .loading-spinner | css/mapa-3d.css, css/roteiro-ia.css |
+| .local-actions | css/index.css, css/sabores.css |
+| .local-btn | css/index.css, css/sabores.css |
+| .local-btn:hover | css/index.css, css/sabores.css |
+| .local-card | css/index.css, css/sabores.css |
+| .local-icon | css/index.css, css/sabores.css |
+| .local-info h4 | css/index.css, css/sabores.css |
+| .local-info p | css/index.css, css/sabores.css |
+| .map-popup | css/mapa-completo.css, css/mapa-turistico.css |
+| .modal | css/eventos.css, css/portal-usuario.css |
+| .modal-body | css/eventos.css, css/portal-usuario.css |
+| .modal-close | css/eventos.css, css/portal-usuario.css |
+| .modal-header | css/eventos.css, css/portal-usuario.css |
+| .modal-overlay.active | css/eventos.css, css/portal-usuario.css |
+| .nav-links | css/galeria.css, css/index.css |
+| .nav-links a | css/galeria.css, css/index.css |
+| .produtor-locais | css/index.css, css/sabores.css |
+| .section-header | css/index.css, css/portal-usuario.css, css/transparencia.css |
+| .section-header h2 | css/portal-usuario.css, css/sabores.css |
+| .section-title | css/index.css, css/transparencia.css |
+| .stat-number | css/index.css, css/mapa-completo.css |
+| .step-number | css/para-o-trade.css, css/portal-usuario.css |
+| @keyframes pulse | css/index.css, css/offline.css |
+| @keyframes spin | css/eventos.css, css/mapa-3d.css, css/roteiro-ia.css |
+| @media (max-width: 1024px) | css/index.css, css/mapa-turistico.css |
+| @media (max-width: 480px) | css/index.css, css/noticias.css, css/sabores.css, css/shared.css |
+| @media (max-width: 600px) | css/eventos.css, css/index.css |
+| @media (max-width: 768px) | css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css |
+| /* ============================================            BOTÃO VOLTAR AO TOPO         ============================================ */         .back-to-top | css/index.css, css/rotas-completas.css |
+| /* Modal */         .modal-overlay | css/eventos.css, css/portal-usuario.css |
+| /* Responsive */         @media (max-width: 768px) | css/portal-usuario.css, css/transparencia.css |
+| /* Responsive */         @media (max-width: 968px) | css/eventos.css, css/index.css |
+| /* Responsive */ @media (max-width: 768px) | css/onde-ficar.css, css/para-o-trade.css, css/sabores.css |
+| 50% | css/index.css, css/offline.css, css/roteiro-ia.css |
+| body | css/404.css, css/index.css, css/mapa-completo.css, css/offline.css, css/shared.css |
+| h1 | css/404.css, css/offline.css |
+| html, body | css/index.css, css/shared.css |
+| p | css/404.css, css/offline.css |
+| to | css/galeria.css, css/index.css, css/portal-usuario.css, css/shared.css |
+
+
+## Globais JS compartilhados
+
+| global | files |
+| --- | --- |
+| window.addEventListener | js/chatbot.js, js/nav-shared.js, js/site-stats.js |
+| window.applyTranslations | js/nav-shared.js, translations.js |
+| window.CONFIG | config.js, js/site-stats.js |
+| window.FirebaseSystem | js/firebase-auth.js, js/nav-shared.js |
+| window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
+| window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
+| window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js |
+| window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/rotas-data.js |
+| window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
+| window.setTimeout | js/mapa-turistico.js, js/search.js |
+| window.SMSecurity | js/cms.js, js/security-utils.js |
+| window.translations | js/nav-shared.js, js/search.js, translations.js |
+| window.TURISMO_DATA | js/data/turismo-data.js, js/mapa-turistico.js, js/search-index.js, js/site-stats.js |
+| window.TURISMO_DATA_ADAPTER | js/data/turismo-data-adapter.js, js/data/turismo-data.js, js/site-stats.js |
+| window.TURISMO_DATA_HELPERS | js/data/turismo-data.js, js/site-stats.js |
+| window.TURISMO_DATA_META | js/data/turismo-data.js, js/site-stats.js |
+| window.TURISMO_EVENTOS | js/data/eventos.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_HOSPEDAGENS | js/data/hospedagens.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_INFORMACOES_ESSENCIAIS | js/data/informacoes-essenciais.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_PONTOS | js/data/pontos-turisticos.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_RESTAURANTES | js/data/restaurantes.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_ROTAS | js/data/rotas.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_SEARCH_INDEX | js/search-index.js, js/search.js |
+

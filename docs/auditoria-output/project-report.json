@@ -1,0 +1,3226 @@
+{
+  "generatedAt": "2026-05-18T13:03:30.888Z",
+  "totals": {
+    "files": 248,
+    "html": 36,
+    "css": 21,
+    "js": 31,
+    "directoryIndexes": 14,
+    "rootHtml": 22
+  },
+  "byExt": [
+    {
+      "ext": ".mp4",
+      "files": 3,
+      "bytes": 287052567
+    },
+    {
+      "ext": ".png",
+      "files": 27,
+      "bytes": 36842588
+    },
+    {
+      "ext": ".jpg",
+      "files": 51,
+      "bytes": 27730696
+    },
+    {
+      "ext": ".webp",
+      "files": 22,
+      "bytes": 6812112
+    },
+    {
+      "ext": ".jpeg",
+      "files": 20,
+      "bytes": 4432852
+    },
+    {
+      "ext": ".pdf",
+      "files": 6,
+      "bytes": 3750140
+    },
+    {
+      "ext": ".docx",
+      "files": 4,
+      "bytes": 3402708
+    },
+    {
+      "ext": ".js",
+      "files": 31,
+      "bytes": 610276
+    },
+    {
+      "ext": ".html",
+      "files": 36,
+      "bytes": 511668
+    },
+    {
+      "ext": ".css",
+      "files": 21,
+      "bytes": 286744
+    },
+    {
+      "ext": ".md",
+      "files": 12,
+      "bytes": 86372
+    },
+    {
+      "ext": ".json",
+      "files": 3,
+      "bytes": 63303
+    },
+    {
+      "ext": ".mjs",
+      "files": 3,
+      "bytes": 29339
+    },
+    {
+      "ext": ".xml",
+      "files": 1,
+      "bytes": 3852
+    },
+    {
+      "ext": ".rules",
+      "files": 1,
+      "bytes": 3105
+    },
+    {
+      "ext": "(sem ext)",
+      "files": 4,
+      "bytes": 1607
+    },
+    {
+      "ext": ".log",
+      "files": 1,
+      "bytes": 1550
+    },
+    {
+      "ext": ".txt",
+      "files": 2,
+      "bytes": 1368
+    }
+  ],
+  "byDir": [
+    {
+      "dir": "videos",
+      "files": 3,
+      "bytes": 287052567
+    },
+    {
+      "dir": "images",
+      "files": 64,
+      "bytes": 46865639
+    },
+    {
+      "dir": "images/empreendimentos/nova-esperanca-equoterapia",
+      "files": 4,
+      "bytes": 11137447
+    },
+    {
+      "dir": "docs/comtur",
+      "files": 10,
+      "bytes": 7152848
+    },
+    {
+      "dir": "images/WEBP",
+      "files": 17,
+      "bytes": 6073770
+    },
+    {
+      "dir": "images/mascotes",
+      "files": 9,
+      "bytes": 5986533
+    },
+    {
+      "dir": "images/empreendimentos/ribeiro-pesca",
+      "files": 8,
+      "bytes": 2382374
+    },
+    {
+      "dir": "images/empreendimentos/doces-e-delicias",
+      "files": 8,
+      "bytes": 1394028
+    },
+    {
+      "dir": "images/logos",
+      "files": 7,
+      "bytes": 1323041
+    },
+    {
+      "dir": ".",
+      "files": 36,
+      "bytes": 773811
+    },
+    {
+      "dir": "images/empreendimentos/ancestral-gastronomia",
+      "files": 4,
+      "bytes": 656450
+    },
+    {
+      "dir": "js",
+      "files": 19,
+      "bytes": 354081
+    },
+    {
+      "dir": "css",
+      "files": 21,
+      "bytes": 286744
+    },
+    {
+      "dir": "docs",
+      "files": 12,
+      "bytes": 86372
+    },
+    {
+      "dir": "js/data",
+      "files": 8,
+      "bytes": 37961
+    },
+    {
+      "dir": "scripts",
+      "files": 3,
+      "bytes": 29339
+    },
+    {
+      "dir": "cloudflare-worker",
+      "files": 1,
+      "bytes": 14522
+    },
+    {
+      "dir": "sabores",
+      "files": 1,
+      "bytes": 3176
+    },
+    {
+      "dir": "onde-ficar",
+      "files": 1,
+      "bytes": 3160
+    },
+    {
+      "dir": "o-que-fazer",
+      "files": 1,
+      "bytes": 860
+    },
+    {
+      "dir": "rotas-completas",
+      "files": 1,
+      "bytes": 767
+    },
+    {
+      "dir": "portal-usuario",
+      "files": 1,
+      "bytes": 756
+    },
+    {
+      "dir": "transparencia",
+      "files": 1,
+      "bytes": 752
+    },
+    {
+      "dir": "mapa-completo",
+      "files": 1,
+      "bytes": 751
+    },
+    {
+      "dir": "privacidade",
+      "files": 1,
+      "bytes": 739
+    },
+    {
+      "dir": "local",
+      "files": 1,
+      "bytes": 738
+    },
+    {
+      "dir": "eventos",
+      "files": 1,
+      "bytes": 730
+    },
+    {
+      "dir": "noticias",
+      "files": 1,
+      "bytes": 727
+    },
+    {
+      "dir": "noticia",
+      "files": 1,
+      "bytes": 724
+    },
+    {
+      "dir": "mapa-3d",
+      "files": 1,
+      "bytes": 721
+    },
+    {
+      "dir": "galeria",
+      "files": 1,
+      "bytes": 719
+    }
+  ],
+  "largest": [
+    {
+      "path": "videos/VIDEO_ABERTURA_4K.mp4",
+      "ext": ".mp4",
+      "dir": "videos",
+      "bytes": 98040012
+    },
+    {
+      "path": "videos/INSTITUCIONAL_POLONES.mp4",
+      "ext": ".mp4",
+      "dir": "videos",
+      "bytes": 97037240
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.mp4",
+      "ext": ".mp4",
+      "dir": "videos",
+      "bytes": 91975315
+    },
+    {
+      "path": "images/EU_AMO_SMS.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 5161495
+    },
+    {
+      "path": "images/CASA_DA_MEMORIA.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 5020646
+    },
+    {
+      "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 4410089
+    },
+    {
+      "path": "images/IGREJA_COLONIA_IGUACU.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 3855743
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 3614212
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/nova-esperanca-equoterapia",
+      "bytes": 3360949
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_2.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 3315073
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/nova-esperanca-equoterapia",
+      "bytes": 3169922
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/nova-esperanca-equoterapia",
+      "bytes": 2780546
+    },
+    {
+      "path": "docs/comtur/loa-2025.pdf",
+      "ext": ".pdf",
+      "dir": "docs/comtur",
+      "bytes": 2675327
+    },
+    {
+      "path": "docs/comtur/atas-comtur-2024-2025.docx",
+      "ext": ".docx",
+      "dir": "docs/comtur",
+      "bytes": 2034102
+    },
+    {
+      "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/nova-esperanca-equoterapia",
+      "bytes": 1826030
+    },
+    {
+      "path": "images/diorama_sao_mateus.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 1414760
+    },
+    {
+      "path": "images/IMIGRANTES_IA_2.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 1410765
+    },
+    {
+      "path": "images/IMG_2326.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 1282786
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 1242750
+    },
+    {
+      "path": "docs/comtur/sistema-ministerio-turismo.docx",
+      "ext": ".docx",
+      "dir": "docs/comtur",
+      "bytes": 1213169
+    },
+    {
+      "path": "images/IMIGRANTES_IA_1.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 1176932
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/ribeiro-pesca",
+      "bytes": 1139631
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 1136738
+    },
+    {
+      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 1077038
+    },
+    {
+      "path": "images/mascotes/MASCOTE_PERY.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 812748
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 725003
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_1.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 713776
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_5.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 700978
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_2.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 680379
+    },
+    {
+      "path": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "ext": ".png",
+      "dir": "images/mascotes",
+      "bytes": 651642
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 644396
+    },
+    {
+      "path": "docs/comtur/convite-conselho-2024.pdf",
+      "ext": ".pdf",
+      "dir": "docs/comtur",
+      "bytes": 638098
+    },
+    {
+      "path": "images/IMG_2295.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 636119
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_4.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 620134
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_3.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 585692
+    },
+    {
+      "path": "images/IMG_2301.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 564760
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 552442
+    },
+    {
+      "path": "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 552230
+    },
+    {
+      "path": "images/IMG_2304.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 551454
+    },
+    {
+      "path": "images/CUIA_3.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 536666
+    },
+    {
+      "path": "images/GINASIO_POLACAO.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 528933
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_7.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 525567
+    },
+    {
+      "path": "images/WEBP/NATAL-_20_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 501040
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_6.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 484862
+    },
+    {
+      "path": "images/CUIA_1.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 481303
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 450726
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_6.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 448820
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 433527
+    },
+    {
+      "path": "images/logos/setu.png",
+      "ext": ".png",
+      "dir": "images/logos",
+      "bytes": 426710
+    },
+    {
+      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 411048
+    },
+    {
+      "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/ancestral-gastronomia",
+      "bytes": 409241
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_2.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 394838
+    },
+    {
+      "path": "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 377310
+    },
+    {
+      "path": "images/logos/viaje-parana.png",
+      "ext": ".png",
+      "dir": "images/logos",
+      "bytes": 373454
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_8.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 370070
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_5.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 364252
+    },
+    {
+      "path": "images/PARRERAL__6_.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 329580
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 326282
+    },
+    {
+      "path": "images/MORANGO_1.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 311469
+    },
+    {
+      "path": "images/WEBP/PRACA-DO-IGUACU_1.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 310104
+    },
+    {
+      "path": "images/IGREJA_MATRIZ_1.webp",
+      "ext": ".webp",
+      "dir": "images",
+      "bytes": 303620
+    },
+    {
+      "path": "images/WEBP/NATAL-_19_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 300712
+    },
+    {
+      "path": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 298242
+    },
+    {
+      "path": "images/IMG_2371.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 295455
+    },
+    {
+      "path": "images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 292626
+    },
+    {
+      "path": "images/PARRERAL__1_.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 287724
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_4.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 284520
+    },
+    {
+      "path": "images/WEBP/NATAL-_18_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 283142
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/ribeiro-pesca",
+      "bytes": 282432
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_2.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 275175
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_3.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 262090
+    },
+    {
+      "path": "images/PONTE_ENTRADA_CIDADE_1_3.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 254908
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 254542
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_10.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 243570
+    },
+    {
+      "path": "images/PARRERAL__4_.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 242809
+    },
+    {
+      "path": "images/IGREJA_AGUA_BRANCA_7.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 236656
+    },
+    {
+      "path": "images/WEBP/RUA-DO-MATHE-_1_-1.webp",
+      "ext": ".webp",
+      "dir": "images/WEBP",
+      "bytes": 224068
+    },
+    {
+      "path": "docs/comtur/lei-3250-2024-alteracao.pdf",
+      "ext": ".pdf",
+      "dir": "docs/comtur",
+      "bytes": 213802
+    },
+    {
+      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/doces-e-delicias",
+      "bytes": 212259
+    },
+    {
+      "path": "images/logos/governo-pr.png",
+      "ext": ".png",
+      "dir": "images/logos",
+      "bytes": 207927
+    }
+  ],
+  "rootHtml": [
+    {
+      "path": "404.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 2862
+    },
+    {
+      "path": "admin-firebase.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 34182
+    },
+    {
+      "path": "eventos.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 34225
+    },
+    {
+      "path": "galeria.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 38890
+    },
+    {
+      "path": "index.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 145913
+    },
+    {
+      "path": "local.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 20543
+    },
+    {
+      "path": "mapa-3d.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 6253
+    },
+    {
+      "path": "mapa-completo.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 10424
+    },
+    {
+      "path": "mapa-turistico.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 10581
+    },
+    {
+      "path": "noticia.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 6276
+    },
+    {
+      "path": "noticias.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 20635
+    },
+    {
+      "path": "o-que-fazer.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 5797
+    },
+    {
+      "path": "offline.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 2356
+    },
+    {
+      "path": "onde-ficar.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 17711
+    },
+    {
+      "path": "para-o-trade.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 15013
+    },
+    {
+      "path": "portal-usuario.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 37913
+    },
+    {
+      "path": "privacidade.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 22349
+    },
+    {
+      "path": "reservas.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 5654
+    },
+    {
+      "path": "rotas-completas.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 4131
+    },
+    {
+      "path": "roteiro-ia.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 3243
+    },
+    {
+      "path": "sabores.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 30227
+    },
+    {
+      "path": "transparencia.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 21170
+    }
+  ],
+  "directoryIndexes": [
+    {
+      "path": "eventos/index.html",
+      "ext": ".html",
+      "dir": "eventos",
+      "bytes": 730
+    },
+    {
+      "path": "galeria/index.html",
+      "ext": ".html",
+      "dir": "galeria",
+      "bytes": 719
+    },
+    {
+      "path": "local/index.html",
+      "ext": ".html",
+      "dir": "local",
+      "bytes": 738
+    },
+    {
+      "path": "mapa-3d/index.html",
+      "ext": ".html",
+      "dir": "mapa-3d",
+      "bytes": 721
+    },
+    {
+      "path": "mapa-completo/index.html",
+      "ext": ".html",
+      "dir": "mapa-completo",
+      "bytes": 751
+    },
+    {
+      "path": "noticia/index.html",
+      "ext": ".html",
+      "dir": "noticia",
+      "bytes": 724
+    },
+    {
+      "path": "noticias/index.html",
+      "ext": ".html",
+      "dir": "noticias",
+      "bytes": 727
+    },
+    {
+      "path": "o-que-fazer/index.html",
+      "ext": ".html",
+      "dir": "o-que-fazer",
+      "bytes": 860
+    },
+    {
+      "path": "onde-ficar/index.html",
+      "ext": ".html",
+      "dir": "onde-ficar",
+      "bytes": 3160
+    },
+    {
+      "path": "portal-usuario/index.html",
+      "ext": ".html",
+      "dir": "portal-usuario",
+      "bytes": 756
+    },
+    {
+      "path": "privacidade/index.html",
+      "ext": ".html",
+      "dir": "privacidade",
+      "bytes": 739
+    },
+    {
+      "path": "rotas-completas/index.html",
+      "ext": ".html",
+      "dir": "rotas-completas",
+      "bytes": 767
+    },
+    {
+      "path": "sabores/index.html",
+      "ext": ".html",
+      "dir": "sabores",
+      "bytes": 3176
+    },
+    {
+      "path": "transparencia/index.html",
+      "ext": ".html",
+      "dir": "transparencia",
+      "bytes": 752
+    }
+  ],
+  "likelyLegacy": [
+    {
+      "path": ".firebaserc",
+      "ext": "(sem ext)",
+      "dir": ".",
+      "bytes": 58
+    },
+    {
+      "path": "admin-firebase.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 34182
+    },
+    {
+      "path": "css/mapa-3d.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 3475
+    },
+    {
+      "path": "css/mapa-completo.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 4962
+    },
+    {
+      "path": "css/para-o-trade.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 2932
+    },
+    {
+      "path": "css/portal-usuario.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 17199
+    },
+    {
+      "path": "css/reservas.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 772
+    },
+    {
+      "path": "css/rotas-completas.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 13962
+    },
+    {
+      "path": "css/roteiro-ia.css",
+      "ext": ".css",
+      "dir": "css",
+      "bytes": 9638
+    },
+    {
+      "path": "firebase.json",
+      "ext": ".json",
+      "dir": ".",
+      "bytes": 61
+    },
+    {
+      "path": "js/firebase-auth.js",
+      "ext": ".js",
+      "dir": "js",
+      "bytes": 19968
+    },
+    {
+      "path": "js/reservas.js",
+      "ext": ".js",
+      "dir": "js",
+      "bytes": 26015
+    },
+    {
+      "path": "js/roteiro-ia.js",
+      "ext": ".js",
+      "dir": "js",
+      "bytes": 21189
+    },
+    {
+      "path": "mapa-3d/index.html",
+      "ext": ".html",
+      "dir": "mapa-3d",
+      "bytes": 721
+    },
+    {
+      "path": "mapa-3d.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 6253
+    },
+    {
+      "path": "mapa-completo/index.html",
+      "ext": ".html",
+      "dir": "mapa-completo",
+      "bytes": 751
+    },
+    {
+      "path": "mapa-completo.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 10424
+    },
+    {
+      "path": "para-o-trade.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 15013
+    },
+    {
+      "path": "portal-usuario/index.html",
+      "ext": ".html",
+      "dir": "portal-usuario",
+      "bytes": 756
+    },
+    {
+      "path": "portal-usuario.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 37913
+    },
+    {
+      "path": "reservas.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 5654
+    },
+    {
+      "path": "rotas-completas/index.html",
+      "ext": ".html",
+      "dir": "rotas-completas",
+      "bytes": 767
+    },
+    {
+      "path": "rotas-completas.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 4131
+    },
+    {
+      "path": "roteiro-ia.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 3243
+    }
+  ],
+  "htmlAssets": [
+    {
+      "file": "404.html",
+      "scripts": [
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/variables.css",
+        "css/404.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "robots"
+      ]
+    },
+    {
+      "file": "admin-firebase.html",
+      "scripts": [
+        "js/security-utils.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "js/firebase-auth.js"
+      ],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "robots",
+        "loginScreen",
+        "adminLoginForm",
+        "loginEmail",
+        "loginPass",
+        "loginBtn",
+        "dashboard",
+        "section-home",
+        "currentDate",
+        "stat-usuarios",
+        "stat-pendentes",
+        "stat-aprovados",
+        "stat-estabelecimentos",
+        "section-aprovacoes",
+        "eventos-pendentes-container",
+        "estabelecimentos-pendentes-container",
+        "section-usuarios",
+        "usuarios-container",
+        "section-eventos",
+        "eventos-aprovados-container"
+      ]
+    },
+    {
+      "file": "eventos/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "eventos.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "js/scroll-animations.js",
+        "js/nav-shared.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/eventos.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "mesNav",
+        "cAll",
+        "cDest",
+        "cRel",
+        "cCul",
+        "cFei",
+        "cEsp",
+        "cBin",
+        "secDestaques",
+        "destaqueGrid",
+        "tituloSecao",
+        "loading",
+        "vistaLista",
+        "vistaCalendario",
+        "calPrev",
+        "calTitulo",
+        "calNext",
+        "calDays",
+        "semResultados",
+        "modalOverlay",
+        "modalTitulo",
+        "modalBody"
+      ]
+    },
+    {
+      "file": "galeria/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "galeria.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "js/scroll-animations.js",
+        "js/nav-shared.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/variables.css",
+        "css/galeria.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "author",
+        "patrimonio",
+        "natureza",
+        "gastronomia-g",
+        "eventos-g",
+        "fluviopolis",
+        "arte",
+        "mascotes",
+        "videos",
+        "lb",
+        "lb-img",
+        "lb-title",
+        "lb-desc",
+        "lb-cnt",
+        "lb-thumbs"
+      ]
+    },
+    {
+      "file": "index.html",
+      "scripts": [
+        "js/loading.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "config.js",
+        "js/locais-data.js",
+        "js/rotas-data.js",
+        "js/data/pontos-turisticos.js",
+        "js/data/rotas.js",
+        "js/data/hospedagens.js",
+        "js/data/restaurantes.js",
+        "js/data/eventos.js",
+        "js/data/informacoes-essenciais.js",
+        "js/data/turismo-data-adapter.js",
+        "js/data/turismo-data.js",
+        "js/site-stats.js",
+        "js/search-index.js",
+        "js/search.js",
+        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+        "https://vlibras.gov.br/app/vlibras-plugin.js",
+        "js/scroll-animations.js",
+        "js/chatbot.js",
+        "js/avaliacoes.js"
+      ],
+      "styles": [
+        "css/variables.css",
+        "css/index.css"
+      ],
+      "anchors": [
+        "viewport",
+        "description",
+        "keywords",
+        "author",
+        "robots",
+        "language",
+        "theme-color",
+        "apple-mobile-web-app-capable",
+        "apple-mobile-web-app-status-bar-style",
+        "sms-scroll-track",
+        "sms-scroll-progress",
+        "navToggle",
+        "navLinks",
+        "currentLang",
+        "langDropdown",
+        "mobileOverlay",
+        "searchModal",
+        "searchDialog",
+        "searchModalTitle",
+        "search",
+        "searchResults",
+        "agrosamas-banner",
+        "map-hero",
+        "map",
+        "visitor-guide-title",
+        "festas-destaque",
+        "sobre",
+        "attractions",
+        "mapModalOverlay",
+        "mapModalIcon",
+        "mapModalTitle",
+        "mapModalMap",
+        "mapModalIframe",
+        "mapModalAddress",
+        "mapModalPhone",
+        "mapModalHours",
+        "mapModalGoogleLink",
+        "eventos",
+        "proximosEventosHome",
+        "onde-ficar",
+        "contato",
+        "contactForm",
+        "nome",
+        "nome",
+        "email",
+        "email",
+        "telefone",
+        "telefone",
+        "assunto",
+        "assunto",
+        "mensagem",
+        "mensagem",
+        "newsletter",
+        "newsletter",
+        "formStatus",
+        "weather-title",
+        "galeria",
+        "onde-ficar-placeholder",
+        "backToTop",
+        "footer"
+      ]
+    },
+    {
+      "file": "local/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "local.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/variables.css",
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "lb",
+        "lb-img",
+        "page-root",
+        "local-map",
+        "hero-img"
+      ]
+    },
+    {
+      "file": "mapa-3d/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "mapa-3d.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "js/mapa3d.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/mapa-3d.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "loading",
+        "mapa-3d-container"
+      ]
+    },
+    {
+      "file": "mapa-completo/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "mapa-completo.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+        "js/nav-shared.js",
+        "js/rotas-data.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+        "css/variables.css",
+        "css/mapa-completo.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "leaflet-map",
+        "toggleBtn",
+        "infoPanel",
+        "totalLocais",
+        "legendContainer",
+        "statPins",
+        "statRotas"
+      ]
+    },
+    {
+      "file": "mapa-turistico.html",
+      "scripts": [
+        "translations.js",
+        "config.js",
+        "js/locais-data.js",
+        "js/rotas-data.js",
+        "js/data/pontos-turisticos.js",
+        "js/data/rotas.js",
+        "js/data/hospedagens.js",
+        "js/data/restaurantes.js",
+        "js/data/eventos.js",
+        "js/data/informacoes-essenciais.js",
+        "js/data/turismo-data-adapter.js",
+        "js/data/turismo-data.js",
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
+        "js/mapa-turistico.js",
+        "js/nav-shared.js"
+      ],
+      "styles": [
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+        "css/variables.css",
+        "css/mapa-turistico.css"
+      ],
+      "anchors": [
+        "viewport",
+        "description",
+        "main-content",
+        "mapHeroPoints",
+        "mapHeroPlaces",
+        "mapHeroCategories",
+        "mapSearchInput",
+        "mapSearchClear",
+        "mapSearchStatus",
+        "mapVisibleItems",
+        "mapVisibleLabel",
+        "mapLocatedItems",
+        "mapLocatedLabel",
+        "mapFilters",
+        "tourismMap",
+        "mapTotalItems",
+        "mapTotalLabel",
+        "mapSidebarVisible",
+        "mapSidebarMarkers",
+        "mapSidebarGroups",
+        "mapSelectedItem",
+        "mapPanelGroups",
+        "mapItemList",
+        "mapMissingItems"
+      ]
+    },
+    {
+      "file": "noticia/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "noticia.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "js/nav-shared.js",
+        "js/security-utils.js",
+        "js/cms.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/noticia.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "meta-description",
+        "meta-canonical",
+        "og-url",
+        "page-title",
+        "article-container"
+      ]
+    },
+    {
+      "file": "noticias/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "noticias.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "config.js",
+        "js/scroll-animations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/noticias.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords"
+      ]
+    },
+    {
+      "file": "o-que-fazer/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "o-que-fazer.html",
+      "scripts": [
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/o-que-fazer.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "main-content",
+        "footer"
+      ]
+    },
+    {
+      "file": "offline.html",
+      "scripts": [],
+      "styles": [
+        "css/variables.css",
+        "css/offline.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "robots"
+      ]
+    },
+    {
+      "file": "onde-ficar/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "description",
+        "robots",
+        "main-content"
+      ]
+    },
+    {
+      "file": "onde-ficar.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/onde-ficar.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "hotelsGrid"
+      ]
+    },
+    {
+      "file": "para-o-trade.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/para-o-trade.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "footer"
+      ]
+    },
+    {
+      "file": "portal-usuario/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "portal-usuario.html",
+      "scripts": [
+        "js/loading.js",
+        "js/scroll-animations.js",
+        "js/nav-shared.js",
+        "config.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "js/firebase-auth.js",
+        "js/breadcrumbs.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/portal-usuario.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "robots",
+        "authScreen",
+        "authTabs",
+        "tabLogin",
+        "tabRegister",
+        "formLogin",
+        "loginEmail",
+        "loginSenha",
+        "btnEntrar",
+        "formForgot",
+        "forgotEmail",
+        "btnRecuperar",
+        "formRegister",
+        "regNome",
+        "regEmail",
+        "regSenha",
+        "regConfirm",
+        "regTelefone",
+        "regTipo",
+        "orgField",
+        "regOrg",
+        "btnCriar",
+        "dashboard",
+        "userName",
+        "myEvents",
+        "eventsList",
+        "eventModal",
+        "evtNome",
+        "evtCat",
+        "evtCat",
+        "evtCat",
+        "evtCat",
+        "evtCat",
+        "evtCat",
+        "evtDataInicio",
+        "evtDataFim",
+        "evtHoraInicio",
+        "evtHoraFim",
+        "evtLocal",
+        "evtDescricao",
+        "evtEntrada",
+        "evtValorGroup",
+        "evtValor",
+        "evtContato",
+        "evtSite",
+        "btnEnviarEvento",
+        "establishmentModal",
+        "estNome",
+        "estCat",
+        "estCat",
+        "estCat",
+        "estCat",
+        "estCat",
+        "estCat",
+        "estEndereco",
+        "estDescricao",
+        "estTelefone",
+        "estWhatsapp",
+        "estSite",
+        "estHorario",
+        "btnEnviarEst"
+      ]
+    },
+    {
+      "file": "privacidade/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "privacidade.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "robots",
+        "main-content",
+        "controlador",
+        "dados-coletados",
+        "finalidade",
+        "base-legal",
+        "compartilhamento",
+        "cookies",
+        "retencao",
+        "direitos",
+        "seguranca",
+        "menores",
+        "alteracoes",
+        "contato-dpo",
+        "footer"
+      ]
+    },
+    {
+      "file": "reservas.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "config.js",
+        "js/nav-shared.js",
+        "js/reservas.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/reservas.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "lista-experiencias"
+      ]
+    },
+    {
+      "file": "rotas-completas/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "rotas-completas.html",
+      "scripts": [
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/o-que-fazer.css"
+      ],
+      "anchors": [
+        "viewport",
+        "description",
+        "robots",
+        "main-content",
+        "footer"
+      ]
+    },
+    {
+      "file": "roteiro-ia.html",
+      "scripts": [
+        "js/loading.js",
+        "js/breadcrumbs.js",
+        "https://www.googletagmanager.com/gtag/js",
+        "js/nav-shared.js",
+        "js/roteiro-ia.js",
+        "translations.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/roteiro-ia.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "roteiro-ia-container"
+      ]
+    },
+    {
+      "file": "sabores/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "description",
+        "robots",
+        "main-content"
+      ]
+    },
+    {
+      "file": "sabores.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/sabores.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "polonesa",
+        "feiras",
+        "restaurantes",
+        "produtor",
+        "produtorDetails"
+      ]
+    },
+    {
+      "file": "transparencia/index.html",
+      "scripts": [],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "robots"
+      ]
+    },
+    {
+      "file": "transparencia.html",
+      "scripts": [
+        "https://www.googletagmanager.com/gtag/js",
+        "translations.js",
+        "js/breadcrumbs.js",
+        "js/nav-shared.js",
+        "https://vlibras.gov.br/app/vlibras-plugin.js",
+        "js/cookies.js"
+      ],
+      "styles": [
+        "css/shared.css",
+        "css/transparencia.css"
+      ],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "description",
+        "keywords",
+        "author",
+        "robots",
+        "main-content",
+        "comtur",
+        "fumtur",
+        "convenios",
+        "acessibilidade",
+        "lgpd"
+      ]
+    }
+  ],
+  "cssAnalysis": [
+    {
+      "file": "css/404.css",
+      "bytes": 2306,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 18
+    },
+    {
+      "file": "css/eventos.css",
+      "bytes": 16158,
+      "important": 5,
+      "media": 2,
+      "selectorCount": 99
+    },
+    {
+      "file": "css/galeria.css",
+      "bytes": 8674,
+      "important": 0,
+      "media": 3,
+      "selectorCount": 85
+    },
+    {
+      "file": "css/index.css",
+      "bytes": 132714,
+      "important": 448,
+      "media": 38,
+      "selectorCount": 752
+    },
+    {
+      "file": "css/mapa-3d.css",
+      "bytes": 3469,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 20
+    },
+    {
+      "file": "css/mapa-completo.css",
+      "bytes": 4771,
+      "important": 5,
+      "media": 1,
+      "selectorCount": 29
+    },
+    {
+      "file": "css/mapa-turistico.css",
+      "bytes": 32538,
+      "important": 13,
+      "media": 7,
+      "selectorCount": 227
+    },
+    {
+      "file": "css/noticia.css",
+      "bytes": 2034,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 18
+    },
+    {
+      "file": "css/noticias.css",
+      "bytes": 3926,
+      "important": 0,
+      "media": 2,
+      "selectorCount": 40
+    },
+    {
+      "file": "css/o-que-fazer.css",
+      "bytes": 3488,
+      "important": 1,
+      "media": 1,
+      "selectorCount": 21
+    },
+    {
+      "file": "css/offline.css",
+      "bytes": 1824,
+      "important": 0,
+      "media": 0,
+      "selectorCount": 11
+    },
+    {
+      "file": "css/onde-ficar.css",
+      "bytes": 4423,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 35
+    },
+    {
+      "file": "css/para-o-trade.css",
+      "bytes": 2926,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 22
+    },
+    {
+      "file": "css/portal-usuario.css",
+      "bytes": 17193,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 98
+    },
+    {
+      "file": "css/reservas.css",
+      "bytes": 770,
+      "important": 0,
+      "media": 0,
+      "selectorCount": 2
+    },
+    {
+      "file": "css/rotas-completas.css",
+      "bytes": 13946,
+      "important": 11,
+      "media": 4,
+      "selectorCount": 73
+    },
+    {
+      "file": "css/roteiro-ia.css",
+      "bytes": 9636,
+      "important": 0,
+      "media": 2,
+      "selectorCount": 56
+    },
+    {
+      "file": "css/sabores.css",
+      "bytes": 7813,
+      "important": 9,
+      "media": 2,
+      "selectorCount": 72
+    },
+    {
+      "file": "css/shared.css",
+      "bytes": 9793,
+      "important": 8,
+      "media": 7,
+      "selectorCount": 51
+    },
+    {
+      "file": "css/transparencia.css",
+      "bytes": 6387,
+      "important": 0,
+      "media": 1,
+      "selectorCount": 33
+    },
+    {
+      "file": "css/variables.css",
+      "bytes": 1375,
+      "important": 0,
+      "media": 0,
+      "selectorCount": 0
+    }
+  ],
+  "duplicateSelectors": [
+    {
+      "selector": ":root",
+      "files": "css/404.css, css/index.css, css/mapa-turistico.css"
+    },
+    {
+      "selector": ".accessibility-bar .shortcuts",
+      "files": "css/index.css, css/transparencia.css"
+    },
+    {
+      "selector": ".back-to-top:hover",
+      "files": "css/index.css, css/rotas-completas.css"
+    },
+    {
+      "selector": ".back-to-top.visible",
+      "files": "css/index.css, css/rotas-completas.css"
+    },
+    {
+      "selector": ".btn-primary",
+      "files": "css/404.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".btn-primary:hover",
+      "files": "css/404.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".event-info h4",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".filter-btn",
+      "files": "css/eventos.css, css/onde-ficar.css, css/rotas-completas.css"
+    },
+    {
+      "selector": ".filter-btn:hover",
+      "files": "css/eventos.css, css/rotas-completas.css"
+    },
+    {
+      "selector": ".filter-btn.active",
+      "files": "css/eventos.css, css/rotas-completas.css"
+    },
+    {
+      "selector": ".form-group",
+      "files": "css/index.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".form-group input,\r\n        .form-group select,\r\n        .form-group textarea",
+      "files": "css/index.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".form-group input:focus,\r\n        .form-group select:focus,\r\n        .form-group textarea:focus",
+      "files": "css/index.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".form-group label",
+      "files": "css/index.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".form-group textarea",
+      "files": "css/index.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".header-logo",
+      "files": "css/rotas-completas.css, css/shared.css"
+    },
+    {
+      "selector": ".header-logo img",
+      "files": "css/noticias.css, css/rotas-completas.css, css/shared.css"
+    },
+    {
+      "selector": ".header-nav a",
+      "files": "css/noticias.css, css/shared.css"
+    },
+    {
+      "selector": ".header-title",
+      "files": "css/rotas-completas.css, css/shared.css"
+    },
+    {
+      "selector": ".hero p",
+      "files": "css/onde-ficar.css, css/shared.css"
+    },
+    {
+      "selector": ".hotel-card",
+      "files": "css/index.css, css/onde-ficar.css"
+    },
+    {
+      "selector": ".hotel-card:hover",
+      "files": "css/index.css, css/onde-ficar.css"
+    },
+    {
+      "selector": ".hotel-contact",
+      "files": "css/index.css, css/onde-ficar.css"
+    },
+    {
+      "selector": ".loading-spinner",
+      "files": "css/mapa-3d.css, css/roteiro-ia.css"
+    },
+    {
+      "selector": ".local-actions",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-btn",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-btn:hover",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-card",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-icon",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-info h4",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".local-info p",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".map-popup",
+      "files": "css/mapa-completo.css, css/mapa-turistico.css"
+    },
+    {
+      "selector": ".modal",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".modal-body",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".modal-close",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".modal-header",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".modal-overlay.active",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": ".nav-links",
+      "files": "css/galeria.css, css/index.css"
+    },
+    {
+      "selector": ".nav-links a",
+      "files": "css/galeria.css, css/index.css"
+    },
+    {
+      "selector": ".produtor-locais",
+      "files": "css/index.css, css/sabores.css"
+    },
+    {
+      "selector": ".section-header",
+      "files": "css/index.css, css/portal-usuario.css, css/transparencia.css"
+    },
+    {
+      "selector": ".section-header h2",
+      "files": "css/portal-usuario.css, css/sabores.css"
+    },
+    {
+      "selector": ".section-title",
+      "files": "css/index.css, css/transparencia.css"
+    },
+    {
+      "selector": ".stat-number",
+      "files": "css/index.css, css/mapa-completo.css"
+    },
+    {
+      "selector": ".step-number",
+      "files": "css/para-o-trade.css, css/portal-usuario.css"
+    },
+    {
+      "selector": "@keyframes pulse",
+      "files": "css/index.css, css/offline.css"
+    },
+    {
+      "selector": "@keyframes spin",
+      "files": "css/eventos.css, css/mapa-3d.css, css/roteiro-ia.css"
+    },
+    {
+      "selector": "@media (max-width: 1024px)",
+      "files": "css/index.css, css/mapa-turistico.css"
+    },
+    {
+      "selector": "@media (max-width: 480px)",
+      "files": "css/index.css, css/noticias.css, css/sabores.css, css/shared.css"
+    },
+    {
+      "selector": "@media (max-width: 600px)",
+      "files": "css/eventos.css, css/index.css"
+    },
+    {
+      "selector": "@media (max-width: 768px)",
+      "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css"
+    },
+    {
+      "selector": "/* ============================================\r\n           BOTÃO VOLTAR AO TOPO\r\n        ============================================ */\r\n        .back-to-top",
+      "files": "css/index.css, css/rotas-completas.css"
+    },
+    {
+      "selector": "/* Modal */\r\n        .modal-overlay",
+      "files": "css/eventos.css, css/portal-usuario.css"
+    },
+    {
+      "selector": "/* Responsive */\r\n        @media (max-width: 768px)",
+      "files": "css/portal-usuario.css, css/transparencia.css"
+    },
+    {
+      "selector": "/* Responsive */\r\n        @media (max-width: 968px)",
+      "files": "css/eventos.css, css/index.css"
+    },
+    {
+      "selector": "/* Responsive */\r\n@media (max-width: 768px)",
+      "files": "css/onde-ficar.css, css/para-o-trade.css, css/sabores.css"
+    },
+    {
+      "selector": "50%",
+      "files": "css/index.css, css/offline.css, css/roteiro-ia.css"
+    },
+    {
+      "selector": "body",
+      "files": "css/404.css, css/index.css, css/mapa-completo.css, css/offline.css, css/shared.css"
+    },
+    {
+      "selector": "h1",
+      "files": "css/404.css, css/offline.css"
+    },
+    {
+      "selector": "html, body",
+      "files": "css/index.css, css/shared.css"
+    },
+    {
+      "selector": "p",
+      "files": "css/404.css, css/offline.css"
+    },
+    {
+      "selector": "to",
+      "files": "css/galeria.css, css/index.css, css/portal-usuario.css, css/shared.css"
+    }
+  ],
+  "jsAnalysis": [
+    {
+      "file": "cloudflare-worker/chat-worker.js",
+      "bytes": 13209,
+      "globals": [
+        "const ALLOWED_ORIGINS",
+        "const MAX_HISTORY_ITEMS",
+        "const MAX_HISTORY_TEXT_LENGTH",
+        "const RATE_LIMIT_MAX",
+        "const RATE_LIMIT_WINDOW",
+        "const SYSTEM_PROMPTS"
+      ],
+      "functions": [
+        "checkRateLimit",
+        "corsHeaders",
+        "getAllowedOrigin",
+        "jsonResponse",
+        "sanitizeHistory"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "config.js",
+      "bytes": 6514,
+      "globals": [
+        "const CONFIG",
+        "window.CONFIG",
+        "window.__SMS_GA_INITIALIZED",
+        "window.dataLayer",
+        "window.gtag"
+      ],
+      "functions": [
+        "gtag"
+      ],
+      "localStorage": 1,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/avaliacoes.js",
+      "bytes": 8693,
+      "globals": [
+        "window.AvaliacaoSistema"
+      ],
+      "functions": [],
+      "localStorage": 4,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/breadcrumbs.js",
+      "bytes": 6170,
+      "globals": [
+        "var CSS",
+        "var PAGE_LABELS",
+        "window.location"
+      ],
+      "functions": [
+        "buildCrumbs",
+        "getLabel",
+        "getLang",
+        "injectSchema"
+      ],
+      "localStorage": 1,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/chatbot.js",
+      "bytes": 51661,
+      "globals": [
+        "var RESPOSTAS",
+        "window.Chatbot",
+        "window.active",
+        "window.addEventListener"
+      ],
+      "functions": [
+        "init"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 3
+    },
+    {
+      "file": "js/cms.js",
+      "bytes": 11595,
+      "globals": [
+        "const CMS",
+        "window.CMS",
+        "window.SMSecurity"
+      ],
+      "functions": [],
+      "localStorage": 7,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/cookies.js",
+      "bytes": 5618,
+      "globals": [
+        "var CONSENT_VERSION",
+        "var STORAGE_KEY"
+      ],
+      "functions": [
+        "buildBanner",
+        "disableAnalytics",
+        "getConsent",
+        "hideBanner",
+        "init",
+        "saveConsent"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 3
+    },
+    {
+      "file": "js/data/eventos.js",
+      "bytes": 3917,
+      "globals": [
+        "window.TURISMO_EVENTOS"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/hospedagens.js",
+      "bytes": 2459,
+      "globals": [
+        "window.TURISMO_HOSPEDAGENS"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/informacoes-essenciais.js",
+      "bytes": 2068,
+      "globals": [
+        "window.TURISMO_INFORMACOES_ESSENCIAIS"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/pontos-turisticos.js",
+      "bytes": 3451,
+      "globals": [
+        "window.TURISMO_PONTOS"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/restaurantes.js",
+      "bytes": 3190,
+      "globals": [
+        "window.TURISMO_RESTAURANTES"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/rotas.js",
+      "bytes": 2089,
+      "globals": [
+        "window.TURISMO_ROTAS"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/turismo-data-adapter.js",
+      "bytes": 15898,
+      "globals": [
+        "window.ROTAS_LEGADO_ESTABLISHMENTS",
+        "window.ROTAS_LEGADO_ROUTE_INFO",
+        "window.TURISMO_DATA_ADAPTER",
+        "window.locaisData"
+      ],
+      "functions": [
+        "buildLegacyLocalItem",
+        "buildLegacyRouteItem",
+        "buildLegacySnapshot",
+        "classifyBroadCategory",
+        "classifyLegacyCategory",
+        "cloneItem",
+        "collectBroadCategories",
+        "coordinatesAreClose",
+        "createEmptyLegacySnapshot",
+        "ensureArray",
+        "findDuplicate",
+        "getCollectionName",
+        "getComparableName",
+        "getComparableUrl",
+        "getCoordinates",
+        "hasCoordinates",
+        "isFiniteNumber",
+        "mergeItems",
+        "mergeSnapshot",
+        "normalizeText",
+        "summarizeSnapshot",
+        "uniqueTags"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/data/turismo-data.js",
+      "bytes": 4594,
+      "globals": [
+        "window.TURISMO_DATA",
+        "window.TURISMO_DATA_ADAPTER",
+        "window.TURISMO_DATA_HELPERS",
+        "window.TURISMO_DATA_META",
+        "window.TURISMO_EVENTOS",
+        "window.TURISMO_HOSPEDAGENS",
+        "window.TURISMO_INFORMACOES_ESSENCIAIS",
+        "window.TURISMO_PONTOS",
+        "window.TURISMO_RESTAURANTES",
+        "window.TURISMO_ROTAS"
+      ],
+      "functions": [
+        "createSnapshot",
+        "ensureArray",
+        "getAllItems",
+        "getCollection",
+        "getPontoById",
+        "getPontosByCategoria",
+        "getRotasByCategoria",
+        "getStats",
+        "normalizeText",
+        "searchAll"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/firebase-auth.js",
+      "bytes": 19900,
+      "globals": [
+        "window.FirebaseSystem",
+        "window.currentUser",
+        "window.dispatchEvent",
+        "window.firebaseAuth",
+        "window.firebaseDB",
+        "window.initFirebase"
+      ],
+      "functions": [
+        "initFirebase",
+        "tryInit"
+      ],
+      "localStorage": 2,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
+      "file": "js/loading.js",
+      "bytes": 3156,
+      "globals": [
+        "window.smsHideLoading"
+      ],
+      "functions": [
+        "hideLoading"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/locais-data.js",
+      "bytes": 21552,
+      "globals": [
+        "window.locaisData"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/mapa-turistico.js",
+      "bytes": 60488,
+      "globals": [
+        "var CATEGORY_CONFIG",
+        "var FILTER_ORDER",
+        "var MAP_TEXT",
+        "var PANEL_GROUP_CONFIG",
+        "var PANEL_GROUP_ORDER",
+        "window.L",
+        "window.TURISMO_DATA",
+        "window.history",
+        "window.location",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "applyInitialStateFromUrl",
+        "applyPageText",
+        "bindEvents",
+        "bootstrap",
+        "buildItems",
+        "classifyCategory",
+        "closeDetailsModal",
+        "createGoogleMapsLink",
+        "createMarkerIcon",
+        "createWhatsAppLink",
+        "ensureArray",
+        "ensureDetailsModal",
+        "escapeHtml",
+        "filterItems",
+        "getAvailableCategoryCount",
+        "getCategoryConfig",
+        "getCoordinates",
+        "getCurrentListItems",
+        "getCurrentMissingItems",
+        "getDefaultPanelGroupForFilter",
+        "getFilterCount",
+        "getFirstPhoneDigits",
+        "getFocusableElements",
+        "getGroupCountLabel",
+        "getImageHtml",
+        "getItemById",
+        "getLang",
+        "getMissingSummary",
+        "getPanelGroup",
+        "getPanelGroupCount",
+        "getPanelGroupLabel",
+        "getPanelGroupSlug",
+        "getPanelItems",
+        "getSearchStatusMessage",
+        "getSelectedItem",
+        "handleDetailsKeydown",
+        "initMap",
+        "isExternalUrl",
+        "isRouteItem",
+        "normalizeImages",
+        "normalizeItem",
+        "normalizeSocialLink",
+        "normalizeText",
+        "openDetailsModal",
+        "refreshView",
+        "renderDetailsGallery",
+        "renderDetailsModalContent",
+        "renderFilters",
+        "renderGroupedList",
+        "renderList",
+        "renderListCard",
+        "renderMarkers",
+        "renderMetaRow",
+        "renderMissingItems",
+        "renderPanelGroups",
+        "renderSelectedItem",
+        "renderStats",
+        "replaceCount",
+        "resolveFilterAlias",
+        "resolvePanelGroupAlias",
+        "selectItem",
+        "syncSelectedItemVisibility",
+        "syncUrlState",
+        "t",
+        "uniqueList",
+        "updateMarkerSelection",
+        "updateSearchUi"
+      ],
+      "localStorage": 2,
+      "serviceWorker": 0,
+      "addEventListeners": 10
+    },
+    {
+      "file": "js/mapa3d.js",
+      "bytes": 14656,
+      "globals": [
+        "window.Mapa3D"
+      ],
+      "functions": [
+        "loop"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 6
+    },
+    {
+      "file": "js/nav-shared.js",
+      "bytes": 39600,
+      "globals": [
+        "const NAV_CSS",
+        "const NAV_HTML",
+        "window.FirebaseSystem",
+        "window.addEventListener",
+        "window.applyTranslations",
+        "window.innerHeight",
+        "window.location",
+        "window.pageYOffset",
+        "window.scrollTo",
+        "window.smsChangeFontSize",
+        "window.smsLogout",
+        "window.smsToggleContrast",
+        "window.translations"
+      ],
+      "functions": [
+        "applyAuthState",
+        "closeAllDropdowns",
+        "hasLoadedScript",
+        "revealMascote"
+      ],
+      "localStorage": 9,
+      "serviceWorker": 2,
+      "addEventListeners": 15
+    },
+    {
+      "file": "js/reservas.js",
+      "bytes": 25945,
+      "globals": [
+        "window.Reservas",
+        "window.open"
+      ],
+      "functions": [],
+      "localStorage": 6,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/rotas-data.js",
+      "bytes": 33424,
+      "globals": [
+        "window.ROTAS_LEGADO_ESTABLISHMENTS",
+        "window.ROTAS_LEGADO_ROUTE_INFO"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/roteiro-ia.js",
+      "bytes": 20998,
+      "globals": [
+        "window.RoteiroIA",
+        "window.location",
+        "window.print"
+      ],
+      "functions": [],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/scroll-animations.js",
+      "bytes": 6742,
+      "globals": [
+        "var ALVO",
+        "var DELAY_MS",
+        "var DURACAO",
+        "var EASING",
+        "var EXCLUIR",
+        "var GRIDS",
+        "var MAX_DELAY",
+        "var TRANSFORM",
+        "window.animRefresh",
+        "window.innerHeight",
+        "window.matchMedia"
+      ],
+      "functions": [
+        "acimaDaDobra",
+        "dentroDosExcluidos",
+        "estiloFinal",
+        "estiloInicial",
+        "init",
+        "preparar"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 1
+    },
+    {
+      "file": "js/search-index.js",
+      "bytes": 4787,
+      "globals": [
+        "window.TURISMO_DATA",
+        "window.TURISMO_EVENTOS",
+        "window.TURISMO_HOSPEDAGENS",
+        "window.TURISMO_INFORMACOES_ESSENCIAIS",
+        "window.TURISMO_PONTOS",
+        "window.TURISMO_RESTAURANTES",
+        "window.TURISMO_ROTAS",
+        "window.TURISMO_SEARCH_INDEX"
+      ],
+      "functions": [
+        "fromCollection",
+        "getData",
+        "makeEntry"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/search.js",
+      "bytes": 7777,
+      "globals": [
+        "window.TURISMO_SEARCH_INDEX",
+        "window.TurismoSearch",
+        "window.setTimeout",
+        "window.translations"
+      ],
+      "functions": [
+        "buildHaystack",
+        "closeOpenMenus",
+        "closeSearch",
+        "getTranslation",
+        "initSearch",
+        "normalizeText",
+        "openSearch",
+        "renderEmpty",
+        "renderIdle",
+        "renderResults",
+        "runSearch",
+        "scoreItem"
+      ],
+      "localStorage": 1,
+      "serviceWorker": 0,
+      "addEventListeners": 8
+    },
+    {
+      "file": "js/security-utils.js",
+      "bytes": 2142,
+      "globals": [
+        "var HTML_MAP",
+        "window.SMSecurity",
+        "window.location"
+      ],
+      "functions": [
+        "escapeAttr",
+        "escapeHTML",
+        "escapeJSString",
+        "safeURL",
+        "valueOrFallback"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/site-stats.js",
+      "bytes": 2918,
+      "globals": [
+        "var FALLBACK_FOUNDING_YEAR",
+        "var FALLBACK_STATS",
+        "window.CONFIG",
+        "window.SITE_STATS",
+        "window.SITE_STATS_META",
+        "window.TURISMO_DATA",
+        "window.TURISMO_DATA_ADAPTER",
+        "window.TURISMO_DATA_HELPERS",
+        "window.TURISMO_DATA_META",
+        "window.addEventListener"
+      ],
+      "functions": [
+        "applyStatsToDocument",
+        "buildStatsPayload",
+        "getFoundingYear",
+        "getRuntimeStats",
+        "getStatValue",
+        "isFiniteNumber",
+        "refreshSiteStats",
+        "sanitizeCount"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
+      "file": "sw.js",
+      "bytes": 5087,
+      "globals": [
+        "const CACHE_NAME",
+        "const NEVER_CACHE",
+        "const NEVER_CACHE_EXT",
+        "const OFFLINE_URL",
+        "const PRECACHE_ASSETS"
+      ],
+      "functions": [
+        "fetchAndCache"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 5
+    },
+    {
+      "file": "translations.js",
+      "bytes": 186849,
+      "globals": [
+        "window.applyTranslations",
+        "window.initPageLanguage",
+        "window.translations"
+      ],
+      "functions": [
+        "applyTranslations",
+        "detectBrowserLanguage",
+        "initPageLanguage"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 4
+    }
+  ],
+  "scriptUsageCount": [
+    {
+      "script": "translations.js",
+      "pages": 19,
+      "examples": "eventos.html, galeria.html, index.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html"
+    },
+    {
+      "script": "js/breadcrumbs.js",
+      "pages": 17,
+      "examples": "eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html, o-que-fazer.html"
+    },
+    {
+      "script": "js/nav-shared.js",
+      "pages": 17,
+      "examples": "eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html, noticias.html"
+    },
+    {
+      "script": "js/cookies.js",
+      "pages": 16,
+      "examples": "404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html"
+    },
+    {
+      "script": "js/loading.js",
+      "pages": 9,
+      "examples": "eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html"
+    },
+    {
+      "script": "config.js",
+      "pages": 5,
+      "examples": "index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
+    },
+    {
+      "script": "js/scroll-animations.js",
+      "pages": 5,
+      "examples": "eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html"
+    },
+    {
+      "script": "js/rotas-data.js",
+      "pages": 3,
+      "examples": "index.html, mapa-completo.html, mapa-turistico.html"
+    },
+    {
+      "script": "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+      "pages": 2,
+      "examples": "index.html, index.html"
+    },
+    {
+      "script": "js/data/eventos.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/hospedagens.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/informacoes-essenciais.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/pontos-turisticos.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/restaurantes.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/rotas.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/turismo-data-adapter.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/data/turismo-data.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/firebase-auth.js",
+      "pages": 2,
+      "examples": "admin-firebase.html, portal-usuario.html"
+    },
+    {
+      "script": "js/locais-data.js",
+      "pages": 2,
+      "examples": "index.html, mapa-turistico.html"
+    },
+    {
+      "script": "js/security-utils.js",
+      "pages": 2,
+      "examples": "admin-firebase.html, noticia.html"
+    },
+    {
+      "script": "js/avaliacoes.js",
+      "pages": 1,
+      "examples": "index.html"
+    },
+    {
+      "script": "js/chatbot.js",
+      "pages": 1,
+      "examples": "index.html"
+    },
+    {
+      "script": "js/cms.js",
+      "pages": 1,
+      "examples": "noticia.html"
+    },
+    {
+      "script": "js/mapa-turistico.js",
+      "pages": 1,
+      "examples": "mapa-turistico.html"
+    },
+    {
+      "script": "js/mapa3d.js",
+      "pages": 1,
+      "examples": "mapa-3d.html"
+    },
+    {
+      "script": "js/reservas.js",
+      "pages": 1,
+      "examples": "reservas.html"
+    },
+    {
+      "script": "js/roteiro-ia.js",
+      "pages": 1,
+      "examples": "roteiro-ia.html"
+    },
+    {
+      "script": "js/search-index.js",
+      "pages": 1,
+      "examples": "index.html"
+    },
+    {
+      "script": "js/search.js",
+      "pages": 1,
+      "examples": "index.html"
+    },
+    {
+      "script": "js/site-stats.js",
+      "pages": 1,
+      "examples": "index.html"
+    }
+  ],
+  "scriptDuplicateLoads": [
+    {
+      "key": "index.html|cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
+      "count": 2
+    }
+  ],
+  "sharedGlobals": [
+    {
+      "global": "window.addEventListener",
+      "files": "js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+    },
+    {
+      "global": "window.applyTranslations",
+      "files": "js/nav-shared.js, translations.js"
+    },
+    {
+      "global": "window.CONFIG",
+      "files": "config.js, js/site-stats.js"
+    },
+    {
+      "global": "window.FirebaseSystem",
+      "files": "js/firebase-auth.js, js/nav-shared.js"
+    },
+    {
+      "global": "window.innerHeight",
+      "files": "js/nav-shared.js, js/scroll-animations.js"
+    },
+    {
+      "global": "window.locaisData",
+      "files": "js/data/turismo-data-adapter.js, js/locais-data.js"
+    },
+    {
+      "global": "window.location",
+      "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js"
+    },
+    {
+      "global": "window.ROTAS_LEGADO_ESTABLISHMENTS",
+      "files": "js/data/turismo-data-adapter.js, js/rotas-data.js"
+    },
+    {
+      "global": "window.ROTAS_LEGADO_ROUTE_INFO",
+      "files": "js/data/turismo-data-adapter.js, js/rotas-data.js"
+    },
+    {
+      "global": "window.setTimeout",
+      "files": "js/mapa-turistico.js, js/search.js"
+    },
+    {
+      "global": "window.SMSecurity",
+      "files": "js/cms.js, js/security-utils.js"
+    },
+    {
+      "global": "window.translations",
+      "files": "js/nav-shared.js, js/search.js, translations.js"
+    },
+    {
+      "global": "window.TURISMO_DATA",
+      "files": "js/data/turismo-data.js, js/mapa-turistico.js, js/search-index.js, js/site-stats.js"
+    },
+    {
+      "global": "window.TURISMO_DATA_ADAPTER",
+      "files": "js/data/turismo-data-adapter.js, js/data/turismo-data.js, js/site-stats.js"
+    },
+    {
+      "global": "window.TURISMO_DATA_HELPERS",
+      "files": "js/data/turismo-data.js, js/site-stats.js"
+    },
+    {
+      "global": "window.TURISMO_DATA_META",
+      "files": "js/data/turismo-data.js, js/site-stats.js"
+    },
+    {
+      "global": "window.TURISMO_EVENTOS",
+      "files": "js/data/eventos.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_HOSPEDAGENS",
+      "files": "js/data/hospedagens.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_INFORMACOES_ESSENCIAIS",
+      "files": "js/data/informacoes-essenciais.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_PONTOS",
+      "files": "js/data/pontos-turisticos.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_RESTAURANTES",
+      "files": "js/data/restaurantes.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_ROTAS",
+      "files": "js/data/rotas.js, js/data/turismo-data.js, js/search-index.js"
+    },
+    {
+      "global": "window.TURISMO_SEARCH_INDEX",
+      "files": "js/search-index.js, js/search.js"
+    }
+  ]
+}
