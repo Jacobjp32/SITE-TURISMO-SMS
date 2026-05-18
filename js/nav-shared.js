@@ -362,6 +362,20 @@ body.font-larger{font-size:140%!important;}
             '<polyline points="18 15 12 9 6 15"></polyline></svg></button>');
     }
 
+    function hasLoadedScript(src) {
+        return Array.prototype.some.call(document.scripts, function(script) {
+            var currentSrc = script.getAttribute('src') || '';
+            return currentSrc === src || currentSrc.split('?')[0] === src;
+        });
+    }
+
+    if (!hasLoadedScript('js/site-meta.js')) {
+        var metaScript = document.createElement('script');
+        metaScript.src = 'js/site-meta.js';
+        metaScript.defer = true;
+        document.body.appendChild(metaScript);
+    }
+
     // Carregar chatbot (se ainda não carregado)
     if (!document.getElementById('chatbot-script')) {
         var cbScript = document.createElement('script');
@@ -385,13 +399,6 @@ body.font-larger{font-size:140%!important;}
         animScript.src = 'js/scroll-animations.js';
         animScript.defer = true;
         document.body.appendChild(animScript);
-    }
-
-    function hasLoadedScript(src) {
-        return Array.prototype.some.call(document.scripts, function(script) {
-            var currentSrc = script.getAttribute('src') || '';
-            return currentSrc === src || currentSrc.split('?')[0] === src;
-        });
     }
 
     [
