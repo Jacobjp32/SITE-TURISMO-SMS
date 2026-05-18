@@ -5,6 +5,12 @@ window.TURISMO_RESTAURANTES = [
     categoria: "Gastronomia",
     descricao: "Vivências gastronômicas com receitas típicas, pratos autorais, pães de fermentação natural e experiências junto à natureza.",
     imagem: "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
+    galeria: [
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
+      "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg"
+    ],
     url: "/mapa-turistico.html?categoria=Gastronomia",
     telefone: "(42) 98804-0535",
     localizacao: "Avenida Ozy Mendonça de Lima, 3133 — Colônia Taquaral",

@@ -387,6 +387,13 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(animScript);
     }
 
+    function hasLoadedScript(src) {
+        return Array.prototype.some.call(document.scripts, function(script) {
+            var currentSrc = script.getAttribute('src') || '';
+            return currentSrc === src || currentSrc.split('?')[0] === src;
+        });
+    }
+
     [
         'js/locais-data.js',
         'js/rotas-data.js',
@@ -401,7 +408,7 @@ body.font-larger{font-size:140%!important;}
         'js/search-index.js',
         'js/search.js'
     ].forEach(function(src) {
-        if (!document.querySelector('script[src="' + src + '"]')) {
+        if (!hasLoadedScript(src)) {
             var script = document.createElement('script');
             script.src = src;
             script.async = false;

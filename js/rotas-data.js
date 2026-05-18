@@ -68,6 +68,12 @@ const establishments = [
         subtitle: 'Centro de Equoterapia e Equitação',
         desc: 'Passeios a cavalo, equoterapia e conexão com animais. Espaço inclusivo.',
         imagem: 'images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg',
+        galeria: [
+            'images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg',
+            'images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg',
+            'images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg',
+            'images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg'
+        ],
         location: 'Localidade de Divisa',
         phone: '(42) 99903-1325',
         hours: 'Seg–Sex 9h–18h; Sáb e Dom com agendamento',
@@ -289,6 +295,12 @@ const establishments = [
         subtitle: 'Sabores que atravessam gerações',
         desc: 'Vivências gastronômicas com receitas típicas e autorais, pães de fermentação natural, almoço típico polonês sob agendamento e personal chef.',
         imagem: 'images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg',
+        galeria: [
+            'images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg',
+            'images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg',
+            'images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg',
+            'images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg'
+        ],
         location: 'Avenida Ozy Mendonça de Lima, 3133 — Colônia Taquaral',
         phone: '(42) 98804-0535',
         hours: 'Sob agendamento',
@@ -322,6 +334,16 @@ const establishments = [
         subtitle: 'Pesca esportiva e passeio fluvial',
         desc: 'Passeio pelo Rio Iguaçu e pesca esportiva com orientação de especialistas.',
         imagem: 'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg',
+        galeria: [
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-01.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-03.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-04.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg',
+            'images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg'
+        ],
         location: 'Centro — Praça do Rio Iguaçu',
         phone: '(42) 99804-0096',
         hours: 'Todo domingo a partir das 14h',

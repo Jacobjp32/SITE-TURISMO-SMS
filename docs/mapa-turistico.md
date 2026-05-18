@@ -84,9 +84,53 @@ O script `js/mapa-turistico.js` normaliza os dados e cria:
 - clicar em um marker destaca o card correspondente, atualiza o painel de destaque e mantém o popup do Leaflet disponível
 - clicar em um card com coordenadas centraliza o mapa no local e abre o popup do marker
 - clicar em um card sem coordenadas atualiza apenas o painel de destaque, sem tentar centralizar o mapa
+- clicar em `Ver detalhes` abre um modal/drawer responsivo com as informações do item, sem recarregar a página
 - o marker selecionado recebe destaque visual sem depender de animação pesada
 - o card selecionado recebe realce visual na grade
 - se o marker clicado estiver fora do grupo visível atual, a grade troca automaticamente para o grupo correto
+
+## Modal de detalhes
+
+O botão `Ver detalhes` é renderizado como `button` com `data-map-details-id`, não como link de navegação. O handler em `js/mapa-turistico.js` seleciona o item, preserva o destaque do mapa/card e abre um modal central no desktop. Em telas menores, o mesmo componente se comporta como drawer/bottom sheet rolável.
+
+O modal consome apenas campos já presentes no item consolidado em `window.TURISMO_DATA`:
+
+- `nome`
+- `categoria`
+- `descricao`
+- `descricaoLonga` ou `historia`, quando existir
+- `imagem`
+- `galeria`, `imagens`, `fotos` ou `images`
+- `localizacao` ou `endereco`
+- `telefone`
+- `horario`, `hours` ou `periodo`
+- `tags`
+- `rota`, `route` ou nome de rota herdado
+- `site`, `instagram`, `social`, `facebook` ou URL externa
+- `coordenadas` e `mapsUrl`
+
+Campos ausentes são omitidos. O modal não imprime `undefined`, não cria informação nova e não tenta resolver páginas individuais.
+
+### Imagem principal e galeria
+
+A imagem principal vem de `imagem`. Para adicionar galeria futura, use um array no próprio item:
+
+```js
+galeria: [
+  "images/empreendimentos/exemplo/exemplo-01.jpeg",
+  "images/empreendimentos/exemplo/exemplo-02.jpeg"
+]
+```
+
+O modal ignora arquivos `.HEIC` e `.DNG`; use apenas versões web já disponíveis (`.jpg`, `.jpeg`, `.png`, `.webp`). Se `galeria` existir, a primeira imagem continua como destaque e as demais aparecem em mini galeria. Se não houver imagem, aparece um fallback visual por categoria.
+
+### Itens sem coordenadas
+
+Itens sem coordenadas continuam visíveis na grade e podem abrir o modal. O botão `Como chegar` fica oculto quando `coordenadas.lat` e `coordenadas.lng` não são números válidos.
+
+### Roteiros
+
+Roteiros aparecem no modal como `Roteiro temático`, com descrição e tags. Quando não possuem coordenada única, não exibem `Como chegar`. Relações futuras entre roteiro e pontos podem ser criadas depois, mas a implementação atual não inventa vínculo automático.
 
 ## Como funcionam filtros e busca
 

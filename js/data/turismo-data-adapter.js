@@ -174,10 +174,19 @@
       nome: item.nome,
       categoria: category,
       descricao: item.descricao || item.historia || "",
+      descricaoLonga: item.historia || "",
       imagem: item.imagem || "",
+      galeria: ensureArray(item.galeria),
       url: item.id ? "/local?id=" + item.id : "",
       telefone: item.telefone || "",
       localizacao: item.endereco || "",
+      endereco: item.endereco || "",
+      horario: item.horario || "",
+      site: item.site || "",
+      instagram: item.instagram || "",
+      facebook: item.facebook || "",
+      rota: item.rota || "",
+      acessibilidade: item.acessibilidade || "",
       coordenadas: getCoordinates(item),
       tags: uniqueTags(item.badge, item.categoria, item.rota, item.subtitulo, item.acessibilidade),
       mapsUrl: item.mapsUrl || "",
@@ -193,10 +202,19 @@
       nome: item.name,
       categoria: category,
       descricao: item.desc || "",
+      descricaoLonga: item.subtitle || "",
       imagem: item.imagem || "",
+      galeria: ensureArray(item.galeria),
       url: "",
       telefone: item.phone || "",
       localizacao: item.location || "",
+      endereco: item.location || "",
+      horario: item.hours || "",
+      site: item.site || "",
+      instagram: item.social || "",
+      social: item.social || "",
+      videoUrl: item.videoUrl || "",
+      rota: routeMeta.name || item.route || "",
       coordenadas: getCoordinates(item),
       tags: uniqueTags(item.route, routeMeta.name, item.subtitle, item.coordStatus, item.coordNote),
       mapsUrl: item.mapsUrl || "",
@@ -271,13 +289,14 @@
   }
 
   function mergeItems(existing, incoming) {
-    ["descricao", "imagem", "url", "telefone", "localizacao", "mapsUrl"].forEach(function (field) {
+    ["descricao", "descricaoLonga", "imagem", "url", "telefone", "localizacao", "endereco", "horario", "site", "instagram", "social", "facebook", "videoUrl", "rota", "acessibilidade", "mapsUrl"].forEach(function (field) {
       if (!existing[field] && incoming[field]) {
         existing[field] = incoming[field];
       }
     });
 
     existing.tags = uniqueTags(existing.tags, incoming.tags);
+    existing.galeria = uniqueTags(existing.galeria, incoming.galeria);
 
     if (!existing.legacySource && incoming.legacySource) {
       existing.legacySource = incoming.legacySource;

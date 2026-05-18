@@ -46,6 +46,16 @@
       noDescription: "Descricao em atualizacao.",
       routeBadge: "Roteiro tematico",
       routeSupport: "Pontos relacionados disponiveis no mapa.",
+      closeDetails: "Fechar detalhes",
+      contact: "Contato",
+      whatsapp: "WhatsApp",
+      address: "Endereco",
+      hours: "Horario",
+      services: "Servicos e tags",
+      relatedRoute: "Rota relacionada",
+      externalLink: "Link externo",
+      gallery: "Galeria",
+      detailsTitleSuffix: "Detalhes do local",
       cardSelected: "Selecionado no mapa",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} itens",
@@ -131,6 +141,16 @@
       noDescription: "Description pending update.",
       routeBadge: "Themed route",
       routeSupport: "Related places remain available on the map.",
+      closeDetails: "Close details",
+      contact: "Contact",
+      whatsapp: "WhatsApp",
+      address: "Address",
+      hours: "Hours",
+      services: "Services and tags",
+      relatedRoute: "Related route",
+      externalLink: "External link",
+      gallery: "Gallery",
+      detailsTitleSuffix: "Place details",
       cardSelected: "Selected on map",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} items",
@@ -216,6 +236,16 @@
       noDescription: "Descripcion en actualizacion.",
       routeBadge: "Ruta tematica",
       routeSupport: "Los puntos relacionados siguen disponibles en el mapa.",
+      closeDetails: "Cerrar detalles",
+      contact: "Contacto",
+      whatsapp: "WhatsApp",
+      address: "Direccion",
+      hours: "Horario",
+      services: "Servicios y etiquetas",
+      relatedRoute: "Ruta relacionada",
+      externalLink: "Enlace externo",
+      gallery: "Galeria",
+      detailsTitleSuffix: "Detalles del lugar",
       cardSelected: "Seleccionado en el mapa",
       groupItemsSingle: "1 elemento",
       groupItemsMany: "{count} elementos",
@@ -301,6 +331,16 @@
       noDescription: "Opis jest aktualizowany.",
       routeBadge: "Trasa tematyczna",
       routeSupport: "Powiazane miejsca pozostaja dostepne na mapie.",
+      closeDetails: "Zamknij szczegoly",
+      contact: "Kontakt",
+      whatsapp: "WhatsApp",
+      address: "Adres",
+      hours: "Godziny",
+      services: "Uslugi i tagi",
+      relatedRoute: "Powiazana trasa",
+      externalLink: "Link zewnetrzny",
+      gallery: "Galeria",
+      detailsTitleSuffix: "Szczegoly miejsca",
       cardSelected: "Wybrane na mapie",
       groupItemsSingle: "1 element",
       groupItemsMany: "{count} elementow",
@@ -380,7 +420,10 @@
     panelGroup: "all",
     searchTerm: "",
     searchValue: "",
-    lang: "pt"
+    lang: "pt",
+    detailsModal: null,
+    detailsLastFocus: null,
+    detailsLastItemId: null
   };
 
   function normalizeText(value) {
@@ -407,6 +450,75 @@
       cursor = cursor && cursor[parts[i]];
     }
     return cursor || fallback || path;
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function ensureArray(value) {
+    if (!value) return [];
+    return Array.isArray(value) ? value : [value];
+  }
+
+  function uniqueList(values) {
+    var seen = {};
+    return ensureArray(values).reduce(function (list, value) {
+      var item = String(value || "").trim();
+      var key = normalizeText(item);
+      if (!item || seen[key]) return list;
+      seen[key] = true;
+      list.push(item);
+      return list;
+    }, []);
+  }
+
+  function normalizeImages(item) {
+    var images = []
+      .concat(ensureArray(item.galeria))
+      .concat(ensureArray(item.imagens))
+      .concat(ensureArray(item.fotos))
+      .concat(ensureArray(item.images));
+
+    if (item.imagem) {
+      images.unshift(item.imagem);
+    }
+
+    return uniqueList(images).filter(function (image) {
+      return !/\.(heic|dng)$/i.test(image);
+    });
+  }
+
+  function isExternalUrl(value) {
+    return /^https?:\/\//i.test(String(value || ""));
+  }
+
+  function normalizeSocialLink(value) {
+    var social = String(value || "").trim();
+    if (!social) return "";
+    if (isExternalUrl(social)) return social;
+    if (social.charAt(0) === "@") {
+      return "https://www.instagram.com/" + social.replace(/^@+/, "");
+    }
+    return "";
+  }
+
+  function getFirstPhoneDigits(value) {
+    var matches = String(value || "").match(/\(?\d{2}\)?\s*\d{4,5}[-\s]?\d{4}/);
+    if (!matches) return "";
+    var digits = matches[0].replace(/\D/g, "");
+    if (digits.length === 10 || digits.length === 11) return "55" + digits;
+    return digits.length >= 12 ? digits : "";
+  }
+
+  function createWhatsAppLink(value) {
+    var digits = getFirstPhoneDigits(value);
+    return digits ? "https://wa.me/" + digits : "";
   }
 
   function getCoordinates(item) {
@@ -469,10 +581,13 @@
   }
 
   function createGoogleMapsLink(item, coordinates) {
+    if (coordinates && item.mapsUrl) {
+      return item.mapsUrl;
+    }
     if (coordinates) {
       return "https://www.google.com/maps/search/?api=1&query=" + coordinates.lat + "," + coordinates.lng;
     }
-    return item.url || "#";
+    return "";
   }
 
   function normalizeItem(item, itemType) {
@@ -481,6 +596,9 @@
     var coordinates = getCoordinates(item);
     var broadCategory = classifyCategory(itemType, item.categoria, item.tags, item.descricao);
     var panelGroup = getPanelGroup(itemType);
+    var gallery = normalizeImages(item);
+    var externalLink = item.site || item.website || item.instagram || item.social || item.facebook || (isExternalUrl(item.url) ? item.url : "");
+    var contactLink = normalizeSocialLink(item.instagram || item.social || item.facebook) || (isExternalUrl(item.site || item.website) ? item.site || item.website : "") || (isExternalUrl(item.url) ? item.url : "");
 
     return {
       id: item.id || item.nome,
@@ -491,12 +609,25 @@
       categoriaMapa: broadCategory,
       categoriaLabel: t("categoryLabels." + broadCategory, item.categoria || ""),
       descricao: item.descricao || "",
-      imagem: item.imagem || "",
+      descricaoLonga: item.descricaoLonga || item.historia || "",
+      imagem: item.imagem || gallery[0] || "",
+      galeria: gallery,
       url: item.url || "",
       telefone: item.telefone || "",
-      localizacao: item.localizacao || item.local || "",
-      periodo: item.periodo || "",
+      whatsappUrl: createWhatsAppLink(item.telefone),
+      localizacao: item.localizacao || item.local || item.endereco || "",
+      endereco: item.endereco || item.localizacao || item.local || "",
+      periodo: item.periodo || item.horario || "",
+      horario: item.horario || item.hours || item.periodo || "",
       destaque: item.destaque || "",
+      rota: item.rota || item.route || item.legacyRouteName || "",
+      site: item.site || item.website || "",
+      instagram: item.instagram || item.social || "",
+      facebook: item.facebook || "",
+      videoUrl: item.videoUrl || "",
+      externalLink: isExternalUrl(externalLink) ? externalLink : normalizeSocialLink(externalLink),
+      contactLink: contactLink,
+      acessibilidade: item.acessibilidade || "",
       tags: Array.isArray(item.tags) ? item.tags : [],
       coordenadas: coordinates,
       possuiCoordenadas: !!coordinates,
@@ -507,8 +638,14 @@
         item.descricao,
         item.localizacao,
         item.local,
+        item.endereco,
         item.periodo,
+        item.horario,
         item.telefone,
+        item.site,
+        item.instagram,
+        item.social,
+        item.rota,
         Array.isArray(item.tags) ? item.tags.join(" ") : item.tags
       ].join(" "))
     };
@@ -733,7 +870,7 @@
       }
       return '<div class="' + className + ' map-image-fallback" aria-hidden="true"><span>' + getCategoryConfig(item.categoriaMapa).icon + '</span><small>' + t("noImage") + "</small></div>";
     }
-    return '<img src="' + item.imagem + '" alt="' + item.nome + '" class="' + className + '">';
+    return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '">';
   }
 
   function createMarkerIcon(filterId, isSelected) {
@@ -848,11 +985,11 @@
 
       marker.bindPopup(
         '<div class="map-popup">'
-          + '<strong>' + item.nome + '</strong>'
-          + '<span>' + item.categoriaLabel + '</span>'
-          + '<p>' + (item.descricao || t("noDescription")) + '</p>'
-          + (item.url ? '<a href="' + item.url + '">' + t("popupDetails") + '</a><br>' : "")
-          + '<a href="' + item.mapsUrl + '" target="_blank" rel="noopener">' + t("popupDirections") + "</a>"
+          + '<strong>' + escapeHtml(item.nome) + '</strong>'
+          + '<span>' + escapeHtml(item.categoriaLabel) + '</span>'
+          + '<p>' + escapeHtml(item.descricao || t("noDescription")) + '</p>'
+          + '<button type="button" class="map-popup-detail-button" data-map-details-id="' + escapeHtml(item.id) + '">' + t("popupDetails") + '</button>'
+          + (item.possuiCoordenadas ? '<a href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("popupDirections") + "</a>" : "")
           + "</div>"
       );
 
@@ -874,6 +1011,165 @@
     updateMarkerSelection();
   }
 
+  function ensureDetailsModal() {
+    if (state.detailsModal) return state.detailsModal;
+
+    var wrapper = document.createElement("div");
+    wrapper.className = "map-details-modal";
+    wrapper.setAttribute("data-map-details-modal", "");
+    wrapper.setAttribute("hidden", "");
+    wrapper.innerHTML = ''
+      + '<div class="map-details-backdrop" data-map-details-close></div>'
+      + '<section class="map-details-dialog" role="dialog" aria-modal="true" aria-labelledby="mapDetailsTitle" tabindex="-1">'
+      + '<button type="button" class="map-details-close" data-map-details-close aria-label="' + escapeHtml(t("closeDetails")) + '">×</button>'
+      + '<div class="map-details-content"></div>'
+      + '</section>';
+
+    document.body.appendChild(wrapper);
+    state.detailsModal = wrapper;
+
+    wrapper.addEventListener("click", function (event) {
+      if (event.target.closest("[data-map-details-close]")) {
+        closeDetailsModal();
+      }
+    });
+
+    return wrapper;
+  }
+
+  function getFocusableElements(container) {
+    return Array.prototype.slice.call(container.querySelectorAll([
+      "a[href]",
+      "button:not([disabled])",
+      "textarea:not([disabled])",
+      "input:not([disabled])",
+      "select:not([disabled])",
+      "[tabindex]:not([tabindex='-1'])"
+    ].join(","))).filter(function (element) {
+      return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    });
+  }
+
+  function renderMetaRow(label, value) {
+    if (!value) return "";
+    return '<div class="map-details-info-row"><dt>' + escapeHtml(label) + '</dt><dd>' + escapeHtml(value) + "</dd></div>";
+  }
+
+  function renderDetailsGallery(item) {
+    var images = uniqueList(item.galeria || []);
+    if (images.length <= 1) return "";
+
+    return '<section class="map-details-gallery" aria-label="' + escapeHtml(t("gallery")) + '">'
+      + '<h3>' + escapeHtml(t("gallery")) + '</h3>'
+      + '<div class="map-details-gallery-grid">'
+      + images.slice(1, 7).map(function (image) {
+        return '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.nome) + '">';
+      }).join("")
+      + "</div></section>";
+  }
+
+  function renderDetailsModalContent(item) {
+    var config = getCategoryConfig(item.categoriaMapa);
+    var tags = uniqueList(item.tags).slice(0, 12);
+    var description = item.descricao || t("noDescription");
+    var longDescription = item.descricaoLonga && item.descricaoLonga !== item.descricao ? item.descricaoLonga : "";
+    var routeLabel = isRouteItem(item) ? t("routeBadge") : item.rota;
+
+    return ''
+      + '<div class="map-details-media">'
+      + getImageHtml(item, "map-details-image")
+      + '</div>'
+      + '<div class="map-details-body">'
+      + '<div class="map-details-heading">'
+      + '<span class="map-detail-category is-soft" style="--detail-accent:' + config.accent + ';--detail-color:' + config.color + ';">' + escapeHtml(isRouteItem(item) ? t("routeBadge") : item.categoriaLabel) + '</span>'
+      + '<h2 id="mapDetailsTitle">' + escapeHtml(item.nome) + '</h2>'
+      + '<p>' + escapeHtml(description) + '</p>'
+      + (longDescription ? '<p class="map-details-long">' + escapeHtml(longDescription) + '</p>' : "")
+      + (isRouteItem(item) ? '<p class="map-detail-support">' + escapeHtml(t("routeSupport")) + '</p>' : "")
+      + '</div>'
+      + '<dl class="map-details-info">'
+      + renderMetaRow(t("address"), item.endereco || item.localizacao)
+      + renderMetaRow(t("contact"), item.telefone)
+      + renderMetaRow(t("hours"), item.horario)
+      + renderMetaRow(t("relatedRoute"), routeLabel)
+      + '</dl>'
+      + (tags.length ? '<section class="map-details-tags"><h3>' + escapeHtml(t("services")) + '</h3><div>' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join("") + '</div></section>' : "")
+      + renderDetailsGallery(item)
+      + '<div class="map-details-actions">'
+      + (item.possuiCoordenadas ? '<a class="map-button primary" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("directions")) + '</a>' : "")
+      + (item.whatsappUrl ? '<a class="map-button" href="' + escapeHtml(item.whatsappUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("whatsapp")) + '</a>' : "")
+      + (item.contactLink ? '<a class="map-button" href="' + escapeHtml(item.contactLink) + '" target="_blank" rel="noopener">' + escapeHtml(t("externalLink")) + '</a>' : "")
+      + '</div>'
+      + '</div>';
+  }
+
+  function openDetailsModal(itemId, opener) {
+    var item = getItemById(itemId);
+    var modal = ensureDetailsModal();
+    var content = modal.querySelector(".map-details-content");
+    var dialog = modal.querySelector(".map-details-dialog");
+    if (!item || !content || !dialog) return;
+
+    state.detailsLastFocus = opener || document.activeElement;
+    state.detailsLastItemId = item.id;
+    selectItem(item.id, false);
+    content.innerHTML = renderDetailsModalContent(item);
+    modal.removeAttribute("hidden");
+    modal.classList.add("is-open");
+    document.body.classList.add("map-details-open");
+    dialog.setAttribute("aria-label", item.nome + " - " + t("detailsTitleSuffix"));
+
+    var focusTarget = modal.querySelector(".map-details-close") || dialog;
+    focusTarget.focus();
+  }
+
+  function closeDetailsModal() {
+    var modal = state.detailsModal;
+    if (!modal || modal.hasAttribute("hidden")) return;
+    modal.classList.remove("is-open");
+    modal.setAttribute("hidden", "");
+    document.body.classList.remove("map-details-open");
+
+    if (state.detailsLastFocus && document.contains(state.detailsLastFocus) && typeof state.detailsLastFocus.focus === "function") {
+      state.detailsLastFocus.focus();
+    } else if (state.detailsLastItemId) {
+      var nextFocus = Array.prototype.find.call(document.querySelectorAll("[data-map-details-id]"), function (element) {
+        return element.getAttribute("data-map-details-id") === state.detailsLastItemId;
+      });
+      if (nextFocus && typeof nextFocus.focus === "function") {
+        nextFocus.focus();
+      }
+    }
+    state.detailsLastFocus = null;
+    state.detailsLastItemId = null;
+  }
+
+  function handleDetailsKeydown(event) {
+    var modal = state.detailsModal;
+    if (!modal || modal.hasAttribute("hidden")) return;
+
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeDetailsModal();
+      return;
+    }
+
+    if (event.key !== "Tab") return;
+
+    var focusable = getFocusableElements(modal);
+    if (!focusable.length) return;
+
+    var first = focusable[0];
+    var last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   function renderSelectedItem() {
     var container = document.getElementById("mapSelectedItem");
     if (!container) return;
@@ -887,10 +1183,10 @@
     state.selectedItemId = item.id;
 
     var meta = [];
-    if (item.localizacao) meta.push('<span class="map-meta-chip">📍 ' + item.localizacao + "</span>");
-    if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + item.telefone + "</span>");
-    if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + item.periodo + "</span>");
-    if (item.categoriaOriginal && item.panelGroup === "routes") meta.push('<span class="map-meta-chip">🗺️ ' + item.categoriaOriginal + "</span>");
+    if (item.localizacao) meta.push('<span class="map-meta-chip">📍 ' + escapeHtml(item.localizacao) + "</span>");
+    if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + escapeHtml(item.telefone) + "</span>");
+    if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + escapeHtml(item.periodo) + "</span>");
+    if (item.categoriaOriginal && item.panelGroup === "routes") meta.push('<span class="map-meta-chip">🗺️ ' + escapeHtml(item.categoriaOriginal) + "</span>");
     if (isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("routeBadge") + "</span>");
     if (!item.possuiCoordenadas && !isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("noCoordinates") + "</span>");
 
@@ -899,17 +1195,17 @@
       + getImageHtml(item, "map-detail-image")
       + '<div class="map-detail-top">'
       + "<div>"
-      + '<span class="map-detail-category is-soft" style="--detail-accent:' + getCategoryConfig(item.categoriaMapa).accent + ';--detail-color:' + getCategoryConfig(item.categoriaMapa).color + ';">' + item.categoriaLabel + "</span>"
-      + "<h3>" + item.nome + "</h3>"
+      + '<span class="map-detail-category is-soft" style="--detail-accent:' + getCategoryConfig(item.categoriaMapa).accent + ';--detail-color:' + getCategoryConfig(item.categoriaMapa).color + ';">' + escapeHtml(item.categoriaLabel) + "</span>"
+      + "<h3>" + escapeHtml(item.nome) + "</h3>"
       + "</div>"
       + '<span class="map-detail-badge">' + t("cardSelected") + "</span>"
       + "</div>"
-      + "<p>" + (item.descricao || t("noDescription")) + "</p>"
+      + "<p>" + escapeHtml(item.descricao || t("noDescription")) + "</p>"
       + (isRouteItem(item) ? '<p class="map-detail-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-detail-meta">' + meta.join("") + "</div>"
       + '<div class="map-detail-actions">'
-      + (item.url ? '<a class="map-button primary" href="' + item.url + '">' + t("details") + "</a>" : "")
-      + (item.possuiCoordenadas ? '<a class="map-button" href="' + item.mapsUrl + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
+      + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</div>";
   }
@@ -919,10 +1215,10 @@
     var config = getCategoryConfig(item.categoriaMapa);
     var tags = [];
 
-    tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + item.categoriaLabel + "</span>");
+    tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + escapeHtml(item.categoriaLabel) + "</span>");
     if (item.panelGroup === "routes" && item.categoriaOriginal) {
       tags.push('<span class="map-list-badge is-route">' + t("routeBadge") + "</span>");
-      tags.push('<span class="map-list-badge is-neutral">RO ' + item.categoriaOriginal + "</span>");
+      tags.push('<span class="map-list-badge is-neutral">RO ' + escapeHtml(item.categoriaOriginal) + "</span>");
     }
     if (!item.possuiCoordenadas && !isRouteItem(item)) {
       tags.push('<span class="map-list-badge is-missing">' + t("noCoordinates") + "</span>");
@@ -930,18 +1226,18 @@
 
     return ""
       + '<article class="map-list-card' + selectedClass + '">'
-      + '<button type="button" class="map-list-card-select" data-item-id="' + item.id + '" aria-label="' + item.nome + '">'
+      + '<button type="button" class="map-list-card-select" data-item-id="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(item.nome) + '">'
       + getImageHtml(item, "map-list-thumb")
       + '<div class="map-list-content">'
-      + "<h4>" + item.nome + "</h4>"
-      + "<p>" + (item.descricao || t("noDescription")) + "</p>"
+      + "<h4>" + escapeHtml(item.nome) + "</h4>"
+      + "<p>" + escapeHtml(item.descricao || t("noDescription")) + "</p>"
       + (isRouteItem(item) ? '<p class="map-list-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-list-card-tags">' + tags.join("") + "</div>"
       + "</div>"
       + "</button>"
       + '<div class="map-list-card-actions">'
-      + (item.url ? '<a class="map-button primary" href="' + item.url + '">' + t("details") + "</a>" : "")
-      + (item.possuiCoordenadas ? '<a class="map-button" href="' + item.mapsUrl + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
+      + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</article>";
   }
@@ -1117,6 +1413,16 @@
         selectItem(card.getAttribute("data-item-id"), true);
       });
     }
+
+    document.addEventListener("click", function (event) {
+      var detailsButton = event.target.closest("[data-map-details-id]");
+      if (!detailsButton) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openDetailsModal(detailsButton.getAttribute("data-map-details-id"), detailsButton);
+    });
+
+    document.addEventListener("keydown", handleDetailsKeydown);
 
     document.addEventListener("translationsApplied", function () {
       state.lang = getLang();

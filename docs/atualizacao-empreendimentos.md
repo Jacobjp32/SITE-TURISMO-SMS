@@ -39,6 +39,18 @@ Rodada realizada em 2026-05-15 a partir de `EMPREENDIMENTOS/`.
 - Hotel Moro: localização atualizada para BR-476 Km 167, Instagram adicionado nas tags/base de rota e descrição ajustada na hospedagem.
 - Ribeiro Pesca e Turismo: imagem principal adicionada ao item existente de rota.
 
+## Exibição no mapa turístico
+
+As informações e imagens vinculadas aos itens passam a aparecer também no modal de detalhes aberto pelo botão `Ver detalhes` em `mapa-turistico.html`. O modal usa `imagem` como foto principal e, quando existir `galeria`, exibe miniaturas extras sem criar nova página, backend ou catálogo separado.
+
+Galerias estruturadas nesta rodada:
+
+- `Ancestral Gastronomia`: 4 imagens em `images/empreendimentos/ancestral-gastronomia/`
+- `Nova Esperança`: 4 imagens web em `images/empreendimentos/nova-esperanca-equoterapia/`
+- `Ribeiro Pesca e Turismo`: 8 imagens em `images/empreendimentos/ribeiro-pesca/`
+
+Baldo, Marina Barra do Iguaçu, Ervateira Rei Verde e Hotel Moro exibem os campos textuais disponíveis no modal. Como não há imagem estática web vinculada com segurança para esses itens, o mapa mantém o fallback visual por categoria.
+
 ## Dados não incorporados por dúvida ou escopo
 
 - CNPJ e nome de responsável não foram expostos nos cards turísticos por não haver campo público equivalente na base atual.
