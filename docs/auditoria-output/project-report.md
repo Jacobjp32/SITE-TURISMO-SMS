@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-18T13:03:30.888Z.
+Gerado em 2026-05-18T13:27:49.555Z.
 
 ## Resumo
 
@@ -22,12 +22,12 @@ Gerado em 2026-05-18T13:03:30.888Z.
 | .jpeg | 20 | 4432852 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 31 | 610276 |
-| .html | 36 | 511668 |
+| .js | 31 | 610335 |
+| .html | 36 | 511118 |
 | .css | 21 | 286744 |
-| .md | 12 | 86372 |
-| .json | 3 | 63303 |
-| .mjs | 3 | 29339 |
+| .md | 12 | 88679 |
+| .json | 3 | 63320 |
+| .mjs | 3 | 29705 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
 | (sem ext) | 4 | 1607 |
@@ -129,8 +129,8 @@ Gerado em 2026-05-18T13:03:30.888Z.
 | admin-firebase.html | 34182 |
 | eventos.html | 34225 |
 | galeria.html | 38890 |
-| index.html | 145913 |
-| local.html | 20543 |
+| index.html | 145320 |
+| local.html | 20586 |
 | mapa-3d.html | 6253 |
 | mapa-completo.html | 10424 |
 | mapa-turistico.html | 10581 |
@@ -210,8 +210,8 @@ Gerado em 2026-05-18T13:03:30.888Z.
 | js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
 | config.js | 5 | index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
+| js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
 | js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
-| cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js | 2 | index.html, index.html |
 | js/data/eventos.js | 2 | index.html, mapa-turistico.html |
 | js/data/hospedagens.js | 2 | index.html, mapa-turistico.html |
 | js/data/informacoes-essenciais.js | 2 | index.html, mapa-turistico.html |
@@ -221,7 +221,6 @@ Gerado em 2026-05-18T13:03:30.888Z.
 | js/data/turismo-data-adapter.js | 2 | index.html, mapa-turistico.html |
 | js/data/turismo-data.js | 2 | index.html, mapa-turistico.html |
 | js/firebase-auth.js | 2 | admin-firebase.html, portal-usuario.html |
-| js/locais-data.js | 2 | index.html, mapa-turistico.html |
 | js/security-utils.js | 2 | admin-firebase.html, noticia.html |
 | js/avaliacoes.js | 1 | index.html |
 | js/chatbot.js | 1 | index.html |
@@ -237,9 +236,7 @@ Gerado em 2026-05-18T13:03:30.888Z.
 
 ## Loads duplicados no mesmo HTML
 
-| key | count |
-| --- | --- |
-| index.html\|cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js | 2 |
+_Nenhum item encontrado._
 
 
 ## CSS por arquivo

@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v11';
+const CACHE_NAME = 'turismo-sms-v12';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -77,8 +77,9 @@ self.addEventListener('fetch', event => {
     // Nunca cachear APIs externas / Firebase
     if (NEVER_CACHE.some(domain => event.request.url.includes(domain))) return;
 
-    // Nunca cachear JSON e HTML — sempre buscar da rede
+    // Nunca cachear navegacoes, JSON e HTML — sempre buscar da rede
     const url = new URL(event.request.url);
+    if (event.request.mode === 'navigate') return;
     if (NEVER_CACHE_EXT.some(ext => url.pathname.endsWith(ext))) return;
     
     event.respondWith(

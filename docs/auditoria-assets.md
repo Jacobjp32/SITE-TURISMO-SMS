@@ -48,6 +48,8 @@ Nao foram encontradas referencias quebradas reais em HTML/CSS/JS/dados turistico
 
 Observacao: os scripts ignoram `docs/` para evitar que exemplos documentais entrem como erro do site publicado.
 
+Rodada 1 de limpeza segura: nenhuma imagem foi apagada, movida, renomeada ou escolhida como canonica. As 35 orfas provaveis continuam pendentes de revisao humana posterior.
+
 ## 4. Imagens orfas provaveis
 
 | Arquivo | Tamanho | Observacao | Acao recomendada |

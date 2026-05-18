@@ -8,10 +8,29 @@ Principio: executar em fases pequenas, com validacao local, sem apagar dados ou 
 
 | Item | Risco | Arquivos envolvidos | Beneficio | Acao recomendada | Validacao humana |
 | --- | --- | --- | --- | --- | --- |
-| Corrigir anchors `/eventos#setembro` e `/eventos#dezembro` | Baixo | `index.html`, `eventos.html` | Remove links quebrados reais. | Criar anchors reais ou ajustar destino. | Sim, para confirmar intencao editorial. |
-| Resolver links `/portal/noticias/...` | Medio | `noticias.html` | Evita navegacao para rotas inexistentes. | Trocar por noticia local, ponte ou remover link depois. | Sim. |
-| Padronizar links obvios para mapa | Medio | `breadcrumbs.js`, HTMLs legados, busca | Reduz rotas concorrentes. | Fazer uma rota por vez. | Sim. |
-| Documentar ordem de scripts | Baixo | `docs/auditoria-js.md` | Evita `Identifier already declared`. | Ja documentado; manter atualizado. | Nao. |
+| Corrigir anchors `/eventos#setembro` e `/eventos#dezembro` | Baixo | `index.html` | Remove links quebrados reais. | Resolvido nesta rodada: ambos apontam para `/eventos/`, sem criar ancora falsa. | Revisar depois se houver campanha mensal com anchor real. |
+| Resolver links `/portal/noticias/...` | Medio | `noticias.html`, `scripts/audit-links.mjs` | Evita falso positivo como rota local inexistente. | Resolvido como falso positivo da auditoria: links continuam externos para o portal oficial da Prefeitura. | Sim, se houver decisao de trazer noticias locais. |
+| Padronizar links obvios para mapa | Medio | `manifest.json`, paginas legadas | Reduz rotas concorrentes. | Resolvido apenas no atalho PWA `O Que Fazer`, agora para `/mapa-turistico.html?grupo=roteiros`. Demais rotas antigas seguem preservadas. | Sim. |
+| Documentar ordem de scripts | Baixo | `docs/auditoria-js.md` | Evita `Identifier already declared`. | Mantido e atualizado com a limpeza do artefato Cloudflare. | Nao. |
+
+### Rodada 1 - executada em 18/05/2026
+
+Resolvido:
+
+- `index.html`: links `/eventos#setembro` e `/eventos#dezembro` trocados por `/eventos/`.
+- `index.html`: residuos Cloudflare de email protection removidos e email exposto como `mailto:turismo@saomateusdosul.pr.gov.br`.
+- `manifest.json`: atalho PWA `O Que Fazer` direcionado para o grupo de roteiros no mapa turistico.
+- `scripts/audit-links.mjs`: falsos positivos corrigidos para links externos oficiais, strings de CSS/data SVG, comentarios JS e assets injetados por JS.
+- `local.html`: carregamento de `js/locais-data.js` antecipado para a pagina individual funcionar em `/local/?id=...`.
+- `sw.js`: navegacoes deixam de ser cacheadas para evitar HTML antigo em rotas sem `.html`; cache atualizado para `turismo-sms-v12`.
+
+Adiado:
+
+- remocao de imagens orfas provaveis;
+- escolha de imagem canonica;
+- mudanca estrutural nas paginas legadas;
+- migracao de dados turisticos ou bases legadas;
+- refatoracao de CSS/JS sensiveis.
 
 ## Fase 2 - Assets
 
@@ -75,7 +94,7 @@ Principio: executar em fases pequenas, com validacao local, sem apagar dados ou 
 - escolha de imagem canonica;
 - conversao de HEIC/DNG;
 - papel publico de paginas antigas;
-- destino das noticias de portal;
+- eventual espelhamento local das noticias hoje vinculadas ao portal externo oficial;
 - estado de `portal-usuario`, `admin-firebase` e `reservas`;
 - textos editoriais e categorias que afetam narrativa do turismo.
 

@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-05-18T13:03:29.357Z",
+  "generatedAt": "2026-05-18T13:27:49.793Z",
   "totals": {
     "filesScanned": 92,
-    "links": 587,
+    "links": 579,
     "routes": 43,
-    "broken": 19,
-    "legacy": 12,
+    "broken": 0,
+    "legacy": 16,
     "redundant": 66,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
@@ -184,103 +184,7 @@
       "file": "transparencia.html"
     }
   ],
-  "broken": [
-    {
-      "source": "css/index.css",
-      "url": "/></g></g></svg>",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "index.html",
-      "url": "/eventos#setembro",
-      "issue": "anchor inexistente no destino"
-    },
-    {
-      "source": "index.html",
-      "url": "/eventos#dezembro",
-      "issue": "anchor inexistente no destino"
-    },
-    {
-      "source": "index.html",
-      "url": "/cdn-cgi/l/email-protection#0c78797e657f61634c7f6d63616d7869797f68637f7960227c7e226b637a226e7e",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "index.html",
-      "url": "/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
-      "issue": "asset interno inexistente"
-    },
-    {
-      "source": "index.html",
-      "url": "/cdn-cgi/l/email-protection#631716110a100e0c2310020c0e0217061610070c10160f4d13114d040c154d0111",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "js/loading.js",
-      "url": "js/loading.js",
-      "issue": "asset interno inexistente"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "images/logo_header_branca.png",
-      "issue": "asset interno inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/3/1/50/0/0/0",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3431/sao-mateus-do-sul-abre-inscricoes-para-projetos-culturais-com-recursos-da-politica-nacional-aldir-blanc/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3408/eleicao-de-nova-diretoria-e-planejamento-estrategico-marcam-reuniao-do-conselho-de-turismo/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3420/atencao---chamamento-geral-para-artistas-locais/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3363/palestra-sobre-inteligencia-artificial-reune-publico-na-incubadora-inova-sao-mateus/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3333/sao-mateus-do-sul-conclui-a-jornada-do-turismo-com-integracao-e-valorizacao-do-setor/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3347/confira-a-programacao-completa-do-natal-ouro-verde-em-familia-2025-na-rua-do-mathe/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3249/sao-mateus-do-sul-recebe-caravana-de-trailers-e-motorhomes-nesta-sexta-feira-88/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3227/agosto-e-polones-em-sao-mateus-do-sul/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3206/vem-ai-a-6-edicao-da-polskie-smaki/",
-      "issue": "rota interna inexistente"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/portal/noticias/0/3/3149/3-edicao-do-agrosamas-supera-expectativas-e-movimenta-a-economia-em-sao-mateus-do-sul/",
-      "issue": "rota interna inexistente"
-    }
-  ],
+  "broken": [],
   "legacy": [
     {
       "source": "js/breadcrumbs.js",
@@ -313,13 +217,13 @@
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
-      "source": "manifest.json",
-      "url": "/o-que-fazer.html?utm_source=pwa-shortcut",
+      "source": "mapa-3d/index.html",
+      "url": "/mapa-3d.html",
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
-      "source": "mapa-3d/index.html",
-      "url": "/mapa-3d.html",
+      "source": "mapa-3d.html",
+      "url": "/mapa-3d",
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
@@ -334,12 +238,32 @@
     },
     {
       "source": "o-que-fazer/index.html",
+      "url": "/o-que-fazer",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "o-que-fazer/index.html",
       "url": "/o-que-fazer.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "o-que-fazer.html",
+      "url": "/o-que-fazer",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "onde-ficar.html",
+      "url": "/onde-ficar",
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
       "source": "rotas-completas/index.html",
       "url": "/rotas-completas.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "sabores.html",
+      "url": "/sabores",
       "issue": "rota legada ou concorrente ao mapa"
     }
   ],
@@ -531,7 +455,7 @@
     },
     {
       "source": "manifest.json",
-      "url": "/o-que-fazer.html?utm_source=pwa-shortcut",
+      "url": "/mapa-turistico.html?grupo=roteiros&utm_source=pwa-shortcut",
       "issue": "existe variante sem .html"
     },
     {

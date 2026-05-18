@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T13:03:30.888Z",
+  "generatedAt": "2026-05-18T13:27:49.555Z",
   "totals": {
     "files": 248,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 31,
-      "bytes": 610276
+      "bytes": 610335
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 511668
+      "bytes": 511118
     },
     {
       "ext": ".css",
@@ -62,17 +62,17 @@
     {
       "ext": ".md",
       "files": 12,
-      "bytes": 86372
+      "bytes": 88679
     },
     {
       "ext": ".json",
       "files": 3,
-      "bytes": 63303
+      "bytes": 63320
     },
     {
       "ext": ".mjs",
       "files": 3,
-      "bytes": 29339
+      "bytes": 29705
     },
     {
       "ext": ".xml",
@@ -149,7 +149,7 @@
     {
       "dir": ".",
       "files": 36,
-      "bytes": 773811
+      "bytes": 773337
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -169,7 +169,7 @@
     {
       "dir": "docs",
       "files": 12,
-      "bytes": 86372
+      "bytes": 88679
     },
     {
       "dir": "js/data",
@@ -179,7 +179,7 @@
     {
       "dir": "scripts",
       "files": 3,
-      "bytes": 29339
+      "bytes": 29705
     },
     {
       "dir": "cloudflare-worker",
@@ -768,13 +768,13 @@
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 145913
+      "bytes": 145320
     },
     {
       "path": "local.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20543
+      "bytes": 20586
     },
     {
       "path": "mapa-3d.html",
@@ -1274,8 +1274,6 @@
         "js/site-stats.js",
         "js/search-index.js",
         "js/search.js",
-        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
-        "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
         "https://vlibras.gov.br/app/vlibras-plugin.js",
         "js/scroll-animations.js",
         "js/chatbot.js",
@@ -1361,6 +1359,7 @@
       "file": "local.html",
       "scripts": [
         "https://www.googletagmanager.com/gtag/js",
+        "js/locais-data.js",
         "js/breadcrumbs.js",
         "js/nav-shared.js",
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
@@ -2938,7 +2937,7 @@
     },
     {
       "file": "sw.js",
-      "bytes": 5087,
+      "bytes": 5146,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",
@@ -3008,14 +3007,14 @@
       "examples": "eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html"
     },
     {
+      "script": "js/locais-data.js",
+      "pages": 3,
+      "examples": "index.html, local.html, mapa-turistico.html"
+    },
+    {
       "script": "js/rotas-data.js",
       "pages": 3,
       "examples": "index.html, mapa-completo.html, mapa-turistico.html"
-    },
-    {
-      "script": "cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
-      "pages": 2,
-      "examples": "index.html, index.html"
     },
     {
       "script": "js/data/eventos.js",
@@ -3061,11 +3060,6 @@
       "script": "js/firebase-auth.js",
       "pages": 2,
       "examples": "admin-firebase.html, portal-usuario.html"
-    },
-    {
-      "script": "js/locais-data.js",
-      "pages": 2,
-      "examples": "index.html, mapa-turistico.html"
     },
     {
       "script": "js/security-utils.js",
@@ -3123,12 +3117,7 @@
       "examples": "index.html"
     }
   ],
-  "scriptDuplicateLoads": [
-    {
-      "key": "index.html|cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js",
-      "count": 2
-    }
-  ],
+  "scriptDuplicateLoads": [],
   "sharedGlobals": [
     {
       "global": "window.addEventListener",

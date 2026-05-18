@@ -125,9 +125,9 @@ Resumo automatico:
 
 | Item | Quantidade |
 | --- | ---: |
-| Links internos analisados | 587 |
-| Links quebrados ou suspeitos | 19 |
-| Candidatos legados/redundantes | 12 |
+| Links internos/externos analisados | 579 |
+| Links quebrados ou suspeitos | 0 |
+| Candidatos legados/concorrentes | 16 |
 | Links internos com `.html` | 66 |
 | Links que precisam de decisao humana | 17 |
 | Links `Ver detalhes` que ainda navegam indevidamente | 0 |
@@ -136,13 +136,14 @@ Resumo automatico:
 
 | Origem | Destino | Diagnostico | Acao |
 | --- | --- | --- | --- |
-| `index.html` | `/eventos#setembro` | Anchor nao encontrado no destino estatico. | Criar anchor real ou ajustar link. |
-| `index.html` | `/eventos#dezembro` | Anchor nao encontrado no destino estatico. | Criar anchor real ou ajustar link. |
-| `noticias.html` | `/portal/noticias/...` | Rotas de portal nao existem no site estatico. | Decidir se sao externas, legadas ou devem virar noticias locais. |
-| `index.html` | `/cdn-cgi/l/email-protection...` | Artefato Cloudflare/email protection, nao rota local. | Revisar se o HTML exportado deve manter isso. |
-| `css/index.css` | trecho SVG detectado como URL | Falso positivo do scanner em SVG/data string. | Sem acao imediata. |
-| `js/loading.js` | `js/loading.js` | Falso positivo por string em script. | Sem acao imediata. |
-| `js/nav-shared.js` | `images/logo_header_branca.png` | Falso positivo de resolucao relativa em JS; arquivo existe. | Sem acao imediata. |
+| `index.html` | `/eventos#setembro` | Anchor nao existia no destino estatico. | Resolvido: link alterado para `/eventos/`. |
+| `index.html` | `/eventos#dezembro` | Anchor nao existia no destino estatico. | Resolvido: link alterado para `/eventos/`. |
+| `noticias.html` | `https://www.saomateusdosul.pr.gov.br/portal/noticias/...` | Link externo oficial era tratado como rota interna pelo auditor. | Resolvido no auditor; links externos preservados. |
+| `index.html` | `/cdn-cgi/l/email-protection...` | Artefato Cloudflare/email protection, nao rota local. | Resolvido: substituido por `mailto:` direto e script Cloudflare removido. |
+| `css/index.css` | trecho SVG detectado como URL | Falso positivo do scanner em SVG/data string. | Resolvido no auditor; CSS nao foi alterado. |
+| `js/loading.js` | `js/loading.js` | Falso positivo por string em comentario/script. | Resolvido no auditor; JS do site nao foi alterado. |
+| `js/nav-shared.js` | `images/logo_header_branca.png` | Falso positivo de resolucao relativa em JS; arquivo existe. | Resolvido no auditor; `nav-shared.js` preservado. |
+| `local/?id=...` | pagina individual carregava antes da base `locaisData` em cache antigo. | Ordem de script corrigida em `local.html` e navegacoes sem `.html` deixam de ser cacheadas pelo service worker. |
 
 Lista completa: `docs/auditoria-output/links-report.md`.
 
@@ -179,10 +180,11 @@ Possiveis candidatos, dependendo da decisao editorial:
 - `local.html` e `/local/?id=...` enquanto paginas individuais existirem;
 - pontes `*/index.html` enquanto houver compatibilidade de URLs;
 - links externos reais de contato, mapa, site, Instagram e WhatsApp quando vinculados a dados confirmados.
+- links externos oficiais do portal da Prefeitura em `noticias.html`, ate decisao de espelhar ou criar noticias locais.
 
 ### Links que precisam de decisao humana
 
-- noticias em `/portal/noticias/...`;
+- eventual espelhamento local das noticias hoje apontadas para o portal externo oficial;
 - paginas `portal-usuario`, `reservas`, `admin-firebase`;
 - rota experimental `mapa-3d`;
 - uso publico de `mapa-completo`;
@@ -196,7 +198,7 @@ Possiveis candidatos, dependendo da decisao editorial:
 | Bases antigas ainda necessarias | Alta | `locais-data.js` e `rotas-data.js` alimentam mapa via adapter. | Nao remover ate migracao completa. |
 | Rotas antigas competindo com mapa | Media | `o-que-fazer`, `sabores`, `onde-ficar`, `rotas-completas`. | Transformar em ponte gradualmente. |
 | Midias pesadas | Media | Videos de 90 MB+ e PNGs de 3 MB a 5 MB. | Otimizar em fase propria. |
-| Links de noticias para portal inexistente | Media | Varios `/portal/noticias/...`. | Decidir destino ou criar ponte. |
+| Noticias dependentes do portal externo | Media | `noticias.html` aponta para o portal oficial da Prefeitura. | Manter externo por enquanto; criar noticia local somente com decisao editorial. |
 | Dados fixos fora do centralizador | Media | `chatbot.js`, `roteiro-ia.js`, partes da HOME. | Migrar com testes em fase futura. |
 | Ordem de carregamento de scripts | Alta | Dados globais e adapter dependem de ordem. | Documentar e reduzir globais antes de mexer. |
-| Service worker/cache | Media | Pode manter versoes antigas de scripts. | Revisar cache antes de grandes trocas de JS/CSS. |
+| Service worker/cache | Media | Pode manter versoes antigas se a rota nao tiver extensao. | Rodada 1 ajustou navegacoes para sempre buscar da rede; revisar cache antes de grandes trocas de JS/CSS. |

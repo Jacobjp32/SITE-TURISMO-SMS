@@ -50,7 +50,7 @@
       "name": "O Que Fazer",
       "short_name": "Rotas",
       "description": "Explore as 6 rotas turísticas",
-      "url": "/o-que-fazer.html?utm_source=pwa-shortcut",
+      "url": "/mapa-turistico.html?grupo=roteiros&utm_source=pwa-shortcut",
       "icons": [{ "src": "images/logo_pin_turismo_3d.png", "sizes": "96x96" }]
     }
   ],

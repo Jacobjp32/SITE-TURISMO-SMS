@@ -77,9 +77,22 @@ Risco: os arquivos legados usam `const` globais, como `locaisData`, `routeInfo` 
 | Busca e chatbot com conteudo proprio | `search-index.js` e `chatbot.js` possuem textos fixos/fallbacks. | Reduzir duplicidade em fase futura. |
 | Roteiro IA com pontos proprios | `js/roteiro-ia.js` nao depende totalmente de `TURISMO_DATA`. | Migrar depois. |
 | Mapas separados | `mapa-turistico.js`, `mapa-completo.js`, `mapa3d.js`. | Definir quais ficam publicos. |
-| Cloudflare email decode | `index.html` carrega script detectado em duplicidade. | Revisar se e artefato exportado necessario. |
+| Cloudflare email decode | `index.html` carregava script externo de email protection em duplicidade. | Resolvido na rodada 1: email convertido para `mailto:` e scripts Cloudflare removidos. |
 
-## 6. Riscos
+## 6. Ajuste no auditor de links
+
+Na rodada 1, `scripts/audit-links.mjs` foi ajustado para reduzir falsos positivos sem alterar a logica do site:
+
+- links externos oficiais da Prefeitura deixam de ser reduzidos para rota local;
+- strings de CSS/data SVG nao entram como links internos;
+- comentarios JS deixam de gerar falso positivo de asset;
+- assets injetados por JS tambem podem ser resolvidos a partir da raiz publica.
+
+Na mesma rodada, `local.html` passou a carregar `js/locais-data.js` antes do script inline da pagina individual. A alteracao preserva a base legada e evita o estado falso de "Local nao encontrado" em `/local/?id=igreja-matriz`.
+
+`sw.js` tambem foi ajustado de `turismo-sms-v11` para `turismo-sms-v12` e deixou de cachear requisicoes de navegacao, mantendo coerencia com a regra documentada de nao cachear HTML.
+
+## 7. Riscos
 
 | Risco | Gravidade | Recomendacao |
 | --- | --- | --- |
@@ -90,7 +103,7 @@ Risco: os arquivos legados usam `const` globais, como `locaisData`, `routeInfo` 
 | Links antigos em `search-index.js` | Media | Padronizar URLs na fase de rotas. |
 | Modal de detalhes depender de campos opcionais | Baixa | Continuar ocultando campo vazio/ausente. |
 
-## 7. Recomendacoes de limpeza
+## 8. Recomendacoes de limpeza
 
 1. Congelar scripts legados enquanto ainda alimentam dados.
 2. Padronizar ordem de carregamento em `index.html` e `mapa-turistico.html`.

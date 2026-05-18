@@ -1,41 +1,21 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-05-18T13:03:29.357Z.
+Gerado em 2026-05-18T13:27:49.793Z.
 
 ## Resumo
 
 - Arquivos varridos: 92
-- Links internos/externos coletados: 587
+- Links internos/externos coletados: 579
 - Rotas HTML conhecidas: 43
-- Links quebrados: 19
-- Links legados/concorrentes: 12
+- Links quebrados: 0
+- Links legados/concorrentes: 16
 - Links redundantes com .html: 66
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
 ## Links quebrados
 
-| source | url | issue |
-| --- | --- | --- |
-| css/index.css | /></g></g></svg> | rota interna inexistente |
-| index.html | /eventos#setembro | anchor inexistente no destino |
-| index.html | /eventos#dezembro | anchor inexistente no destino |
-| index.html | /cdn-cgi/l/email-protection#0c78797e657f61634c7f6d63616d7869797f68637f7960227c7e226b637a226e7e | rota interna inexistente |
-| index.html | /cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js | asset interno inexistente |
-| index.html | /cdn-cgi/l/email-protection#631716110a100e0c2310020c0e0217061610070c10160f4d13114d040c154d0111 | rota interna inexistente |
-| js/loading.js | js/loading.js | asset interno inexistente |
-| js/nav-shared.js | images/logo_header_branca.png | asset interno inexistente |
-| noticias.html | /portal/noticias/3/1/50/0/0/0 | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3431/sao-mateus-do-sul-abre-inscricoes-para-projetos-culturais-com-recursos-da-politica-nacional-aldir-blanc/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3408/eleicao-de-nova-diretoria-e-planejamento-estrategico-marcam-reuniao-do-conselho-de-turismo/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3420/atencao---chamamento-geral-para-artistas-locais/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3363/palestra-sobre-inteligencia-artificial-reune-publico-na-incubadora-inova-sao-mateus/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3333/sao-mateus-do-sul-conclui-a-jornada-do-turismo-com-integracao-e-valorizacao-do-setor/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3347/confira-a-programacao-completa-do-natal-ouro-verde-em-familia-2025-na-rua-do-mathe/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3249/sao-mateus-do-sul-recebe-caravana-de-trailers-e-motorhomes-nesta-sexta-feira-88/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3227/agosto-e-polones-em-sao-mateus-do-sul/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3206/vem-ai-a-6-edicao-da-polskie-smaki/ | rota interna inexistente |
-| noticias.html | /portal/noticias/0/3/3149/3-edicao-do-agrosamas-supera-expectativas-e-movimenta-a-economia-em-sao-mateus-do-sul/ | rota interna inexistente |
+_Nenhum item encontrado._
 
 
 ## Links legados ou concorrentes
@@ -48,12 +28,16 @@ Gerado em 2026-05-18T13:03:29.357Z.
 | js/breadcrumbs.js | /rotas-completas | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /mapa-completo | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /mapa-3d | rota legada ou concorrente ao mapa |
-| manifest.json | /o-que-fazer.html?utm_source=pwa-shortcut | rota legada ou concorrente ao mapa |
 | mapa-3d/index.html | /mapa-3d.html | rota legada ou concorrente ao mapa |
+| mapa-3d.html | /mapa-3d | rota legada ou concorrente ao mapa |
 | mapa-3d.html | /mapa-completo | rota legada ou concorrente ao mapa |
 | mapa-completo/index.html | /mapa-completo.html | rota legada ou concorrente ao mapa |
+| o-que-fazer/index.html | /o-que-fazer | rota legada ou concorrente ao mapa |
 | o-que-fazer/index.html | /o-que-fazer.html | rota legada ou concorrente ao mapa |
+| o-que-fazer.html | /o-que-fazer | rota legada ou concorrente ao mapa |
+| onde-ficar.html | /onde-ficar | rota legada ou concorrente ao mapa |
 | rotas-completas/index.html | /rotas-completas.html | rota legada ou concorrente ao mapa |
+| sabores.html | /sabores | rota legada ou concorrente ao mapa |
 
 
 ## Links redundantes com .html
@@ -97,7 +81,7 @@ Gerado em 2026-05-18T13:03:29.357Z.
 | manifest.json | /index.html?utm_source=pwa | existe variante sem .html |
 | manifest.json | /eventos.html?utm_source=pwa-shortcut | existe variante sem .html |
 | manifest.json | /reservas.html?utm_source=pwa-shortcut | existe variante sem .html |
-| manifest.json | /o-que-fazer.html?utm_source=pwa-shortcut | existe variante sem .html |
+| manifest.json | /mapa-turistico.html?grupo=roteiros&utm_source=pwa-shortcut | existe variante sem .html |
 | mapa-3d/index.html | /mapa-3d.html | existe variante sem .html |
 | mapa-completo/index.html | /mapa-completo.html | existe variante sem .html |
 | mapa-turistico.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |

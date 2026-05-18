@@ -24,7 +24,7 @@ async function walk(dir) {
 }
 
 function stripOrigin(value) {
-  return String(value || "").replace(/^https?:\/\/(?:www\.)?saomateusdosul(?:\.pr)?[^/]*/i, "");
+  return String(value || "").replace(/^https?:\/\/turismo\.saomateusdosul\.pr\.gov\.br(?=\/|$)/i, "");
 }
 
 function cleanUrl(value) {
@@ -75,13 +75,18 @@ function htmlAnchors(text) {
 
 function extractLinks(text, source) {
   const links = [];
+  const sourceExt = path.extname(source).toLowerCase();
   const attrPattern = /\b(?:href|src|action)=["']([^"']+)["']/gi;
   const stringPattern = /["'`]((?:\/|\.\/|\.\.\/)[^"'`\s]+|[A-Za-z0-9_-]+\.html(?:[?#][^"'`\s]*)?)["'`]/g;
   for (const match of text.matchAll(attrPattern)) {
     const url = cleanUrl(match[1]);
     if (url) links.push({ source, raw: match[1], url, kind: "attr" });
   }
-  for (const match of text.matchAll(stringPattern)) {
+  if (sourceExt === ".css") return links;
+  const searchableText = [".js", ".mjs"].includes(sourceExt)
+    ? text.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1")
+    : text;
+  for (const match of searchableText.matchAll(stringPattern)) {
     const url = cleanUrl(match[1]);
     if (url) links.push({ source, raw: match[1], url, kind: "string" });
   }
@@ -163,7 +168,8 @@ for (const link of uniqueLinks) {
   const relativePath = resolveProjectPath(link.source, pathname);
 
   if (isAssetPath(pathname)) {
-    const exists = existingFileSet.has(relativePath);
+    const rootRelativePath = pathname.replace(/^\/+/, "");
+    const exists = existingFileSet.has(relativePath) || existingFileSet.has(rootRelativePath);
     if (!exists) broken.push({ source: link.source, url: link.url, issue: "asset interno inexistente" });
     continue;
   }

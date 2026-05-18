@@ -9,7 +9,7 @@ Escopo: textos em HTML, JS, dados, busca, modal de detalhes e paginas legadas. N
 | Tema | Onde aparece | Risco | Recomendacao |
 | --- | --- | --- | --- |
 | Mapa turistico | HOME, `mapa-turistico.html`, busca, chatbot, informacoes essenciais | Baixo | Manter como fluxo principal. |
-| O Que Fazer | `o-que-fazer.html`, ponte, breadcrumbs, manifest | Medio | Decidir se vira ponte para mapa filtrado. |
+| O Que Fazer | `o-que-fazer.html`, ponte, breadcrumbs, manifest | Medio | Atalho PWA ja aponta para roteiros no mapa; pagina legada segue preservada. |
 | Rotas Completas | `rotas-completas.html`, ponte, breadcrumbs | Medio | Evitar tratar como catalogo principal. |
 | Sabores | `sabores.html`, ponte, cards de gastronomia | Medio | Consolidar com categoria Gastronomia no mapa. |
 | Onde Ficar | `onde-ficar.html`, ponte, busca | Medio | Consolidar com categoria Hospedagem no mapa. |
@@ -19,7 +19,7 @@ Escopo: textos em HTML, JS, dados, busca, modal de detalhes e paginas legadas. N
 
 | Local | Sinal | Acao recomendada |
 | --- | --- | --- |
-| `noticias.html` | Links para `/portal/noticias/...` sem rota local. | Decidir destino real ou transformar em placeholder claro. |
+| `noticias.html` | Links externos para o portal oficial da Prefeitura. | Mantidos como fonte externa; criar noticia local apenas com decisao editorial. |
 | `portal-usuario.html` | Fluxo administrativo/usuario sem clareza de status publico. | Decidir se fica oculto, ponte ou futuro admin. |
 | `roteiro-ia.html` | Texto/experiencia com base propria. | Revisar quando migrar para `TURISMO_DATA`. |
 | `chatbot.js` | Respostas podem ficar atrasadas em relacao ao mapa. | Passar a consultar dados centrais em fase futura. |
@@ -51,7 +51,7 @@ Acao recomendada:
 | Caso | Evidencia | Acao |
 | --- | --- | --- |
 | `https://maps.app.goo.gl/exemplo` | Encontrado em dados legados. | Substituir somente quando houver URL real confirmada. |
-| Noticias `/portal/noticias/...` | Rotas locais inexistentes. | Decisao humana. |
+| Noticias no portal externo | Links oficiais preservados em `noticias.html`. | Decisao humana apenas se o conteudo passar a ser espelhado localmente. |
 | Exemplos de imagem em docs | Referencias de exemplo sem arquivo real. | Pode manter como exemplo ou marcar como ficticio. |
 | Telefone/site/Instagram ausentes | Campos opcionais em dados. | Ocultar no modal, nao inventar. |
 
