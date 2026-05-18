@@ -8,7 +8,7 @@ const translations = {
   pt: {
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 O Que Fazer',
-    'page-oqfazer-subtitulo': 'As experiências, roteiros e pontos turísticos agora estão reunidos no Mapa Turístico Interativo.',
+    'page-oqfazer-subtitulo': 'Esta página foi mantida por compatibilidade. A exploração principal agora acontece no Mapa Turístico.',
     'oqf-rotas-h': '🗺️ Rotas Temáticas',
     'oqf-rotas-sub': 'Escolha sua experiência e mergulhe na cultura de São Mateus do Sul',
     'oqf-badge-ig': 'Indicação Geográfica',

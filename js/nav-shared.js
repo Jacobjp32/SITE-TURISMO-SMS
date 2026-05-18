@@ -429,6 +429,40 @@ body.font-larger{font-size:140%!important;}
         var links  = document.getElementById('navLinks');
         var overlay= document.getElementById('menuOverlay');
 
+        function closeMobileMenu() {
+            toggle && toggle.classList.remove('active');
+            links && links.classList.remove('active');
+            overlay && overlay.classList.remove('active');
+            toggle && toggle.setAttribute('aria-expanded', 'false');
+            document.body.classList.remove('nav-menu-open');
+            closeAllDropdowns();
+        }
+
+        function isModifiedClick(event) {
+            return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0;
+        }
+
+        function shouldForceMobileNavigation(link, event) {
+            if (!link || event.defaultPrevented || isModifiedClick(event)) return false;
+            if (link.target && link.target !== '_self') return false;
+            if (!window.matchMedia || !window.matchMedia('(max-width: 1180px)').matches) return false;
+
+            var targetUrl;
+            try {
+                targetUrl = new URL(link.href, window.location.href);
+            } catch (error) {
+                return false;
+            }
+
+            if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') return false;
+
+            var sameDocument = targetUrl.origin === window.location.origin
+                && targetUrl.pathname === window.location.pathname
+                && targetUrl.search === window.location.search;
+
+            return !(sameDocument && targetUrl.hash);
+        }
+
         if (toggle && links) {
             toggle.addEventListener('click', function () {
                 toggle.classList.toggle('active');
@@ -443,12 +477,7 @@ body.font-larger{font-size:140%!important;}
         }
         if (overlay) {
             overlay.addEventListener('click', function () {
-                toggle && toggle.classList.remove('active');
-                links  && links.classList.remove('active');
-                toggle && toggle.setAttribute('aria-expanded', 'false');
-                overlay.classList.remove('active');
-                document.body.classList.remove('nav-menu-open');
-                closeAllDropdowns();
+                closeMobileMenu();
             });
         }
 
@@ -497,33 +526,29 @@ body.font-larger{font-size:140%!important;}
 
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
-                toggle && toggle.classList.remove('active');
-                links && links.classList.remove('active');
-                overlay && overlay.classList.remove('active');
-                toggle && toggle.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('nav-menu-open');
-                closeAllDropdowns();
+                closeMobileMenu();
             }
         });
 
         // Search triggers close the mobile drawer first
         document.querySelectorAll('[data-search-open]').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                toggle && toggle.classList.remove('active');
-                links && links.classList.remove('active');
-                overlay && overlay.classList.remove('active');
-                toggle && toggle.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('nav-menu-open');
+                closeMobileMenu();
             });
         });
 
         document.querySelectorAll('#navLinks a').forEach(function(link) {
-            link.addEventListener('click', function() {
-                toggle && toggle.classList.remove('active');
-                links && links.classList.remove('active');
-                overlay && overlay.classList.remove('active');
-                toggle && toggle.setAttribute('aria-expanded', 'false');
-                document.body.classList.remove('nav-menu-open');
+            link.addEventListener('click', function(event) {
+                var href = link.href;
+                var forceNavigation = shouldForceMobileNavigation(link, event);
+                closeMobileMenu();
+                if (forceNavigation) {
+                    window.setTimeout(function() {
+                        if (!event.defaultPrevented && document.visibilityState !== 'hidden') {
+                            window.location.href = href;
+                        }
+                    }, 80);
+                }
             });
         });
 
@@ -554,6 +579,7 @@ body.font-larger{font-size:140%!important;}
                         });
                     }
                     localStorage.setItem('sms-lang', lang);
+                    closeMobileMenu();
                 });
             });
             // Restaurar idioma salvo

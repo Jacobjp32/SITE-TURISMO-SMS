@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-18T13:27:49.555Z.
+Gerado em 2026-05-18T18:39:39.188Z.
 
 ## Resumo
 
-- Arquivos mapeados: 248
+- Arquivos mapeados: 251
 - HTMLs: 36
 - CSS: 21
-- JS: 31
+- JS: 32
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,12 +22,12 @@ Gerado em 2026-05-18T13:27:49.555Z.
 | .jpeg | 20 | 4432852 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 31 | 610335 |
-| .html | 36 | 511118 |
-| .css | 21 | 286744 |
-| .md | 12 | 88679 |
+| .js | 32 | 615056 |
+| .html | 36 | 512357 |
+| .css | 21 | 289122 |
+| .md | 13 | 93258 |
 | .json | 3 | 63320 |
-| .mjs | 3 | 29705 |
+| .mjs | 4 | 30868 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
 | (sem ext) | 4 | 1607 |
@@ -128,22 +128,22 @@ Gerado em 2026-05-18T13:27:49.555Z.
 | 404.html | 2862 |
 | admin-firebase.html | 34182 |
 | eventos.html | 34225 |
-| galeria.html | 38890 |
-| index.html | 145320 |
-| local.html | 20586 |
+| galeria.html | 38167 |
+| index.html | 146991 |
+| local.html | 20635 |
 | mapa-3d.html | 6253 |
 | mapa-completo.html | 10424 |
-| mapa-turistico.html | 10581 |
+| mapa-turistico.html | 10625 |
 | noticia.html | 6276 |
-| noticias.html | 20635 |
-| o-que-fazer.html | 5797 |
+| noticias.html | 20681 |
+| o-que-fazer.html | 5852 |
 | offline.html | 2356 |
 | onde-ficar.html | 17711 |
 | para-o-trade.html | 15013 |
 | portal-usuario.html | 37913 |
-| privacidade.html | 22349 |
+| privacidade.html | 22396 |
 | reservas.html | 5654 |
-| rotas-completas.html | 4131 |
+| rotas-completas.html | 4181 |
 | roteiro-ia.html | 3243 |
 | sabores.html | 30227 |
 | transparencia.html | 21170 |
@@ -195,7 +195,7 @@ Gerado em 2026-05-18T13:27:49.555Z.
 | portal-usuario.html | 37913 |
 | reservas.html | 5654 |
 | rotas-completas/index.html | 767 |
-| rotas-completas.html | 4131 |
+| rotas-completas.html | 4181 |
 | roteiro-ia.html | 3243 |
 
 
@@ -208,6 +208,7 @@ Gerado em 2026-05-18T13:27:49.555Z.
 | js/nav-shared.js | 17 | eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html, noticias.html |
 | js/cookies.js | 16 | 404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html |
 | js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
+| js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
 | config.js | 5 | index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
 | js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
@@ -245,14 +246,14 @@ _Nenhum item encontrado._
 | --- | --- | --- | --- | --- |
 | css/404.css | 2306 | 0 | 1 | 18 |
 | css/eventos.css | 16158 | 5 | 2 | 99 |
-| css/galeria.css | 8674 | 0 | 3 | 85 |
-| css/index.css | 132714 | 448 | 38 | 752 |
+| css/galeria.css | 9234 | 0 | 3 | 89 |
+| css/index.css | 133491 | 458 | 40 | 757 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
-| css/mapa-turistico.css | 32538 | 13 | 7 | 227 |
+| css/mapa-turistico.css | 33403 | 13 | 7 | 236 |
 | css/noticia.css | 2034 | 0 | 1 | 18 |
 | css/noticias.css | 3926 | 0 | 2 | 40 |
-| css/o-que-fazer.css | 3488 | 1 | 1 | 21 |
+| css/o-que-fazer.css | 3662 | 1 | 1 | 21 |
 | css/offline.css | 1824 | 0 | 0 | 11 |
 | css/onde-ficar.css | 4423 | 0 | 1 | 35 |
 | css/para-o-trade.css | 2926 | 0 | 1 | 22 |
@@ -345,9 +346,10 @@ _Nenhum item encontrado._
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
 | window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js |
+| window.matchMedia | js/nav-shared.js, js/scroll-animations.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
-| window.setTimeout | js/mapa-turistico.js, js/search.js |
+| window.setTimeout | js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
 | window.SMSecurity | js/cms.js, js/security-utils.js |
 | window.translations | js/nav-shared.js, js/search.js, translations.js |
 | window.TURISMO_DATA | js/data/turismo-data.js, js/mapa-turistico.js, js/search-index.js, js/site-stats.js |

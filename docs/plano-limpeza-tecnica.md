@@ -108,3 +108,20 @@ Adiado:
 - imagens orfas provaveis antes de validacao
 - arquivos Firebase/admin antes de decisao
 - paginas antigas enquanto houver links e compatibilidade
+
+## Atualizacao de escopo - 18/05/2026
+
+Nesta rodada, a limpeza tecnica agressiva continuou fora de escopo. Foram feitos apenas ajustes visuais/interativos pontuais:
+
+- consolidacao visual de Agua Branca na Galeria sem apagar imagens;
+- reforco da pagina `o-que-fazer` como ponte de compatibilidade;
+- correcao de comportamento do menu mobile sem refatorar o header inteiro;
+- compactacao responsiva de estatisticas do mapa.
+
+Permanece para fase futura:
+
+- limpeza estrutural de CSS;
+- revisao completa de paginas antigas;
+- escolha canonica de imagens;
+- otimizacao de videos e imagens pesadas;
+- qualquer remocao de arquivos.

@@ -1698,6 +1698,31 @@
                 console.log('Menu FECHADO');
             }
 
+            function isModifiedClick(evento) {
+                return evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey || evento.button !== 0;
+            }
+
+            function shouldForceMobileNavigation(link, evento) {
+                if (!link || evento.defaultPrevented || isModifiedClick(evento)) return false;
+                if (link.target && link.target !== '_self') return false;
+                if (!window.matchMedia || !window.matchMedia('(max-width: 1180px)').matches) return false;
+
+                var targetUrl;
+                try {
+                    targetUrl = new URL(link.href, window.location.href);
+                } catch (erro) {
+                    return false;
+                }
+
+                if (targetUrl.protocol !== 'http:' && targetUrl.protocol !== 'https:') return false;
+
+                var sameDocument = targetUrl.origin === window.location.origin
+                    && targetUrl.pathname === window.location.pathname
+                    && targetUrl.search === window.location.search;
+
+                return !(sameDocument && targetUrl.hash);
+            }
+
             function toggleMenu(evento) {
                 if (evento) {
                     evento.preventDefault();
@@ -1724,8 +1749,17 @@
             // Links fecham menu
             var links = navLinks.getElementsByTagName('a');
             for (var i = 0; i < links.length; i++) {
-                links[i].addEventListener('click', function() {
-                    setTimeout(fecharMenu, 100);
+                links[i].addEventListener('click', function(evento) {
+                    var href = this.href;
+                    var forceNavigation = shouldForceMobileNavigation(this, evento);
+                    fecharMenu();
+                    if (forceNavigation) {
+                        window.setTimeout(function() {
+                            if (!evento.defaultPrevented && document.visibilityState !== 'hidden') {
+                                window.location.href = href;
+                            }
+                        }, 80);
+                    }
                 });
             }
 

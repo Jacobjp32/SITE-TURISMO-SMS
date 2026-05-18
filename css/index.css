@@ -5008,3 +5008,33 @@
         border-radius: 20px;
     }
 }
+
+/* Ajuste cirúrgico: mantém os 5 indicadores institucionais alinhados em desktop. */
+.about-stats {
+    grid-template-columns: repeat(5, minmax(118px, 1fr)) !important;
+    max-width: 1040px !important;
+    align-items: stretch !important;
+}
+
+.about-stats .stat-label {
+    color: var(--white-pure) !important;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.42) !important;
+}
+
+@media (max-width: 900px) {
+    .about-stats {
+        grid-template-columns: repeat(3, minmax(120px, 1fr)) !important;
+        max-width: 680px !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .about-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 0.8rem !important;
+    }
+
+    .about-stats .stat-item {
+        padding: 0.9rem 0.65rem !important;
+    }
+}

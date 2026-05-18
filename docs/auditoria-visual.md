@@ -67,3 +67,22 @@ As recomendacoes abaixo devem ser confirmadas com captura visual humana ou nova 
 - Quais imagens orfas sao realmente descartaveis.
 - Se videos grandes continuam necessarios em 4K.
 - Se o estado sem imagem do modal e aceitavel editorialmente.
+
+## 6. Rodada visual/interativa de 18/05/2026
+
+Correcoes aplicadas nesta rodada:
+
+- HOME: os 5 indicadores da secao "Sao Mateus do Sul: Onde a Tradicao Encontra o Futuro" agora usam grid de 5 colunas em desktop/notebook, com quebra responsiva em 3/2 colunas nos tamanhos menores.
+- HOME: o texto descritivo dos indicadores foi reforcado em branco para contraste com o fundo premium.
+- Galeria: "Igreja Agua Branca" passou a ocupar 1 card em Patrimonio Historico, mantendo as 10 imagens no lightbox do proprio conjunto.
+- Galeria: Patrimonio Historico ficou como primeira prioridade visual; Videos continuam abaixo.
+- Menu mobile: o fechamento do drawer foi separado da navegacao real, preservando links, subitens, busca, idioma, overlay e ESC.
+- `o-que-fazer`: pagina mantida por compatibilidade e tratada como ponte compacta para o Mapa Turistico, sem virar catalogo concorrente.
+- Mapa Turistico: estatisticas de "Visao rapida" e "Resumo da exploracao" foram compactadas em mobile.
+
+Decisoes editoriais mantidas:
+
+- Nenhuma imagem foi apagada.
+- Nenhuma pagina ponte foi removida.
+- `/o-que-fazer/` e `/o-que-fazer.html` continuam ativos por compatibilidade.
+- `TURISMO_DATA` nao foi alterado nesta rodada.

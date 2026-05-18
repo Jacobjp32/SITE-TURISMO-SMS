@@ -310,3 +310,20 @@ node --check js/mapa-turistico.js
 - conectar páginas de local com fotos adicionais
 - explorar molduras, camadas e microinterações mais ricas sem perder desempenho
 - usar o mapa 2D como base de navegação para futura experiência visual 3D
+
+## Ajuste mobile de estatisticas - 18/05/2026
+
+O layout mobile de `mapa-turistico.html` foi ajustado para reduzir peso visual:
+
+- "Visao rapida" no hero mantem 3 cards compactos em linha em 390/430px.
+- "Resumo da exploracao" tambem usa 3 cards compactos no painel, com padding e tipografia reduzidos.
+- As informacoes continuam presentes; a mudanca e apenas de densidade visual no mobile.
+- Desktop/tablet largo nao foram alterados.
+
+Fluxos que devem continuar sendo validados apos ajustes no mapa:
+
+- mapa carrega;
+- filtros e busca atualizam cards/contagens;
+- "Ver detalhes" abre e fecha por X, ESC e backdrop;
+- "Como chegar" aparece apenas quando ha coordenada;
+- itens sem coordenada seguem sem botao invalido.
