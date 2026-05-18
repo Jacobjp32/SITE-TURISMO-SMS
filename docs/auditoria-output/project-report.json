@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-18T18:39:39.188Z",
+  "generatedAt": "2026-05-18T19:07:15.691Z",
   "totals": {
     "files": 251,
     "html": 36,
@@ -47,17 +47,17 @@
     {
       "ext": ".js",
       "files": 32,
-      "bytes": 615056
+      "bytes": 615231
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 512357
+      "bytes": 513108
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 289122
+      "bytes": 289225
     },
     {
       "ext": ".md",
@@ -149,7 +149,7 @@
     {
       "dir": ".",
       "files": 36,
-      "bytes": 774581
+      "bytes": 775332
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -159,12 +159,12 @@
     {
       "dir": "js",
       "files": 20,
-      "bytes": 358797
+      "bytes": 358972
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 289122
+      "bytes": 289225
     },
     {
       "dir": "docs",
@@ -768,7 +768,7 @@
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 146991
+      "bytes": 147742
     },
     {
       "path": "local.html",
@@ -1982,10 +1982,10 @@
     },
     {
       "file": "css/index.css",
-      "bytes": 133491,
-      "important": 458,
+      "bytes": 133594,
+      "important": 460,
       "media": 40,
-      "selectorCount": 757
+      "selectorCount": 759
     },
     {
       "file": "css/mapa-3d.css",
@@ -2754,7 +2754,7 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 40516,
+      "bytes": 40691,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
@@ -2763,7 +2763,6 @@
         "window.applyTranslations",
         "window.innerHeight",
         "window.location",
-        "window.matchMedia",
         "window.pageYOffset",
         "window.scrollTo",
         "window.setTimeout",
@@ -2776,10 +2775,11 @@
         "applyAuthState",
         "closeAllDropdowns",
         "closeMobileMenu",
+        "handleMobileMenuLink",
         "hasLoadedScript",
+        "isMobileMenuActive",
         "isModifiedClick",
-        "revealMascote",
-        "shouldForceMobileNavigation"
+        "revealMascote"
       ],
       "localStorage": 9,
       "serviceWorker": 2,
@@ -3183,10 +3183,6 @@
     {
       "global": "window.location",
       "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js"
-    },
-    {
-      "global": "window.matchMedia",
-      "files": "js/nav-shared.js, js/scroll-animations.js"
     },
     {
       "global": "window.ROTAS_LEGADO_ESTABLISHMENTS",

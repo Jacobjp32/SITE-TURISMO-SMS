@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-18T18:39:39.188Z.
+Gerado em 2026-05-18T19:07:15.691Z.
 
 ## Resumo
 
@@ -22,9 +22,9 @@ Gerado em 2026-05-18T18:39:39.188Z.
 | .jpeg | 20 | 4432852 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 32 | 615056 |
-| .html | 36 | 512357 |
-| .css | 21 | 289122 |
+| .js | 32 | 615231 |
+| .html | 36 | 513108 |
+| .css | 21 | 289225 |
 | .md | 13 | 93258 |
 | .json | 3 | 63320 |
 | .mjs | 4 | 30868 |
@@ -129,7 +129,7 @@ Gerado em 2026-05-18T18:39:39.188Z.
 | admin-firebase.html | 34182 |
 | eventos.html | 34225 |
 | galeria.html | 38167 |
-| index.html | 146991 |
+| index.html | 147742 |
 | local.html | 20635 |
 | mapa-3d.html | 6253 |
 | mapa-completo.html | 10424 |
@@ -247,7 +247,7 @@ _Nenhum item encontrado._
 | css/404.css | 2306 | 0 | 1 | 18 |
 | css/eventos.css | 16158 | 5 | 2 | 99 |
 | css/galeria.css | 9234 | 0 | 3 | 89 |
-| css/index.css | 133491 | 458 | 40 | 757 |
+| css/index.css | 133594 | 460 | 40 | 759 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
 | css/mapa-turistico.css | 33403 | 13 | 7 | 236 |
@@ -346,7 +346,6 @@ _Nenhum item encontrado._
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
 | window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js |
-| window.matchMedia | js/nav-shared.js, js/scroll-animations.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.setTimeout | js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |

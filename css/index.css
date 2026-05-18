@@ -436,9 +436,17 @@
             visibility: visible;
         }
 
-        body.nav-menu-open {
-            overflow: hidden !important;
-        }
+body.nav-menu-open {
+    overflow: hidden !important;
+}
+
+body.nav-menu-open .nav {
+    z-index: 10021 !important;
+}
+
+body.nav-menu-open .nav-toggle {
+    z-index: 10022 !important;
+}
 
         /* ============================================
            RESPONSIVO - MOBILE MENU
