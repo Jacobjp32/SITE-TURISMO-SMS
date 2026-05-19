@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v12';
+const CACHE_NAME = 'turismo-sms-v13';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -38,6 +38,9 @@ const NEVER_CACHE = [
     'firebasestorage.googleapis.com',
     'firestore.googleapis.com',
     'identitytoolkit.googleapis.com',
+    'js/nav-shared.js',
+    'js/site-meta.js',
+    'api.open-meteo.com',
     'www.googletagmanager.com'
 ];
 

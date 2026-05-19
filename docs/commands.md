@@ -1,14 +1,38 @@
 # Comandos operacionais
 
-## Atualizar metadados do portal
+## Preparar atualizacao publica
 
-Antes de commit/push de uma atualizacao publica do site, atualize a data exibida no rodape:
+Antes de commitar uma atualizacao publica do site, rode:
+
+```bash
+node scripts/prepare-update.mjs
+```
+
+O comando usa apenas Node nativo, roda `scripts/update-site-meta.mjs`, atualiza `updatedAt` em `js/site-meta.js` e executa checks basicos de sintaxe nos scripts operacionais. Depois revise o diff e siga com:
+
+```bash
+git add ...
+git commit -m "tipo: descricao breve"
+git push
+```
+
+Opcionalmente, quem quiser automatizar localmente pode criar um hook `pre-commit` chamando `node scripts/prepare-update.mjs`. Nao ha hook instalado automaticamente neste repositorio.
+
+O comando direto abaixo continua disponivel para atualizar somente a data do portal:
 
 ```bash
 node scripts/update-site-meta.mjs
 ```
 
-O comando usa apenas Node nativo e atualiza `updatedAt` em `js/site-meta.js`, preservando `version` e `environment`.
+## Previsao do tempo
+
+A HOME carrega `js/weather.js`, que consulta a API publica sem chave da Open-Meteo para Sao Mateus do Sul:
+
+```text
+https://api.open-meteo.com/v1/forecast
+```
+
+O script usa coordenadas centralizadas em `js/weather.js`, cache local em `localStorage` por 1 hora e fallback honesto. Se a API falhar, usa cache antigo quando existir; se nao houver cache, mostra dados indisponiveis sem inventar temperatura.
 
 ## Validacao visual/interativa local
 
@@ -21,6 +45,9 @@ node --check js/search.js
 node --check js/search-index.js
 node --check js/site-stats.js
 node --check js/site-meta.js
+node --check js/weather.js
+node --check scripts/update-site-meta.mjs
+node --check scripts/prepare-update.mjs
 node --check translations.js
 node --check config.js
 node --check sw.js

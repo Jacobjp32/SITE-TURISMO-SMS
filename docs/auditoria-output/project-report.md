@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-19T17:43:45.694Z.
+Gerado em 2026-05-19T18:23:46.888Z.
 
 ## Resumo
 
-- Arquivos mapeados: 314
+- Arquivos mapeados: 316
 - HTMLs: 36
 - CSS: 21
-- JS: 32
+- JS: 33
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,12 +22,12 @@ Gerado em 2026-05-19T17:43:45.694Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 32 | 625059 |
-| .html | 36 | 513162 |
-| .css | 21 | 289225 |
-| .md | 13 | 98032 |
+| .js | 33 | 635524 |
+| .html | 36 | 513881 |
+| .css | 21 | 289487 |
+| .md | 13 | 99737 |
 | .json | 3 | 63320 |
-| .mjs | 4 | 30868 |
+| .mjs | 5 | 32233 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
 | (sem ext) | 4 | 1606 |
@@ -127,26 +127,26 @@ Gerado em 2026-05-19T17:43:45.694Z.
 | --- | --- |
 | 404.html | 2862 |
 | admin-firebase.html | 34182 |
-| eventos.html | 34225 |
-| galeria.html | 38167 |
-| index.html | 147742 |
-| local.html | 20635 |
-| mapa-3d.html | 6253 |
-| mapa-completo.html | 10424 |
-| mapa-turistico.html | 10679 |
-| noticia.html | 6276 |
-| noticias.html | 20681 |
-| o-que-fazer.html | 5852 |
+| eventos.html | 34246 |
+| galeria.html | 38188 |
+| index.html | 147992 |
+| local.html | 20677 |
+| mapa-3d.html | 6274 |
+| mapa-completo.html | 10445 |
+| mapa-turistico.html | 10705 |
+| noticia.html | 6297 |
+| noticias.html | 20723 |
+| o-que-fazer.html | 5895 |
 | offline.html | 2356 |
-| onde-ficar.html | 17711 |
-| para-o-trade.html | 15013 |
-| portal-usuario.html | 37913 |
-| privacidade.html | 22396 |
-| reservas.html | 5654 |
-| rotas-completas.html | 4181 |
-| roteiro-ia.html | 3243 |
-| sabores.html | 30227 |
-| transparencia.html | 21170 |
+| onde-ficar.html | 17732 |
+| para-o-trade.html | 15034 |
+| portal-usuario.html | 37934 |
+| privacidade.html | 22417 |
+| reservas.html | 5675 |
+| rotas-completas.html | 4224 |
+| roteiro-ia.html | 3264 |
+| sabores.html | 30248 |
+| transparencia.html | 21191 |
 
 
 ## Rotas com index.html
@@ -187,16 +187,16 @@ Gerado em 2026-05-19T17:43:45.694Z.
 | js/reservas.js | 26015 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
-| mapa-3d.html | 6253 |
+| mapa-3d.html | 6274 |
 | mapa-completo/index.html | 751 |
-| mapa-completo.html | 10424 |
-| para-o-trade.html | 15013 |
+| mapa-completo.html | 10445 |
+| para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 37913 |
-| reservas.html | 5654 |
+| portal-usuario.html | 37934 |
+| reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
-| rotas-completas.html | 4181 |
-| roteiro-ia.html | 3243 |
+| rotas-completas.html | 4224 |
+| roteiro-ia.html | 3264 |
 
 
 ## Scripts mais carregados por HTML
@@ -233,6 +233,7 @@ Gerado em 2026-05-19T17:43:45.694Z.
 | js/search-index.js | 1 | index.html |
 | js/search.js | 1 | index.html |
 | js/site-stats.js | 1 | index.html |
+| js/weather.js | 1 | index.html |
 
 
 ## Loads duplicados no mesmo HTML
@@ -247,7 +248,7 @@ _Nenhum item encontrado._
 | css/404.css | 2306 | 0 | 1 | 18 |
 | css/eventos.css | 16158 | 5 | 2 | 99 |
 | css/galeria.css | 9234 | 0 | 3 | 89 |
-| css/index.css | 133594 | 460 | 40 | 759 |
+| css/index.css | 133856 | 460 | 40 | 762 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
 | css/mapa-turistico.css | 33403 | 13 | 7 | 236 |
@@ -350,7 +351,7 @@ _Nenhum item encontrado._
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.setTimeout | js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
 | window.SMSecurity | js/cms.js, js/security-utils.js |
-| window.translations | js/nav-shared.js, js/search.js, translations.js |
+| window.translations | js/nav-shared.js, js/search.js, js/weather.js, translations.js |
 | window.TURISMO_DATA | js/data/turismo-data.js, js/mapa-turistico.js, js/search-index.js, js/site-stats.js |
 | window.TURISMO_DATA_ADAPTER | js/data/turismo-data-adapter.js, js/data/turismo-data.js, js/site-stats.js |
 | window.TURISMO_DATA_HELPERS | js/data/turismo-data.js, js/site-stats.js |

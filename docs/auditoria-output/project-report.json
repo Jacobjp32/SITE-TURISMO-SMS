@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-19T17:43:45.694Z",
+  "generatedAt": "2026-05-19T18:23:46.888Z",
   "totals": {
-    "files": 314,
+    "files": 316,
     "html": 36,
     "css": 21,
-    "js": 32,
+    "js": 33,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,23 +46,23 @@
     },
     {
       "ext": ".js",
-      "files": 32,
-      "bytes": 625059
+      "files": 33,
+      "bytes": 635524
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 513162
+      "bytes": 513881
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 289225
+      "bytes": 289487
     },
     {
       "ext": ".md",
       "files": 13,
-      "bytes": 98032
+      "bytes": 99737
     },
     {
       "ext": ".json",
@@ -71,8 +71,8 @@
     },
     {
       "ext": ".mjs",
-      "files": 4,
-      "bytes": 30868
+      "files": 5,
+      "bytes": 32233
     },
     {
       "ext": ".xml",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 36,
-      "bytes": 775385
+      "bytes": 777491
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -173,18 +173,18 @@
     },
     {
       "dir": "js",
-      "files": 20,
-      "bytes": 363647
+      "files": 21,
+      "bytes": 372725
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 289225
+      "bytes": 289487
     },
     {
       "dir": "docs",
       "files": 13,
-      "bytes": 98032
+      "bytes": 99737
     },
     {
       "dir": "js/data",
@@ -193,8 +193,8 @@
     },
     {
       "dir": "scripts",
-      "files": 4,
-      "bytes": 30868
+      "files": 5,
+      "bytes": 32233
     },
     {
       "dir": "cloudflare-worker",
@@ -771,61 +771,61 @@
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34225
+      "bytes": 34246
     },
     {
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 38167
+      "bytes": 38188
     },
     {
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 147742
+      "bytes": 147992
     },
     {
       "path": "local.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20635
+      "bytes": 20677
     },
     {
       "path": "mapa-3d.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6253
+      "bytes": 6274
     },
     {
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10424
+      "bytes": 10445
     },
     {
       "path": "mapa-turistico.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10679
+      "bytes": 10705
     },
     {
       "path": "noticia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6276
+      "bytes": 6297
     },
     {
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20681
+      "bytes": 20723
     },
     {
       "path": "o-que-fazer.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5852
+      "bytes": 5895
     },
     {
       "path": "offline.html",
@@ -837,55 +837,55 @@
       "path": "onde-ficar.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 17711
+      "bytes": 17732
     },
     {
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15013
+      "bytes": 15034
     },
     {
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37913
+      "bytes": 37934
     },
     {
       "path": "privacidade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22396
+      "bytes": 22417
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5654
+      "bytes": 5675
     },
     {
       "path": "rotas-completas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 4181
+      "bytes": 4224
     },
     {
       "path": "roteiro-ia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 3243
+      "bytes": 3264
     },
     {
       "path": "sabores.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 30227
+      "bytes": 30248
     },
     {
       "path": "transparencia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 21170
+      "bytes": 21191
     }
   ],
   "directoryIndexes": [
@@ -1063,7 +1063,7 @@
       "path": "mapa-3d.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6253
+      "bytes": 6274
     },
     {
       "path": "mapa-completo/index.html",
@@ -1075,13 +1075,13 @@
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10424
+      "bytes": 10445
     },
     {
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15013
+      "bytes": 15034
     },
     {
       "path": "portal-usuario/index.html",
@@ -1093,13 +1093,13 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37913
+      "bytes": 37934
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5654
+      "bytes": 5675
     },
     {
       "path": "rotas-completas/index.html",
@@ -1111,13 +1111,13 @@
       "path": "rotas-completas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 4181
+      "bytes": 4224
     },
     {
       "path": "roteiro-ia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 3243
+      "bytes": 3264
     }
   ],
   "htmlAssets": [
@@ -1288,6 +1288,7 @@
         "js/data/turismo-data-adapter.js",
         "js/data/turismo-data.js",
         "js/site-stats.js",
+        "js/weather.js",
         "js/search-index.js",
         "js/search.js",
         "https://vlibras.gov.br/app/vlibras-plugin.js",
@@ -1997,10 +1998,10 @@
     },
     {
       "file": "css/index.css",
-      "bytes": 133594,
+      "bytes": 133856,
       "important": 460,
       "media": 40,
-      "selectorCount": 759
+      "selectorCount": 762
     },
     {
       "file": "css/mapa-3d.css",
@@ -2769,7 +2770,7 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 40691,
+      "bytes": 40525,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
@@ -2983,8 +2984,43 @@
       "addEventListeners": 2
     },
     {
+      "file": "js/weather.js",
+      "bytes": 9210,
+      "globals": [
+        "var CACHE_KEY",
+        "var CACHE_TTL_MS",
+        "var CITY",
+        "var FORECAST_DAYS",
+        "var WMO_LABELS",
+        "window.SMS_WEATHER",
+        "window.SMS_WEATHER_API_OVERRIDE",
+        "window.translations"
+      ],
+      "functions": [
+        "buildUrl",
+        "fetchWeather",
+        "formatDateTime",
+        "formatRange",
+        "getCondition",
+        "getLang",
+        "initWeather",
+        "normalizePayload",
+        "readCache",
+        "renderCard",
+        "renderUnavailable",
+        "renderWeather",
+        "roundTemp",
+        "setStatus",
+        "t",
+        "writeCache"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
       "file": "sw.js",
-      "bytes": 5146,
+      "bytes": 5214,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",
@@ -3001,7 +3037,7 @@
     },
     {
       "file": "translations.js",
-      "bytes": 186854,
+      "bytes": 188152,
       "globals": [
         "window.applyTranslations",
         "window.initPageLanguage",
@@ -3167,6 +3203,11 @@
       "script": "js/site-stats.js",
       "pages": 1,
       "examples": "index.html"
+    },
+    {
+      "script": "js/weather.js",
+      "pages": 1,
+      "examples": "index.html"
     }
   ],
   "scriptDuplicateLoads": [],
@@ -3217,7 +3258,7 @@
     },
     {
       "global": "window.translations",
-      "files": "js/nav-shared.js, js/search.js, translations.js"
+      "files": "js/nav-shared.js, js/search.js, js/weather.js, translations.js"
     },
     {
       "global": "window.TURISMO_DATA",

@@ -35,6 +35,7 @@ Escopo: textos em HTML, JS, dados, busca, modal de detalhes e paginas legadas. N
 | `Sem imagem cadastrada` | Estado de ausencia de imagem. | Manter discreto; nao mostrar `undefined`. |
 | `O Que Fazer` | Pagina antiga e categoria editorial. | Decidir se continua nome publico ou ponte. |
 | `Rotas Completas` | Catalogo antigo. | Evitar como fluxo principal. |
+| `Agenda` | Antes misturava `Eventos`, `Calendario` e `Festas Tradicionais` apontando para o mesmo destino. | Manter uma opcao principal `Eventos` e `Noticias` separado. |
 
 ## 4. Numeros fixos antigos
 
@@ -54,6 +55,7 @@ Acao recomendada:
 | Noticias no portal externo | Links oficiais preservados em `noticias.html`. | Decisao humana apenas se o conteudo passar a ser espelhado localmente. |
 | Exemplos de imagem em docs | Referencias de exemplo sem arquivo real. | Pode manter como exemplo ou marcar como ficticio. |
 | Telefone/site/Instagram ausentes | Campos opcionais em dados. | Ocultar no modal, nao inventar. |
+| Previsao do tempo | Antes era texto fixo/mockado na HOME. | Agora usa `js/weather.js`, API Open-Meteo, cache local e fallback honesto. |
 
 ## 6. Textos que devem estar em `translations.js`
 

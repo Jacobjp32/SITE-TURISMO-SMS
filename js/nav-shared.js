@@ -67,10 +67,8 @@
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/eventos" data-lang-key="nav-eventos">Eventos</a>
-                    <a href="/eventos" data-lang-key="nav-calendario">Calendário</a>
+                    <a href="/eventos/" data-lang-key="nav-eventos">Eventos</a>
                     <a href="/noticias" data-lang-key="nav-noticias-clean">Notícias</a>
-                    <a href="/eventos" data-lang-key="nav-festas-tradicionais">Festas Tradicionais</a>
                 </div>
             </li>
 
@@ -373,7 +371,7 @@ body.font-larger{font-size:140%!important;}
 
     if (!hasLoadedScript('js/site-meta.js')) {
         var metaScript = document.createElement('script');
-        metaScript.src = 'js/site-meta.js';
+        metaScript.src = 'js/site-meta.js?v=site-meta-20260519';
         metaScript.defer = true;
         document.body.appendChild(metaScript);
     }

@@ -4294,6 +4294,17 @@ body.nav-menu-open .nav-toggle {
     color: #65615a;
 }
 
+.weather-heading .weather-updated,
+.weather-heading .weather-status {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+    line-height: 1.35;
+}
+
+.weather-heading .weather-status {
+    color: #8a4f12;
+}
+
 .weather-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4326,6 +4337,10 @@ body.nav-menu-open .nav-toggle {
     color: #5e625f;
     font-size: 0.9rem;
     line-height: 1.35;
+}
+
+.weather-card.is-unavailable {
+    background: #fffaf3;
 }
 
 .footer {

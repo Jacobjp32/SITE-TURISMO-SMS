@@ -19,6 +19,8 @@ Relatorios brutos relacionados:
 | `js/rotas-data.js` | Dados ricos de rotas e empreendimentos. | Legado ainda necessario. |
 | `js/search.js` | Interface de busca. | Depende de indice e dados globais. |
 | `js/search-index.js` | Indice de busca. | Consome `TURISMO_DATA` com fallback. |
+| `js/weather.js` | Previsao do tempo real da HOME. | Usa Open-Meteo, cache local de 1 hora e fallback honesto. |
+| `js/site-meta.js` | Metadados do rodape. | Renderiza versao e data de atualizacao sem backend. |
 | `translations.js` | Textos multi-idioma. | Carregado por muitas paginas. |
 | `config.js` | Configuracoes globais. | Usado por paginas atuais e antigas. |
 
@@ -66,6 +68,7 @@ Risco: os arquivos legados usam `const` globais, como `locaisData`, `routeInfo` 
 | `window.TURISMO_RESTAURANTES` | `js/data/restaurantes.js` | Base nova de gastronomia. |
 | `window.TURISMO_EVENTOS` | `js/data/eventos.js` | Base nova de eventos. |
 | `window.TURISMO_INFO_ESSENCIAIS` | `js/data/informacoes-essenciais.js` | Blocos de apoio. |
+| `window.SMS_WEATHER` | `js/weather.js` | Configuracao publica da previsao: cidade, cache key e TTL. |
 | `locaisData` | `js/locais-data.js` | Base legada de locais. |
 | `routeInfo`, `establishments` | `js/rotas-data.js` | Base legada de rotas e empreendimentos. |
 
@@ -99,6 +102,7 @@ Na mesma rodada, `local.html` passou a carregar `js/locais-data.js` antes do scr
 | Duplicacao de scripts com query string | Alta | Manter deteccao query-aware em `nav-shared.js`. |
 | Variaveis `const` globais em scripts legados | Alta | Evitar carregar bases legadas duas vezes. |
 | Service worker mantendo JS antigo | Media | Revisar estrategia de cache antes de novas mudancas grandes. |
+| API de clima indisponivel | Baixa | Manter cache local e mensagem honesta sem dados mockados. |
 | `nav-shared.js` fazer muitas responsabilidades | Alta | Documentar antes de quebrar em partes. |
 | Links antigos em `search-index.js` | Media | Padronizar URLs na fase de rotas. |
 | Modal de detalhes depender de campos opcionais | Baixa | Continuar ocultando campo vazio/ausente. |
