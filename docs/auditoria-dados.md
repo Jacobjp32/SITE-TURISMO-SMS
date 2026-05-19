@@ -128,7 +128,9 @@ Categorias detectadas:
 | HEIC/DNG | Material bruto nao web. | Nao usar diretamente; decidir conversao futura. |
 | Video da Rei Verde | Nao vinculado ao site. | Decidir se entra como video, imagem poster ou nao entra. |
 | Baldo | Dados aparecem em informacoes essenciais/legado. | Revisar imagem principal antes de alterar. |
-| Marina Barra do Iguacu | Aparece em gastronomia. | Revisar se ha imagem web segura. |
+| Marina Barra do Iguacu | Atualizada com texto, horario, imagem e galeria em `images/empreendimentos/marina-barra-do-iguacu/`. | Manter; revisar peso da galeria se necessario. |
+| All Garden | Atualizado como item existente de rota, com imagem, galeria e Instagram do TXT recebido. | Manter como item de rota; nao criar duplicado. |
+| Hotel Sao Mateus | Atualizado com telefone do TXT e galeria; segue sem coordenadas confirmadas. | Confirmar localizacao exata antes de habilitar rota/Como chegar. |
 | Hotel Moro | Hospedagem com galeria/campos recentes. | Manter; validar imagem principal. |
 
 ## 9. Itens sem imagem

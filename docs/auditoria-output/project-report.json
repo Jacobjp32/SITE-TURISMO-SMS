@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-18T19:07:15.691Z",
+  "generatedAt": "2026-05-19T17:43:45.694Z",
   "totals": {
-    "files": 251,
+    "files": 314,
     "html": 36,
     "css": 21,
     "js": 32,
@@ -20,6 +20,11 @@
       "bytes": 36842588
     },
     {
+      "ext": ".jpeg",
+      "files": 83,
+      "bytes": 29392570
+    },
+    {
       "ext": ".jpg",
       "files": 51,
       "bytes": 27730696
@@ -28,11 +33,6 @@
       "ext": ".webp",
       "files": 22,
       "bytes": 6812112
-    },
-    {
-      "ext": ".jpeg",
-      "files": 20,
-      "bytes": 4432852
     },
     {
       "ext": ".pdf",
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 32,
-      "bytes": 615231
+      "bytes": 625059
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 513108
+      "bytes": 513162
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 13,
-      "bytes": 93258
+      "bytes": 98032
     },
     {
       "ext": ".json",
@@ -87,7 +87,7 @@
     {
       "ext": "(sem ext)",
       "files": 4,
-      "bytes": 1607
+      "bytes": 1606
     },
     {
       "ext": ".log",
@@ -112,6 +112,11 @@
       "bytes": 46865639
     },
     {
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "files": 40,
+      "bytes": 13949603
+    },
+    {
       "dir": "images/empreendimentos/nova-esperanca-equoterapia",
       "files": 4,
       "bytes": 11137447
@@ -122,6 +127,11 @@
       "bytes": 7152848
     },
     {
+      "dir": "images/empreendimentos/all-garden",
+      "files": 10,
+      "bytes": 6706318
+    },
+    {
       "dir": "images/WEBP",
       "files": 17,
       "bytes": 6073770
@@ -130,6 +140,11 @@
       "dir": "images/mascotes",
       "files": 9,
       "bytes": 5986533
+    },
+    {
+      "dir": "images/empreendimentos/hotel-sao-mateus",
+      "files": 13,
+      "bytes": 4303797
     },
     {
       "dir": "images/empreendimentos/ribeiro-pesca",
@@ -149,7 +164,7 @@
     {
       "dir": ".",
       "files": 36,
-      "bytes": 775332
+      "bytes": 775385
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -159,7 +174,7 @@
     {
       "dir": "js",
       "files": 20,
-      "bytes": 358972
+      "bytes": 363647
     },
     {
       "dir": "css",
@@ -169,12 +184,12 @@
     {
       "dir": "docs",
       "files": 13,
-      "bytes": 93258
+      "bytes": 98032
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 37961
+      "bytes": 43114
     },
     {
       "dir": "scripts",
@@ -337,6 +352,12 @@
       "bytes": 2675327
     },
     {
+      "path": "images/empreendimentos/all-garden/all-garden-02.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 2118493
+    },
+    {
       "path": "docs/comtur/atas-comtur-2024-2025.docx",
       "ext": ".docx",
       "dir": "docs/comtur",
@@ -403,16 +424,34 @@
       "bytes": 1077038
     },
     {
+      "path": "images/empreendimentos/all-garden/all-garden-01.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 879913
+    },
+    {
       "path": "images/mascotes/MASCOTE_PERY.png",
       "ext": ".png",
       "dir": "images/mascotes",
       "bytes": 812748
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-25.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 808171
+    },
+    {
       "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
       "ext": ".png",
       "dir": "images/mascotes",
       "bytes": 725003
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-08.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 724574
     },
     {
       "path": "images/PARQUE_EXPOSICOES_1.jpg",
@@ -425,6 +464,12 @@
       "ext": ".jpg",
       "dir": "images",
       "bytes": 700978
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-37.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 687699
     },
     {
       "path": "images/PARQUE_EXPOSICOES_2.jpg",
@@ -457,16 +502,40 @@
       "bytes": 636119
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-40.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 631238
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 623658
+    },
+    {
       "path": "images/PARQUE_EXPOSICOES_4.jpg",
       "ext": ".jpg",
       "dir": "images",
       "bytes": 620134
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 587070
+    },
+    {
       "path": "images/PARQUE_EXPOSICOES_3.jpg",
       "ext": ".jpg",
       "dir": "images",
       "bytes": 585692
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-07.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 579538
     },
     {
       "path": "images/IMG_2301.jpg",
@@ -493,6 +562,24 @@
       "bytes": 551454
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 548700
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 547055
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-10.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 536937
+    },
+    {
       "path": "images/CUIA_3.JPG",
       "ext": ".jpg",
       "dir": "images",
@@ -509,6 +596,18 @@
       "ext": ".jpg",
       "dir": "images",
       "bytes": 525567
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 523746
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 520824
     },
     {
       "path": "images/WEBP/NATAL-_20_.webp",
@@ -529,6 +628,36 @@
       "bytes": 481303
     },
     {
+      "path": "images/empreendimentos/all-garden/all-garden-09.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 468502
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 466760
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 462028
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 458160
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 450988
+    },
+    {
       "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp",
       "ext": ".webp",
       "dir": "images/WEBP",
@@ -547,10 +676,28 @@
       "bytes": 433527
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 430930
+    },
+    {
       "path": "images/logos/setu.png",
       "ext": ".png",
       "dir": "images/logos",
       "bytes": 426710
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 423875
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-06.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 416902
     },
     {
       "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp",
@@ -571,6 +718,24 @@
       "bytes": 394838
     },
     {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/marina-barra-do-iguacu",
+      "bytes": 387394
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-07.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/hotel-sao-mateus",
+      "bytes": 387044
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-05.jpeg",
+      "ext": ".jpeg",
+      "dir": "images/empreendimentos/all-garden",
+      "bytes": 383701
+    },
+    {
       "path": "images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp",
       "ext": ".webp",
       "dir": "images/WEBP",
@@ -583,160 +748,10 @@
       "bytes": 373454
     },
     {
-      "path": "images/IGREJA_AGUA_BRANCA_8.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 370070
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_5.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 364252
-    },
-    {
-      "path": "images/PARRERAL__6_.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 329580
-    },
-    {
-      "path": "images/WEBP/RUA-DO-MATHE-_1_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 326282
-    },
-    {
-      "path": "images/MORANGO_1.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 311469
-    },
-    {
-      "path": "images/WEBP/PRACA-DO-IGUACU_1.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 310104
-    },
-    {
-      "path": "images/IGREJA_MATRIZ_1.webp",
-      "ext": ".webp",
-      "dir": "images",
-      "bytes": 303620
-    },
-    {
-      "path": "images/WEBP/NATAL-_19_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 300712
-    },
-    {
-      "path": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 298242
-    },
-    {
-      "path": "images/IMG_2371.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 295455
-    },
-    {
-      "path": "images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 292626
-    },
-    {
-      "path": "images/PARRERAL__1_.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 287724
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_4.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 284520
-    },
-    {
-      "path": "images/WEBP/NATAL-_18_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 283142
-    },
-    {
-      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg",
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-03.jpeg",
       "ext": ".jpeg",
-      "dir": "images/empreendimentos/ribeiro-pesca",
-      "bytes": 282432
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_2.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 275175
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_3.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 262090
-    },
-    {
-      "path": "images/PONTE_ENTRADA_CIDADE_1_3.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 254908
-    },
-    {
-      "path": "images/WEBP/RUA-DO-MATHE-_2_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 254542
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_10.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 243570
-    },
-    {
-      "path": "images/PARRERAL__4_.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 242809
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_7.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 236656
-    },
-    {
-      "path": "images/WEBP/RUA-DO-MATHE-_1_-1.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 224068
-    },
-    {
-      "path": "docs/comtur/lei-3250-2024-alteracao.pdf",
-      "ext": ".pdf",
-      "dir": "docs/comtur",
-      "bytes": 213802
-    },
-    {
-      "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/doces-e-delicias",
-      "bytes": 212259
-    },
-    {
-      "path": "images/logos/governo-pr.png",
-      "ext": ".png",
-      "dir": "images/logos",
-      "bytes": 207927
+      "dir": "images/empreendimentos/hotel-sao-mateus",
+      "bytes": 370731
     }
   ],
   "rootHtml": [
@@ -792,7 +807,7 @@
       "path": "mapa-turistico.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10625
+      "bytes": 10679
     },
     {
       "path": "noticia.html",
@@ -2487,7 +2502,7 @@
     },
     {
       "file": "js/data/hospedagens.js",
-      "bytes": 2459,
+      "bytes": 3506,
       "globals": [
         "window.TURISMO_HOSPEDAGENS"
       ],
@@ -2520,7 +2535,7 @@
     },
     {
       "file": "js/data/restaurantes.js",
-      "bytes": 3190,
+      "bytes": 7273,
       "globals": [
         "window.TURISMO_RESTAURANTES"
       ],
@@ -2799,7 +2814,7 @@
     },
     {
       "file": "js/rotas-data.js",
-      "bytes": 33424,
+      "bytes": 38094,
       "globals": [
         "window.ROTAS_LEGADO_ESTABLISHMENTS",
         "window.ROTAS_LEGADO_ROUTE_INFO"

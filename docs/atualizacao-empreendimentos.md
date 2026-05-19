@@ -1,5 +1,55 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-05-19
+
+Atualização realizada a partir das pastas específicas em `EMPREENDIMENTOS/`: `marina barra do iguaçu`, `all garden`, `hotel são mateus` e `nova esperança equoterapia`.
+
+### Inventário recebido
+
+| Pasta | TXT | Imagens/mídias | Formatos | Correspondência na base |
+|---|---:|---:|---|---|
+| `marina barra do iguaçu` | 1 | 40 | `.jpeg` | `Marina Barra do Iguaçu` em `js/data/restaurantes.js` e `js/rotas-data.js` |
+| `all garden` | 1 | 12 | `.jpeg`, `.HEIC` | `All Garden` em `js/rotas-data.js` |
+| `hotel são mateus` | 1 | 16 | `.jpeg`, `.HEIC`, `.zip` | `Hotel São Mateus` em `js/data/hospedagens.js` |
+| `nova esperança equoterapia` | 1 | 13 | `.JPG`, `.HEIC`, `.DNG` | `Nova Esperança` em `js/rotas-data.js` |
+
+### Status por empreendimento
+
+| Empreendimento | Pasta de origem | Status | Arquivos atualizados | Imagens usadas | Pendências |
+|---|---|---|---|---|---|
+| Marina Barra do Iguaçu | `marina barra do iguaçu` | Atualizado com sucesso | `js/data/restaurantes.js`, `js/rotas-data.js` | `images/empreendimentos/marina-barra-do-iguacu/` com 40 `.jpeg` | CNPJ não foi exposto por não haver campo público equivalente no card turístico. |
+| All Garden | `all garden` | Atualizado com sucesso | `js/rotas-data.js` | `images/empreendimentos/all-garden/` com 10 `.jpeg` | TXT não trouxe endereço novo, horário nem coordenadas; dados atuais foram preservados. Instagram antigo `@allgardenmoments` foi substituído pelo TXT: `@allgarden__`. |
+| Hotel São Mateus | `hotel são mateus` | Parcialmente atualizado | `js/data/hospedagens.js` | `images/empreendimentos/hotel-sao-mateus/` com 13 `.jpeg` | TXT trouxe apenas telefone; descrição, localização e coordenadas pendentes foram preservadas. Telefone antigo `(42) 3282-2000` conflitou com o TXT e foi substituído por `(42) 3532-1802`. |
+| Nova Esperança | `nova esperança equoterapia` | Parcialmente atualizado | `docs/atualizacao-empreendimentos.md` | Mantidas as 4 imagens já existentes em `images/empreendimentos/nova-esperanca-equoterapia/` | TXT trouxe apenas Instagram já presente na base. Os 4 `.JPG` recebidos já existiam por SHA-256; `.HEIC` e `.DNG` não foram convertidos. |
+
+### Dados incorporados
+
+- Marina Barra do Iguaçu: descrição pública ampliada com vista para o Rio Iguaçu, gastronomia, petiscos, peixes e frutos do mar, garagem náutica, eventos, horários de quarta a sexta e finais de semana/feriados, Instagram e galeria.
+- All Garden: descrição atualizada para trilhas sensoriais, cafés especiais, piqueniques, lavandas, riachos e conexão com a natureza; Instagram atualizado para `@allgarden__`; telefone, localização, horário e coordenadas atuais preservados.
+- Hotel São Mateus: telefone atualizado para `(42) 3532-1802` e galeria institucional adicionada; sem alteração de coordenadas porque o TXT não trouxe localização exata.
+- Nova Esperança: nenhum dado novo de conteúdo além do Instagram já existente; imagens web recebidas eram duplicatas exatas das já incorporadas.
+
+### Imagens copiadas
+
+- `images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-01.jpeg` até `marina-barra-do-iguacu-40.jpeg`
+- `images/empreendimentos/all-garden/all-garden-01.jpeg` até `all-garden-10.jpeg`
+- `images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg` até `hotel-sao-mateus-13.jpeg`
+
+### Imagens e arquivos ignorados
+
+- All Garden: `IMG_0522.HEIC` e `IMG_0666.HEIC` não foram usados por serem HEIC.
+- Hotel São Mateus: `IMG_6612.HEIC` e `IMG_6613.HEIC` não foram usados por serem HEIC; `WhatsApp Unknown 2026-05-19 at 13.45.57.zip` não foi aberto nem vinculado ao site.
+- Nova Esperança: `IMG_0702.HEIC`, `IMG_0710.HEIC`, `IMG_0723.HEIC` e 6 arquivos `.DNG` não foram usados por não serem formatos web. `IMG_0719.JPG`, `IMG_0755.JPG`, `IMG_0761.JPG` e `IMG_0838.JPG` já existiam no site por hash e não foram duplicados.
+
+### Observações
+
+- All Garden não foi criado como novo cadastro porque já existia como item seguro em `js/rotas-data.js`.
+- Marina Barra do Iguaçu preservou `id`/slug `marina-barra-iguacu` e coordenadas existentes.
+- Hotel São Mateus preservou `id`/slug `hotel-sao-mateus`; continua sem coordenadas até haver fonte confiável.
+- A pasta bruta `EMPREENDIMENTOS/` permaneceu como fonte local de trabalho e não foi copiada para dentro do site.
+
+---
+
 Rodada realizada em 2026-05-15 a partir de `EMPREENDIMENTOS/`.
 
 ## Inventário recebido

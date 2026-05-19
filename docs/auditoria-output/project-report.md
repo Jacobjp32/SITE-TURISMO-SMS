@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-18T19:07:15.691Z.
+Gerado em 2026-05-19T17:43:45.694Z.
 
 ## Resumo
 
-- Arquivos mapeados: 251
+- Arquivos mapeados: 314
 - HTMLs: 36
 - CSS: 21
 - JS: 32
@@ -17,20 +17,20 @@ Gerado em 2026-05-18T19:07:15.691Z.
 | --- | --- | --- |
 | .mp4 | 3 | 287052567 |
 | .png | 27 | 36842588 |
+| .jpeg | 83 | 29392570 |
 | .jpg | 51 | 27730696 |
 | .webp | 22 | 6812112 |
-| .jpeg | 20 | 4432852 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 32 | 615231 |
-| .html | 36 | 513108 |
+| .js | 32 | 625059 |
+| .html | 36 | 513162 |
 | .css | 21 | 289225 |
-| .md | 13 | 93258 |
+| .md | 13 | 98032 |
 | .json | 3 | 63320 |
 | .mjs | 4 | 30868 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
-| (sem ext) | 4 | 1607 |
+| (sem ext) | 4 | 1606 |
 | .log | 1 | 1550 |
 | .txt | 2 | 1368 |
 
@@ -52,6 +52,7 @@ Gerado em 2026-05-18T19:07:15.691Z.
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 |
 | docs/comtur/loa-2025.pdf | 2675327 |
+| images/empreendimentos/all-garden/all-garden-02.jpeg | 2118493 |
 | docs/comtur/atas-comtur-2024-2025.docx | 2034102 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 |
 | images/diorama_sao_mateus.png | 1414760 |
@@ -63,62 +64,61 @@ Gerado em 2026-05-18T19:07:15.691Z.
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg | 1139631 |
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 |
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png | 1077038 |
+| images/empreendimentos/all-garden/all-garden-01.jpeg | 879913 |
 | images/mascotes/MASCOTE_PERY.png | 812748 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-25.jpeg | 808171 |
 | images/mascotes/MASCOTE_MENINO_POLONES_1.png | 725003 |
+| images/empreendimentos/all-garden/all-garden-08.jpeg | 724574 |
 | images/PARQUE_EXPOSICOES_1.jpg | 713776 |
 | images/PARQUE_EXPOSICOES_5.jpg | 700978 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-37.jpeg | 687699 |
 | images/PARQUE_EXPOSICOES_2.jpg | 680379 |
 | images/mascotes/MASCOTE_MENINO_POLONES_2.png | 651642 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp | 644396 |
 | docs/comtur/convite-conselho-2024.pdf | 638098 |
 | images/IMG_2295.jpg | 636119 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-40.jpeg | 631238 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg | 623658 |
 | images/PARQUE_EXPOSICOES_4.jpg | 620134 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg | 587070 |
 | images/PARQUE_EXPOSICOES_3.jpg | 585692 |
+| images/empreendimentos/all-garden/all-garden-07.jpeg | 579538 |
 | images/IMG_2301.jpg | 564760 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp | 552442 |
 | images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp | 552230 |
 | images/IMG_2304.jpg | 551454 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg | 548700 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg | 547055 |
+| images/empreendimentos/all-garden/all-garden-10.jpeg | 536937 |
 | images/CUIA_3.JPG | 536666 |
 | images/GINASIO_POLACAO.JPG | 528933 |
 | images/PARQUE_EXPOSICOES_7.jpg | 525567 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg | 523746 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg | 520824 |
 | images/WEBP/NATAL-_20_.webp | 501040 |
 | images/IGREJA_AGUA_BRANCA_6.jpg | 484862 |
 | images/CUIA_1.JPG | 481303 |
+| images/empreendimentos/all-garden/all-garden-09.jpeg | 468502 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg | 462028 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg | 450988 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp | 450726 |
 | images/PARQUE_EXPOSICOES_6.jpg | 448820 |
 | images/PONTE_ENTRADA_CIDADE_1.JPG | 433527 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg | 430930 |
 | images/logos/setu.png | 426710 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg | 423875 |
+| images/empreendimentos/all-garden/all-garden-06.jpeg | 416902 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp | 411048 |
 | images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg | 409241 |
 | images/PONTE_ENTRADA_CIDADE_1_2.jpg | 394838 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg | 387394 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-07.jpeg | 387044 |
+| images/empreendimentos/all-garden/all-garden-05.jpeg | 383701 |
 | images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp | 377310 |
 | images/logos/viaje-parana.png | 373454 |
-| images/IGREJA_AGUA_BRANCA_8.jpg | 370070 |
-| images/IGREJA_AGUA_BRANCA_5.jpg | 364252 |
-| images/PARRERAL__6_.jpg | 329580 |
-| images/WEBP/RUA-DO-MATHE-_1_.webp | 326282 |
-| images/MORANGO_1.jpg | 311469 |
-| images/WEBP/PRACA-DO-IGUACU_1.webp | 310104 |
-| images/IGREJA_MATRIZ_1.webp | 303620 |
-| images/WEBP/NATAL-_19_.webp | 300712 |
-| images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp | 298242 |
-| images/IMG_2371.jpg | 295455 |
-| images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp | 292626 |
-| images/PARRERAL__1_.jpg | 287724 |
-| images/IGREJA_AGUA_BRANCA_4.jpg | 284520 |
-| images/WEBP/NATAL-_18_.webp | 283142 |
-| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg | 282432 |
-| images/IGREJA_AGUA_BRANCA_2.jpg | 275175 |
-| images/IGREJA_AGUA_BRANCA_3.jpg | 262090 |
-| images/PONTE_ENTRADA_CIDADE_1_3.jpg | 254908 |
-| images/WEBP/RUA-DO-MATHE-_2_.webp | 254542 |
-| images/IGREJA_AGUA_BRANCA_10.jpg | 243570 |
-| images/PARRERAL__4_.jpg | 242809 |
-| images/IGREJA_AGUA_BRANCA_7.jpg | 236656 |
-| images/WEBP/RUA-DO-MATHE-_1_-1.webp | 224068 |
-| docs/comtur/lei-3250-2024-alteracao.pdf | 213802 |
-| images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg | 212259 |
-| images/logos/governo-pr.png | 207927 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-03.jpeg | 370731 |
 
 
 ## HTMLs principais na raiz
@@ -133,7 +133,7 @@ Gerado em 2026-05-18T19:07:15.691Z.
 | local.html | 20635 |
 | mapa-3d.html | 6253 |
 | mapa-completo.html | 10424 |
-| mapa-turistico.html | 10625 |
+| mapa-turistico.html | 10679 |
 | noticia.html | 6276 |
 | noticias.html | 20681 |
 | o-que-fazer.html | 5852 |

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-18T19:07:15.517Z",
+  "generatedAt": "2026-05-19T17:43:45.517Z",
   "totals": {
-    "mediaFiles": 123,
-    "referencedMedia": 88,
+    "mediaFiles": 186,
+    "referencedMedia": 151,
     "likelyOrphans": 35,
     "duplicateGroups": 0,
     "missingReferences": 0,
-    "heavyMedia": 21
+    "heavyMedia": 22
   },
   "assets": [
     {
@@ -79,6 +79,136 @@
       },
       "sha256": "f4bfcc146356ae58b2f33f6db4f59efbc770fc8b9bd173a851585dfc5ae9bda9",
       "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 879913,
+      "dimensions": {
+        "height": 2000,
+        "width": 1333
+      },
+      "sha256": "83897ab80022165d4d289c2f273fd763b5ad5d5faee426febd19c6f60edf0b21",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 2118493,
+      "dimensions": {
+        "height": 1333,
+        "width": 2000
+      },
+      "sha256": "361408e721f1e93458dcab69cd247258f99f0c9ae37f71c8ea7cfdf42a523737",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 252651,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "09a9d719d9f886913ce83686b5623c28f6f95ad03411158e95ab7795f1a8816d",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 345107,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "ead6794a5d21e65406a4468a281aa312a80b54666f966e20480d73960d36cc7b",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 383701,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "e4a8abf012644ad7f25d81e2811c3e25660366fa299e13eabcfe96f8f773a180",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 416902,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "04596c983abc3e8a8d4223f94af4c6faa06c2c7df16a074ca3471094f0d39a27",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 579538,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "37007910ce5cac2db41adc3fd8c35dc9616007f1d3a3f54a6533d62d161b6903",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 724574,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "c8235c6d6504d4f04fbdbe830473564778d86e87363f92ed4167d5697d2fdad5",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-09.jpeg",
+      "ext": ".jpeg",
+      "bytes": 468502,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "dae7b7520bb2e2f9a0265e8cf74e4997e856b5628e746034e77cf52f6d519bb7",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-10.jpeg",
+      "ext": ".jpeg",
+      "bytes": 536937,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "ea819bab0e287a2d1a9e7610049329eaacf1e39212ceeb334dbc68975ca93932",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
     },
     {
       "path": "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg",
@@ -223,6 +353,735 @@
       },
       "sha256": "7680f4fcff67d9291324021f8bc380235b80ddb7face8cf02076e25259d33358",
       "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 351312,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "df06c5e800cc374956fe3884e18d4e7de775a9a394cb086d0c803f169b750563",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 353725,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "5f0de498e1f0edb353feb4ab080e7b587ddf35f357ec64efec887e797d7510cc",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 370731,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "35647a13d6f993f339d7ee9cddf0df581145c19b18155d900b16bd6945a21180",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 283560,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "6839e73ebf2bfa388044a3bb731057ca15566351000b62008e09fa8f2be50811",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 344383,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "f9e2ba4bd0b687139bd73b9edc163c88ab764bd9f4fcd19eee878d7b90dcc27a",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 286312,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "ec2cfdea86d6d021fa6de92c1be566dd868dbdd65e8fe6129d308cd23e2ac13c",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 387044,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "8339e9ea23e969dfe3efacba60fb2dcf127f465a73eb536608f5f15c22045596",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 343453,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "4a909aa3345903cd3fac5a8d420d0eef8e1732439741fcda0d4bb41ccf022f14",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-09.jpeg",
+      "ext": ".jpeg",
+      "bytes": 340786,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "4252e191de95c13305530371c1010503fa565cea3a104cf374d63307af7a7a46",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-10.jpeg",
+      "ext": ".jpeg",
+      "bytes": 291508,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "642009cb6082156e7889a4dc996190ee62cc63d513ee82b2a80b355943a2efaf",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-11.jpeg",
+      "ext": ".jpeg",
+      "bytes": 309966,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "bb3edbaa57fb6bc1e33a1baf71d0306baaade216caf43eea090901471bd6e9de",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-12.jpeg",
+      "ext": ".jpeg",
+      "bytes": 271725,
+      "dimensions": {
+        "height": 1600,
+        "width": 1066
+      },
+      "sha256": "8a7db8ac5d84e22adf29e99189c847add9cede6bd067e35e21c19d03be22f8cb",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-13.jpeg",
+      "ext": ".jpeg",
+      "bytes": 369292,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "b01bb12523953ffdbef3b024362d96b963b1d19ad26ed5dcdb1135df84426053",
+      "usedBy": [
+        "js/data/hospedagens.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 176600,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "01eb557317391a7f043bf4455076f99ed0589c603596ca465f3e43238875bed4",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 124381,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "294f1b19968de17db6b6e7cd76aa64a91e99f9a015c5481b070bdba94fd1d756",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 166618,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "77297cb2d86fe9c89ce845e4e4a90484fdde0fa6015a9a5c57850231d81fe918",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 341775,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "f4e57103f65241785861c9ca7223cd4cb4ca58571fda2b3f64133b8d537224f7",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 195444,
+      "dimensions": {
+        "height": 1200,
+        "width": 1600
+      },
+      "sha256": "3ccf752cd75991626d5852c64542dd1973734af1c64aaf4a422ebf145d9e3518",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 226499,
+      "dimensions": {
+        "height": 1600,
+        "width": 1280
+      },
+      "sha256": "fba29796e6f51489c253c5289597a712f1e0402085412f390be5305fce4e7a41",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 520824,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "b04cbe7b34577399ae039e51e0f5b046a6db65dab0c7a94148699343a6dc675a",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 423875,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "e5c6fcfc8f772c284418d8fdaa4f8c2f0e1748606ba0787eb9a6437364a6968f",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-09.jpeg",
+      "ext": ".jpeg",
+      "bytes": 186287,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "4c6f14a533fc2256ddad656875dfc8dd4fed326ffcb48cea4e85f865a98663f9",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-10.jpeg",
+      "ext": ".jpeg",
+      "bytes": 189205,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "d087dd724e1a1c2caf6ae669a710c7033af655df72915a14d7ac16d88839883a",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-11.jpeg",
+      "ext": ".jpeg",
+      "bytes": 243077,
+      "dimensions": {
+        "height": 1280,
+        "width": 960
+      },
+      "sha256": "6853ab6f2e9c6cccb0331989c4441e52dbde0701115803dac54bf98776ef0f44",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg",
+      "ext": ".jpeg",
+      "bytes": 466760,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "a6a89b8e51cb68de2c971bfc7e38ea57737a160babdec8516f1e2f54c3797cfa",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-13.jpeg",
+      "ext": ".jpeg",
+      "bytes": 304417,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "3e357771af3086b3d8658574791aee93728f29d2cfe9651b5ebda47ddda78207",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-14.jpeg",
+      "ext": ".jpeg",
+      "bytes": 170004,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "4d9749e0dfa76151d781ebf91a56ae1f50d6c4e2d88f668f3e65be09e03262c9",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-15.jpeg",
+      "ext": ".jpeg",
+      "bytes": 278984,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "21be906bd75fb12dfaaf2d9442c8a78d253091e495f56148637353d292f143ba",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg",
+      "ext": ".jpeg",
+      "bytes": 458160,
+      "dimensions": {
+        "height": 1600,
+        "width": 1280
+      },
+      "sha256": "acdb108eb95d63a833de4c6a80de57d0a8f1ce86dae606b5eac414d4d696d892",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg",
+      "ext": ".jpeg",
+      "bytes": 523746,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "6e28106bb6c8998d6188ac37ae92430812e565bb7e64b14717ee5e99e70c39a3",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg",
+      "ext": ".jpeg",
+      "bytes": 587070,
+      "dimensions": {
+        "height": 1600,
+        "width": 1280
+      },
+      "sha256": "256fc86df40bb56dd8dcb99a66661e7badd6d1e6c4bd78c29e8b0a10a018aeb2",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-19.jpeg",
+      "ext": ".jpeg",
+      "bytes": 188759,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "f3c1dd96a0fff6368b9cf7bf2a64340b6152547a2fbe7717cf73656def24fe0c",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg",
+      "ext": ".jpeg",
+      "bytes": 450988,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "509d2e643947723c278674ced1faa326c1ab1de89e11507c04e5a50608fa5a34",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg",
+      "ext": ".jpeg",
+      "bytes": 547055,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "6aa9c03be48666b0e13426494e8dfe8221df01034f7657fe121fb900a63cbbcf",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-22.jpeg",
+      "ext": ".jpeg",
+      "bytes": 306085,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "998b02d078d09bd7c7a1a625a6b7acb4cf134255cd0c5b99937f42b7c7d026d0",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg",
+      "ext": ".jpeg",
+      "bytes": 548700,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "6b9a58c15ce1b563244320d1ef0c6f407a3a8a47128234e3c387286e391d7671",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-24.jpeg",
+      "ext": ".jpeg",
+      "bytes": 181953,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "2d2f400aa8b6734e3031e6a19c8c9084a2a73f63c291cbea01c3dbf389e9c069",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-25.jpeg",
+      "ext": ".jpeg",
+      "bytes": 808171,
+      "dimensions": {
+        "height": 1600,
+        "width": 1280
+      },
+      "sha256": "fcabcb41c94d06650530dd9c1a75de702fc1860e78b88721adfa9c9b8af947a7",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-26.jpeg",
+      "ext": ".jpeg",
+      "bytes": 202853,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "4941150eb5d97536e86b0cee24838ca523afea6685dbf539861a0ead7b7a16f6",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg",
+      "ext": ".jpeg",
+      "bytes": 430930,
+      "dimensions": {
+        "height": 1066,
+        "width": 1600
+      },
+      "sha256": "481fa95f5535eb0c400dfba1c4a8f1f34bd5cd8d8487a59710f1c7e8b0f3435f",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-28.jpeg",
+      "ext": ".jpeg",
+      "bytes": 340668,
+      "dimensions": {
+        "height": 1600,
+        "width": 1360
+      },
+      "sha256": "e12c8154cf31d08ced08c31a24abd588f80d8198bd9368aab039f9ff5f18153c",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg",
+      "ext": ".jpeg",
+      "bytes": 462028,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "e4ff608f8ccf6cebfe7cb865c202c2f83bc568fab9df0069d840447c121cf75a",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg",
+      "ext": ".jpeg",
+      "bytes": 97679,
+      "dimensions": {
+        "height": 683,
+        "width": 1024
+      },
+      "sha256": "49fbe4a4eda58fa64989832ed879e1a3a61c889088cefdaab6d1fd7c228e62a1",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-31.jpeg",
+      "ext": ".jpeg",
+      "bytes": 239624,
+      "dimensions": {
+        "height": 1600,
+        "width": 900
+      },
+      "sha256": "38d5b9d9a3a60c91343b74995207f6c1ec148d4a63a19b9f600f4ad629abbf9a",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-32.jpeg",
+      "ext": ".jpeg",
+      "bytes": 246556,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "3a74f7e8b142f21a8d7d25a3b7075626ded28c0846149223ef631c055afd6347",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-33.jpeg",
+      "ext": ".jpeg",
+      "bytes": 264994,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "ffa310d28d8fc956955555d9a8cb8d3c2047574e6e76b19cd6d4379d978612ac",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-34.jpeg",
+      "ext": ".jpeg",
+      "bytes": 303941,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "6ab7b5fb0d3f9ec4f554fa154897ec1cc965474977def2a88b6892d42ff87a25",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-35.jpeg",
+      "ext": ".jpeg",
+      "bytes": 123123,
+      "dimensions": {
+        "height": 960,
+        "width": 1440
+      },
+      "sha256": "7277da31ddaa3ee75809dedb9eaf7a9bd2d54b936d9a8c7b4aa824d874df9c02",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-36.jpeg",
+      "ext": ".jpeg",
+      "bytes": 291781,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "624a2475600f2d1b68ba90aa6ca00c20c6b93464196a2d538fa213c0bfc57ecd",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-37.jpeg",
+      "ext": ".jpeg",
+      "bytes": 687699,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "229f91983922423091ddf7c3e8a90d707333aaf9409d5e4bee3037988019c8ff",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg",
+      "ext": ".jpeg",
+      "bytes": 623658,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "976fcf2ae2c789904b240ebd109b3aa098ef0031b1a3e5a7c4ec9f09c997058c",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg",
+      "ext": ".jpeg",
+      "bytes": 387394,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "d1b75a0f957f9200ae7799ca84cfea3200413514697d0e46d1a28c5a33b32b8d",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-40.jpeg",
+      "ext": ".jpeg",
+      "bytes": 631238,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "7494d9f22a91c5ef75838875197245382fb6f02364ccebf9659b2cd415a801c4",
+      "usedBy": [
+        "js/data/restaurantes.js",
+        "js/rotas-data.js"
+      ]
     },
     {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
@@ -1662,6 +2521,18 @@
       "images/diorama_sao_mateus.webp"
     ],
     [
+      "images/empreendimentos/all-garden/all-garden-01.jpeg",
+      "images/empreendimentos/all-garden/all-garden-02.jpeg",
+      "images/empreendimentos/all-garden/all-garden-03.jpeg",
+      "images/empreendimentos/all-garden/all-garden-04.jpeg",
+      "images/empreendimentos/all-garden/all-garden-05.jpeg",
+      "images/empreendimentos/all-garden/all-garden-06.jpeg",
+      "images/empreendimentos/all-garden/all-garden-07.jpeg",
+      "images/empreendimentos/all-garden/all-garden-08.jpeg",
+      "images/empreendimentos/all-garden/all-garden-09.jpeg",
+      "images/empreendimentos/all-garden/all-garden-10.jpeg"
+    ],
+    [
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-01.jpeg",
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg",
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
@@ -1676,6 +2547,63 @@
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg",
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg",
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg"
+    ],
+    [
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-02.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-03.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-04.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-05.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-06.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-07.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-08.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-09.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-10.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-11.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-12.jpeg",
+      "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-13.jpeg"
+    ],
+    [
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-01.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-02.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-03.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-04.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-05.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-06.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-09.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-10.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-11.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-13.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-14.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-15.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-19.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-22.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-24.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-25.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-26.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-28.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-31.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-32.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-33.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-34.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-35.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-36.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-37.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg",
+      "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-40.jpeg"
     ],
     [
       "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg",
@@ -2312,6 +3240,19 @@
         "width": 3672
       },
       "sha256": "9b569504758c0b45e82627018bb16d7cbd97bd184f55e145cc6b336414fddcff",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/all-garden/all-garden-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 2118493,
+      "dimensions": {
+        "height": 1333,
+        "width": 2000
+      },
+      "sha256": "361408e721f1e93458dcab69cd247258f99f0c9ae37f71c8ea7cfdf42a523737",
       "usedBy": [
         "js/rotas-data.js"
       ]
