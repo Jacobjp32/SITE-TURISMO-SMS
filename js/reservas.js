@@ -150,7 +150,9 @@ const Reservas = {
             if (typeof CONFIG !== 'undefined' && CONFIG.firebase) {
                 const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
                 const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const { initModularAppCheck } = await import('./firebase-app-check.js');
                 const app = getApps().length ? getApps()[0] : initializeApp(CONFIG.firebase, 'reservas-app');
+                await initModularAppCheck(app);
                 const db = getFirestore(app);
                 const docRef = await addDoc(collection(db, 'reservas'), {
                     ...reserva,

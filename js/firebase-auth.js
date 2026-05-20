@@ -1,7 +1,7 @@
 /**
  * firebase-auth.js — Turismo São Mateus do Sul
  * v3 — Firebase Compat SDK, inicialização síncrona, sem eventos customizados
- * REQUER: firebase-app-compat.js + firebase-auth-compat.js + firebase-firestore-compat.js
+ * REQUER: firebase-app-compat.js + firebase-auth-compat.js + firebase-firestore-compat.js + firebase-app-check-compat.js
  *         carregados ANTES deste script via <script> no HTML
  */
 
@@ -23,7 +23,7 @@ function initFirebase() {
             resolve(false);
             return;
         }
-        function tryInit() {
+        async function tryInit() {
             if (typeof firebase === 'undefined' ||
                 !firebase.auth || !firebase.firestore) {
                 setTimeout(tryInit, 100);
@@ -35,6 +35,9 @@ function initFirebase() {
                 if (!firebase.apps.length) {
                     firebase.initializeApp(firebaseConfig);
                 }
+
+                const { initCompatAppCheck } = await import('./firebase-app-check.js');
+                await initCompatAppCheck(firebase);
 
                 const auth = firebase.auth();
                 const db   = firebase.firestore();

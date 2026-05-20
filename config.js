@@ -99,6 +99,11 @@ const CONFIG = {
         appId: '1:1042825829044:web:13173093e28be3199955e1'
     },
 
+    appCheck: {
+        enabled: true,
+        siteKey: '6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa'
+    },
+
     // ============================================================
     // FUNCIONALIDADES
     // Ative/desative recursos do site

@@ -33,10 +33,12 @@ const CMS = {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
             const { getFirestore, collection, getDocs, query, orderBy } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { initModularAppCheck } = await import('./firebase-app-check.js');
             if (typeof CONFIG === 'undefined' || !CONFIG.firebase) throw new Error('CONFIG.firebase ausente');
             const firebaseConfig = CONFIG.firebase;
             const existingApp = getApps().find(a => a.name === 'cms-app');
             const app = existingApp || initializeApp(firebaseConfig, 'cms-app');
+            await initModularAppCheck(app);
             const db = getFirestore(app);
             const snap = await getDocs(query(collection(db, 'noticias'), orderBy('data', 'desc')));
             if (!snap.empty) {
