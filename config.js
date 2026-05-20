@@ -70,7 +70,7 @@ const CONFIG = {
     // Configure sua API key para melhor performance
     // ============================================================
     maps: {
-        apiKey: 'AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8',  // Google Maps (modal de localização)
+        apiKey: 'AIzaSyDrUjsURgWjbPWS4QCWt1Xjz-cbercH6n4',  // Google Maps (modal de localização)
         centro: {
             lat: -25.8668,
             lng: -50.3828
