@@ -37,3 +37,22 @@ npm-debug.log*
 
 .codex/
 /EMPREENDIMENTOS/
+
+# Additional sensitive/local artifacts
+.netlify/
+serviceAccount*.json
+credentials*.json
+*.pem
+*.p12
+*.key
+*.bak
+*.backup
+*.old
+*.tmp
+tmp-screens/
+
+# Security audit local reports
+SECURITY_AUDIT_REPORT.md
+SECURITY_REMEDIATION_PLAN.md
+gitleaks-report.json
+trufflehog-report.json
