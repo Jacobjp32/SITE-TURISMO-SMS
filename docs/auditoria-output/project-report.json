@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-19T18:23:46.888Z",
+  "generatedAt": "2026-05-25T12:19:35.668Z",
   "totals": {
-    "files": 316,
+    "files": 320,
     "html": 36,
     "css": 21,
-    "js": 33,
+    "js": 34,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,13 +46,13 @@
     },
     {
       "ext": ".js",
-      "files": 33,
-      "bytes": 635524
+      "files": 34,
+      "bytes": 639424
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 513881
+      "bytes": 515874
     },
     {
       "ext": ".css",
@@ -61,8 +61,8 @@
     },
     {
       "ext": ".md",
-      "files": 13,
-      "bytes": 99737
+      "files": 16,
+      "bytes": 129384
     },
     {
       "ext": ".json",
@@ -72,7 +72,7 @@
     {
       "ext": ".mjs",
       "files": 5,
-      "bytes": 32233
+      "bytes": 32606
     },
     {
       "ext": ".xml",
@@ -87,7 +87,7 @@
     {
       "ext": "(sem ext)",
       "files": 4,
-      "bytes": 1606
+      "bytes": 2387
     },
     {
       "ext": ".log",
@@ -163,8 +163,8 @@
     },
     {
       "dir": ".",
-      "files": 36,
-      "bytes": 777491
+      "files": 38,
+      "bytes": 794690
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -173,8 +173,8 @@
     },
     {
       "dir": "js",
-      "files": 21,
-      "bytes": 372725
+      "files": 22,
+      "bytes": 376504
     },
     {
       "dir": "css",
@@ -183,8 +183,8 @@
     },
     {
       "dir": "docs",
-      "files": 13,
-      "bytes": 99737
+      "files": 14,
+      "bytes": 115080
     },
     {
       "dir": "js/data",
@@ -194,7 +194,7 @@
     {
       "dir": "scripts",
       "files": 5,
-      "bytes": 32233
+      "bytes": 32606
     },
     {
       "dir": "cloudflare-worker",
@@ -759,37 +759,37 @@
       "path": "404.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 2862
+      "bytes": 2866
     },
     {
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34182
+      "bytes": 34343
     },
     {
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34246
+      "bytes": 34257
     },
     {
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 38188
+      "bytes": 38199
     },
     {
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 147992
+      "bytes": 148547
     },
     {
       "path": "local.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20677
+      "bytes": 20710
     },
     {
       "path": "mapa-3d.html",
@@ -801,7 +801,7 @@
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10445
+      "bytes": 10456
     },
     {
       "path": "mapa-turistico.html",
@@ -819,7 +819,7 @@
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20723
+      "bytes": 20921
     },
     {
       "path": "o-que-fazer.html",
@@ -837,7 +837,7 @@
       "path": "onde-ficar.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 17732
+      "bytes": 17798
     },
     {
       "path": "para-o-trade.html",
@@ -849,13 +849,13 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37934
+      "bytes": 38500
     },
     {
       "path": "privacidade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22417
+      "bytes": 22461
     },
     {
       "path": "reservas.html",
@@ -885,7 +885,7 @@
       "path": "transparencia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 21191
+      "bytes": 21524
     }
   ],
   "directoryIndexes": [
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34182
+      "bytes": 34343
     },
     {
       "path": "css/mapa-3d.css",
@@ -1036,16 +1036,22 @@
       "bytes": 61
     },
     {
+      "path": "js/firebase-app-check.js",
+      "ext": ".js",
+      "dir": "js",
+      "bytes": 2394
+    },
+    {
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 19968
+      "bytes": 20149
     },
     {
       "path": "js/reservas.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 26015
+      "bytes": 26198
     },
     {
       "path": "js/roteiro-ia.js",
@@ -1075,7 +1081,7 @@
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10445
+      "bytes": 10456
     },
     {
       "path": "para-o-trade.html",
@@ -1093,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37934
+      "bytes": 38500
     },
     {
       "path": "reservas.html",
@@ -1140,9 +1146,11 @@
       "file": "admin-firebase.html",
       "scripts": [
         "js/security-utils.js",
+        "config.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/firebase-auth.js"
       ],
       "styles": [],
@@ -1705,6 +1713,7 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/firebase-auth.js",
         "js/breadcrumbs.js",
         "translations.js",
@@ -2398,7 +2407,7 @@
     },
     {
       "file": "config.js",
-      "bytes": 6514,
+      "bytes": 6635,
       "globals": [
         "const CONFIG",
         "window.CONFIG",
@@ -2460,7 +2469,7 @@
     },
     {
       "file": "js/cms.js",
-      "bytes": 11595,
+      "bytes": 11726,
       "globals": [
         "const CMS",
         "window.CMS",
@@ -2625,8 +2634,26 @@
       "addEventListeners": 0
     },
     {
+      "file": "js/firebase-app-check.js",
+      "bytes": 2388,
+      "globals": [
+        "const APP_CHECK_SDK_URL",
+        "window.CONFIG",
+        "window.__smsCompatAppCheckInitialized",
+        "window.__smsModularAppCheckInitialized"
+      ],
+      "functions": [
+        "getAppCheckConfig",
+        "initCompatAppCheck",
+        "initModularAppCheck"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
       "file": "js/firebase-auth.js",
-      "bytes": 19900,
+      "bytes": 20081,
       "globals": [
         "window.FirebaseSystem",
         "window.currentUser",
@@ -2669,7 +2696,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 60488,
+      "bytes": 60566,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -2803,7 +2830,7 @@
     },
     {
       "file": "js/reservas.js",
-      "bytes": 25945,
+      "bytes": 26128,
       "globals": [
         "window.Reservas",
         "window.open"
@@ -2890,10 +2917,11 @@
     },
     {
       "file": "js/search.js",
-      "bytes": 7777,
+      "bytes": 8589,
       "globals": [
         "window.TURISMO_SEARCH_INDEX",
         "window.TurismoSearch",
+        "window.location",
         "window.setTimeout",
         "window.translations"
       ],
@@ -2901,6 +2929,7 @@
         "buildHaystack",
         "closeOpenMenus",
         "closeSearch",
+        "escapeHtml",
         "getTranslation",
         "initSearch",
         "normalizeText",
@@ -2909,6 +2938,7 @@
         "renderIdle",
         "renderResults",
         "runSearch",
+        "safeUrl",
         "scoreItem"
       ],
       "localStorage": 1,
@@ -3086,8 +3116,8 @@
     },
     {
       "script": "config.js",
-      "pages": 5,
-      "examples": "index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
+      "pages": 6,
+      "examples": "admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
     },
     {
       "script": "js/scroll-animations.js",
@@ -3222,7 +3252,7 @@
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/site-stats.js"
+      "files": "config.js, js/firebase-app-check.js, js/site-stats.js"
     },
     {
       "global": "window.FirebaseSystem",
@@ -3238,7 +3268,7 @@
     },
     {
       "global": "window.location",
-      "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js"
+      "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js"
     },
     {
       "global": "window.ROTAS_LEGADO_ESTABLISHMENTS",

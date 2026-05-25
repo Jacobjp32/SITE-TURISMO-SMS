@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-19T18:23:44.782Z",
+  "generatedAt": "2026-05-25T12:19:33.712Z",
   "totals": {
-    "filesScanned": 94,
-    "links": 587,
+    "filesScanned": 95,
+    "links": 595,
     "routes": 43,
     "broken": 0,
     "legacy": 16,
-    "redundant": 66,
+    "redundant": 13,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
   },
@@ -269,26 +269,6 @@
   ],
   "redundant": [
     {
-      "source": "404.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "404.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "404.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "404.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "eventos/index.html",
       "url": "/eventos.html",
       "issue": "existe variante sem .html"
@@ -299,163 +279,13 @@
       "issue": "existe variante sem .html"
     },
     {
-      "source": "index.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?grupo=pontos-turisticos",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?categoria=Cultura",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?categoria=Natureza",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "index.html",
-      "url": "/mapa-turistico.html?categoria=Eventos",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/hospedagens.js",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/informacoes-essenciais.js",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/informacoes-essenciais.js",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/informacoes-essenciais.js",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/restaurantes.js",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/data/rotas.js",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html?grupo=pontos-turisticos",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/nav-shared.js",
-      "url": "/mapa-turistico.html?categoria=Cultura",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html?grupo=pontos-turisticos",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html?categoria=Cultura",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "js/search-index.js",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "local/index.html",
       "url": "/local.html",
       "issue": "existe variante sem .html"
     },
     {
-      "source": "local.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "manifest.json",
-      "url": "/index.html?utm_source=pwa",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "manifest.json",
       "url": "/eventos.html?utm_source=pwa-shortcut",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "manifest.json",
-      "url": "/reservas.html?utm_source=pwa-shortcut",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "manifest.json",
-      "url": "/mapa-turistico.html?grupo=roteiros&utm_source=pwa-shortcut",
       "issue": "existe variante sem .html"
     },
     {
@@ -469,16 +299,6 @@
       "issue": "existe variante sem .html"
     },
     {
-      "source": "mapa-turistico.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "mapa-turistico.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "noticia/index.html",
       "url": "/noticia.html",
       "issue": "existe variante sem .html"
@@ -489,53 +309,8 @@
       "issue": "existe variante sem .html"
     },
     {
-      "source": "noticias.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "noticias.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "o-que-fazer/index.html",
       "url": "/o-que-fazer.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "o-que-fazer.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "o-que-fazer.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "o-que-fazer.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "o-que-fazer.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "o-que-fazer.html",
-      "url": "/mapa-turistico.html?categoria=Eventos",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "onde-ficar/index.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "onde-ficar/index.html",
-      "url": "/mapa-turistico.html",
       "issue": "existe variante sem .html"
     },
     {
@@ -549,48 +324,8 @@
       "issue": "existe variante sem .html"
     },
     {
-      "source": "privacidade.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
       "source": "rotas-completas/index.html",
       "url": "/rotas-completas.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "rotas-completas.html",
-      "url": "/mapa-turistico.html?grupo=roteiros",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "rotas-completas.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "rotas-completas.html",
-      "url": "/mapa-turistico.html?categoria=Hospedagem",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "rotas-completas.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "sabores/index.html",
-      "url": "/mapa-turistico.html?categoria=Gastronomia",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "sabores/index.html",
-      "url": "/mapa-turistico.html",
-      "issue": "existe variante sem .html"
-    },
-    {
-      "source": "sw.js",
-      "url": "offline.html",
       "issue": "existe variante sem .html"
     },
     {

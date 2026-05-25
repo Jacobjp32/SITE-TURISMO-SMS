@@ -989,7 +989,7 @@
           + '<span>' + escapeHtml(item.categoriaLabel) + '</span>'
           + '<p>' + escapeHtml(item.descricao || t("noDescription")) + '</p>'
           + '<button type="button" class="map-popup-detail-button" data-map-details-id="' + escapeHtml(item.id) + '">' + t("popupDetails") + '</button>'
-          + (item.possuiCoordenadas ? '<a href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("popupDirections") + "</a>" : "")
+          + (item.possuiCoordenadas ? '<a href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("popupDirections") + "</a>" : "")
           + "</div>"
       );
 
@@ -1096,9 +1096,9 @@
       + (tags.length ? '<section class="map-details-tags"><h3>' + escapeHtml(t("services")) + '</h3><div>' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join("") + '</div></section>' : "")
       + renderDetailsGallery(item)
       + '<div class="map-details-actions">'
-      + (item.possuiCoordenadas ? '<a class="map-button primary" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("directions")) + '</a>' : "")
-      + (item.whatsappUrl ? '<a class="map-button" href="' + escapeHtml(item.whatsappUrl) + '" target="_blank" rel="noopener">' + escapeHtml(t("whatsapp")) + '</a>' : "")
-      + (item.contactLink ? '<a class="map-button" href="' + escapeHtml(item.contactLink) + '" target="_blank" rel="noopener">' + escapeHtml(t("externalLink")) + '</a>' : "")
+      + (item.possuiCoordenadas ? '<a class="map-button primary" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("directions")) + '</a>' : "")
+      + (item.whatsappUrl ? '<a class="map-button" href="' + escapeHtml(item.whatsappUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("whatsapp")) + '</a>' : "")
+      + (item.contactLink ? '<a class="map-button" href="' + escapeHtml(item.contactLink) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("externalLink")) + '</a>' : "")
       + '</div>'
       + '</div>';
   }
@@ -1205,7 +1205,7 @@
       + '<div class="map-detail-meta">' + meta.join("") + "</div>"
       + '<div class="map-detail-actions">'
       + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
-      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</div>";
   }
@@ -1237,7 +1237,7 @@
       + "</button>"
       + '<div class="map-list-card-actions">'
       + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
-      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener">' + t("directions") + "</a>" : "")
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</article>";
   }
@@ -1272,7 +1272,7 @@
       + '<span class="map-missing-summary-hint">▼</span>'
       + "</summary>"
       + "<p>" + t("missingDescription") + "</p><ul>"
-      + missingItems.map(function (item) { return "<li>" + item.nome + "</li>"; }).join("")
+      + missingItems.map(function (item) { return "<li>" + escapeHtml(item.nome) + "</li>"; }).join("")
       + "</ul></details>";
   }
 

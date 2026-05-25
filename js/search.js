@@ -50,6 +50,32 @@
         return dict[key] || fallback;
     }
 
+    function escapeHtml(value) {
+        return String(value || "").replace(/[&<>"']/g, function (ch) {
+            return ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[ch];
+        });
+    }
+
+    function safeUrl(value) {
+        var raw = String(value || "");
+        if (!raw || /['"()\\<>]/.test(raw)) return "/";
+        try {
+            var url = new URL(raw, window.location.origin);
+            if (url.origin === window.location.origin || url.protocol === "http:" || url.protocol === "https:") {
+                return escapeHtml(raw);
+            }
+        } catch (error) {
+            return "/";
+        }
+        return "/";
+    }
+
     function closeOpenMenus() {
         var navLinks = document.getElementById("navLinks");
         var navToggle = document.getElementById("navToggle");
@@ -96,10 +122,10 @@
         function renderResults(items) {
             results.innerHTML = items.map(function (item) {
                 return (
-                    '<a class="search-result-card" href="' + item.url + '">' +
-                    '<span class="search-result-category">' + item.category + "</span>" +
-                    '<strong class="search-result-title">' + item.title + "</strong>" +
-                    '<p class="search-result-description">' + item.description + "</p>" +
+                    '<a class="search-result-card" href="' + safeUrl(item.url) + '">' +
+                    '<span class="search-result-category">' + escapeHtml(item.category) + "</span>" +
+                    '<strong class="search-result-title">' + escapeHtml(item.title) + "</strong>" +
+                    '<p class="search-result-description">' + escapeHtml(item.description) + "</p>" +
                     "</a>"
                 );
             }).join("");

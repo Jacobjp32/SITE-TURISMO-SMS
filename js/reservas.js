@@ -193,7 +193,7 @@ const Reservas = {
     // Abrir WhatsApp com reserva
     abrirWhatsApp: function(reserva) {
         const msg = this.gerarMensagemWhatsApp(reserva);
-        window.open(`https://wa.me/${this.config.whatsapp}?text=${msg}`, '_blank');
+        window.open(`https://wa.me/${this.config.whatsapp}?text=${msg}`, '_blank', 'noopener,noreferrer');
     },
     
     // Formatar data
@@ -318,7 +318,7 @@ const Reservas = {
                         <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.85rem;cursor:pointer;font-weight:400;color:#555;">
                             <input type="checkbox" id="reserva-lgpd" required style="margin-top:3px;flex-shrink:0;">
                             Concordo com o uso dos meus dados para contato sobre esta reserva, conforme a 
-                            <a href="/transparencia" target="_blank" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
+                            <a href="/transparencia" target="_blank" rel="noopener noreferrer" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
                         </label>
                     </div>
                     <div class="reserva-modal-footer">

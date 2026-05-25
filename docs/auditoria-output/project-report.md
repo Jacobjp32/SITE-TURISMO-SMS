@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-19T18:23:46.888Z.
+Gerado em 2026-05-25T12:19:35.668Z.
 
 ## Resumo
 
-- Arquivos mapeados: 316
+- Arquivos mapeados: 320
 - HTMLs: 36
 - CSS: 21
-- JS: 33
+- JS: 34
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,15 +22,15 @@ Gerado em 2026-05-19T18:23:46.888Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 33 | 635524 |
-| .html | 36 | 513881 |
+| .js | 34 | 639424 |
+| .html | 36 | 515874 |
 | .css | 21 | 289487 |
-| .md | 13 | 99737 |
+| .md | 16 | 129384 |
 | .json | 3 | 63320 |
-| .mjs | 5 | 32233 |
+| .mjs | 5 | 32606 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
-| (sem ext) | 4 | 1606 |
+| (sem ext) | 4 | 2387 |
 | .log | 1 | 1550 |
 | .txt | 2 | 1368 |
 
@@ -125,28 +125,28 @@ Gerado em 2026-05-19T18:23:46.888Z.
 
 | path | bytes |
 | --- | --- |
-| 404.html | 2862 |
-| admin-firebase.html | 34182 |
-| eventos.html | 34246 |
-| galeria.html | 38188 |
-| index.html | 147992 |
-| local.html | 20677 |
+| 404.html | 2866 |
+| admin-firebase.html | 34343 |
+| eventos.html | 34257 |
+| galeria.html | 38199 |
+| index.html | 148547 |
+| local.html | 20710 |
 | mapa-3d.html | 6274 |
-| mapa-completo.html | 10445 |
+| mapa-completo.html | 10456 |
 | mapa-turistico.html | 10705 |
 | noticia.html | 6297 |
-| noticias.html | 20723 |
+| noticias.html | 20921 |
 | o-que-fazer.html | 5895 |
 | offline.html | 2356 |
-| onde-ficar.html | 17732 |
+| onde-ficar.html | 17798 |
 | para-o-trade.html | 15034 |
-| portal-usuario.html | 37934 |
-| privacidade.html | 22417 |
+| portal-usuario.html | 38500 |
+| privacidade.html | 22461 |
 | reservas.html | 5675 |
 | rotas-completas.html | 4224 |
 | roteiro-ia.html | 3264 |
 | sabores.html | 30248 |
-| transparencia.html | 21191 |
+| transparencia.html | 21524 |
 
 
 ## Rotas com index.html
@@ -174,7 +174,7 @@ Gerado em 2026-05-19T18:23:46.888Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 34182 |
+| admin-firebase.html | 34343 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -183,16 +183,17 @@ Gerado em 2026-05-19T18:23:46.888Z.
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
-| js/firebase-auth.js | 19968 |
-| js/reservas.js | 26015 |
+| js/firebase-app-check.js | 2394 |
+| js/firebase-auth.js | 20149 |
+| js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
 | mapa-3d.html | 6274 |
 | mapa-completo/index.html | 751 |
-| mapa-completo.html | 10445 |
+| mapa-completo.html | 10456 |
 | para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 37934 |
+| portal-usuario.html | 38500 |
 | reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |
@@ -209,7 +210,7 @@ Gerado em 2026-05-19T18:23:46.888Z.
 | js/cookies.js | 16 | 404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html |
 | js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
 | js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
-| config.js | 5 | index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
+| config.js | 6 | admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
 | js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
 | js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
@@ -342,11 +343,11 @@ _Nenhum item encontrado._
 | --- | --- |
 | window.addEventListener | js/chatbot.js, js/nav-shared.js, js/site-stats.js |
 | window.applyTranslations | js/nav-shared.js, translations.js |
-| window.CONFIG | config.js, js/site-stats.js |
+| window.CONFIG | config.js, js/firebase-app-check.js, js/site-stats.js |
 | window.FirebaseSystem | js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
-| window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/security-utils.js |
+| window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.setTimeout | js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |

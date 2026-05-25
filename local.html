@@ -341,15 +341,15 @@
         ? `<section class="mapa-section">
             <span class="sec-label">📍 Localização</span>
             <div id="local-map"></div>
-            <a href="${local.mapsUrl || 'https://www.google.com/maps/search/?api=1&query=' + local.lat + ',' + local.lng}" target="_blank" rel="noopener" class="btn-maps">🗺️ Abrir no Google Maps</a>
+            <a href="${local.mapsUrl || 'https://www.google.com/maps/search/?api=1&query=' + local.lat + ',' + local.lng}" target="_blank" rel="noopener noreferrer" class="btn-maps">🗺️ Abrir no Google Maps</a>
            </section>`
         : '';
 
     // Redes sociais
     const sociais = [];
     if (local.telefone) sociais.push(`<a class="btn-social phone" href="tel:${local.telefone.replace(/\D/g,'')}">📞 ${local.telefone}</a>`);
-    if (local.instagram) sociais.push(`<a class="btn-social instagram" href="https://instagram.com/${local.instagram.replace('@','')}" target="_blank" rel="noopener">📸 ${local.instagram}</a>`);
-    if (local.site) sociais.push(`<a class="btn-social website" href="${local.site}" target="_blank" rel="noopener">🌐 Site oficial</a>`);
+    if (local.instagram) sociais.push(`<a class="btn-social instagram" href="https://instagram.com/${local.instagram.replace('@','')}" target="_blank" rel="noopener noreferrer">📸 ${local.instagram}</a>`);
+    if (local.site) sociais.push(`<a class="btn-social website" href="${local.site}" target="_blank" rel="noopener noreferrer">🌐 Site oficial</a>`);
 
     // Tags de rota
     const rotaTags = local.rota.split('·').map(r => `<span class="tag-rota">${r.trim()}</span>`).join('');

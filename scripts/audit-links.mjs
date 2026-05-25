@@ -4,6 +4,7 @@ import path from "node:path";
 const root = process.cwd();
 const outputDir = path.join(root, "docs", "auditoria-output");
 const ignoredDirs = new Set([".git", ".codex", "EMPREENDIMENTOS", "node_modules", "dist", "build", ".cache", "auditoria-output", "scripts"]);
+const ignoredFiles = new Set(["SECURITY_AUDIT_REPORT.md", "SECURITY_REMEDIATION_PLAN.md", "gitleaks-report.json", "trufflehog-report.json"]);
 const textExts = new Set([".html", ".js", ".mjs", ".json", ".md", ".xml", ".css"]);
 const assetExts = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".mp4", ".webm", ".mov", ".pdf", ".docx", ".css", ".js", ".json", ".xml", ".ico", ".webmanifest"]);
 
@@ -18,7 +19,7 @@ async function walk(dir) {
     if (ignoredDirs.has(entry.name)) continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) files.push(...await walk(full));
-    else files.push(full);
+    else if (!ignoredFiles.has(rel(full))) files.push(full);
   }
   return files;
 }
@@ -31,7 +32,7 @@ function cleanUrl(value) {
   let url = stripOrigin(String(value || "").trim());
   if (!url || /^(mailto:|tel:|whatsapp:|javascript:|data:|#)/i.test(url)) return "";
   if (/^https?:\/\//i.test(url)) return url;
-  url = url.replace(/\\/g, "/").replace(/^\.?\//, "/");
+  url = url.replace(/\\/g, "/");
   try {
     url = decodeURIComponent(url);
   } catch (_) {
@@ -95,6 +96,12 @@ function extractLinks(text, source) {
 
 function isAssetPath(pathname) {
   return assetExts.has(path.extname(pathname).toLowerCase());
+}
+
+function hasPhysicalCleanRoute(pathname) {
+  const cleanPath = pathname.replace(/\.html$/i, "").replace(/^\/+/, "");
+  if (!cleanPath || cleanPath === pathname) return false;
+  return existingFileSet.has(`${cleanPath}/index.html`);
 }
 
 function mdTable(rows, headers, limit = 100) {
@@ -192,7 +199,7 @@ for (const link of uniqueLinks) {
     legacy.push({ source: link.source, url: link.url, issue: "rota legada ou concorrente ao mapa" });
   }
 
-  if (/\.html(?:$|[?#])/i.test(link.url) && routes.has(normalized.replace(/\.html$/i, ""))) {
+  if (/\.html(?:$|[?#])/i.test(link.url) && hasPhysicalCleanRoute(pathname)) {
     redundant.push({ source: link.source, url: link.url, issue: "existe variante sem .html" });
   }
 

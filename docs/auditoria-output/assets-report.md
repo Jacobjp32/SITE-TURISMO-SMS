@@ -1,6 +1,6 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-05-19T18:23:46.679Z.
+Gerado em 2026-05-25T12:19:35.381Z.
 
 ## Resumo
 

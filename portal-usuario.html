@@ -458,10 +458,11 @@
             return;
         }
         container.innerHTML = events.map(function(ev) {
+            var status = safeStatus(ev.status);
             return '<div class="event-item">' +
-                '<div class="event-info"><h4>' + (ev.nome||'') + '</h4>' +
-                '<p>📍 ' + (ev.local||'') + ' | 📅 ' + fmtData(ev.dataInicio) + '</p></div>' +
-                '<span class="event-status status-' + (ev.status||'pendente') + '">' + labelStatus(ev.status) + '</span>' +
+                '<div class="event-info"><h4>' + escapeHtml(ev.nome) + '</h4>' +
+                '<p>📍 ' + escapeHtml(ev.local) + ' | 📅 ' + escapeHtml(fmtData(ev.dataInicio)) + '</p></div>' +
+                '<span class="event-status status-' + status + '">' + escapeHtml(labelStatus(status)) + '</span>' +
                 '</div>';
         }).join('');
     }
@@ -473,6 +474,17 @@
 
     function labelStatus(s) {
         return ({pendente:'⏳ Em Análise', aprovado:'✅ Aprovado', rejeitado:'❌ Não Aprovado'})[s] || (s||'');
+    }
+
+    function escapeHtml(value) {
+        return String(value || '').replace(/[&<>"']/g, function(ch) {
+            return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+        });
+    }
+
+    function safeStatus(status) {
+        status = String(status || 'pendente').toLowerCase();
+        return /^(pendente|aprovado|rejeitado)$/.test(status) ? status : 'pendente';
     }
 
     // ── Modais ───────────────────────────────────────────────────────
@@ -588,7 +600,7 @@
         var cores = { success:'#27ae60', error:'#e74c3c', info:'#3498db' };
         var n = document.createElement('div');
         n.className = 'portal-notif';
-        n.innerHTML = '<span>' + msg + '</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;margin-left:0.5rem;">&times;</button>';
+        n.innerHTML = '<span>' + escapeHtml(msg) + '</span><button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;margin-left:0.5rem;">&times;</button>';
         n.style.cssText = 'position:fixed;top:140px;right:1rem;padding:1rem 1.5rem;border-radius:10px;' +
             'display:flex;align-items:center;gap:0.5rem;z-index:10000;max-width:90vw;' +
             'box-shadow:0 5px 20px rgba(0,0,0,0.25);background:' + (cores[tipo]||cores.info) + ';color:white;' +

@@ -378,7 +378,7 @@
                     <span data-lang-key="agrosamas-tag4">🦕 Parque dos Dinossauros</span>
                 </div>
                 <div class="agrosamas-buttons">
-                    <a href="https://agrosamas.com.br" target="_blank" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
+                    <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
                         Acesse o Site Oficial →
                     </a>
                     <a href="/eventos/" class="agrosamas-btn secondary" data-lang-key="natal-btn">
@@ -562,7 +562,7 @@
                         <span data-lang-key="agrosamas-tag3">🦕 Dinossauros</span>
                         <span data-lang-key="agrosamas-tag4">🎪 Parque</span>
                     </div>
-                    <a href="https://agrosamas.com.br" target="_blank" class="festa-btn" data-lang-key="agrosamas-btn">
+                    <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="festa-btn" data-lang-key="agrosamas-btn">
                         Acesse o Site Oficial →
                     </a>
                 </div>
@@ -879,7 +879,7 @@
                 <p><strong data-lang-key="modal-telefone">Telefone:</strong> <span id="mapModalPhone">-</span></p>
                 <p><strong data-lang-key="modal-horario">Horário:</strong> <span id="mapModalHours">-</span></p>
                 <div class="map-modal-actions">
-                    <a class="map-modal-btn primary" id="mapModalGoogleLink" href="#" target="_blank">
+                    <a class="map-modal-btn primary" id="mapModalGoogleLink" href="#" target="_blank" rel="noopener noreferrer">
                         🗺️ Abrir no Google Maps
                     </a>
                     <button class="map-modal-btn secondary" onclick="closeMapModal()">
@@ -1257,10 +1257,10 @@
                             Siga-nos nas Redes Sociais
                         </h3>
                         <div class="social-links">
-                            <a href="https://www.facebook.com/share/1CC3pQvqsi/" target="_blank" class="social-link" title="Facebook">📘</a>
-                            <a href="https://instagram.com/depculturaeturismosms" target="_blank" class="social-link" title="Instagram">📸</a>
-                            <a href="https://www.tiktok.com/@prefeiturasms" target="_blank" class="social-link" title="TikTok">🎵</a>
-                            <a href="https://youtube.com/@prefeiturasms" target="_blank" class="social-link" title="YouTube">▶️</a>
+                            <a href="https://www.facebook.com/share/1CC3pQvqsi/" target="_blank" rel="noopener noreferrer" class="social-link" title="Facebook">📘</a>
+                            <a href="https://instagram.com/depculturaeturismosms" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">📸</a>
+                            <a href="https://www.tiktok.com/@prefeiturasms" target="_blank" rel="noopener noreferrer" class="social-link" title="TikTok">🎵</a>
+                            <a href="https://youtube.com/@prefeiturasms" target="_blank" rel="noopener noreferrer" class="social-link" title="YouTube">▶️</a>
                         </div>
                     </div>
                 </div>
@@ -1565,7 +1565,7 @@
                     <a href="/transparencia" data-lang-key="footer-link-transparencia">Transparência Turística</a>
                     <a href="/transparencia#comtur" data-lang-key="footer-link-comtur">COMTUR - Conselho Municipal</a>
                     <a href="/transparencia#fumtur" data-lang-key="footer-link-fumtur">FUMTUR - Fundo Municipal</a>
-                    <a href="https://www.saomateusdosul.pr.gov.br" target="_blank" rel="noopener" data-lang-key="footer-link-prefeitura">Portal da Prefeitura</a>
+                    <a href="https://www.saomateusdosul.pr.gov.br" target="_blank" rel="noopener noreferrer" data-lang-key="footer-link-prefeitura">Portal da Prefeitura</a>
                     <a href="/transparencia#acessibilidade" data-lang-key="footer-link-acessibilidade">Acessibilidade</a>
                     <a href="/transparencia#lgpd" data-lang-key="footer-link-privacidade">Política de Privacidade</a>
                 </div>
@@ -2295,6 +2295,12 @@
         const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 
+        function esc(value) {
+            return String(value || '').replace(/[&<>"']/g, function(ch) {
+                return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
+            });
+        }
+
         function renderEventos(eventos) {
             // Filtrar futuros com destaque ou não recorrentes
             const filtrados = eventos
@@ -2311,7 +2317,7 @@
             }
 
             container.innerHTML = filtrados.map(evento => {
-                const titulo = evento.titulo || evento.nome || 'Evento';
+                const titulo = esc(evento.titulo || evento.nome || 'Evento');
                 const dataStr = evento.data || evento.dataInicio || '';
                 const data = new Date(dataStr + 'T12:00:00');
                 const dia = data.getDate();
@@ -2329,13 +2335,13 @@
                             </div>
                             <div>
                                 <h4 style="font-size: 1rem; margin: 0 0 0.25rem 0; color: white;">${isDestaque ? '⭐ ' : ''}${titulo}${fonte}</h4>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">${diaSemana}</span>
+                                <span style="font-size: 0.8rem; opacity: 0.8;">${esc(diaSemana)}</span>
                             </div>
                         </div>
                         <div style="padding: 1.25rem;">
                             <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; color: #666;">
-                                <span>🕐 ${evento.horario || ''}</span>
-                                <span>📍 ${evento.local || ''}</span>
+                                <span>🕐 ${esc(evento.horario)}</span>
+                                <span>📍 ${esc(evento.local)}</span>
                             </div>
                         </div>
                     </a>

@@ -1,15 +1,15 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-05-19T18:23:44.782Z.
+Gerado em 2026-05-25T12:19:33.712Z.
 
 ## Resumo
 
-- Arquivos varridos: 94
-- Links internos/externos coletados: 587
+- Arquivos varridos: 95
+- Links internos/externos coletados: 595
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0
 - Links legados/concorrentes: 16
-- Links redundantes com .html: 66
+- Links redundantes com .html: 13
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
@@ -44,71 +44,18 @@ _Nenhum item encontrado._
 
 | source | url | issue |
 | --- | --- | --- |
-| 404.html | /mapa-turistico.html | existe variante sem .html |
-| 404.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| 404.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| 404.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
 | eventos/index.html | /eventos.html | existe variante sem .html |
 | galeria/index.html | /galeria.html | existe variante sem .html |
-| index.html | /mapa-turistico.html | existe variante sem .html |
-| index.html | /mapa-turistico.html?grupo=pontos-turisticos | existe variante sem .html |
-| index.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| index.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| index.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| index.html | /mapa-turistico.html?categoria=Cultura | existe variante sem .html |
-| index.html | /mapa-turistico.html?categoria=Natureza | existe variante sem .html |
-| index.html | /mapa-turistico.html?categoria=Eventos | existe variante sem .html |
-| js/data/hospedagens.js | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| js/data/informacoes-essenciais.js | /mapa-turistico.html | existe variante sem .html |
-| js/data/informacoes-essenciais.js | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| js/data/informacoes-essenciais.js | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| js/data/restaurantes.js | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| js/data/rotas.js | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html?grupo=pontos-turisticos | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| js/nav-shared.js | /mapa-turistico.html?categoria=Cultura | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html?grupo=pontos-turisticos | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html?categoria=Cultura | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| js/search-index.js | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
 | local/index.html | /local.html | existe variante sem .html |
-| local.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| manifest.json | /index.html?utm_source=pwa | existe variante sem .html |
 | manifest.json | /eventos.html?utm_source=pwa-shortcut | existe variante sem .html |
-| manifest.json | /reservas.html?utm_source=pwa-shortcut | existe variante sem .html |
-| manifest.json | /mapa-turistico.html?grupo=roteiros&utm_source=pwa-shortcut | existe variante sem .html |
 | mapa-3d/index.html | /mapa-3d.html | existe variante sem .html |
 | mapa-completo/index.html | /mapa-completo.html | existe variante sem .html |
-| mapa-turistico.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| mapa-turistico.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
 | noticia/index.html | /noticia.html | existe variante sem .html |
 | noticias/index.html | /noticias.html | existe variante sem .html |
-| noticias.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| noticias.html | /mapa-turistico.html | existe variante sem .html |
 | o-que-fazer/index.html | /o-que-fazer.html | existe variante sem .html |
-| o-que-fazer.html | /mapa-turistico.html | existe variante sem .html |
-| o-que-fazer.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| o-que-fazer.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| o-que-fazer.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| o-que-fazer.html | /mapa-turistico.html?categoria=Eventos | existe variante sem .html |
-| onde-ficar/index.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| onde-ficar/index.html | /mapa-turistico.html | existe variante sem .html |
 | portal-usuario/index.html | /portal-usuario.html | existe variante sem .html |
 | privacidade/index.html | /privacidade.html | existe variante sem .html |
-| privacidade.html | /mapa-turistico.html | existe variante sem .html |
 | rotas-completas/index.html | /rotas-completas.html | existe variante sem .html |
-| rotas-completas.html | /mapa-turistico.html?grupo=roteiros | existe variante sem .html |
-| rotas-completas.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| rotas-completas.html | /mapa-turistico.html?categoria=Hospedagem | existe variante sem .html |
-| rotas-completas.html | /mapa-turistico.html | existe variante sem .html |
-| sabores/index.html | /mapa-turistico.html?categoria=Gastronomia | existe variante sem .html |
-| sabores/index.html | /mapa-turistico.html | existe variante sem .html |
-| sw.js | offline.html | existe variante sem .html |
 | transparencia/index.html | /transparencia.html | existe variante sem .html |
 
 
