@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-25T12:19:35.668Z.
+Gerado em 2026-05-25T12:42:15.061Z.
 
 ## Resumo
 
@@ -22,15 +22,15 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 34 | 639424 |
-| .html | 36 | 515874 |
+| .js | 34 | 642568 |
+| .html | 36 | 518686 |
 | .css | 21 | 289487 |
 | .md | 16 | 129384 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .xml | 1 | 3852 |
 | .rules | 1 | 3105 |
-| (sem ext) | 4 | 2387 |
+| (sem ext) | 4 | 2475 |
 | .log | 1 | 1550 |
 | .txt | 2 | 1368 |
 
@@ -126,7 +126,7 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 34343 |
+| admin-firebase.html | 34902 |
 | eventos.html | 34257 |
 | galeria.html | 38199 |
 | index.html | 148547 |
@@ -140,7 +140,7 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | offline.html | 2356 |
 | onde-ficar.html | 17798 |
 | para-o-trade.html | 15034 |
-| portal-usuario.html | 38500 |
+| portal-usuario.html | 40753 |
 | privacidade.html | 22461 |
 | reservas.html | 5675 |
 | rotas-completas.html | 4224 |
@@ -174,7 +174,7 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 34343 |
+| admin-firebase.html | 34902 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -184,7 +184,7 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 20149 |
+| js/firebase-auth.js | 23104 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
@@ -193,7 +193,7 @@ Gerado em 2026-05-25T12:19:35.668Z.
 | mapa-completo.html | 10456 |
 | para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 38500 |
+| portal-usuario.html | 40753 |
 | reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |

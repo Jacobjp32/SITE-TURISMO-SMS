@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v13';
+const CACHE_NAME = 'turismo-sms-v14';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -16,10 +16,8 @@ const OFFLINE_URL = 'offline.html';
 const PRECACHE_ASSETS = [
     'offline.html',
     'translations.js',
-    'config.js',
     'js/chatbot.js',
     'js/reservas.js',
-    'js/firebase-auth.js',
     'images/logo_pin_turismo_3d.png',
     'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
     'images/PRACA_DO_RIO_IGUACU.jpg',
@@ -38,6 +36,13 @@ const NEVER_CACHE = [
     'firebasestorage.googleapis.com',
     'firestore.googleapis.com',
     'identitytoolkit.googleapis.com',
+    'securetoken.googleapis.com',
+    'firebaseinstallations.googleapis.com',
+    'content-firebaseappcheck.googleapis.com',
+    'firebaseappcheck.googleapis.com',
+    'config.js',
+    'js/firebase-auth.js',
+    'js/firebase-app-check.js',
     'js/nav-shared.js',
     'js/site-meta.js',
     'api.open-meteo.com',

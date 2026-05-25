@@ -14,6 +14,76 @@ if (!firebaseConfig) {
 }
 
 let currentUser = null;
+const SDK_LOAD_TIMEOUT_MS = 15000;
+const AUTH_OPERATION_TIMEOUT_MS = 20000;
+const PROFILE_LOAD_TIMEOUT_MS = 8000;
+
+function withTimeout(promise, timeoutMs, code) {
+    return new Promise(function(resolve, reject) {
+        var timer = setTimeout(function() {
+            var error = new Error('Operação excedeu o tempo limite.');
+            error.code = code || 'operation/timeout';
+            reject(error);
+        }, timeoutMs);
+
+        promise.then(function(value) {
+            clearTimeout(timer);
+            resolve(value);
+        }).catch(function(error) {
+            clearTimeout(timer);
+            reject(error);
+        });
+    });
+}
+
+function getFirebaseAuth() {
+    if (typeof firebase === 'undefined' || !firebase.auth) {
+        var error = new Error('Firebase Auth indisponível.');
+        error.code = 'auth/sdk-not-ready';
+        throw error;
+    }
+    return firebase.auth();
+}
+
+function getFirebaseDB() {
+    if (typeof firebase === 'undefined' || !firebase.firestore) {
+        var error = new Error('Firebase Firestore indisponível.');
+        error.code = 'firestore/sdk-not-ready';
+        throw error;
+    }
+    return firebase.firestore();
+}
+
+function basicUserFromAuth(user) {
+    return {
+        uid: user.uid,
+        email: user.email,
+        nome: user.displayName || user.email || 'Usuário',
+        _profilePending: true
+    };
+}
+
+function persistUserSession(user) {
+    try {
+        localStorage.setItem('smsUserSession', JSON.stringify({
+            nome: user.nome || '',
+            email: user.email || ''
+        }));
+    } catch(ex) {}
+}
+
+function authErrorMessage(error, fallback) {
+    var message = fallback || 'Não foi possível concluir a autenticação.';
+    if (error.code === 'auth/user-not-found') message = 'Usuário não encontrado.';
+    else if (error.code === 'auth/wrong-password') message = 'Senha incorreta.';
+    else if (error.code === 'auth/invalid-credential') message = 'E-mail ou senha incorretos.';
+    else if (error.code === 'auth/invalid-email') message = 'E-mail inválido.';
+    else if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Tente novamente mais tarde.';
+    else if (error.code === 'auth/network-request-failed') message = 'Falha de conexão com o serviço de login. Tente novamente.';
+    else if (error.code === 'auth/login-timeout') message = 'O serviço de login demorou para responder. Tente novamente em alguns instantes.';
+    else if (error.code === 'auth/sdk-not-ready') message = 'O serviço de login ainda não carregou. Recarregue a página e tente novamente.';
+    return message;
+}
 
 // Aguarda os SDKs do Firebase carregarem nas páginas que usam autenticação.
 function initFirebase() {
@@ -23,9 +93,16 @@ function initFirebase() {
             resolve(false);
             return;
         }
+        var startedAt = Date.now();
+
         async function tryInit() {
             if (typeof firebase === 'undefined' ||
                 !firebase.auth || !firebase.firestore) {
+                if (Date.now() - startedAt >= SDK_LOAD_TIMEOUT_MS) {
+                    console.error('[firebase-auth] SDKs do Firebase não carregaram dentro do tempo limite.');
+                    resolve(false);
+                    return;
+                }
                 setTimeout(tryInit, 100);
                 return;
             }
@@ -49,24 +126,29 @@ function initFirebase() {
                 // Observer de estado de autenticação
                 auth.onAuthStateChanged(async function(user) {
                     if (user) {
+                        currentUser = basicUserFromAuth(user);
+                        window.currentUser = currentUser;
+                        persistUserSession(currentUser);
+                        FirebaseSystem.updateUI();
+
                         try {
-                            const userDoc = await db.collection('usuarios').doc(user.uid).get();
+                            const userDoc = await withTimeout(
+                                db.collection('usuarios').doc(user.uid).get(),
+                                PROFILE_LOAD_TIMEOUT_MS,
+                                'firestore/profile-timeout'
+                            );
                             if (userDoc.exists) {
-                                currentUser = Object.assign({ uid: user.uid, email: user.email }, userDoc.data());
+                                currentUser = Object.assign({ uid: user.uid, email: user.email, _profilePending: false }, userDoc.data());
                             } else {
-                                currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
+                                currentUser._profilePending = false;
                             }
                         } catch(e) {
-                            currentUser = { uid: user.uid, email: user.email, nome: user.displayName || 'Usuário' };
+                            console.warn('[firebase-auth] Não foi possível carregar o perfil completo do usuário.', e);
+                            currentUser._profilePending = false;
                         }
                         window.currentUser = currentUser;
-                        // Persistir sessão para outras páginas (sem Firebase)
-                        try {
-                            localStorage.setItem('smsUserSession', JSON.stringify({
-                                nome: currentUser.nome || '',
-                                email: currentUser.email || ''
-                            }));
-                        } catch(ex) {}
+                        persistUserSession(currentUser);
+                        FirebaseSystem.updateUI();
                     } else {
                         currentUser = null;
                         window.currentUser = null;
@@ -78,7 +160,8 @@ function initFirebase() {
                 // Firebase (compat) inicializado
                 resolve(true);
             } catch(error) {
-                    resolve(false);
+                console.error('[firebase-auth] Falha ao inicializar Firebase/Auth.', error);
+                resolve(false);
             }
         }
         tryInit();
@@ -126,17 +209,16 @@ const FirebaseSystem = {
 
     login: async function(email, senha) {
         try {
-            const auth = firebase.auth();
-            const cred = await auth.signInWithEmailAndPassword(email, senha);
+            const auth = getFirebaseAuth();
+            const cred = await withTimeout(
+                auth.signInWithEmailAndPassword(email, senha),
+                AUTH_OPERATION_TIMEOUT_MS,
+                'auth/login-timeout'
+            );
             return { success: true, message: 'Login realizado com sucesso!', user: cred.user };
         } catch(error) {
             console.error('Erro no login:', error);
-            let message = 'E-mail ou senha incorretos.';
-            if (error.code === 'auth/user-not-found')         message = 'Usuário não encontrado.';
-            else if (error.code === 'auth/wrong-password')    message = 'Senha incorreta.';
-            else if (error.code === 'auth/invalid-credential') message = 'E-mail ou senha incorretos.';
-            else if (error.code === 'auth/too-many-requests') message = 'Muitas tentativas. Tente novamente mais tarde.';
-            return { success: false, message: message };
+            return { success: false, message: authErrorMessage(error, 'E-mail ou senha incorretos.') };
         }
     },
 
@@ -273,10 +355,14 @@ const FirebaseSystem = {
         if (!this.isLoggedIn()) return [];
         try {
             const db = firebase.firestore();
-            const [pendSnap, appSnap] = await Promise.all([
-                db.collection('eventos_pendentes').where('submittedBy', '==', currentUser.uid).get(),
-                db.collection('eventos_aprovados').where('submittedBy', '==', currentUser.uid).get()
-            ]);
+            const [pendSnap, appSnap] = await withTimeout(
+                Promise.all([
+                    db.collection('eventos_pendentes').where('submittedBy', '==', currentUser.uid).get(),
+                    db.collection('eventos_aprovados').where('submittedBy', '==', currentUser.uid).get()
+                ]),
+                PROFILE_LOAD_TIMEOUT_MS,
+                'firestore/events-timeout'
+            );
             const pending  = pendSnap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
             const approved = appSnap.docs.map(function(d)  { return Object.assign({ id: d.id }, d.data()); });
             return pending.concat(approved);
