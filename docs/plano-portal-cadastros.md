@@ -1,206 +1,239 @@
 # Plano tecnico do Portal de Cadastros
 
-## 1. Estado atual do Portal do Usuario
+## 1. Estado atual confirmado
 
-Arquivos auditados nesta rodada:
+Arquivos revisados nesta rodada:
 
-- `portal-usuario.html`
-- `admin-firebase.html`
-- `js/firebase-auth.js`
-- `js/firebase-app-check.js`
-- `js/cms.js`
-- `js/reservas.js`
-- `js/security-utils.js`
-- `config.js`
-- `sw.js`
-- `_headers`
+- `docs/plano-portal-cadastros.md`
 - `firestore.rules`
+- `config.js`
+- `js/firebase-auth.js`
+- `admin-firebase.html`
+- `portal-usuario.html`
 - `docs/auditoria-seguranca.md`
-- `docs/commands.md`
 
-Resumo do estado atual:
+Confirmacoes do estado atual:
 
-- O Portal do Usuario ja possui login real com Firebase Auth.
-- O formulario de evento e renderizado em modal inline dentro de `portal-usuario.html`.
-- O formulario de estabelecimento tambem e renderizado em modal inline dentro de `portal-usuario.html`.
-- Os envios atuais ja sao gravados no Firestore.
-- Nao existe upload de imagens hoje.
-- Nao existe uso atual de Firebase Storage no portal/admin.
-- Ja existe painel admin simples para aprovar ou rejeitar eventos e estabelecimentos.
-- O fluxo atual usa collections separadas de pendentes e aprovados.
-- O card "acompanhar cadastros" existe no portal, mas a listagem implementada hoje acompanha apenas eventos do usuario.
+- O portal grava eventos em `eventos_pendentes`.
+- O portal grava estabelecimentos em `estabelecimentos_pendentes`.
+- O admin aprova eventos para `eventos_aprovados`.
+- O admin aprova estabelecimentos para `estabelecimentos_aprovados`.
+- O papel administrativo vem de `usuarios/{uid}.role`.
+- A UI admin exige `role === 'admin'`, mas as regras reais aceitam `admin` e `moderator` nas acoes moderadas.
+- `storageBucket` esta configurado em `config.js`.
+- Nao existe upload de imagem hoje.
+- Nao existe uso real de Firebase Storage no portal/admin.
+- Nao existe arquivo `storage.rules` no repositorio.
+- Nao existe proposta formal versionada de Storage Rules hoje.
 
-## 2. O que ja existe
+## 2. Collections atuais e impacto real
 
-### Formularios e tela logada
-
-- Evento: modal `#eventModal` em `portal-usuario.html`.
-- Estabelecimento: modal `#establishmentModal` em `portal-usuario.html`.
-- Envio do evento: funcao inline `enviarEvento()`.
-- Envio do estabelecimento: funcao inline `enviarEstabelecimento()`.
-- Acompanhamento atual: funcao inline `carregarEventos()`, sem equivalente para estabelecimentos.
-
-### Firestore atual
-
-Collections ja usadas:
+Collections hoje em uso para o portal:
 
 - `usuarios`
 - `eventos_pendentes`
 - `eventos_aprovados`
 - `estabelecimentos_pendentes`
 - `estabelecimentos_aprovados`
-- `noticias`
-- `reservas`
 
 Fluxo atual:
 
-- Usuario cria conta e ganha documento em `usuarios/{uid}`.
-- Evento enviado vai para `eventos_pendentes`.
-- Estabelecimento enviado vai para `estabelecimentos_pendentes`.
-- Admin/moderador aprova copiando para collection de aprovados.
-- No caso de aprovacao, o documento pendente e removido.
-- No caso de rejeicao, o documento permanece na collection pendente com `status = 'rejeitado'`.
+1. Usuario autenticado envia.
+2. Documento entra em collection de pendentes.
+3. Admin/moderador aprova copiando o documento para collection de aprovados.
+4. O documento pendente aprovado e apagado.
+5. Rejeicao hoje apenas atualiza `status = 'rejeitado'` no pendente.
 
-### Admin atual
+Consequencias do modelo atual:
 
-O painel `admin-firebase.html` ja possui:
+- funciona para o fluxo basico existente;
+- aumenta duplicacao de logica entre pendente e aprovado;
+- complica historico;
+- complica pedido de ajustes;
+- complica upload de imagens se os arquivos dependerem do documento final;
+- complica listagem consolidada por usuario;
+- obriga o admin a pensar em "mover/copiar" em vez de "mudar status".
 
-- secao de aprovacoes pendentes;
-- listagem de eventos pendentes;
-- listagem de estabelecimentos pendentes;
-- aprovacao;
-- rejeicao com observacao via `prompt`;
-- listagem de usuarios;
-- listagem de eventos aprovados.
+## 3. Estado atual das Firestore Rules
 
-Limitacoes atuais do admin:
+As `firestore.rules` atuais sao conservadoras e coerentes com o fluxo existente:
 
-- nao ha visualizacao detalhada real de evento;
-- nao ha visualizacao detalhada de estabelecimento;
-- nao ha anexos/imagens;
-- nao ha estado "solicitar ajustes";
-- nao ha listagem de estabelecimentos aprovados;
-- nao ha filtro, busca ou historico de revisao.
+- `usuarios/{userId}`:
+  - leitura pelo proprio usuario ou admin;
+  - criacao pelo proprio usuario ou admin;
+  - update restrito a poucos campos se for o proprio usuario;
+  - delete apenas admin.
+- `eventos_pendentes/{eventId}`:
+  - leitura por moderador/admin ou dono (`submittedBy`);
+  - create autenticado com `submittedBy == request.auth.uid` e `status == 'pendente'`;
+  - update/delete apenas moderador/admin.
+- `estabelecimentos_pendentes/{estId}`:
+  - mesmo desenho de `eventos_pendentes`.
+- `eventos_aprovados/{eventId}`:
+  - leitura publica;
+  - write apenas moderador/admin.
+- `estabelecimentos_aprovados/{estId}`:
+  - leitura publica;
+  - write apenas moderador/admin.
 
-### Seguranca e papeis atuais
+O que as rules atuais **nao** suportam para a fase futura:
 
-- A UI admin depende de `window.currentUser.role === 'admin'`.
-- A protecao real esta em `firestore.rules`, usando `usuarios/{uid}.role` e `ativo != false`.
-- `moderator` ja e aceito nas regras e em `FirebaseSystem.isModerator()`.
-- `localStorage` guarda apenas sessao visual simplificada (`smsUserSession`), nao o papel admin.
+- dono editar submissao propria em `pendente`;
+- dono editar submissao propria em `changes_requested`;
+- campos novos como `ownerUid`, `ownerEmail`, `ownerName`, `images`, `mainImage`, `updatedAt`, `rejectionReason`, `source`;
+- collections unificadas;
+- requests de alteracao de empreendimento existente;
+- qualquer fluxo de Firebase Storage.
 
-## 3. O que falta
+## 4. Como roles/admin sao tratados hoje
 
-- Upload de ate 6 imagens por estabelecimento.
-- Upload de imagens para eventos.
-- Uso real de Firebase Storage no portal/admin.
-- Modelo unico e mais escalavel para submissao e revisao.
-- Acompanhamento de estabelecimentos pelo proprio usuario.
-- Estado intermediario de ajuste solicitado.
-- Painel admin com detalhes completos e preview de imagens.
-- Estrutura para pedido de alteracao de empreendimento existente.
-- Integracao futura entre aprovados e mapa sem editar JS estatico a cada cadastro.
+Estado atual:
 
-## 4. Modelo de dados atual
+- Perfil fica em `usuarios/{uid}`.
+- `role` pode ser `user`, `moderator` ou `admin`.
+- `ativo != false` participa da autorizacao real nas rules.
+- `FirebaseSystem.isModerator()` aceita `admin` ou `moderator`.
+- `admin-firebase.html` usa `role === 'admin'` na UI de entrada do painel.
 
-### Tabela de mapeamento
+Observacao importante:
 
-| Campo atual | Onde aparece | Collection/arquivo | Observacao |
-| --- | --- | --- | --- |
-| `uid` | sessao e auth | Firebase Auth / `usuarios` | chave do usuario |
-| `nome` | cadastro/login/menu/admin | `usuarios` / `js/firebase-auth.js` | usado tambem como `submittedByName` |
-| `email` | cadastro/login/admin | `usuarios` / `js/firebase-auth.js` | usado tambem como `submittedByEmail` |
-| `telefone` | cadastro usuario | `usuarios` / `js/firebase-auth.js` | perfil basico |
-| `tipo` | cadastro usuario | `usuarios` / `js/firebase-auth.js` | `turista`, `organizador`, `estabelecimento` |
-| `organizacao` | cadastro usuario | `usuarios` / `js/firebase-auth.js` | texto livre |
-| `ativo` | admin/regras | `usuarios` / `firestore.rules` | bloqueia acesso quando `false` |
-| `role` | admin/regras | `usuarios` / `firestore.rules` | `user`, `moderator`, `admin` |
-| `criadoEm` | usuarios/admin | `usuarios` / `js/firebase-auth.js` | timestamp servidor |
-| `verificado` | usuarios | `usuarios` / `js/firebase-auth.js` | hoje sem fluxo adicional |
-| `id` | evento | `eventos_pendentes`, `eventos_aprovados` | gerado como `evt_{timestamp}` |
-| `nome` | evento | `eventos_pendentes`, `eventos_aprovados` | nome publico do evento |
-| `categoria` | evento | `eventos_pendentes`, `eventos_aprovados` | texto simples |
-| `dataInicio` | evento | `eventos_pendentes`, `eventos_aprovados` | string de data |
-| `dataFim` | evento | `eventos_pendentes`, `eventos_aprovados` | opcional |
-| `horaInicio` | evento | `eventos_pendentes`, `eventos_aprovados` | opcional |
-| `horaFim` | evento | `eventos_pendentes`, `eventos_aprovados` | opcional |
-| `local` | evento | `eventos_pendentes`, `eventos_aprovados` | texto livre |
-| `descricao` | evento | `eventos_pendentes`, `eventos_aprovados` | texto livre |
-| `entrada` | evento | `eventos_pendentes`, `eventos_aprovados` | `gratuito`, `pago`, `contribuicao` |
-| `valor` | evento | `eventos_pendentes`, `eventos_aprovados` | opcional |
-| `contato` | evento | `eventos_pendentes`, `eventos_aprovados` | telefone/whatsapp em um campo so |
-| `site` | evento | `eventos_pendentes`, `eventos_aprovados` | URL ou rede social |
-| `submittedBy` | evento | `eventos_pendentes`, `eventos_aprovados` | dono do envio |
-| `submittedByName` | evento | `eventos_pendentes`, `eventos_aprovados` | snapshot do perfil |
-| `submittedByEmail` | evento | `eventos_pendentes`, `eventos_aprovados` | snapshot do perfil |
-| `status` | evento | `eventos_pendentes`, `eventos_aprovados` | `pendente`, `rejeitado`, `aprovado` |
-| `submittedAt` | evento | `eventos_pendentes`, `eventos_aprovados` | timestamp servidor |
-| `reviewedAt` | evento | `eventos_pendentes`, `eventos_aprovados` | existe no fluxo atual |
-| `reviewedBy` | evento | `eventos_pendentes`, `eventos_aprovados` | uid do revisor |
-| `reviewNotes` | evento | `eventos_pendentes`, `eventos_aprovados` | observacao simples |
-| `id` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | gerado como `est_{timestamp}` |
-| `nome` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | nome publico |
-| `categoria` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | texto simples |
-| `endereco` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | texto livre |
-| `descricao` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | texto livre |
-| `telefone` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | obrigatorio |
-| `whatsapp` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | opcional |
-| `site` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | hoje mistura site e Instagram |
-| `horario` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | texto livre |
-| `submittedBy` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | dono do envio |
-| `submittedByName` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | snapshot do perfil |
-| `submittedByEmail` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | snapshot do perfil |
-| `status` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | `pendente`, `rejeitado`, `aprovado` |
-| `submittedAt` | estabelecimento | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | timestamp servidor |
-| `reviewedAt` | estabelecimento aprovado/rejeitado | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | incompleto no create atual |
-| `reviewedBy` | estabelecimento aprovado/rejeitado | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | incompleto no create atual |
-| `reviewNotes` | estabelecimento aprovado/rejeitado | `estabelecimentos_pendentes`, `estabelecimentos_aprovados` | incompleto no create atual |
+- Hoje existe pequena assimetria entre UI e rules: a UI restringe o painel a `admin`, enquanto as rules aceitam `moderator` para acoes moderadas. Isso nao quebra seguranca, mas precisa ser lembrado quando o painel for evoluido.
 
-### Notificacao atual
+## 5. Existe Storage Rules hoje?
 
-Nao existe collection de notificacoes implementada hoje.
+Nao.
 
-O que existe:
+Confirmado nesta rodada:
 
-- mensagens de retorno em tela;
-- texto dizendo que o usuario recebera notificacao;
-- infraestrutura de `push` preparada no `sw.js`, mas sem fluxo conectado ao portal.
+- nao existe `storage.rules`;
+- nao existe `firebase.storage.rules`;
+- nao existe uso real de SDK de Storage no codigo auditado;
+- existe apenas `storageBucket` configurado em `config.js`.
 
-### Cadastro pendente atual
+Conclusao:
 
-Ja existe como conceito, mas separado por dominio:
+- o projeto esta tecnicamente preparado para usar Storage no Firebase;
+- mas ainda nao existe camada de regras, politica de paths ou fluxo de leitura/escrita para arquivos.
+
+## 6. Decisao de arquitetura
+
+### Opcao A: manter collections atuais
+
+Collections:
 
 - `eventos_pendentes`
+- `eventos_aprovados`
 - `estabelecimentos_pendentes`
+- `estabelecimentos_aprovados`
 
-### Perfil, role e admin atual
+Vantagens:
 
-Ja existe em `usuarios`:
+- menor risco imediato;
+- menor diff na fase 1;
+- encaixa melhor no codigo atual;
+- acelera a entrega do primeiro upload com aprovacao;
+- evita retrabalho cedo no admin e no portal.
 
-- `role`
-- `ativo`
-- `tipo`
-- `organizacao`
+Desvantagens:
 
-## 5. Modelo de dados proposto
+- modelo menos limpo;
+- duplicacao estrutural;
+- historico ruim;
+- pedido de ajustes menos natural;
+- migracao futura continua necessaria se o fluxo crescer.
 
-### Recomendacao principal
+### Opcao B: migrar agora para collections unificadas
 
-Para a proxima fase, vale trocar o modelo "pendentes/aprovados em collections separadas" por "uma collection por tipo de submissao com `status`". Isso simplifica:
+Collections:
 
-- listagem por dono;
-- auditoria;
-- historico;
-- solicitacao de ajustes;
-- aprovacao sem mover documento;
-- integracao futura com Storage;
-- sincronizacao com mapa e agenda.
+- `event_submissions`
+- `establishment_submissions`
+- `establishment_update_requests`
 
-### Establishment submissions
+Vantagens:
 
-Collection proposta: `establishment_submissions`
+- modelo mais limpo e escalavel;
+- status centralizado;
+- melhor para historico e auditoria;
+- melhor para `changes_requested`;
+- melhor para upload e metadados de imagem;
+- melhor para futura integracao com mapa e agenda.
 
-Campos:
+Desvantagens:
+
+- maior impacto no codigo atual;
+- maior risco de quebrar fluxo existente;
+- exige mexer simultaneamente em portal, admin, regras e acompanhamento do usuario;
+- torna a primeira entrega mais pesada.
+
+### Recomendacao final
+
+Recomendo **arquitetura incremental com Opcao A primeiro e Opcao B planejada como fase de maturacao**.
+
+Decisao pratica desta rodada:
+
+- **Fase 1 a Fase 4**: manter collections atuais para reduzir risco.
+- **Fase 5**: migrar para collections unificadas se o fluxo provar valor e volume.
+
+Motivo:
+
+- respeita o estado real do projeto;
+- reduz chance de quebrar o portal atual;
+- permite introduzir upload e aprovacao visual com mudanca cirurgica;
+- adia a migracao estrutural para um momento com menos incerteza.
+
+## 7. Modelo de dados recomendado
+
+Mesmo mantendo collections atuais no curto prazo, o modelo de campos ja deve nascer alinhado ao modelo final.
+
+### Evento
+
+Collection alvo curta: `eventos_pendentes`
+
+Collection alvo longa: `event_submissions`
+
+Campos recomendados:
+
+- `id`
+- `ownerUid`
+- `ownerEmail`
+- `ownerName`
+- `status`
+- `title`
+- `date`
+- `time`
+- `location`
+- `description`
+- `organizer`
+- `phone`
+- `whatsapp`
+- `instagram`
+- `website`
+- `images`
+- `mainImage`
+- `createdAt`
+- `updatedAt`
+- `submittedAt`
+- `reviewedAt`
+- `reviewedBy`
+- `reviewNotes`
+- `rejectionReason`
+- `source`
+
+Compatibilidade com o modelo atual:
+
+- `submittedBy` pode coexistir temporariamente com `ownerUid`;
+- `nome` pode coexistir temporariamente com `title`;
+- `local` pode coexistir temporariamente com `location`;
+- `site` pode coexistir temporariamente com `website` ou `instagram`.
+
+### Estabelecimento
+
+Collection alvo curta: `estabelecimentos_pendentes`
+
+Collection alvo longa: `establishment_submissions`
+
+Campos recomendados:
 
 - `id`
 - `ownerUid`
@@ -220,66 +253,26 @@ Campos:
 - `mainImage`
 - `createdAt`
 - `updatedAt`
+- `submittedAt`
 - `reviewedAt`
 - `reviewedBy`
 - `reviewNotes`
+- `rejectionReason`
 - `source`
-- `publishedAt`
 
-Observacoes:
+Compatibilidade com o modelo atual:
 
-- `status`: recomendar `draft`, `pending`, `changes_requested`, `approved`, `rejected`, `archived`.
-- `images`: array de objetos, nao so array de strings.
-- `mainImage`: URL/caminho da imagem de capa.
-- `source`: ex. `portal_usuario`.
-- `publishedAt`: util quando aprovado virar conteudo publico.
+- `submittedBy` pode coexistir temporariamente com `ownerUid`;
+- `nome` pode coexistir temporariamente com `name`;
+- `endereco` pode coexistir temporariamente com `address`;
+- `horario` pode coexistir temporariamente com `openingHours`;
+- `site` pode coexistir temporariamente com `website` e `instagram`.
 
-Estrutura sugerida para `images`:
+### Pedido de alteracao futura
 
-- `path`
-- `url`
-- `fileName`
-- `contentType`
-- `sizeBytes`
-- `position`
+Collection recomendada:
 
-### Event submissions
-
-Collection proposta: `event_submissions`
-
-Campos:
-
-- `id`
-- `ownerUid`
-- `ownerEmail`
-- `ownerName`
-- `status`
-- `title`
-- `date`
-- `endDate`
-- `time`
-- `endTime`
-- `location`
-- `description`
-- `organizer`
-- `phone`
-- `whatsapp`
-- `instagram`
-- `website`
-- `ticketType`
-- `ticketPrice`
-- `images`
-- `mainImage`
-- `createdAt`
-- `updatedAt`
-- `reviewedAt`
-- `reviewedBy`
-- `reviewNotes`
-- `publishedAt`
-
-### Pedido de alteracao de empreendimento existente
-
-Collection proposta: `establishment_update_requests`
+- `establishment_update_requests`
 
 Campos:
 
@@ -287,276 +280,208 @@ Campos:
 - `establishmentId`
 - `ownerUid`
 - `ownerEmail`
-- `ownerName`
+- `status`
 - `requestedChanges`
 - `images`
-- `status`
-- `reviewNotes`
+- `mainImage`
 - `createdAt`
-- `updatedAt`
 - `reviewedAt`
 - `reviewedBy`
+- `reviewNotes`
 
-Observacao:
+## 8. Estrutura recomendada para images
 
-- `requestedChanges` deve guardar apenas diff sem apagar automaticamente o cadastro publico.
+Recomendacao:
 
-## 6. Upload de imagens ate 6 fotos
+- `images` deve ser array de objetos, nao array simples de strings.
 
-### Requisitos propostos
+Cada item:
 
-- maximo de 6 imagens por envio;
-- formatos aceitos: `jpg`, `jpeg`, `png`, `webp`;
-- bloquear `heic`, `dng`, `zip`, `svg`;
-- limite de `3 MB` por imagem;
-- preview antes do envio;
-- remocao individual antes do envio;
-- contador visual `0/6 imagens`;
-- validacao no cliente antes de enviar;
-- nao converter para WebP nesta fase.
+- `path`
+- `url`
+- `fileName`
+- `contentType`
+- `sizeBytes`
+- `position`
+- `uploadedAt`
 
-### Estrutura de UI sugerida
+Campo `mainImage`:
 
-Sem mudar layout geral, incluir no formulario:
+- apontar para o item de capa escolhido;
+- pode ser a URL publica controlada ou o path canônico do Storage, conforme a fase.
 
-- `<input type="file" multiple accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp">`
-- area de preview em grade simples;
-- contador `X/6 imagens`;
-- mensagem por arquivo recusado;
-- botao remover por preview.
+## 9. Firestore Rules propostas
 
-### Validacoes obrigatorias no cliente
+As regras abaixo sao **proposta documental**, nao devem ser aplicadas automaticamente nesta rodada.
 
-- total maximo de 6 arquivos;
-- extensao e MIME type aceitos;
-- tamanho maximo por arquivo;
-- impedir duplicatas obvias por nome+tamanho;
-- impedir envio se nao houver login;
-- impedir envio se upload falhar parcialmente.
+### Requisitos
 
-### Caminho de Storage recomendado
+- usuario autenticado cria cadastro proprio;
+- usuario autenticado le apenas cadastros proprios;
+- usuario autenticado edita apenas cadastro proprio com `status in ['pendente', 'changes_requested']`;
+- usuario nao aprova nem rejeita;
+- admin le todos;
+- admin/moderador revisa todos;
+- ninguem nao autenticado escreve;
+- leitura publica apenas para collections aprovadas quando isso fizer sentido.
+
+### Proposta de comportamento
+
+#### Se a fase 1 mantiver collections atuais
+
+- `eventos_pendentes`
+  - `create`: owner somente;
+  - `read`: owner ou moderador/admin;
+  - `update`: owner somente se `status` atual for `pendente` ou `changes_requested`, com lista de campos permitidos;
+  - `update`: moderador/admin para revisar;
+  - `delete`: evitar delete do owner; moderador/admin apenas se houver politica clara.
+- `estabelecimentos_pendentes`
+  - mesmo desenho.
+- `eventos_aprovados`
+  - leitura publica se continuar sendo fonte publica;
+  - write apenas moderador/admin.
+- `estabelecimentos_aprovados`
+  - leitura publica se continuar sendo fonte publica;
+  - write apenas moderador/admin.
+
+#### Se houver migracao futura para collections unificadas
+
+- `event_submissions`
+  - owner cria;
+  - owner le os seus;
+  - owner atualiza somente status `pendente` ou `changes_requested`;
+  - moderador/admin le todos e revisa;
+  - publico nao le bruto.
+- `establishment_submissions`
+  - mesmo desenho.
+- `establishment_update_requests`
+  - owner cria e le os seus;
+  - owner atualiza somente antes de revisao ou quando `changes_requested`;
+  - moderador/admin le todos e revisa.
+
+### Regras de validacao recomendadas
+
+- obrigar `ownerUid == request.auth.uid`;
+- bloquear troca arbitraria de `ownerUid`, `ownerEmail`, `ownerName`;
+- bloquear mudanca de `status` pelo owner;
+- limitar `status` a conjunto conhecido;
+- limitar chaves permitidas;
+- exigir `submittedAt` no create;
+- exigir `updatedAt` no update;
+- exigir `reviewedAt`, `reviewedBy`, `reviewNotes` apenas para moderador/admin;
+- bloquear arrays e mapas fora do schema esperado quando possivel.
+
+## 10. Storage Rules propostas
+
+Nao existe `storage.rules` hoje. A proposta desta rodada e documental.
+
+### Paths recomendados
 
 Estabelecimentos:
 
-- `submissions/establishments/{uid}/{submissionId}/image-01.ext`
-- `submissions/establishments/{uid}/{submissionId}/image-02.ext`
+- `submissions/establishments/{uid}/{submissionId}/{fileName}`
 
 Eventos:
 
-- `submissions/events/{uid}/{submissionId}/image-01.ext`
-- `submissions/events/{uid}/{submissionId}/image-02.ext`
+- `submissions/events/{uid}/{submissionId}/{fileName}`
 
-### Estrategia tecnica recomendada
+### Regras desejadas
 
-1. Criar primeiro o documento Firestore com status `pending`.
-2. Gerar `submissionId`.
-3. Subir imagens para o path desse `submissionId`.
-4. Gravar metadados das imagens no proprio documento.
-5. Atualizar `mainImage` com a primeira imagem valida ou com a escolhida pelo usuario.
+- usuario autenticado so envia para o proprio `{uid}`;
+- usuario autenticado so le os proprios arquivos pendentes;
+- admin pode ler todos;
+- publico nao lista arquivos brutos pendentes;
+- tipos aceitos:
+  - `image/jpeg`
+  - `image/png`
+  - `image/webp`
+- bloquear:
+  - `image/svg+xml`
+  - `image/heic`
+  - `application/zip`
+  - formatos de camera brutos como `dng`
+- limite recomendado:
+  - `3 * 1024 * 1024` bytes por arquivo.
 
-Vantagem:
+### Observacao importante
 
-- evita upload sem vinculo;
-- facilita limpeza futura por submissao;
-- simplifica Storage rules por UID e path.
+O limite de **6 imagens por submissao** deve ser tratado no app e reforcado por validacao de submissao no Firestore. Storage Rules sozinhas nao contam facilmente quantidade de arquivos por pasta com seguranca suficiente para esse caso.
 
-### O que nao fazer agora no upload
+### Destino futuro das imagens aprovadas
 
-- nao tentar converter HEIC/DNG no navegador;
-- nao usar SVG vindo do usuario;
-- nao depender de compressao automatica pesada nesta fase;
-- nao salvar apenas base64 em Firestore;
-- nao misturar imagens publicas finais com imagens de submissao pendente.
+Decisao ainda em aberto, mas a recomendacao e uma destas:
 
-## 7. Fluxo de aprovacao proposto
+- manter o mesmo arquivo e apenas referencia-lo quando aprovado;
+- ou copiar para area/prefixo publico controlado em fase posterior.
 
-### Admin
+Nao decidir isso agora evita acoplamento prematuro.
 
-Painel admin futuro deve permitir:
-
-- listar pendentes;
-- filtrar por tipo e status;
-- abrir detalhes da submissao;
-- visualizar imagens;
-- aprovar;
-- rejeitar;
-- solicitar ajustes;
-- registrar observacao;
-- manter historico de revisao.
-
-### Status recomendados
-
-- `pending`
-- `changes_requested`
-- `approved`
-- `rejected`
-
-### Regras de fluxo
-
-- Nada entra no mapa ou agenda publica antes de `approved`.
-- `changes_requested` deve manter o envio visivel ao dono.
-- Rejeicao nao deve apagar imagens automaticamente sem politica de retencao definida.
-- Aprovacao deve registrar `reviewedAt`, `reviewedBy` e `reviewNotes`.
-
-### Painel atual versus painel futuro
-
-O painel atual ja serve como base, mas ainda e raso:
-
-- hoje aprova/rejeita por linha de tabela;
-- nao abre detalhes reais;
-- nao enxerga imagens;
-- nao trabalha com pedidos de ajuste;
-- nao centraliza estabelecimentos aprovados.
-
-## 8. Integracao futura com mapa
-
-### Estado atual do mapa
-
-- O mapa publico hoje depende principalmente de `window.TURISMO_DATA` e arquivos JS estaticos.
-- Os cadastros do portal ainda nao alimentam o mapa turistico.
-
-### Opcao A: overlay dinamico em tempo real
-
-Como funcionaria:
-
-- carregar base estatica atual;
-- depois consultar Firestore para `establishment_submissions` aprovados;
-- normalizar esses dados no cliente;
-- mesclar com a lista estatica como camada complementar.
-
-Vantagens:
-
-- sem editar JS estatico a cada aprovacao;
-- publicacao mais rapida;
-- historico mais simples.
-
-Riscos:
-
-- aumenta dependencia de Firestore no mapa publico;
-- exige cuidado de cache, disponibilidade e seguranca;
-- pode introduzir variacao de carregamento e inconsistencia de UX.
-
-### Opcao B: rotina administrativa/manual para exportar aprovados
-
-Como funcionaria:
-
-- admin aprova no Firestore;
-- depois uma rotina manual ou tela admin exporta os aprovados para um JS/JSON controlado pelo projeto;
-- o mapa continua lendo majoritariamente fonte estatica publicada.
-
-Vantagens:
-
-- preserva a arquitetura atual do site;
-- menor risco de impacto no mapa publico;
-- mais previsivel para hospedagem estatica e cache.
-
-Riscos:
-
-- exige etapa operacional extra;
-- publicacao nao e imediata;
-- aumenta chance de backlog manual.
-
-### Recomendacao para este projeto
-
-Recomendo **Opcao B primeiro**.
-
-Motivo:
-
-- o projeto atual e majoritariamente estatico;
-- o pedido desta fase e conservador;
-- o mapa ja tem camada de dados sensivel e nao deve virar dependente de Firestore agora;
-- primeiro vale estabilizar submissao, revisao e aprovacao;
-- depois, se o fluxo provar volume e necessidade real, avaliar overlay dinamico apenas para aprovados.
-
-## 9. Integracao futura com eventos
-
-Para eventos, a mesma logica vale:
-
-- manter `event_submissions` no Firestore como origem editorial;
-- publicar na agenda publica apenas itens `approved`;
-- em fase inicial, preferir uma rotina controlada que gere feed estavel para a agenda;
-- evitar que `eventos.html` dependa imediatamente de leitura publica ampla do Firestore sem revisar bem seguranca e cache.
-
-## 10. Regras de seguranca necessarias
-
-Cuidados obrigatorios:
-
-- usuario so cria seus proprios cadastros;
-- usuario so ve seus proprios envios;
-- admin ve todos;
-- apenas admin ou moderador aprova;
-- Storage rules devem limitar path por UID;
-- validar tipo e tamanho no cliente;
-- nao confiar apenas no front-end;
-- escapar dados ao renderizar;
-- evitar HTML bruto nas descricoes;
-- nao usar `localStorage` para papel admin;
-- revisar Firestore rules e Storage rules antes de producao;
-- separar claramente arquivos pendentes de arquivos publicos finais.
-
-### Observacao importante desta rodada
-
-As regras atuais de Firestore ja protegem bem o fluxo atual de pendentes/aprovados, mas **nao ha Storage rules auditadas aqui** porque o upload ainda nao existe.
-
-## 11. Etapas recomendadas de implementacao
+## 11. Plano incremental recomendado
 
 ### Fase 1
 
-- revisar e fechar modelo final de collections;
-- decidir se mantem collections separadas ou migra para `*_submissions`;
-- definir politica de status;
-- desenhar Storage rules e Firestore rules para o novo modelo.
+- adicionar upload de imagens no portal para cadastros pendentes;
+- manter collections atuais;
+- gravar metadados no Firestore;
+- introduzir Storage rules e ajuste controlado das Firestore rules.
 
 ### Fase 2
 
-- adicionar upload de imagens no formulario de evento;
-- adicionar upload de imagens no formulario de estabelecimento;
-- salvar submissao com metadados de imagem;
-- listar eventos e estabelecimentos do proprio usuario no portal.
+- permitir que o admin visualize imagens;
+- aprovar, rejeitar ou solicitar ajustes;
+- registrar observacao estruturada.
 
 ### Fase 3
 
-- evoluir `admin-firebase.html` para detalhes completos;
-- preview de imagens;
-- aprovacao, rejeicao e pedido de ajustes;
-- historico minimo de revisao.
+- publicar aprovados em area publica dinamica ou export controlado;
+- manter aprovados fora do mapa/agenda ate status final.
 
 ### Fase 4
 
-- publicar aprovados em feed controlado para mapa/agenda;
-- testar fluxo completo com dados reais;
-- definir limpeza/retencao de submissao rejeitada ou substituida.
+- criar fluxo de pedido de alteracao de empreendimento existente;
+- introduzir `establishment_update_requests`.
+
+### Fase 5
+
+- reavaliar migracao para `event_submissions` e `establishment_submissions`;
+- executar migracao apenas se a complexidade operacional justificar.
 
 ## 12. Riscos
 
-- crescer em cima do modelo atual de collections separadas pode gerar manutencao ruim;
-- conectar mapa diretamente ao Firestore cedo demais aumenta risco operacional;
-- upload sem Storage rules revisadas cria risco serio;
-- misturar site e Instagram no mesmo campo dificulta validacao futura;
-- o portal hoje acompanha apenas eventos, o que pode gerar UX inconsistente quando estabelecimentos comecarem a ter imagens e status detalhado;
-- `reviewNotes` hoje existe, mas sem fluxo mais rico de ajustes;
-- o painel admin ainda depende fortemente de HTML inline e precisa continuar escapando dados em toda expansao.
+- mudar tudo para collections unificadas cedo demais pode quebrar o fluxo atual;
+- manter collections separadas para sempre tende a acumular divida tecnica;
+- upload sem rules de Storage revisadas cria superficie nova de risco;
+- o painel admin atual ainda nao suporta detalhes ricos;
+- owner editando submissao apos envio exige rules mais precisas do que as atuais;
+- misturar campos legados e novos sem plano de compatibilidade pode confundir o admin.
 
-## 13. O que nao deve ser feito agora
+## 13. Validacoes humanas obrigatorias antes de publicar rules
 
-- nao alterar `firestore.rules` nesta rodada;
-- nao alterar CSP;
-- nao alterar login/Auth;
-- nao alterar mapa turistico;
-- nao alterar dados turisticos estaticos;
-- nao criar backend;
-- nao instalar dependencias;
-- nao criar `package.json`;
-- nao mudar layout geral;
-- nao publicar leitura publica de Storage ou Firestore sem revisar regras;
-- nao fazer upload direto para pasta publica do site.
+- confirmar se `moderator` deve continuar com poder de aprovacao ou se isso sera apenas `admin`;
+- decidir se leitura publica continuara em collections aprovadas ou via export controlado;
+- decidir estrategia de URL final das imagens aprovadas;
+- decidir politica de retencao para arquivos rejeitados;
+- revisar se o painel admin deve aceitar `changes_requested` na UI;
+- revisar se os campos legados serao mantidos em paralelo por uma fase.
 
-## 14. Recomendacao final
+## 14. O que nao deve ser implementado ainda
 
-Proxima etapa sugerida:
+- nao publicar `firestore.rules` automaticamente;
+- nao criar `storage.rules` definitivas sem revisao humana;
+- nao implementar upload agora;
+- nao mexer em `portal-usuario.html` nesta rodada;
+- nao mexer em `admin-firebase.html` nesta rodada;
+- nao mexer em login/Auth;
+- nao mexer em CSP;
+- nao mexer no mapa turistico;
+- nao mover dados estaticos publicos para Firestore agora;
+- nao abrir leitura publica ampla de arquivos pendentes.
 
-1. Fechar o modelo alvo com collections unificadas `establishment_submissions` e `event_submissions`.
-2. Definir Firestore rules e Storage rules para esse modelo.
-3. Implementar primeiro o upload e acompanhamento do proprio usuario.
-4. Depois evoluir o painel admin de aprovacao.
-5. So por ultimo decidir como aprovados entram no mapa e na agenda publica.
+## 15. Proxima etapa recomendada
+
+Proxima etapa:
+
+1. Revisar e aprovar o documento de rules proposto.
+2. Definir se a fase 1 vai mesmo manter collections atuais.
+3. Implementar upload de imagens em cadastros pendentes com risco minimo.
+4. So depois evoluir o painel admin para preview e revisao completa.
