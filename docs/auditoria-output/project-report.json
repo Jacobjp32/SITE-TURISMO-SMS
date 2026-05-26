@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-25T12:42:15.061Z",
+  "generatedAt": "2026-05-26T13:08:42.004Z",
   "totals": {
     "files": 320,
     "html": 36,
@@ -52,7 +52,7 @@
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 518686
+      "bytes": 519110
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 16,
-      "bytes": 129384
+      "bytes": 131182
     },
     {
       "ext": ".json",
@@ -87,7 +87,7 @@
     {
       "ext": "(sem ext)",
       "files": 4,
-      "bytes": 2475
+      "bytes": 2687
     },
     {
       "ext": ".log",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 38,
-      "bytes": 797779
+      "bytes": 798415
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -184,7 +184,7 @@
     {
       "dir": "docs",
       "files": 14,
-      "bytes": 115080
+      "bytes": 116878
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34902
+      "bytes": 35114
     },
     {
       "path": "eventos.html",
@@ -849,7 +849,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 40753
+      "bytes": 40965
     },
     {
       "path": "privacidade.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34902
+      "bytes": 35114
     },
     {
       "path": "css/mapa-3d.css",
@@ -1099,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 40753
+      "bytes": 40965
     },
     {
       "path": "reservas.html",

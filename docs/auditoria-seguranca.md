@@ -133,6 +133,26 @@ Estado atual:
 
 Observacao: as metas CSP nos HTMLs continuam divergentes e mais permissivas. O ideal e uma fonte unica de politica.
 
+### Ajuste CSP para Firebase App Check/reCAPTCHA
+
+Em 2026-05-26 foi confirmado um bloqueio de CSP no login do Portal do Usuario:
+
+- a meta CSP de `portal-usuario.html` bloqueava `https://www.google.com/recaptcha/api.js`;
+- `admin-firebase.html` tinha a mesma politica de login e foi alinhado;
+- `_headers` tambem define CSP para `/*.html`, entao em producao a pagina pode receber duas politicas ao mesmo tempo.
+
+A causa foi a ativacao do Firebase App Check com reCAPTCHA via `firebase.appCheck().activate(...)` sem permitir o script do reCAPTCHA em `script-src`. O bloqueio impedia o App Check/Auth de concluir e o fluxo de login caia no timeout defensivo.
+
+Dominios/paths adicionados de forma especifica:
+
+- `script-src`: `https://www.google.com/recaptcha/` e `https://www.gstatic.com/recaptcha/`;
+- `frame-src`: `https://www.google.com/recaptcha/` e `https://recaptcha.google.com/recaptcha/`;
+- `connect-src`: `https://www.google.com/recaptcha/`, `https://www.gstatic.com/recaptcha/`, `https://content-firebaseappcheck.googleapis.com`, `https://firebaseappcheck.googleapis.com`, `https://securetoken.googleapis.com`, `https://identitytoolkit.googleapis.com`, `https://firebaseinstallations.googleapis.com` e `https://firestore.googleapis.com`.
+
+Nao foi usado wildcard (`*`) porque o fluxo conhecido precisa apenas de Firebase/Auth/Firestore/App Check e dos paths do reCAPTCHA. O risco residual e manter CSP duplicada entre `_headers` e metas HTML: qualquer ajuste futuro em uma fonte precisa ser espelhado na outra ou uma das duas deve ser removida em uma rodada propria, com validacao de hospedagem.
+
+Necessario apos deploy: testar login real com uma conta valida, confirmar que o reCAPTCHA nao gera violacao de CSP no console e que App Check/Auth continuam funcionando no dominio de producao.
+
 ## Service worker
 
 `sw.js` esta em postura razoavel:
