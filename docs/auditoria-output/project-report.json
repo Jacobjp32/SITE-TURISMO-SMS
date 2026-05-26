@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-26T13:43:21.530Z",
+  "generatedAt": "2026-05-26T14:20:16.837Z",
   "totals": {
-    "files": 321,
+    "files": 324,
     "html": 36,
     "css": 21,
     "js": 34,
@@ -47,22 +47,22 @@
     {
       "ext": ".js",
       "files": 34,
-      "bytes": 636292
+      "bytes": 636327
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 519110
+      "bytes": 536133
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 289487
+      "bytes": 291487
     },
     {
       "ext": ".md",
-      "files": 17,
-      "bytes": 134082
+      "files": 19,
+      "bytes": 157031
     },
     {
       "ext": ".json",
@@ -75,14 +75,14 @@
       "bytes": 32606
     },
     {
+      "ext": ".rules",
+      "files": 2,
+      "bytes": 4671
+    },
+    {
       "ext": ".xml",
       "files": 1,
       "bytes": 3852
-    },
-    {
-      "ext": ".rules",
-      "files": 1,
-      "bytes": 3105
     },
     {
       "ext": "(sem ext)",
@@ -163,8 +163,8 @@
     },
     {
       "dir": ".",
-      "files": 38,
-      "bytes": 798415
+      "files": 39,
+      "bytes": 817039
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -179,12 +179,12 @@
     {
       "dir": "css",
       "files": 21,
-      "bytes": 289487
+      "bytes": 291487
     },
     {
       "dir": "docs",
-      "files": 15,
-      "bytes": 119778
+      "files": 17,
+      "bytes": 142727
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 35114
+      "bytes": 35444
     },
     {
       "path": "eventos.html",
@@ -849,7 +849,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 40965
+      "bytes": 57658
     },
     {
       "path": "privacidade.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 35114
+      "bytes": 35444
     },
     {
       "path": "css/mapa-3d.css",
@@ -1009,7 +1009,7 @@
       "path": "css/portal-usuario.css",
       "ext": ".css",
       "dir": "css",
-      "bytes": 17199
+      "bytes": 19199
     },
     {
       "path": "css/reservas.css",
@@ -1099,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 40965
+      "bytes": 57658
     },
     {
       "path": "reservas.html",
@@ -1713,6 +1713,7 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/firebase-auth.js",
         "js/breadcrumbs.js",
@@ -1772,6 +1773,10 @@
         "evtValor",
         "evtContato",
         "evtSite",
+        "evtImages",
+        "eventImageCounter",
+        "eventImageError",
+        "eventImagePreview",
         "btnEnviarEvento",
         "establishmentModal",
         "estNome",
@@ -1787,6 +1792,10 @@
         "estWhatsapp",
         "estSite",
         "estHorario",
+        "estImages",
+        "establishmentImageCounter",
+        "establishmentImageError",
+        "establishmentImagePreview",
         "btnEnviarEst"
       ]
     },
@@ -2077,10 +2086,10 @@
     },
     {
       "file": "css/portal-usuario.css",
-      "bytes": 17193,
+      "bytes": 19193,
       "important": 0,
       "media": 1,
-      "selectorCount": 98
+      "selectorCount": 110
     },
     {
       "file": "css/reservas.css",
@@ -3059,7 +3068,7 @@
     },
     {
       "file": "sw.js",
-      "bytes": 5403,
+      "bytes": 5438,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",

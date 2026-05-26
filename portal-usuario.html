@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://firebaseappcheck.googleapis.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net; img-src 'self' data: https: blob: https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://firebaseappcheck.googleapis.com https://firebasestorage.googleapis.com https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <meta name="description" content="Portal do Usuário - Cadastre eventos e estabelecimentos no site oficial de turismo de São Mateus do Sul.">
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
@@ -239,6 +239,16 @@
                 </div>
                 <div class="form-group"><label>Telefone/WhatsApp para Contato</label><input type="tel" id="evtContato" placeholder="(42) 99999-9999"></div>
                 <div class="form-group"><label>Site ou Rede Social</label><input type="url" id="evtSite" placeholder="https://..."></div>
+                <div class="form-group">
+                    <label for="evtImages">Imagens do Evento</label>
+                    <div class="upload-box">
+                        <input type="file" id="evtImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('event')">
+                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 3 MB cada. As imagens serao analisadas junto com o cadastro.</p>
+                        <p class="upload-counter" id="eventImageCounter">0/6 imagens</p>
+                        <p class="upload-error" id="eventImageError" hidden></p>
+                        <div class="upload-preview-grid" id="eventImagePreview"></div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-primary btn-secondary" onclick="fecharModal('eventModal')">Cancelar</button>
@@ -276,6 +286,16 @@
                 </div>
                 <div class="form-group"><label>Site ou Instagram</label><input type="text" id="estSite" placeholder="https://... ou @seuinstagram"></div>
                 <div class="form-group"><label>Horário de Funcionamento</label><input type="text" id="estHorario" placeholder="Ex: Seg a Sex: 8h às 18h | Sáb: 8h às 12h"></div>
+                <div class="form-group">
+                    <label for="estImages">Imagens do Estabelecimento</label>
+                    <div class="upload-box">
+                        <input type="file" id="estImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('establishment')">
+                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 3 MB cada. As imagens serao analisadas antes de qualquer publicacao.</p>
+                        <p class="upload-counter" id="establishmentImageCounter">0/6 imagens</p>
+                        <p class="upload-error" id="establishmentImageError" hidden></p>
+                        <div class="upload-preview-grid" id="establishmentImagePreview"></div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn-primary btn-secondary" onclick="fecharModal('establishmentModal')">Cancelar</button>
@@ -302,6 +322,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
     <script src="js/firebase-auth.js?v=auth-login-fix-20260525"></script>
 
@@ -380,6 +401,18 @@
         var name = user.nome || user.displayName || user.email || 'Usuário';
         return String(name).split(' ')[0] || 'Usuário';
     }
+
+    var PORTAL_UPLOAD_LIMIT = 6;
+    var PORTAL_IMAGE_MAX_BYTES = 3 * 1024 * 1024;
+    var PORTAL_ALLOWED_IMAGE_TYPES = {
+        'image/jpeg': 'jpg',
+        'image/png': 'png',
+        'image/webp': 'webp'
+    };
+    var portalUploads = {
+        event: [],
+        establishment: []
+    };
 
     function renderAuthState(user) {
         var authScreen = document.getElementById('authScreen');
@@ -503,6 +536,289 @@
         }
     });
 
+    function getUploadConfig(kind) {
+        return kind === 'event'
+            ? {
+                inputId: 'evtImages',
+                counterId: 'eventImageCounter',
+                errorId: 'eventImageError',
+                previewId: 'eventImagePreview',
+                pathRoot: 'events'
+            }
+            : {
+                inputId: 'estImages',
+                counterId: 'establishmentImageCounter',
+                errorId: 'establishmentImageError',
+                previewId: 'establishmentImagePreview',
+                pathRoot: 'establishments'
+            };
+    }
+
+    function sanitizePlainText(value) {
+        return String(value || '')
+            .replace(/<[^>]*>/g, ' ')
+            .replace(/[\u0000-\u001F\u007F]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function containsHtml(value) {
+        return /<[^>]+>/.test(String(value || ''));
+    }
+
+    function sanitizeStorageSegment(value) {
+        return String(value || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 60) || 'arquivo';
+    }
+
+    function getPortalCurrentUser() {
+        return (window.FirebaseSystem && FirebaseSystem.getCurrentUser && FirebaseSystem.getCurrentUser()) || window.currentUser || null;
+    }
+
+    function getPortalDb() {
+        var db = window.firebaseDB && window.firebaseDB.db;
+        if (!db) throw new Error('Firestore não inicializado. Recarregue a página e tente novamente.');
+        return db;
+    }
+
+    function getPortalStorage() {
+        if (!window.firebase || typeof firebase.storage !== 'function') {
+            throw new Error('Firebase Storage não está disponível nesta página.');
+        }
+        return firebase.storage();
+    }
+
+    function getFieldValue() {
+        return firebase.firestore.FieldValue;
+    }
+
+    function showUploadError(kind, message) {
+        var errorEl = document.getElementById(getUploadConfig(kind).errorId);
+        if (!errorEl) return;
+        if (message) {
+            errorEl.hidden = false;
+            errorEl.textContent = message;
+        } else {
+            errorEl.hidden = true;
+            errorEl.textContent = '';
+        }
+    }
+
+    function updateImageCounter(kind) {
+        var config = getUploadConfig(kind);
+        var counter = document.getElementById(config.counterId);
+        if (counter) {
+            counter.textContent = portalUploads[kind].length + '/' + PORTAL_UPLOAD_LIMIT + ' imagens';
+        }
+    }
+
+    function renderImagePreviews(kind) {
+        var config = getUploadConfig(kind);
+        var preview = document.getElementById(config.previewId);
+        if (!preview) return;
+        preview.innerHTML = '';
+
+        portalUploads[kind].forEach(function(entry, index) {
+            var card = document.createElement('div');
+            card.className = 'upload-preview-card';
+
+            var img = document.createElement('img');
+            img.className = 'upload-preview-image';
+            img.src = entry.previewUrl;
+            img.alt = 'Preview da imagem ' + (index + 1);
+            card.appendChild(img);
+
+            var meta = document.createElement('div');
+            meta.className = 'upload-preview-meta';
+
+            var name = document.createElement('p');
+            name.className = 'upload-preview-name';
+            name.textContent = entry.file.name;
+            meta.appendChild(name);
+
+            var size = document.createElement('p');
+            size.className = 'upload-preview-size';
+            size.textContent = formatFileSize(entry.file.size);
+            meta.appendChild(size);
+
+            var removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'upload-remove-btn';
+            removeButton.textContent = 'Remover';
+            removeButton.addEventListener('click', function() {
+                removeSelectedImage(kind, index);
+            });
+            meta.appendChild(removeButton);
+
+            card.appendChild(meta);
+            preview.appendChild(card);
+        });
+
+        updateImageCounter(kind);
+    }
+
+    function formatFileSize(size) {
+        if (!size) return '0 KB';
+        if (size >= 1024 * 1024) {
+            return (size / (1024 * 1024)).toFixed(2).replace('.', ',') + ' MB';
+        }
+        return Math.round(size / 1024) + ' KB';
+    }
+
+    function validateImageFiles(files, currentCount) {
+        var accepted = [];
+        var errors = [];
+        Array.prototype.forEach.call(files || [], function(file) {
+            if (!(file.type in PORTAL_ALLOWED_IMAGE_TYPES)) {
+                errors.push(file.name + ': formato não suportado. Use JPG, PNG ou WebP.');
+                return;
+            }
+            if (file.size > PORTAL_IMAGE_MAX_BYTES) {
+                errors.push(file.name + ': excede o limite de 3 MB.');
+                return;
+            }
+            if (currentCount + accepted.length >= PORTAL_UPLOAD_LIMIT) {
+                errors.push('Limite máximo de 6 imagens atingido.');
+                return;
+            }
+            accepted.push(file);
+        });
+        return { accepted: accepted, errors: errors };
+    }
+
+    function handleImageSelection(kind) {
+        var config = getUploadConfig(kind);
+        var input = document.getElementById(config.inputId);
+        if (!input || !input.files) return;
+
+        var result = validateImageFiles(input.files, portalUploads[kind].length);
+        portalUploads[kind] = portalUploads[kind].concat(result.accepted.map(function(file) {
+            return {
+                file: file,
+                previewUrl: URL.createObjectURL(file)
+            };
+        }));
+
+        if (result.errors.length > 0) {
+            showUploadError(kind, result.errors[0]);
+        } else {
+            showUploadError(kind, '');
+        }
+
+        renderImagePreviews(kind);
+        input.value = '';
+    }
+
+    function removeSelectedImage(kind, index) {
+        var removed = portalUploads[kind].splice(index, 1)[0];
+        if (removed && removed.previewUrl) {
+            URL.revokeObjectURL(removed.previewUrl);
+        }
+        showUploadError(kind, '');
+        renderImagePreviews(kind);
+    }
+
+    function clearUploadState(kind) {
+        portalUploads[kind].forEach(function(entry) {
+            if (entry.previewUrl) URL.revokeObjectURL(entry.previewUrl);
+        });
+        portalUploads[kind] = [];
+        showUploadError(kind, '');
+        renderImagePreviews(kind);
+        var input = document.getElementById(getUploadConfig(kind).inputId);
+        if (input) input.value = '';
+    }
+
+    async function deleteUploadedFiles(uploadedItems) {
+        var storage = getPortalStorage();
+        await Promise.all((uploadedItems || []).map(function(item) {
+            return storage.ref(item.path).delete().catch(function() {
+                return null;
+            });
+        }));
+    }
+
+    async function uploadSubmissionImages(kind, submissionId, user) {
+        var config = getUploadConfig(kind);
+        var storage = getPortalStorage();
+        var uploaded = [];
+
+        for (var i = 0; i < portalUploads[kind].length; i += 1) {
+            var file = portalUploads[kind][i].file;
+            var extension = PORTAL_ALLOWED_IMAGE_TYPES[file.type];
+            var safeName = 'image-' + String(i + 1).padStart(2, '0') + '.' + extension;
+            var path = 'submissions/' + config.pathRoot + '/' + sanitizeStorageSegment(user.uid) + '/' + sanitizeStorageSegment(submissionId) + '/' + safeName;
+            var ref = storage.ref(path);
+
+            try {
+                var snapshot = await ref.put(file, {
+                    contentType: file.type,
+                    cacheControl: 'private,max-age=0,no-transform'
+                });
+                var url = await snapshot.ref.getDownloadURL();
+                uploaded.push({
+                    url: url,
+                    path: path,
+                    name: safeName,
+                    contentType: file.type,
+                    size: file.size,
+                    uploadedAt: new Date().toISOString()
+                });
+            } catch (error) {
+                await deleteUploadedFiles(uploaded);
+                throw error;
+            }
+        }
+
+        return uploaded;
+    }
+
+    function getStorageErrorMessage(error) {
+        var code = error && error.code;
+        if (code === 'storage/unauthorized') return 'Upload bloqueado pelas Storage Rules atuais. Revise e publique o arquivo storage.rules no Firebase antes de usar em produção.';
+        if (code === 'storage/canceled') return 'Upload cancelado antes de concluir.';
+        if (code === 'storage/retry-limit-exceeded') return 'O upload falhou após várias tentativas. Verifique sua conexão e tente novamente.';
+        if (code === 'storage/quota-exceeded') return 'O bucket de arquivos atingiu o limite disponível.';
+        return (error && error.message) || 'Não foi possível enviar as imagens agora.';
+    }
+
+    function getPrimaryImage(images) {
+        return Array.isArray(images) && images.length > 0 ? images[0].url : '';
+    }
+
+    function resetEventForm() {
+        ['evtNome','evtDataInicio','evtDataFim','evtHoraInicio','evtHoraFim',
+         'evtLocal','evtDescricao','evtValor','evtContato','evtSite'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        document.getElementById('evtEntrada').value = 'gratuito';
+        document.getElementById('evtValorGroup').style.display = 'none';
+        document.querySelectorAll('input[name="evtCat"]').forEach(function(r) {
+            r.checked = false;
+            r.closest('.category-option').classList.remove('selected');
+        });
+        clearUploadState('event');
+    }
+
+    function resetEstablishmentForm() {
+        ['estNome','estEndereco','estDescricao','estTelefone','estWhatsapp','estSite','estHorario'].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        document.querySelectorAll('input[name="estCat"]').forEach(function(r) {
+            r.checked = false;
+            r.closest('.category-option').classList.remove('selected');
+        });
+        clearUploadState('establishment');
+    }
+
     // ── Eventos do usuário ───────────────────────────────────────────
     async function carregarEventos() {
         var container = document.getElementById('eventsList');
@@ -577,79 +893,174 @@
 
     // ── Envio de Evento ──────────────────────────────────────────────
     async function enviarEvento() {
-        var nome  = document.getElementById('evtNome').value.trim();
+        var user = getPortalCurrentUser();
+        if (!user || !user.uid) {
+            mostrarNotif('Você precisa estar autenticado para enviar um cadastro.', 'error');
+            return;
+        }
+
+        var nome  = sanitizePlainText(document.getElementById('evtNome').value);
         var cat   = document.querySelector('input[name="evtCat"]:checked');
         var data  = document.getElementById('evtDataInicio').value;
-        var local = document.getElementById('evtLocal').value.trim();
-        var desc  = document.getElementById('evtDescricao').value.trim();
+        var local = sanitizePlainText(document.getElementById('evtLocal').value);
+        var desc  = sanitizePlainText(document.getElementById('evtDescricao').value);
         if (!nome || !cat || !data || !local || !desc) {
             mostrarNotif('Preencha: nome, categoria, data de início, local e descrição.', 'error'); return;
+        }
+        if (containsHtml(document.getElementById('evtDescricao').value)) {
+            mostrarNotif('A descrição do evento não pode conter HTML.', 'error');
+            return;
         }
         var btn = document.getElementById('btnEnviarEvento');
         btn.disabled = true; btn.textContent = 'Enviando...';
 
-        var result = await FirebaseSystem.submitEvent({
-            nome: nome, categoria: cat.value, dataInicio: data,
-            dataFim:    document.getElementById('evtDataFim').value,
-            horaInicio: document.getElementById('evtHoraInicio').value,
-            horaFim:    document.getElementById('evtHoraFim').value,
-            local: local, descricao: desc,
-            entrada: document.getElementById('evtEntrada').value,
-            valor:   document.getElementById('evtValor').value,
-            contato: document.getElementById('evtContato').value,
-            site:    document.getElementById('evtSite').value
-        });
+        var submissionId = 'evt_' + Date.now();
+        var uploadedImages = [];
 
-        if (result.success) {
-            mostrarNotif(result.message, 'success');
+        try {
+            uploadedImages = await uploadSubmissionImages('event', submissionId, user);
+
+            var payload = {
+                id: submissionId,
+                nome: nome,
+                categoria: cat.value,
+                dataInicio: data,
+                dataFim: document.getElementById('evtDataFim').value,
+                horaInicio: document.getElementById('evtHoraInicio').value,
+                horaFim: document.getElementById('evtHoraFim').value,
+                local: local,
+                descricao: desc,
+                entrada: sanitizePlainText(document.getElementById('evtEntrada').value),
+                valor: sanitizePlainText(document.getElementById('evtValor').value),
+                contato: sanitizePlainText(document.getElementById('evtContato').value),
+                site: sanitizePlainText(document.getElementById('evtSite').value),
+                submittedBy: user.uid,
+                submittedByName: sanitizePlainText(user.nome || user.displayName || ''),
+                submittedByEmail: sanitizePlainText(user.email || ''),
+                ownerUid: user.uid,
+                ownerEmail: sanitizePlainText(user.email || ''),
+                ownerName: sanitizePlainText(user.nome || user.displayName || ''),
+                status: 'pendente',
+                title: nome,
+                date: data,
+                time: sanitizePlainText(document.getElementById('evtHoraInicio').value),
+                location: local,
+                description: desc,
+                organizer: sanitizePlainText(user.organizacao || user.nome || user.displayName || ''),
+                phone: sanitizePlainText(document.getElementById('evtContato').value),
+                whatsapp: sanitizePlainText(document.getElementById('evtContato').value),
+                instagram: '',
+                website: sanitizePlainText(document.getElementById('evtSite').value),
+                images: uploadedImages,
+                mainImage: getPrimaryImage(uploadedImages),
+                imageCount: uploadedImages.length,
+                source: 'portal_usuario',
+                createdAt: getFieldValue().serverTimestamp(),
+                updatedAt: getFieldValue().serverTimestamp(),
+                submittedAt: getFieldValue().serverTimestamp(),
+                reviewedAt: null,
+                reviewedBy: null,
+                reviewNotes: ''
+            };
+
+            await getPortalDb().collection('eventos_pendentes').doc(submissionId).set(payload);
+            mostrarNotif('Evento enviado para análise com sucesso.', 'success');
             fecharModal('eventModal');
-            ['evtNome','evtDataInicio','evtDataFim','evtHoraInicio','evtHoraFim',
-             'evtLocal','evtDescricao','evtValor','evtContato','evtSite'].forEach(function(id) {
-                var el = document.getElementById(id); if (el) el.value = '';
-            });
-            document.querySelectorAll('input[name="evtCat"]').forEach(function(r) {
-                r.checked = false; r.closest('.category-option').classList.remove('selected');
-            });
+            resetEventForm();
             carregarEventos();
-        } else {
-            mostrarNotif(result.message, 'error');
+        } catch (error) {
+            if (uploadedImages.length > 0) {
+                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            }
+            mostrarNotif(getStorageErrorMessage(error), 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Enviar para Análise';
         }
-        btn.disabled = false; btn.textContent = 'Enviar para Análise';
     }
 
     // ── Envio de Estabelecimento ─────────────────────────────────────
     async function enviarEstabelecimento() {
-        var nome = document.getElementById('estNome').value.trim();
+        var user = getPortalCurrentUser();
+        if (!user || !user.uid) {
+            mostrarNotif('Você precisa estar autenticado para enviar um cadastro.', 'error');
+            return;
+        }
+
+        var nome = sanitizePlainText(document.getElementById('estNome').value);
         var cat  = document.querySelector('input[name="estCat"]:checked');
-        var end  = document.getElementById('estEndereco').value.trim();
-        var desc = document.getElementById('estDescricao').value.trim();
-        var tel  = document.getElementById('estTelefone').value.trim();
+        var end  = sanitizePlainText(document.getElementById('estEndereco').value);
+        var desc = sanitizePlainText(document.getElementById('estDescricao').value);
+        var tel  = sanitizePlainText(document.getElementById('estTelefone').value);
         if (!nome || !cat || !end || !desc || !tel) {
             mostrarNotif('Preencha: nome, categoria, endereço, descrição e telefone.', 'error'); return;
+        }
+        if (containsHtml(document.getElementById('estDescricao').value)) {
+            mostrarNotif('A descrição do estabelecimento não pode conter HTML.', 'error');
+            return;
         }
         var btn = document.getElementById('btnEnviarEst');
         btn.disabled = true; btn.textContent = 'Enviando...';
 
-        var result = await FirebaseSystem.submitEstablishment({
-            nome: nome, categoria: cat.value, endereco: end, descricao: desc, telefone: tel,
-            whatsapp: document.getElementById('estWhatsapp').value,
-            site:     document.getElementById('estSite').value,
-            horario:  document.getElementById('estHorario').value
-        });
+        var submissionId = 'est_' + Date.now();
+        var uploadedImages = [];
 
-        if (result.success) {
-            mostrarNotif(result.message, 'success');
+        try {
+            uploadedImages = await uploadSubmissionImages('establishment', submissionId, user);
+
+            var socialOrSite = sanitizePlainText(document.getElementById('estSite').value);
+            var instagram = socialOrSite.charAt(0) === '@' ? socialOrSite : '';
+            var website = instagram ? '' : socialOrSite;
+            var payload = {
+                id: submissionId,
+                nome: nome,
+                categoria: cat.value,
+                endereco: end,
+                descricao: desc,
+                telefone: tel,
+                whatsapp: sanitizePlainText(document.getElementById('estWhatsapp').value),
+                site: socialOrSite,
+                horario: sanitizePlainText(document.getElementById('estHorario').value),
+                submittedBy: user.uid,
+                submittedByName: sanitizePlainText(user.nome || user.displayName || ''),
+                submittedByEmail: sanitizePlainText(user.email || ''),
+                ownerUid: user.uid,
+                ownerEmail: sanitizePlainText(user.email || ''),
+                ownerName: sanitizePlainText(user.nome || user.displayName || ''),
+                status: 'pendente',
+                name: nome,
+                category: cat.value,
+                address: end,
+                description: desc,
+                phone: tel,
+                openingHours: sanitizePlainText(document.getElementById('estHorario').value),
+                instagram: instagram,
+                website: website,
+                images: uploadedImages,
+                mainImage: getPrimaryImage(uploadedImages),
+                imageCount: uploadedImages.length,
+                source: 'portal_usuario',
+                createdAt: getFieldValue().serverTimestamp(),
+                updatedAt: getFieldValue().serverTimestamp(),
+                submittedAt: getFieldValue().serverTimestamp(),
+                reviewedAt: null,
+                reviewedBy: null,
+                reviewNotes: ''
+            };
+
+            await getPortalDb().collection('estabelecimentos_pendentes').doc(submissionId).set(payload);
+            mostrarNotif('Estabelecimento enviado para análise com sucesso.', 'success');
             fecharModal('establishmentModal');
-            ['estNome','estEndereco','estDescricao','estTelefone','estWhatsapp','estSite','estHorario'].forEach(function(id) {
-                var el = document.getElementById(id); if (el) el.value = '';
-            });
-            document.querySelectorAll('input[name="estCat"]').forEach(function(r) {
-                r.checked = false; r.closest('.category-option').classList.remove('selected');
-            });
-        } else {
-            mostrarNotif(result.message, 'error');
+            resetEstablishmentForm();
+        } catch (error) {
+            if (uploadedImages.length > 0) {
+                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            }
+            mostrarNotif(getStorageErrorMessage(error), 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Enviar para Análise';
         }
-        btn.disabled = false; btn.textContent = 'Enviar para Análise';
     }
 
     // ── Notificação visual ───────────────────────────────────────────

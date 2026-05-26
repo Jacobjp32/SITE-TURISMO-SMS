@@ -1,0 +1,47 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return firestore.get(/databases/(default)/documents/usuarios/$(request.auth.uid));
+    }
+
+    function isStaff() {
+      return signedIn() &&
+        userDoc().data.ativo != false &&
+        (userDoc().data.role == 'admin' || userDoc().data.role == 'moderator');
+    }
+
+    function validPendingImageUpload(uid) {
+      return signedIn() &&
+        request.auth.uid == uid &&
+        request.resource != null &&
+        request.resource.size <= 3 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/(jpeg|png|webp)');
+    }
+
+    match /submissions/establishments/{uid}/{submissionId}/{fileName} {
+      allow read: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow write: if validPendingImageUpload(uid);
+      allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+    }
+
+    match /submissions/events/{uid}/{submissionId}/{fileName} {
+      allow read: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow write: if validPendingImageUpload(uid);
+      allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+    }
+
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// Observacao:
+// O limite de ate 6 imagens por submissao precisa ser validado no aplicativo.
+// Storage Rules validam tipo, tamanho e ownership do path, mas nao contam arquivos com seguranca suficiente para esse caso.

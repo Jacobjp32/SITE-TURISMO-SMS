@@ -67,3 +67,11 @@ No Windows deste projeto, se `python` nao estiver no PATH, use o runtime local j
 ```powershell
 C:\Users\jacob\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe -m http.server 8080 --bind 127.0.0.1
 ```
+
+## Firebase Storage
+
+O arquivo versionado `storage.rules` e apenas rascunho local. Antes de usar upload de imagens em ambiente real:
+
+1. revise o arquivo `storage.rules`;
+2. publique as rules no Firebase Console ou pela CLI oficial do projeto;
+3. teste upload com usuario comum e aprovacao com conta administrativa.

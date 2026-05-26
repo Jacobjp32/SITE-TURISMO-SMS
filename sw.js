@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v14';
+const CACHE_NAME = 'turismo-sms-v15';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -40,6 +40,7 @@ const NEVER_CACHE = [
     'firebaseinstallations.googleapis.com',
     'content-firebaseappcheck.googleapis.com',
     'firebaseappcheck.googleapis.com',
+    'www.gstatic.com/firebasejs/',
     'config.js',
     'js/firebase-auth.js',
     'js/firebase-app-check.js',

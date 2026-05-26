@@ -1,5 +1,24 @@
 # Plano tecnico do Portal de Cadastros
 
+## Status da Fase 1
+
+Implementado nesta rodada:
+
+- upload de ate 6 imagens em `portal-usuario.html` para eventos e estabelecimentos;
+- preview local com remocao antes do envio;
+- validacao cliente para `jpg`, `jpeg`, `png` e `webp`;
+- bloqueio cliente de arquivos acima de `3 MB`;
+- upload para Firebase Storage antes da gravacao nas collections pendentes;
+- gravacao de `images`, `mainImage`, `imageCount`, `ownerUid`, `ownerEmail`, `ownerName`, `createdAt`, `updatedAt`, `submittedAt` e `source`;
+- preservacao dos campos de imagem na aprovacao atual, porque o admin continua copiando `doc.data()` para as collections aprovadas.
+
+Fora desta fase:
+
+- nada e publicado automaticamente no mapa turistico;
+- nada e publicado automaticamente na agenda publica;
+- o admin nao ganhou galeria visual completa;
+- as rules reais do Firebase ainda precisam ser publicadas manualmente no Console.
+
 ## 1. Estado atual confirmado
 
 Arquivos revisados nesta rodada:
@@ -21,10 +40,10 @@ Confirmacoes do estado atual:
 - O papel administrativo vem de `usuarios/{uid}.role`.
 - A UI admin exige `role === 'admin'`, mas as regras reais aceitam `admin` e `moderator` nas acoes moderadas.
 - `storageBucket` esta configurado em `config.js`.
-- Nao existe upload de imagem hoje.
-- Nao existe uso real de Firebase Storage no portal/admin.
-- Nao existe arquivo `storage.rules` no repositorio.
-- Nao existe proposta formal versionada de Storage Rules hoje.
+- A Fase 1 agora permite upload de imagem no portal.
+- O portal agora usa Firebase Storage para anexos de cadastros pendentes.
+- Existe arquivo `storage.rules` local no repositorio.
+- As Storage Rules reais ainda nao foram publicadas.
 
 ## 2. Collections atuais e impacto real
 
@@ -39,10 +58,16 @@ Collections hoje em uso para o portal:
 Fluxo atual:
 
 1. Usuario autenticado envia.
-2. Documento entra em collection de pendentes.
-3. Admin/moderador aprova copiando o documento para collection de aprovados.
-4. O documento pendente aprovado e apagado.
-5. Rejeicao hoje apenas atualiza `status = 'rejeitado'` no pendente.
+2. Se houver imagens, o portal envia primeiro para o Storage.
+3. Documento entra em collection de pendentes.
+4. Admin/moderador aprova copiando o documento para collection de aprovados.
+5. O documento pendente aprovado e apagado.
+6. Rejeicao hoje apenas atualiza `status = 'rejeitado'` no pendente.
+
+Paths usados na Fase 1:
+
+- `submissions/events/{uid}/{submissionId}/image-01.ext`
+- `submissions/establishments/{uid}/{submissionId}/image-01.ext`
 
 Consequencias do modelo atual:
 
@@ -101,19 +126,19 @@ Observacao importante:
 
 ## 5. Existe Storage Rules hoje?
 
-Nao.
+Sim, como rascunho local versionado.
 
 Confirmado nesta rodada:
 
-- nao existe `storage.rules`;
+- existe `storage.rules` no repositorio;
 - nao existe `firebase.storage.rules`;
-- nao existe uso real de SDK de Storage no codigo auditado;
+- o portal ja usa SDK de Storage no fluxo de envio;
 - existe apenas `storageBucket` configurado em `config.js`.
 
 Conclusao:
 
-- o projeto esta tecnicamente preparado para usar Storage no Firebase;
-- mas ainda nao existe camada de regras, politica de paths ou fluxo de leitura/escrita para arquivos.
+- o projeto agora tem fluxo de upload e proposta versionada de rules;
+- as Storage Rules reais ainda precisam ser revisadas e publicadas fora do repositorio antes de producao.
 
 ## 6. Decisao de arquitetura
 
@@ -226,6 +251,7 @@ Compatibilidade com o modelo atual:
 - `nome` pode coexistir temporariamente com `title`;
 - `local` pode coexistir temporariamente com `location`;
 - `site` pode coexistir temporariamente com `website` ou `instagram`.
+- `images`, `mainImage` e `imageCount` ja podem coexistir no fluxo atual sem quebrar aprovacao.
 
 ### Estabelecimento
 
@@ -267,6 +293,7 @@ Compatibilidade com o modelo atual:
 - `endereco` pode coexistir temporariamente com `address`;
 - `horario` pode coexistir temporariamente com `openingHours`;
 - `site` pode coexistir temporariamente com `website` e `instagram`.
+- `images`, `mainImage` e `imageCount` ja podem coexistir no fluxo atual sem quebrar aprovacao.
 
 ### Pedido de alteracao futura
 
@@ -373,7 +400,7 @@ As regras abaixo sao **proposta documental**, nao devem ser aplicadas automatica
 
 ## 10. Storage Rules propostas
 
-Nao existe `storage.rules` hoje. A proposta desta rodada e documental.
+Existe `storage.rules` no repositorio como rascunho local. Ele ainda precisa de revisao humana e publicacao manual no Firebase.
 
 ### Paths recomendados
 

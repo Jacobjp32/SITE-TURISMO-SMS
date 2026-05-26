@@ -1,5 +1,22 @@
 # Plano de Firestore e Storage Rules
 
+## Status da Fase 1
+
+O repositorio agora tem um arquivo local `storage.rules`, mas ele ainda e apenas rascunho versionado.
+
+Implementado no app:
+
+- upload de ate 6 imagens no portal;
+- validacao cliente de tipo e tamanho;
+- paths privados por `uid` e `submissionId`;
+- gravacao dos metadados das imagens em `eventos_pendentes` e `estabelecimentos_pendentes`.
+
+Ainda depende de acao manual antes de producao:
+
+- revisar o conteudo de `storage.rules`;
+- publicar as Storage Rules no Firebase Console ou via CLI do projeto;
+- testar upload real com usuario comum e conta administrativa.
+
 ## 1. Objetivo
 
 Fechar a proposta tecnica de rules para suportar, em fase futura:
@@ -28,9 +45,9 @@ As rules atuais:
 Estado atual:
 
 - `storageBucket` existe em `config.js`;
-- nao existe `storage.rules`;
-- nao existe uso real do Firebase Storage no portal/admin;
-- nao existe path policy definida para uploads.
+- existe `storage.rules` local, ainda nao publicado;
+- o portal agora usa Firebase Storage para anexos de cadastros pendentes;
+- a path policy atual usa `submissions/events/{uid}/{submissionId}` e `submissions/establishments/{uid}/{submissionId}`.
 
 ## 3. Decisao recomendada de arquitetura
 
@@ -260,6 +277,7 @@ Aplicar a mesma logica:
 - impedir duplicatas de conteudo;
 - validar coerencia entre Firestore e Storage;
 - validar ordem editorial das imagens.
+- limpar arquivos ja enviados quando o `set` no Firestore falhar.
 
 Esses pontos devem ser tratados no app e, quando possivel, cruzados com o documento Firestore.
 
@@ -277,16 +295,16 @@ Esses pontos devem ser tratados no app e, quando possivel, cruzados com o docume
 ## 8. Plano de publicacao seguro
 
 1. Revisar rules propostas com validacao humana.
-2. Definir schema final da fase 1.
-3. Ajustar Firestore rules primeiro.
-4. Criar Storage rules.
-5. Testar com usuario comum, moderador e admin.
-6. So depois implementar upload na UI.
+2. Publicar `storage.rules` no Firebase.
+3. Revisar se as `firestore.rules` atuais vao continuar aceitando os novos campos na collection de pendentes.
+4. Testar com usuario comum, moderador e admin.
+5. Confirmar mensagens de erro de upload bloqueado no portal.
+6. So depois considerar aprovacoes visuais mais completas no admin.
 
 ## 9. O que nao fazer agora
 
 - nao publicar rules automaticamente;
-- nao ligar Storage na UI antes das rules;
+- nao supor que o upload funcione em producao antes de publicar as rules reais;
 - nao migrar collections agora;
 - nao abrir leitura publica de pendentes;
 - nao acoplar mapa diretamente a colecoes brutas.

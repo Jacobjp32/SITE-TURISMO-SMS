@@ -681,6 +681,7 @@
                                 <th>Data</th>
                                 <th>Local</th>
                                 <th>Solicitante</th>
+                                <th>Imagens</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -691,6 +692,7 @@
                                     <td>${SEC.html(formatDate(e.dataInicio))}</td>
                                     <td>${SEC.html(e.local, '—')}</td>
                                     <td>${SEC.html(e.submittedByName, '—')}<br><small>${SEC.html(e.submittedByEmail)}</small></td>
+                                    <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
                                         <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
                                         <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
@@ -718,6 +720,7 @@
                                 <th>Categoria</th>
                                 <th>Endereço</th>
                                 <th>Solicitante</th>
+                                <th>Imagens</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
@@ -728,6 +731,7 @@
                                     <td>${SEC.html(e.categoria)}</td>
                                     <td>${SEC.html(e.endereco, '—')}</td>
                                     <td>${SEC.html(e.submittedByName, '—')}</td>
+                                    <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
                                         <button class="btn-sm btn-approve" onclick="approveEstablishment('${SEC.js(e.id)}')">✅</button>
                                         <button class="btn-sm btn-reject" onclick="rejectEstablishment('${SEC.js(e.id)}')">❌</button>
