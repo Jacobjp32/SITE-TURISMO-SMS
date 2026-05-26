@@ -1,5 +1,25 @@
 # Plano de Firestore e Storage Rules
 
+## Status da Fase 1.2 - eventos vinculados ao empreendimento
+
+Arquivo ajustado nesta fase:
+
+- `firestore.rules`
+
+Objetivo da mudanca local:
+
+- permitir `eventos_pendentes` comuns com `source = portal_usuario`;
+- permitir `eventos_pendentes` vinculados com `source = establishment_manager`;
+- exigir que evento vinculado aponte para um `linkedManagerId` real em `establishment_managers`;
+- exigir que o manager esteja ativo e que os campos `linkedEstablishmentId`, `linkedEstablishmentName` e `linkedEstablishmentRole` batam com o documento do manager;
+- manter `eventos_aprovados` como leitura publica e escrita apenas staff.
+
+Importante:
+
+- a rule nova continua apenas local no repositorio;
+- ainda existe passo manual para publicar a versao revisada no Firebase Console ou pela CLI oficial;
+- `storage.rules` nao precisou mudar, porque o upload continua usando o mesmo path de `submissions/events/{uid}/{submissionId}`.
+
 ## Status da Fase 1.1 - vinculo com empreendimento existente
 
 Arquivos versionados nesta fase:
@@ -230,9 +250,17 @@ Cada item do array `images`:
 
 - `create`
   - autenticado;
-  - `ownerUid` e/ou `submittedBy` igual ao uid logado;
+  - `ownerUid` e `submittedBy` igual ao uid logado;
   - `status == 'pendente'`;
-  - apenas campos permitidos.
+  - para evento comum:
+    - `source = portal_usuario`;
+    - campos `linked*` nulos.
+  - para evento vinculado:
+    - `source = establishment_manager`;
+    - `linkedManagerId` precisa existir em `establishment_managers`;
+    - `linkedEstablishmentId`, `linkedEstablishmentName` e `linkedEstablishmentRole` precisam bater com o manager;
+    - o manager precisa estar `active == true`;
+    - `userId` do manager precisa ser o mesmo usuario autenticado.
 - `read`
   - owner;
   - moderador/admin.

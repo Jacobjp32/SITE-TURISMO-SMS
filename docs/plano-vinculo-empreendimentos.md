@@ -11,11 +11,77 @@ Escopo entregue:
 - usuario passa a ver solicitacoes e vinculos aprovados no portal;
 - vinculo aprovado aparece em `Meus empreendimentos` apenas como leitura.
 
+## Atualizacao - eventos vinculados ao empreendimento
+
+Escopo entregue nesta fase:
+
+- usuario com vinculo ativo em `establishment_managers` pode abrir o mesmo formulario de evento como `evento vinculado`;
+- o portal mostra a acao `Cadastrar evento vinculado` em cada item de `Meus empreendimentos`;
+- o envio continua indo para `eventos_pendentes`;
+- o admin continua aprovando manualmente antes de qualquer publicacao;
+- os campos de vinculo sao preservados em `eventos_aprovados` porque a aprovacao continua copiando `doc.data()`.
+
+## Como funciona o evento vinculado
+
+1. O usuario entra no portal normalmente.
+2. Em `Meus empreendimentos`, escolhe `Cadastrar evento vinculado`.
+3. O formulario de evento abre com aviso visual do empreendimento vinculado.
+4. Antes do upload/gravação final, o portal consulta `establishment_managers` para validar se o vinculo ainda esta ativo.
+5. O evento e salvo em `eventos_pendentes` com `source = establishment_manager`.
+6. O admin visualiza esse contexto no painel e decide aprovar ou rejeitar.
+
+O cadastro comum de evento continua existindo e usa `source = portal_usuario`.
+
+## Campos usados em evento vinculado
+
+Novos campos operacionais adicionados ao payload de `eventos_pendentes`:
+
+- `source`
+- `linkedManagerId`
+- `linkedEstablishmentId`
+- `linkedEstablishmentName`
+- `linkedEstablishmentRole`
+
+Campos preservados do fluxo existente:
+
+- `ownerUid`
+- `ownerEmail`
+- `ownerName`
+- `images`
+- `mainImage`
+- `imageCount`
+- `createdAt`
+- `updatedAt`
+- `submittedAt`
+
+## Como o admin identifica evento vinculado
+
+Na lista de eventos pendentes do `admin-firebase.html`, o painel agora mostra:
+
+- selo textual `Evento vinculado a empreendimento`;
+- `linkedEstablishmentName`;
+- `source`;
+- `ownerName` e `ownerEmail`.
+
+## Rules locais desta fase
+
+O arquivo `firestore.rules` agora diferencia:
+
+- evento comum:
+  - `source = portal_usuario`
+  - campos `linked*` nulos
+- evento vinculado:
+  - `source = establishment_manager`
+  - `linkedManagerId` aponta para um documento real em `establishment_managers`
+  - o manager precisa estar `active == true`
+  - `userId`, `establishmentId`, `establishmentName` e `role` precisam bater com o documento do manager
+
+Nada foi publicado automaticamente no Firebase.
+
 Fora desta fase:
 
 - edicao publica do empreendimento;
 - publicacao automatica no mapa turistico;
-- eventos vinculados a empreendimento;
 - migracao de collections legadas;
 - alteracao de `TURISMO_DATA`;
 - alteracao de CSP, login, Auth, App Check ou regras publicadas no Console.
@@ -175,7 +241,9 @@ Antes de usar em ambiente real:
 ## Limitacoes restantes
 
 - `Meus empreendimentos` e apenas leitura;
+- o evento vinculado ainda usa o mesmo formulario do evento comum; nao existe painel detalhado separado por empreendimento;
 - o painel admin continua exigindo `role === admin` na UI, embora as rules locais aceitem `admin` e `moderator` para moderacao;
 - nao ha workflow de edicao de dados publicos;
-- nao ha workflow de eventos vinculados a empreendimento;
 - nao ha sincronizacao com o mapa publico.
+- nao existe selo publico na agenda para indicar que um evento aprovado veio de empreendimento vinculado;
+- nao existe publicacao dinamica no mapa nem painel avancado de operacao por empreendimento.

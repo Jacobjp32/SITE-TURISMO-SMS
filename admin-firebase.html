@@ -749,10 +749,18 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${SEC.html(e.nome, '—')}</strong><br><small>${SEC.html(e.categoria)}</small></td>
+                                    <td>
+                                        <strong>${SEC.html(e.nome, '—')}</strong><br>
+                                        <small>${SEC.html(e.categoria)}</small>
+                                        ${e.linkedEstablishmentId ? `<br><small><strong>Evento vinculado a empreendimento</strong></small><br><small>${SEC.html(e.linkedEstablishmentName || '—')}</small>` : ''}
+                                    </td>
                                     <td>${SEC.html(formatDate(e.dataInicio))}</td>
                                     <td>${SEC.html(e.local, '—')}</td>
-                                    <td>${SEC.html(e.submittedByName, '—')}<br><small>${SEC.html(e.submittedByEmail)}</small></td>
+                                    <td>
+                                        ${SEC.html(e.submittedByName, '—')}<br>
+                                        <small>${SEC.html(e.submittedByEmail)}</small>
+                                        ${e.linkedEstablishmentId ? `<br><small>Fonte: ${SEC.html(e.source || '—')}</small><br><small>Owner: ${SEC.html(e.ownerName || '—')} / ${SEC.html(e.ownerEmail || '—')}</small>` : ''}
+                                    </td>
                                     <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
                                         <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>

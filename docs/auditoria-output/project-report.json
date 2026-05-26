@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-26T18:00:28.788Z",
+  "generatedAt": "2026-05-26T20:10:30.135Z",
   "totals": {
     "files": 326,
     "html": 36,
@@ -47,22 +47,22 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 653857
+      "bytes": 657269
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 555853
+      "bytes": 561399
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 291987
+      "bytes": 292725
     },
     {
       "ext": ".md",
       "files": 20,
-      "bytes": 174034
+      "bytes": 179286
     },
     {
       "ext": ".json",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 6331
+      "bytes": 8468
     },
     {
       "ext": ".xml",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 838419
+      "bytes": 846102
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -174,17 +174,17 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 393800
+      "bytes": 397212
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 291987
+      "bytes": 292725
     },
     {
       "dir": "docs",
       "files": 18,
-      "bytes": 159730
+      "bytes": 164982
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 42559
+      "bytes": 43236
     },
     {
       "path": "eventos.html",
@@ -849,7 +849,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 72198
+      "bytes": 77067
     },
     {
       "path": "privacidade.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 42559
+      "bytes": 43236
     },
     {
       "path": "css/mapa-3d.css",
@@ -1009,7 +1009,7 @@
       "path": "css/portal-usuario.css",
       "ext": ".css",
       "dir": "css",
-      "bytes": 19699
+      "bytes": 20437
     },
     {
       "path": "css/reservas.css",
@@ -1045,7 +1045,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 34414
+      "bytes": 37826
     },
     {
       "path": "js/reservas.js",
@@ -1099,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 72198
+      "bytes": 77067
     },
     {
       "path": "reservas.html",
@@ -1770,6 +1770,9 @@
         "claimRequestsList",
         "managedEstablishmentsList",
         "eventModal",
+        "eventModalTitle",
+        "linkedEventNotice",
+        "linkedEventEstablishmentName",
         "evtNome",
         "evtCat",
         "evtCat",
@@ -2101,10 +2104,10 @@
     },
     {
       "file": "css/portal-usuario.css",
-      "bytes": 19693,
+      "bytes": 20431,
       "important": 0,
       "media": 1,
-      "selectorCount": 115
+      "selectorCount": 119
     },
     {
       "file": "css/reservas.css",
@@ -2708,7 +2711,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 34281,
+      "bytes": 37683,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2728,6 +2731,7 @@
         "getFirebaseAuth",
         "getFirebaseDB",
         "initFirebase",
+        "isActiveManagerRecord",
         "normalizeComparableId",
         "persistUserSession",
         "sortByTimestampDesc",

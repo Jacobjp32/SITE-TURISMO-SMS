@@ -30,6 +30,44 @@ service cloud.firestore {
       return signedIn() && resourceData.userId == request.auth.uid;
     }
 
+    function managerDoc(managerId) {
+      return get(/databases/$(database)/documents/establishment_managers/$(managerId));
+    }
+
+    function validPendingEventCreateBase(eventId) {
+      return signedIn() &&
+        request.resource.data.id == eventId &&
+        request.resource.data.submittedBy == request.auth.uid &&
+        request.resource.data.ownerUid == request.auth.uid &&
+        request.resource.data.status == 'pendente' &&
+        request.resource.data.submittedByEmail == request.auth.token.email &&
+        request.resource.data.ownerEmail == request.auth.token.email;
+    }
+
+    function validCommonPendingEventCreate(eventId) {
+      return validPendingEventCreateBase(eventId) &&
+        request.resource.data.source == 'portal_usuario' &&
+        request.resource.data.linkedManagerId == null &&
+        request.resource.data.linkedEstablishmentId == null &&
+        request.resource.data.linkedEstablishmentName == null &&
+        request.resource.data.linkedEstablishmentRole == null;
+    }
+
+    function validLinkedPendingEventCreate(eventId) {
+      return validPendingEventCreateBase(eventId) &&
+        request.resource.data.source == 'establishment_manager' &&
+        request.resource.data.linkedManagerId is string &&
+        request.resource.data.linkedEstablishmentId is string &&
+        request.resource.data.linkedEstablishmentName is string &&
+        request.resource.data.linkedEstablishmentRole in ['proprietario', 'gerente_responsavel', 'representante_autorizado'] &&
+        exists(/databases/$(database)/documents/establishment_managers/$(request.resource.data.linkedManagerId)) &&
+        managerDoc(request.resource.data.linkedManagerId).data.userId == request.auth.uid &&
+        managerDoc(request.resource.data.linkedManagerId).data.active == true &&
+        managerDoc(request.resource.data.linkedManagerId).data.establishmentId == request.resource.data.linkedEstablishmentId &&
+        managerDoc(request.resource.data.linkedManagerId).data.establishmentName == request.resource.data.linkedEstablishmentName &&
+        managerDoc(request.resource.data.linkedManagerId).data.role == request.resource.data.linkedEstablishmentRole;
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if isAdmin() || (
@@ -51,9 +89,8 @@ service cloud.firestore {
 
     match /eventos_pendentes/{eventId} {
       allow read: if isModerator() || owns(resource.data);
-      allow create: if signedIn() &&
-        request.resource.data.submittedBy == request.auth.uid &&
-        request.resource.data.status == 'pendente';
+      allow create: if validCommonPendingEventCreate(eventId) ||
+        validLinkedPendingEventCreate(eventId);
       allow update: if isModerator();
       allow delete: if isModerator();
     }

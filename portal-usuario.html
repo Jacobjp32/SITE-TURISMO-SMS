@@ -149,7 +149,7 @@
                     <div class="card-icon">🎪</div>
                     <h3 class="card-title">Cadastrar Evento</h3>
                     <p class="card-desc">Divulgue sua festa, feira ou evento cultural no calendário oficial de São Mateus do Sul.</p>
-                    <button class="card-action" onclick="abrirModal('eventModal')">+ Novo Evento</button>
+                    <button class="card-action" onclick="abrirModalEvento()">+ Novo Evento</button>
                 </div>
                 <div class="dashboard-card">
                     <div class="card-icon">🏨</div>
@@ -174,13 +174,13 @@
             <section class="section-panel" id="myEvents">
                 <div class="section-header">
                     <h2>📅 Meus Eventos</h2>
-                    <button class="card-action" onclick="abrirModal('eventModal')">+ Novo Evento</button>
+                    <button class="card-action" onclick="abrirModalEvento()">+ Novo Evento</button>
                 </div>
                 <div class="events-list" id="eventsList">
                     <div class="empty-state">
                         <div class="icon">📭</div>
                         <p>Você ainda não cadastrou nenhum evento.</p>
-                        <button class="card-action" style="margin-top:1rem;" onclick="abrirModal('eventModal')">Cadastrar Primeiro Evento</button>
+                        <button class="card-action" style="margin-top:1rem;" onclick="abrirModalEvento()">Cadastrar Primeiro Evento</button>
                     </div>
                 </div>
             </section>
@@ -267,10 +267,14 @@
     <div class="modal-overlay" id="eventModal" onclick="fecharModalFora(event,'eventModal')">
         <div class="modal" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h2>🎪 Cadastrar Novo Evento</h2>
+                <h2 id="eventModalTitle">🎪 Cadastrar Novo Evento</h2>
                 <button class="modal-close" onclick="fecharModal('eventModal')">&times;</button>
             </div>
             <div class="modal-body">
+                <div class="event-link-notice" id="linkedEventNotice" hidden>
+                    <strong>Evento vinculado a empreendimento</strong>
+                    <p>Este evento será enviado como programação vinculada a: <span id="linkedEventEstablishmentName"></span>. A publicação depende de aprovação.</p>
+                </div>
                 <div class="form-group"><label>Nome do Evento *</label><input type="text" id="evtNome" placeholder="Ex: Festa da Colônia 2026"></div>
                 <div class="form-group">
                     <label>Categoria do Evento *</label>
@@ -484,6 +488,8 @@
         event: [],
         establishment: []
     };
+    var portalManagedEstablishments = [];
+    var currentLinkedEventContext = null;
 
     function renderAuthState(user) {
         var authScreen = document.getElementById('authScreen');
@@ -867,6 +873,62 @@
         return Array.isArray(images) && images.length > 0 ? images[0].url : '';
     }
 
+    function getCurrentManagedEstablishment(managerId) {
+        var targetId = String(managerId || '');
+        return portalManagedEstablishments.find(function(item) {
+            return String(item && item.id || '') === targetId;
+        }) || null;
+    }
+
+    function atualizarAvisoEventoVinculado() {
+        var notice = document.getElementById('linkedEventNotice');
+        var title = document.getElementById('eventModalTitle');
+        var target = document.getElementById('linkedEventEstablishmentName');
+        var submitButton = document.getElementById('btnEnviarEvento');
+
+        if (!notice || !title || !target || !submitButton) return;
+
+        if (currentLinkedEventContext) {
+            notice.hidden = false;
+            target.textContent = currentLinkedEventContext.establishmentName || 'Empreendimento';
+            title.textContent = '🎪 Cadastrar Evento Vinculado';
+            submitButton.textContent = 'Enviar Evento Vinculado';
+            return;
+        }
+
+        notice.hidden = true;
+        target.textContent = '';
+        title.textContent = '🎪 Cadastrar Novo Evento';
+        submitButton.textContent = 'Enviar para Análise';
+    }
+
+    function limparContextoEventoVinculado() {
+        currentLinkedEventContext = null;
+        atualizarAvisoEventoVinculado();
+    }
+
+    function abrirModalEvento() {
+        limparContextoEventoVinculado();
+        abrirModal('eventModal');
+    }
+
+    function abrirModalEventoVinculado(managerId) {
+        var manager = getCurrentManagedEstablishment(managerId);
+        if (!manager) {
+            mostrarNotif('Não foi possível localizar o vínculo ativo deste empreendimento. Recarregue a página e tente novamente.', 'error');
+            return;
+        }
+
+        currentLinkedEventContext = {
+            linkedManagerId: manager.id,
+            establishmentId: manager.establishmentId,
+            establishmentName: manager.establishmentName,
+            establishmentRole: manager.role
+        };
+        atualizarAvisoEventoVinculado();
+        abrirModal('eventModal');
+    }
+
     function resetEventForm() {
         ['evtNome','evtDataInicio','evtDataFim','evtHoraInicio','evtHoraFim',
          'evtLocal','evtDescricao','evtValor','evtContato','evtSite'].forEach(function(id) {
@@ -880,6 +942,7 @@
             r.closest('.category-option').classList.remove('selected');
         });
         clearUploadState('event');
+        limparContextoEventoVinculado();
     }
 
     function resetEstablishmentForm() {
@@ -903,14 +966,18 @@
             container.innerHTML =
                 '<div class="empty-state"><div class="icon">📭</div>' +
                 '<p>Você ainda não cadastrou nenhum evento.</p>' +
-                '<button class="card-action" style="margin-top:1rem;" onclick="abrirModal(\'eventModal\')">Cadastrar Primeiro Evento</button></div>';
+                '<button class="card-action" style="margin-top:1rem;" onclick="abrirModalEvento()">Cadastrar Primeiro Evento</button></div>';
             return;
         }
         container.innerHTML = events.map(function(ev) {
             var status = safeStatus(ev.status);
+            var linkedInfo = ev.linkedEstablishmentName
+                ? '<p class="claim-extra claim-info">Vinculado a: ' + escapeHtml(ev.linkedEstablishmentName) + '</p>'
+                : '';
             return '<div class="event-item">' +
                 '<div class="event-info"><h4>' + escapeHtml(ev.nome) + '</h4>' +
-                '<p>📍 ' + escapeHtml(ev.local) + ' | 📅 ' + escapeHtml(fmtData(ev.dataInicio)) + '</p></div>' +
+                '<p>📍 ' + escapeHtml(ev.local) + ' | 📅 ' + escapeHtml(fmtData(ev.dataInicio)) + '</p>' +
+                linkedInfo + '</div>' +
                 '<span class="event-status status-' + status + '">' + escapeHtml(labelStatus(status)) + '</span>' +
                 '</div>';
         }).join('');
@@ -1077,6 +1144,7 @@
 
         container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
         var managers = await FirebaseSystem.getUserManagedEstablishments();
+        portalManagedEstablishments = Array.isArray(managers) ? managers.slice() : [];
 
         if (!managers || managers.length === 0) {
             container.innerHTML =
@@ -1092,10 +1160,19 @@
                 '<p>Função: ' + escapeHtml(getClaimRoleLabel(manager.role)) + '</p>' +
                 '<p>Status: vínculo ativo | Aprovado em: ' + escapeHtml(formatFirestoreDate(manager.approvedAt)) + '</p>' +
                 '<p class="claim-extra claim-info">Em breve você poderá solicitar alterações de informações e cadastrar eventos vinculados a este empreendimento.</p>' +
+                '<div class="managed-establishment-actions">' +
+                '<button type="button" class="card-action linked-event-action" data-manager-id="' + escapeHtml(manager.id) + '">Cadastrar evento vinculado</button>' +
+                '</div>' +
                 '</div>' +
                 '<span class="event-status status-aprovado">✅ Ativo</span>' +
                 '</div>';
         }).join('');
+
+        container.querySelectorAll('.linked-event-action').forEach(function(button) {
+            button.addEventListener('click', function() {
+                abrirModalEventoVinculado(this.getAttribute('data-manager-id'));
+            });
+        });
     }
 
     // ── Modais ───────────────────────────────────────────────────────
@@ -1106,6 +1183,9 @@
     function fecharModal(id) {
         document.getElementById(id).classList.remove('active');
         document.body.style.overflow = '';
+        if (id === 'eventModal') {
+            limparContextoEventoVinculado();
+        }
     }
     function fecharModalFora(e, id) {
         if (e.target === document.getElementById(id)) fecharModal(id);
@@ -1153,8 +1233,21 @@
 
         var submissionId = 'evt_' + Date.now();
         var uploadedImages = [];
+        var linkedManager = null;
 
         try {
+            if (currentLinkedEventContext && currentLinkedEventContext.linkedManagerId) {
+                linkedManager = await FirebaseSystem.getManagedEstablishmentForCurrentUser(
+                    currentLinkedEventContext.linkedManagerId,
+                    currentLinkedEventContext.establishmentId
+                );
+
+                if (!linkedManager) {
+                    mostrarNotif('Seu vínculo com este empreendimento não foi encontrado ou não está ativo. Recarregue a página e tente novamente.', 'error');
+                    return;
+                }
+            }
+
             uploadedImages = await uploadSubmissionImages('event', submissionId, user);
 
             var payload = {
@@ -1183,7 +1276,9 @@
                 time: sanitizePlainText(document.getElementById('evtHoraInicio').value),
                 location: local,
                 description: desc,
-                organizer: sanitizePlainText(user.organizacao || user.nome || user.displayName || ''),
+                organizer: linkedManager
+                    ? sanitizePlainText(linkedManager.establishmentName || '')
+                    : sanitizePlainText(user.organizacao || user.nome || user.displayName || ''),
                 phone: sanitizePlainText(document.getElementById('evtContato').value),
                 whatsapp: sanitizePlainText(document.getElementById('evtContato').value),
                 instagram: '',
@@ -1191,7 +1286,11 @@
                 images: uploadedImages,
                 mainImage: getPrimaryImage(uploadedImages),
                 imageCount: uploadedImages.length,
-                source: 'portal_usuario',
+                source: linkedManager ? 'establishment_manager' : 'portal_usuario',
+                linkedManagerId: linkedManager ? sanitizePlainText(linkedManager.id) : null,
+                linkedEstablishmentId: linkedManager ? sanitizePlainText(linkedManager.establishmentId) : null,
+                linkedEstablishmentName: linkedManager ? sanitizePlainText(linkedManager.establishmentName) : null,
+                linkedEstablishmentRole: linkedManager ? sanitizePlainText(linkedManager.role) : null,
                 createdAt: getFieldValue().serverTimestamp(),
                 updatedAt: getFieldValue().serverTimestamp(),
                 submittedAt: getFieldValue().serverTimestamp(),
@@ -1200,8 +1299,16 @@
                 reviewNotes: ''
             };
 
-            await getPortalDb().collection('eventos_pendentes').doc(submissionId).set(payload);
-            mostrarNotif('Evento enviado para análise com sucesso.', 'success');
+            var result = await FirebaseSystem.submitEvent(payload);
+            if (!result.success) {
+                if (uploadedImages.length > 0) {
+                    await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+                }
+                mostrarNotif(result.message, 'error');
+                return;
+            }
+
+            mostrarNotif(result.message, 'success');
             fecharModal('eventModal');
             resetEventForm();
             carregarEventos();
@@ -1212,7 +1319,7 @@
             mostrarNotif(getStorageErrorMessage(error), 'error');
         } finally {
             btn.disabled = false;
-            btn.textContent = 'Enviar para Análise';
+            atualizarAvisoEventoVinculado();
         }
     }
 

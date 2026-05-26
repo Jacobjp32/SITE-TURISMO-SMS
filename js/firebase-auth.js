@@ -113,6 +113,15 @@ function buildEstablishmentManagerDocId(userId, establishmentId) {
         String(establishmentId || '').replace(/[^\w-]+/g, '_');
 }
 
+function isActiveManagerRecord(manager, userId, establishmentId) {
+    if (!manager || manager.active === false) return false;
+    if (userId && manager.userId !== userId) return false;
+    if (establishmentId && normalizeComparableId(manager.establishmentId) !== normalizeComparableId(establishmentId)) {
+        return false;
+    }
+    return true;
+}
+
 // Aguarda os SDKs do Firebase carregarem nas páginas que usam autenticação.
 function initFirebase() {
     return new Promise(function(resolve) {
@@ -317,21 +326,55 @@ const FirebaseSystem = {
         if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
         try {
             const db = firebase.firestore();
-            const eventId = 'evt_' + Date.now();
+            const payload = Object.assign({}, eventData || {});
+            const eventId = String(payload.id || ('evt_' + Date.now())).trim();
+            const eventSource = payload.source === 'establishment_manager'
+                ? 'establishment_manager'
+                : 'portal_usuario';
+            const userName = currentUser.nome || currentUser.displayName || currentUser.email || 'Usuário';
+            var linkedManager = null;
+
+            if (eventSource === 'establishment_manager') {
+                linkedManager = await this.getManagedEstablishmentForCurrentUser(
+                    payload.linkedManagerId,
+                    payload.linkedEstablishmentId
+                );
+
+                if (!linkedManager) {
+                    return { success: false, message: 'Seu vínculo com este empreendimento não foi encontrado ou não está ativo.' };
+                }
+            }
+
             await db.collection('eventos_pendentes').doc(eventId).set(
-                Object.assign({}, eventData, {
+                Object.assign({}, payload, {
                     id: eventId,
-                    submittedBy:      currentUser.uid,
-                    submittedByName:  currentUser.nome,
-                    submittedByEmail: currentUser.email,
-                    status:           'pendente',
-                    submittedAt:      firebase.firestore.FieldValue.serverTimestamp(),
-                    reviewedAt:       null,
-                    reviewedBy:       null,
-                    reviewNotes:      ''
+                    submittedBy: currentUser.uid,
+                    submittedByName: userName,
+                    submittedByEmail: currentUser.email || '',
+                    ownerUid: currentUser.uid,
+                    ownerEmail: currentUser.email || '',
+                    ownerName: userName,
+                    organizer: linkedManager ? (linkedManager.establishmentName || '') : payload.organizer,
+                    source: eventSource,
+                    linkedManagerId: linkedManager ? linkedManager.id : null,
+                    linkedEstablishmentId: linkedManager ? linkedManager.establishmentId : null,
+                    linkedEstablishmentName: linkedManager ? linkedManager.establishmentName : null,
+                    linkedEstablishmentRole: linkedManager ? (linkedManager.role || '') : null,
+                    status: 'pendente',
+                    createdAt: payload.createdAt || firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedAt: payload.updatedAt || firebase.firestore.FieldValue.serverTimestamp(),
+                    submittedAt: payload.submittedAt || firebase.firestore.FieldValue.serverTimestamp(),
+                    reviewedAt: null,
+                    reviewedBy: null,
+                    reviewNotes: ''
                 })
             );
-            return { success: true, message: 'Evento enviado para análise! Você receberá uma notificação quando for aprovado.' };
+            return {
+                success: true,
+                message: linkedManager
+                    ? 'Evento vinculado enviado para análise! A publicação depende de aprovação da equipe.'
+                    : 'Evento enviado para análise! Você receberá uma notificação quando for aprovado.'
+            };
         } catch(e) { console.error(e); return { success: false, message: 'Erro ao enviar evento.' }; }
     },
 
@@ -584,6 +627,36 @@ const FirebaseSystem = {
         } catch(error) {
             console.error(error);
             return [];
+        }
+    },
+
+    getManagedEstablishmentForCurrentUser: async function(managerId, establishmentId) {
+        if (!this.isLoggedIn()) return null;
+
+        var normalizedManagerId = String(managerId || '').trim();
+        var normalizedEstablishmentId = String(establishmentId || '').trim();
+
+        try {
+            if (normalizedManagerId) {
+                var managerDoc = await firebase.firestore().collection('establishment_managers')
+                    .doc(normalizedManagerId)
+                    .get();
+
+                if (!managerDoc.exists) return null;
+
+                var manager = Object.assign({ id: managerDoc.id }, managerDoc.data());
+                return isActiveManagerRecord(manager, currentUser.uid, normalizedEstablishmentId) ? manager : null;
+            }
+
+            if (!normalizedEstablishmentId) return null;
+
+            var managers = await this.getUserManagedEstablishments();
+            return managers.find(function(item) {
+                return isActiveManagerRecord(item, currentUser.uid, normalizedEstablishmentId);
+            }) || null;
+        } catch (error) {
+            console.error(error);
+            return null;
         }
     },
 

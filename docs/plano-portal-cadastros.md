@@ -1,5 +1,28 @@
 # Plano tecnico do Portal de Cadastros
 
+## Status da Fase 1.2 - eventos vinculados ao empreendimento
+
+Implementado nesta rodada:
+
+- `Meus empreendimentos` agora oferece a acao `Cadastrar evento vinculado`;
+- o portal reaproveita o mesmo modal de evento, mas mostra aviso visual quando o envio esta vinculado a um empreendimento gerenciado;
+- antes do envio final, o portal consulta `establishment_managers` para validar que o vinculo continua ativo;
+- o evento vinculado entra em `eventos_pendentes` com:
+  - `source = establishment_manager`
+  - `linkedManagerId`
+  - `linkedEstablishmentId`
+  - `linkedEstablishmentName`
+  - `linkedEstablishmentRole`
+- o evento comum continua usando `source = portal_usuario`;
+- a aprovacao admin continua preservando `doc.data()`, entao os campos de vinculo seguem para `eventos_aprovados`.
+
+Mantido fora desta fase:
+
+- nenhuma publicacao automatica na agenda publica;
+- nenhuma alteracao do mapa turistico;
+- nenhuma edicao direta de empreendimento;
+- nenhuma migracao de collections.
+
 ## Status da Fase 1.1 - vinculo com empreendimento existente
 
 Implementado nesta rodada:
@@ -681,26 +704,23 @@ Campos que devem continuar bloqueados para edicao direta do vinculado:
 
 ### Fase D - eventos vinculados ao empreendimento
 
-Sem criar backend novo, o caminho mais seguro e adicionar relacao no proprio fluxo de eventos pendentes.
+Implementado de forma incremental, sem backend novo e sem nova collection de eventos.
 
-Colecao curta compativel com o estado atual:
+Colecao mantida:
 
 - `eventos_pendentes`
 
-Campos novos recomendados para evento vinculado:
+Campos usados nesta fase:
 
 - `linkedEstablishmentId`
 - `linkedEstablishmentName`
-- `linkedUserUid`
-- `eventScope`
-
-Valores sugeridos:
-
-- `eventScope`: `independent`, `establishment-linked`
+- `linkedEstablishmentRole`
+- `linkedManagerId`
+- `source`
 
 Regras funcionais:
 
-- se `eventScope = establishment-linked`, o usuario precisa ter vinculo `approved` com o empreendimento;
+- se `source = establishment_manager`, o usuario precisa ter vinculo ativo com o empreendimento;
 - o evento continua pendente de moderacao antes de entrar em qualquer agenda publica;
 - o empreendimento vinculado aparece apenas como referencia operacional, nao como autorizacao de auto-publicacao.
 
@@ -711,8 +731,13 @@ Capacidades futuras do `portal-usuario.html`:
 - listar vinculos aprovados do usuario;
 - listar pedidos de vinculacao pendentes;
 - abrir formulario de atualizacao apenas para empreendimentos vinculados;
-- abrir formulario de evento ja pre-preenchido com o empreendimento selecionado;
 - mostrar status de revisao: `pendente`, `changes_requested`, `approved`, `rejected`.
+
+Estado atual:
+
+- `Meus empreendimentos` ja lista vinculos aprovados do usuario;
+- o portal ja abre o formulario de evento com o empreendimento selecionado quando o usuario escolhe `Cadastrar evento vinculado`;
+- o cadastro comum de evento continua disponivel em paralelo.
 
 Consulta recomendada no cliente:
 

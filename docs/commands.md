@@ -72,6 +72,14 @@ E abrir:
 - `http://127.0.0.1:8080/portal-usuario.html`
 - `http://127.0.0.1:8080/admin-firebase.html`
 
+Checklist minimo para a fase de eventos vinculados:
+
+- cadastro comum de evento continua abrindo e enviando;
+- `Meus empreendimentos` continua carregando;
+- o botao `Cadastrar evento vinculado` aparece para manager ativo;
+- o modal de evento mostra o aviso do empreendimento vinculado;
+- o admin continua listando eventos pendentes e identifica quando o `source` e `establishment_manager`.
+
 Servidor local:
 
 ```bash

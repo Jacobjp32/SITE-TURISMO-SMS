@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-26T18:00:28.788Z.
+Gerado em 2026-05-26T20:10:30.135Z.
 
 ## Resumo
 
@@ -22,13 +22,13 @@ Gerado em 2026-05-26T18:00:28.788Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 653857 |
-| .html | 36 | 555853 |
-| .css | 21 | 291987 |
-| .md | 20 | 174034 |
+| .js | 35 | 657269 |
+| .html | 36 | 561399 |
+| .css | 21 | 292725 |
+| .md | 20 | 179286 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
-| .rules | 2 | 6331 |
+| .rules | 2 | 8468 |
 | .xml | 1 | 3852 |
 | (sem ext) | 4 | 2687 |
 | .log | 1 | 1550 |
@@ -126,7 +126,7 @@ Gerado em 2026-05-26T18:00:28.788Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 42559 |
+| admin-firebase.html | 43236 |
 | eventos.html | 34257 |
 | galeria.html | 37789 |
 | index.html | 147022 |
@@ -140,7 +140,7 @@ Gerado em 2026-05-26T18:00:28.788Z.
 | offline.html | 2356 |
 | onde-ficar.html | 17798 |
 | para-o-trade.html | 15034 |
-| portal-usuario.html | 72198 |
+| portal-usuario.html | 77067 |
 | privacidade.html | 22461 |
 | reservas.html | 5675 |
 | rotas-completas.html | 4224 |
@@ -174,17 +174,17 @@ Gerado em 2026-05-26T18:00:28.788Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 42559 |
+| admin-firebase.html | 43236 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
-| css/portal-usuario.css | 19699 |
+| css/portal-usuario.css | 20437 |
 | css/reservas.css | 772 |
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 34414 |
+| js/firebase-auth.js | 37826 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
@@ -193,7 +193,7 @@ Gerado em 2026-05-26T18:00:28.788Z.
 | mapa-completo.html | 10456 |
 | para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 72198 |
+| portal-usuario.html | 77067 |
 | reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |
@@ -260,7 +260,7 @@ _Nenhum item encontrado._
 | css/offline.css | 1824 | 0 | 0 | 11 |
 | css/onde-ficar.css | 4423 | 0 | 1 | 35 |
 | css/para-o-trade.css | 2926 | 0 | 1 | 22 |
-| css/portal-usuario.css | 19693 | 0 | 1 | 115 |
+| css/portal-usuario.css | 20431 | 0 | 1 | 119 |
 | css/reservas.css | 770 | 0 | 0 | 2 |
 | css/rotas-completas.css | 13946 | 11 | 4 | 73 |
 | css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
