@@ -373,6 +373,44 @@
             font-family: inherit;
             cursor: pointer;
         }
+
+        .admin-input,
+        .admin-textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 0.6rem 0.75rem;
+            font-family: inherit;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-textarea {
+            min-height: 84px;
+            resize: vertical;
+        }
+
+        .claim-admin-message {
+            max-width: 360px;
+            white-space: normal;
+            line-height: 1.5;
+        }
+
+        .claim-admin-actions {
+            min-width: 240px;
+        }
+
+        .claim-admin-actions .btn-sm {
+            margin-top: 0.25rem;
+        }
+
+        .claim-admin-note {
+            display: block;
+            color: #666;
+            font-size: 0.78rem;
+            line-height: 1.4;
+            margin-top: 0.35rem;
+        }
         
         /* Responsive */
         @media (max-width: 1024px) {
@@ -447,6 +485,7 @@
             <ul class="sidebar-menu">
                 <li><a class="active" data-section="home">📊 <span>Dashboard</span></a></li>
                 <li><a data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
+                <li><a data-section="vinculos">🤝 <span>Solicitações de vínculo</span></a></li>
                 <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
                 <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
@@ -495,6 +534,7 @@
                     </div>
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <button class="btn-primary" onclick="showSection('aprovacoes')">✅ Ver Aprovações</button>
+                        <button class="btn-primary" onclick="showSection('vinculos')">🤝 Ver Vínculos</button>
                         <button class="btn-primary" onclick="showSection('usuarios')">👥 Gerenciar Usuários</button>
                         <a href="/portal-usuario" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
                     </div>
@@ -522,6 +562,26 @@
                         <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
                     </div>
                     <div id="estabelecimentos-pendentes-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Vínculos Section -->
+            <section class="admin-section" id="section-vinculos">
+                <div class="page-header">
+                    <h1>🤝 Solicitações de vínculo</h1>
+                    <button class="btn-primary" onclick="loadEstablishmentClaims()">🔄 Atualizar</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Empreendimentos existentes aguardando revisão</h2>
+                    </div>
+                    <p style="color:#666; margin-bottom:1rem; line-height:1.6;">
+                        Ao aprovar, o usuário passa a ver o empreendimento em “Meus empreendimentos”. Nesta fase não há edição pública do mapa nem alteração direta dos dados turísticos.
+                    </p>
+                    <div id="claims-pendentes-container">
                         <div class="loading">Carregando...</div>
                     </div>
                 </div>
@@ -641,6 +701,7 @@
 
             // Carregar dados da seção
             if (section === 'aprovacoes') loadPendingData();
+            if (section === 'vinculos') loadEstablishmentClaims();
             if (section === 'usuarios') loadUsers();
             if (section === 'eventos') loadApprovedEvents();
         }
@@ -798,6 +859,55 @@
             `;
         }
 
+        async function loadEstablishmentClaims() {
+            const claims = await FirebaseSystem.getPendingEstablishmentClaims();
+            const container = document.getElementById('claims-pendentes-container');
+
+            if (!claims.length) {
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de vínculo pendente.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>Empreendimento</th>
+                            <th>Vínculo solicitado</th>
+                            <th>Mensagem</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${claims.map(claim => `
+                            <tr>
+                                <td>
+                                    <strong>${SEC.html(claim.userName, '—')}</strong><br>
+                                    <small>${SEC.html(claim.userEmail, '—')}</small><br>
+                                    <small>${SEC.html(claim.contactPhone || 'Sem contato adicional')}</small>
+                                </td>
+                                <td>
+                                    <strong>${SEC.html(claim.establishmentName, '—')}</strong><br>
+                                    <small>${SEC.html(claim.establishmentCategory || 'Categoria não informada')}</small><br>
+                                    <small>Enviado em ${SEC.html(formatFirestoreDate(claim.createdAt))}</small>
+                                </td>
+                                <td>${SEC.html(getClaimRoleLabel(claim.requestedRole))}</td>
+                                <td class="claim-admin-message">${SEC.html(claim.message, '—')}</td>
+                                <td class="claim-admin-actions">
+                                    <textarea class="admin-textarea" id="claim-note-${SEC.attr(claim.id)}" placeholder="Observação interna (opcional)"></textarea>
+                                    <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
+                                    <button class="btn-sm btn-approve" onclick="approveClaim('${SEC.js(claim.id)}')">✅ Aprovar</button>
+                                    <button class="btn-sm btn-reject" onclick="rejectClaimReview('${SEC.js(claim.id)}')">❌ Rejeitar</button>
+                                    <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
         async function loadApprovedEvents() {
             // Buscar eventos aprovados diretamente
             try {
@@ -878,6 +988,30 @@
             loadPendingData();
         }
 
+        async function approveClaim(claimId) {
+            const notes = getClaimInputValue('claim-note-', claimId);
+            if (!confirm('Aprovar este vínculo?')) return;
+            const result = await FirebaseSystem.approveEstablishmentClaim(claimId, notes);
+            alert(result.message);
+            loadEstablishmentClaims();
+        }
+
+        async function rejectClaimReview(claimId) {
+            const reason = getClaimInputValue('claim-reason-', claimId);
+            const notes = getClaimInputValue('claim-note-', claimId);
+
+            if (!reason) {
+                alert('Informe o motivo da rejeição antes de continuar.');
+                return;
+            }
+
+            if (!confirm('Rejeitar esta solicitação de vínculo?')) return;
+
+            const result = await FirebaseSystem.rejectEstablishmentClaim(claimId, reason, notes);
+            alert(result.message);
+            loadEstablishmentClaims();
+        }
+
         async function changeUserRole(userId, newRole) {
             const result = await FirebaseSystem.setUserRole(userId, newRole);
             alert(result.message);
@@ -897,6 +1031,33 @@
             } catch {
                 return dateStr;
             }
+        }
+
+        function formatFirestoreDate(value) {
+            if (!value) return '-';
+            try {
+                if (typeof value.toDate === 'function') {
+                    return value.toDate().toLocaleDateString('pt-BR');
+                }
+                if (typeof value.seconds === 'number') {
+                    return new Date(value.seconds * 1000).toLocaleDateString('pt-BR');
+                }
+                return new Date(value).toLocaleDateString('pt-BR');
+            } catch {
+                return '-';
+            }
+        }
+
+        function getClaimRoleLabel(role) {
+            return ({
+                proprietario: 'Proprietário',
+                gerente_responsavel: 'Gerente / responsável',
+                representante_autorizado: 'Representante autorizado'
+            })[String(role || '')] || 'Não informado';
+        }
+
+        function getClaimInputValue(prefix, claimId) {
+            return document.getElementById(prefix + claimId)?.value.trim() || '';
         }
     </script>
 </body>

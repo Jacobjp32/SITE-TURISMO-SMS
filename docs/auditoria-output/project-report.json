@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-26T16:42:57.646Z",
+  "generatedAt": "2026-05-26T18:00:28.788Z",
   "totals": {
-    "files": 324,
+    "files": 326,
     "html": 36,
     "css": 21,
-    "js": 34,
+    "js": 35,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,23 +46,23 @@
     },
     {
       "ext": ".js",
-      "files": 34,
-      "bytes": 635745
+      "files": 35,
+      "bytes": 653857
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 534198
+      "bytes": 555853
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 291487
+      "bytes": 291987
     },
     {
       "ext": ".md",
-      "files": 19,
-      "bytes": 166544
+      "files": 20,
+      "bytes": 174034
     },
     {
       "ext": ".json",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 4671
+      "bytes": 6331
     },
     {
       "ext": ".xml",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 815104
+      "bytes": 838419
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -173,18 +173,18 @@
     },
     {
       "dir": "js",
-      "files": 22,
-      "bytes": 375688
+      "files": 23,
+      "bytes": 393800
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 291487
+      "bytes": 291987
     },
     {
       "dir": "docs",
-      "files": 17,
-      "bytes": 152240
+      "files": 18,
+      "bytes": 159730
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 35444
+      "bytes": 42559
     },
     {
       "path": "eventos.html",
@@ -849,7 +849,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 57658
+      "bytes": 72198
     },
     {
       "path": "privacidade.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 35444
+      "bytes": 42559
     },
     {
       "path": "css/mapa-3d.css",
@@ -1009,7 +1009,7 @@
       "path": "css/portal-usuario.css",
       "ext": ".css",
       "dir": "css",
-      "bytes": 19199
+      "bytes": 19699
     },
     {
       "path": "css/reservas.css",
@@ -1045,7 +1045,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 23104
+      "bytes": 34414
     },
     {
       "path": "js/reservas.js",
@@ -1099,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 57658
+      "bytes": 72198
     },
     {
       "path": "reservas.html",
@@ -1173,10 +1173,14 @@
         "section-aprovacoes",
         "eventos-pendentes-container",
         "estabelecimentos-pendentes-container",
+        "section-vinculos",
+        "claims-pendentes-container",
         "section-usuarios",
         "usuarios-container",
         "section-eventos",
-        "eventos-aprovados-container"
+        "eventos-aprovados-container",
+        "claim-note-${SEC.attr(claim.id)}",
+        "claim-reason-${SEC.attr(claim.id)}"
       ]
     },
     {
@@ -1716,6 +1720,9 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/firebase-auth.js",
+        "js/data/hospedagens.js",
+        "js/data/restaurantes.js",
+        "js/establishment-catalog.js",
         "js/breadcrumbs.js",
         "translations.js",
         "js/cookies.js"
@@ -1754,6 +1761,14 @@
         "userName",
         "myEvents",
         "eventsList",
+        "claimRequestSection",
+        "claimEstablishment",
+        "claimRole",
+        "claimContactPhone",
+        "claimMessage",
+        "btnEnviarClaim",
+        "claimRequestsList",
+        "managedEstablishmentsList",
         "eventModal",
         "evtNome",
         "evtCat",
@@ -2086,10 +2101,10 @@
     },
     {
       "file": "css/portal-usuario.css",
-      "bytes": 19193,
+      "bytes": 19693,
       "important": 0,
       "media": 1,
-      "selectorCount": 110
+      "selectorCount": 115
     },
     {
       "file": "css/reservas.css",
@@ -2643,6 +2658,37 @@
       "addEventListeners": 0
     },
     {
+      "file": "js/establishment-catalog.js",
+      "bytes": 6791,
+      "globals": [
+        "var EXCLUDED_NAMES",
+        "var PRIMARY_SOURCE_PRIORITY",
+        "window.EstablishmentCatalog",
+        "window.ROTAS_LEGADO_ESTABLISHMENTS",
+        "window.TURISMO_HOSPEDAGENS",
+        "window.TURISMO_RESTAURANTES"
+      ],
+      "functions": [
+        "buildCatalog",
+        "classifyLegacyCategory",
+        "cleanLabel",
+        "ensureArray",
+        "findById",
+        "getPreferredLegacyName",
+        "list",
+        "loadLegacyRouteEstablishments",
+        "looksClaimableLegacy",
+        "mergeEntry",
+        "normalizeText",
+        "ready",
+        "shouldExcludeByName",
+        "toEntry"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
       "file": "js/firebase-app-check.js",
       "bytes": 2388,
       "globals": [
@@ -2662,7 +2708,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 23020,
+      "bytes": 34281,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2677,10 +2723,14 @@
       "functions": [
         "authErrorMessage",
         "basicUserFromAuth",
+        "buildEstablishmentManagerDocId",
+        "getComparableTimestamp",
         "getFirebaseAuth",
         "getFirebaseDB",
         "initFirebase",
+        "normalizeComparableId",
         "persistUserSession",
+        "sortByTimestampDesc",
         "tryInit",
         "withTimeout"
       ],
@@ -3143,6 +3193,16 @@
       "examples": "eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html"
     },
     {
+      "script": "js/data/hospedagens.js",
+      "pages": 3,
+      "examples": "index.html, mapa-turistico.html, portal-usuario.html"
+    },
+    {
+      "script": "js/data/restaurantes.js",
+      "pages": 3,
+      "examples": "index.html, mapa-turistico.html, portal-usuario.html"
+    },
+    {
       "script": "js/locais-data.js",
       "pages": 3,
       "examples": "index.html, local.html, mapa-turistico.html"
@@ -3158,22 +3218,12 @@
       "examples": "index.html, mapa-turistico.html"
     },
     {
-      "script": "js/data/hospedagens.js",
-      "pages": 2,
-      "examples": "index.html, mapa-turistico.html"
-    },
-    {
       "script": "js/data/informacoes-essenciais.js",
       "pages": 2,
       "examples": "index.html, mapa-turistico.html"
     },
     {
       "script": "js/data/pontos-turisticos.js",
-      "pages": 2,
-      "examples": "index.html, mapa-turistico.html"
-    },
-    {
-      "script": "js/data/restaurantes.js",
       "pages": 2,
       "examples": "index.html, mapa-turistico.html"
     },
@@ -3216,6 +3266,11 @@
       "script": "js/cms.js",
       "pages": 1,
       "examples": "noticia.html"
+    },
+    {
+      "script": "js/establishment-catalog.js",
+      "pages": 1,
+      "examples": "portal-usuario.html"
     },
     {
       "script": "js/mapa-turistico.js",
@@ -3290,7 +3345,7 @@
     },
     {
       "global": "window.ROTAS_LEGADO_ESTABLISHMENTS",
-      "files": "js/data/turismo-data-adapter.js, js/rotas-data.js"
+      "files": "js/data/turismo-data-adapter.js, js/establishment-catalog.js, js/rotas-data.js"
     },
     {
       "global": "window.ROTAS_LEGADO_ROUTE_INFO",
@@ -3330,7 +3385,7 @@
     },
     {
       "global": "window.TURISMO_HOSPEDAGENS",
-      "files": "js/data/hospedagens.js, js/data/turismo-data.js, js/search-index.js"
+      "files": "js/data/hospedagens.js, js/data/turismo-data.js, js/establishment-catalog.js, js/search-index.js"
     },
     {
       "global": "window.TURISMO_INFORMACOES_ESSENCIAIS",
@@ -3342,7 +3397,7 @@
     },
     {
       "global": "window.TURISMO_RESTAURANTES",
-      "files": "js/data/restaurantes.js, js/data/turismo-data.js, js/search-index.js"
+      "files": "js/data/restaurantes.js, js/data/turismo-data.js, js/establishment-catalog.js, js/search-index.js"
     },
     {
       "global": "window.TURISMO_ROTAS",

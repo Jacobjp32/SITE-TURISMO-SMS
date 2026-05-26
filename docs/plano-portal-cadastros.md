@@ -1,5 +1,31 @@
 # Plano tecnico do Portal de Cadastros
 
+## Status da Fase 1.1 - vinculo com empreendimento existente
+
+Implementado nesta rodada:
+
+- secao `Solicitar vinculo com empreendimento` no `portal-usuario.html`;
+- lista de empreendimentos existentes montada por leitura de fontes publicas ja aprovadas, sem tocar em `TURISMO_DATA`;
+- historico `Minhas solicitacoes de vinculo`;
+- area `Meus empreendimentos` apenas para leitura;
+- secao admin `Solicitacoes de vinculo` em `admin-firebase.html`;
+- collections novas:
+  - `establishment_claims`
+  - `establishment_managers`
+- verificacao de duplicidade por usuario + empreendimento antes do create e antes da aprovacao.
+
+Mantido fora desta fase:
+
+- nenhuma edicao publica do empreendimento;
+- nenhuma integracao com o mapa turistico;
+- nenhuma migracao de collections existentes;
+- nenhum ajuste de login/Auth/App Check;
+- nenhuma mudanca em `storage.rules`.
+
+Documento detalhado:
+
+- `docs/plano-vinculo-empreendimentos.md`
+
 ## Status da Fase 1
 
 Implementado nesta rodada:

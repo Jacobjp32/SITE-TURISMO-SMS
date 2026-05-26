@@ -39,10 +39,15 @@ O script usa coordenadas centralizadas em `js/weather.js`, cache local em `local
 Para rodadas de ajuste visual sem dependencias novas:
 
 ```bash
+node --check js/establishment-catalog.js
+node --check js/firebase-auth.js
+node --check js/firebase-app-check.js
+node --check js/cms.js
 node --check js/nav-shared.js
 node --check js/mapa-turistico.js
 node --check js/search.js
 node --check js/search-index.js
+node --check js/security-utils.js
 node --check js/site-stats.js
 node --check js/site-meta.js
 node --check js/weather.js
@@ -55,6 +60,17 @@ node scripts/audit-links.mjs
 node scripts/audit-assets.mjs
 node scripts/audit-project.mjs
 ```
+
+Para fluxos do portal/admin com vinculo de empreendimento, vale validar tambem:
+
+```bash
+python -m http.server 8080 --bind 127.0.0.1
+```
+
+E abrir:
+
+- `http://127.0.0.1:8080/portal-usuario.html`
+- `http://127.0.0.1:8080/admin-firebase.html`
 
 Servidor local:
 

@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-26T16:42:57.646Z.
+Gerado em 2026-05-26T18:00:28.788Z.
 
 ## Resumo
 
-- Arquivos mapeados: 324
+- Arquivos mapeados: 326
 - HTMLs: 36
 - CSS: 21
-- JS: 34
+- JS: 35
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,13 +22,13 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 34 | 635745 |
-| .html | 36 | 534198 |
-| .css | 21 | 291487 |
-| .md | 19 | 166544 |
+| .js | 35 | 653857 |
+| .html | 36 | 555853 |
+| .css | 21 | 291987 |
+| .md | 20 | 174034 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
-| .rules | 2 | 4671 |
+| .rules | 2 | 6331 |
 | .xml | 1 | 3852 |
 | (sem ext) | 4 | 2687 |
 | .log | 1 | 1550 |
@@ -126,7 +126,7 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 35444 |
+| admin-firebase.html | 42559 |
 | eventos.html | 34257 |
 | galeria.html | 37789 |
 | index.html | 147022 |
@@ -140,7 +140,7 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | offline.html | 2356 |
 | onde-ficar.html | 17798 |
 | para-o-trade.html | 15034 |
-| portal-usuario.html | 57658 |
+| portal-usuario.html | 72198 |
 | privacidade.html | 22461 |
 | reservas.html | 5675 |
 | rotas-completas.html | 4224 |
@@ -174,17 +174,17 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 35444 |
+| admin-firebase.html | 42559 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
-| css/portal-usuario.css | 19199 |
+| css/portal-usuario.css | 19699 |
 | css/reservas.css | 772 |
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 23104 |
+| js/firebase-auth.js | 34414 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
@@ -193,7 +193,7 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | mapa-completo.html | 10456 |
 | para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 57658 |
+| portal-usuario.html | 72198 |
 | reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |
@@ -212,13 +212,13 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
 | config.js | 6 | admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
+| js/data/hospedagens.js | 3 | index.html, mapa-turistico.html, portal-usuario.html |
+| js/data/restaurantes.js | 3 | index.html, mapa-turistico.html, portal-usuario.html |
 | js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
 | js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
 | js/data/eventos.js | 2 | index.html, mapa-turistico.html |
-| js/data/hospedagens.js | 2 | index.html, mapa-turistico.html |
 | js/data/informacoes-essenciais.js | 2 | index.html, mapa-turistico.html |
 | js/data/pontos-turisticos.js | 2 | index.html, mapa-turistico.html |
-| js/data/restaurantes.js | 2 | index.html, mapa-turistico.html |
 | js/data/rotas.js | 2 | index.html, mapa-turistico.html |
 | js/data/turismo-data-adapter.js | 2 | index.html, mapa-turistico.html |
 | js/data/turismo-data.js | 2 | index.html, mapa-turistico.html |
@@ -227,6 +227,7 @@ Gerado em 2026-05-26T16:42:57.646Z.
 | js/avaliacoes.js | 1 | index.html |
 | js/chatbot.js | 1 | index.html |
 | js/cms.js | 1 | noticia.html |
+| js/establishment-catalog.js | 1 | portal-usuario.html |
 | js/mapa-turistico.js | 1 | mapa-turistico.html |
 | js/mapa3d.js | 1 | mapa-3d.html |
 | js/reservas.js | 1 | reservas.html |
@@ -259,7 +260,7 @@ _Nenhum item encontrado._
 | css/offline.css | 1824 | 0 | 0 | 11 |
 | css/onde-ficar.css | 4423 | 0 | 1 | 35 |
 | css/para-o-trade.css | 2926 | 0 | 1 | 22 |
-| css/portal-usuario.css | 19193 | 0 | 1 | 110 |
+| css/portal-usuario.css | 19693 | 0 | 1 | 115 |
 | css/reservas.css | 770 | 0 | 0 | 2 |
 | css/rotas-completas.css | 13946 | 11 | 4 | 73 |
 | css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
@@ -348,7 +349,7 @@ _Nenhum item encontrado._
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
 | window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js |
-| window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/rotas-data.js |
+| window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/establishment-catalog.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
 | window.setTimeout | js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
 | window.SMSecurity | js/cms.js, js/security-utils.js |
@@ -358,10 +359,10 @@ _Nenhum item encontrado._
 | window.TURISMO_DATA_HELPERS | js/data/turismo-data.js, js/site-stats.js |
 | window.TURISMO_DATA_META | js/data/turismo-data.js, js/site-stats.js |
 | window.TURISMO_EVENTOS | js/data/eventos.js, js/data/turismo-data.js, js/search-index.js |
-| window.TURISMO_HOSPEDAGENS | js/data/hospedagens.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_HOSPEDAGENS | js/data/hospedagens.js, js/data/turismo-data.js, js/establishment-catalog.js, js/search-index.js |
 | window.TURISMO_INFORMACOES_ESSENCIAIS | js/data/informacoes-essenciais.js, js/data/turismo-data.js, js/search-index.js |
 | window.TURISMO_PONTOS | js/data/pontos-turisticos.js, js/data/turismo-data.js, js/search-index.js |
-| window.TURISMO_RESTAURANTES | js/data/restaurantes.js, js/data/turismo-data.js, js/search-index.js |
+| window.TURISMO_RESTAURANTES | js/data/restaurantes.js, js/data/turismo-data.js, js/establishment-catalog.js, js/search-index.js |
 | window.TURISMO_ROTAS | js/data/rotas.js, js/data/turismo-data.js, js/search-index.js |
 | window.TURISMO_SEARCH_INDEX | js/search-index.js, js/search.js |
 

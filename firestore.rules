@@ -26,6 +26,10 @@ service cloud.firestore {
       return signedIn() && resourceData.submittedBy == request.auth.uid;
     }
 
+    function ownsUserId(resourceData) {
+      return signedIn() && resourceData.userId == request.auth.uid;
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if isAdmin() || (
@@ -71,6 +75,49 @@ service cloud.firestore {
     match /estabelecimentos_aprovados/{estId} {
       allow read: if true;
       allow write: if isModerator();
+    }
+
+    match /establishment_claims/{claimId} {
+      allow read: if isModerator() || ownsUserId(resource.data);
+      allow create: if signedIn() &&
+        request.resource.data.id == claimId &&
+        request.resource.data.userId == request.auth.uid &&
+        request.resource.data.userEmail == request.auth.token.email &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.source == 'portal_usuario' &&
+        request.resource.data.reviewedAt == null &&
+        request.resource.data.reviewedBy == null &&
+        request.resource.data.reviewNotes == '' &&
+        request.resource.data.rejectionReason == '' &&
+        request.resource.data.requestedRole in ['proprietario', 'gerente_responsavel', 'representante_autorizado'] &&
+        request.resource.data.keys().hasOnly([
+          'id',
+          'userId',
+          'userEmail',
+          'userName',
+          'contactPhone',
+          'establishmentId',
+          'establishmentName',
+          'establishmentCategory',
+          'establishmentSource',
+          'establishmentOriginalId',
+          'requestedRole',
+          'status',
+          'message',
+          'createdAt',
+          'updatedAt',
+          'reviewedAt',
+          'reviewedBy',
+          'reviewNotes',
+          'rejectionReason',
+          'source'
+        ]);
+      allow update, delete: if isModerator();
+    }
+
+    match /establishment_managers/{managerId} {
+      allow read: if isModerator() || ownsUserId(resource.data);
+      allow create, update, delete: if isModerator();
     }
 
     match /noticias/{noticiaId} {

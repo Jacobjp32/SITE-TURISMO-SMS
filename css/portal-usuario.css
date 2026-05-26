@@ -337,6 +337,12 @@
             gap: 0.5rem;
         }
 
+        .section-copy {
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
         /* Events List */
         .events-list {
             display: flex;
@@ -366,6 +372,26 @@
         .event-info p {
             font-size: 0.85rem;
             color: #666;
+        }
+
+        .claim-item {
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .claim-extra {
+            margin-top: 0.45rem;
+            line-height: 1.55;
+        }
+
+        .claim-success {
+            color: #155724;
+            font-weight: 600;
+        }
+
+        .claim-info {
+            color: var(--forest-deep);
+            font-weight: 500;
         }
 
         .event-status {

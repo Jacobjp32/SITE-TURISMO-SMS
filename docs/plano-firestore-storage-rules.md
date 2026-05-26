@@ -1,5 +1,39 @@
 # Plano de Firestore e Storage Rules
 
+## Status da Fase 1.1 - vinculo com empreendimento existente
+
+Arquivos versionados nesta fase:
+
+- `firestore.rules`
+- `portal-usuario.html`
+- `admin-firebase.html`
+- `js/firebase-auth.js`
+
+Collections novas previstas no Firestore:
+
+- `establishment_claims`
+- `establishment_managers`
+
+Politica adicionada localmente:
+
+- usuario autenticado cria apenas o proprio claim com `status = pending`;
+- usuario le apenas os proprios claims;
+- usuario nao aprova, nao rejeita e nao cria manager;
+- admin/moderator le todos os claims;
+- admin/moderator aprova/rejeita claims;
+- usuario le apenas os proprios managers;
+- admin/moderator cria e atualiza managers.
+
+Importante:
+
+- essa mudanca ficou apenas no arquivo local `firestore.rules`;
+- continua necessario publicar manualmente a versao revisada no Firebase Console ou pela CLI oficial;
+- nenhuma Storage Rule nova foi necessaria para o fluxo de vinculo.
+
+Documento detalhado:
+
+- `docs/plano-vinculo-empreendimentos.md`
+
 ## Status da Fase 1
 
 O repositorio agora tem um arquivo local `storage.rules`, mas ele ainda e apenas rascunho versionado.

@@ -85,6 +85,34 @@ function authErrorMessage(error, fallback) {
     return message;
 }
 
+function normalizeComparableId(value) {
+    return String(value || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+}
+
+function getComparableTimestamp(value) {
+    if (!value) return 0;
+    if (typeof value.toMillis === 'function') return value.toMillis();
+    if (typeof value.seconds === 'number') return value.seconds * 1000;
+    if (value instanceof Date) return value.getTime();
+    var parsed = Date.parse(value);
+    return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function sortByTimestampDesc(items, fieldName) {
+    return (items || []).slice().sort(function(a, b) {
+        return getComparableTimestamp(b && b[fieldName]) - getComparableTimestamp(a && a[fieldName]);
+    });
+}
+
+function buildEstablishmentManagerDocId(userId, establishmentId) {
+    return 'mgr_' + String(userId || '').replace(/[^\w-]+/g, '_') + '__' +
+        String(establishmentId || '').replace(/[^\w-]+/g, '_');
+}
+
 // Aguarda os SDKs do Firebase carregarem nas páginas que usam autenticação.
 function initFirebase() {
     return new Promise(function(resolve) {
@@ -434,6 +462,254 @@ const FirebaseSystem = {
             });
             return { success: true, message: 'Estabelecimento rejeitado.' };
         } catch(e) { return { success: false, message: 'Erro ao rejeitar estabelecimento.' }; }
+    },
+
+    // ========================================
+    // VINCULOS COM EMPREENDIMENTOS EXISTENTES
+    // ========================================
+
+    createEstablishmentClaim: async function(claimData) {
+        if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
+
+        var establishmentId = String(claimData && claimData.establishmentId || '').trim();
+        var establishmentName = String(claimData && claimData.establishmentName || '').trim();
+        var requestedRole = String(claimData && claimData.requestedRole || '').trim();
+        var message = String(claimData && claimData.message || '').trim();
+
+        if (!establishmentId || !establishmentName || !requestedRole) {
+            return { success: false, message: 'Preencha empreendimento e tipo de vínculo.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var userId = currentUser.uid;
+            var normalizedTarget = normalizeComparableId(establishmentId);
+
+            var managersSnap = await db.collection('establishment_managers')
+                .where('userId', '==', userId)
+                .get();
+
+            var alreadyManager = managersSnap.docs
+                .map(function(doc) { return doc.data(); })
+                .some(function(item) {
+                    return item.active !== false &&
+                        normalizeComparableId(item.establishmentId) === normalizedTarget;
+                });
+
+            if (alreadyManager) {
+                return { success: false, message: 'Você já possui vínculo ativo com este empreendimento.' };
+            }
+
+            var claimsSnap = await db.collection('establishment_claims')
+                .where('userId', '==', userId)
+                .get();
+
+            var relatedClaims = claimsSnap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).filter(function(item) {
+                return normalizeComparableId(item.establishmentId) === normalizedTarget;
+            });
+
+            if (relatedClaims.some(function(item) { return item.status === 'pending'; })) {
+                return { success: false, message: 'Já existe uma solicitação pendente para este empreendimento.' };
+            }
+
+            if (relatedClaims.some(function(item) { return item.status === 'approved'; })) {
+                return { success: false, message: 'Este vínculo já foi aprovado anteriormente.' };
+            }
+
+            var claimId = 'claim_' + Date.now();
+            var now = firebase.firestore.FieldValue.serverTimestamp();
+
+            await db.collection('establishment_claims').doc(claimId).set({
+                id: claimId,
+                userId: userId,
+                userEmail: currentUser.email || '',
+                userName: currentUser.nome || currentUser.displayName || currentUser.email || 'Usuário',
+                contactPhone: String(claimData && claimData.contactPhone || '').trim(),
+                establishmentId: establishmentId,
+                establishmentName: establishmentName,
+                establishmentCategory: String(claimData && claimData.establishmentCategory || '').trim(),
+                establishmentSource: String(claimData && claimData.establishmentSource || '').trim(),
+                establishmentOriginalId: String(claimData && claimData.establishmentOriginalId || '').trim(),
+                requestedRole: requestedRole,
+                status: 'pending',
+                message: message,
+                createdAt: now,
+                updatedAt: now,
+                reviewedAt: null,
+                reviewedBy: null,
+                reviewNotes: '',
+                rejectionReason: '',
+                source: 'portal_usuario'
+            });
+
+            return { success: true, message: 'Solicitação de vínculo enviada para análise.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao enviar solicitação de vínculo.' };
+        }
+    },
+
+    getUserEstablishmentClaims: async function() {
+        if (!this.isLoggedIn()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_claims')
+                .where('userId', '==', currentUser.uid)
+                .get();
+
+            return sortByTimestampDesc(snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }), 'createdAt');
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    getUserManagedEstablishments: async function() {
+        if (!this.isLoggedIn()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_managers')
+                .where('userId', '==', currentUser.uid)
+                .get();
+
+            return snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).filter(function(item) {
+                return item.active !== false;
+            }).sort(function(a, b) {
+                return String(a.establishmentName || '').localeCompare(String(b.establishmentName || ''), 'pt-BR');
+            });
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    getPendingEstablishmentClaims: async function() {
+        if (!this.isModerator()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_claims')
+                .where('status', '==', 'pending')
+                .get();
+
+            return sortByTimestampDesc(snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }), 'createdAt');
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    approveEstablishmentClaim: async function(claimId, reviewNotes) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        try {
+            var db = firebase.firestore();
+            var claimRef = db.collection('establishment_claims').doc(claimId);
+            var claimSnap = await claimRef.get();
+
+            if (!claimSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var claim = Object.assign({ id: claimSnap.id }, claimSnap.data());
+
+            if (claim.status === 'approved') {
+                return { success: false, message: 'Esta solicitação já foi aprovada.' };
+            }
+
+            if (claim.status !== 'pending') {
+                return { success: false, message: 'Apenas solicitações pendentes podem ser aprovadas.' };
+            }
+
+            var managersSnap = await db.collection('establishment_managers')
+                .where('userId', '==', claim.userId)
+                .get();
+
+            var normalizedTarget = normalizeComparableId(claim.establishmentId);
+            var duplicateActiveManager = managersSnap.docs
+                .map(function(doc) { return doc.data(); })
+                .some(function(item) {
+                    return item.active !== false &&
+                        normalizeComparableId(item.establishmentId) === normalizedTarget;
+                });
+
+            if (duplicateActiveManager) {
+                return { success: false, message: 'Já existe vínculo ativo para este usuário e empreendimento.' };
+            }
+
+            var batch = db.batch();
+            var managerRef = db.collection('establishment_managers')
+                .doc(buildEstablishmentManagerDocId(claim.userId, claim.establishmentId));
+            var approvedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+            batch.update(claimRef, {
+                status: 'approved',
+                updatedAt: approvedAt,
+                reviewedAt: approvedAt,
+                reviewedBy: currentUser.uid,
+                reviewNotes: reviewNotes || '',
+                rejectionReason: ''
+            });
+
+            batch.set(managerRef, {
+                userId: claim.userId,
+                userEmail: claim.userEmail || '',
+                userName: claim.userName || '',
+                establishmentId: claim.establishmentId,
+                establishmentName: claim.establishmentName,
+                role: claim.requestedRole,
+                active: true,
+                approvedAt: approvedAt,
+                approvedBy: currentUser.uid,
+                claimId: claim.id
+            });
+
+            await batch.commit();
+            return { success: true, message: 'Vínculo aprovado com sucesso.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao aprovar solicitação de vínculo.' };
+        }
+    },
+
+    rejectEstablishmentClaim: async function(claimId, rejectionReason, reviewNotes) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        try {
+            var claimRef = firebase.firestore().collection('establishment_claims').doc(claimId);
+            var claimSnap = await claimRef.get();
+
+            if (!claimSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var claim = claimSnap.data() || {};
+            if (claim.status === 'approved') {
+                return { success: false, message: 'Solicitações já aprovadas não podem ser rejeitadas.' };
+            }
+
+            if (claim.status !== 'pending') {
+                return { success: false, message: 'Apenas solicitações pendentes podem ser rejeitadas.' };
+            }
+
+            await claimRef.update({
+                status: 'rejected',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedBy: currentUser.uid,
+                rejectionReason: rejectionReason || '',
+                reviewNotes: reviewNotes || ''
+            });
+
+            return { success: true, message: 'Solicitação rejeitada.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao rejeitar solicitação de vínculo.' };
+        }
     },
 
     // ========================================
