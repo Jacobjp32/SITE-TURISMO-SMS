@@ -1,12 +1,12 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-05-26T13:08:41.788Z.
+Gerado em 2026-05-26T13:43:21.301Z.
 
 ## Resumo
 
 - Midias encontradas: 186
-- Midias referenciadas: 151
-- Orfas provaveis: 35
+- Midias referenciadas: 111
+- Orfas provaveis: 75
 - Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
 - Midias pesadas: 22
@@ -61,29 +61,69 @@ _Nenhum item encontrado._
 | images/PARQUE_EXPOSICOES_1.jpg | 713776 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_5.jpg | 700978 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_2.jpg | 680379 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg | 623658 | 1200x1600 |
 | images/PARQUE_EXPOSICOES_4.jpg | 620134 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg | 587070 | 1280x1600 |
 | images/PARQUE_EXPOSICOES_3.jpg | 585692 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg | 548700 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg | 547055 | 1600x1066 |
 | images/CUIA_3.JPG | 536666 | 1920x1080 |
 | images/GINASIO_POLACAO.JPG | 528933 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_7.jpg | 525567 | 1920x1080 |
 | images/CUIA_1.JPG | 481303 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg | 462028 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 | 1280x1600 |
 | images/PARQUE_EXPOSICOES_6.jpg | 448820 | 1920x888 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg | 430930 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg | 423875 | 1200x1600 |
+| images/empreendimentos/all-garden/all-garden-06.jpeg | 416902 | 1200x1600 |
 | images/PONTE_ENTRADA_CIDADE_1_2.jpg | 394838 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg | 387394 | 1200x1600 |
+| images/empreendimentos/all-garden/all-garden-04.jpeg | 345107 | 1066x1600 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-08.jpeg | 343453 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-04.jpeg | 341775 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-28.jpeg | 340668 | 1360x1600 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-11.jpeg | 309966 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-22.jpeg | 306085 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-13.jpeg | 304417 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-34.jpeg | 303941 | 1200x1600 |
 | images/IGREJA_MATRIZ_1.webp | 303620 | 1920x1280 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-36.jpeg | 291781 | 1200x1600 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-10.jpeg | 291508 | 1600x1066 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-06.jpeg | 286312 | 1600x1066 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-04.jpeg | 283560 | 1066x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-15.jpeg | 278984 | 1200x1600 |
+| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-12.jpeg | 271725 | 1066x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-33.jpeg | 264994 | 1200x1600 |
 | images/PONTE_ENTRADA_CIDADE_1_3.jpg | 254908 | 1920x1080 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-32.jpeg | 246556 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-11.jpeg | 243077 | 960x1280 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-31.jpeg | 239624 | 900x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-06.jpeg | 226499 | 1280x1600 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-05.jpeg | 212259 | 960x1280 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-26.jpeg | 202853 | 1600x1066 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg | 201228 | 960x1280 |
 | images/logo_turismo_completa.png | 199454 | 800x573 |
 | images/praca_rio_iguacu.jpg | 197472 | 1200x675 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg | 196666 | 960x1280 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-05.jpeg | 195444 | 1600x1200 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-10.jpeg | 189205 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-19.jpeg | 188759 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-09.jpeg | 186287 | 1200x1600 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-02.jpeg | 186072 | 960x1280 |
 | images/IMIGRANTES_IA_2.jpg | 184560 | 1200x669 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-24.jpeg | 181953 | 1600x1066 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-14.jpeg | 170004 | 1200x1600 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg | 163345 | 960x1280 |
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp | 152444 | 306945x4997377 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg | 147035 | 960x1280 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg | 146400 | 720x1280 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg | 141023 | 960x1280 |
 | images/IMIGRANTES_IA_1.jpg | 133075 | 1200x669 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-02.jpeg | 124381 | 1200x1600 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-35.jpeg | 123123 | 1440x960 |
+| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg | 97679 | 1024x683 |
 | images/mascotes/MASCOTE_MENINO_POLONES_1.webp | 95512 | 306945x4997377 |
 | images/diorama_sao_mateus.webp | 94108 | 1200x669 |
 | images/mascotes/MASCOTE_PERY.webp | 92658 | 306945x4997377 |

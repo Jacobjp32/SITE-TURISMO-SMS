@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-26T13:08:42.004Z.
+Gerado em 2026-05-26T13:43:21.530Z.
 
 ## Resumo
 
-- Arquivos mapeados: 320
+- Arquivos mapeados: 321
 - HTMLs: 36
 - CSS: 21
 - JS: 34
@@ -22,10 +22,10 @@ Gerado em 2026-05-26T13:08:42.004Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 34 | 642568 |
+| .js | 34 | 636292 |
 | .html | 36 | 519110 |
 | .css | 21 | 289487 |
-| .md | 16 | 131182 |
+| .md | 17 | 134082 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .xml | 1 | 3852 |

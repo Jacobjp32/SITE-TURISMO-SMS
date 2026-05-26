@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-26T13:08:42.004Z",
+  "generatedAt": "2026-05-26T13:43:21.530Z",
   "totals": {
-    "files": 320,
+    "files": 321,
     "html": 36,
     "css": 21,
     "js": 34,
@@ -47,7 +47,7 @@
     {
       "ext": ".js",
       "files": 34,
-      "bytes": 642568
+      "bytes": 636292
     },
     {
       "ext": ".html",
@@ -61,8 +61,8 @@
     },
     {
       "ext": ".md",
-      "files": 16,
-      "bytes": 131182
+      "files": 17,
+      "bytes": 134082
     },
     {
       "ext": ".json",
@@ -174,7 +174,7 @@
     {
       "dir": "js",
       "files": 22,
-      "bytes": 379459
+      "bytes": 376379
     },
     {
       "dir": "css",
@@ -183,13 +183,13 @@
     },
     {
       "dir": "docs",
-      "files": 14,
-      "bytes": 116878
+      "files": 15,
+      "bytes": 119778
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 43114
+      "bytes": 39918
     },
     {
       "dir": "scripts",
@@ -2512,7 +2512,7 @@
     },
     {
       "file": "js/data/hospedagens.js",
-      "bytes": 3506,
+      "bytes": 3062,
       "globals": [
         "window.TURISMO_HOSPEDAGENS"
       ],
@@ -2545,7 +2545,7 @@
     },
     {
       "file": "js/data/restaurantes.js",
-      "bytes": 7273,
+      "bytes": 4521,
       "globals": [
         "window.TURISMO_RESTAURANTES"
       ],
@@ -2851,7 +2851,7 @@
     },
     {
       "file": "js/rotas-data.js",
-      "bytes": 38094,
+      "bytes": 35014,
       "globals": [
         "window.ROTAS_LEGADO_ESTABLISHMENTS",
         "window.ROTAS_LEGADO_ROUTE_INFO"
