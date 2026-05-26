@@ -24,7 +24,7 @@ AS 6 ROTAS TURÍSTICAS:
 2. 🇵🇱 Rota da Cultura Polonesa — danças, tradições, igrejas históricas polonesas
 3. ⛪ Rota do Turismo de Fé — Igreja Matriz (neogótica), Igreja Água Branca, capelas coloniais
 4. 🌊 Rota das Águas e Natureza — Rio Iguaçu, passeios de barco, canoagem, pesca esportiva
-5. 🍓 Rota Sabores & Memórias — Morangos da Mary, Dalety (queijos e doces), All Garden, Localidade de Divisa
+5. 🍓 Rota Sabores & Memórias — Dalety (queijos e doces), All Garden, Nova Esperança, Cabana Campo de Telha, Localidade de Divisa
 6. 🌱 Rota da Terra — agricultura familiar, produtos coloniais orgânicos
 
 GASTRONOMIA:
@@ -71,7 +71,7 @@ ABOUT THE CITY:
 2. 🇵🇱 Polish Culture Route — dances, traditions, historic Polish churches
 3. ⛪ Religious Tourism Route — Gothic Revival Cathedral, Água Branca Church, colonial chapels
 4. 🌊 Water & Nature Route — Iguaçu River, boat tours, kayaking, sport fishing
-5. 🍓 Flavors & Memories Route — Mary's Strawberries, Dalety (cheeses & sweets), Divisa area
+5. 🍓 Flavors & Memories Route — Dalety (cheeses & sweets), All Garden, Nova Esperança, Cabana Campo de Telha, Divisa area
 6. 🌱 Land Route — family farming, organic colonial products
 
 GASTRONOMY:
@@ -109,7 +109,7 @@ SOBRE LA CIUDAD:
 2. 🇵🇱 Ruta de la Cultura Polaca — danzas, tradiciones, iglesias históricas
 3. ⛪ Ruta de Turismo de Fe — Iglesia Matriz neogótica, Iglesia Água Branca
 4. 🌊 Ruta de Aguas y Naturaleza — Río Iguazú, paseos en barco, kayak, pesca
-5. 🍓 Ruta Sabores y Memorias — Fresas de Mary, Dalety (quesos), zona de Divisa
+5. 🍓 Ruta Sabores y Memorias — Dalety (quesos), All Garden, Nova Esperança, Cabana Campo de Telha, zona de Divisa
 6. 🌱 Ruta de la Tierra — agricultura familiar, productos coloniales orgánicos
 
 GASTRONOMÍA:
@@ -138,7 +138,7 @@ O MIEŚCIE:
 2. 🇵🇱 Trasa Kultury Polskiej — tańce, tradycje, zabytkowe kościoły polskie
 3. ⛪ Trasa Turystyki Religijnej — Katedra neogotycka, Kościół Água Branca
 4. 🌊 Trasa Wód i Natury — rzeka Iguaçu, rejsy łodzią, kajakarstwo, wędkarstwo
-5. 🍓 Trasa Smaków i Wspomnień — Truskawki Mary, Dalety (sery), okolica Divisa
+5. 🍓 Trasa Smaków i Wspomnień — Dalety (sery), All Garden, Nova Esperança, Cabana Campo de Telha, okolica Divisa
 6. 🌱 Trasa Ziemi — rolnictwo rodzinne, ekologiczne produkty kolonialne
 
 GASTRONOMIA:

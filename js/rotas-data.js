@@ -17,21 +17,6 @@ const establishments = [
 
     // ── ROTA SABORES & MEMÓRIAS ─────────────────────────────
     {
-        id: 'morangos-da-mary',
-        route: 'sabores',
-        name: 'Morangos da Mary',
-        subtitle: 'Sabor que adoça a vida',
-        desc: 'Experiência "colha e pague" de morangos com manejo biológico e sustentável.',
-        location: 'Localidade de Divisa',
-        phone: '(42) 99820-6671',
-        hours: 'Sáb e Dom 14h30–18h; Seg–Sex com agendamento',
-        social: '',
-        mapsUrl: 'https://maps.app.goo.gl/GZDc2rnRxA6jBap97',
-        lat: -25.9838616,
-        lng: -50.3783231,
-        coordStatus: 'ok'
-    },
-    {
         id: 'dalety',
         route: 'sabores',
         name: 'Dalety — Queijos e Doces',

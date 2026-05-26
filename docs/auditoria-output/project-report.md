@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-26T14:20:16.837Z.
+Gerado em 2026-05-26T16:42:57.646Z.
 
 ## Resumo
 
@@ -22,10 +22,10 @@ Gerado em 2026-05-26T14:20:16.837Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 34 | 636327 |
-| .html | 36 | 536133 |
+| .js | 34 | 635745 |
+| .html | 36 | 534198 |
 | .css | 21 | 291487 |
-| .md | 19 | 157031 |
+| .md | 19 | 166544 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 4671 |
@@ -128,8 +128,8 @@ Gerado em 2026-05-26T14:20:16.837Z.
 | 404.html | 2866 |
 | admin-firebase.html | 35444 |
 | eventos.html | 34257 |
-| galeria.html | 38199 |
-| index.html | 148547 |
+| galeria.html | 37789 |
+| index.html | 147022 |
 | local.html | 20710 |
 | mapa-3d.html | 6274 |
 | mapa-completo.html | 10456 |

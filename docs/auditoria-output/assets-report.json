@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-26T14:20:16.662Z",
+  "generatedAt": "2026-05-26T16:42:57.438Z",
   "totals": {
     "mediaFiles": 186,
-    "referencedMedia": 111,
-    "likelyOrphans": 75,
+    "referencedMedia": 110,
+    "likelyOrphans": 76,
     "duplicateGroups": 0,
     "missingReferences": 0,
     "heavyMedia": 22
@@ -1815,10 +1815,7 @@
         "width": 1200
       },
       "sha256": "e29d4806134cf717014e386c81573bf88f02b2a5bbef25eaa1983f6760a205bf",
-      "usedBy": [
-        "galeria.html",
-        "index.html"
-      ]
+      "usedBy": []
     },
     {
       "path": "images/PARQUE_EXPOSICOES_1.jpg",
@@ -2918,6 +2915,17 @@
         "width": 1360
       },
       "sha256": "e12c8154cf31d08ced08c31a24abd588f80d8198bd9368aab039f9ff5f18153c",
+      "usedBy": []
+    },
+    {
+      "path": "images/MORANGO_1.jpg",
+      "ext": ".jpg",
+      "bytes": 311469,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "e29d4806134cf717014e386c81573bf88f02b2a5bbef25eaa1983f6760a205bf",
       "usedBy": []
     },
     {

@@ -1,5 +1,27 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-05-26
+
+### Remocao publica - Morangos da Mary
+
+Solicitacao:
+
+- empreendimento nao participa mais do turismo;
+- remover apenas da experiencia publica;
+- nao apagar imagem fisica nem material bruto sem confirmacao humana.
+
+Resumo da acao:
+
+- cadastro removido de `js/rotas-data.js`;
+- mencoes publicas removidas de `index.html`, `galeria.html` e `js/chatbot.js`;
+- tag de rota ajustada em `js/data/rotas.js`;
+- nenhuma alteracao foi feita em login, Firebase/Auth/App Check, CSP ou rules reais.
+
+Imagem associada:
+
+- `images/MORANGO_1.jpg` permaneceu no repositorio e pode ter ficado orfa de uso publico;
+- nao houve remocao fisica da imagem nesta rodada.
+
 ## Rodada 2026-05-19
 
 Atualização realizada a partir das pastas específicas em `EMPREENDIMENTOS/`: `marina barra do iguaçu`, `all garden`, `hotel são mateus` e `nova esperança equoterapia`.

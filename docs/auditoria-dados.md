@@ -151,3 +151,52 @@ Casos esperados:
 - eventos sem local unico.
 
 Acao recomendada: manter `null` ate haver coordenada confirmada.
+
+## 11. Remocao publica de empreendimento
+
+### Rodada 2026-05-26 - Morangos da Mary
+
+Objetivo da rodada:
+
+- remover `Morangos da Mary` da experiencia publica do site de turismo;
+- nao mexer em login, CSP, Firebase/Auth/App Check, rules reais ou backend;
+- nao apagar imagens fisicas sem confirmacao humana.
+
+Ocorrencias encontradas:
+
+| Local | Ocorrencia | Acao |
+| --- | --- | --- |
+| `js/rotas-data.js` | Cadastro legado completo do empreendimento (`id: morangos-da-mary`). | Removido da base legada. |
+| `js/data/rotas.js` | Tag `morangos` na rota `Sabores & Memorias`. | Removida para nao sugerir busca ligada ao empreendimento removido. |
+| `js/chatbot.js` | Respostas fixas de `sabores`, `sabores e memorias`, `morango` e `morangos` citavam o empreendimento. | Textos atualizados para listar apenas empreendimentos ativos e resposta generica para consulta sobre morangos. |
+| `cloudflare-worker/chat-worker.js` | Resumo fixo da rota `Sabores & Memorias` citava o empreendimento. | Texto atualizado para listar apenas empreendimentos ativos. |
+| `index.html` | Bloco `produtoresData.morangos` com nome, telefone e horario do empreendimento. | Removido. |
+| `index.html` | Card oculto da galeria com `images/MORANGO_1.jpg`. | Removido do HTML para evitar uso publico futuro. |
+| `galeria.html` | Card publico "Morangos das Colonias" usando `images/MORANGO_1.jpg`. | Removido da galeria publica. |
+
+Arquivos alterados nesta remocao:
+
+- `js/rotas-data.js`
+- `js/data/rotas.js`
+- `js/chatbot.js`
+- `cloudflare-worker/chat-worker.js`
+- `index.html`
+- `galeria.html`
+- `docs/auditoria-dados.md`
+- `docs/atualizacao-empreendimentos.md`
+- `docs/plano-portal-cadastros.md`
+
+Imagem associada encontrada:
+
+- `images/MORANGO_1.jpg`
+
+Status da imagem:
+
+- o arquivo fisico foi preservado;
+- a imagem deixou de ser referenciada publicamente em `index.html` e `galeria.html`;
+- fica como candidata a revisao humana posterior por possivel orfandade.
+
+Historico preservado:
+
+- nenhum dado do empreendimento foi mantido em area publica ativa;
+- o historico desta remocao fica documentado neste arquivo e em `docs/atualizacao-empreendimentos.md`.

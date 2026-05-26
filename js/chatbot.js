@@ -95,8 +95,8 @@
             'rota':             'Nossas 6 rotas turísticas: 🗺️\n\n🧉 Erva-Mate (IG São Matheus)\n🇵🇱 Cultura Polonesa\n⛪ Turismo de Fé\n🌊 Rota das Águas\n🍓 Sabores & Memórias\n🌱 Rota da Terra\n\nQuer detalhes de alguma rota específica?',
             'rotas':            'Nossas 6 rotas turísticas: 🗺️\n\n🧉 Erva-Mate (IG São Matheus)\n🇵🇱 Cultura Polonesa\n⛪ Turismo de Fé\n🌊 Rota das Águas\n🍓 Sabores & Memórias\n🌱 Rota da Terra\n\nQuer detalhes de alguma rota específica?',
             'rota das aguas':   'Rota das Águas — natureza e Rio Iguaçu! 🌊\n\n• Passeios de barco\n• Canoagem e pesca\n• Praça do Rio Iguaçu\n• Paisagens preservadas às margens do rio\n\nIdeal para quem busca natureza e ecoturismo!',
-            'sabores':          'Rota Sabores & Memórias — turismo rural! 🍓\n\n• Morangos da Mary (colheita própria)\n• Dalety — queijos e doces artesanais\n• All Garden — produtos coloniais\n• Nova Esperança — vivência rural\n• Cabana Campo de Telha\n\nTodos na Localidade de Divisa.',
-            'sabores e memorias':'Rota Sabores & Memórias — turismo rural! 🍓\n\n• Morangos da Mary (colheita própria)\n• Dalety — queijos e doces artesanais\n• All Garden — produtos coloniais\n• Nova Esperança — vivência rural\n• Cabana Campo de Telha\n\nTodos na Localidade de Divisa.',
+            'sabores':          'Rota Sabores & Memórias — turismo rural! 🍓\n\n• Dalety — queijos e doces artesanais\n• All Garden — produtos coloniais\n• Nova Esperança — vivência rural\n• Cabana Campo de Telha\n\nTodos na Localidade de Divisa.',
+            'sabores e memorias':'Rota Sabores & Memórias — turismo rural! 🍓\n\n• Dalety — queijos e doces artesanais\n• All Garden — produtos coloniais\n• Nova Esperança — vivência rural\n• Cabana Campo de Telha\n\nTodos na Localidade de Divisa.',
             'rota da terra':    'Rota da Terra — agricultura familiar e produtos coloniais! 🌱\nVisitas a propriedades rurais, produtos orgânicos e contato com a vida no campo.',
             // Erva-mate
             'erva':             'Nossa erva-mate tem Indicação Geográfica (IG São Matheus)! 🧉\nVisite a Rua do Mathe, o Chimarródromo e as ervateiras da região.',
@@ -118,8 +118,8 @@
             'cafe colonial':    'Café colonial disponível nas pousadas rurais e alguns restaurantes de São Mateus do Sul! ☕\nBuche, bolo, queijo artesanal, pão colonial, geleias — uma experiência completa.',
             'feira':            'Feiras de São Mateus do Sul: 🏪\n\n🍽️ Feira Gastronômica — qua e sex, 17h-22h, Rua do Mathe\n🥬 Feira do Produtor — sábados, 7h-12h, Rua do Mathe\n🌙 Feira da Lua — 2ª terça, 17h-22h, Vila Pinheirinho\n\nAmbas gratuitas e com produtos locais!',
             'gastronom':        'Gastronomia de São Mateus do Sul: 🍽️\n\nFeira Gastronômica: qua e sex, 17h-22h.\nFeira do Produtor: sáb, 7h-12h.\nAmbas na Rua do Mathe!\n\nDa culinária polonesa (Pierogi, Gołąbki) ao café colonial.',
-            'morango':          'Morangos frescos na Rota Sabores & Memórias! 🍓\nVisita ao Morangos da Mary na Localidade de Divisa — colheita própria!\nSáb/Dom 14h30-18h; Seg-Sex com agendamento. Tel: (42) 99820-6671.',
-            'morangos':         'Morangos frescos na Rota Sabores & Memórias! 🍓\nVisita ao Morangos da Mary na Localidade de Divisa — colheita própria!\nSáb/Dom 14h30-18h; Seg-Sex com agendamento. Tel: (42) 99820-6671.',
+            'morango':          'A Rota Sabores & Memórias reúne cafés coloniais, queijos, doces e vivências rurais em São Mateus do Sul. 🍓 Consulte o mapa turístico para ver os empreendimentos ativos.',
+            'morangos':         'A Rota Sabores & Memórias reúne cafés coloniais, queijos, doces e vivências rurais em São Mateus do Sul. 🍓 Consulte o mapa turístico para ver os empreendimentos ativos.',
             // Eventos
             'eventos':          'Calendário 2026 com mais de 280 eventos! 📅\n\n• Baile do Pierogi — 25/04\n• Mês Polonês — Agosto\n• Polskie Smaki — 29/08\n• V AgroSamas — 18-21/09\n• Natal Ouro Verde — Dez\n\nVisite a página Eventos para o calendário completo!',
             'evento':           'Próximos eventos em São Mateus do Sul: 📅\n\n• Baile do Pierogi — 25/04/2026\n• Festival do Cordeiro — 07-09/08/2026\n• Polskie Smaki — 29/08/2026\n• V AgroSamas — 18-21/09/2026\n• Natal Ouro Verde — Dez/2026\n\nVisite a página Eventos para ver todos!',

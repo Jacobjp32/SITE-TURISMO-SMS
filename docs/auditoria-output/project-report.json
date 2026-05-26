@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-26T14:20:16.837Z",
+  "generatedAt": "2026-05-26T16:42:57.646Z",
   "totals": {
     "files": 324,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 34,
-      "bytes": 636327
+      "bytes": 635745
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 536133
+      "bytes": 534198
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 19,
-      "bytes": 157031
+      "bytes": 166544
     },
     {
       "ext": ".json",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 817039
+      "bytes": 815104
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -174,7 +174,7 @@
     {
       "dir": "js",
       "files": 22,
-      "bytes": 376379
+      "bytes": 375688
     },
     {
       "dir": "css",
@@ -184,12 +184,12 @@
     {
       "dir": "docs",
       "files": 17,
-      "bytes": 142727
+      "bytes": 152240
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 39918
+      "bytes": 39906
     },
     {
       "dir": "scripts",
@@ -199,7 +199,7 @@
     {
       "dir": "cloudflare-worker",
       "files": 1,
-      "bytes": 14522
+      "bytes": 14643
     },
     {
       "dir": "sabores",
@@ -777,13 +777,13 @@
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 38199
+      "bytes": 37789
     },
     {
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 148547
+      "bytes": 147022
     },
     {
       "path": "local.html",
@@ -2394,7 +2394,7 @@
   "jsAnalysis": [
     {
       "file": "cloudflare-worker/chat-worker.js",
-      "bytes": 13209,
+      "bytes": 13326,
       "globals": [
         "const ALLOWED_ORIGINS",
         "const MAX_HISTORY_ITEMS",
@@ -2462,7 +2462,7 @@
     },
     {
       "file": "js/chatbot.js",
-      "bytes": 51661,
+      "bytes": 51545,
       "globals": [
         "var RESPOSTAS",
         "window.Chatbot",
@@ -2565,7 +2565,7 @@
     },
     {
       "file": "js/data/rotas.js",
-      "bytes": 2089,
+      "bytes": 2077,
       "globals": [
         "window.TURISMO_ROTAS"
       ],
@@ -2860,7 +2860,7 @@
     },
     {
       "file": "js/rotas-data.js",
-      "bytes": 35014,
+      "bytes": 34452,
       "globals": [
         "window.ROTAS_LEGADO_ESTABLISHMENTS",
         "window.ROTAS_LEGADO_ROUTE_INFO"

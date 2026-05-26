@@ -512,3 +512,224 @@ Proxima etapa:
 2. Definir se a fase 1 vai mesmo manter collections atuais.
 3. Implementar upload de imagens em cadastros pendentes com risco minimo.
 4. So depois evoluir o painel admin para preview e revisao completa.
+
+## 16. Vinculo entre usuario logado e empreendimento existente
+
+Escopo desta secao:
+
+- planejamento tecnico apenas;
+- sem alterar login, Auth, App Check, CSP, backend ou rules reais nesta rodada;
+- sem liberar edicao publica direta do mapa;
+- sem migrar collections atuais.
+
+Objetivo funcional futuro:
+
+- permitir que um usuario autenticado e aprovado seja vinculado a um empreendimento ja existente, como `Marina Barra do Iguacu`;
+- permitir que esse usuario envie pedidos de atualizacao do proprio empreendimento;
+- permitir que esse usuario cadastre eventos vinculados ao empreendimento;
+- manter tudo sob moderacao antes de qualquer reflexo publico.
+
+Principios de seguranca e operacao:
+
+- o mapa turistico continua lendo apenas dados publicos aprovados;
+- nenhum usuario comum edita diretamente `js/rotas-data.js`, `TURISMO_DATA` ou collections publicas aprovadas;
+- todo pedido entra como pendente;
+- o vinculo usuario ↔ empreendimento precisa ser aprovado por admin/moderador;
+- um empreendimento pode ter mais de um usuario vinculado, com papeis diferentes, se isso fizer sentido operacional.
+
+Modelo incremental recomendado:
+
+### Fase A - vinculo administrativo
+
+Criar colecao futura de vinculos aprovados, sem substituir o fluxo atual:
+
+- `establishment_user_links`
+
+Campos recomendados:
+
+- `id`
+- `establishmentId`
+- `establishmentSlug`
+- `establishmentName`
+- `userUid`
+- `userEmail`
+- `userName`
+- `role`
+- `status`
+- `createdAt`
+- `updatedAt`
+- `approvedAt`
+- `approvedBy`
+- `notes`
+
+Valores recomendados:
+
+- `role`: `owner`, `manager`, `editor`
+- `status`: `pending`, `approved`, `revoked`
+
+Regra operacional:
+
+- o usuario nao cria o vinculo final sozinho;
+- o usuario pode no maximo solicitar vinculacao;
+- admin/moderador aprova ou rejeita;
+- somente vinculos `approved` habilitam pedidos de alteracao e cadastro de eventos vinculados.
+
+### Fase B - solicitacao de vinculo
+
+Criar colecao futura para pedido inicial:
+
+- `establishment_link_requests`
+
+Campos recomendados:
+
+- `id`
+- `establishmentId`
+- `userUid`
+- `userEmail`
+- `userName`
+- `message`
+- `status`
+- `createdAt`
+- `reviewedAt`
+- `reviewedBy`
+- `reviewNotes`
+
+Fluxo recomendado:
+
+1. Usuario autenticado escolhe um empreendimento existente.
+2. Envia pedido de vinculacao com mensagem curta e dados de contato.
+3. Admin/moderador revisa evidencias fora do sistema se necessario.
+4. Se aprovado, cria `establishment_user_links`.
+5. O pedido original permanece como historico.
+
+### Fase C - pedido de atualizacao do empreendimento existente
+
+Reaproveitar a ideia ja prevista de pedidos de alteracao, mas agora exigindo vinculo aprovado:
+
+- `establishment_update_requests`
+
+Campos minimos adicionais ao plano atual:
+
+- `establishmentId`
+- `linkedUserUid`
+- `linkRole`
+- `changedFields`
+- `proposedData`
+- `images`
+- `mainImage`
+- `status`
+- `createdAt`
+- `updatedAt`
+- `reviewedAt`
+- `reviewedBy`
+- `reviewNotes`
+
+Comportamento recomendado:
+
+- o pedido referencia o empreendimento aprovado existente, nao cria um novo duplicado;
+- `changedFields` lista exatamente o que mudou;
+- `proposedData` guarda apenas os campos editaveis do formulario;
+- aprovacao humana aplica o patch no registro publico final;
+- rejeicao ou `changes_requested` devolve observacoes ao usuario sem tocar no mapa publico.
+
+Campos publicos editaveis sugeridos:
+
+- descricao
+- telefone
+- whatsapp
+- instagram
+- website
+- horario
+- imagens
+- imagem principal
+
+Campos que devem continuar bloqueados para edicao direta do vinculado:
+
+- `id`
+- slug
+- categoria estrutural
+- coordenadas
+- rota principal
+- flags internas
+- qualquer campo de aprovacao/moderacao
+
+### Fase D - eventos vinculados ao empreendimento
+
+Sem criar backend novo, o caminho mais seguro e adicionar relacao no proprio fluxo de eventos pendentes.
+
+Colecao curta compativel com o estado atual:
+
+- `eventos_pendentes`
+
+Campos novos recomendados para evento vinculado:
+
+- `linkedEstablishmentId`
+- `linkedEstablishmentName`
+- `linkedUserUid`
+- `eventScope`
+
+Valores sugeridos:
+
+- `eventScope`: `independent`, `establishment-linked`
+
+Regras funcionais:
+
+- se `eventScope = establishment-linked`, o usuario precisa ter vinculo `approved` com o empreendimento;
+- o evento continua pendente de moderacao antes de entrar em qualquer agenda publica;
+- o empreendimento vinculado aparece apenas como referencia operacional, nao como autorizacao de auto-publicacao.
+
+### Fase E - painel do usuario
+
+Capacidades futuras do `portal-usuario.html`:
+
+- listar vinculos aprovados do usuario;
+- listar pedidos de vinculacao pendentes;
+- abrir formulario de atualizacao apenas para empreendimentos vinculados;
+- abrir formulario de evento ja pre-preenchido com o empreendimento selecionado;
+- mostrar status de revisao: `pendente`, `changes_requested`, `approved`, `rejected`.
+
+Consulta recomendada no cliente:
+
+- carregar primeiro o usuario autenticado atual;
+- buscar apenas vinculos onde `userUid == currentUser.uid`;
+- liberar acoes somente quando houver pelo menos um vinculo `approved`.
+
+### Fase F - rules futuras
+
+Quando esta funcionalidade for implementada de verdade, as rules reais precisarao validar:
+
+- autenticacao obrigatoria;
+- vinculo aprovado entre `request.auth.uid` e `establishmentId`;
+- bloqueio de update direto em collections publicas aprovadas;
+- criacao/update apenas em collections de pedidos pendentes;
+- bloqueio de troca manual de `linkedUserUid`, `establishmentId`, `status`, `reviewedBy` e campos de moderacao.
+
+### Exemplo aplicado: Marina Barra do Iguacu
+
+Fluxo desejado:
+
+1. Usuario faz login normalmente no portal atual.
+2. Solicita vinculacao com `Marina Barra do Iguacu`.
+3. Admin confirma a legitimidade e aprova o vinculo.
+4. O usuario passa a poder:
+   - enviar pedido para atualizar descricao, telefone, horario, Instagram e imagens da Marina;
+   - cadastrar um evento vinculado a `Marina Barra do Iguacu`.
+5. Nada entra no mapa ou na agenda publica sem aprovacao posterior.
+
+### Riscos se implementar errado
+
+- permitir escrita direta no registro publico do empreendimento;
+- usar apenas email como prova de posse sem aprovacao humana;
+- misturar pedido de novo empreendimento com pedido de alteracao de empreendimento existente;
+- deixar evento vinculado publicar automaticamente no calendario publico;
+- permitir que vinculado altere coordenadas, categoria ou slug sem moderacao.
+
+### Recomendacao final
+
+Para a futura implementacao, o caminho de menor risco e:
+
+1. criar primeiro o vinculo aprovado `usuario ↔ empreendimento`;
+2. depois liberar pedido de alteracao do empreendimento existente;
+3. por ultimo liberar cadastro de evento vinculado ao empreendimento.
+
+Isso preserva o login atual, evita mexer no mapa publico e reduz o risco de quebrar o fluxo existente.

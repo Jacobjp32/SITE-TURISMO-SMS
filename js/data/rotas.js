@@ -7,7 +7,7 @@ window.TURISMO_ROTAS = [
     url: "/mapa-turistico.html?grupo=roteiros",
     cor: "#c0392b",
     icone: "🍓",
-    tags: ["sabores", "memorias", "cafe colonial", "queijos", "morangos"]
+    tags: ["sabores", "memorias", "cafe colonial", "queijos"]
   },
   {
     id: "rota-erva-mate",

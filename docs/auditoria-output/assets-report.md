@@ -1,12 +1,12 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-05-26T14:20:16.662Z.
+Gerado em 2026-05-26T16:42:57.438Z.
 
 ## Resumo
 
 - Midias encontradas: 186
-- Midias referenciadas: 111
-- Orfas provaveis: 75
+- Midias referenciadas: 110
+- Orfas provaveis: 76
 - Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
 - Midias pesadas: 22
@@ -84,6 +84,7 @@ _Nenhum item encontrado._
 | images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-08.jpeg | 343453 | 1600x1066 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-04.jpeg | 341775 | 1200x1600 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-28.jpeg | 340668 | 1360x1600 |
+| images/MORANGO_1.jpg | 311469 | 1200x1600 |
 | images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-11.jpeg | 309966 | 1600x1066 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-22.jpeg | 306085 | 1600x1066 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-13.jpeg | 304417 | 1200x1600 |
