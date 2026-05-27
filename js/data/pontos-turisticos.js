@@ -64,7 +64,8 @@ window.TURISMO_PONTOS = [
     nome: "Vapor Pery",
     categoria: "História",
     descricao: "Referência simbólica da navegação no Rio Iguaçu e da memória dos antigos ciclos de transporte.",
-    imagem: "images/PONTE_SOB_O_RIO_IGUACU.jpg",
+    imagem: "images/vapor-pery.png",
+    galeria: ["images/vapor-pery.png"],
     url: "/#sobre",
     coordenadas: { lat: null, lng: null },
     tags: ["vapor pery", "história", "rio iguaçu", "navegação", "memória", "patrimônio"]

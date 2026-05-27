@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-27T14:31:53.429Z.
+Gerado em 2026-05-27T16:57:31.285Z.
 
 ## Resumo
 
-- Arquivos mapeados: 346
+- Arquivos mapeados: 357
 - HTMLs: 36
 - CSS: 21
 - JS: 35
@@ -16,16 +16,17 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | ext | files | bytes |
 | --- | --- | --- |
 | .mp4 | 3 | 287052567 |
-| .png | 30 | 43973044 |
-| .jpeg | 98 | 40608066 |
-| .jpg | 53 | 36817774 |
+| .png | 32 | 164258908 |
+| .jpg | 59 | 71499852 |
+| .jpeg | 100 | 46812212 |
+| .dng | 1 | 25447897 |
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 691239 |
-| .html | 36 | 620324 |
+| .js | 35 | 691123 |
+| .html | 36 | 620263 |
 | .css | 21 | 292816 |
-| .md | 20 | 197584 |
+| .md | 20 | 202124 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 11986 |
@@ -42,6 +43,11 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | videos/VIDEO_ABERTURA_4K.mp4 | 98040012 |
 | videos/INSTITUCIONAL_POLONES.mp4 | 97037240 |
 | videos/ROTA_DO_TURISMO.mp4 | 91975315 |
+| images/PERY_PARA_TROCAR.png | 60142932 |
+| images/vapor-pery.png | 60142932 |
+| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG | 25447897 |
+| images/novo-paco-municipal.jpg | 16131727 |
+| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG | 16131727 |
 | images/EU_AMO_SMS.png | 5161495 |
 | images/CASA_DA_MEMORIA.png | 5020646 |
 | images/empreendimentos/agrosamas/agrosamas-02.jpg | 4811831 |
@@ -52,6 +58,8 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 |
 | images/IGREJA_MATRIZ_2.png | 3315073 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 |
+| images/agrosamas-publico-show-noturno.jpeg | 3102073 |
+| images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG | 3102073 |
 | images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 |
 | docs/comtur/loa-2025.pdf | 2675327 |
@@ -85,7 +93,9 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | images/PARQUE_EXPOSICOES_1.jpg | 713776 |
 | images/PARQUE_EXPOSICOES_5.jpg | 700978 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-37.jpeg | 687699 |
+| images/parque-exposicoes-aerea.jpg | 680379 |
 | images/PARQUE_EXPOSICOES_2.jpg | 680379 |
+| images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg | 680379 |
 | images/mascotes/MASCOTE_MENINO_POLONES_2.png | 651642 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp | 644396 |
 | docs/comtur/convite-conselho-2024.pdf | 638098 |
@@ -106,19 +116,10 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | images/empreendimentos/casa-da-memoria/casa-da-memoria-03.jpeg | 537312 |
 | images/empreendimentos/all-garden/all-garden-10.jpeg | 536937 |
 | images/CUIA_3.JPG | 536666 |
+| images/ginasio-polacao.jpg | 528933 |
 | images/GINASIO_POLACAO.JPG | 528933 |
+| images/GINASIO_POLACAO_PARA_TROCAR.JPG | 528933 |
 | images/PARQUE_EXPOSICOES_7.jpg | 525567 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg | 523746 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg | 520824 |
-| images/WEBP/NATAL-_20_.webp | 501040 |
-| images/IGREJA_AGUA_BRANCA_6.jpg | 484862 |
-| images/CUIA_1.JPG | 481303 |
-| images/empreendimentos/all-garden/all-garden-09.jpeg | 468502 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg | 462028 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg | 450988 |
-| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp | 450726 |
 
 
 ## HTMLs principais na raiz
@@ -128,7 +129,7 @@ Gerado em 2026-05-27T14:31:53.429Z.
 | 404.html | 2866 |
 | admin-firebase.html | 83371 |
 | eventos.html | 34257 |
-| galeria.html | 37789 |
+| galeria.html | 37728 |
 | index.html | 147049 |
 | local.html | 20710 |
 | mapa-3d.html | 6274 |

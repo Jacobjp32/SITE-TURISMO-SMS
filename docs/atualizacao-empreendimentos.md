@@ -1,5 +1,36 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-05-27 - Correção de imagens e nome no mapa turístico
+
+Escopo isolado desta rodada:
+
+- corrigir imagens públicas de `Parque de Exposições`, `AgroSamas`, `Paço Municipal`, `Ginásio Polacão` e `Vapor Pery`;
+- renomear a exibição de `Paço Municipal` para `Novo Paço Municipal`;
+- não criar item novo, não alterar coordenadas e não mexer em login, admin, Firebase ou regras.
+
+### Arquivos de dados alterados
+
+- `js/locais-data.js`
+- `js/data/eventos.js`
+- `js/data/pontos-turisticos.js`
+- `galeria.html`
+
+### Substituições aplicadas
+
+| Item | Imagem anterior | Imagem publicada agora | Origem preservada | Observação |
+| --- | --- | --- | --- | --- |
+| Parque de Exposições | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/parque-exposicoes-aerea.jpg` | `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` | Removido o uso da capa do AgroSamas no card/local do parque. |
+| AgroSamas | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/agrosamas-publico-show-noturno.jpeg` | `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` | Capa alterada para a imagem aérea noturna com público/show. |
+| Paço Municipal | `images/PREFEITURA_MUNICIPAL.jpg` | `images/novo-paco-municipal.jpg` | `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` | Nome exibido alterado para `Novo Paço Municipal`. |
+| Ginásio Polacão | `images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg` | `images/ginasio-polacao.jpg` | `images/GINASIO_POLACAO_PARA_TROCAR.JPG` | Mantido o nome atual do item. |
+| Vapor Pery | `images/PONTE_SOB_O_RIO_IGUACU.jpg` | `images/vapor-pery.png` | `images/PERY_PARA_TROCAR.png` | Corrigida a imagem do ponto resumido. |
+
+### Pendências e decisões editoriais
+
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG` foi preservado como bruto e não entrou no site por não ser formato web.
+- Não houve necessidade de criar cadastro duplicado nem de alterar categoria, descrição ou coordenadas.
+- A galeria pública de `Parque de Exposições` em `galeria.html` também passou a usar a imagem correta.
+
 ## Rodada 2026-05-27
 
 Atualização realizada a partir das pastas específicas em `EMPREENDIMENTOS/`: `sawe`, `vivenda do mate`, `casa da memoria`, `agrosamas` e `ribeiro pesca`.

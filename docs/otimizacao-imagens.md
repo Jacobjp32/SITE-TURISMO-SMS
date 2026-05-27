@@ -1,5 +1,22 @@
 # Otimizacao de imagens dos empreendimentos
 
+## Rodada 2026-05-27 - estabilização de paths públicos
+
+Para evitar `src` com espaço, acento ou nomes provisórios no HTML/JS, esta rodada criou apenas cópias públicas em ASCII, preservando todos os arquivos originais.
+
+Mapeamento aplicado:
+
+- `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` -> `images/agrosamas-publico-show-noturno.jpeg`
+- `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` -> `images/parque-exposicoes-aerea.jpg`
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` -> `images/novo-paco-municipal.jpg`
+- `images/GINASIO_POLACAO_PARA_TROCAR.JPG` -> `images/ginasio-polacao.jpg`
+- `images/PERY_PARA_TROCAR.png` -> `images/vapor-pery.png`
+
+Observações:
+
+- Nenhum arquivo bruto foi apagado ou sobrescrito.
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG` segue fora da publicação por não ser formato web.
+
 ## Escopo desta rodada
 
 Curadoria leve das galerias exibidas no modal, sem apagar, mover, renomear ou converter arquivos.

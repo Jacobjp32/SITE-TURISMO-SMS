@@ -1,5 +1,28 @@
 # Auditoria das bases de dados turisticas
 
+## Atualização 2026-05-27 - correção pontual de imagens/nome
+
+Mudanças públicas desta rodada:
+
+- `paco-municipal` em `js/locais-data.js`: nome alterado de `Paço Municipal` para `Novo Paço Municipal`; imagem e galeria atualizadas para `images/novo-paco-municipal.jpg`.
+- `parque-exposicoes` em `js/locais-data.js`: capa errada do AgroSamas substituída por `images/parque-exposicoes-aerea.jpg`; galeria deixou de reutilizar imagens do evento.
+- `agrosamas` em `js/data/eventos.js`: imagem principal alterada para `images/agrosamas-publico-show-noturno.jpeg`, mantendo as demais imagens anteriores na galeria.
+- `ginasio-polacao` em `js/locais-data.js`: imagem principal corrigida para `images/ginasio-polacao.jpg`.
+- `vapor-pery` em `js/data/pontos-turisticos.js`: imagem principal corrigida para `images/vapor-pery.png`.
+
+Arquivos-fonte preservados:
+
+- `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG`
+- `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg`
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG`
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG`
+- `images/GINASIO_POLACAO_PARA_TROCAR.JPG`
+- `images/PERY_PARA_TROCAR.png`
+
+Pendência de curadoria humana:
+
+- validar futuramente se `Novo Paço Municipal` deve receber também uma segunda imagem web exportada a partir do bruto `.DNG`; nesta rodada não houve conversão.
+
 Data da auditoria: 18/05/2026
 
 Escopo: bases em `js/data/*.js`, bases legadas `js/locais-data.js` e `js/rotas-data.js`, busca, chatbot e roteiro IA. Nenhum dado turistico foi alterado nesta rodada.

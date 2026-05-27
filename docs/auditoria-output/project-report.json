@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-27T14:31:53.429Z",
+  "generatedAt": "2026-05-27T16:57:31.285Z",
   "totals": {
-    "files": 346,
+    "files": 357,
     "html": 36,
     "css": 21,
     "js": 35,
@@ -16,18 +16,23 @@
     },
     {
       "ext": ".png",
-      "files": 30,
-      "bytes": 43973044
-    },
-    {
-      "ext": ".jpeg",
-      "files": 98,
-      "bytes": 40608066
+      "files": 32,
+      "bytes": 164258908
     },
     {
       "ext": ".jpg",
-      "files": 53,
-      "bytes": 36817774
+      "files": 59,
+      "bytes": 71499852
+    },
+    {
+      "ext": ".jpeg",
+      "files": 100,
+      "bytes": 46812212
+    },
+    {
+      "ext": ".dng",
+      "files": 1,
+      "bytes": 25447897
     },
     {
       "ext": ".webp",
@@ -47,12 +52,12 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 691239
+      "bytes": 691123
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 620324
+      "bytes": 620263
     },
     {
       "ext": ".css",
@@ -62,7 +67,7 @@
     {
       "ext": ".md",
       "files": 20,
-      "bytes": 197584
+      "bytes": 202124
     },
     {
       "ext": ".json",
@@ -108,8 +113,8 @@
     },
     {
       "dir": "images",
-      "files": 64,
-      "bytes": 46865639
+      "files": 75,
+      "bytes": 233485624
     },
     {
       "dir": "images/empreendimentos/marina-barra-do-iguacu",
@@ -179,7 +184,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 908545
+      "bytes": 908484
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -189,7 +194,7 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 430898
+      "bytes": 430709
     },
     {
       "dir": "css",
@@ -199,12 +204,12 @@
     {
       "dir": "docs",
       "files": 18,
-      "bytes": 183280
+      "bytes": 187820
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 40190
+      "bytes": 40263
     },
     {
       "dir": "scripts",
@@ -307,6 +312,36 @@
       "bytes": 91975315
     },
     {
+      "path": "images/PERY_PARA_TROCAR.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 60142932
+    },
+    {
+      "path": "images/vapor-pery.png",
+      "ext": ".png",
+      "dir": "images",
+      "bytes": 60142932
+    },
+    {
+      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG",
+      "ext": ".dng",
+      "dir": "images",
+      "bytes": 25447897
+    },
+    {
+      "path": "images/novo-paco-municipal.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 16131727
+    },
+    {
+      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 16131727
+    },
+    {
       "path": "images/EU_AMO_SMS.png",
       "ext": ".png",
       "dir": "images",
@@ -365,6 +400,18 @@
       "ext": ".jpg",
       "dir": "images/empreendimentos/nova-esperanca-equoterapia",
       "bytes": 3169922
+    },
+    {
+      "path": "images/agrosamas-publico-show-noturno.jpeg",
+      "ext": ".jpeg",
+      "dir": "images",
+      "bytes": 3102073
+    },
+    {
+      "path": "images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
+      "ext": ".jpeg",
+      "dir": "images",
+      "bytes": 3102073
     },
     {
       "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
@@ -565,7 +612,19 @@
       "bytes": 687699
     },
     {
+      "path": "images/parque-exposicoes-aerea.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 680379
+    },
+    {
       "path": "images/PARQUE_EXPOSICOES_2.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 680379
+    },
+    {
+      "path": "images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg",
       "ext": ".jpg",
       "dir": "images",
       "bytes": 680379
@@ -691,7 +750,19 @@
       "bytes": 536666
     },
     {
+      "path": "images/ginasio-polacao.jpg",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 528933
+    },
+    {
       "path": "images/GINASIO_POLACAO.JPG",
+      "ext": ".jpg",
+      "dir": "images",
+      "bytes": 528933
+    },
+    {
+      "path": "images/GINASIO_POLACAO_PARA_TROCAR.JPG",
       "ext": ".jpg",
       "dir": "images",
       "bytes": 528933
@@ -701,72 +772,6 @@
       "ext": ".jpg",
       "dir": "images",
       "bytes": 525567
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 523746
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 520824
-    },
-    {
-      "path": "images/WEBP/NATAL-_20_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 501040
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_6.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 484862
-    },
-    {
-      "path": "images/CUIA_1.JPG",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 481303
-    },
-    {
-      "path": "images/empreendimentos/all-garden/all-garden-09.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/all-garden",
-      "bytes": 468502
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 466760
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 462028
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 458160
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 450988
-    },
-    {
-      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 450726
     }
   ],
   "rootHtml": [
@@ -792,7 +797,7 @@
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37789
+      "bytes": 37728
     },
     {
       "path": "index.html",
@@ -2585,7 +2590,7 @@
     },
     {
       "file": "js/data/eventos.js",
-      "bytes": 4165,
+      "bytes": 4210,
       "globals": [
         "window.TURISMO_EVENTOS"
       ],
@@ -2618,7 +2623,7 @@
     },
     {
       "file": "js/data/pontos-turisticos.js",
-      "bytes": 3487,
+      "bytes": 3515,
       "globals": [
         "window.TURISMO_PONTOS"
       ],
@@ -2832,7 +2837,7 @@
     },
     {
       "file": "js/locais-data.js",
-      "bytes": 22039,
+      "bytes": 21850,
       "globals": [
         "window.locaisData"
       ],
