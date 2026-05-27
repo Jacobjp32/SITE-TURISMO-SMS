@@ -514,6 +514,111 @@
             gap: 1rem;
         }
 
+        .update-request-list {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .update-request-card {
+            border: 1px solid #e8ece8;
+            border-radius: 14px;
+            padding: 1rem;
+            background: #fcfcfb;
+        }
+
+        .update-request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .update-request-header h3 {
+            margin: 0 0 0.4rem;
+            color: var(--primary);
+        }
+
+        .update-request-meta {
+            color: #666;
+            line-height: 1.55;
+            font-size: 0.9rem;
+        }
+
+        .update-request-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .update-request-panel {
+            border: 1px solid #eef1ee;
+            border-radius: 12px;
+            padding: 0.9rem;
+            background: #fff;
+        }
+
+        .update-request-panel h4 {
+            margin: 0 0 0.75rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .update-request-field {
+            margin: 0 0 0.55rem;
+            color: #444;
+            line-height: 1.55;
+        }
+
+        .update-request-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .update-request-images a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .update-request-images img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            border: 1px solid #e2e8e4;
+            background: #f4f6f4;
+        }
+
+        .update-request-image-caption {
+            display: block;
+            margin-top: 0.4rem;
+            font-size: 0.8rem;
+            color: #666;
+            word-break: break-word;
+        }
+
+        .update-request-actions {
+            display: grid;
+            gap: 0.65rem;
+        }
+
+        .update-request-actions .page-actions {
+            gap: 0.5rem;
+        }
+
+        .update-request-callout {
+            margin-top: 0.85rem;
+            padding: 0.75rem 0.9rem;
+            border-radius: 10px;
+            background: #f7f3e8;
+            color: #5e4b1f;
+            line-height: 1.5;
+            font-size: 0.88rem;
+        }
+
         .admin-field {
             display: flex;
             flex-direction: column;
@@ -597,6 +702,12 @@
 
             .admin-modal-grid {
                 grid-template-columns: 1fr;
+            }
+
+            .update-request-header,
+            .update-request-grid {
+                grid-template-columns: 1fr;
+                display: grid;
             }
         }
     </style>
@@ -712,6 +823,18 @@
                         <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
                     </div>
                     <div id="estabelecimentos-pendentes-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>🛠️ Alterações de empreendimentos</h2>
+                    </div>
+                    <p class="admin-helper-text">
+                        Esta fila registra apenas a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não publica nada automaticamente</strong> no mapa público nem nos dados estáticos.
+                    </p>
+                    <div id="establishment-update-requests-container">
                         <div class="loading">Carregando...</div>
                     </div>
                 </div>
@@ -1057,6 +1180,8 @@
                     </table>
                 `;
             }
+
+            await loadEstablishmentUpdateRequests();
         }
 
         async function loadUsers() {
@@ -1159,6 +1284,71 @@
                         `).join('')}
                     </tbody>
                 </table>
+            `;
+        }
+
+        async function loadEstablishmentUpdateRequests() {
+            const container = document.getElementById('establishment-update-requests-container');
+            if (!container) return;
+
+            const requests = await FirebaseSystem.listAllEstablishmentUpdateRequests(['pending']);
+
+            if (!requests.length) {
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de alteração pendente.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="update-request-list">
+                    ${requests.map(request => `
+                        <article class="update-request-card">
+                            <div class="update-request-header">
+                                <div>
+                                    <h3>${SEC.html(request.establishmentName, 'Empreendimento')}</h3>
+                                    <div class="update-request-meta">
+                                        <div><strong>Solicitante:</strong> ${SEC.html(request.ownerName || request.ownerEmail || 'Usuário')}</div>
+                                        <div><strong>E-mail:</strong> ${SEC.html(request.ownerEmail, '—')}</div>
+                                        <div><strong>Categoria:</strong> ${SEC.html(request.establishmentCategory || 'Não informada')}</div>
+                                        <div><strong>Enviado em:</strong> ${SEC.html(formatFirestoreDate(request.createdAt))}</div>
+                                    </div>
+                                </div>
+                                <span class="badge ${getUpdateRequestBadgeClass(request.status)}">${SEC.html(getUpdateRequestStatusLabel(request.status))}</span>
+                            </div>
+
+                            <div class="update-request-grid">
+                                <section class="update-request-panel">
+                                    <h4>Dados atuais conhecidos</h4>
+                                    ${renderUpdateRequestFields(request.currentSnapshot, 'Snapshot atual não disponível.')}
+                                </section>
+
+                                <section class="update-request-panel">
+                                    <h4>Alterações solicitadas</h4>
+                                    ${renderUpdateRequestFields(request.requestedChanges, 'Solicitação com foco em imagens anexadas.')}
+                                </section>
+                            </div>
+
+                            <section class="update-request-panel">
+                                <h4>Imagens anexadas</h4>
+                                ${renderUpdateRequestImages(request.images)}
+                            </section>
+
+                            <section class="update-request-panel update-request-actions">
+                                <h4>Revisão administrativa</h4>
+                                <textarea class="admin-textarea" id="update-review-note-${SEC.attr(request.id)}" maxlength="1500" placeholder="Observação geral da revisão (opcional)"></textarea>
+                                <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
+                                <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
+                                <div class="page-actions">
+                                    <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar</button>
+                                    <button class="btn-sm btn-reject" onclick="rejectEstablishmentUpdateRequest('${SEC.js(request.id)}')">❌ Rejeitar</button>
+                                    <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
+                                </div>
+                                <div class="update-request-callout">
+                                    Solicitação aprovada para revisão/publicação. A aplicação no site público ainda depende de atualização controlada dos dados.
+                                </div>
+                            </section>
+                        </article>
+                    `).join('')}
+                </div>
             `;
         }
 
@@ -1597,6 +1787,64 @@
             loadEstablishmentClaims();
         }
 
+        async function approveEstablishmentUpdateRequest(requestId) {
+            const reviewNotes = getClaimInputValue('update-review-note-', requestId);
+            if (!confirm('Aprovar esta solicitação para revisão/publicação futura? Isso não publica nada automaticamente no site público.')) return;
+
+            const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
+                status: 'approved',
+                reviewNotes: reviewNotes
+            });
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
+        async function rejectEstablishmentUpdateRequest(requestId) {
+            const reviewNotes = getClaimInputValue('update-review-note-', requestId);
+            const rejectionReason = getClaimInputValue('update-rejection-reason-', requestId);
+
+            if (!rejectionReason) {
+                alert('Informe o motivo da rejeição antes de continuar.');
+                return;
+            }
+
+            if (!confirm('Rejeitar esta solicitação de alteração?')) return;
+
+            const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
+                status: 'rejected',
+                reviewNotes: reviewNotes,
+                rejectionReason: rejectionReason
+            });
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
+        async function requestChangesForEstablishmentUpdate(requestId) {
+            const reviewNotes = getClaimInputValue('update-review-note-', requestId);
+            const changesRequestedNotes = getClaimInputValue('update-changes-requested-', requestId);
+
+            if (!changesRequestedNotes) {
+                alert('Descreva quais ajustes precisam ser feitos antes de continuar.');
+                return;
+            }
+
+            if (!confirm('Marcar esta solicitação como ajustes necessários?')) return;
+
+            const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
+                status: 'changes_requested',
+                reviewNotes: reviewNotes,
+                changesRequestedNotes: changesRequestedNotes
+            });
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
         async function changeUserRole(userId, newRole) {
             const result = await FirebaseSystem.setUserRole(userId, newRole);
             alert(result.message);
@@ -1639,6 +1887,85 @@
                 gerente_responsavel: 'Gerente / responsável',
                 representante_autorizado: 'Representante autorizado'
             })[String(role || '')] || 'Não informado';
+        }
+
+        function normalizeUpdateRequestStatus(status) {
+            const normalized = String(status || 'pending').toLowerCase();
+            return ['pending', 'approved', 'rejected', 'changes_requested'].includes(normalized) ? normalized : 'pending';
+        }
+
+        function getUpdateRequestStatusLabel(status) {
+            return ({
+                pending: 'Pendente',
+                approved: 'Aprovada',
+                rejected: 'Rejeitada',
+                changes_requested: 'Ajustes necessários'
+            })[normalizeUpdateRequestStatus(status)] || 'Pendente';
+        }
+
+        function getUpdateRequestBadgeClass(status) {
+            return ({
+                pending: 'badge-warning',
+                approved: 'badge-success',
+                rejected: 'badge-danger',
+                changes_requested: 'badge-info'
+            })[normalizeUpdateRequestStatus(status)] || 'badge-warning';
+        }
+
+        function getUpdateRequestFieldLabel(field) {
+            return ({
+                name: 'Nome',
+                category: 'Categoria',
+                source: 'Fonte',
+                originalId: 'ID de origem',
+                description: 'Descrição',
+                phone: 'Telefone',
+                whatsapp: 'WhatsApp',
+                instagram: 'Instagram',
+                website: 'Site',
+                address: 'Endereço / localização',
+                openingHours: 'Horário de funcionamento',
+                additionalNotes: 'Observações adicionais'
+            })[String(field || '')] || 'Campo';
+        }
+
+        function renderUpdateRequestFields(data, fallback) {
+            const fields = Object.keys(data || {}).filter(function(field) {
+                return ['images', 'mainImage', 'imageCount'].indexOf(field) === -1;
+            });
+            if (!fields.length) {
+                return `<p class="update-request-field">${SEC.html(fallback || 'Sem dados informados.')}</p>`;
+            }
+
+            const renderedFields = fields.map(field => `
+                <p class="update-request-field">
+                    <strong>${SEC.html(getUpdateRequestFieldLabel(field))}:</strong>
+                    ${SEC.html(data[field], '—')}
+                </p>
+            `).join('');
+
+            const imageInfo = Number(data && data.imageCount || 0) > 0
+                ? `<p class="update-request-field"><strong>Imagens atuais:</strong> ${SEC.html(String(data.imageCount))}</p>`
+                : '';
+
+            return renderedFields + imageInfo;
+        }
+
+        function renderUpdateRequestImages(images) {
+            if (!Array.isArray(images) || !images.length) {
+                return '<p class="update-request-field">Sem imagens anexadas.</p>';
+            }
+
+            return `
+                <div class="update-request-images">
+                    ${images.map(image => `
+                        <a href="${SEC.url(image && image.url, '#')}" target="_blank" rel="noopener noreferrer">
+                            <img src="${SEC.url(image && image.url, '')}" alt="Imagem anexada da solicitação">
+                            <span class="update-request-image-caption">${SEC.html(image && (image.name || image.path || 'imagem'))}</span>
+                        </a>
+                    `).join('')}
+                </div>
+            `;
         }
 
         function getManagerRoleFormValue(role) {

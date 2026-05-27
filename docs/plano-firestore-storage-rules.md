@@ -1,5 +1,46 @@
 # Plano de Firestore e Storage Rules
 
+## Status da Fase 1.4 - rules locais para alteracoes de empreendimento
+
+Arquivos ajustados nesta fase:
+
+- `firestore.rules`
+- `storage.rules`
+
+Objetivo da mudanca local:
+
+- permitir que usuario autenticado com vinculo ativo crie somente a propria solicitacao em `establishment_update_requests`;
+- limitar leitura do usuario comum apenas aos seus pedidos;
+- manter revisao, aprovacao, rejeicao e `changes_requested` somente para `admin` e `moderator`;
+- reaproveitar upload privado para `submissions/establishment-updates/{uid}/{requestId}/{fileName}`;
+- impedir que este fluxo escreva diretamente nos dados publicos do site.
+
+Politica local adicionada:
+
+- o create exige `managerId` valido em `establishment_managers`;
+- `ownerUid` e `ownerEmail` precisam bater com o usuario autenticado;
+- `status` inicial e sempre `pending`;
+- `currentSnapshot` e `requestedChanges` ficam restritos ao schema esperado desta fase;
+- `reviewedAt`, `reviewedBy`, `reviewNotes`, `rejectionReason` e `changesRequestedNotes` nascem vazios;
+- upload continua limitado a JPG/JPEG/PNG/WebP com maximo de 3 MB por arquivo.
+
+Passo manual obrigatorio antes de ambiente real:
+
+1. revisar `firestore.rules`;
+2. revisar `storage.rules`;
+3. publicar ambas no projeto Firebase correto via Console ou CLI oficial;
+4. testar com:
+   - usuario comum com vinculo ativo;
+   - usuario comum sem vinculo;
+   - conta admin/moderator;
+   - aprovacao, rejeicao e pedido de ajustes.
+
+Importante:
+
+- nada foi publicado automaticamente pelo repositorio;
+- a aprovacao da solicitacao continua sem publicar nada no mapa publico;
+- o uso de `getDownloadURL()` para anexos segue o padrao atual do portal e deve continuar sendo revisado em fase futura se a politica de arquivos pendentes ficar mais rigida.
+
 ## Status da Fase 1.3 - gestao administrativa de vinculos
 
 Arquivo ajustado nesta fase:

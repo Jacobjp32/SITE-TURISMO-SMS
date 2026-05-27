@@ -88,6 +88,16 @@ Checklist minimo adicional para a fase de gestao de vinculos:
 - `Gerenciar Usuários` mostra o aviso de que permissao global nao e vinculo de empreendimento;
 - editar, desativar e reativar um vinculo nao quebram o portal nem os eventos vinculados.
 
+Checklist minimo adicional para a fase de solicitacoes de alteracao:
+
+- `Meus empreendimentos` continua carregando;
+- o botao `Solicitar alteracao` aparece para vinculo ativo;
+- o modal de alteracao abre com os campos atuais preenchidos;
+- o portal permite anexar ate 6 imagens no fluxo de alteracao;
+- `Minhas solicitacoes de alteracao` mostra status, campos pedidos e retorno da equipe;
+- o card `Alteracoes de empreendimentos` aparece em `Aprovacoes` no admin;
+- aprovar, rejeitar e marcar `changes_requested` nao aplicam nada automaticamente no site publico.
+
 Servidor local:
 
 ```bash
@@ -107,3 +117,10 @@ O arquivo versionado `storage.rules` e apenas rascunho local. Antes de usar uplo
 1. revise o arquivo `storage.rules`;
 2. publique as rules no Firebase Console ou pela CLI oficial do projeto;
 3. teste upload com usuario comum e aprovacao com conta administrativa.
+
+Para a fila de alteracoes de empreendimento, confirme tambem:
+
+1. o path `submissions/establishment-updates/{uid}/{requestId}/{fileName}` foi publicado nas Storage Rules reais;
+2. a collection `establishment_update_requests` esta coberta pelas Firestore Rules reais;
+3. um usuario sem vinculo ativo nao consegue criar solicitacao;
+4. um admin/moderator consegue revisar sem alterar dados publicos automaticamente.

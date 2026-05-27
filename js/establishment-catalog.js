@@ -76,39 +76,186 @@
 
         if (shouldExcludeByName(item.name)) return false;
 
-        if (/prefeitura|paco municipal|paço municipal|praca|praça|ponte|igreja matriz|casa da memoria|casa da memória|arena cultural|ginasio|ginasio|parque de exposicoes|parque de exposições/.test(source)) {
+        if (/prefeitura|paco municipal|paço municipal|praca|praça|ponte|igreja matriz|casa da memoria|casa da memória|arena cultural|ginasio|ginásio|parque de exposicoes|parque de exposições/.test(source)) {
             return false;
         }
 
         return !!(item.phone || item.social || item.site || item.hours || item.mapsUrl);
     }
 
+    function normalizeWebsite(value) {
+        var raw = cleanLabel(value);
+        if (!raw) return '';
+        if (raw.charAt(0) === '@') return '';
+        if (/^https?:\/\//i.test(raw)) return raw;
+        if (/^www\./i.test(raw)) return 'https://' + raw;
+        return '';
+    }
+
+    function normalizeInstagram(value) {
+        var raw = cleanLabel(value);
+        if (!raw) return '';
+        if (raw.charAt(0) === '@') return raw;
+        return '';
+    }
+
+    function splitSocialFields(primary, secondary) {
+        var values = [primary, secondary]
+            .map(cleanLabel)
+            .filter(Boolean);
+        var instagram = '';
+        var website = '';
+
+        values.forEach(function(value) {
+            if (!instagram) {
+                instagram = normalizeInstagram(value);
+            }
+            if (!website) {
+                website = normalizeWebsite(value);
+            }
+        });
+
+        return {
+            instagram: instagram,
+            website: website
+        };
+    }
+
+    function pickFirst(values) {
+        for (var i = 0; i < values.length; i += 1) {
+            var value = cleanLabel(values[i]);
+            if (value) return value;
+        }
+        return '';
+    }
+
+    function buildImageList(item) {
+        var images = ensureArray(item && item.galeria)
+            .map(cleanLabel)
+            .filter(Boolean);
+        var mainImage = cleanLabel(item && item.imagem);
+
+        if (mainImage && images.indexOf(mainImage) === -1) {
+            images.unshift(mainImage);
+        }
+
+        if (!mainImage && images.length > 0) {
+            mainImage = images[0];
+        }
+
+        return {
+            images: images,
+            mainImage: mainImage,
+            imageCount: images.length
+        };
+    }
+
+    function buildCurrentSnapshot(source, item, category, originalId) {
+        var social = splitSocialFields(item && item.instagram, item && (item.site || item.social));
+        var imageData = buildImageList(item);
+
+        return {
+            name: source === 'rotas_legado'
+                ? getPreferredLegacyName(item)
+                : cleanLabel(item && item.nome),
+            category: cleanLabel(category),
+            source: cleanLabel(source),
+            originalId: cleanLabel(originalId),
+            description: pickFirst([
+                item && item.descricaoLonga,
+                item && item.descricao,
+                item && item.desc
+            ]),
+            phone: pickFirst([
+                item && item.telefone,
+                item && item.phone
+            ]),
+            whatsapp: pickFirst([
+                item && item.whatsapp
+            ]),
+            instagram: social.instagram,
+            website: social.website,
+            address: pickFirst([
+                item && item.localizacao,
+                item && item.location
+            ]),
+            openingHours: pickFirst([
+                item && item.horario,
+                item && item.hours
+            ]),
+            images: imageData.images,
+            mainImage: imageData.mainImage,
+            imageCount: imageData.imageCount
+        };
+    }
+
+    function mergeCurrentSnapshot(primary, secondary) {
+        var merged = Object.assign({}, secondary || {}, primary || {});
+        var imageSet = [];
+
+        ensureArray(primary && primary.images).concat(ensureArray(secondary && secondary.images)).forEach(function(image) {
+            var normalized = cleanLabel(image);
+            if (normalized && imageSet.indexOf(normalized) === -1) {
+                imageSet.push(normalized);
+            }
+        });
+
+        [
+            'name',
+            'category',
+            'source',
+            'originalId',
+            'description',
+            'phone',
+            'whatsapp',
+            'instagram',
+            'website',
+            'address',
+            'openingHours'
+        ].forEach(function(field) {
+            merged[field] = cleanLabel(primary && primary[field]) || cleanLabel(secondary && secondary[field]);
+        });
+
+        merged.images = imageSet;
+        merged.mainImage = cleanLabel(primary && primary.mainImage) || cleanLabel(secondary && secondary.mainImage) || (imageSet[0] || '');
+        merged.imageCount = imageSet.length;
+        return merged;
+    }
+
     function toEntry(source, item) {
         if (source === 'restaurantes' || source === 'hospedagens') {
             var primaryName = cleanLabel(item && item.nome);
+            var category = cleanLabel(item && item.categoria || (source === 'restaurantes' ? 'Gastronomia' : 'Hospedagem'));
+            var originalId = cleanLabel(item && item.id || '');
+
             if (!primaryName || shouldExcludeByName(primaryName)) return null;
 
             return {
                 establishmentId: cleanLabel(item.id || primaryName),
                 establishmentName: primaryName,
-                category: cleanLabel(item.categoria || (source === 'restaurantes' ? 'Gastronomia' : 'Hospedagem')),
+                category: category,
                 source: source,
-                originalId: cleanLabel(item.id || ''),
-                slug: cleanLabel(item.id || '')
+                originalId: originalId,
+                slug: cleanLabel(item.id || ''),
+                currentSnapshot: buildCurrentSnapshot(source, item, category, originalId)
             };
         }
 
         if (source === 'rotas_legado' && looksClaimableLegacy(item)) {
             var legacyName = getPreferredLegacyName(item);
+            var legacyCategory = classifyLegacyCategory(item);
+            var legacyOriginalId = cleanLabel(item && item.id || '');
+
             if (!legacyName) return null;
 
             return {
                 establishmentId: cleanLabel(item.id || legacyName),
                 establishmentName: legacyName,
-                category: classifyLegacyCategory(item),
+                category: legacyCategory,
                 source: source,
-                originalId: cleanLabel(item.id || ''),
-                slug: cleanLabel(item.id || '')
+                originalId: legacyOriginalId,
+                slug: cleanLabel(item.id || ''),
+                currentSnapshot: buildCurrentSnapshot(source, item, legacyCategory, legacyOriginalId)
             };
         }
 
@@ -121,9 +268,18 @@
         var key = normalizeText(entry.establishmentName);
         var existing = map[key];
 
-        if (!existing || (PRIMARY_SOURCE_PRIORITY[entry.source] || 0) > (PRIMARY_SOURCE_PRIORITY[existing.source] || 0)) {
+        if (!existing) {
             map[key] = entry;
+            return;
         }
+
+        if ((PRIMARY_SOURCE_PRIORITY[entry.source] || 0) > (PRIMARY_SOURCE_PRIORITY[existing.source] || 0)) {
+            entry.currentSnapshot = mergeCurrentSnapshot(entry.currentSnapshot, existing.currentSnapshot);
+            map[key] = entry;
+            return;
+        }
+
+        existing.currentSnapshot = mergeCurrentSnapshot(existing.currentSnapshot, entry.currentSnapshot);
     }
 
     async function loadLegacyRouteEstablishments() {

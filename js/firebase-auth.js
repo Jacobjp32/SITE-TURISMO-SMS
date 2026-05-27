@@ -102,6 +102,10 @@ function getComparableTimestamp(value) {
     return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function ensureArray(value) {
+    return Array.isArray(value) ? value : [];
+}
+
 function sortByTimestampDesc(items, fieldName) {
     return (items || []).slice().sort(function(a, b) {
         return getComparableTimestamp(b && b[fieldName]) - getComparableTimestamp(a && a[fieldName]);
@@ -123,6 +127,128 @@ function normalizeManagerRole(value) {
         gerente_responsavel: 'gerente_responsavel',
         representante_autorizado: 'representante_autorizado'
     })[role] || '';
+}
+
+var ESTABLISHMENT_UPDATE_ALLOWED_FIELDS = [
+    'description',
+    'phone',
+    'whatsapp',
+    'instagram',
+    'website',
+    'address',
+    'openingHours',
+    'additionalNotes'
+];
+
+var ESTABLISHMENT_UPDATE_FIELD_LIMITS = {
+    description: 4000,
+    phone: 120,
+    whatsapp: 120,
+    instagram: 160,
+    website: 240,
+    address: 240,
+    openingHours: 240,
+    additionalNotes: 1500
+};
+
+function sanitizeSimpleText(value, maxLength) {
+    var normalized = String(value || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/[\u0000-\u001F\u007F]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    if (!normalized) return '';
+    if (typeof maxLength === 'number' && maxLength > 0) {
+        return normalized.slice(0, maxLength);
+    }
+    return normalized;
+}
+
+function sanitizeLongText(value, maxLength) {
+    var normalized = String(value || '')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]+/g, ' ')
+        .replace(/[ \t]+\n/g, '\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+    if (!normalized) return '';
+    if (typeof maxLength === 'number' && maxLength > 0) {
+        return normalized.slice(0, maxLength);
+    }
+    return normalized;
+}
+
+function sanitizeUpdateFieldValue(field, value) {
+    var limit = ESTABLISHMENT_UPDATE_FIELD_LIMITS[field];
+    if (field === 'description' || field === 'additionalNotes') {
+        return sanitizeLongText(value, limit);
+    }
+    return sanitizeSimpleText(value, limit);
+}
+
+function buildSafeImageMetadata(items) {
+    return ensureArray(items).map(function(item, index) {
+        return {
+            url: sanitizeSimpleText(item && item.url, 2048),
+            path: sanitizeSimpleText(item && item.path, 512),
+            name: sanitizeSimpleText(item && (item.name || item.fileName), 120),
+            contentType: sanitizeSimpleText(item && item.contentType, 80),
+            size: Number(item && item.size || 0) || 0,
+            uploadedAt: sanitizeSimpleText(item && item.uploadedAt, 60),
+            position: index + 1
+        };
+    }).filter(function(item) {
+        return item.path && item.contentType && item.size > 0;
+    });
+}
+
+function buildSafeCurrentSnapshot(snapshot) {
+    var raw = snapshot || {};
+    var images = ensureArray(raw.images).map(function(item) {
+        return sanitizeSimpleText(item, 512);
+    }).filter(Boolean);
+
+    return {
+        name: sanitizeSimpleText(raw.name, 160),
+        category: sanitizeSimpleText(raw.category, 120),
+        source: sanitizeSimpleText(raw.source, 60),
+        originalId: sanitizeSimpleText(raw.originalId, 120),
+        description: sanitizeLongText(raw.description, 4000),
+        phone: sanitizeSimpleText(raw.phone, 120),
+        whatsapp: sanitizeSimpleText(raw.whatsapp, 120),
+        instagram: sanitizeSimpleText(raw.instagram, 160),
+        website: sanitizeSimpleText(raw.website, 240),
+        address: sanitizeSimpleText(raw.address, 240),
+        openingHours: sanitizeSimpleText(raw.openingHours, 240),
+        images: images,
+        mainImage: sanitizeSimpleText(raw.mainImage, 512) || (images[0] || ''),
+        imageCount: images.length
+    };
+}
+
+function buildSafeRequestedChanges(changes) {
+    var raw = changes || {};
+    return ESTABLISHMENT_UPDATE_ALLOWED_FIELDS.reduce(function(result, field) {
+        var sanitized = sanitizeUpdateFieldValue(field, raw[field]);
+        if (sanitized || sanitized === '') {
+            if (Object.prototype.hasOwnProperty.call(raw, field)) {
+                result[field] = sanitized;
+            }
+        }
+        return result;
+    }, {});
+}
+
+function normalizeUpdateRequestStatus(status) {
+    var normalized = String(status || '').trim().toLowerCase();
+    if (normalized === 'approved' || normalized === 'rejected' || normalized === 'changes_requested') {
+        return normalized;
+    }
+    return 'pending';
 }
 
 function isActiveManagerRecord(manager, userId, establishmentId) {
@@ -669,6 +795,203 @@ const FirebaseSystem = {
         } catch (error) {
             console.error(error);
             return null;
+        }
+    },
+
+    createEstablishmentUpdateRequest: async function(requestData) {
+        if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
+
+        var managerId = sanitizeSimpleText(requestData && requestData.managerId, 160);
+        var establishmentId = sanitizeSimpleText(requestData && requestData.establishmentId, 160);
+        var currentSnapshot = buildSafeCurrentSnapshot(requestData && requestData.currentSnapshot);
+        var requestedChanges = buildSafeRequestedChanges(requestData && requestData.requestedChanges);
+        var images = buildSafeImageMetadata(requestData && requestData.images);
+        var requestedChangeKeys = Object.keys(requestedChanges);
+        var mainImage = sanitizeSimpleText(requestData && requestData.mainImage, 2048);
+        var linkedManager = null;
+
+        if (!establishmentId) {
+            return { success: false, message: 'Empreendimento inválido para a solicitação.' };
+        }
+
+        if (!requestedChangeKeys.length && !images.length) {
+            return { success: false, message: 'Preencha ao menos um campo alterado ou anexe imagens.' };
+        }
+
+        if (images.length > 0) {
+            mainImage = images.some(function(item) { return item.url === mainImage; })
+                ? mainImage
+                : images[0].url;
+        } else {
+            mainImage = '';
+        }
+
+        try {
+            var db = firebase.firestore();
+            linkedManager = await this.getManagedEstablishmentForCurrentUser(managerId, establishmentId);
+
+            if (!linkedManager) {
+                return { success: false, message: 'Seu vínculo ativo com este empreendimento não foi encontrado.' };
+            }
+
+            var existingRequests = await db.collection('establishment_update_requests')
+                .where('ownerUid', '==', currentUser.uid)
+                .get();
+
+            var hasPendingRequest = existingRequests.docs.some(function(doc) {
+                var item = doc.data() || {};
+                return normalizeComparableId(item.establishmentId) === normalizeComparableId(linkedManager.establishmentId) &&
+                    normalizeUpdateRequestStatus(item.status) === 'pending';
+            });
+
+            if (hasPendingRequest) {
+                return { success: false, message: 'Já existe uma solicitação pendente para este empreendimento.' };
+            }
+
+            var requestId = sanitizeSimpleText(requestData && requestData.id, 160) || ('upd_' + Date.now());
+            var now = firebase.firestore.FieldValue.serverTimestamp();
+            var establishmentName = sanitizeSimpleText(
+                requestData && requestData.establishmentName || linkedManager.establishmentName,
+                160
+            ) || linkedManager.establishmentName;
+
+            await db.collection('establishment_update_requests').doc(requestId).set({
+                id: requestId,
+                managerId: linkedManager.id,
+                ownerUid: currentUser.uid,
+                ownerEmail: sanitizeSimpleText(currentUser.email, 160),
+                ownerName: sanitizeSimpleText(currentUser.nome || currentUser.displayName || currentUser.email || 'Usuário', 160),
+                establishmentId: sanitizeSimpleText(linkedManager.establishmentId, 160),
+                establishmentName: establishmentName,
+                establishmentCategory: sanitizeSimpleText(requestData && requestData.establishmentCategory || currentSnapshot.category, 120),
+                establishmentSource: sanitizeSimpleText(requestData && requestData.establishmentSource || currentSnapshot.source, 60),
+                currentSnapshot: currentSnapshot,
+                requestedChanges: requestedChanges,
+                images: images,
+                mainImage: mainImage,
+                imageCount: images.length,
+                status: 'pending',
+                source: 'establishment_manager',
+                createdAt: now,
+                updatedAt: now,
+                submittedAt: now,
+                reviewedAt: null,
+                reviewedBy: null,
+                reviewNotes: '',
+                rejectionReason: '',
+                changesRequestedNotes: ''
+            });
+
+            return {
+                success: true,
+                message: 'Solicitação enviada para análise. Nada será publicado automaticamente no site público.'
+            };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao enviar solicitação de alteração.' };
+        }
+    },
+
+    listMyEstablishmentUpdateRequests: async function() {
+        if (!this.isLoggedIn()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_update_requests')
+                .where('ownerUid', '==', currentUser.uid)
+                .get();
+
+            return sortByTimestampDesc(snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }), 'createdAt');
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    listAllEstablishmentUpdateRequests: async function(statusFilter) {
+        if (!this.isModerator()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_update_requests').get();
+            var statusList = ensureArray(statusFilter).map(normalizeUpdateRequestStatus);
+
+            return sortByTimestampDesc(snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).filter(function(item) {
+                if (!statusList.length) return true;
+                return statusList.indexOf(normalizeUpdateRequestStatus(item.status)) !== -1;
+            }), 'createdAt');
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    reviewEstablishmentUpdateRequest: async function(requestId, reviewData) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedRequestId = sanitizeSimpleText(requestId, 160);
+        var targetStatus = normalizeUpdateRequestStatus(reviewData && reviewData.status);
+        var reviewNotes = sanitizeLongText(reviewData && reviewData.reviewNotes, 1500);
+        var rejectionReason = sanitizeLongText(reviewData && reviewData.rejectionReason, 500);
+        var changesRequestedNotes = sanitizeLongText(reviewData && reviewData.changesRequestedNotes, 1500);
+
+        if (!normalizedRequestId) {
+            return { success: false, message: 'Solicitação inválida.' };
+        }
+
+        if (['approved', 'rejected', 'changes_requested'].indexOf(targetStatus) === -1) {
+            return { success: false, message: 'Status de revisão inválido.' };
+        }
+
+        if (targetStatus === 'rejected' && !rejectionReason) {
+            return { success: false, message: 'Informe o motivo da rejeição.' };
+        }
+
+        if (targetStatus === 'changes_requested' && !changesRequestedNotes) {
+            return { success: false, message: 'Informe quais ajustes precisam ser feitos.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
+            var requestSnap = await requestRef.get();
+
+            if (!requestSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var request = requestSnap.data() || {};
+            var currentStatus = normalizeUpdateRequestStatus(request.status);
+
+            if (currentStatus === 'approved' || currentStatus === 'rejected') {
+                return { success: false, message: 'Esta solicitação já foi concluída.' };
+            }
+
+            await requestRef.update({
+                status: targetStatus,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                reviewedBy: currentUser.uid,
+                reviewNotes: targetStatus === 'approved' ? reviewNotes : reviewNotes,
+                rejectionReason: targetStatus === 'rejected' ? rejectionReason : '',
+                changesRequestedNotes: targetStatus === 'changes_requested' ? changesRequestedNotes : ''
+            });
+
+            if (targetStatus === 'approved') {
+                return {
+                    success: true,
+                    message: 'Solicitação aprovada para revisão/publicação. A aplicação no site público ainda depende de atualização controlada dos dados.'
+                };
+            }
+
+            if (targetStatus === 'changes_requested') {
+                return { success: true, message: 'Solicitação marcada como ajustes necessários.' };
+            }
+
+            return { success: true, message: 'Solicitação rejeitada.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao revisar solicitação de alteração.' };
         }
     },
 

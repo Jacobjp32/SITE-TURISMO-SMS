@@ -1,5 +1,54 @@
 # Plano tecnico do Portal de Cadastros
 
+## Status da Fase 1.4 - fila de alteracoes de empreendimento
+
+Implementado nesta rodada:
+
+- `portal-usuario.html` ganhou a acao `Solicitar alteracao` para cada vinculo ativo em `Meus empreendimentos`;
+- o formulario usa apenas campos seguros desta fase:
+  - descricao
+  - telefone
+  - WhatsApp
+  - Instagram
+  - site
+  - endereco/localizacao textual
+  - horario de funcionamento
+  - observacoes adicionais
+- o portal registra apenas alteracoes propostas em `establishment_update_requests`;
+- o snapshot atual do empreendimento e lido do catalogo `js/establishment-catalog.js`, sem editar dados publicos;
+- o historico `Minhas solicitacoes de alteracao` mostra campos pedidos, status, data e retorno da equipe;
+- `admin-firebase.html` ganhou a fila `Alteracoes de empreendimentos` dentro de `Aprovacoes`;
+- aprovar nao publica automaticamente no mapa nem nos dados estaticos.
+
+Colecao nova desta fase:
+
+- `establishment_update_requests`
+
+Campos operacionais principais:
+
+- `managerId`
+- `ownerUid`
+- `establishmentId`
+- `currentSnapshot`
+- `requestedChanges`
+- `images`
+- `mainImage`
+- `imageCount`
+- `status`
+- `reviewNotes`
+- `rejectionReason`
+- `changesRequestedNotes`
+
+Limites e decisoes desta fase:
+
+- nao altera `TURISMO_DATA`;
+- nao altera mapa turistico;
+- nao mexe em login, Auth, App Check ou CSP;
+- nao cria backend;
+- nao faz autoapply da aprovacao;
+- nao permite mudar coordenadas, categoria, slug ou ids sensiveis;
+- quando o usuario anexa so imagens, `requestedChanges` pode ficar vazio e a solicitacao continua valida.
+
 ## Status da Fase 1.3 - gestao administrativa de vinculos
 
 Implementado nesta rodada:

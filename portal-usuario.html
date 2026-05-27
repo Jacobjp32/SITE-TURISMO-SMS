@@ -246,6 +246,21 @@
                 </div>
             </section>
 
+            <section class="section-panel">
+                <div class="section-header">
+                    <h2>🛠️ Minhas solicitações de alteração</h2>
+                </div>
+                <p class="section-copy">
+                    Aqui você acompanha os pedidos enviados para corrigir ou atualizar informações dos empreendimentos que gerencia. Nada é publicado automaticamente no site público.
+                </p>
+                <div class="events-list" id="establishmentUpdateRequestsList">
+                    <div class="empty-state">
+                        <div class="icon">🧾</div>
+                        <p>Você ainda não enviou nenhuma solicitação de alteração.</p>
+                    </div>
+                </div>
+            </section>
+
             <section class="section-panel" style="background:linear-gradient(135deg,#e8f5e9,#c8e6c9);">
                 <h2 style="color:var(--forest-deep);margin-bottom:1rem;">ℹ️ Como funciona a aprovação?</h2>
                 <div class="process-steps">
@@ -375,6 +390,75 @@
         </div>
     </div>
 
+    <!-- MODAL: SOLICITAR ALTERAÇÃO DE EMPREENDIMENTO -->
+    <div class="modal-overlay" id="establishmentUpdateModal" onclick="fecharModalFora(event,'establishmentUpdateModal')">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2>🛠️ Solicitar alteração de empreendimento</h2>
+                <button class="modal-close" onclick="fecharModal('establishmentUpdateModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="event-link-notice" id="establishmentUpdateNotice">
+                    <strong id="updateRequestEstablishmentName">Empreendimento</strong>
+                    <p>As alterações enviadas serão analisadas pela equipe responsável antes de qualquer publicação.</p>
+                </div>
+                <input type="hidden" id="updateManagerId">
+                <input type="hidden" id="updateEstablishmentId">
+                <div class="form-group">
+                    <label for="updateDescription">Descrição</label>
+                    <textarea id="updateDescription" maxlength="4000" placeholder="Atualize a descrição pública do empreendimento."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updatePhone">Telefone</label>
+                        <input type="tel" id="updatePhone" maxlength="120" placeholder="(42) 3532-0000">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateWhatsapp">WhatsApp</label>
+                        <input type="tel" id="updateWhatsapp" maxlength="120" placeholder="(42) 99999-9999">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="updateInstagram">Instagram</label>
+                        <input type="text" id="updateInstagram" maxlength="160" placeholder="@seuinstagram">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateWebsite">Site</label>
+                        <input type="url" id="updateWebsite" maxlength="240" placeholder="https://...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="updateAddress">Endereço ou localização textual</label>
+                    <input type="text" id="updateAddress" maxlength="240" placeholder="Rua, número, bairro ou referência de localização">
+                </div>
+                <div class="form-group">
+                    <label for="updateOpeningHours">Horário de funcionamento</label>
+                    <input type="text" id="updateOpeningHours" maxlength="240" placeholder="Ex: Seg a Sex 8h às 18h | Sáb 8h às 12h">
+                </div>
+                <div class="form-group">
+                    <label for="updateAdditionalNotes">Observações adicionais</label>
+                    <textarea id="updateAdditionalNotes" maxlength="1500" placeholder="Explique o contexto da correção, detalhe algum ponto importante ou descreva o que precisa ser revisado."></textarea>
+                    <p class="form-hint">Não altere coordenadas, categoria ou dados internos por este formulário.</p>
+                </div>
+                <div class="form-group">
+                    <label for="updateImages">Imagens anexas</label>
+                    <div class="upload-box">
+                        <input type="file" id="updateImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('update')">
+                        <p class="form-hint">Envie até 6 imagens em JPG, PNG ou WebP, com no máximo 3 MB cada. As imagens ficam em fila de revisão administrativa.</p>
+                        <p class="upload-counter" id="updateImageCounter">0/6 imagens</p>
+                        <p class="upload-error" id="updateImageError" hidden></p>
+                        <div class="upload-preview-grid" id="updateImagePreview"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-primary btn-secondary" onclick="fecharModal('establishmentUpdateModal')">Cancelar</button>
+                <button type="button" class="btn-primary" id="btnEnviarUpdateRequest" onclick="enviarSolicitacaoAlteracaoEmpreendimento()">Enviar solicitação</button>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="footer">
@@ -486,10 +570,12 @@
     };
     var portalUploads = {
         event: [],
-        establishment: []
+        establishment: [],
+        update: []
     };
     var portalManagedEstablishments = [];
     var currentLinkedEventContext = null;
+    var currentEstablishmentUpdateContext = null;
 
     function renderAuthState(user) {
         var authScreen = document.getElementById('authScreen');
@@ -503,6 +589,7 @@
             carregarEventos();
             carregarSolicitacoesVinculo();
             carregarMeusEmpreendimentos();
+            carregarSolicitacoesAlteracaoEmpreendimento();
         } else {
             authScreen.style.display = 'flex';
             dashboard.classList.remove('active');
@@ -618,21 +705,31 @@
     });
 
     function getUploadConfig(kind) {
-        return kind === 'event'
-            ? {
+        if (kind === 'event') {
+            return {
                 inputId: 'evtImages',
                 counterId: 'eventImageCounter',
                 errorId: 'eventImageError',
                 previewId: 'eventImagePreview',
                 pathRoot: 'events'
-            }
-            : {
-                inputId: 'estImages',
-                counterId: 'establishmentImageCounter',
-                errorId: 'establishmentImageError',
-                previewId: 'establishmentImagePreview',
-                pathRoot: 'establishments'
             };
+        }
+        if (kind === 'update') {
+            return {
+                inputId: 'updateImages',
+                counterId: 'updateImageCounter',
+                errorId: 'updateImageError',
+                previewId: 'updateImagePreview',
+                pathRoot: 'establishment-updates'
+            };
+        }
+        return {
+            inputId: 'estImages',
+            counterId: 'establishmentImageCounter',
+            errorId: 'establishmentImageError',
+            previewId: 'establishmentImagePreview',
+            pathRoot: 'establishments'
+        };
     }
 
     function sanitizePlainText(value) {
@@ -929,6 +1026,67 @@
         abrirModal('eventModal');
     }
 
+    async function abrirModalSolicitacaoAlteracao(managerId) {
+        var manager = getCurrentManagedEstablishment(managerId);
+        if (!manager) {
+            mostrarNotif('Não foi possível localizar o vínculo ativo deste empreendimento. Recarregue a página e tente novamente.', 'error');
+            return;
+        }
+
+        var catalogItems = await getCatalogoEmpreendimentos();
+        var catalogEntry = catalogItems.find(function(item) {
+            return item.establishmentId === manager.establishmentId;
+        });
+
+        if (!catalogEntry) {
+            mostrarNotif('O catálogo público deste empreendimento não está disponível agora. Recarregue a página e tente novamente.', 'error');
+            return;
+        }
+
+        currentEstablishmentUpdateContext = {
+            managerId: manager.id,
+            establishmentId: manager.establishmentId,
+            establishmentName: manager.establishmentName,
+            establishmentCategory: catalogEntry.category || '',
+            establishmentSource: catalogEntry.source || '',
+            currentSnapshot: Object.assign({}, catalogEntry.currentSnapshot || {})
+        };
+
+        preencherFormularioSolicitacaoAlteracao();
+        abrirModal('establishmentUpdateModal');
+    }
+
+    function preencherFormularioSolicitacaoAlteracao() {
+        if (!currentEstablishmentUpdateContext) return;
+
+        var snapshot = currentEstablishmentUpdateContext.currentSnapshot || {};
+        var setValue = function(id, value) {
+            var el = document.getElementById(id);
+            if (el) el.value = value || '';
+        };
+
+        document.getElementById('updateManagerId').value = currentEstablishmentUpdateContext.managerId || '';
+        document.getElementById('updateEstablishmentId').value = currentEstablishmentUpdateContext.establishmentId || '';
+        document.getElementById('updateRequestEstablishmentName').textContent = currentEstablishmentUpdateContext.establishmentName || 'Empreendimento';
+
+        setValue('updateDescription', snapshot.description);
+        setValue('updatePhone', snapshot.phone);
+        setValue('updateWhatsapp', snapshot.whatsapp);
+        setValue('updateInstagram', snapshot.instagram);
+        setValue('updateWebsite', snapshot.website);
+        setValue('updateAddress', snapshot.address);
+        setValue('updateOpeningHours', snapshot.openingHours);
+        setValue('updateAdditionalNotes', '');
+        clearUploadState('update');
+    }
+
+    function limparContextoSolicitacaoAlteracao() {
+        currentEstablishmentUpdateContext = null;
+        document.getElementById('updateManagerId').value = '';
+        document.getElementById('updateEstablishmentId').value = '';
+        document.getElementById('updateRequestEstablishmentName').textContent = 'Empreendimento';
+    }
+
     function resetEventForm() {
         ['evtNome','evtDataInicio','evtDataFim','evtHoraInicio','evtHoraFim',
          'evtLocal','evtDescricao','evtValor','evtContato','evtSite'].forEach(function(id) {
@@ -955,6 +1113,24 @@
             r.closest('.category-option').classList.remove('selected');
         });
         clearUploadState('establishment');
+    }
+
+    function resetEstablishmentUpdateForm() {
+        [
+            'updateDescription',
+            'updatePhone',
+            'updateWhatsapp',
+            'updateInstagram',
+            'updateWebsite',
+            'updateAddress',
+            'updateOpeningHours',
+            'updateAdditionalNotes'
+        ].forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.value = '';
+        });
+        clearUploadState('update');
+        limparContextoSolicitacaoAlteracao();
     }
 
     // ── Eventos do usuário ───────────────────────────────────────────
@@ -1030,6 +1206,94 @@
             approved: '✅ Aprovado',
             rejected: '❌ Rejeitado'
         })[normalizeClaimStatus(status)];
+    }
+
+    function normalizeUpdateRequestStatus(status) {
+        status = String(status || 'pending').toLowerCase();
+        return /^(pending|approved|rejected|changes_requested)$/.test(status) ? status : 'pending';
+    }
+
+    function getUpdateRequestStatusClass(status) {
+        return ({
+            pending: 'pendente',
+            approved: 'aprovado',
+            rejected: 'rejeitado',
+            changes_requested: 'info'
+        })[normalizeUpdateRequestStatus(status)];
+    }
+
+    function getUpdateRequestStatusLabel(status) {
+        return ({
+            pending: '⏳ Pendente',
+            approved: '✅ Aprovado',
+            rejected: '❌ Rejeitado',
+            changes_requested: '🛠️ Ajustes necessários'
+        })[normalizeUpdateRequestStatus(status)];
+    }
+
+    function getUpdateFieldLabel(field) {
+        return ({
+            description: 'Descrição',
+            phone: 'Telefone',
+            whatsapp: 'WhatsApp',
+            instagram: 'Instagram',
+            website: 'Site',
+            address: 'Endereço / localização',
+            openingHours: 'Horário de funcionamento',
+            additionalNotes: 'Observações adicionais'
+        })[String(field || '')] || 'Campo';
+    }
+
+    function getCurrentUpdateFieldValue(field) {
+        return sanitizePlainText(document.getElementById(field).value);
+    }
+
+    function normalizeComparisonValue(value) {
+        return String(value || '')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function buildRequestedEstablishmentChanges(snapshot) {
+        var fields = {
+            description: getCurrentUpdateFieldValue('updateDescription'),
+            phone: getCurrentUpdateFieldValue('updatePhone'),
+            whatsapp: getCurrentUpdateFieldValue('updateWhatsapp'),
+            instagram: getCurrentUpdateFieldValue('updateInstagram'),
+            website: getCurrentUpdateFieldValue('updateWebsite'),
+            address: getCurrentUpdateFieldValue('updateAddress'),
+            openingHours: getCurrentUpdateFieldValue('updateOpeningHours'),
+            additionalNotes: sanitizePlainText(document.getElementById('updateAdditionalNotes').value)
+        };
+        var changes = {};
+
+        Object.keys(fields).forEach(function(field) {
+            var currentValue = fields[field];
+            var originalValue = field === 'additionalNotes' ? '' : sanitizePlainText(snapshot && snapshot[field] || '');
+            if (normalizeComparisonValue(currentValue) !== normalizeComparisonValue(originalValue)) {
+                changes[field] = currentValue;
+            }
+        });
+
+        return changes;
+    }
+
+    function summarizeRequestedChanges(requestedChanges) {
+        var fields = Object.keys(requestedChanges || {});
+        if (!fields.length) return 'Somente imagens anexadas';
+        return fields.map(getUpdateFieldLabel).join(', ');
+    }
+
+    function renderRequestedChangesHtml(requestedChanges) {
+        var fields = Object.keys(requestedChanges || {});
+        if (!fields.length) {
+            return '<p class="claim-extra">Somente imagens anexadas nesta solicitação.</p>';
+        }
+
+        return fields.map(function(field) {
+            return '<p class="claim-extra"><strong>' + escapeHtml(getUpdateFieldLabel(field)) + ':</strong> ' +
+                escapeHtml(requestedChanges[field]) + '</p>';
+        }).join('');
     }
 
     function formatFirestoreDate(value) {
@@ -1138,6 +1402,42 @@
         }).join('');
     }
 
+    async function carregarSolicitacoesAlteracaoEmpreendimento() {
+        var container = document.getElementById('establishmentUpdateRequestsList');
+        if (!container) return;
+
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
+        var requests = await FirebaseSystem.listMyEstablishmentUpdateRequests();
+
+        if (!requests || requests.length === 0) {
+            container.innerHTML =
+                '<div class="empty-state"><div class="icon">🧾</div>' +
+                '<p>Você ainda não enviou nenhuma solicitação de alteração.</p></div>';
+            return;
+        }
+
+        container.innerHTML = requests.map(function(request) {
+            var status = normalizeUpdateRequestStatus(request.status);
+            var note = request.reviewNotes ? '<p class="claim-extra"><strong>Observação da equipe:</strong> ' + escapeHtml(request.reviewNotes) + '</p>' : '';
+            var rejection = request.rejectionReason ? '<p class="claim-extra"><strong>Motivo da rejeição:</strong> ' + escapeHtml(request.rejectionReason) + '</p>' : '';
+            var adjustments = request.changesRequestedNotes ? '<p class="claim-extra"><strong>Ajustes solicitados:</strong> ' + escapeHtml(request.changesRequestedNotes) + '</p>' : '';
+            var imagesInfo = Number(request.imageCount || 0) > 0
+                ? '<p class="claim-extra claim-info">Imagens anexadas: ' + escapeHtml(String(request.imageCount)) + '</p>'
+                : '';
+
+            return '<div class="event-item claim-item">' +
+                '<div class="event-info">' +
+                '<h4>' + escapeHtml(request.establishmentName) + '</h4>' +
+                '<p>Campos solicitados: ' + escapeHtml(summarizeRequestedChanges(request.requestedChanges || {})) + '</p>' +
+                '<p>Enviado em: ' + escapeHtml(formatFirestoreDate(request.createdAt)) + '</p>' +
+                renderRequestedChangesHtml(request.requestedChanges || {}) +
+                imagesInfo + note + rejection + adjustments +
+                '</div>' +
+                '<span class="event-status status-' + getUpdateRequestStatusClass(status) + '">' + escapeHtml(getUpdateRequestStatusLabel(status)) + '</span>' +
+                '</div>';
+        }).join('');
+    }
+
     async function carregarMeusEmpreendimentos() {
         var container = document.getElementById('managedEstablishmentsList');
         if (!container) return;
@@ -1159,14 +1459,21 @@
                 '<h4>' + escapeHtml(manager.establishmentName) + '</h4>' +
                 '<p>Função: ' + escapeHtml(getClaimRoleLabel(manager.role)) + '</p>' +
                 '<p>Status: vínculo ativo | Aprovado em: ' + escapeHtml(formatFirestoreDate(manager.approvedAt)) + '</p>' +
-                '<p class="claim-extra claim-info">Em breve você poderá solicitar alterações de informações e cadastrar eventos vinculados a este empreendimento.</p>' +
+                '<p class="claim-extra claim-info">Você pode solicitar correções de dados e cadastrar eventos vinculados. Nada será publicado automaticamente no site público.</p>' +
                 '<div class="managed-establishment-actions">' +
+                '<button type="button" class="card-action establishment-update-action" data-manager-id="' + escapeHtml(manager.id) + '">Solicitar alteração</button>' +
                 '<button type="button" class="card-action linked-event-action" data-manager-id="' + escapeHtml(manager.id) + '">Cadastrar evento vinculado</button>' +
                 '</div>' +
                 '</div>' +
                 '<span class="event-status status-aprovado">✅ Ativo</span>' +
                 '</div>';
         }).join('');
+
+        container.querySelectorAll('.establishment-update-action').forEach(function(button) {
+            button.addEventListener('click', function() {
+                abrirModalSolicitacaoAlteracao(this.getAttribute('data-manager-id'));
+            });
+        });
 
         container.querySelectorAll('.linked-event-action').forEach(function(button) {
             button.addEventListener('click', function() {
@@ -1185,6 +1492,9 @@
         document.body.style.overflow = '';
         if (id === 'eventModal') {
             limparContextoEventoVinculado();
+        }
+        if (id === 'establishmentUpdateModal') {
+            resetEstablishmentUpdateForm();
         }
     }
     function fecharModalFora(e, id) {
@@ -1483,6 +1793,84 @@
             }
         } catch (error) {
             mostrarNotif(error.message || 'Não foi possível enviar a solicitação agora.', 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = 'Enviar solicitação';
+        }
+    }
+
+    async function enviarSolicitacaoAlteracaoEmpreendimento() {
+        var user = getPortalCurrentUser();
+        if (!user || !user.uid) {
+            mostrarNotif('Você precisa estar autenticado para enviar uma solicitação de alteração.', 'error');
+            return;
+        }
+
+        if (!currentEstablishmentUpdateContext || !currentEstablishmentUpdateContext.establishmentId) {
+            mostrarNotif('O empreendimento selecionado não está disponível. Feche o modal e tente novamente.', 'error');
+            return;
+        }
+
+        var rawLongFields = [
+            { id: 'updateDescription', label: 'Descrição' },
+            { id: 'updateAdditionalNotes', label: 'Observações adicionais' }
+        ];
+        var hasHtmlField = rawLongFields.find(function(field) {
+            return containsHtml(document.getElementById(field.id).value);
+        });
+
+        if (hasHtmlField) {
+            mostrarNotif(hasHtmlField.label + ' não pode conter HTML.', 'error');
+            return;
+        }
+
+        var requestedChanges = buildRequestedEstablishmentChanges(currentEstablishmentUpdateContext.currentSnapshot || {});
+        var hasImages = portalUploads.update.length > 0;
+
+        if (!Object.keys(requestedChanges).length && !hasImages) {
+            mostrarNotif('Altere ao menos um campo ou anexe imagens antes de enviar.', 'error');
+            return;
+        }
+
+        var btn = document.getElementById('btnEnviarUpdateRequest');
+        btn.disabled = true;
+        btn.textContent = 'Enviando...';
+
+        var requestId = 'upd_' + Date.now();
+        var uploadedImages = [];
+
+        try {
+            uploadedImages = await uploadSubmissionImages('update', requestId, user);
+
+            var result = await FirebaseSystem.createEstablishmentUpdateRequest({
+                id: requestId,
+                managerId: currentEstablishmentUpdateContext.managerId,
+                establishmentId: currentEstablishmentUpdateContext.establishmentId,
+                establishmentName: currentEstablishmentUpdateContext.establishmentName,
+                establishmentCategory: currentEstablishmentUpdateContext.establishmentCategory,
+                establishmentSource: currentEstablishmentUpdateContext.establishmentSource,
+                currentSnapshot: currentEstablishmentUpdateContext.currentSnapshot,
+                requestedChanges: requestedChanges,
+                images: uploadedImages,
+                mainImage: getPrimaryImage(uploadedImages)
+            });
+
+            if (!result.success) {
+                if (uploadedImages.length > 0) {
+                    await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+                }
+                mostrarNotif(result.message, 'error');
+                return;
+            }
+
+            mostrarNotif(result.message, 'success');
+            fecharModal('establishmentUpdateModal');
+            carregarSolicitacoesAlteracaoEmpreendimento();
+        } catch (error) {
+            if (uploadedImages.length > 0) {
+                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            }
+            mostrarNotif(getStorageErrorMessage(error), 'error');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Enviar solicitação';

@@ -1,5 +1,59 @@
 # Plano de vinculo entre usuario e empreendimento
 
+## Status da Fase 1.4 - solicitacoes de alteracao de empreendimento
+
+Implementado nesta rodada:
+
+- usuario com vinculo ativo em `establishment_managers` pode abrir `Solicitar alteracao` em `Meus empreendimentos`;
+- o portal abre um modal especifico para alteracao de descricao, telefone, WhatsApp, Instagram, site, endereco/localizacao textual, horario e observacoes adicionais;
+- o envio grava em `establishment_update_requests`, sem tocar em `TURISMO_DATA`, mapa turistico, dados estaticos publicos ou collections aprovadas;
+- o portal reaproveita o upload existente para anexar ate 6 imagens em `submissions/establishment-updates/{uid}/{requestId}/image-01.ext`;
+- o usuario acompanha tudo em `Minhas solicitacoes de alteracao`;
+- o admin revisa na fila `Alteracoes de empreendimentos` dentro de `Aprovacoes`, com acoes para `approved`, `rejected` e `changes_requested`;
+- aprovar nesta fase significa apenas liberar a solicitacao para revisao/publicacao futura, sem aplicar nada automaticamente no site publico.
+
+Campos principais usados em `establishment_update_requests`:
+
+- `id`
+- `managerId`
+- `ownerUid`
+- `ownerEmail`
+- `ownerName`
+- `establishmentId`
+- `establishmentName`
+- `establishmentCategory`
+- `establishmentSource`
+- `currentSnapshot`
+- `requestedChanges`
+- `images`
+- `mainImage`
+- `imageCount`
+- `status`
+- `source`
+- `createdAt`
+- `updatedAt`
+- `submittedAt`
+- `reviewedAt`
+- `reviewedBy`
+- `reviewNotes`
+- `rejectionReason`
+- `changesRequestedNotes`
+
+Status validos nesta fase:
+
+- `pending`
+- `approved`
+- `rejected`
+- `changes_requested`
+
+Regras operacionais desta fase:
+
+- o vinculo ativo e revalidado antes da gravacao da solicitacao;
+- `currentSnapshot` guarda o retrato conhecido do empreendimento no momento do pedido;
+- `requestedChanges` guarda apenas os campos alterados pelo usuario;
+- imagens sao opcionais e nao substituem automaticamente a galeria publica;
+- o admin continua decidindo manualmente o que sera publicado depois, em fluxo separado.
+
 ## Objetivo desta fase
 
 Implementar o primeiro fluxo funcional de vinculo entre usuario autenticado e empreendimento turistico ja existente no site, sem editar dados publicos do mapa e sem mexer nas collections ja usadas para cadastros pendentes.

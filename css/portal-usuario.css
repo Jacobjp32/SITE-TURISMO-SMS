@@ -444,6 +444,11 @@
             color: #721c24;
         }
 
+        .status-info {
+            background: #e3f2fd;
+            color: #0f5c84;
+        }
+
         .empty-state {
             text-align: center;
             padding: 3rem;

@@ -30,6 +30,10 @@ service cloud.firestore {
       return signedIn() && resourceData.userId == request.auth.uid;
     }
 
+    function ownsOwnerUid(resourceData) {
+      return signedIn() && resourceData.ownerUid == request.auth.uid;
+    }
+
     function managerDoc(managerId) {
       return get(/databases/$(database)/documents/establishment_managers/$(managerId));
     }
@@ -158,6 +162,88 @@ service cloud.firestore {
         resource.data.active == true
       );
       allow create, update, delete: if isModerator();
+    }
+
+    match /establishment_update_requests/{requestId} {
+      allow read: if isModerator() || ownsOwnerUid(resource.data);
+      allow create: if signedIn() &&
+        request.resource.data.id == requestId &&
+        request.resource.data.managerId is string &&
+        request.resource.data.ownerUid == request.auth.uid &&
+        request.resource.data.ownerEmail == request.auth.token.email &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.source == 'establishment_manager' &&
+        request.resource.data.reviewedAt == null &&
+        request.resource.data.reviewedBy == null &&
+        request.resource.data.reviewNotes == '' &&
+        request.resource.data.rejectionReason == '' &&
+        request.resource.data.changesRequestedNotes == '' &&
+        exists(/databases/$(database)/documents/establishment_managers/$(request.resource.data.managerId)) &&
+        managerDoc(request.resource.data.managerId).data.userId == request.auth.uid &&
+        managerDoc(request.resource.data.managerId).data.active == true &&
+        managerDoc(request.resource.data.managerId).data.establishmentId == request.resource.data.establishmentId &&
+        managerDoc(request.resource.data.managerId).data.establishmentName == request.resource.data.establishmentName &&
+        request.resource.data.currentSnapshot is map &&
+        request.resource.data.currentSnapshot.keys().hasOnly([
+          'name',
+          'category',
+          'source',
+          'originalId',
+          'description',
+          'phone',
+          'whatsapp',
+          'instagram',
+          'website',
+          'address',
+          'openingHours',
+          'images',
+          'mainImage',
+          'imageCount'
+        ]) &&
+        request.resource.data.requestedChanges is map &&
+        request.resource.data.requestedChanges.keys().hasOnly([
+          'description',
+          'phone',
+          'whatsapp',
+          'instagram',
+          'website',
+          'address',
+          'openingHours',
+          'additionalNotes'
+        ]) &&
+        (
+          request.resource.data.requestedChanges.keys().size() > 0 ||
+          request.resource.data.imageCount > 0
+        ) &&
+        request.resource.data.images is list &&
+        request.resource.data.imageCount == request.resource.data.images.size() &&
+        request.resource.data.keys().hasOnly([
+          'id',
+          'managerId',
+          'ownerUid',
+          'ownerEmail',
+          'ownerName',
+          'establishmentId',
+          'establishmentName',
+          'establishmentCategory',
+          'establishmentSource',
+          'currentSnapshot',
+          'requestedChanges',
+          'images',
+          'mainImage',
+          'imageCount',
+          'status',
+          'source',
+          'createdAt',
+          'updatedAt',
+          'submittedAt',
+          'reviewedAt',
+          'reviewedBy',
+          'reviewNotes',
+          'rejectionReason',
+          'changesRequestedNotes'
+        ]);
+      allow update, delete: if isModerator();
     }
 
     match /noticias/{noticiaId} {

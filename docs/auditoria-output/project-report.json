@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T13:28:30.041Z",
+  "generatedAt": "2026-05-27T14:02:34.588Z",
   "totals": {
     "files": 326,
     "html": 36,
@@ -47,22 +47,22 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 671638
+      "bytes": 689819
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 587748
+      "bytes": 620271
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 292725
+      "bytes": 292816
     },
     {
       "ext": ".md",
       "files": 20,
-      "bytes": 184012
+      "bytes": 190268
     },
     {
       "ext": ".json",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 8526
+      "bytes": 11982
     },
     {
       "ext": ".xml",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 872509
+      "bytes": 908488
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -174,17 +174,17 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 411581
+      "bytes": 429762
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 292725
+      "bytes": 292816
     },
     {
       "dir": "docs",
       "files": 18,
-      "bytes": 169708
+      "bytes": 175964
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 69585
+      "bytes": 83371
     },
     {
       "path": "eventos.html",
@@ -849,7 +849,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 77067
+      "bytes": 95804
     },
     {
       "path": "privacidade.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 69585
+      "bytes": 83371
     },
     {
       "path": "css/mapa-3d.css",
@@ -1009,7 +1009,7 @@
       "path": "css/portal-usuario.css",
       "ext": ".css",
       "dir": "css",
-      "bytes": 20437
+      "bytes": 20528
     },
     {
       "path": "css/reservas.css",
@@ -1045,7 +1045,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 52195
+      "bytes": 65379
     },
     {
       "path": "js/reservas.js",
@@ -1099,7 +1099,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 77067
+      "bytes": 95804
     },
     {
       "path": "reservas.html",
@@ -1176,6 +1176,7 @@
         "section-aprovacoes",
         "eventos-pendentes-container",
         "estabelecimentos-pendentes-container",
+        "establishment-update-requests-container",
         "section-vinculos",
         "claims-pendentes-container",
         "section-gerenciar-vinculos",
@@ -1199,7 +1200,10 @@
         "managerNotes",
         "managerSaveBtn",
         "claim-note-${SEC.attr(claim.id)}",
-        "claim-reason-${SEC.attr(claim.id)}"
+        "claim-reason-${SEC.attr(claim.id)}",
+        "update-review-note-${SEC.attr(request.id)}",
+        "update-rejection-reason-${SEC.attr(request.id)}",
+        "update-changes-requested-${SEC.attr(request.id)}"
       ]
     },
     {
@@ -1788,6 +1792,7 @@
         "btnEnviarClaim",
         "claimRequestsList",
         "managedEstablishmentsList",
+        "establishmentUpdateRequestsList",
         "eventModal",
         "eventModalTitle",
         "linkedEventNotice",
@@ -1833,7 +1838,25 @@
         "establishmentImageCounter",
         "establishmentImageError",
         "establishmentImagePreview",
-        "btnEnviarEst"
+        "btnEnviarEst",
+        "establishmentUpdateModal",
+        "establishmentUpdateNotice",
+        "updateRequestEstablishmentName",
+        "updateManagerId",
+        "updateEstablishmentId",
+        "updateDescription",
+        "updatePhone",
+        "updateWhatsapp",
+        "updateInstagram",
+        "updateWebsite",
+        "updateAddress",
+        "updateOpeningHours",
+        "updateAdditionalNotes",
+        "updateImages",
+        "updateImageCounter",
+        "updateImageError",
+        "updateImagePreview",
+        "btnEnviarUpdateRequest"
       ]
     },
     {
@@ -2123,10 +2146,10 @@
     },
     {
       "file": "css/portal-usuario.css",
-      "bytes": 20431,
+      "bytes": 20522,
       "important": 0,
       "media": 1,
-      "selectorCount": 119
+      "selectorCount": 120
     },
     {
       "file": "css/reservas.css",
@@ -2681,7 +2704,7 @@
     },
     {
       "file": "js/establishment-catalog.js",
-      "bytes": 6791,
+      "bytes": 11787,
       "globals": [
         "var EXCLUDED_NAMES",
         "var PRIMARY_SOURCE_PRIORITY",
@@ -2692,6 +2715,8 @@
       ],
       "functions": [
         "buildCatalog",
+        "buildCurrentSnapshot",
+        "buildImageList",
         "classifyLegacyCategory",
         "cleanLabel",
         "ensureArray",
@@ -2700,10 +2725,15 @@
         "list",
         "loadLegacyRouteEstablishments",
         "looksClaimableLegacy",
+        "mergeCurrentSnapshot",
         "mergeEntry",
+        "normalizeInstagram",
         "normalizeText",
+        "normalizeWebsite",
+        "pickFirst",
         "ready",
         "shouldExcludeByName",
+        "splitSocialFields",
         "toEntry"
       ],
       "localStorage": 0,
@@ -2730,11 +2760,13 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 51994,
+      "bytes": 65125,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
         "const SDK_LOAD_TIMEOUT_MS",
+        "var ESTABLISHMENT_UPDATE_ALLOWED_FIELDS",
+        "var ESTABLISHMENT_UPDATE_FIELD_LIMITS",
         "window.FirebaseSystem",
         "window.currentUser",
         "window.dispatchEvent",
@@ -2746,6 +2778,10 @@
         "authErrorMessage",
         "basicUserFromAuth",
         "buildEstablishmentManagerDocId",
+        "buildSafeCurrentSnapshot",
+        "buildSafeImageMetadata",
+        "buildSafeRequestedChanges",
+        "ensureArray",
         "getComparableTimestamp",
         "getFirebaseAuth",
         "getFirebaseDB",
@@ -2753,7 +2789,11 @@
         "isActiveManagerRecord",
         "normalizeComparableId",
         "normalizeManagerRole",
+        "normalizeUpdateRequestStatus",
         "persistUserSession",
+        "sanitizeLongText",
+        "sanitizeSimpleText",
+        "sanitizeUpdateFieldValue",
         "sortByTimestampDesc",
         "tryInit",
         "withTimeout"
