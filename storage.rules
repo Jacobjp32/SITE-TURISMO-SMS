@@ -21,7 +21,7 @@ service firebase.storage {
         request.auth.uid == uid &&
         request.resource != null &&
         request.resource.size <= 3 * 1024 * 1024 &&
-        request.resource.contentType.matches('image/(jpeg|png|webp)');
+        request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
     }
 
     match /submissions/establishments/{uid}/{submissionId}/{fileName} {
