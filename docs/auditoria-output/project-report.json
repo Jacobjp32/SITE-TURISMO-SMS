@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T17:13:36.262Z",
+  "generatedAt": "2026-05-27T17:23:28.767Z",
   "totals": {
     "files": 351,
     "html": 36,
@@ -52,7 +52,7 @@
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 620264
+      "bytes": 622681
     },
     {
       "ext": ".css",
@@ -179,7 +179,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 908485
+      "bytes": 910902
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -864,7 +864,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 95804
+      "bytes": 98221
     },
     {
       "path": "privacidade.html",
@@ -1114,7 +1114,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 95804
+      "bytes": 98221
     },
     {
       "path": "reservas.html",

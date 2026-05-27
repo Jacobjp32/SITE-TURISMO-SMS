@@ -565,6 +565,7 @@
     var CLAIM_MESSAGE_MAX_LENGTH = 500;
     var PORTAL_ALLOWED_IMAGE_TYPES = {
         'image/jpeg': 'jpg',
+        'image/jpg': 'jpg',
         'image/png': 'png',
         'image/webp': 'webp'
     };
@@ -755,6 +756,35 @@
             .slice(0, 60) || 'arquivo';
     }
 
+    function sanitizeStorageFileName(value, fallbackExtension) {
+        var safeBase = String(value || '')
+            .replace(/\.[^.]+$/, '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9._-]+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-|-$/g, '')
+            .slice(0, 60) || 'arquivo';
+        return safeBase + '.' + fallbackExtension;
+    }
+
+    function getFileExtensionFromName(fileName) {
+        var match = String(fileName || '').toLowerCase().match(/\.([a-z0-9]+)$/);
+        return match ? match[1] : '';
+    }
+
+    function normalizeUploadContentType(file) {
+        var originalType = String(file && file.type || '').trim().toLowerCase();
+        var extension = getFileExtensionFromName(file && file.name);
+        if (originalType === 'image/jpg') return 'image/jpeg';
+        if (originalType in PORTAL_ALLOWED_IMAGE_TYPES) return originalType;
+        if (extension === 'jpg' || extension === 'jpeg') return 'image/jpeg';
+        if (extension === 'png') return 'image/png';
+        if (extension === 'webp') return 'image/webp';
+        return '';
+    }
+
     function getPortalCurrentUser() {
         return (window.FirebaseSystem && FirebaseSystem.getCurrentUser && FirebaseSystem.getCurrentUser()) || window.currentUser || null;
     }
@@ -853,7 +883,8 @@
         var accepted = [];
         var errors = [];
         Array.prototype.forEach.call(files || [], function(file) {
-            if (!(file.type in PORTAL_ALLOWED_IMAGE_TYPES)) {
+            var normalizedContentType = normalizeUploadContentType(file);
+            if (!(normalizedContentType in PORTAL_ALLOWED_IMAGE_TYPES)) {
                 errors.push(file.name + ': formato não suportado. Use JPG, PNG ou WebP.');
                 return;
             }
@@ -926,17 +957,28 @@
         var config = getUploadConfig(kind);
         var storage = getPortalStorage();
         var uploaded = [];
+        var currentUser = user || getPortalCurrentUser();
+
+        if (!currentUser || !currentUser.uid) {
+            throw new Error('Usuário autenticado não encontrado para o upload.');
+        }
 
         for (var i = 0; i < portalUploads[kind].length; i += 1) {
             var file = portalUploads[kind][i].file;
-            var extension = PORTAL_ALLOWED_IMAGE_TYPES[file.type];
-            var safeName = 'image-' + String(i + 1).padStart(2, '0') + '.' + extension;
-            var path = 'submissions/' + config.pathRoot + '/' + sanitizeStorageSegment(user.uid) + '/' + sanitizeStorageSegment(submissionId) + '/' + safeName;
+            var normalizedContentType = normalizeUploadContentType(file);
+            var extension = PORTAL_ALLOWED_IMAGE_TYPES[normalizedContentType];
+            if (!extension) {
+                var unsupportedError = new Error('Formato de imagem não suportado para upload.');
+                unsupportedError.code = 'storage/invalid-content-type';
+                throw unsupportedError;
+            }
+            var safeName = sanitizeStorageFileName('image-' + String(i + 1).padStart(2, '0'), extension);
+            var path = 'submissions/' + config.pathRoot + '/' + currentUser.uid + '/' + sanitizeStorageSegment(submissionId) + '/' + safeName;
             var ref = storage.ref(path);
 
             try {
                 var snapshot = await ref.put(file, {
-                    contentType: file.type,
+                    contentType: normalizedContentType,
                     cacheControl: 'private,max-age=0,no-transform'
                 });
                 var url = await snapshot.ref.getDownloadURL();
@@ -944,11 +986,21 @@
                     url: url,
                     path: path,
                     name: safeName,
-                    contentType: file.type,
+                    contentType: normalizedContentType,
                     size: file.size,
                     uploadedAt: new Date().toISOString()
                 });
             } catch (error) {
+                console.error('[portal-upload] Falha no upload de imagem', {
+                    uploadPath: path,
+                    fileName: file && file.name,
+                    originalContentType: file && file.type,
+                    normalizedContentType: normalizedContentType,
+                    fileSize: file && file.size,
+                    currentUserUid: currentUser && currentUser.uid,
+                    firebaseErrorCode: error && error.code,
+                    firebaseErrorMessage: error && error.message
+                });
                 await deleteUploadedFiles(uploaded);
                 throw error;
             }

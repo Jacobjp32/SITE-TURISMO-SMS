@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-27T17:13:36.262Z.
+Gerado em 2026-05-27T17:23:28.767Z.
 
 ## Resumo
 
@@ -23,7 +23,7 @@ Gerado em 2026-05-27T17:13:36.262Z.
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
 | .js | 35 | 691131 |
-| .html | 36 | 620264 |
+| .html | 36 | 622681 |
 | .css | 21 | 292816 |
 | .md | 20 | 206607 |
 | .json | 3 | 63320 |
@@ -140,7 +140,7 @@ Gerado em 2026-05-27T17:13:36.262Z.
 | offline.html | 2356 |
 | onde-ficar.html | 17798 |
 | para-o-trade.html | 15034 |
-| portal-usuario.html | 95804 |
+| portal-usuario.html | 98221 |
 | privacidade.html | 22461 |
 | reservas.html | 5675 |
 | rotas-completas.html | 4224 |
@@ -193,7 +193,7 @@ Gerado em 2026-05-27T17:13:36.262Z.
 | mapa-completo.html | 10456 |
 | para-o-trade.html | 15034 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 95804 |
+| portal-usuario.html | 98221 |
 | reservas.html | 5675 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |
