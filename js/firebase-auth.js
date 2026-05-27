@@ -817,6 +817,7 @@ const FirebaseSystem = {
             }
 
             var currentManager = Object.assign({ id: managerSnap.id }, managerSnap.data());
+            var currentUserId = String(currentManager.userId || '').trim();
             var establishmentId = String(managerData && managerData.establishmentId || currentManager.establishmentId || '').trim();
             var establishmentName = String(managerData && managerData.establishmentName || currentManager.establishmentName || '').trim();
             var role = normalizeManagerRole(managerData && managerData.role || currentManager.role);
@@ -824,11 +825,19 @@ const FirebaseSystem = {
             var notes = String(managerData && managerData.notes || '').trim();
             var revokeReason = String(managerData && managerData.revokeReason || '').trim();
 
+            if (!currentUserId) {
+                return {
+                    success: false,
+                    code: 'manager-missing-user',
+                    message: 'Este vínculo não possui usuário associado. Desative este registro e crie um novo vínculo.'
+                };
+            }
+
             if (!establishmentId || !establishmentName || !role) {
                 return { success: false, message: 'Empreendimento e função do vínculo são obrigatórios.' };
             }
 
-            var duplicateManager = await this.checkExistingManager(currentManager.userId, establishmentId, normalizedManagerId);
+            var duplicateManager = await this.checkExistingManager(currentUserId, establishmentId, normalizedManagerId);
             if (duplicateManager) {
                 return {
                     success: false,
@@ -841,14 +850,14 @@ const FirebaseSystem = {
             }
 
             var now = firebase.firestore.FieldValue.serverTimestamp();
-            var targetManagerId = buildEstablishmentManagerDocId(currentManager.userId, establishmentId);
+            var targetManagerId = buildEstablishmentManagerDocId(currentUserId, establishmentId);
 
             if (targetManagerId !== normalizedManagerId) {
                 var batch = db.batch();
                 var targetRef = db.collection('establishment_managers').doc(targetManagerId);
 
                 batch.set(targetRef, {
-                    userId: currentManager.userId,
+                    userId: currentUserId,
                     userEmail: currentManager.userEmail || '',
                     userName: currentManager.userName || '',
                     establishmentId: establishmentId,

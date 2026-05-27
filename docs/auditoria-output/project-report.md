@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-27T12:54:16.483Z.
+Gerado em 2026-05-27T13:28:30.041Z.
 
 ## Resumo
 
@@ -22,8 +22,8 @@ Gerado em 2026-05-27T12:54:16.483Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 671282 |
-| .html | 36 | 584731 |
+| .js | 35 | 671638 |
+| .html | 36 | 587748 |
 | .css | 21 | 292725 |
 | .md | 20 | 184012 |
 | .json | 3 | 63320 |
@@ -126,7 +126,7 @@ Gerado em 2026-05-27T12:54:16.483Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 66568 |
+| admin-firebase.html | 69585 |
 | eventos.html | 34257 |
 | galeria.html | 37789 |
 | index.html | 147022 |
@@ -174,7 +174,7 @@ Gerado em 2026-05-27T12:54:16.483Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 66568 |
+| admin-firebase.html | 69585 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -184,7 +184,7 @@ Gerado em 2026-05-27T12:54:16.483Z.
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 51839 |
+| js/firebase-auth.js | 52195 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |

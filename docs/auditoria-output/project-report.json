@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T12:54:16.483Z",
+  "generatedAt": "2026-05-27T13:28:30.041Z",
   "totals": {
     "files": 326,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 671282
+      "bytes": 671638
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 584731
+      "bytes": 587748
     },
     {
       "ext": ".css",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 869492
+      "bytes": 872509
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -174,7 +174,7 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 411225
+      "bytes": 411581
     },
     {
       "dir": "css",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 66568
+      "bytes": 69585
     },
     {
       "path": "eventos.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 66568
+      "bytes": 69585
     },
     {
       "path": "css/mapa-3d.css",
@@ -1045,7 +1045,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 51839
+      "bytes": 52195
     },
     {
       "path": "js/reservas.js",
@@ -1189,6 +1189,9 @@
         "managerForm",
         "managerFormMode",
         "managerFormId",
+        "managerOriginalUserId",
+        "managerOriginalUserEmail",
+        "managerOriginalUserName",
         "managerUserId",
         "managerEstablishmentId",
         "managerRole",
@@ -2727,7 +2730,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 51642,
+      "bytes": 51994,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",

@@ -810,6 +810,9 @@
                 <div class="admin-modal-body">
                     <input type="hidden" id="managerFormMode" value="create">
                     <input type="hidden" id="managerFormId" value="">
+                    <input type="hidden" id="managerOriginalUserId" value="">
+                    <input type="hidden" id="managerOriginalUserEmail" value="">
+                    <input type="hidden" id="managerOriginalUserName" value="">
 
                     <div class="admin-modal-grid">
                         <div class="admin-field">
@@ -1244,6 +1247,33 @@
             }).join('');
         }
 
+        function ensureManagerUserOption(userData) {
+            const select = document.getElementById('managerUserId');
+            const userId = String(userData && userData.userId || '').trim();
+
+            if (!userId) {
+                return;
+            }
+
+            const existingOption = Array.from(select.options).find(function(option) {
+                return option.value === userId;
+            });
+
+            if (existingOption) {
+                existingOption.selected = true;
+                return;
+            }
+
+            const tempOption = document.createElement('option');
+            const userName = String(userData && userData.userName || '').trim() || 'Usuário sem nome';
+            const userEmail = String(userData && userData.userEmail || '').trim() || 'Sem e-mail';
+
+            tempOption.value = userId;
+            tempOption.textContent = userName + ' | ' + userEmail;
+            tempOption.selected = true;
+            select.appendChild(tempOption);
+        }
+
         function populateManagerEstablishmentSelect(selectedEstablishmentId) {
             const select = document.getElementById('managerEstablishmentId');
             select.innerHTML = '<option value="">Selecione um empreendimento</option>' + adminEstablishmentCatalog.map(function(item) {
@@ -1259,6 +1289,9 @@
             document.getElementById('managerForm').reset();
             document.getElementById('managerFormMode').value = 'create';
             document.getElementById('managerFormId').value = '';
+            document.getElementById('managerOriginalUserId').value = '';
+            document.getElementById('managerOriginalUserEmail').value = '';
+            document.getElementById('managerOriginalUserName').value = '';
             document.getElementById('managerUserId').disabled = false;
             document.getElementById('managerSaveBtn').disabled = false;
             document.getElementById('managerSaveBtn').textContent = 'Salvar vínculo';
@@ -1283,6 +1316,9 @@
             document.getElementById('managerModalTitle').textContent = 'Adicionar vínculo';
             document.getElementById('managerFormMode').value = 'create';
             document.getElementById('managerFormId').value = '';
+            document.getElementById('managerOriginalUserId').value = '';
+            document.getElementById('managerOriginalUserEmail').value = '';
+            document.getElementById('managerOriginalUserName').value = '';
             document.getElementById('managerRole').value = 'manager';
             document.getElementById('managerActive').value = 'true';
             document.getElementById('managerNotes').value = '';
@@ -1302,11 +1338,15 @@
 
             await ensureManagerFormSources();
             populateManagerUserSelect(manager.userId);
+            ensureManagerUserOption(manager);
             populateManagerEstablishmentSelect(manager.establishmentId);
 
             document.getElementById('managerModalTitle').textContent = 'Editar vínculo';
             document.getElementById('managerFormMode').value = 'edit';
             document.getElementById('managerFormId').value = manager.id;
+            document.getElementById('managerOriginalUserId').value = manager.userId || '';
+            document.getElementById('managerOriginalUserEmail').value = manager.userEmail || '';
+            document.getElementById('managerOriginalUserName').value = manager.userName || '';
             document.getElementById('managerUserId').value = manager.userId || '';
             document.getElementById('managerEstablishmentId').value = manager.establishmentId || '';
             document.getElementById('managerRole').value = getManagerRoleFormValue(manager.role);
@@ -1323,6 +1363,9 @@
             const mode = document.getElementById('managerFormMode').value;
             const managerId = document.getElementById('managerFormId').value;
             const userId = document.getElementById('managerUserId').value;
+            const originalUserId = document.getElementById('managerOriginalUserId').value.trim();
+            const originalUserEmail = document.getElementById('managerOriginalUserEmail').value.trim();
+            const originalUserName = document.getElementById('managerOriginalUserName').value.trim();
             const establishmentId = document.getElementById('managerEstablishmentId').value;
             const role = document.getElementById('managerRole').value;
             const active = document.getElementById('managerActive').value === 'true';
@@ -1335,7 +1378,17 @@
                 return item.establishmentId === establishmentId;
             });
 
-            if (!selectedUser || !selectedEstablishment) {
+            if (!selectedEstablishment) {
+                alert('Selecione um empreendimento válido.');
+                return;
+            }
+
+            if (mode === 'edit' && !originalUserId) {
+                alert('Este vínculo não possui usuário associado. Desative este registro e crie um novo vínculo.');
+                return;
+            }
+
+            if (mode === 'create' && !selectedUser) {
                 alert('Selecione um usuário e um empreendimento válidos.');
                 return;
             }
@@ -1345,9 +1398,13 @@
 
             try {
                 const payload = {
-                    userId: selectedUser.id,
-                    userEmail: selectedUser.email || '',
-                    userName: selectedUser.nome || selectedUser.email || 'Usuário',
+                    userId: mode === 'edit' ? originalUserId : selectedUser.id,
+                    userEmail: mode === 'edit'
+                        ? (originalUserEmail || (selectedUser && selectedUser.email) || '')
+                        : (selectedUser.email || ''),
+                    userName: mode === 'edit'
+                        ? (originalUserName || (selectedUser && (selectedUser.nome || selectedUser.email)) || 'Usuário')
+                        : (selectedUser.nome || selectedUser.email || 'Usuário'),
                     establishmentId: selectedEstablishment.establishmentId,
                     establishmentName: selectedEstablishment.establishmentName,
                     role: role,
