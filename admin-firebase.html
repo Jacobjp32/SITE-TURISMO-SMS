@@ -411,6 +411,139 @@
             line-height: 1.4;
             margin-top: 0.35rem;
         }
+
+        .page-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .admin-helper-text {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .admin-helper-text code {
+            background: #f1f3f5;
+            border-radius: 6px;
+            padding: 0.1rem 0.35rem;
+        }
+
+        .manager-meta {
+            display: block;
+            color: #666;
+            font-size: 0.82rem;
+            line-height: 1.45;
+            margin-top: 0.3rem;
+        }
+
+        .manager-actions {
+            min-width: 160px;
+        }
+
+        .manager-actions .btn-sm {
+            margin-top: 0.25rem;
+        }
+
+        .admin-modal[hidden] {
+            display: none;
+        }
+
+        .admin-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 1200;
+        }
+
+        .admin-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .admin-modal-dialog {
+            position: relative;
+            z-index: 1;
+            width: min(760px, calc(100vw - 2rem));
+            margin: 4vh auto;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+            max-height: 92vh;
+            overflow-y: auto;
+        }
+
+        .admin-modal-header,
+        .admin-modal-footer {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .admin-modal-footer {
+            border-bottom: none;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        .admin-modal-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .admin-modal-body {
+            padding: 1.5rem;
+        }
+
+        .admin-modal-close {
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 1.6rem;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .admin-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
+        }
+
+        .admin-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        .admin-field label {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.92rem;
+        }
+
+        .admin-field.full {
+            grid-column: 1 / -1;
+        }
+
+        .btn-secondary {
+            background: #f1f3f5;
+            color: #333;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e7eb;
+        }
         
         /* Responsive */
         @media (max-width: 1024px) {
@@ -450,6 +583,21 @@
             .data-table td {
                 padding: 0.5rem;
             }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .page-actions,
+            .admin-modal-footer {
+                width: 100%;
+            }
+
+            .admin-modal-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -486,6 +634,7 @@
                 <li><a class="active" data-section="home">📊 <span>Dashboard</span></a></li>
                 <li><a data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
                 <li><a data-section="vinculos">🤝 <span>Solicitações de vínculo</span></a></li>
+                <li><a data-section="gerenciar-vinculos">🗂️ <span>Gerenciar Vínculos</span></a></li>
                 <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
                 <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
@@ -535,6 +684,7 @@
                     <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                         <button class="btn-primary" onclick="showSection('aprovacoes')">✅ Ver Aprovações</button>
                         <button class="btn-primary" onclick="showSection('vinculos')">🤝 Ver Vínculos</button>
+                        <button class="btn-primary" onclick="showSection('gerenciar-vinculos')">🗂️ Gerenciar Vínculos</button>
                         <button class="btn-primary" onclick="showSection('usuarios')">👥 Gerenciar Usuários</button>
                         <a href="/portal-usuario" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
                     </div>
@@ -587,6 +737,30 @@
                 </div>
             </section>
 
+            <!-- Gerenciar Vínculos Section -->
+            <section class="admin-section" id="section-gerenciar-vinculos">
+                <div class="page-header">
+                    <h1>🗂️ Gerenciar Vínculos</h1>
+                    <div class="page-actions">
+                        <button class="btn-primary" onclick="loadEstablishmentManagers()">🔄 Atualizar</button>
+                        <button class="btn-primary" onclick="openAddManagerModal()">➕ Adicionar vínculo</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Vínculos já aprovados ou cadastrados manualmente</h2>
+                    </div>
+                    <p class="admin-helper-text">
+                        Use esta área para adicionar, corrigir, desativar ou reativar registros em <code>establishment_managers</code>.
+                        Isso não altera a permissão global do usuário no sistema.
+                    </p>
+                    <div id="establishment-managers-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Usuários Section -->
             <section class="admin-section" id="section-usuarios">
                 <div class="page-header">
@@ -598,6 +772,10 @@
                     <div class="card-header">
                         <h2>Lista de Usuários</h2>
                     </div>
+                    <p class="admin-helper-text">
+                        Permissão define acesso global ao sistema. Para liberar um usuário a gerenciar um empreendimento específico, use a seção <strong>Gerenciar Vínculos</strong>.
+                        <code>user</code> atende turistas e empreendedores, <code>moderator</code> é moderação global e <code>admin</code> é administração global.
+                    </p>
                     <div id="usuarios-container">
                         <div class="loading">Carregando...</div>
                     </div>
@@ -619,7 +797,67 @@
         </main>
     </div>
 
+    <div class="admin-modal" id="managerModal" hidden>
+        <div class="admin-modal-backdrop" onclick="closeManagerModal()"></div>
+        <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="managerModalTitle">
+            <div class="admin-modal-header">
+                <div class="admin-modal-title">
+                    <h2 id="managerModalTitle">Adicionar vínculo</h2>
+                    <button class="admin-modal-close" type="button" aria-label="Fechar" onclick="closeManagerModal()">&times;</button>
+                </div>
+            </div>
+            <form id="managerForm">
+                <div class="admin-modal-body">
+                    <input type="hidden" id="managerFormMode" value="create">
+                    <input type="hidden" id="managerFormId" value="">
+
+                    <div class="admin-modal-grid">
+                        <div class="admin-field">
+                            <label for="managerUserId">Usuário</label>
+                            <select id="managerUserId" required></select>
+                        </div>
+
+                        <div class="admin-field">
+                            <label for="managerEstablishmentId">Empreendimento</label>
+                            <select id="managerEstablishmentId" required></select>
+                        </div>
+
+                        <div class="admin-field">
+                            <label for="managerRole">Tipo de vínculo</label>
+                            <select id="managerRole" required>
+                                <option value="owner">Owner (proprietário)</option>
+                                <option value="manager">Manager (gestor)</option>
+                                <option value="representative">Representative (representante)</option>
+                            </select>
+                        </div>
+
+                        <div class="admin-field">
+                            <label for="managerActive">Status</label>
+                            <select id="managerActive" required>
+                                <option value="true">Ativo</option>
+                                <option value="false">Inativo</option>
+                            </select>
+                        </div>
+
+                        <div class="admin-field full">
+                            <label for="managerNotes">Observação administrativa</label>
+                            <textarea class="admin-textarea" id="managerNotes" maxlength="500" placeholder="Observação opcional para controle interno"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-modal-footer">
+                    <button class="btn-secondary" type="button" onclick="closeManagerModal()">Cancelar</button>
+                    <button class="btn-primary" type="submit" id="managerSaveBtn">Salvar vínculo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="js/security-utils.js"></script>
+    <script src="js/data/restaurantes.js"></script>
+    <script src="js/data/hospedagens.js"></script>
+    <script src="js/establishment-catalog.js"></script>
     <script src="config.js"></script>
     <!-- Painel administrativo principal: permissões controladas por usuarios/{uid}.role no Firebase. -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -629,10 +867,14 @@
     <script src="js/firebase-auth.js?v=auth-login-fix-20260525"></script>
     <script>
         const SEC = window.SMSecurity;
+        var adminUsersCache = [];
+        var adminEstablishmentCatalog = [];
+        var adminManagersCache = [];
 
         // Aguardar Firebase estar pronto antes de vincular formulário de login
         window.addEventListener('firebaseReady', function() {
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
+            document.getElementById('managerForm').addEventListener('submit', handleManagerFormSubmit);
             document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
                 link.addEventListener('click', () => showSection(link.dataset.section));
             });
@@ -702,6 +944,7 @@
             // Carregar dados da seção
             if (section === 'aprovacoes') loadPendingData();
             if (section === 'vinculos') loadEstablishmentClaims();
+            if (section === 'gerenciar-vinculos') loadEstablishmentManagers();
             if (section === 'usuarios') loadUsers();
             if (section === 'eventos') loadApprovedEvents();
         }
@@ -916,6 +1159,280 @@
             `;
         }
 
+        async function ensureManagerFormSources() {
+            var results = await Promise.all([
+                adminUsersCache.length ? Promise.resolve(adminUsersCache) : Promise.resolve(FirebaseSystem.getUsers()),
+                adminEstablishmentCatalog.length
+                    ? Promise.resolve(adminEstablishmentCatalog)
+                    : (window.EstablishmentCatalog && typeof window.EstablishmentCatalog.ready === 'function'
+                        ? window.EstablishmentCatalog.ready()
+                        : Promise.resolve([]))
+            ]);
+
+            adminUsersCache = Array.isArray(results[0]) ? results[0].slice().sort(function(a, b) {
+                return String(a.nome || '').localeCompare(String(b.nome || ''), 'pt-BR');
+            }) : [];
+            adminEstablishmentCatalog = Array.isArray(results[1]) ? results[1].slice() : [];
+        }
+
+        async function loadEstablishmentManagers() {
+            const container = document.getElementById('establishment-managers-container');
+            container.innerHTML = '<div class="loading">Carregando...</div>';
+
+            const managers = await FirebaseSystem.listAllEstablishmentManagers();
+            adminManagersCache = Array.isArray(managers) ? managers.slice() : [];
+
+            if (!adminManagersCache.length) {
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhum vínculo cadastrado ainda.</p>';
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Usuário</th>
+                            <th>E-mail</th>
+                            <th>Empreendimento</th>
+                            <th>Função</th>
+                            <th>Status</th>
+                            <th>Aprovado em</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${adminManagersCache.map(manager => `
+                            <tr>
+                                <td>
+                                    <strong>${SEC.html(manager.userName, '—')}</strong>
+                                    ${manager.claimId ? `<span class="manager-meta">Origem: ${SEC.html(manager.claimId === 'manual' ? 'manual' : manager.claimId)}</span>` : ''}
+                                </td>
+                                <td>${SEC.html(manager.userEmail, '—')}</td>
+                                <td>
+                                    <strong>${SEC.html(manager.establishmentName, '—')}</strong>
+                                    <span class="manager-meta">${SEC.html(manager.establishmentId || '—')}</span>
+                                    ${manager.notes ? `<span class="manager-meta">Obs.: ${SEC.html(manager.notes)}</span>` : ''}
+                                </td>
+                                <td>${SEC.html(getManagerRoleAdminLabel(manager.role))}</td>
+                                <td>
+                                    <span class="badge ${manager.active === false ? 'badge-danger' : 'badge-success'}">
+                                        ${manager.active === false ? 'Inativo' : 'Ativo'}
+                                    </span>
+                                    ${manager.revokeReason ? `<span class="manager-meta">Motivo: ${SEC.html(manager.revokeReason)}</span>` : ''}
+                                </td>
+                                <td>${SEC.html(formatFirestoreDate(manager.approvedAt))}</td>
+                                <td class="manager-actions">
+                                    <button class="btn-sm btn-edit" onclick="openEditManagerModal('${SEC.js(manager.id)}')">✏️ Editar</button>
+                                    ${manager.active === false
+                                        ? `<button class="btn-sm btn-approve" onclick="reactivateManager('${SEC.js(manager.id)}')">✅ Reativar</button>`
+                                        : `<button class="btn-sm btn-reject" onclick="deactivateManager('${SEC.js(manager.id)}')">🚫 Desativar</button>`}
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function populateManagerUserSelect(selectedUserId) {
+            const select = document.getElementById('managerUserId');
+            select.innerHTML = '<option value="">Selecione um usuário</option>' + adminUsersCache.map(function(user) {
+                return '<option value="' + SEC.attr(user.id) + '"' +
+                    (user.id === selectedUserId ? ' selected' : '') + '>' +
+                    SEC.html((user.nome || 'Usuário sem nome') + ' | ' + (user.email || 'Sem e-mail')) +
+                    '</option>';
+            }).join('');
+        }
+
+        function populateManagerEstablishmentSelect(selectedEstablishmentId) {
+            const select = document.getElementById('managerEstablishmentId');
+            select.innerHTML = '<option value="">Selecione um empreendimento</option>' + adminEstablishmentCatalog.map(function(item) {
+                return '<option value="' + SEC.attr(item.establishmentId) + '"' +
+                    (item.establishmentId === selectedEstablishmentId ? ' selected' : '') + '>' +
+                    SEC.html(item.establishmentName + ' | ' + (item.category || 'Sem categoria')) +
+                    '</option>';
+            }).join('');
+        }
+
+        function closeManagerModal() {
+            document.getElementById('managerModal').hidden = true;
+            document.getElementById('managerForm').reset();
+            document.getElementById('managerFormMode').value = 'create';
+            document.getElementById('managerFormId').value = '';
+            document.getElementById('managerUserId').disabled = false;
+            document.getElementById('managerSaveBtn').disabled = false;
+            document.getElementById('managerSaveBtn').textContent = 'Salvar vínculo';
+        }
+
+        async function openAddManagerModal() {
+            await ensureManagerFormSources();
+
+            if (!adminUsersCache.length) {
+                alert('Não foi possível carregar a lista de usuários.');
+                return;
+            }
+
+            if (!adminEstablishmentCatalog.length) {
+                alert('Não foi possível carregar o catálogo de empreendimentos.');
+                return;
+            }
+
+            populateManagerUserSelect('');
+            populateManagerEstablishmentSelect('');
+
+            document.getElementById('managerModalTitle').textContent = 'Adicionar vínculo';
+            document.getElementById('managerFormMode').value = 'create';
+            document.getElementById('managerFormId').value = '';
+            document.getElementById('managerRole').value = 'manager';
+            document.getElementById('managerActive').value = 'true';
+            document.getElementById('managerNotes').value = '';
+            document.getElementById('managerUserId').disabled = false;
+            document.getElementById('managerModal').hidden = false;
+        }
+
+        async function openEditManagerModal(managerId) {
+            const manager = adminManagersCache.find(function(item) {
+                return item.id === managerId;
+            });
+
+            if (!manager) {
+                alert('Vínculo não encontrado na lista atual.');
+                return;
+            }
+
+            await ensureManagerFormSources();
+            populateManagerUserSelect(manager.userId);
+            populateManagerEstablishmentSelect(manager.establishmentId);
+
+            document.getElementById('managerModalTitle').textContent = 'Editar vínculo';
+            document.getElementById('managerFormMode').value = 'edit';
+            document.getElementById('managerFormId').value = manager.id;
+            document.getElementById('managerUserId').value = manager.userId || '';
+            document.getElementById('managerEstablishmentId').value = manager.establishmentId || '';
+            document.getElementById('managerRole').value = getManagerRoleFormValue(manager.role);
+            document.getElementById('managerActive').value = manager.active === false ? 'false' : 'true';
+            document.getElementById('managerNotes').value = manager.notes || '';
+            document.getElementById('managerUserId').disabled = true;
+            document.getElementById('managerModal').hidden = false;
+        }
+
+        async function handleManagerFormSubmit(event) {
+            event.preventDefault();
+
+            const saveBtn = document.getElementById('managerSaveBtn');
+            const mode = document.getElementById('managerFormMode').value;
+            const managerId = document.getElementById('managerFormId').value;
+            const userId = document.getElementById('managerUserId').value;
+            const establishmentId = document.getElementById('managerEstablishmentId').value;
+            const role = document.getElementById('managerRole').value;
+            const active = document.getElementById('managerActive').value === 'true';
+            const notes = document.getElementById('managerNotes').value.trim();
+
+            const selectedUser = adminUsersCache.find(function(user) {
+                return user.id === userId;
+            });
+            const selectedEstablishment = adminEstablishmentCatalog.find(function(item) {
+                return item.establishmentId === establishmentId;
+            });
+
+            if (!selectedUser || !selectedEstablishment) {
+                alert('Selecione um usuário e um empreendimento válidos.');
+                return;
+            }
+
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Salvando...';
+
+            try {
+                const payload = {
+                    userId: selectedUser.id,
+                    userEmail: selectedUser.email || '',
+                    userName: selectedUser.nome || selectedUser.email || 'Usuário',
+                    establishmentId: selectedEstablishment.establishmentId,
+                    establishmentName: selectedEstablishment.establishmentName,
+                    role: role,
+                    active: active,
+                    notes: notes
+                };
+
+                if (mode === 'create') {
+                    const existingManager = await FirebaseSystem.checkExistingManager(payload.userId, payload.establishmentId);
+
+                    if (existingManager && existingManager.active === false) {
+                        if (!active) {
+                            alert('Já existe um vínculo inativo para este usuário e empreendimento. Edite ou reative o registro existente.');
+                            return;
+                        }
+
+                        if (!confirm('Já existe um vínculo inativo para este usuário e empreendimento. Deseja reativá-lo e atualizar os dados?')) {
+                            return;
+                        }
+
+                        const reactivateResult = await FirebaseSystem.updateEstablishmentManager(existingManager.id, {
+                            establishmentId: payload.establishmentId,
+                            establishmentName: payload.establishmentName,
+                            role: payload.role,
+                            active: true,
+                            notes: notes
+                        });
+                        alert(reactivateResult.message);
+                        if (reactivateResult.success) {
+                            closeManagerModal();
+                            loadEstablishmentManagers();
+                        }
+                        return;
+                    }
+
+                    const result = await FirebaseSystem.createEstablishmentManager(payload);
+                    alert(result.message);
+                    if (result.success) {
+                        closeManagerModal();
+                        loadEstablishmentManagers();
+                    }
+                    return;
+                }
+
+                const updateResult = await FirebaseSystem.updateEstablishmentManager(managerId, {
+                    establishmentId: payload.establishmentId,
+                    establishmentName: payload.establishmentName,
+                    role: payload.role,
+                    active: active,
+                    notes: notes
+                });
+                alert(updateResult.message);
+                if (updateResult.success) {
+                    closeManagerModal();
+                    loadEstablishmentManagers();
+                }
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Salvar vínculo';
+            }
+        }
+
+        async function deactivateManager(managerId) {
+            const reason = prompt('Motivo da desativação (opcional):');
+            if (reason === null) return;
+
+            if (!confirm('Desativar este vínculo?')) return;
+
+            const result = await FirebaseSystem.deactivateEstablishmentManager(managerId, reason);
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentManagers();
+            }
+        }
+
+        async function reactivateManager(managerId) {
+            if (!confirm('Reativar este vínculo?')) return;
+
+            const result = await FirebaseSystem.reactivateEstablishmentManager(managerId);
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentManagers();
+            }
+        }
+
         async function loadApprovedEvents() {
             // Buscar eventos aprovados diretamente
             try {
@@ -1002,6 +1519,9 @@
             const result = await FirebaseSystem.approveEstablishmentClaim(claimId, notes);
             alert(result.message);
             loadEstablishmentClaims();
+            if (result.success) {
+                loadEstablishmentManagers();
+            }
         }
 
         async function rejectClaimReview(claimId) {
@@ -1062,6 +1582,28 @@
                 gerente_responsavel: 'Gerente / responsável',
                 representante_autorizado: 'Representante autorizado'
             })[String(role || '')] || 'Não informado';
+        }
+
+        function getManagerRoleFormValue(role) {
+            return ({
+                owner: 'owner',
+                manager: 'manager',
+                representative: 'representative',
+                proprietario: 'owner',
+                gerente_responsavel: 'manager',
+                representante_autorizado: 'representative'
+            })[String(role || '')] || 'manager';
+        }
+
+        function getManagerRoleAdminLabel(role) {
+            return ({
+                owner: 'owner',
+                manager: 'manager',
+                representative: 'representative',
+                proprietario: 'owner',
+                gerente_responsavel: 'manager',
+                representante_autorizado: 'representative'
+            })[String(role || '')] || 'não informado';
         }
 
         function getClaimInputValue(prefix, claimId) {

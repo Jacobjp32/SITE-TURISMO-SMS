@@ -80,6 +80,14 @@ Checklist minimo para a fase de eventos vinculados:
 - o modal de evento mostra o aviso do empreendimento vinculado;
 - o admin continua listando eventos pendentes e identifica quando o `source` e `establishment_manager`.
 
+Checklist minimo adicional para a fase de gestao de vinculos:
+
+- o menu `Gerenciar Vínculos` aparece no admin;
+- a lista de `establishment_managers` carrega ou falha com erro amigavel;
+- o botao `Adicionar vínculo` abre modal com usuarios e empreendimentos;
+- `Gerenciar Usuários` mostra o aviso de que permissao global nao e vinculo de empreendimento;
+- editar, desativar e reativar um vinculo nao quebram o portal nem os eventos vinculados.
+
 Servidor local:
 
 ```bash

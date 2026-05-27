@@ -11,6 +11,62 @@ Escopo entregue:
 - usuario passa a ver solicitacoes e vinculos aprovados no portal;
 - vinculo aprovado aparece em `Meus empreendimentos` apenas como leitura.
 
+## Atualizacao - gestao administrativa de vinculos
+
+Escopo entregue nesta rodada:
+
+- nova secao `Gerenciar Vínculos` no `admin-firebase.html`, separada de `Gerenciar Usuários`;
+- listagem completa da collection `establishment_managers`;
+- criacao manual de vinculo para usuario existente + empreendimento existente;
+- edicao de funcao, status, observacoes e correcao de empreendimento;
+- desativacao e reativacao sem apagar historico;
+- aviso explicito de que `usuarios.role` e permissao global, nao acesso a empreendimento.
+
+## Diferenca entre role global e vinculo de empreendimento
+
+- `usuarios.role = user` continua sendo o padrao para turista, empreendedor e usuario comum;
+- `usuarios.role = moderator` e moderacao global do sistema;
+- `usuarios.role = admin` e administracao global do sistema;
+- acesso a empreendimento especifico nao vem de `usuarios.role`, e sim de `establishment_managers`.
+
+Exemplo pratico:
+
+- um empreendedor pode continuar com `role = user` e mesmo assim gerenciar eventos vinculados se tiver um documento ativo em `establishment_managers`.
+
+## Como adicionar vinculo manualmente
+
+1. O admin entra em `Gerenciar Vínculos`.
+2. Clica em `Adicionar vínculo`.
+3. Seleciona um usuario existente da collection `usuarios`.
+4. Seleciona um empreendimento existente do catalogo `js/establishment-catalog.js`.
+5. Escolhe a funcao:
+   - `owner`
+   - `manager`
+   - `representative`
+6. Define se o vinculo ja nasce ativo e pode registrar observacao administrativa.
+7. O painel grava em `establishment_managers` sem alterar `usuarios.role`.
+
+## Como editar, desativar e reativar
+
+- `Editar` permite ajustar funcao, observacao, status e corrigir o empreendimento vinculado.
+- Se o empreendimento mudar, o admin cria o novo documento tecnico do manager e marca o registro antigo como substituido, evitando perder rastreabilidade.
+- `Desativar` marca `active = false` e registra `revokedAt`, `revokedBy` e `revokeReason`.
+- `Reativar` volta o documento para `active = true` sem criar duplicidade.
+
+## Como corrigir empreendimento escolhido errado
+
+Se o usuario foi vinculado ao empreendimento errado:
+
+1. abrir o registro em `Gerenciar Vínculos`;
+2. trocar o empreendimento no modal de edicao;
+3. salvar a correcao;
+4. o admin mantem o registro antigo como inativo/substituido e passa a usar o novo alvo correto.
+
+Se o erro foi no usuario escolhido, o caminho recomendado continua sendo:
+
+1. desativar o vinculo incorreto;
+2. criar um novo vinculo manual para o usuario certo.
+
 ## Atualizacao - eventos vinculados ao empreendimento
 
 Escopo entregue nesta fase:
@@ -159,6 +215,13 @@ Campos usados nesta fase:
 - `approvedAt`
 - `approvedBy`
 - `claimId`
+- `notes`
+- `updatedAt`
+- `updatedBy`
+- `revokedAt`
+- `revokedBy`
+- `revokeReason`
+- `replacedBy`
 
 ## Fluxo do usuario
 
@@ -221,7 +284,7 @@ Politica desejada nesta fase:
 - usuario nao cria nem edita `establishment_managers`;
 - admin/moderator le todos os claims;
 - admin/moderator aprova e rejeita claims;
-- usuario le apenas os proprios managers;
+- usuario le apenas os proprios managers ativos;
 - admin/moderator le e escreve managers.
 
 ## Passo manual necessario
@@ -243,6 +306,7 @@ Antes de usar em ambiente real:
 - `Meus empreendimentos` e apenas leitura;
 - o evento vinculado ainda usa o mesmo formulario do evento comum; nao existe painel detalhado separado por empreendimento;
 - o painel admin continua exigindo `role === admin` na UI, embora as rules locais aceitem `admin` e `moderator` para moderacao;
+- o admin ainda nao possui CMS de noticias ou galeria administrativa;
 - nao ha workflow de edicao de dados publicos;
 - nao ha sincronizacao com o mapa publico.
 - nao existe selo publico na agenda para indicar que um evento aprovado veio de empreendimento vinculado;

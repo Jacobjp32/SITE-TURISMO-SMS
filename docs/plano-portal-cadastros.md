@@ -1,5 +1,23 @@
 # Plano tecnico do Portal de Cadastros
 
+## Status da Fase 1.3 - gestao administrativa de vinculos
+
+Implementado nesta rodada:
+
+- `admin-firebase.html` ganhou a secao separada `Gerenciar Vínculos`;
+- o admin pode listar `establishment_managers` sem depender de `Gerenciar Usuários`;
+- o admin pode adicionar vinculo manual usando `usuarios` + catalogo de empreendimentos;
+- o admin pode editar funcao, status, observacao e corrigir o empreendimento vinculado;
+- o admin pode desativar e reativar vinculos sem apagar o documento por padrao;
+- `Gerenciar Usuários` agora explica que permissao global nao substitui vinculo de empreendimento.
+
+Mantido fora desta fase:
+
+- nenhuma edicao publica de empreendimento;
+- nenhuma publicacao automatica no mapa;
+- nenhum CMS de noticias;
+- nenhuma galeria administrativa.
+
 ## Status da Fase 1.2 - eventos vinculados ao empreendimento
 
 Implementado nesta rodada:
@@ -172,6 +190,7 @@ Estado atual:
 Observacao importante:
 
 - Hoje existe pequena assimetria entre UI e rules: a UI restringe o painel a `admin`, enquanto as rules aceitam `moderator` para acoes moderadas. Isso nao quebra seguranca, mas precisa ser lembrado quando o painel for evoluido.
+- Vinculo com empreendimento nao usa `usuarios.role`; ele depende de `establishment_managers`, inclusive para liberar eventos vinculados.
 
 ## 5. Existe Storage Rules hoje?
 

@@ -113,6 +113,18 @@ function buildEstablishmentManagerDocId(userId, establishmentId) {
         String(establishmentId || '').replace(/[^\w-]+/g, '_');
 }
 
+function normalizeManagerRole(value) {
+    var role = String(value || '').trim();
+    return ({
+        owner: 'proprietario',
+        manager: 'gerente_responsavel',
+        representative: 'representante_autorizado',
+        proprietario: 'proprietario',
+        gerente_responsavel: 'gerente_responsavel',
+        representante_autorizado: 'representante_autorizado'
+    })[role] || '';
+}
+
 function isActiveManagerRecord(manager, userId, establishmentId) {
     if (!manager || manager.active === false) return false;
     if (userId && manager.userId !== userId) return false;
@@ -676,6 +688,295 @@ const FirebaseSystem = {
         }
     },
 
+    listAllEstablishmentManagers: async function() {
+        if (!this.isModerator()) return [];
+        try {
+            var snap = await firebase.firestore().collection('establishment_managers').get();
+            return snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).sort(function(a, b) {
+                if ((a.active === false) !== (b.active === false)) {
+                    return a.active === false ? 1 : -1;
+                }
+
+                var userCompare = String(a.userName || '').localeCompare(String(b.userName || ''), 'pt-BR');
+                if (userCompare !== 0) return userCompare;
+
+                return String(a.establishmentName || '').localeCompare(String(b.establishmentName || ''), 'pt-BR');
+            });
+        } catch(error) {
+            console.error(error);
+            return [];
+        }
+    },
+
+    checkExistingManager: async function(userId, establishmentId, excludeManagerId) {
+        if (!this.isModerator()) return null;
+
+        var normalizedUserId = String(userId || '').trim();
+        var normalizedEstablishmentId = String(establishmentId || '').trim();
+        var normalizedExcludeId = String(excludeManagerId || '').trim();
+
+        if (!normalizedUserId || !normalizedEstablishmentId) return null;
+
+        try {
+            var snap = await firebase.firestore().collection('establishment_managers')
+                .where('userId', '==', normalizedUserId)
+                .get();
+
+            var targetId = normalizeComparableId(normalizedEstablishmentId);
+            return snap.docs.map(function(doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).find(function(item) {
+                return item.id !== normalizedExcludeId &&
+                    normalizeComparableId(item.establishmentId) === targetId;
+            }) || null;
+        } catch(error) {
+            console.error(error);
+            return null;
+        }
+    },
+
+    createEstablishmentManager: async function(managerData) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var userId = String(managerData && managerData.userId || '').trim();
+        var userEmail = String(managerData && managerData.userEmail || '').trim();
+        var userName = String(managerData && managerData.userName || '').trim();
+        var establishmentId = String(managerData && managerData.establishmentId || '').trim();
+        var establishmentName = String(managerData && managerData.establishmentName || '').trim();
+        var role = normalizeManagerRole(managerData && managerData.role);
+        var active = managerData && managerData.active === false ? false : true;
+        var notes = String(managerData && managerData.notes || '').trim();
+        var claimId = String(managerData && managerData.claimId || 'manual').trim() || 'manual';
+        var revokeReason = String(managerData && managerData.revokeReason || '').trim();
+
+        if (!userId || !userEmail || !userName || !establishmentId || !establishmentName || !role) {
+            return { success: false, message: 'Preencha usuário, empreendimento e função do vínculo.' };
+        }
+
+        try {
+            var existingManager = await this.checkExistingManager(userId, establishmentId);
+            if (existingManager) {
+                return {
+                    success: false,
+                    code: existingManager.active === false ? 'manager-inactive-exists' : 'manager-active-exists',
+                    existingManager: existingManager,
+                    message: existingManager.active === false
+                        ? 'Já existe um vínculo inativo para este usuário e empreendimento.'
+                        : 'Já existe vínculo ativo para este usuário e empreendimento.'
+                };
+            }
+
+            var db = firebase.firestore();
+            var now = firebase.firestore.FieldValue.serverTimestamp();
+            var managerId = buildEstablishmentManagerDocId(userId, establishmentId);
+
+            await db.collection('establishment_managers').doc(managerId).set({
+                userId: userId,
+                userEmail: userEmail,
+                userName: userName,
+                establishmentId: establishmentId,
+                establishmentName: establishmentName,
+                role: role,
+                active: active,
+                approvedAt: now,
+                approvedBy: currentUser.uid,
+                claimId: claimId,
+                notes: notes,
+                updatedAt: now,
+                updatedBy: currentUser.uid,
+                revokedAt: active ? null : now,
+                revokedBy: active ? null : currentUser.uid,
+                revokeReason: active ? '' : (revokeReason || 'Criado manualmente como inativo'),
+                replacedBy: ''
+            });
+
+            return { success: true, message: 'Vínculo criado com sucesso.', managerId: managerId };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao criar vínculo.' };
+        }
+    },
+
+    updateEstablishmentManager: async function(managerId, managerData) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedManagerId = String(managerId || '').trim();
+        if (!normalizedManagerId) {
+            return { success: false, message: 'Vínculo não informado.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var managerRef = db.collection('establishment_managers').doc(normalizedManagerId);
+            var managerSnap = await managerRef.get();
+
+            if (!managerSnap.exists) {
+                return { success: false, message: 'Vínculo não encontrado.' };
+            }
+
+            var currentManager = Object.assign({ id: managerSnap.id }, managerSnap.data());
+            var establishmentId = String(managerData && managerData.establishmentId || currentManager.establishmentId || '').trim();
+            var establishmentName = String(managerData && managerData.establishmentName || currentManager.establishmentName || '').trim();
+            var role = normalizeManagerRole(managerData && managerData.role || currentManager.role);
+            var active = managerData && managerData.active === false ? false : true;
+            var notes = String(managerData && managerData.notes || '').trim();
+            var revokeReason = String(managerData && managerData.revokeReason || '').trim();
+
+            if (!establishmentId || !establishmentName || !role) {
+                return { success: false, message: 'Empreendimento e função do vínculo são obrigatórios.' };
+            }
+
+            var duplicateManager = await this.checkExistingManager(currentManager.userId, establishmentId, normalizedManagerId);
+            if (duplicateManager) {
+                return {
+                    success: false,
+                    code: duplicateManager.active === false ? 'manager-inactive-exists' : 'manager-active-exists',
+                    existingManager: duplicateManager,
+                    message: duplicateManager.active === false
+                        ? 'Já existe um vínculo inativo para este usuário e empreendimento.'
+                        : 'Já existe vínculo ativo para este usuário e empreendimento.'
+                };
+            }
+
+            var now = firebase.firestore.FieldValue.serverTimestamp();
+            var targetManagerId = buildEstablishmentManagerDocId(currentManager.userId, establishmentId);
+
+            if (targetManagerId !== normalizedManagerId) {
+                var batch = db.batch();
+                var targetRef = db.collection('establishment_managers').doc(targetManagerId);
+
+                batch.set(targetRef, {
+                    userId: currentManager.userId,
+                    userEmail: currentManager.userEmail || '',
+                    userName: currentManager.userName || '',
+                    establishmentId: establishmentId,
+                    establishmentName: establishmentName,
+                    role: role,
+                    active: active,
+                    approvedAt: currentManager.approvedAt || now,
+                    approvedBy: currentManager.approvedBy || currentUser.uid,
+                    claimId: currentManager.claimId || 'manual',
+                    notes: notes,
+                    updatedAt: now,
+                    updatedBy: currentUser.uid,
+                    revokedAt: active ? null : now,
+                    revokedBy: active ? null : currentUser.uid,
+                    revokeReason: active ? '' : (revokeReason || currentManager.revokeReason || 'Desativado via edição administrativa'),
+                    replacedBy: ''
+                });
+
+                batch.update(managerRef, {
+                    active: false,
+                    updatedAt: now,
+                    updatedBy: currentUser.uid,
+                    revokedAt: now,
+                    revokedBy: currentUser.uid,
+                    revokeReason: 'Substituído por correção administrativa',
+                    replacedBy: targetManagerId
+                });
+
+                await batch.commit();
+                return {
+                    success: true,
+                    message: 'Vínculo corrigido com sucesso.',
+                    managerId: targetManagerId
+                };
+            }
+
+            await managerRef.update({
+                establishmentId: establishmentId,
+                establishmentName: establishmentName,
+                role: role,
+                active: active,
+                notes: notes,
+                updatedAt: now,
+                updatedBy: currentUser.uid,
+                revokedAt: active ? null : now,
+                revokedBy: active ? null : currentUser.uid,
+                revokeReason: active ? '' : (revokeReason || currentManager.revokeReason || 'Desativado via edição administrativa'),
+                replacedBy: currentManager.replacedBy || ''
+            });
+
+            return { success: true, message: 'Vínculo atualizado com sucesso.', managerId: normalizedManagerId };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao atualizar vínculo.' };
+        }
+    },
+
+    deactivateEstablishmentManager: async function(managerId, revokeReason) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedManagerId = String(managerId || '').trim();
+        if (!normalizedManagerId) {
+            return { success: false, message: 'Vínculo não informado.' };
+        }
+
+        try {
+            await firebase.firestore().collection('establishment_managers').doc(normalizedManagerId).update({
+                active: false,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedBy: currentUser.uid,
+                revokedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                revokedBy: currentUser.uid,
+                revokeReason: String(revokeReason || '').trim() || 'Desativado manualmente'
+            });
+
+            return { success: true, message: 'Vínculo desativado com sucesso.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao desativar vínculo.' };
+        }
+    },
+
+    reactivateEstablishmentManager: async function(managerId, notes) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedManagerId = String(managerId || '').trim();
+        if (!normalizedManagerId) {
+            return { success: false, message: 'Vínculo não informado.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var managerRef = db.collection('establishment_managers').doc(normalizedManagerId);
+            var managerSnap = await managerRef.get();
+
+            if (!managerSnap.exists) {
+                return { success: false, message: 'Vínculo não encontrado.' };
+            }
+
+            var currentManager = Object.assign({ id: managerSnap.id }, managerSnap.data());
+            var duplicateManager = await this.checkExistingManager(
+                currentManager.userId,
+                currentManager.establishmentId,
+                normalizedManagerId
+            );
+
+            if (duplicateManager && duplicateManager.active !== false) {
+                return { success: false, message: 'Já existe vínculo ativo para este usuário e empreendimento.' };
+            }
+
+            await managerRef.update({
+                active: true,
+                notes: String(notes || currentManager.notes || '').trim(),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedBy: currentUser.uid,
+                revokedAt: null,
+                revokedBy: null,
+                revokeReason: '',
+                replacedBy: ''
+            });
+
+            return { success: true, message: 'Vínculo reativado com sucesso.' };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao reativar vínculo.' };
+        }
+    },
+
     approveEstablishmentClaim: async function(claimId, reviewNotes) {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
 
@@ -734,11 +1035,18 @@ const FirebaseSystem = {
                 userName: claim.userName || '',
                 establishmentId: claim.establishmentId,
                 establishmentName: claim.establishmentName,
-                role: claim.requestedRole,
+                role: normalizeManagerRole(claim.requestedRole) || claim.requestedRole,
                 active: true,
                 approvedAt: approvedAt,
                 approvedBy: currentUser.uid,
-                claimId: claim.id
+                claimId: claim.id,
+                notes: '',
+                updatedAt: approvedAt,
+                updatedBy: currentUser.uid,
+                revokedAt: null,
+                revokedBy: null,
+                revokeReason: '',
+                replacedBy: ''
             });
 
             await batch.commit();

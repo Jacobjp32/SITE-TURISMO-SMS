@@ -153,7 +153,10 @@ service cloud.firestore {
     }
 
     match /establishment_managers/{managerId} {
-      allow read: if isModerator() || ownsUserId(resource.data);
+      allow read: if isModerator() || (
+        ownsUserId(resource.data) &&
+        resource.data.active == true
+      );
       allow create, update, delete: if isModerator();
     }
 

@@ -1,5 +1,24 @@
 # Plano de Firestore e Storage Rules
 
+## Status da Fase 1.3 - gestao administrativa de vinculos
+
+Arquivo ajustado nesta fase:
+
+- `firestore.rules`
+
+Objetivo da mudanca local:
+
+- manter `establishment_managers` com escrita apenas para staff;
+- permitir leitura total de `establishment_managers` por `admin` e `moderator`;
+- limitar usuario comum a leitura apenas dos proprios vinculos ativos;
+- preservar o fluxo de criacao/edicao/desativacao/reativacao manual no admin sem abrir permissao para usuario comum.
+
+Importante:
+
+- a regra revisada continua apenas local no repositorio;
+- ainda existe passo manual para publicar a versao revisada no Firebase Console ou pela CLI oficial;
+- `storage.rules` nao precisou mudar nesta rodada.
+
 ## Status da Fase 1.2 - eventos vinculados ao empreendimento
 
 Arquivo ajustado nesta fase:

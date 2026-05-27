@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-26T20:10:30.135Z.
+Gerado em 2026-05-27T12:54:16.483Z.
 
 ## Resumo
 
@@ -22,13 +22,13 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 657269 |
-| .html | 36 | 561399 |
+| .js | 35 | 671282 |
+| .html | 36 | 584731 |
 | .css | 21 | 292725 |
-| .md | 20 | 179286 |
+| .md | 20 | 184012 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
-| .rules | 2 | 8468 |
+| .rules | 2 | 8526 |
 | .xml | 1 | 3852 |
 | (sem ext) | 4 | 2687 |
 | .log | 1 | 1550 |
@@ -126,7 +126,7 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 43236 |
+| admin-firebase.html | 66568 |
 | eventos.html | 34257 |
 | galeria.html | 37789 |
 | index.html | 147022 |
@@ -174,7 +174,7 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 43236 |
+| admin-firebase.html | 66568 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -184,7 +184,7 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 37826 |
+| js/firebase-auth.js | 51839 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
@@ -212,8 +212,8 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
 | config.js | 6 | admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
-| js/data/hospedagens.js | 3 | index.html, mapa-turistico.html, portal-usuario.html |
-| js/data/restaurantes.js | 3 | index.html, mapa-turistico.html, portal-usuario.html |
+| js/data/hospedagens.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
+| js/data/restaurantes.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
 | js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
 | js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
 | js/data/eventos.js | 2 | index.html, mapa-turistico.html |
@@ -222,12 +222,12 @@ Gerado em 2026-05-26T20:10:30.135Z.
 | js/data/rotas.js | 2 | index.html, mapa-turistico.html |
 | js/data/turismo-data-adapter.js | 2 | index.html, mapa-turistico.html |
 | js/data/turismo-data.js | 2 | index.html, mapa-turistico.html |
+| js/establishment-catalog.js | 2 | admin-firebase.html, portal-usuario.html |
 | js/firebase-auth.js | 2 | admin-firebase.html, portal-usuario.html |
 | js/security-utils.js | 2 | admin-firebase.html, noticia.html |
 | js/avaliacoes.js | 1 | index.html |
 | js/chatbot.js | 1 | index.html |
 | js/cms.js | 1 | noticia.html |
-| js/establishment-catalog.js | 1 | portal-usuario.html |
 | js/mapa-turistico.js | 1 | mapa-turistico.html |
 | js/mapa3d.js | 1 | mapa-3d.html |
 | js/reservas.js | 1 | reservas.html |

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-26T20:10:30.135Z",
+  "generatedAt": "2026-05-27T12:54:16.483Z",
   "totals": {
     "files": 326,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 657269
+      "bytes": 671282
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 561399
+      "bytes": 584731
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 20,
-      "bytes": 179286
+      "bytes": 184012
     },
     {
       "ext": ".json",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 8468
+      "bytes": 8526
     },
     {
       "ext": ".xml",
@@ -164,7 +164,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 846102
+      "bytes": 869492
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -174,7 +174,7 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 397212
+      "bytes": 411225
     },
     {
       "dir": "css",
@@ -184,7 +184,7 @@
     {
       "dir": "docs",
       "files": 18,
-      "bytes": 164982
+      "bytes": 169708
     },
     {
       "dir": "js/data",
@@ -765,7 +765,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 43236
+      "bytes": 66568
     },
     {
       "path": "eventos.html",
@@ -985,7 +985,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 43236
+      "bytes": 66568
     },
     {
       "path": "css/mapa-3d.css",
@@ -1045,7 +1045,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 37826
+      "bytes": 51839
     },
     {
       "path": "js/reservas.js",
@@ -1146,6 +1146,9 @@
       "file": "admin-firebase.html",
       "scripts": [
         "js/security-utils.js",
+        "js/data/restaurantes.js",
+        "js/data/hospedagens.js",
+        "js/establishment-catalog.js",
         "config.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
@@ -1175,10 +1178,23 @@
         "estabelecimentos-pendentes-container",
         "section-vinculos",
         "claims-pendentes-container",
+        "section-gerenciar-vinculos",
+        "establishment-managers-container",
         "section-usuarios",
         "usuarios-container",
         "section-eventos",
         "eventos-aprovados-container",
+        "managerModal",
+        "managerModalTitle",
+        "managerForm",
+        "managerFormMode",
+        "managerFormId",
+        "managerUserId",
+        "managerEstablishmentId",
+        "managerRole",
+        "managerActive",
+        "managerNotes",
+        "managerSaveBtn",
         "claim-note-${SEC.attr(claim.id)}",
         "claim-reason-${SEC.attr(claim.id)}"
       ]
@@ -2711,7 +2727,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 37683,
+      "bytes": 51642,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2733,6 +2749,7 @@
         "initFirebase",
         "isActiveManagerRecord",
         "normalizeComparableId",
+        "normalizeManagerRole",
         "persistUserSession",
         "sortByTimestampDesc",
         "tryInit",
@@ -3198,13 +3215,13 @@
     },
     {
       "script": "js/data/hospedagens.js",
-      "pages": 3,
-      "examples": "index.html, mapa-turistico.html, portal-usuario.html"
+      "pages": 4,
+      "examples": "admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html"
     },
     {
       "script": "js/data/restaurantes.js",
-      "pages": 3,
-      "examples": "index.html, mapa-turistico.html, portal-usuario.html"
+      "pages": 4,
+      "examples": "admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html"
     },
     {
       "script": "js/locais-data.js",
@@ -3247,6 +3264,11 @@
       "examples": "index.html, mapa-turistico.html"
     },
     {
+      "script": "js/establishment-catalog.js",
+      "pages": 2,
+      "examples": "admin-firebase.html, portal-usuario.html"
+    },
+    {
       "script": "js/firebase-auth.js",
       "pages": 2,
       "examples": "admin-firebase.html, portal-usuario.html"
@@ -3270,11 +3292,6 @@
       "script": "js/cms.js",
       "pages": 1,
       "examples": "noticia.html"
-    },
-    {
-      "script": "js/establishment-catalog.js",
-      "pages": 1,
-      "examples": "portal-usuario.html"
     },
     {
       "script": "js/mapa-turistico.js",
