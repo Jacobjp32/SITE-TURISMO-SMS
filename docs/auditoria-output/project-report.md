@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-27T17:23:28.767Z.
+Gerado em 2026-05-27T17:28:50.510Z.
 
 ## Resumo
 
@@ -25,7 +25,7 @@ Gerado em 2026-05-27T17:23:28.767Z.
 | .js | 35 | 691131 |
 | .html | 36 | 622681 |
 | .css | 21 | 292816 |
-| .md | 20 | 206607 |
+| .md | 20 | 206624 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 11986 |

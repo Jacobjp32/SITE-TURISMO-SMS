@@ -93,7 +93,7 @@ Checklist minimo adicional para a fase de solicitacoes de alteracao:
 - `Meus empreendimentos` continua carregando;
 - o botao `Solicitar alteracao` aparece para vinculo ativo;
 - o modal de alteracao abre com os campos atuais preenchidos;
-- o portal permite anexar ate 6 imagens no fluxo de alteracao;
+- o portal permite anexar ate 6 imagens de ate 5 MB cada no fluxo de alteracao;
 - `Minhas solicitacoes de alteracao` mostra status, campos pedidos e retorno da equipe;
 - o card `Alteracoes de empreendimentos` aparece em `Aprovacoes` no admin;
 - aprovar, rejeitar e marcar `changes_requested` nao aplicam nada automaticamente no site publico.

@@ -22,7 +22,7 @@ Politica local adicionada:
 - `status` inicial e sempre `pending`;
 - `currentSnapshot` e `requestedChanges` ficam restritos ao schema esperado desta fase;
 - `reviewedAt`, `reviewedBy`, `reviewNotes`, `rejectionReason` e `changesRequestedNotes` nascem vazios;
-- upload continua limitado a JPG/JPEG/PNG/WebP com maximo de 3 MB por arquivo.
+- upload continua limitado a JPG/JPEG/PNG/WebP com maximo de 5 MB por arquivo.
 
 Passo manual obrigatorio antes de ambiente real:
 
@@ -384,7 +384,7 @@ Aplicar a mesma logica:
     - `image/jpeg`
     - `image/png`
     - `image/webp`
-  - tamanho maximo de `3 MB`.
+  - tamanho maximo de `5 MB`.
 - `read`
   - owner do path;
   - admin/moderador;

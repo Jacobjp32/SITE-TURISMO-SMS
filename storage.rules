@@ -20,7 +20,7 @@ service firebase.storage {
       return signedIn() &&
         request.auth.uid == uid &&
         request.resource != null &&
-        request.resource.size <= 3 * 1024 * 1024 &&
+        request.resource.size <= 5 * 1024 * 1024 &&
         request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
     }
 

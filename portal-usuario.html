@@ -329,7 +329,7 @@
                     <label for="evtImages">Imagens do Evento</label>
                     <div class="upload-box">
                         <input type="file" id="evtImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('event')">
-                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 3 MB cada. As imagens serao analisadas junto com o cadastro.</p>
+                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 5 MB cada. As imagens serao analisadas junto com o cadastro.</p>
                         <p class="upload-counter" id="eventImageCounter">0/6 imagens</p>
                         <p class="upload-error" id="eventImageError" hidden></p>
                         <div class="upload-preview-grid" id="eventImagePreview"></div>
@@ -376,7 +376,7 @@
                     <label for="estImages">Imagens do Estabelecimento</label>
                     <div class="upload-box">
                         <input type="file" id="estImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('establishment')">
-                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 3 MB cada. As imagens serao analisadas antes de qualquer publicacao.</p>
+                        <p class="form-hint">Envie ate 6 imagens em JPG, PNG ou WebP, com no maximo 5 MB cada. As imagens serao analisadas antes de qualquer publicacao.</p>
                         <p class="upload-counter" id="establishmentImageCounter">0/6 imagens</p>
                         <p class="upload-error" id="establishmentImageError" hidden></p>
                         <div class="upload-preview-grid" id="establishmentImagePreview"></div>
@@ -445,7 +445,7 @@
                     <label for="updateImages">Imagens anexas</label>
                     <div class="upload-box">
                         <input type="file" id="updateImages" accept=".jpg,.jpeg,.png,.webp" multiple onchange="handleImageSelection('update')">
-                        <p class="form-hint">Envie até 6 imagens em JPG, PNG ou WebP, com no máximo 3 MB cada. As imagens ficam em fila de revisão administrativa.</p>
+                        <p class="form-hint">Envie até 6 imagens em JPG, PNG ou WebP, com no máximo 5 MB cada. As imagens ficam em fila de revisão administrativa.</p>
                         <p class="upload-counter" id="updateImageCounter">0/6 imagens</p>
                         <p class="upload-error" id="updateImageError" hidden></p>
                         <div class="upload-preview-grid" id="updateImagePreview"></div>
@@ -561,7 +561,7 @@
     }
 
     var PORTAL_UPLOAD_LIMIT = 6;
-    var PORTAL_IMAGE_MAX_BYTES = 3 * 1024 * 1024;
+    var PORTAL_IMAGE_MAX_BYTES = 5 * 1024 * 1024;
     var CLAIM_MESSAGE_MAX_LENGTH = 500;
     var PORTAL_ALLOWED_IMAGE_TYPES = {
         'image/jpeg': 'jpg',
@@ -889,7 +889,7 @@
                 return;
             }
             if (file.size > PORTAL_IMAGE_MAX_BYTES) {
-                errors.push(file.name + ': excede o limite de 3 MB.');
+                errors.push(file.name + ': excede o limite de 5 MB.');
                 return;
             }
             if (currentCount + accepted.length >= PORTAL_UPLOAD_LIMIT) {

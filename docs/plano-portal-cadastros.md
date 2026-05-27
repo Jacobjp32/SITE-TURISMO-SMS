@@ -123,7 +123,7 @@ Implementado nesta rodada:
 - upload de ate 6 imagens em `portal-usuario.html` para eventos e estabelecimentos;
 - preview local com remocao antes do envio;
 - validacao cliente para `jpg`, `jpeg`, `png` e `webp`;
-- bloqueio cliente de arquivos acima de `3 MB`;
+- bloqueio cliente de arquivos acima de `5 MB`;
 - upload para Firebase Storage antes da gravacao nas collections pendentes;
 - gravacao de `images`, `mainImage`, `imageCount`, `ownerUid`, `ownerEmail`, `ownerName`, `createdAt`, `updatedAt`, `submittedAt` e `source`;
 - preservacao dos campos de imagem na aprovacao atual, porque o admin continua copiando `doc.data()` para as collections aprovadas.
@@ -545,7 +545,7 @@ Eventos:
   - `application/zip`
   - formatos de camera brutos como `dng`
 - limite recomendado:
-  - `3 * 1024 * 1024` bytes por arquivo.
+  - `5 * 1024 * 1024` bytes por arquivo.
 
 ### Observacao importante
 

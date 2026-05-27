@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-27T17:23:28.767Z",
+  "generatedAt": "2026-05-27T17:28:50.510Z",
   "totals": {
     "files": 351,
     "html": 36,
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 20,
-      "bytes": 206607
+      "bytes": 206624
     },
     {
       "ext": ".json",
@@ -199,7 +199,7 @@
     {
       "dir": "docs",
       "files": 18,
-      "bytes": 192303
+      "bytes": 192320
     },
     {
       "dir": "js/data",
