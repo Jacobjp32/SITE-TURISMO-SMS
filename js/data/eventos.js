@@ -4,7 +4,12 @@ window.TURISMO_EVENTOS = [
     nome: "AgroSamas",
     categoria: "Eventos",
     descricao: "Grande evento do município com shows, feira gastronômica, exposição agropecuária e atrações para toda a família.",
-    imagem: "",
+    imagem: "images/empreendimentos/agrosamas/agrosamas-01.jpg",
+    galeria: [
+      "images/empreendimentos/agrosamas/agrosamas-01.jpg",
+      "images/empreendimentos/agrosamas/agrosamas-02.jpg",
+      "images/empreendimentos/agrosamas/agrosamas-03.jpeg"
+    ],
     url: "/eventos",
     periodo: "Setembro",
     local: "Parque de Exposições",

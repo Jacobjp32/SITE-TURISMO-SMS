@@ -1,6 +1,6 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-05-27T14:02:33.149Z.
+Gerado em 2026-05-27T14:17:25.080Z.
 
 ## Resumo
 

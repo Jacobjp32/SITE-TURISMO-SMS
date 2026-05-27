@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-27T14:02:34.588Z.
+Gerado em 2026-05-27T14:31:53.429Z.
 
 ## Resumo
 
-- Arquivos mapeados: 326
+- Arquivos mapeados: 346
 - HTMLs: 36
 - CSS: 21
 - JS: 35
@@ -16,19 +16,19 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | ext | files | bytes |
 | --- | --- | --- |
 | .mp4 | 3 | 287052567 |
-| .png | 27 | 36842588 |
-| .jpeg | 83 | 29392570 |
-| .jpg | 51 | 27730696 |
+| .png | 30 | 43973044 |
+| .jpeg | 98 | 40608066 |
+| .jpg | 53 | 36817774 |
 | .webp | 22 | 6812112 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 689819 |
-| .html | 36 | 620271 |
+| .js | 35 | 691239 |
+| .html | 36 | 620324 |
 | .css | 21 | 292816 |
-| .md | 20 | 190268 |
+| .md | 20 | 197584 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
-| .rules | 2 | 11982 |
+| .rules | 2 | 11986 |
 | .xml | 1 | 3852 |
 | (sem ext) | 4 | 2687 |
 | .log | 1 | 1550 |
@@ -44,14 +44,20 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | videos/ROTA_DO_TURISMO.mp4 | 91975315 |
 | images/EU_AMO_SMS.png | 5161495 |
 | images/CASA_DA_MEMORIA.png | 5020646 |
+| images/empreendimentos/agrosamas/agrosamas-02.jpg | 4811831 |
 | images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 |
+| images/empreendimentos/agrosamas/agrosamas-01.jpg | 4275247 |
 | images/IGREJA_COLONIA_IGUACU.png | 3855743 |
 | images/IGREJA_MATRIZ_1.png | 3614212 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 |
 | images/IGREJA_MATRIZ_2.png | 3315073 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 |
+| images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 |
 | docs/comtur/loa-2025.pdf | 2675327 |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png | 2617603 |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png | 2337143 |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png | 2175710 |
 | images/empreendimentos/all-garden/all-garden-02.jpeg | 2118493 |
 | docs/comtur/atas-comtur-2024-2025.docx | 2034102 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 |
@@ -65,8 +71,15 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 |
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png | 1077038 |
 | images/empreendimentos/all-garden/all-garden-01.jpeg | 879913 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-08.jpeg | 840380 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-02.jpeg | 836465 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-07.jpeg | 824438 |
 | images/mascotes/MASCOTE_PERY.png | 812748 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-25.jpeg | 808171 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-06.jpeg | 801897 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg | 782088 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-04.jpeg | 762647 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-05.jpeg | 757877 |
 | images/mascotes/MASCOTE_MENINO_POLONES_1.png | 725003 |
 | images/empreendimentos/all-garden/all-garden-08.jpeg | 724574 |
 | images/PARQUE_EXPOSICOES_1.jpg | 713776 |
@@ -80,6 +93,7 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-40.jpeg | 631238 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg | 623658 |
 | images/PARQUE_EXPOSICOES_4.jpg | 620134 |
+| images/empreendimentos/sawe/sawe-01.jpeg | 609314 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg | 587070 |
 | images/PARQUE_EXPOSICOES_3.jpg | 585692 |
 | images/empreendimentos/all-garden/all-garden-07.jpeg | 579538 |
@@ -89,6 +103,7 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | images/IMG_2304.jpg | 551454 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-23.jpeg | 548700 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg | 547055 |
+| images/empreendimentos/casa-da-memoria/casa-da-memoria-03.jpeg | 537312 |
 | images/empreendimentos/all-garden/all-garden-10.jpeg | 536937 |
 | images/CUIA_3.JPG | 536666 |
 | images/GINASIO_POLACAO.JPG | 528933 |
@@ -104,21 +119,6 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg | 450988 |
 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp | 450726 |
-| images/PARQUE_EXPOSICOES_6.jpg | 448820 |
-| images/PONTE_ENTRADA_CIDADE_1.JPG | 433527 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-27.jpeg | 430930 |
-| images/logos/setu.png | 426710 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-08.jpeg | 423875 |
-| images/empreendimentos/all-garden/all-garden-06.jpeg | 416902 |
-| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp | 411048 |
-| images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg | 409241 |
-| images/PONTE_ENTRADA_CIDADE_1_2.jpg | 394838 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-39.jpeg | 387394 |
-| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-07.jpeg | 387044 |
-| images/empreendimentos/all-garden/all-garden-05.jpeg | 383701 |
-| images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp | 377310 |
-| images/logos/viaje-parana.png | 373454 |
-| images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-03.jpeg | 370731 |
 
 
 ## HTMLs principais na raiz
@@ -129,11 +129,11 @@ Gerado em 2026-05-27T14:02:34.588Z.
 | admin-firebase.html | 83371 |
 | eventos.html | 34257 |
 | galeria.html | 37789 |
-| index.html | 147022 |
+| index.html | 147049 |
 | local.html | 20710 |
 | mapa-3d.html | 6274 |
 | mapa-completo.html | 10456 |
-| mapa-turistico.html | 10705 |
+| mapa-turistico.html | 10731 |
 | noticia.html | 6297 |
 | noticias.html | 20921 |
 | o-que-fazer.html | 5895 |

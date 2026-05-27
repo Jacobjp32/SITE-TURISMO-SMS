@@ -75,3 +75,63 @@ Curadoria humana recomendada:
 - Adotar como alvo futuro algo entre `250 KB` e `600 KB` por imagem publicada, com excecoes justificadas para imagens hero.
 - Limitar dimensoes publicadas para algo em torno de `1600 px` no maior lado para galerias de modal.
 - Se houver nova rodada editorial, montar uma curadoria humana final por empreendimento antes de qualquer compressao em lote.
+
+## Rodada 2026-05-27
+
+Empreendimentos revisados:
+
+- Sawe Parque Aquatico
+- Casa da Memoria Padre Bauer
+- AgroSamas
+- Ribeiro Pesca e Turismo
+
+### Sawe Parque Aquatico
+
+- Total na pasta bruta: 20 imagens `.jpeg`
+- Publicadas nesta rodada: `sawe-01` a `sawe-06`
+- Curadoria aplicada priorizando paisagem, area de descanso, piscina, lago e estrutura de lazer.
+
+Observacao:
+
+- Os arquivos publicados ficaram abaixo de `0,7 MB` cada e nao exigem compressao urgente.
+
+### Casa da Memoria Padre Bauer
+
+- Total na pasta bruta: 8 imagens `.JPEG`
+- Publicadas nesta rodada: `casa-da-memoria-01` a `08`
+- Curadoria aplicada aproveitando fachada, visita guiada e acervo interno.
+
+Observacao:
+
+- O conjunto esta publicavel no formato atual; uma rodada futura pode reduzir levemente peso sem perda perceptivel.
+
+### AgroSamas
+
+- Total na pasta bruta: 9 imagens (`.JPG` e `.JPEG`)
+- Publicadas nesta rodada: `agrosamas-01`, `agrosamas-02`, `agrosamas-03`
+- Curadoria aplicada priorizando exposicao agropecuaria, experiencia de balao e publico/show.
+
+Arquivos mais pesados usados:
+
+- `agrosamas-01.jpg` - 4,08 MB
+- `agrosamas-02.jpg` - 4,59 MB
+- `agrosamas-03.jpeg` - 2,96 MB
+
+Curadoria humana recomendada:
+
+- Reduzir peso e definir se a capa final do evento deve destacar exposicao, experiencia aerea ou publico/show.
+
+### Ribeiro Pesca e Turismo
+
+- Pasta publicada agora inclui `ribeiro-pesca-09.png`, `10.png` e `11.png`
+- Galeria ativa mantida com 8 imagens, incluindo `09` e `10`
+- Curadoria aplicada para preservar fotos anteriores uteis e incorporar duas novas vistas aereas.
+
+Arquivos mais pesados usados:
+
+- `ribeiro-pesca-10.png` - 2,50 MB
+- `ribeiro-pesca-09.png` - 2,07 MB
+
+Curadoria humana recomendada:
+
+- Converter `09` e `10` para WebP em rodada separada; `11.png` pode entrar depois se houver espaco editorial na galeria.

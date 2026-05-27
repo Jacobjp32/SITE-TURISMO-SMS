@@ -121,10 +121,13 @@ Categorias detectadas:
 | Item | Status atual | Recomendacao |
 | --- | --- | --- |
 | Ancestral Gastronomia | Imagens e galeria estruturadas. | Manter; revisar peso se necessario. |
-| Ribeiro Pesca e Turismo | Galeria estruturada em dados legados/adaptados. | Manter; otimizar imagens pesadas depois. |
+| Ribeiro Pesca e Turismo | Galeria curada com 8 imagens, incluindo 2 novas fotos aereas `.png`. | Manter; otimizar `.png` pesados depois. |
 | Nova Esperanca | Galeria estruturada. | Manter; otimizar imagens grandes. |
 | Doces e Delicias | Imagens em `images/empreendimentos/`, sem item seguro consolidado. | Nao cadastrar automaticamente. Precisa decisao humana. |
-| Casa da Memoria | TXT recebido vazio em rodada anterior; dados atuais preservados. | Nao alterar sem fonte confirmada. |
+| Casa da Memoria | Fotos reais incorporadas em `pontos-turisticos` e `locais-data`; TXT segue vazio. | Confirmar endereco publico antes de revisar texto/horario. |
+| Sawe Parque Aquatico | Item existente de rota com nova galeria e endereco textual mais especifico. | Revisar compressao das fotos se o modal ficar pesado. |
+| Vivenda do Mate | Texto, telefone e site atualizados com base em TXT seguro; segue sem imagem. | Priorizar imagem institucional em rodada futura. |
+| AgroSamas | Material recebido corresponde melhor ao evento existente em `js/data/eventos.js`. | Nao criar item duplicado; separar curadoria de evento e parque se necessario. |
 | HEIC/DNG | Material bruto nao web. | Nao usar diretamente; decidir conversao futura. |
 | Video da Rei Verde | Nao vinculado ao site. | Decidir se entra como video, imagem poster ou nao entra. |
 | Baldo | Dados aparecem em informacoes essenciais/legado. | Revisar imagem principal antes de alterar. |

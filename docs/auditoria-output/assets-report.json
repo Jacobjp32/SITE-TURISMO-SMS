@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-27T14:02:34.390Z",
+  "generatedAt": "2026-05-27T14:31:55.052Z",
   "totals": {
-    "mediaFiles": 186,
-    "referencedMedia": 110,
-    "likelyOrphans": 76,
+    "mediaFiles": 206,
+    "referencedMedia": 126,
+    "likelyOrphans": 80,
     "duplicateGroups": 0,
     "missingReferences": 0,
-    "heavyMedia": 22
+    "heavyMedia": 28
   },
   "assets": [
     {
@@ -18,9 +18,7 @@
         "height": 1280
       },
       "sha256": "23db22b6e2c32cdd22e45db6b5dc1e4f27af00cf7e76ebcef6e0c309724fe069",
-      "usedBy": [
-        "js/data/pontos-turisticos.js"
-      ]
+      "usedBy": []
     },
     {
       "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
@@ -79,6 +77,48 @@
       },
       "sha256": "f4bfcc146356ae58b2f33f6db4f59efbc770fc8b9bd173a851585dfc5ae9bda9",
       "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/agrosamas/agrosamas-01.jpg",
+      "ext": ".jpg",
+      "bytes": 4275247,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "c94bd1af3c658bf040fbb122d999fc5a6b85ce970b8652fb191f78c5970b2413",
+      "usedBy": [
+        "js/data/eventos.js",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/agrosamas/agrosamas-02.jpg",
+      "ext": ".jpg",
+      "bytes": 4811831,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "73bda7e4a914d91f0d3f62ef5b5817fefc0a82d6fe265df2f373ce1e5b038ebb",
+      "usedBy": [
+        "js/data/eventos.js",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 3102073,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
+      "usedBy": [
+        "js/data/eventos.js",
+        "js/locais-data.js"
+      ]
     },
     {
       "path": "images/empreendimentos/all-garden/all-garden-01.jpeg",
@@ -260,6 +300,111 @@
       "usedBy": [
         "js/data/restaurantes.js",
         "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 782088,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "3f54b8c08a893a1ddc5a574c670d39b3422614b27da08aba6cf862e468f573af",
+      "usedBy": [
+        "js/data/pontos-turisticos.js",
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 836465,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "43e362afaa8405f142a0e45701dac2d81f69b2ca30b670c9747fc8e93c1241af",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 537312,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "a38cfaf968f8fea69825d90a2b4a2a77e5cc98e468eda7e11c6516cd3a2b2ec3",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 762647,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "c8f3d9abce3c93c5a1ea676a483b0c0a651aa987103a83c1b4faefe4f6c8b16f",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 757877,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "002816af65684705e8436b9af22508633ddcd131945de52dcf1da8358aec1a34",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 801897,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "0bb92b9c74b2f1dd2583df0515e823f813a82d67a2fc8acd2f364288b716eaaa",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-07.jpeg",
+      "ext": ".jpeg",
+      "bytes": 824438,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "15ee28c21d68b6aa2ddfbf7ab6a45866c8cbe95325f0b06b4b80839b23a9bd64",
+      "usedBy": [
+        "js/locais-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/casa-da-memoria/casa-da-memoria-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 840380,
+      "dimensions": {
+        "height": 2048,
+        "width": 1536
+      },
+      "sha256": "2634aaacbe72c1fae57c3eedd6fcbc78e5ecc21e042656e776e945daef13be3e",
+      "usedBy": [
+        "js/locais-data.js"
       ]
     },
     {
@@ -1097,9 +1242,7 @@
         "width": 1600
       },
       "sha256": "d957c30f488da229bed861632030b8ccc5f0a8be8aca2f3a6642c796d26b59d2",
-      "usedBy": [
-        "js/rotas-data.js"
-      ]
+      "usedBy": []
     },
     {
       "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
@@ -1123,6 +1266,119 @@
         "width": 720
       },
       "sha256": "e381deda56600dae613dfff3bf53681042fd1713e72b8789895423fe856a7082",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png",
+      "ext": ".png",
+      "bytes": 2175710,
+      "dimensions": {
+        "width": 1600,
+        "height": 900
+      },
+      "sha256": "f16025203a03475f8b2f77914b03cf8200486eaff81c11fe90bbba6c4e8e4c52",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png",
+      "ext": ".png",
+      "bytes": 2617603,
+      "dimensions": {
+        "width": 1597,
+        "height": 896
+      },
+      "sha256": "a38b244de2009a705df7400bd8579bb9571131c13395003a548f261a6acc00ab",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png",
+      "ext": ".png",
+      "bytes": 2337143,
+      "dimensions": {
+        "width": 1596,
+        "height": 861
+      },
+      "sha256": "7ed2194946cfcd4b2a50d997725c87dca58c09c624153f125e2e4902fea8b82d",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-01.jpeg",
+      "ext": ".jpeg",
+      "bytes": 609314,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "d743f8d1d28a0fb05baac7c8a2cf9951778e63de3eb4588f60cbc9ac85858d2e",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-02.jpeg",
+      "ext": ".jpeg",
+      "bytes": 371681,
+      "dimensions": {
+        "height": 739,
+        "width": 1600
+      },
+      "sha256": "5cce3b09cf7e21cf9e9a3c9be685d0df9510484eb0973606d7014c77db7b96b7",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 332884,
+      "dimensions": {
+        "height": 1472,
+        "width": 828
+      },
+      "sha256": "18149f96af9104509fb2e75c2245883cd72cddff4285c18f01f3b3fd885f09f9",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-04.jpeg",
+      "ext": ".jpeg",
+      "bytes": 263772,
+      "dimensions": {
+        "height": 1600,
+        "width": 1200
+      },
+      "sha256": "34584db7b9cffd7bf185d6ab0d4bdf10d5c3c87bf9aaf8a7ec7775d60f17ceb2",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-05.jpeg",
+      "ext": ".jpeg",
+      "bytes": 211516,
+      "dimensions": {
+        "height": 1600,
+        "width": 900
+      },
+      "sha256": "fbd91481a79a42f7c6c58599effea772d21258cb8b615d9e990df260cffb994d",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/sawe/sawe-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 181152,
+      "dimensions": {
+        "height": 768,
+        "width": 1024
+      },
+      "sha256": "80feca1eea36d9f546e231b15dac540aca7877fe4a5d79245b36fc3844f022d6",
       "usedBy": [
         "js/rotas-data.js"
       ]
@@ -2406,6 +2662,11 @@
       "images/diorama_sao_mateus.webp"
     ],
     [
+      "images/empreendimentos/agrosamas/agrosamas-01.jpg",
+      "images/empreendimentos/agrosamas/agrosamas-02.jpg",
+      "images/empreendimentos/agrosamas/agrosamas-03.jpeg"
+    ],
+    [
       "images/empreendimentos/all-garden/all-garden-01.jpeg",
       "images/empreendimentos/all-garden/all-garden-02.jpeg",
       "images/empreendimentos/all-garden/all-garden-03.jpeg",
@@ -2422,6 +2683,16 @@
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-02.jpeg",
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-03.jpeg",
       "images/empreendimentos/ancestral-gastronomia/ancestral-gastronomia-04.jpeg"
+    ],
+    [
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-02.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-03.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-04.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-05.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-06.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-07.jpeg",
+      "images/empreendimentos/casa-da-memoria/casa-da-memoria-08.jpeg"
     ],
     [
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-01.jpeg",
@@ -2504,7 +2775,18 @@
       "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg",
       "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg",
       "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg",
-      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg"
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png",
+      "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png"
+    ],
+    [
+      "images/empreendimentos/sawe/sawe-01.jpeg",
+      "images/empreendimentos/sawe/sawe-02.jpeg",
+      "images/empreendimentos/sawe/sawe-03.jpeg",
+      "images/empreendimentos/sawe/sawe-04.jpeg",
+      "images/empreendimentos/sawe/sawe-05.jpeg",
+      "images/empreendimentos/sawe/sawe-06.jpeg"
     ],
     [
       "images/IGREJA_AGUA_BRANCA_10.jpg",
@@ -2610,6 +2892,17 @@
       "usedBy": []
     },
     {
+      "path": "images/CASA_DA_MEMORIA.png",
+      "ext": ".png",
+      "bytes": 5020646,
+      "dimensions": {
+        "width": 1920,
+        "height": 1280
+      },
+      "sha256": "23db22b6e2c32cdd22e45db6b5dc1e4f27af00cf7e76ebcef6e0c309724fe069",
+      "usedBy": []
+    },
+    {
       "path": "images/CHALE_DO_PRODUTOR_SEC_CULTURA.png",
       "ext": ".png",
       "bytes": 4410089,
@@ -2629,6 +2922,17 @@
         "height": 1280
       },
       "sha256": "8deba3a405b133392936dbe1abcebecac9617220fdec648d92ffad62924fcf7b",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png",
+      "ext": ".png",
+      "bytes": 2337143,
+      "dimensions": {
+        "width": 1596,
+        "height": 861
+      },
+      "sha256": "7ed2194946cfcd4b2a50d997725c87dca58c09c624153f125e2e4902fea8b82d",
       "usedBy": []
     },
     {
@@ -3127,6 +3431,17 @@
       "usedBy": []
     },
     {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg",
+      "ext": ".jpeg",
+      "bytes": 203493,
+      "dimensions": {
+        "height": 1067,
+        "width": 1600
+      },
+      "sha256": "d957c30f488da229bed861632030b8ccc5f0a8be8aca2f3a6642c796d26b59d2",
+      "usedBy": []
+    },
+    {
       "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-26.jpeg",
       "ext": ".jpeg",
       "bytes": 202853,
@@ -3325,6 +3640,17 @@
       "usedBy": []
     },
     {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg",
+      "ext": ".jpeg",
+      "bytes": 133992,
+      "dimensions": {
+        "height": 1280,
+        "width": 720
+      },
+      "sha256": "e381deda56600dae613dfff3bf53681042fd1713e72b8789895423fe856a7082",
+      "usedBy": []
+    },
+    {
       "path": "images/IMIGRANTES_IA_1.jpg",
       "ext": ".jpg",
       "bytes": 133075,
@@ -3486,8 +3812,20 @@
         "height": 1280
       },
       "sha256": "23db22b6e2c32cdd22e45db6b5dc1e4f27af00cf7e76ebcef6e0c309724fe069",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/agrosamas/agrosamas-02.jpg",
+      "ext": ".jpg",
+      "bytes": 4811831,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "73bda7e4a914d91f0d3f62ef5b5817fefc0a82d6fe265df2f373ce1e5b038ebb",
       "usedBy": [
-        "js/data/pontos-turisticos.js"
+        "js/data/eventos.js",
+        "js/locais-data.js"
       ]
     },
     {
@@ -3500,6 +3838,20 @@
       },
       "sha256": "1b694ff2ab7f2d70e889b0181cfc3cf53596af21e7a94f824855eca26c8fbb15",
       "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/agrosamas/agrosamas-01.jpg",
+      "ext": ".jpg",
+      "bytes": 4275247,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "c94bd1af3c658bf040fbb122d999fc5a6b85ce970b8652fb191f78c5970b2413",
+      "usedBy": [
+        "js/data/eventos.js",
+        "js/locais-data.js"
+      ]
     },
     {
       "path": "images/IGREJA_COLONIA_IGUACU.png",
@@ -3568,6 +3920,20 @@
       ]
     },
     {
+      "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
+      "ext": ".jpeg",
+      "bytes": 3102073,
+      "dimensions": {
+        "height": 2250,
+        "width": 4000
+      },
+      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
+      "usedBy": [
+        "js/data/eventos.js",
+        "js/locais-data.js"
+      ]
+    },
+    {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg",
       "ext": ".jpg",
       "bytes": 2780546,
@@ -3576,6 +3942,43 @@
         "width": 3672
       },
       "sha256": "9b569504758c0b45e82627018bb16d7cbd97bd184f55e145cc6b336414fddcff",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png",
+      "ext": ".png",
+      "bytes": 2617603,
+      "dimensions": {
+        "width": 1597,
+        "height": 896
+      },
+      "sha256": "a38b244de2009a705df7400bd8579bb9571131c13395003a548f261a6acc00ab",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png",
+      "ext": ".png",
+      "bytes": 2337143,
+      "dimensions": {
+        "width": 1596,
+        "height": 861
+      },
+      "sha256": "7ed2194946cfcd4b2a50d997725c87dca58c09c624153f125e2e4902fea8b82d",
+      "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png",
+      "ext": ".png",
+      "bytes": 2175710,
+      "dimensions": {
+        "width": 1600,
+        "height": 900
+      },
+      "sha256": "f16025203a03475f8b2f77914b03cf8200486eaff81c11fe90bbba6c4e8e4c52",
       "usedBy": [
         "js/rotas-data.js"
       ]

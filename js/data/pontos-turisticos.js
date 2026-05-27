@@ -54,7 +54,7 @@ window.TURISMO_PONTOS = [
     nome: "Casa da Memória Padre Bauer",
     categoria: "História",
     descricao: "Acervo e memória local reunidos em um espaço ligado à formação histórica do município.",
-    imagem: "images/CASA_DA_MEMORIA.png",
+    imagem: "images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg",
     url: "/local?id=casa-da-memoria",
     coordenadas: { lat: -25.877, lng: -50.3835 },
     tags: ["casa da memória", "história", "patrimônio", "museu", "memória local", "cultura"]

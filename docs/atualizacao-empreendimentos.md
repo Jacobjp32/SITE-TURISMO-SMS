@@ -1,5 +1,70 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-05-27
+
+Atualização realizada a partir das pastas específicas em `EMPREENDIMENTOS/`: `sawe`, `vivenda do mate`, `casa da memoria`, `agrosamas` e `ribeiro pesca`.
+
+### Inventário recebido
+
+| Pasta | TXT | Imagens/mídias | Formatos | Correspondência na base |
+|---|---:|---:|---|---|
+| `sawe` | 1 | 20 | `.jpeg` | `Sawe Parque Aquático` em `js/rotas-data.js` |
+| `vivenda do mate` | 1 | 0 | - | `Vivenda do Mate` em `js/rotas-data.js` |
+| `casa da memoria` | 1 vazio | 8 | `.JPEG` | `Casa da Memória Padre Bauer` em `js/data/pontos-turisticos.js` e `js/locais-data.js` |
+| `agrosamas` | 0 | 9 | `.JPG`, `.JPEG` | `AgroSamas` em `js/data/eventos.js`; contexto do `Parque de Exposições` em `js/locais-data.js` |
+| `ribeiro pesca` | 1 | 11 | `.jpeg`, `.png` | `Ribeiro Pesca e Turismo` em `js/rotas-data.js` |
+
+### Status por empreendimento
+
+| Empreendimento | Pasta de origem | Status | Arquivos atualizados | Imagens usadas | Pendências |
+|---|---|---|---|---|---|
+| Sawe Parque Aquático | `sawe` | Atualizado com sucesso | `js/rotas-data.js` | `images/empreendimentos/sawe/` com 6 `.jpeg` | Há 14 fotos extras não publicadas nesta rodada por curadoria. |
+| Vivenda do Mate | `vivenda do mate` | Atualizado com sucesso | `js/rotas-data.js` | - | TXT não trouxe imagens nem coordenadas novas; imagem segue pendente. |
+| Casa da Memória Padre Bauer | `casa da memoria` | Parcialmente atualizado | `js/data/pontos-turisticos.js`, `js/locais-data.js` | `images/empreendimentos/casa-da-memoria/` com 8 `.jpeg` | TXT segue vazio; textos e endereço foram preservados. |
+| AgroSamas | `agrosamas` | Atualizado como evento existente | `js/data/eventos.js`, `js/locais-data.js` | `images/empreendimentos/agrosamas/` com 3 imagens | Não foi criado item novo de empreendimento; material foi associado ao evento já existente e ao contexto do `Parque de Exposições`. |
+| Ribeiro Pesca e Turismo | `ribeiro pesca` | Atualizado com sucesso | `js/rotas-data.js` | Galeria curada com 8 imagens, incluindo 2 novas `.png` | `ribeiro-pesca-11.png` e outras 2 imagens úteis ficaram fora da galeria por limite editorial desta rodada. |
+
+### Dados incorporados
+
+- Sawe Parque Aquático: descrição ajustada com foco familiar e estrutura do parque, endereço textual específico, imagem principal e galeria.
+- Vivenda do Mate: descrição atualizada a partir do TXT, telefone corrigido para DDD `42`, localização textual refinada e site oficial adicionado.
+- Casa da Memória Padre Bauer: capa e galeria passaram a usar as fotos reais recebidas, preservando os textos existentes por falta de novo conteúdo descritivo confirmado.
+- AgroSamas: classificado nesta rodada como `evento` já existente; recebeu imagem principal e galeria curta para mapa/modal, sem criar item duplicado.
+- Parque de Exposições: passou a usar a nova curadoria visual vinculada ao AgroSamas, reforçando o contexto público do evento no mapa.
+- Ribeiro Pesca e Turismo: imagem principal substituída por foto aérea nova e galeria recalibrada para manter 8 imagens, preservando fotos anteriores úteis.
+
+### Imagens copiadas
+
+- `images/empreendimentos/sawe/sawe-01.jpeg` até `sawe-06.jpeg`
+- `images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg` até `casa-da-memoria-08.jpeg`
+- `images/empreendimentos/agrosamas/agrosamas-01.jpg` até `agrosamas-03.jpeg`
+- `images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png`
+- `images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png`
+- `images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png`
+
+### Imagens e arquivos ignorados
+
+- Sawe: 14 arquivos `.jpeg` permaneceram apenas na pasta bruta por curadoria desta rodada; não houve duplicata por hash.
+- Vivenda do Mate: sem imagens recebidas na pasta desta rodada.
+- Casa da Memória: nenhuma imagem web foi descartada; as 8 fotos recebidas foram aproveitadas.
+- AgroSamas: 6 imagens ficaram fora da publicação por redundância temática e peso alto; o material bruto foi mantido intacto.
+- Ribeiro Pesca: `ribeiro-pesca-06.jpeg`, `ribeiro-pesca-08.jpeg` e `ribeiro-pesca-11.png` ficaram fora da galeria publicada para manter limite editorial de 8 imagens.
+
+### Dados não incorporados por dúvida ou escopo
+
+- Não houve criação de novo cadastro para `AgroSamas`, porque a correspondência segura foi com o evento já existente.
+- `Casa da Memória` não recebeu alteração de texto, horário ou endereço porque o TXT continua vazio.
+- `Vivenda do Mate` segue sem imagem publicada por ausência de foto segura na pasta recebida.
+- Nenhum arquivo bruto foi apagado, convertido ou sobrescrito em `EMPREENDIMENTOS/`.
+
+### Pendências para revisão humana
+
+- Confirmar se `Vivenda do Mate` deve receber imagem em rodada futura e, se sim, enviar fotos web ou autorizar conversão de originais.
+- Confirmar endereço público final da `Casa da Memória Padre Bauer` para remover o marcador `(confirmar endereço)`.
+- Revisar se `AgroSamas` merece uma curadoria visual separada entre página de eventos e contexto do `Parque de Exposições`.
+- Confirmar no browser, após limpeza de cache local, se o diálogo do item `AgroSamas` passou a refletir a imagem principal adicionada em `js/data/eventos.js`.
+- Avaliar compressão futura das imagens grandes de `AgroSamas` e das novas `.png` de `Ribeiro Pesca`.
+
 ## Rodada 2026-05-26
 
 ### Remocao publica - Morangos da Mary
