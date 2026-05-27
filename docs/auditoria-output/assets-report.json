@@ -1,37 +1,26 @@
 {
-  "generatedAt": "2026-05-27T16:57:33.671Z",
+  "generatedAt": "2026-05-27T17:13:38.046Z",
   "totals": {
-    "mediaFiles": 217,
+    "mediaFiles": 211,
     "referencedMedia": 131,
-    "likelyOrphans": 86,
-    "duplicateGroups": 5,
+    "likelyOrphans": 80,
+    "duplicateGroups": 0,
     "missingReferences": 0,
-    "heavyMedia": 35
+    "heavyMedia": 28
   },
   "assets": [
     {
-      "path": "images/agrosamas-publico-show-noturno.jpeg",
-      "ext": ".jpeg",
-      "bytes": 3102073,
+      "path": "images/agrosamas-publico-show-noturno.webp",
+      "ext": ".webp",
+      "bytes": 262578,
       "dimensions": {
-        "height": 2250,
-        "width": 4000
+        "width": 1600,
+        "height": 900
       },
-      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
+      "sha256": "f970b6d4f9b926807e91ed26fb8cef0d7f3e944a5521b6886a8881570d6f6b3c",
       "usedBy": [
         "js/data/eventos.js"
       ]
-    },
-    {
-      "path": "images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
-      "ext": ".jpeg",
-      "bytes": 3102073,
-      "dimensions": {
-        "height": 2250,
-        "width": 4000
-      },
-      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-      "usedBy": []
     },
     {
       "path": "images/CASA_DA_MEMORIA.png",
@@ -1449,31 +1438,20 @@
       ]
     },
     {
-      "path": "images/ginasio-polacao.jpg",
-      "ext": ".jpg",
-      "bytes": 528933,
+      "path": "images/ginasio-polacao.webp",
+      "ext": ".webp",
+      "bytes": 310070,
       "dimensions": {
-        "height": 1080,
-        "width": 1920
+        "width": 1600,
+        "height": 900
       },
-      "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
+      "sha256": "55a872bc5c8df749367af5f5a135066cbd4e3ea05f6d52b99d5e7a45b09bd26f",
       "usedBy": [
         "js/locais-data.js"
       ]
     },
     {
       "path": "images/GINASIO_POLACAO.JPG",
-      "ext": ".jpg",
-      "bytes": 528933,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
-      "usedBy": []
-    },
-    {
-      "path": "images/GINASIO_POLACAO_PARA_TROCAR.JPG",
       "ext": ".jpg",
       "bytes": 528933,
       "dimensions": {
@@ -2118,46 +2096,27 @@
       "usedBy": []
     },
     {
-      "path": "images/novo-paco-municipal.jpg",
-      "ext": ".jpg",
-      "bytes": 16131727,
+      "path": "images/novo-paco-municipal.webp",
+      "ext": ".webp",
+      "bytes": 341874,
       "dimensions": {
-        "height": 3880,
-        "width": 9442
+        "width": 1600,
+        "height": 657
       },
-      "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
+      "sha256": "b4b0d0e6d74b70797b5346b96d893529e999deb680a3eeb5d5012705e6ebd24d",
       "usedBy": [
         "js/locais-data.js"
       ]
     },
     {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-      "ext": ".jpg",
-      "bytes": 16131727,
+      "path": "images/parque-exposicoes-aerea.webp",
+      "ext": ".webp",
+      "bytes": 438674,
       "dimensions": {
-        "height": 3880,
-        "width": 9442
+        "width": 1600,
+        "height": 900
       },
-      "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-      "usedBy": []
-    },
-    {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG",
-      "ext": ".dng",
-      "bytes": 25447897,
-      "dimensions": null,
-      "sha256": "c0d0a3666b02bc846d06ef2ecb75a54aeed7fc9789d720aef57f83e170e4ae24",
-      "usedBy": []
-    },
-    {
-      "path": "images/parque-exposicoes-aerea.jpg",
-      "ext": ".jpg",
-      "bytes": 680379,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
+      "sha256": "45f3ed3969f97745bf075f51f2bec4a1e7d7d47ae48712a88e08ff8913210427",
       "usedBy": [
         "galeria.html",
         "js/locais-data.js"
@@ -2241,17 +2200,6 @@
       "usedBy": []
     },
     {
-      "path": "images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg",
-      "ext": ".jpg",
-      "bytes": 680379,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
-      "usedBy": []
-    },
-    {
       "path": "images/PARRERAL__1_.jpg",
       "ext": ".jpg",
       "bytes": 287724,
@@ -2296,17 +2244,6 @@
       "usedBy": [
         "sabores.html"
       ]
-    },
-    {
-      "path": "images/PERY_PARA_TROCAR.png",
-      "ext": ".png",
-      "bytes": 60142932,
-      "dimensions": {
-        "width": 8064,
-        "height": 6048
-      },
-      "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-      "usedBy": []
     },
     {
       "path": "images/POLACA_ORACAO.jpg",
@@ -2489,14 +2426,14 @@
       ]
     },
     {
-      "path": "images/vapor-pery.png",
-      "ext": ".png",
-      "bytes": 60142932,
+      "path": "images/vapor-pery.webp",
+      "ext": ".webp",
+      "bytes": 281142,
       "dimensions": {
-        "width": 8064,
-        "height": 6048
+        "width": 1600,
+        "height": 1200
       },
-      "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
+      "sha256": "55be59e8bc7ca9d505fb5aa4711bd31b71cd7b155a0585458668df0e9a526d1e",
       "usedBy": [
         "js/data/pontos-turisticos.js"
       ]
@@ -2775,174 +2712,7 @@
       ]
     }
   ],
-  "duplicateGroups": [
-    [
-      {
-        "path": "images/agrosamas-publico-show-noturno.jpeg",
-        "ext": ".jpeg",
-        "bytes": 3102073,
-        "dimensions": {
-          "height": 2250,
-          "width": 4000
-        },
-        "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-        "usedBy": [
-          "js/data/eventos.js"
-        ]
-      },
-      {
-        "path": "images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
-        "ext": ".jpeg",
-        "bytes": 3102073,
-        "dimensions": {
-          "height": 2250,
-          "width": 4000
-        },
-        "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-        "usedBy": []
-      },
-      {
-        "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
-        "ext": ".jpeg",
-        "bytes": 3102073,
-        "dimensions": {
-          "height": 2250,
-          "width": 4000
-        },
-        "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-        "usedBy": [
-          "js/data/eventos.js"
-        ]
-      }
-    ],
-    [
-      {
-        "path": "images/ginasio-polacao.jpg",
-        "ext": ".jpg",
-        "bytes": 528933,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
-        "usedBy": [
-          "js/locais-data.js"
-        ]
-      },
-      {
-        "path": "images/GINASIO_POLACAO.JPG",
-        "ext": ".jpg",
-        "bytes": 528933,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
-        "usedBy": []
-      },
-      {
-        "path": "images/GINASIO_POLACAO_PARA_TROCAR.JPG",
-        "ext": ".jpg",
-        "bytes": 528933,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
-        "usedBy": []
-      }
-    ],
-    [
-      {
-        "path": "images/novo-paco-municipal.jpg",
-        "ext": ".jpg",
-        "bytes": 16131727,
-        "dimensions": {
-          "height": 3880,
-          "width": 9442
-        },
-        "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-        "usedBy": [
-          "js/locais-data.js"
-        ]
-      },
-      {
-        "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-        "ext": ".jpg",
-        "bytes": 16131727,
-        "dimensions": {
-          "height": 3880,
-          "width": 9442
-        },
-        "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-        "usedBy": []
-      }
-    ],
-    [
-      {
-        "path": "images/parque-exposicoes-aerea.jpg",
-        "ext": ".jpg",
-        "bytes": 680379,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
-        "usedBy": [
-          "galeria.html",
-          "js/locais-data.js"
-        ]
-      },
-      {
-        "path": "images/PARQUE_EXPOSICOES_2.jpg",
-        "ext": ".jpg",
-        "bytes": 680379,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
-        "usedBy": []
-      },
-      {
-        "path": "images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg",
-        "ext": ".jpg",
-        "bytes": 680379,
-        "dimensions": {
-          "height": 1080,
-          "width": 1920
-        },
-        "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
-        "usedBy": []
-      }
-    ],
-    [
-      {
-        "path": "images/PERY_PARA_TROCAR.png",
-        "ext": ".png",
-        "bytes": 60142932,
-        "dimensions": {
-          "width": 8064,
-          "height": 6048
-        },
-        "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-        "usedBy": []
-      },
-      {
-        "path": "images/vapor-pery.png",
-        "ext": ".png",
-        "bytes": 60142932,
-        "dimensions": {
-          "width": 8064,
-          "height": 6048
-        },
-        "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-        "usedBy": [
-          "js/data/pontos-turisticos.js"
-        ]
-      }
-    ]
-  ],
+  "duplicateGroups": [],
   "similarGroups": [
     [
       "images/CUIA_1.JPG",
@@ -3080,7 +2850,7 @@
       "images/empreendimentos/sawe/sawe-06.jpeg"
     ],
     [
-      "images/ginasio-polacao.jpg",
+      "images/ginasio-polacao.webp",
       "images/GINASIO_POLACAO.JPG"
     ],
     [
@@ -3124,10 +2894,6 @@
     [
       "images/mascotes/MASCOTE_PERY.png",
       "images/mascotes/MASCOTE_PERY.webp"
-    ],
-    [
-      "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-      "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG"
     ],
     [
       "images/PARQUE_EXPOSICOES_1.jpg",
@@ -3180,36 +2946,6 @@
   "missingReferences": [],
   "orphanLikely": [
     {
-      "path": "images/PERY_PARA_TROCAR.png",
-      "ext": ".png",
-      "bytes": 60142932,
-      "dimensions": {
-        "width": 8064,
-        "height": 6048
-      },
-      "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-      "usedBy": []
-    },
-    {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG",
-      "ext": ".dng",
-      "bytes": 25447897,
-      "dimensions": null,
-      "sha256": "c0d0a3666b02bc846d06ef2ecb75a54aeed7fc9789d720aef57f83e170e4ae24",
-      "usedBy": []
-    },
-    {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-      "ext": ".jpg",
-      "bytes": 16131727,
-      "dimensions": {
-        "height": 3880,
-        "width": 9442
-      },
-      "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-      "usedBy": []
-    },
-    {
       "path": "images/EU_AMO_SMS.png",
       "ext": ".png",
       "bytes": 5161495,
@@ -3254,17 +2990,6 @@
       "usedBy": []
     },
     {
-      "path": "images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
-      "ext": ".jpeg",
-      "bytes": 3102073,
-      "dimensions": {
-        "height": 2250,
-        "width": 4000
-      },
-      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-      "usedBy": []
-    },
-    {
       "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png",
       "ext": ".png",
       "bytes": 2337143,
@@ -3299,17 +3024,6 @@
     },
     {
       "path": "images/PARQUE_EXPOSICOES_2.jpg",
-      "ext": ".jpg",
-      "bytes": 680379,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "3465dad5d907f2ed472842077455d74c680b7388a64c1124c64750a1e0e4f4e8",
-      "usedBy": []
-    },
-    {
-      "path": "images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg",
       "ext": ".jpg",
       "bytes": 680379,
       "dimensions": {
@@ -3398,17 +3112,6 @@
     },
     {
       "path": "images/GINASIO_POLACAO.JPG",
-      "ext": ".jpg",
-      "bytes": 528933,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "b47b8383b5ea327939b7079e1191c00541870db2364340caed3b946d2a69cc3c",
-      "usedBy": []
-    },
-    {
-      "path": "images/GINASIO_POLACAO_PARA_TROCAR.JPG",
       "ext": ".jpg",
       "bytes": 528933,
       "dimensions": {
@@ -4155,62 +3858,6 @@
       ]
     },
     {
-      "path": "images/PERY_PARA_TROCAR.png",
-      "ext": ".png",
-      "bytes": 60142932,
-      "dimensions": {
-        "width": 8064,
-        "height": 6048
-      },
-      "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-      "usedBy": []
-    },
-    {
-      "path": "images/vapor-pery.png",
-      "ext": ".png",
-      "bytes": 60142932,
-      "dimensions": {
-        "width": 8064,
-        "height": 6048
-      },
-      "sha256": "5625129e4b069932cedb5d8b5bffd04965192e871bf86862b54b1501a62b80ba",
-      "usedBy": [
-        "js/data/pontos-turisticos.js"
-      ]
-    },
-    {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG",
-      "ext": ".dng",
-      "bytes": 25447897,
-      "dimensions": null,
-      "sha256": "c0d0a3666b02bc846d06ef2ecb75a54aeed7fc9789d720aef57f83e170e4ae24",
-      "usedBy": []
-    },
-    {
-      "path": "images/novo-paco-municipal.jpg",
-      "ext": ".jpg",
-      "bytes": 16131727,
-      "dimensions": {
-        "height": 3880,
-        "width": 9442
-      },
-      "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-      "usedBy": [
-        "js/locais-data.js"
-      ]
-    },
-    {
-      "path": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-      "ext": ".jpg",
-      "bytes": 16131727,
-      "dimensions": {
-        "height": 3880,
-        "width": 9442
-      },
-      "sha256": "9746b1efc213086809ac790f6940dd23d6dfc26bb5b7e417d1802a2938da9184",
-      "usedBy": []
-    },
-    {
       "path": "images/EU_AMO_SMS.png",
       "ext": ".png",
       "bytes": 5161495,
@@ -4334,30 +3981,6 @@
       "usedBy": [
         "js/rotas-data.js"
       ]
-    },
-    {
-      "path": "images/agrosamas-publico-show-noturno.jpeg",
-      "ext": ".jpeg",
-      "bytes": 3102073,
-      "dimensions": {
-        "height": 2250,
-        "width": 4000
-      },
-      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-      "usedBy": [
-        "js/data/eventos.js"
-      ]
-    },
-    {
-      "path": "images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
-      "ext": ".jpeg",
-      "bytes": 3102073,
-      "dimensions": {
-        "height": 2250,
-        "width": 4000
-      },
-      "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
-      "usedBy": []
     },
     {
       "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
@@ -4556,31 +4179,5 @@
       ]
     }
   ],
-  "canonicalSuggestions": [
-    {
-      "canonical": "images/agrosamas-publico-show-noturno.jpeg",
-      "alternatives": "images/empreendimentos/agrosamas/agrosamas-03.jpeg, images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG",
-      "usedBy": "images/agrosamas-publico-show-noturno.jpeg: js/data/eventos.js / images/empreendimentos/agrosamas/agrosamas-03.jpeg: js/data/eventos.js / images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG: sem referencia"
-    },
-    {
-      "canonical": "images/ginasio-polacao.jpg",
-      "alternatives": "images/GINASIO_POLACAO_PARA_TROCAR.JPG, images/GINASIO_POLACAO.JPG",
-      "usedBy": "images/ginasio-polacao.jpg: js/locais-data.js / images/GINASIO_POLACAO_PARA_TROCAR.JPG: sem referencia / images/GINASIO_POLACAO.JPG: sem referencia"
-    },
-    {
-      "canonical": "images/novo-paco-municipal.jpg",
-      "alternatives": "images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG",
-      "usedBy": "images/novo-paco-municipal.jpg: js/locais-data.js / images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG: sem referencia"
-    },
-    {
-      "canonical": "images/parque-exposicoes-aerea.jpg",
-      "alternatives": "images/PARQUE_EXPOSICOES_2.jpg, images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg",
-      "usedBy": "images/parque-exposicoes-aerea.jpg: galeria.html, js/locais-data.js / images/PARQUE_EXPOSICOES_2.jpg: sem referencia / images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg: sem referencia"
-    },
-    {
-      "canonical": "images/vapor-pery.png",
-      "alternatives": "images/PERY_PARA_TROCAR.png",
-      "usedBy": "images/vapor-pery.png: js/data/pontos-turisticos.js / images/PERY_PARA_TROCAR.png: sem referencia"
-    }
-  ]
+  "canonicalSuggestions": []
 }

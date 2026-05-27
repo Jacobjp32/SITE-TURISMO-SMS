@@ -1,5 +1,44 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-05-27 - otimização emergencial das imagens públicas
+
+Motivo da rodada:
+
+- corrigir a publicação indevida de imagens pesadas na árvore pública do site;
+- substituir as cópias `.png`, `.jpg` e `.jpeg` recém-criadas por versões `.webp` otimizadas;
+- manter os brutos de trabalho fora da área pública versionada.
+
+### Imagens otimizadas
+
+| Item | Arquivo público anterior | Tamanho antes | Arquivo público novo | Tamanho depois |
+| --- | --- | ---: | --- | ---: |
+| Vapor Pery | `images/vapor-pery.png` | 57,36 MB | `images/vapor-pery.webp` | 274,55 KB |
+| Novo Paço Municipal | `images/novo-paco-municipal.jpg` | 15,38 MB | `images/novo-paco-municipal.webp` | 333,86 KB |
+| Parque de Exposições | `images/parque-exposicoes-aerea.jpg` | 664,43 KB | `images/parque-exposicoes-aerea.webp` | 428,39 KB |
+| AgroSamas | `images/agrosamas-publico-show-noturno.jpeg` | 2,96 MB | `images/agrosamas-publico-show-noturno.webp` | 256,42 KB |
+| Ginásio Polacão | `images/ginasio-polacao.jpg` | 516,54 KB | `images/ginasio-polacao.webp` | 302,80 KB |
+
+### Referências atualizadas
+
+- `js/locais-data.js`
+- `js/data/eventos.js`
+- `js/data/pontos-turisticos.js`
+- `galeria.html`
+
+### Remoções e destino dos brutos
+
+- arquivos públicos pesados substituídos por WebP devem sair da árvore pública referenciada:
+  - `images/vapor-pery.png`
+  - `images/novo-paco-municipal.jpg`
+  - `images/parque-exposicoes-aerea.jpg`
+  - `images/agrosamas-publico-show-noturno.jpeg`
+  - `images/ginasio-polacao.jpg`
+- brutos de trabalho movidos para `EMPREENDIMENTOS/_brutos-imagens-troca-2026-05-27/`
+
+### Regra registrada
+
+- novas imagens públicas do site devem entrar apenas como `.webp` otimizado, salvo exceção técnica documentada.
+
 ## Rodada 2026-05-27 - Correção de imagens e nome no mapa turístico
 
 Escopo isolado desta rodada:
@@ -19,11 +58,11 @@ Escopo isolado desta rodada:
 
 | Item | Imagem anterior | Imagem publicada agora | Origem preservada | Observação |
 | --- | --- | --- | --- | --- |
-| Parque de Exposições | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/parque-exposicoes-aerea.jpg` | `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` | Removido o uso da capa do AgroSamas no card/local do parque. |
-| AgroSamas | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/agrosamas-publico-show-noturno.jpeg` | `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` | Capa alterada para a imagem aérea noturna com público/show. |
-| Paço Municipal | `images/PREFEITURA_MUNICIPAL.jpg` | `images/novo-paco-municipal.jpg` | `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` | Nome exibido alterado para `Novo Paço Municipal`. |
-| Ginásio Polacão | `images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg` | `images/ginasio-polacao.jpg` | `images/GINASIO_POLACAO_PARA_TROCAR.JPG` | Mantido o nome atual do item. |
-| Vapor Pery | `images/PONTE_SOB_O_RIO_IGUACU.jpg` | `images/vapor-pery.png` | `images/PERY_PARA_TROCAR.png` | Corrigida a imagem do ponto resumido. |
+| Parque de Exposições | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/parque-exposicoes-aerea.webp` | `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` | Removido o uso da capa do AgroSamas no card/local do parque. |
+| AgroSamas | `images/empreendimentos/agrosamas/agrosamas-01.jpg` | `images/agrosamas-publico-show-noturno.webp` | `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` | Capa alterada para a imagem aérea noturna com público/show. |
+| Paço Municipal | `images/PREFEITURA_MUNICIPAL.jpg` | `images/novo-paco-municipal.webp` | `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` | Nome exibido alterado para `Novo Paço Municipal`. |
+| Ginásio Polacão | `images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg` | `images/ginasio-polacao.webp` | `images/GINASIO_POLACAO_PARA_TROCAR.JPG` | Mantido o nome atual do item. |
+| Vapor Pery | `images/PONTE_SOB_O_RIO_IGUACU.jpg` | `images/vapor-pery.webp` | `images/PERY_PARA_TROCAR.png` | Corrigida a imagem do ponto resumido. |
 
 ### Pendências e decisões editoriais
 

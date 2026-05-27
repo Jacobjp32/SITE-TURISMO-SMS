@@ -1,14 +1,33 @@
 # Auditoria das bases de dados turisticas
 
+## Atualização 2026-05-27 - padronização WebP nas imagens públicas recentes
+
+Escopo desta correção:
+
+- nenhuma alteração de texto, categoria, coordenada ou estrutura do mapa;
+- apenas troca de referências de imagem pública para versões `.webp` otimizadas.
+
+Referências públicas ajustadas:
+
+- `images/vapor-pery.png` -> `images/vapor-pery.webp`
+- `images/novo-paco-municipal.jpg` -> `images/novo-paco-municipal.webp`
+- `images/parque-exposicoes-aerea.jpg` -> `images/parque-exposicoes-aerea.webp`
+- `images/agrosamas-publico-show-noturno.jpeg` -> `images/agrosamas-publico-show-noturno.webp`
+- `images/ginasio-polacao.jpg` -> `images/ginasio-polacao.webp`
+
+Diretriz consolidada:
+
+- novas imagens públicas incluídas em `js/locais-data.js`, `js/data/*` e páginas HTML devem usar `.webp` otimizado como padrão.
+
 ## Atualização 2026-05-27 - correção pontual de imagens/nome
 
 Mudanças públicas desta rodada:
 
-- `paco-municipal` em `js/locais-data.js`: nome alterado de `Paço Municipal` para `Novo Paço Municipal`; imagem e galeria atualizadas para `images/novo-paco-municipal.jpg`.
-- `parque-exposicoes` em `js/locais-data.js`: capa errada do AgroSamas substituída por `images/parque-exposicoes-aerea.jpg`; galeria deixou de reutilizar imagens do evento.
-- `agrosamas` em `js/data/eventos.js`: imagem principal alterada para `images/agrosamas-publico-show-noturno.jpeg`, mantendo as demais imagens anteriores na galeria.
-- `ginasio-polacao` em `js/locais-data.js`: imagem principal corrigida para `images/ginasio-polacao.jpg`.
-- `vapor-pery` em `js/data/pontos-turisticos.js`: imagem principal corrigida para `images/vapor-pery.png`.
+- `paco-municipal` em `js/locais-data.js`: nome alterado de `Paço Municipal` para `Novo Paço Municipal`; imagem e galeria atualizadas para `images/novo-paco-municipal.webp`.
+- `parque-exposicoes` em `js/locais-data.js`: capa errada do AgroSamas substituída por `images/parque-exposicoes-aerea.webp`; galeria deixou de reutilizar imagens do evento.
+- `agrosamas` em `js/data/eventos.js`: imagem principal alterada para `images/agrosamas-publico-show-noturno.webp`, mantendo as demais imagens anteriores na galeria.
+- `ginasio-polacao` em `js/locais-data.js`: imagem principal corrigida para `images/ginasio-polacao.webp`.
+- `vapor-pery` em `js/data/pontos-turisticos.js`: imagem principal corrigida para `images/vapor-pery.webp`.
 
 Arquivos-fonte preservados:
 

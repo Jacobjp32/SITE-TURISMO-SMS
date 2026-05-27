@@ -1,16 +1,53 @@
 # Otimizacao de imagens dos empreendimentos
 
+## Rodada 2026-05-27 - correção urgente de imagens públicas pesadas
+
+Problema corrigido:
+
+- imagens públicas recém-publicadas entraram em formatos pesados (`.png`, `.jpg`, `.jpeg`) diretamente na árvore pública do site.
+
+Ferramenta usada:
+
+- Pillow `12.2.0` via Python empacotado do ambiente.
+
+Parâmetro aplicado nesta rodada:
+
+- resize para largura máxima de `1600 px`
+- exportação `WEBP` com `quality=82`
+
+### Antes e depois
+
+| Arquivo original público | Dimensão original | Tamanho antes | Arquivo WebP | Dimensão final | Tamanho depois |
+| --- | --- | ---: | --- | --- | ---: |
+| `images/vapor-pery.png` | `8064x6048` | 57,36 MB | `images/vapor-pery.webp` | `1600x1200` | 274,55 KB |
+| `images/novo-paco-municipal.jpg` | `9442x3880` | 15,38 MB | `images/novo-paco-municipal.webp` | `1600x657` | 333,86 KB |
+| `images/parque-exposicoes-aerea.jpg` | `1920x1080` | 664,43 KB | `images/parque-exposicoes-aerea.webp` | `1600x900` | 428,39 KB |
+| `images/agrosamas-publico-show-noturno.jpeg` | `4000x2250` | 2,96 MB | `images/agrosamas-publico-show-noturno.webp` | `1600x900` | 256,42 KB |
+| `images/ginasio-polacao.jpg` | `1920x1080` | 516,54 KB | `images/ginasio-polacao.webp` | `1600x900` | 302,80 KB |
+
+### Faixas auditadas em `images/`
+
+- acima de `1 MB`: existem vários arquivos, incluindo públicos antigos e brutos de trabalho
+- acima de `3 MB`: havia públicos problemáticos e diversos brutos não publicados
+- acima de `10 MB`: os casos críticos desta rodada foram `images/vapor-pery.png` e `images/novo-paco-municipal.jpg`, além dos brutos correspondentes
+
+### Regra operacional daqui para frente
+
+- toda imagem pública nova deve ser publicada apenas em `WebP` otimizado;
+- cópia provisória em `jpg/png/jpeg` pode existir só como bruto de trabalho, fora da área pública referenciada;
+- se for necessário manter bruto, mover para pasta ignorada em `EMPREENDIMENTOS/`.
+
 ## Rodada 2026-05-27 - estabilização de paths públicos
 
 Para evitar `src` com espaço, acento ou nomes provisórios no HTML/JS, esta rodada criou apenas cópias públicas em ASCII, preservando todos os arquivos originais.
 
 Mapeamento aplicado:
 
-- `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` -> `images/agrosamas-publico-show-noturno.jpeg`
-- `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` -> `images/parque-exposicoes-aerea.jpg`
-- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` -> `images/novo-paco-municipal.jpg`
-- `images/GINASIO_POLACAO_PARA_TROCAR.JPG` -> `images/ginasio-polacao.jpg`
-- `images/PERY_PARA_TROCAR.png` -> `images/vapor-pery.png`
+- `images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG` -> `images/agrosamas-publico-show-noturno.webp`
+- `images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg` -> `images/parque-exposicoes-aerea.webp`
+- `images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG` -> `images/novo-paco-municipal.webp`
+- `images/GINASIO_POLACAO_PARA_TROCAR.JPG` -> `images/ginasio-polacao.webp`
+- `images/PERY_PARA_TROCAR.png` -> `images/vapor-pery.webp`
 
 Observações:
 

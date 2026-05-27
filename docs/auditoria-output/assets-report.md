@@ -1,33 +1,19 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-05-27T16:57:33.671Z.
+Gerado em 2026-05-27T17:13:38.046Z.
 
 ## Resumo
 
-- Midias encontradas: 217
+- Midias encontradas: 211
 - Midias referenciadas: 131
-- Orfas provaveis: 86
-- Grupos duplicados por SHA-256: 5
+- Orfas provaveis: 80
+- Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
-- Midias pesadas: 35
+- Midias pesadas: 28
 
 ## Imagens duplicadas reais
 
-| grupo | arquivo | bytes | uso |
-| --- | --- | --- | --- |
-| D1 | images/agrosamas-publico-show-noturno.jpeg | 3102073 | js/data/eventos.js |
-| D1 | images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG | 3102073 | sem referencia |
-| D1 | images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 | js/data/eventos.js |
-| D2 | images/ginasio-polacao.jpg | 528933 | js/locais-data.js |
-| D2 | images/GINASIO_POLACAO.JPG | 528933 | sem referencia |
-| D2 | images/GINASIO_POLACAO_PARA_TROCAR.JPG | 528933 | sem referencia |
-| D3 | images/novo-paco-municipal.jpg | 16131727 | js/locais-data.js |
-| D3 | images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG | 16131727 | sem referencia |
-| D4 | images/parque-exposicoes-aerea.jpg | 680379 | galeria.html, js/locais-data.js |
-| D4 | images/PARQUE_EXPOSICOES_2.jpg | 680379 | sem referencia |
-| D4 | images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg | 680379 | sem referencia |
-| D5 | images/PERY_PARA_TROCAR.png | 60142932 | sem referencia |
-| D5 | images/vapor-pery.png | 60142932 | js/data/pontos-turisticos.js |
+_Nenhum item encontrado._
 
 
 ## Imagens com nomes parecidos
@@ -46,7 +32,7 @@ Gerado em 2026-05-27T16:57:33.671Z.
 | N10 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg, images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg |
 | N11 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-01.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-02.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-03.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-04.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-05.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-06.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-08.jpeg, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png, images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png |
 | N12 | images/empreendimentos/sawe/sawe-01.jpeg, images/empreendimentos/sawe/sawe-02.jpeg, images/empreendimentos/sawe/sawe-03.jpeg, images/empreendimentos/sawe/sawe-04.jpeg, images/empreendimentos/sawe/sawe-05.jpeg, images/empreendimentos/sawe/sawe-06.jpeg |
-| N13 | images/ginasio-polacao.jpg, images/GINASIO_POLACAO.JPG |
+| N13 | images/ginasio-polacao.webp, images/GINASIO_POLACAO.JPG |
 | N14 | images/IGREJA_AGUA_BRANCA_10.jpg, images/IGREJA_AGUA_BRANCA_2.jpg, images/IGREJA_AGUA_BRANCA_3.jpg, images/IGREJA_AGUA_BRANCA_4.jpg, images/IGREJA_AGUA_BRANCA_5.jpg, images/IGREJA_AGUA_BRANCA_6.jpg, images/IGREJA_AGUA_BRANCA_7.jpg, images/IGREJA_AGUA_BRANCA_8.jpg, images/IGREJA_AGUA_BRANCA_9.jpg |
 | N15 | images/IGREJA_MATRIZ_1.png, images/IGREJA_MATRIZ_1.webp, images/IGREJA_MATRIZ_2.png |
 | N16 | images/IMG_2295.jpg, images/IMG_2301.jpg, images/IMG_2304.jpg, images/IMG_2326.jpg, images/IMG_2371.jpg |
@@ -54,15 +40,14 @@ Gerado em 2026-05-27T16:57:33.671Z.
 | N18 | images/mascotes/MASCOTE_CAPIVARA_PINHAO.png, images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp |
 | N19 | images/mascotes/MASCOTE_MENINO_POLONES_1.png, images/mascotes/MASCOTE_MENINO_POLONES_1.webp, images/mascotes/MASCOTE_MENINO_POLONES_2.png |
 | N20 | images/mascotes/MASCOTE_PERY.png, images/mascotes/MASCOTE_PERY.webp |
-| N21 | images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG, images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG |
-| N22 | images/PARQUE_EXPOSICOES_1.jpg, images/PARQUE_EXPOSICOES_2.jpg, images/PARQUE_EXPOSICOES_3.jpg, images/PARQUE_EXPOSICOES_4.jpg, images/PARQUE_EXPOSICOES_5.jpg, images/PARQUE_EXPOSICOES_6.jpg, images/PARQUE_EXPOSICOES_7.jpg |
-| N23 | images/PARRERAL__1_.jpg, images/PARRERAL__4_.jpg, images/PARRERAL__6_.jpg |
-| N24 | images/POLSKIE_SMAKI__1_.jpg, images/POLSKIE_SMAKI__5_.jpg, images/POLSKIE_SMAKI__6_.jpg |
-| N25 | images/PONTE_ENTRADA_CIDADE_1.JPG, images/PONTE_ENTRADA_CIDADE_1_2.jpg, images/PONTE_ENTRADA_CIDADE_1_3.jpg, images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp, images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp |
-| N26 | images/WEBP/NATAL-_17_.webp, images/WEBP/NATAL-_18_.webp, images/WEBP/NATAL-_19_.webp, images/WEBP/NATAL-_20_.webp |
-| N27 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp |
-| N28 | images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp, images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp |
-| N29 | images/WEBP/RUA-DO-MATHE-_1_-1.webp, images/WEBP/RUA-DO-MATHE-_1_.webp, images/WEBP/RUA-DO-MATHE-_2_.webp |
+| N21 | images/PARQUE_EXPOSICOES_1.jpg, images/PARQUE_EXPOSICOES_2.jpg, images/PARQUE_EXPOSICOES_3.jpg, images/PARQUE_EXPOSICOES_4.jpg, images/PARQUE_EXPOSICOES_5.jpg, images/PARQUE_EXPOSICOES_6.jpg, images/PARQUE_EXPOSICOES_7.jpg |
+| N22 | images/PARRERAL__1_.jpg, images/PARRERAL__4_.jpg, images/PARRERAL__6_.jpg |
+| N23 | images/POLSKIE_SMAKI__1_.jpg, images/POLSKIE_SMAKI__5_.jpg, images/POLSKIE_SMAKI__6_.jpg |
+| N24 | images/PONTE_ENTRADA_CIDADE_1.JPG, images/PONTE_ENTRADA_CIDADE_1_2.jpg, images/PONTE_ENTRADA_CIDADE_1_3.jpg, images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp, images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp |
+| N25 | images/WEBP/NATAL-_17_.webp, images/WEBP/NATAL-_18_.webp, images/WEBP/NATAL-_19_.webp, images/WEBP/NATAL-_20_.webp |
+| N26 | images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_4_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_5_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_6_.webp, images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp |
+| N27 | images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_1_.webp, images/WEBP/ROTA-TURISTICA-FLUVIOPOLIS-_2_.webp |
+| N28 | images/WEBP/RUA-DO-MATHE-_1_-1.webp, images/WEBP/RUA-DO-MATHE-_1_.webp, images/WEBP/RUA-DO-MATHE-_2_.webp |
 
 
 ## Referencias sem arquivo
@@ -74,19 +59,14 @@ _Nenhum item encontrado._
 
 | arquivo | bytes | dimensoes |
 | --- | --- | --- |
-| images/PERY_PARA_TROCAR.png | 60142932 | 8064x6048 |
-| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG | 25447897 |  |
-| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG | 16131727 | 9442x3880 |
 | images/EU_AMO_SMS.png | 5161495 | 1920x1563 |
 | images/CASA_DA_MEMORIA.png | 5020646 | 1920x1280 |
 | images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 | 1920x1280 |
 | images/IGREJA_COLONIA_IGUACU.png | 3855743 | 1920x1280 |
-| images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG | 3102073 | 4000x2250 |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png | 2337143 | 1596x861 |
 | images/PARQUE_EXPOSICOES_1.jpg | 713776 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_5.jpg | 700978 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_2.jpg | 680379 | 1920x1080 |
-| images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg | 680379 | 1920x1080 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-38.jpeg | 623658 | 1200x1600 |
 | images/PARQUE_EXPOSICOES_4.jpg | 620134 | 1920x1080 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-18.jpeg | 587070 | 1280x1600 |
@@ -95,7 +75,6 @@ _Nenhum item encontrado._
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-21.jpeg | 547055 | 1600x1066 |
 | images/CUIA_3.JPG | 536666 | 1920x1080 |
 | images/GINASIO_POLACAO.JPG | 528933 | 1920x1080 |
-| images/GINASIO_POLACAO_PARA_TROCAR.JPG | 528933 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_7.jpg | 525567 | 1920x1080 |
 | images/CUIA_1.JPG | 481303 | 1920x1080 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 | 1200x1600 |
@@ -169,11 +148,6 @@ _Nenhum item encontrado._
 | videos/VIDEO_ABERTURA_4K.mp4 | 98040012 | galeria.html |
 | videos/INSTITUCIONAL_POLONES.mp4 | 97037240 | galeria.html |
 | videos/ROTA_DO_TURISMO.mp4 | 91975315 | index.html |
-| images/PERY_PARA_TROCAR.png | 60142932 | sem referencia |
-| images/vapor-pery.png | 60142932 | js/data/pontos-turisticos.js |
-| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_2.DNG | 25447897 | sem referencia |
-| images/novo-paco-municipal.jpg | 16131727 | js/locais-data.js |
-| images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG | 16131727 | sem referencia |
 | images/EU_AMO_SMS.png | 5161495 | sem referencia |
 | images/CASA_DA_MEMORIA.png | 5020646 | sem referencia |
 | images/empreendimentos/agrosamas/agrosamas-02.jpg | 4811831 | js/data/eventos.js |
@@ -184,8 +158,6 @@ _Nenhum item encontrado._
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 | js/rotas-data.js |
 | images/IGREJA_MATRIZ_2.png | 3315073 | js/locais-data.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 | js/rotas-data.js |
-| images/agrosamas-publico-show-noturno.jpeg | 3102073 | js/data/eventos.js |
-| images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG | 3102073 | sem referencia |
 | images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 | js/data/eventos.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 | js/rotas-data.js |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png | 2617603 | js/rotas-data.js |
@@ -205,11 +177,5 @@ _Nenhum item encontrado._
 
 ## Sugestao de canonica para duplicatas reais
 
-| canonical | alternatives | usedBy |
-| --- | --- | --- |
-| images/agrosamas-publico-show-noturno.jpeg | images/empreendimentos/agrosamas/agrosamas-03.jpeg, images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG | images/agrosamas-publico-show-noturno.jpeg: js/data/eventos.js / images/empreendimentos/agrosamas/agrosamas-03.jpeg: js/data/eventos.js / images/AGROSAMAS_PUBLICO SHOW_PARA_TROCAR.JPEG: sem referencia |
-| images/ginasio-polacao.jpg | images/GINASIO_POLACAO_PARA_TROCAR.JPG, images/GINASIO_POLACAO.JPG | images/ginasio-polacao.jpg: js/locais-data.js / images/GINASIO_POLACAO_PARA_TROCAR.JPG: sem referencia / images/GINASIO_POLACAO.JPG: sem referencia |
-| images/novo-paco-municipal.jpg | images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG | images/novo-paco-municipal.jpg: js/locais-data.js / images/NOVO_PAÇO_MUNICIPAL_PARA_USAR_1.JPG: sem referencia |
-| images/parque-exposicoes-aerea.jpg | images/PARQUE_EXPOSICOES_2.jpg, images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg | images/parque-exposicoes-aerea.jpg: galeria.html, js/locais-data.js / images/PARQUE_EXPOSICOES_2.jpg: sem referencia / images/PARQUE_EXPOSICOES_PARA_TROCAR.jpg: sem referencia |
-| images/vapor-pery.png | images/PERY_PARA_TROCAR.png | images/vapor-pery.png: js/data/pontos-turisticos.js / images/PERY_PARA_TROCAR.png: sem referencia |
+_Nenhum item encontrado._
 
