@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-05-28T13:22:39.301Z",
+  "generatedAt": "2026-05-28T13:40:45.617Z",
   "totals": {
-    "files": 352,
+    "files": 353,
     "html": 36,
     "css": 21,
-    "js": 35,
+    "js": 36,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,18 +46,18 @@
     },
     {
       "ext": ".js",
-      "files": 35,
-      "bytes": 709374
+      "files": 36,
+      "bytes": 738378
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 628301
+      "bytes": 641295
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 296008
+      "bytes": 296081
     },
     {
       "ext": ".md",
@@ -178,8 +178,8 @@
     },
     {
       "dir": ".",
-      "files": 39,
-      "bytes": 916522
+      "files": 40,
+      "bytes": 958498
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -189,12 +189,12 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 448958
+      "bytes": 448980
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 296008
+      "bytes": 296081
     },
     {
       "dir": "docs",
@@ -786,7 +786,7 @@
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 34257
+      "bytes": 47251
     },
     {
       "path": "galeria.html",
@@ -1238,6 +1238,10 @@
         "https://www.googletagmanager.com/gtag/js",
         "js/scroll-animations.js",
         "js/nav-shared.js",
+        "config.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "translations.js",
         "js/cookies.js"
       ],
@@ -2115,10 +2119,10 @@
     },
     {
       "file": "css/mapa-turistico.css",
-      "bytes": 36595,
+      "bytes": 36668,
       "important": 13,
       "media": 7,
-      "selectorCount": 257
+      "selectorCount": 258
     },
     {
       "file": "css/noticia.css",
@@ -2849,7 +2853,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 76089,
+      "bytes": 76111,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -3246,6 +3250,59 @@
       "addEventListeners": 5
     },
     {
+      "file": "tmp-eventos-inline-check.js",
+      "bytes": 28012,
+      "globals": [
+        "const DIAS",
+        "const EVENT_BLOCKED_STATUS",
+        "const EVENT_CATEGORY_MAP",
+        "const EVENT_PUBLIC_APPROVED",
+        "const MESES",
+        "const MESES3",
+        "window.CONFIG",
+        "window.__smsCompatAppCheckInitialized",
+        "window.animRefresh",
+        "window.firebase"
+      ],
+      "functions": [
+        "abrirModal",
+        "aplicarFiltros",
+        "append",
+        "asCleanString",
+        "atualizarContadores",
+        "atualizarTitulo",
+        "cardEvento",
+        "carregarEventos",
+        "compareEvents",
+        "ensurePublicFirestore",
+        "escapeHtml",
+        "eventIdentityKey",
+        "eventSignatureKey",
+        "extractEventMainImage",
+        "fecharModal",
+        "isPublicApprovedStatus",
+        "loadApprovedFirebaseEvents",
+        "loadStaticEvents",
+        "mergeEvents",
+        "mostrarVista",
+        "normalizeCategory",
+        "normalizeCompareText",
+        "normalizeEventDate",
+        "normalizeFirebaseEvent",
+        "normalizeStaticEvent",
+        "normalizeStatus",
+        "normalizeWhatsAppLink",
+        "parseTimeSortValue",
+        "renderCalendario",
+        "renderDestaques",
+        "renderLista",
+        "sanitizePublicUrl"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 8
+    },
+    {
       "file": "translations.js",
       "bytes": 188152,
       "globals": [
@@ -3290,14 +3347,14 @@
       "examples": "eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html"
     },
     {
+      "script": "config.js",
+      "pages": 7,
+      "examples": "admin-firebase.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
+    },
+    {
       "script": "js/site-meta.js",
       "pages": 7,
       "examples": "index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html"
-    },
-    {
-      "script": "config.js",
-      "pages": 6,
-      "examples": "admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
     },
     {
       "script": "js/scroll-animations.js",
@@ -3429,11 +3486,15 @@
   "sharedGlobals": [
     {
       "global": "window.__smsCompatAppCheckInitialized",
-      "files": "js/firebase-app-check.js, js/mapa-turistico.js"
+      "files": "js/firebase-app-check.js, js/mapa-turistico.js, tmp-eventos-inline-check.js"
     },
     {
       "global": "window.addEventListener",
       "files": "js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+    },
+    {
+      "global": "window.animRefresh",
+      "files": "js/scroll-animations.js, tmp-eventos-inline-check.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3441,7 +3502,11 @@
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
+      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js, tmp-eventos-inline-check.js"
+    },
+    {
+      "global": "window.firebase",
+      "files": "js/mapa-turistico.js, tmp-eventos-inline-check.js"
     },
     {
       "global": "window.FirebaseSystem",

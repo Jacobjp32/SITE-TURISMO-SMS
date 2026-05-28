@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-28T13:22:39.301Z.
+Gerado em 2026-05-28T13:40:45.617Z.
 
 ## Resumo
 
-- Arquivos mapeados: 352
+- Arquivos mapeados: 353
 - HTMLs: 36
 - CSS: 21
-- JS: 35
+- JS: 36
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,9 +22,9 @@ Gerado em 2026-05-28T13:22:39.301Z.
 | .webp | 27 | 8446450 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 709374 |
-| .html | 36 | 628301 |
-| .css | 21 | 296008 |
+| .js | 36 | 738378 |
+| .html | 36 | 641295 |
+| .css | 21 | 296081 |
 | .md | 21 | 218912 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
@@ -127,7 +127,7 @@ Gerado em 2026-05-28T13:22:39.301Z.
 | --- | --- |
 | 404.html | 2866 |
 | admin-firebase.html | 88676 |
-| eventos.html | 34257 |
+| eventos.html | 47251 |
 | galeria.html | 37729 |
 | index.html | 147049 |
 | local.html | 20710 |
@@ -209,8 +209,8 @@ Gerado em 2026-05-28T13:22:39.301Z.
 | js/nav-shared.js | 17 | eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html, noticias.html |
 | js/cookies.js | 16 | 404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html |
 | js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
+| config.js | 7 | admin-firebase.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
-| config.js | 6 | admin-firebase.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
 | js/data/hospedagens.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
 | js/data/restaurantes.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
@@ -253,7 +253,7 @@ _Nenhum item encontrado._
 | css/index.css | 133856 | 460 | 40 | 762 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
-| css/mapa-turistico.css | 36595 | 13 | 7 | 257 |
+| css/mapa-turistico.css | 36668 | 13 | 7 | 258 |
 | css/noticia.css | 2034 | 0 | 1 | 18 |
 | css/noticias.css | 3926 | 0 | 2 | 40 |
 | css/o-que-fazer.css | 3662 | 1 | 1 | 21 |
@@ -342,10 +342,12 @@ _Nenhum item encontrado._
 
 | global | files |
 | --- | --- |
-| window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js |
+| window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js, tmp-eventos-inline-check.js |
 | window.addEventListener | js/chatbot.js, js/nav-shared.js, js/site-stats.js |
+| window.animRefresh | js/scroll-animations.js, tmp-eventos-inline-check.js |
 | window.applyTranslations | js/nav-shared.js, translations.js |
-| window.CONFIG | config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js |
+| window.CONFIG | config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js, tmp-eventos-inline-check.js |
+| window.firebase | js/mapa-turistico.js, tmp-eventos-inline-check.js |
 | window.FirebaseSystem | js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |

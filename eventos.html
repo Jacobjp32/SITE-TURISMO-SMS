@@ -296,6 +296,10 @@
         </p>
     </footer>
 
+    <script src="config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js" defer></script>
     <script>
     // ================================================================
     // CALENDÁRIO DE EVENTOS 2026 — v3 reescrito
@@ -305,6 +309,19 @@
                    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     const MESES3 = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     const DIAS   = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    const EVENT_PUBLIC_APPROVED = new Set(['aprovado', 'approved']);
+    const EVENT_BLOCKED_STATUS = new Set(['pendente', 'pending', 'rejeitado', 'rejected']);
+    const EVENT_CATEGORY_MAP = {
+        religioso: 'religioso',
+        religiosa: 'religioso',
+        cultural: 'cultural',
+        cultura: 'cultural',
+        feira: 'feira',
+        feiras: 'feira',
+        esportivo: 'esportivo',
+        esporte: 'esportivo',
+        bingo: 'bingo'
+    };
 
     let todos      = [];      // todos os eventos do JSON
     let filtrados  = [];      // resultado dos filtros ativos
@@ -314,21 +331,303 @@
     let calMes     = new Date().getMonth() + 1;
     let calAno     = 2026;
 
-    // ── Carregar JSON ────────────────────────────────────────────────
-    async function carregarEventos() {
+    function asCleanString(value) {
+        if (value === null || value === undefined) return '';
+        const text = String(value).trim();
+        return !text || text === 'undefined' || text === 'null' || text === 'NaN' ? '' : text;
+    }
+
+    function escapeHtml(value) {
+        return asCleanString(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function normalizeCompareText(value) {
+        return asCleanString(value)
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toLowerCase()
+            .replace(/[^a-z0-9\s]/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+    }
+
+    function normalizeStatus(status) {
+        return normalizeCompareText(status);
+    }
+
+    function isPublicApprovedStatus(status) {
+        const normalized = normalizeStatus(status);
+        if (!normalized) return true;
+        if (EVENT_BLOCKED_STATUS.has(normalized)) return false;
+        return EVENT_PUBLIC_APPROVED.has(normalized);
+    }
+
+    function normalizeCategory(value, fallback) {
+        const normalized = normalizeCompareText(value);
+        return EVENT_CATEGORY_MAP[normalized] || fallback || 'cultural';
+    }
+
+    function normalizeEventDate(value) {
+        const text = asCleanString(value);
+        if (!text) return '';
+        if (/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
+
+        const brDate = text.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+        if (brDate) {
+            const day = brDate[1].padStart(2, '0');
+            const month = brDate[2].padStart(2, '0');
+            return `${brDate[3]}-${month}-${day}`;
+        }
+
+        return '';
+    }
+
+    function extractEventMainImage(images) {
+        if (!Array.isArray(images) || images.length === 0) return '';
+        const first = images[0];
+        if (typeof first === 'string') return asCleanString(first);
+        if (first && typeof first === 'object') {
+            return asCleanString(first.url || first.src || first.downloadURL || first.path);
+        }
+        return '';
+    }
+
+    function sanitizePublicUrl(value) {
+        const text = asCleanString(value);
+        if (!text) return '';
+        if (/^(https?:\/\/|\/|\.\/|\.\.\/)/i.test(text)) return text;
+        return '';
+    }
+
+    function normalizeWhatsAppLink(value) {
+        const text = asCleanString(value);
+        if (!text) return '';
+        if (/^https?:\/\//i.test(text)) return text;
+        const digits = text.replace(/\D/g, '');
+        return digits ? `https://wa.me/${digits}` : '';
+    }
+
+    function parseTimeSortValue(value) {
+        const text = asCleanString(value).toLowerCase();
+        if (!text) return Number.MAX_SAFE_INTEGER;
+
+        let match = text.match(/(\d{1,2})[:h](\d{2})/);
+        if (match) return parseInt(match[1], 10) * 60 + parseInt(match[2], 10);
+
+        match = text.match(/(\d{1,2})\s*h\b/);
+        if (match) return parseInt(match[1], 10) * 60;
+
+        match = text.match(/(\d{1,2})/);
+        if (match) return parseInt(match[1], 10) * 60;
+
+        return Number.MAX_SAFE_INTEGER;
+    }
+
+    function compareEvents(a, b) {
+        const dateCompare = a.data.localeCompare(b.data);
+        if (dateCompare !== 0) return dateCompare;
+
+        const timeCompare = parseTimeSortValue(a.horario) - parseTimeSortValue(b.horario);
+        if (timeCompare !== 0) return timeCompare;
+
+        return a.titulo.localeCompare(b.titulo, 'pt-BR');
+    }
+
+    function eventIdentityKey(evento) {
+        const id = normalizeCompareText(evento.originalId || evento.id);
+        return id ? `id:${id}` : '';
+    }
+
+    function eventSignatureKey(evento) {
+        const baseLocation = evento.local || evento.organizador || '';
+        return [
+            normalizeCompareText(evento.titulo),
+            normalizeCompareText(evento.data),
+            normalizeCompareText(evento.horario),
+            normalizeCompareText(baseLocation)
+        ].join('|');
+    }
+
+    function normalizeStaticEvent(evento) {
+        const data = normalizeEventDate(evento && evento.data);
+        if (!data) return null;
+
+        return {
+            id: asCleanString(evento.id || ''),
+            originalId: asCleanString(evento.id || ''),
+            titulo: asCleanString(evento.titulo) || 'Evento sem título',
+            descricao: asCleanString(evento.descricao),
+            data: data,
+            horario: asCleanString(evento.horario),
+            local: asCleanString(evento.local),
+            organizador: asCleanString(evento.organizador),
+            imagem: sanitizePublicUrl(evento.imagem || evento.image),
+            valor: asCleanString(evento.valor),
+            site: sanitizePublicUrl(evento.site || evento.url),
+            whatsapp: normalizeWhatsAppLink(evento.whatsapp),
+            categoria: normalizeCategory(evento.categoria, 'cultural'),
+            recorrente: Boolean(evento.recorrente),
+            destaque: Boolean(evento.destaque),
+            origem: 'estatico'
+        };
+    }
+
+    function normalizeFirebaseEvent(doc) {
+        const raw = doc && typeof doc.data === 'function' ? doc.data() : (doc || {});
+        const data = normalizeEventDate(raw.date || raw.data || raw.dataInicio);
+        if (!data) {
+            console.warn('[eventos] Evento aprovado ignorado por falta de data válida.', {
+                collection: 'eventos_aprovados',
+                docId: doc && doc.id ? doc.id : raw.id || null
+            });
+            return null;
+        }
+
+        const status = normalizeStatus(raw.status);
+        const categoriaBruta = raw.category || raw.categoria || raw.tipo;
+        return {
+            id: asCleanString((doc && doc.id) || raw.id || ''),
+            originalId: asCleanString((doc && doc.id) || raw.id || ''),
+            titulo: asCleanString(raw.title || raw.nome) || 'Evento sem título',
+            descricao: asCleanString(raw.description || raw.descricao),
+            data: data,
+            horario: asCleanString(raw.time || raw.hora || raw.horaInicio),
+            local: asCleanString(raw.location || raw.local || raw.establishmentName || raw.organizer),
+            organizador: asCleanString(raw.organizer || raw.establishmentName || raw.ownerName),
+            imagem: sanitizePublicUrl(raw.mainImage || extractEventMainImage(raw.images) || raw.image),
+            valor: asCleanString(raw.value || raw.valor || raw.entrada),
+            site: sanitizePublicUrl(raw.website || raw.site || raw.url),
+            whatsapp: normalizeWhatsAppLink(raw.whatsapp || raw.phone || raw.telefone),
+            categoria: normalizeCategory(categoriaBruta, 'cultural'),
+            recorrente: Boolean(raw.recorrente),
+            destaque: Boolean(raw.destaque),
+            origem: 'firebase',
+            firebaseStatus: status
+        };
+    }
+
+    function mergeEvents(staticEvents, firebaseEvents) {
+        const merged = [];
+        const identityKeys = new Set();
+        const signatureKeys = new Set();
+
+        function append(evento) {
+            if (!evento) return;
+
+            const identity = eventIdentityKey(evento);
+            const signature = eventSignatureKey(evento);
+            if (identity && identityKeys.has(identity)) return;
+            if (signature && signatureKeys.has(signature)) return;
+
+            if (identity) identityKeys.add(identity);
+            if (signature) signatureKeys.add(signature);
+            merged.push(evento);
+        }
+
+        staticEvents.forEach(append);
+        firebaseEvents.forEach(append);
+
+        return merged
+            .sort(compareEvents)
+            .map((evento, index) => Object.assign({}, evento, { uid: index + 1 }));
+    }
+
+    async function loadStaticEvents() {
         const urls = ['eventos-2026.json', './eventos-2026.json', '/eventos-2026.json'];
         let data = null;
 
         for (const url of urls) {
             try {
-                const r = await fetch(url, { cache: 'no-store' });
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                data = await r.json();
+                const response = await fetch(url, { cache: 'no-store' });
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                data = await response.json();
                 break;
-            } catch(e) { console.warn('fetch falhou:', url, e.message); }
+            } catch (error) {
+                console.warn('[eventos] Falha ao carregar agenda estática:', url, error && error.message ? error.message : error);
+            }
         }
 
-        if (!data) {
+        if (!Array.isArray(data)) {
+            return { items: [], loaded: false };
+        }
+
+        return {
+            items: data.map(normalizeStaticEvent).filter(Boolean),
+            loaded: true
+        };
+    }
+
+    async function ensurePublicFirestore() {
+        if (!window.CONFIG || !window.CONFIG.firebase) {
+            console.warn('[eventos] CONFIG.firebase ausente. Mantendo apenas eventos estáticos.');
+            return null;
+        }
+
+        if (!window.firebase || !window.firebase.initializeApp || !window.firebase.firestore) {
+            console.warn('[eventos] Firebase compat indisponível. Mantendo apenas eventos estáticos.');
+            return null;
+        }
+
+        try {
+            if (!window.firebase.apps || !window.firebase.apps.length) {
+                window.firebase.initializeApp(window.CONFIG.firebase);
+            }
+
+            if (window.firebase.appCheck && !window.__smsCompatAppCheckInitialized) {
+                try {
+                    const appCheckModule = await import('./js/firebase-app-check.js');
+                    if (appCheckModule && typeof appCheckModule.initCompatAppCheck === 'function') {
+                        await appCheckModule.initCompatAppCheck(window.firebase);
+                    }
+                } catch (appCheckError) {
+                    console.warn('[eventos] App Check indisponível na agenda pública.', appCheckError && appCheckError.message ? appCheckError.message : appCheckError);
+                }
+            }
+
+            return window.firebase.firestore();
+        } catch (error) {
+            console.warn('[eventos] Falha ao inicializar Firestore público.', error);
+            return null;
+        }
+    }
+
+    async function loadApprovedFirebaseEvents() {
+        const db = await ensurePublicFirestore();
+        if (!db) return [];
+
+        try {
+            const snapshot = await db.collection('eventos_aprovados').get();
+            return snapshot.docs
+                .filter(doc => {
+                    const status = doc.exists ? doc.data().status : '';
+                    return isPublicApprovedStatus(status);
+                })
+                .map(normalizeFirebaseEvent)
+                .filter(Boolean);
+        } catch (error) {
+            console.warn('[eventos] Falha ao carregar eventos aprovados do Firebase.', {
+                collection: 'eventos_aprovados',
+                filter: 'status ausente || aprovado || approved',
+                error: error,
+                stack: error && error.stack ? error.stack : null
+            });
+            return [];
+        }
+    }
+
+    // ── Carregar JSON + Firebase ────────────────────────────────────
+    async function carregarEventos() {
+        const [staticResult, firebaseItems] = await Promise.all([
+            loadStaticEvents(),
+            loadApprovedFirebaseEvents()
+        ]);
+
+        if (!staticResult.loaded) {
             document.getElementById('loading').innerHTML =
                 '<div style="text-align:center;padding:3rem">' +
                 '<div style="font-size:2.5rem;margin-bottom:1rem">📅</div>' +
@@ -339,7 +638,7 @@
             return;
         }
 
-        todos = data.sort((a,b) => a.data.localeCompare(b.data));
+        todos = mergeEvents(staticResult.items, firebaseItems);
         document.getElementById('loading').style.display = 'none';
 
         atualizarContadores();
@@ -429,7 +728,7 @@
 
             html += `<div class="mes-secao">
                 <h3 class="mes-titulo">
-                    ${mesNome} <span class="mes-count">(${evs.length} evento${evs.length!==1?'s':''})</span>
+                    ${escapeHtml(mesNome)} <span class="mes-count">(${evs.length} evento${evs.length!==1?'s':''})</span>
                 </h3>`;
 
             // Cards de eventos únicos (não recorrentes ou destaques)
@@ -447,9 +746,9 @@
                 html += `<div class="feira-resumo">
                     <span style="font-size:1.3rem;">🏪</span>
                     <div>
-                        <strong>${titulo}</strong>
-                        — ${freq} · ${ocorr} ocorrência${ocorr!==1?'s':''} em ${mesNome}
-                        <span style="color:#aaa;margin-left:0.5rem;">📍 ${primeiro.local} · 🕐 ${primeiro.horario}</span>
+                        <strong>${escapeHtml(titulo)}</strong>
+                        — ${escapeHtml(freq)} · ${ocorr} ocorrência${ocorr!==1?'s':''} em ${escapeHtml(mesNome)}
+                        <span style="color:#aaa;margin-left:0.5rem;">📍 ${escapeHtml(primeiro.local)} · 🕐 ${escapeHtml(primeiro.horario)}</span>
                     </div>
                 </div>`;
             });
@@ -469,20 +768,20 @@
             ? '<span class="badge-dest">destaque</span>'
             : (ev.recorrente ? '<span class="badge-rec">recorrente</span>' : '');
 
-        return `<div class="ev-card ${ev.categoria||''} ${ev.destaque?'destaque':''}" onclick="abrirModal(${ev.id})">
+        return `<div class="ev-card ${escapeHtml(ev.categoria || '')} ${ev.destaque ? 'destaque' : ''}" onclick="abrirModal(${ev.uid})">
             <div class="ev-data">
                 <div class="dia">${dia}</div>
-                <div class="mes">${mes}</div>
-                <div class="dow">${dow}</div>
+                <div class="mes">${escapeHtml(mes)}</div>
+                <div class="dow">${escapeHtml(dow)}</div>
             </div>
             <div class="ev-info">
-                <h4>${ev.destaque?'⭐ ':''}${ev.titulo}${badgeExtra}</h4>
+                <h4>${ev.destaque?'⭐ ':''}${escapeHtml(ev.titulo)}${badgeExtra}</h4>
                 <div class="ev-meta">
-                    <span>🕐 ${ev.horario}</span>
-                    <span>📍 ${ev.local}</span>
+                    <span>🕐 ${escapeHtml(ev.horario)}</span>
+                    <span>📍 ${escapeHtml(ev.local)}</span>
                 </div>
             </div>
-            <button class="btn-ver" onclick="event.stopPropagation();abrirModal(${ev.id})">Ver mais</button>
+            <button class="btn-ver" onclick="event.stopPropagation();abrirModal(${ev.uid})">Ver mais</button>
         </div>`;
     }
 
@@ -499,10 +798,10 @@
 
         document.getElementById('destaqueGrid').innerHTML = lista.map(ev => {
             const d = new Date(ev.data + 'T12:00:00');
-            return `<div class="destaque-card" onclick="abrirModal(${ev.id})">
+            return `<div class="destaque-card" onclick="abrirModal(${ev.uid})">
                 <div class="dc-data">📅 ${d.getDate()} de ${MESES[d.getMonth()+1]}</div>
-                <h4>${ev.titulo}</h4>
-                <div class="dc-local">📍 ${ev.local}</div>
+                <h4>${escapeHtml(ev.titulo)}</h4>
+                <div class="dc-local">📍 ${escapeHtml(ev.local)}</div>
             </div>`;
         }).join('');
     }
@@ -534,7 +833,7 @@
             let evHtml = '';
             const mostrar = evsDia.slice(0, 3);
             mostrar.forEach(e => {
-                evHtml += `<div class="mini-ev ${e.categoria||''} ${e.destaque?'destaque':''}" onclick="abrirModal(${e.id})" title="${e.titulo}">${e.titulo}</div>`;
+                evHtml += `<div class="mini-ev ${escapeHtml(e.categoria || '')} ${e.destaque ? 'destaque' : ''}" onclick="abrirModal(${e.uid})" title="${escapeHtml(e.titulo)}">${escapeHtml(e.titulo)}</div>`;
             });
             if (evsDia.length > 3) {
                 evHtml += `<div class="mini-ev" style="background:#eee;color:#666;">+${evsDia.length-3}</div>`;
@@ -556,19 +855,39 @@
     }
 
     // ── Modal ────────────────────────────────────────────────────────
-    function abrirModal(id) {
-        const ev = todos.find(e => e.id === id);
+    function abrirModal(uid) {
+        const ev = todos.find(e => e.uid === uid);
         if (!ev) return;
 
         const d = new Date(ev.data + 'T12:00:00');
-        const dataStr = `${d.getDate()} de ${MESES[d.getMonth()+1]} de 2026 (${DIAS[d.getDay()]})`;
+        const dataStr = `${d.getDate()} de ${MESES[d.getMonth()+1]} de ${d.getFullYear()} (${DIAS[d.getDay()]})`;
+        const imageMarkup = ev.imagem
+            ? `<img src="${escapeHtml(ev.imagem)}" alt="${escapeHtml(ev.titulo)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:1rem;" onerror="this.style.display='none'">`
+            : '';
+        const organizadorMarkup = ev.organizador
+            ? `<div class="modal-row"><div class="ic">👤</div><div><div class="label">Organizador</div>${escapeHtml(ev.organizador)}</div></div>`
+            : '';
+        const valorMarkup = ev.valor
+            ? `<div class="modal-row"><div class="ic">🎟️</div><div><div class="label">Valor</div>${escapeHtml(ev.valor)}</div></div>`
+            : '';
+        const siteMarkup = ev.site
+            ? `<div class="modal-row"><div class="ic">🔗</div><div><div class="label">Site</div><a href="${escapeHtml(ev.site)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ev.site)}</a></div></div>`
+            : '';
+        const whatsappMarkup = ev.whatsapp
+            ? `<div class="modal-row"><div class="ic">💬</div><div><div class="label">WhatsApp</div><a href="${escapeHtml(ev.whatsapp)}" target="_blank" rel="noopener noreferrer">Abrir contato</a></div></div>`
+            : '';
 
         document.getElementById('modalTitulo').textContent = (ev.destaque ? '⭐ ' : '') + ev.titulo;
         document.getElementById('modalBody').innerHTML = `
-            <div class="modal-row"><div class="ic">📅</div><div><div class="label">Data</div>${dataStr}</div></div>
-            <div class="modal-row"><div class="ic">🕐</div><div><div class="label">Horário</div>${ev.horario}</div></div>
-            <div class="modal-row"><div class="ic">📍</div><div><div class="label">Local</div>${ev.local}</div></div>
-            ${ev.descricao ? `<div class="modal-desc">${ev.descricao}</div>` : ''}`;
+            ${imageMarkup}
+            <div class="modal-row"><div class="ic">📅</div><div><div class="label">Data</div>${escapeHtml(dataStr)}</div></div>
+            <div class="modal-row"><div class="ic">🕐</div><div><div class="label">Horário</div>${escapeHtml(ev.horario)}</div></div>
+            <div class="modal-row"><div class="ic">📍</div><div><div class="label">Local</div>${escapeHtml(ev.local)}</div></div>
+            ${organizadorMarkup}
+            ${valorMarkup}
+            ${siteMarkup}
+            ${whatsappMarkup}
+            ${ev.descricao ? `<div class="modal-desc">${escapeHtml(ev.descricao)}</div>` : ''}`;
 
         document.getElementById('modalOverlay').classList.add('ativo');
         document.body.style.overflow = 'hidden';
