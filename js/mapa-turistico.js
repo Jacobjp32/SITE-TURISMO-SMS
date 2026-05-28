@@ -65,6 +65,11 @@
       missingSummaryMany: "{count} itens sem localizacao exata",
       popupDetails: "Ver detalhes",
       popupDirections: "Como chegar",
+      upcomingEventsTitle: "Proximos eventos neste local",
+      upcomingEventsSingle: "1 evento futuro",
+      upcomingEventsMany: "{count} eventos futuros",
+      upcomingEventsMore: "+{count} outros eventos",
+      eventAction: "Saiba mais",
       searchResultsSingle: "1 local encontrado.",
       searchResultsMany: "{count} locais encontrados.",
       searchResultsFiltered: "{count} locais neste filtro.",
@@ -160,6 +165,11 @@
       missingSummaryMany: "{count} items without exact location",
       popupDetails: "View details",
       popupDirections: "Directions",
+      upcomingEventsTitle: "Upcoming events at this place",
+      upcomingEventsSingle: "1 upcoming event",
+      upcomingEventsMany: "{count} upcoming events",
+      upcomingEventsMore: "+{count} more events",
+      eventAction: "Learn more",
       searchResultsSingle: "1 place found.",
       searchResultsMany: "{count} places found.",
       searchResultsFiltered: "{count} places in this filter.",
@@ -255,6 +265,11 @@
       missingSummaryMany: "{count} elementos sin ubicacion exacta",
       popupDetails: "Ver detalles",
       popupDirections: "Como llegar",
+      upcomingEventsTitle: "Proximos eventos en este lugar",
+      upcomingEventsSingle: "1 proximo evento",
+      upcomingEventsMany: "{count} proximos eventos",
+      upcomingEventsMore: "+{count} eventos mas",
+      eventAction: "Saber mas",
       searchResultsSingle: "1 lugar encontrado.",
       searchResultsMany: "{count} lugares encontrados.",
       searchResultsFiltered: "{count} lugares en este filtro.",
@@ -350,6 +365,11 @@
       missingSummaryMany: "{count} elementow bez dokladnej lokalizacji",
       popupDetails: "Zobacz szczegoly",
       popupDirections: "Jak dojechac",
+      upcomingEventsTitle: "Nadchodzace wydarzenia w tym miejscu",
+      upcomingEventsSingle: "1 nadchodzace wydarzenie",
+      upcomingEventsMany: "{count} nadchodzace wydarzenia",
+      upcomingEventsMore: "+{count} kolejnych wydarzen",
+      eventAction: "Dowiedz sie wiecej",
       searchResultsSingle: "Znaleziono 1 miejsce.",
       searchResultsMany: "Znaleziono {count} miejsc.",
       searchResultsFiltered: "{count} miejsc w tym filtrze.",
@@ -413,6 +433,7 @@
     markersLayer: null,
     markerIndex: {},
     items: [],
+    approvedEvents: [],
     filteredItems: [],
     missingItems: [],
     selectedItemId: null,
@@ -423,7 +444,9 @@
     lang: "pt",
     detailsModal: null,
     detailsLastFocus: null,
-    detailsLastItemId: null
+    detailsLastItemId: null,
+    approvedEventsReady: false,
+    debugApprovedEvents: /(?:\?|&)debug=map-events(?:&|$)/.test(window.location.search)
   };
 
   function normalizeText(value) {
@@ -431,6 +454,26 @@
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
       .toLowerCase()
+      .trim();
+  }
+
+  function normalizeComparableText(value) {
+    return String(value || "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  function toComparableSlug(value) {
+    return normalizeComparableText(value).replace(/\s+/g, "-");
+  }
+
+  function cleanTextValue(value) {
+    return String(value == null ? "" : value)
+      .replace(/[\u0000-\u001F\u007F]+/g, " ")
+      .replace(/\s+/g, " ")
       .trim();
   }
 
@@ -464,6 +507,12 @@
   function ensureArray(value) {
     if (!value) return [];
     return Array.isArray(value) ? value : [value];
+  }
+
+  function truncateText(value, limit) {
+    var text = cleanTextValue(value);
+    if (!text || text.length <= limit) return text;
+    return text.slice(0, Math.max(limit - 1, 1)).trim() + "...";
   }
 
   function uniqueList(values) {
@@ -519,6 +568,373 @@
   function createWhatsAppLink(value) {
     var digits = getFirstPhoneDigits(value);
     return digits ? "https://wa.me/" + digits : "";
+  }
+
+  function isPublicApprovedStatus(status) {
+    var normalized = normalizeComparableText(status);
+    return !normalized || normalized === "aprovado" || normalized === "approved";
+  }
+
+  function sanitizeActionUrl(value, fallback) {
+    var raw = cleanTextValue(value);
+    if (!raw) return fallback || "";
+    if (isExternalUrl(raw)) return raw;
+    if (/^www\./i.test(raw)) return "https://" + raw;
+    if (/^\//.test(raw)) return raw;
+    return fallback || "";
+  }
+
+  function extractImageUrl(value) {
+    if (!value) return "";
+    if (typeof value === "string") return cleanTextValue(value);
+    if (typeof value === "object") {
+      return cleanTextValue(value.url || value.src || value.path || value.image);
+    }
+    return "";
+  }
+
+  function extractImageUrls(values) {
+    var urls = [];
+    ensureArray(values).forEach(function (item) {
+      var url = extractImageUrl(item);
+      if (url) urls.push(url);
+    });
+    return uniqueList(urls);
+  }
+
+  function toDateObject(value) {
+    if (!value) return null;
+
+    try {
+      if (typeof value.toDate === "function") {
+        var firestoreDate = value.toDate();
+        return isFinite(firestoreDate.getTime()) ? firestoreDate : null;
+      }
+
+      if (typeof value.seconds === "number") {
+        var timestampDate = new Date(value.seconds * 1000);
+        return isFinite(timestampDate.getTime()) ? timestampDate : null;
+      }
+
+      if (value instanceof Date) {
+        return isFinite(value.getTime()) ? value : null;
+      }
+
+      var raw = cleanTextValue(value);
+      if (!raw) return null;
+
+      var isoMatch = raw.match(/^(\d{4})-(\d{2})-(\d{2})(?:[T\s].*)?$/);
+      if (isoMatch) {
+        return new Date(Number(isoMatch[1]), Number(isoMatch[2]) - 1, Number(isoMatch[3]), 0, 0, 0, 0);
+      }
+
+      var brMatch = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})(?:\s+.*)?$/);
+      if (brMatch) {
+        return new Date(Number(brMatch[3]), Number(brMatch[2]) - 1, Number(brMatch[1]), 0, 0, 0, 0);
+      }
+
+      var parsed = new Date(raw);
+      return isFinite(parsed.getTime()) ? parsed : null;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function parseTimeParts(value) {
+    var raw = cleanTextValue(value);
+    var match = raw.match(/^(\d{1,2}):(\d{2})/);
+    if (!match) return null;
+
+    var hours = Number(match[1]);
+    var minutes = Number(match[2]);
+    if (!isFinite(hours) || !isFinite(minutes)) return null;
+    if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+    return { hours: hours, minutes: minutes };
+  }
+
+  function buildEventStartAt(dateValue, timeValue) {
+    var baseDate = toDateObject(dateValue);
+    if (!baseDate) return null;
+
+    var timeParts = parseTimeParts(timeValue);
+    if (timeParts) {
+      baseDate.setHours(timeParts.hours, timeParts.minutes, 0, 0);
+      return baseDate;
+    }
+
+    baseDate.setHours(23, 59, 59, 999);
+    return baseDate;
+  }
+
+  function formatEventDate(dateValue) {
+    var date = toDateObject(dateValue);
+    if (!date) return "";
+    return date.toLocaleDateString("pt-BR");
+  }
+
+  function formatApprovedEventSchedule(event) {
+    var dateLabel = formatEventDate(event && event.dateValue);
+    var timeLabel = cleanTextValue(event && event.timeValue);
+
+    if (dateLabel && timeLabel) return dateLabel + " às " + timeLabel;
+    if (dateLabel) return dateLabel;
+    if (timeLabel) return timeLabel;
+    return "";
+  }
+
+  function compareApprovedEvents(a, b) {
+    var timeA = a && a.startAt ? a.startAt.getTime() : Number.POSITIVE_INFINITY;
+    var timeB = b && b.startAt ? b.startAt.getTime() : Number.POSITIVE_INFINITY;
+
+    if (timeA !== timeB) return timeA - timeB;
+    return String(a && a.title || "").localeCompare(String(b && b.title || ""), "pt-BR");
+  }
+
+  function isUpcomingApprovedEvent(event) {
+    return !!(event && event.startAt && event.startAt.getTime() >= Date.now());
+  }
+
+  function normalizeApprovedEvent(rawEvent, docId) {
+    var raw = rawEvent || {};
+    var images = extractImageUrls(raw.images);
+    var mainImage = cleanTextValue(raw.mainImage) || extractImageUrl(raw.image) || (images[0] || "");
+
+    if (mainImage && images.indexOf(mainImage) === -1) {
+      images.unshift(mainImage);
+    }
+
+    var normalized = {
+      id: cleanTextValue(docId || raw.id) || ("evento-" + String(Date.now())),
+      title: cleanTextValue(raw.title || raw.nome) || "Evento sem título",
+      description: cleanTextValue(raw.description || raw.descricao),
+      dateValue: raw.date || raw.data || raw.dataInicio || "",
+      timeValue: cleanTextValue(raw.time || raw.hora || raw.horaInicio),
+      location: cleanTextValue(raw.location || raw.local || raw.establishmentName || raw.linkedEstablishmentName || raw.organizer),
+      organizer: cleanTextValue(raw.organizer || raw.establishmentName || raw.linkedEstablishmentName || raw.ownerName),
+      establishmentId: cleanTextValue(raw.establishmentId || raw.linkedEstablishmentId || raw.establishmentSlug),
+      establishmentName: cleanTextValue(raw.establishmentName || raw.linkedEstablishmentName || raw.organizer || raw.location || raw.local),
+      mainImage: mainImage,
+      value: cleanTextValue(raw.value || raw.valor || raw.entrada),
+      site: cleanTextValue(raw.website || raw.site || raw.url),
+      whatsapp: cleanTextValue(raw.whatsapp || raw.phone || raw.telefone || raw.contato),
+      status: normalizeComparableText(raw.status),
+      images: images
+    };
+
+    normalized.startAt = buildEventStartAt(normalized.dateValue, normalized.timeValue);
+    normalized.actionUrl = sanitizeActionUrl(normalized.site, "") || "/eventos";
+    normalized.actionExternal = isExternalUrl(normalized.actionUrl);
+
+    return normalized;
+  }
+
+  function getItemMatchScore(event, item) {
+    if (!event || !item) return 0;
+
+    var itemId = normalizeComparableText(item.id);
+    var itemIdSlug = toComparableSlug(item.id);
+    var itemName = normalizeComparableText(item.nome);
+    var itemNameSlug = toComparableSlug(item.nome);
+    var eventEstablishmentId = normalizeComparableText(event.establishmentId);
+    var eventEstablishmentSlug = toComparableSlug(event.establishmentId);
+    var eventEstablishmentName = normalizeComparableText(event.establishmentName);
+    var eventOrganizer = normalizeComparableText(event.organizer);
+    var eventLocation = normalizeComparableText(event.location);
+
+    if (eventEstablishmentId && (
+      eventEstablishmentId === itemId ||
+      eventEstablishmentId === itemName ||
+      eventEstablishmentSlug === itemIdSlug ||
+      eventEstablishmentSlug === itemNameSlug
+    )) {
+      return 4;
+    }
+
+    if (eventEstablishmentName && eventEstablishmentName === itemName) {
+      return 3;
+    }
+
+    if (eventOrganizer && eventOrganizer === itemName) {
+      return 2;
+    }
+
+    if (eventLocation && eventLocation === itemName) {
+      return 1;
+    }
+
+    return 0;
+  }
+
+  function debugApprovedEventIssue(message, payload) {
+    if (!state.debugApprovedEvents) return;
+    console.warn("[mapa-turistico] " + message, payload || {});
+  }
+
+  function attachApprovedEventsToItems(items, approvedEvents) {
+    ensureArray(items).forEach(function (item) {
+      item.relatedApprovedEvents = [];
+    });
+
+    ensureArray(approvedEvents).forEach(function (event) {
+      var bestItem = null;
+      var bestScore = 0;
+      var ambiguous = false;
+
+      ensureArray(items).forEach(function (item) {
+        var score = getItemMatchScore(event, item);
+        if (!score) return;
+
+        if (score > bestScore) {
+          bestItem = item;
+          bestScore = score;
+          ambiguous = false;
+          return;
+        }
+
+        if (score === bestScore) {
+          ambiguous = true;
+        }
+      });
+
+      if (!bestItem || ambiguous) {
+        debugApprovedEventIssue(ambiguous ? "Evento aprovado com vinculo ambiguo." : "Evento aprovado sem vinculo seguro no mapa.", {
+          eventId: event.id,
+          title: event.title,
+          establishmentId: event.establishmentId,
+          establishmentName: event.establishmentName,
+          organizer: event.organizer,
+          location: event.location
+        });
+        return;
+      }
+
+      bestItem.relatedApprovedEvents.push(event);
+    });
+
+    ensureArray(items).forEach(function (item) {
+      item.relatedApprovedEvents.sort(compareApprovedEvents);
+    });
+  }
+
+  function getUpcomingApprovedEventsForItem(item) {
+    return ensureArray(item && item.relatedApprovedEvents).filter(isUpcomingApprovedEvent).sort(compareApprovedEvents);
+  }
+
+  function renderApprovedEventImage(event) {
+    if (!event || !event.mainImage) {
+      return '<div class="map-related-event-fallback" aria-hidden="true"><span>EV</span><small>' + escapeHtml(t("categories.events")) + "</small></div>";
+    }
+
+    return '<img src="' + escapeHtml(event.mainImage) + '" alt="' + escapeHtml(event.title) + '" loading="lazy">';
+  }
+
+  function renderApprovedEventsSection(item, context) {
+    var events = getUpcomingApprovedEventsForItem(item);
+    if (!events.length) return "";
+
+    var visibleEvents = events.slice(0, 3);
+    var countLabel = events.length === 1
+      ? t("upcomingEventsSingle")
+      : replaceCount(t("upcomingEventsMany"), events.length);
+
+    return '<section class="map-related-events is-' + escapeHtml(context || "panel") + '">'
+      + '<div class="map-related-events-head">'
+      + '<h3>' + escapeHtml(t("upcomingEventsTitle")) + '</h3>'
+      + '<span>' + escapeHtml(countLabel) + "</span>"
+      + "</div>"
+      + '<div class="map-related-events-list">'
+      + visibleEvents.map(function (event, index) {
+        var description = truncateText(event.description, context === "modal" ? 180 : 110);
+        var schedule = formatApprovedEventSchedule(event);
+        var chips = [];
+
+        if (schedule) {
+          chips.push('<span class="map-related-event-chip">📅 ' + escapeHtml(schedule) + "</span>");
+        }
+        if (event.value) {
+          chips.push('<span class="map-related-event-chip">💲 ' + escapeHtml(event.value) + "</span>");
+        }
+
+        return '<article class="map-related-event-card' + (events.length === 1 && index === 0 ? " is-featured" : "") + '">'
+          + '<div class="map-related-event-media">' + renderApprovedEventImage(event) + "</div>"
+          + '<div class="map-related-event-body">'
+          + '<h4>' + escapeHtml(event.title) + "</h4>"
+          + (description ? '<p>' + escapeHtml(description) + "</p>" : "")
+          + (chips.length ? '<div class="map-related-event-meta">' + chips.join("") + "</div>" : "")
+          + '<div class="map-related-event-actions">'
+          + '<a class="map-button' + (events.length === 1 && index === 0 ? " primary" : "") + '" href="' + escapeHtml(event.actionUrl) + '"' + (event.actionExternal ? ' target="_blank" rel="noopener noreferrer"' : "") + '>' + escapeHtml(t("eventAction")) + "</a>"
+          + "</div>"
+          + "</div>"
+          + "</article>";
+      }).join("")
+      + "</div>"
+      + (events.length > visibleEvents.length
+        ? '<p class="map-related-events-more">' + escapeHtml(replaceCount(t("upcomingEventsMore"), events.length - visibleEvents.length)) + "</p>"
+        : "")
+      + "</section>";
+  }
+
+  async function ensurePublicFirestore() {
+    if (!window.CONFIG || !window.CONFIG.firebase) {
+      console.warn("[mapa-turistico] CONFIG.firebase ausente. Eventos aprovados não serão carregados.");
+      return null;
+    }
+
+    if (!window.firebase || !window.firebase.initializeApp || !window.firebase.firestore) {
+      console.warn("[mapa-turistico] Firebase compat indisponível no mapa. Mantendo apenas dados estáticos.");
+      return null;
+    }
+
+    try {
+      if (!window.firebase.apps || !window.firebase.apps.length) {
+        window.firebase.initializeApp(window.CONFIG.firebase);
+      }
+
+      if (window.firebase.appCheck && !window.__smsCompatAppCheckInitialized) {
+        try {
+          var appCheckModule = await import("./firebase-app-check.js");
+          if (appCheckModule && typeof appCheckModule.initCompatAppCheck === "function") {
+            await appCheckModule.initCompatAppCheck(window.firebase);
+          }
+        } catch (appCheckError) {
+          console.warn("[mapa-turistico] App Check indisponível para o mapa público.", appCheckError && appCheckError.message ? appCheckError.message : appCheckError);
+        }
+      }
+
+      return window.firebase.firestore();
+    } catch (error) {
+      console.warn("[mapa-turistico] Falha ao inicializar Firestore público no mapa.", error);
+      return null;
+    }
+  }
+
+  async function loadApprovedEventsForMap() {
+    var db = await ensurePublicFirestore();
+    if (!db) {
+      state.approvedEventsReady = true;
+      return;
+    }
+
+    try {
+      var snapshot = await db.collection("eventos_aprovados").get();
+      var approvedEvents = snapshot.docs
+        .map(function (doc) { return normalizeApprovedEvent(doc.data(), doc.id); })
+        .filter(function (event) { return isPublicApprovedStatus(event.status); });
+
+      state.approvedEvents = approvedEvents;
+      attachApprovedEventsToItems(state.items, approvedEvents);
+      state.approvedEventsReady = true;
+      refreshView();
+    } catch (error) {
+      console.warn("[mapa-turistico] Falha ao carregar eventos aprovados do Firestore.", {
+        collection: "eventos_aprovados",
+        filter: "status ausente || aprovado || approved",
+        error: error,
+        stack: error && error.stack ? error.stack : null
+      });
+      state.approvedEventsReady = true;
+    }
   }
 
   function getCoordinates(item) {
@@ -1094,6 +1510,7 @@
       + renderMetaRow(t("relatedRoute"), routeLabel)
       + '</dl>'
       + (tags.length ? '<section class="map-details-tags"><h3>' + escapeHtml(t("services")) + '</h3><div>' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join("") + '</div></section>' : "")
+      + renderApprovedEventsSection(item, "modal")
       + renderDetailsGallery(item)
       + '<div class="map-details-actions">'
       + (item.possuiCoordenadas ? '<a class="map-button primary" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("directions")) + '</a>' : "")
@@ -1203,6 +1620,7 @@
       + "<p>" + escapeHtml(item.descricao || t("noDescription")) + "</p>"
       + (isRouteItem(item) ? '<p class="map-detail-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-detail-meta">' + meta.join("") + "</div>"
+      + renderApprovedEventsSection(item, "panel")
       + '<div class="map-detail-actions">'
       + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
@@ -1452,6 +1870,7 @@
   function initMap() {
     state.lang = getLang();
     state.items = buildItems();
+    attachApprovedEventsToItems(state.items, []);
     applyInitialStateFromUrl();
 
     state.map = L.map("tourismMap", {
@@ -1473,6 +1892,8 @@
     window.setTimeout(function () {
       state.map.invalidateSize();
     }, 180);
+
+    loadApprovedEventsForMap();
   }
 
   function bootstrap() {

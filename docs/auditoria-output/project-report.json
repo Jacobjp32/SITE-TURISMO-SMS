@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-28T12:47:08.105Z",
+  "generatedAt": "2026-05-28T13:22:39.301Z",
   "totals": {
     "files": 352,
     "html": 36,
@@ -47,17 +47,17 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 693838
+      "bytes": 709374
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 627986
+      "bytes": 628301
     },
     {
       "ext": ".css",
       "files": 21,
-      "bytes": 292816
+      "bytes": 296008
     },
     {
       "ext": ".md",
@@ -179,7 +179,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 916207
+      "bytes": 916522
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -189,12 +189,12 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 433422
+      "bytes": 448958
     },
     {
       "dir": "css",
       "files": 21,
-      "bytes": 292816
+      "bytes": 296008
     },
     {
       "dir": "docs",
@@ -822,7 +822,7 @@
       "path": "mapa-turistico.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10731
+      "bytes": 11046
     },
     {
       "path": "noticia.html",
@@ -1525,6 +1525,9 @@
       "scripts": [
         "translations.js",
         "config.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/site-meta.js",
         "js/locais-data.js",
         "js/rotas-data.js",
@@ -2112,10 +2115,10 @@
     },
     {
       "file": "css/mapa-turistico.css",
-      "bytes": 33403,
+      "bytes": 36595,
       "important": 13,
       "media": 7,
-      "selectorCount": 236
+      "selectorCount": 257
     },
     {
       "file": "css/noticia.css",
@@ -2846,15 +2849,18 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 60566,
+      "bytes": 76089,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
         "var MAP_TEXT",
         "var PANEL_GROUP_CONFIG",
         "var PANEL_GROUP_ORDER",
+        "window.CONFIG",
         "window.L",
         "window.TURISMO_DATA",
+        "window.__smsCompatAppCheckInitialized",
+        "window.firebase",
         "window.history",
         "window.location",
         "window.setTimeout"
@@ -2862,18 +2868,28 @@
       "functions": [
         "applyInitialStateFromUrl",
         "applyPageText",
+        "attachApprovedEventsToItems",
         "bindEvents",
         "bootstrap",
+        "buildEventStartAt",
         "buildItems",
         "classifyCategory",
+        "cleanTextValue",
         "closeDetailsModal",
+        "compareApprovedEvents",
         "createGoogleMapsLink",
         "createMarkerIcon",
         "createWhatsAppLink",
+        "debugApprovedEventIssue",
         "ensureArray",
         "ensureDetailsModal",
+        "ensurePublicFirestore",
         "escapeHtml",
+        "extractImageUrl",
+        "extractImageUrls",
         "filterItems",
+        "formatApprovedEventSchedule",
+        "formatEventDate",
         "getAvailableCategoryCount",
         "getCategoryConfig",
         "getCoordinates",
@@ -2886,6 +2902,7 @@
         "getGroupCountLabel",
         "getImageHtml",
         "getItemById",
+        "getItemMatchScore",
         "getLang",
         "getMissingSummary",
         "getPanelGroup",
@@ -2895,16 +2912,25 @@
         "getPanelItems",
         "getSearchStatusMessage",
         "getSelectedItem",
+        "getUpcomingApprovedEventsForItem",
         "handleDetailsKeydown",
         "initMap",
         "isExternalUrl",
+        "isPublicApprovedStatus",
         "isRouteItem",
+        "isUpcomingApprovedEvent",
+        "loadApprovedEventsForMap",
+        "normalizeApprovedEvent",
+        "normalizeComparableText",
         "normalizeImages",
         "normalizeItem",
         "normalizeSocialLink",
         "normalizeText",
         "openDetailsModal",
+        "parseTimeParts",
         "refreshView",
+        "renderApprovedEventImage",
+        "renderApprovedEventsSection",
         "renderDetailsGallery",
         "renderDetailsModalContent",
         "renderFilters",
@@ -2920,10 +2946,14 @@
         "replaceCount",
         "resolveFilterAlias",
         "resolvePanelGroupAlias",
+        "sanitizeActionUrl",
         "selectItem",
         "syncSelectedItemVisibility",
         "syncUrlState",
         "t",
+        "toComparableSlug",
+        "toDateObject",
+        "truncateText",
         "uniqueList",
         "updateMarkerSelection",
         "updateSearchUi"
@@ -3398,6 +3428,10 @@
   "scriptDuplicateLoads": [],
   "sharedGlobals": [
     {
+      "global": "window.__smsCompatAppCheckInitialized",
+      "files": "js/firebase-app-check.js, js/mapa-turistico.js"
+    },
+    {
       "global": "window.addEventListener",
       "files": "js/chatbot.js, js/nav-shared.js, js/site-stats.js"
     },
@@ -3407,7 +3441,7 @@
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/firebase-app-check.js, js/site-stats.js"
+      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
     },
     {
       "global": "window.FirebaseSystem",

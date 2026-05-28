@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-05-28T12:47:08.105Z.
+Gerado em 2026-05-28T13:22:39.301Z.
 
 ## Resumo
 
@@ -22,9 +22,9 @@ Gerado em 2026-05-28T12:47:08.105Z.
 | .webp | 27 | 8446450 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 35 | 693838 |
-| .html | 36 | 627986 |
-| .css | 21 | 292816 |
+| .js | 35 | 709374 |
+| .html | 36 | 628301 |
+| .css | 21 | 296008 |
 | .md | 21 | 218912 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
@@ -133,7 +133,7 @@ Gerado em 2026-05-28T12:47:08.105Z.
 | local.html | 20710 |
 | mapa-3d.html | 6274 |
 | mapa-completo.html | 10456 |
-| mapa-turistico.html | 10731 |
+| mapa-turistico.html | 11046 |
 | noticia.html | 6297 |
 | noticias.html | 20921 |
 | o-que-fazer.html | 5895 |
@@ -253,7 +253,7 @@ _Nenhum item encontrado._
 | css/index.css | 133856 | 460 | 40 | 762 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
-| css/mapa-turistico.css | 33403 | 13 | 7 | 236 |
+| css/mapa-turistico.css | 36595 | 13 | 7 | 257 |
 | css/noticia.css | 2034 | 0 | 1 | 18 |
 | css/noticias.css | 3926 | 0 | 2 | 40 |
 | css/o-que-fazer.css | 3662 | 1 | 1 | 21 |
@@ -342,9 +342,10 @@ _Nenhum item encontrado._
 
 | global | files |
 | --- | --- |
+| window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js |
 | window.addEventListener | js/chatbot.js, js/nav-shared.js, js/site-stats.js |
 | window.applyTranslations | js/nav-shared.js, translations.js |
-| window.CONFIG | config.js, js/firebase-app-check.js, js/site-stats.js |
+| window.CONFIG | config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js |
 | window.FirebaseSystem | js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
