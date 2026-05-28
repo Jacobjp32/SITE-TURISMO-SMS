@@ -1089,58 +1089,93 @@
             const stats = await FirebaseSystem.getAdminStats();
             if (stats) {
                 document.getElementById('stat-usuarios').textContent = stats.totalUsers;
-                document.getElementById('stat-pendentes').textContent = stats.pendingEvents;
+                document.getElementById('stat-pendentes').textContent = stats.pendingEventsLoadError ? 'Erro' : stats.pendingEvents;
                 document.getElementById('stat-aprovados').textContent = stats.approvedEvents;
                 document.getElementById('stat-estabelecimentos').textContent = stats.pendingEstablishments;
             }
         }
 
         async function loadPendingData() {
-            // Eventos pendentes
-            const eventos = await FirebaseSystem.getPendingEvents();
             const eventosContainer = document.getElementById('eventos-pendentes-container');
-            
-            if (eventos.length === 0) {
-                eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum evento pendente!</p>';
-            } else {
-                eventosContainer.innerHTML = `
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Evento</th>
-                                <th>Data</th>
-                                <th>Local</th>
-                                <th>Solicitante</th>
-                                <th>Imagens</th>
-                                <th>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${eventos.map(e => `
+            try {
+                const eventosResult = typeof FirebaseSystem.getPendingEventsReport === 'function'
+                    ? await FirebaseSystem.getPendingEventsReport()
+                    : {
+                        success: true,
+                        items: await FirebaseSystem.getPendingEvents(),
+                        diagnostics: {
+                            collection: 'eventos_pendentes',
+                            filter: 'status == pendente'
+                        }
+                    };
+                const eventos = Array.isArray(eventosResult && eventosResult.items) ? eventosResult.items : [];
+
+                if (!eventosResult || eventosResult.success === false) {
+                    const diagnostics = eventosResult && eventosResult.diagnostics ? eventosResult.diagnostics : {
+                        collection: 'eventos_pendentes',
+                        filter: 'indisponível'
+                    };
+
+                    console.error('[admin-firebase] Falha ao carregar eventos pendentes.', {
+                        collection: diagnostics.collection,
+                        filter: diagnostics.filter,
+                        error: eventosResult && eventosResult.error ? eventosResult.error : null,
+                        stack: eventosResult && eventosResult.error && eventosResult.error.stack ? eventosResult.error.stack : null
+                    });
+
+                    eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar eventos pendentes. Verifique o console e tente novamente.</p>';
+                } else if (eventos.length === 0) {
+                    eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum evento pendente!</p>';
+                } else {
+                    eventosContainer.innerHTML = `
+                        <table class="data-table">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <strong>${SEC.html(e.nome, '—')}</strong><br>
-                                        <small>${SEC.html(e.categoria)}</small>
-                                        ${e.linkedEstablishmentId ? `<br><small><strong>Evento vinculado a empreendimento</strong></small><br><small>${SEC.html(e.linkedEstablishmentName || '—')}</small>` : ''}
-                                    </td>
-                                    <td>${SEC.html(formatDate(e.dataInicio))}</td>
-                                    <td>${SEC.html(e.local, '—')}</td>
-                                    <td>
-                                        ${SEC.html(e.submittedByName, '—')}<br>
-                                        <small>${SEC.html(e.submittedByEmail)}</small>
-                                        ${e.linkedEstablishmentId ? `<br><small>Fonte: ${SEC.html(e.source || '—')}</small><br><small>Owner: ${SEC.html(e.ownerName || '—')} / ${SEC.html(e.ownerEmail || '—')}</small>` : ''}
-                                    </td>
-                                    <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
-                                    <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
-                                        <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️</button>
-                                    </td>
+                                    <th>Evento</th>
+                                    <th>Data</th>
+                                    <th>Local</th>
+                                    <th>Solicitante</th>
+                                    <th>Imagens</th>
+                                    <th>Ações</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
+                            </thead>
+                            <tbody>
+                                ${eventos.map(e => `
+                                    <tr>
+                                        <td>
+                                            <strong>${SEC.html(getEventDisplayTitle(e))}</strong><br>
+                                            <small>${SEC.html(getEventDisplayCategory(e), '—')}</small>
+                                            <br><small><strong>Organizador:</strong> ${SEC.html(getEventDisplayOrganizer(e))}</small>
+                                            ${e.linkedEstablishmentId ? `<br><small><strong>Evento vinculado a empreendimento</strong></small><br><small>${SEC.html(e.linkedEstablishmentName || e.establishmentName || '—')}</small>` : ''}
+                                        </td>
+                                        <td>${SEC.html(getEventDisplaySchedule(e))}</td>
+                                        <td>${SEC.html(getEventDisplayLocation(e), '—')}</td>
+                                        <td>
+                                            ${SEC.html(getEventRequesterLabel(e))}<br>
+                                            <small>${SEC.html(getEventRequesterValue(e))}</small>
+                                            ${e.linkedEstablishmentId ? `<br><small>Fonte: ${SEC.html(e.source || '—')}</small><br><small>Owner: ${SEC.html(e.ownerName || '—')} / ${SEC.html(e.ownerEmail || '—')}</small>` : ''}
+                                        </td>
+                                        <td>${SEC.html(String(getEventImageCount(e)))}</td>
+                                        <td>
+                                            <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
+                                            <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
+                                            <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    `;
+                }
+            } catch (error) {
+                console.error('[admin-firebase] Falha ao renderizar eventos pendentes.', {
+                    collection: 'eventos_pendentes',
+                    filter: 'isPendingStatus(status) em memória',
+                    error: error,
+                    stack: error && error.stack ? error.stack : null
+                });
+
+                eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao renderizar eventos pendentes. Verifique o console e tente novamente.</p>';
             }
 
             // Estabelecimentos pendentes
@@ -1708,10 +1743,10 @@
                         <tbody>
                             ${eventos.map(e => `
                                 <tr>
-                                    <td><strong>${SEC.html(e.nome, '—')}</strong></td>
-                                    <td>${SEC.html(formatDate(e.dataInicio || e.data))}</td>
-                                    <td>${SEC.html(e.local, '—')}</td>
-                                    <td>${SEC.html(e.submittedByName, '—')}</td>
+                                    <td><strong>${SEC.html(getEventDisplayTitle(e))}</strong></td>
+                                    <td>${SEC.html(getEventDisplaySchedule(e))}</td>
+                                    <td>${SEC.html(getEventDisplayLocation(e), '—')}</td>
+                                    <td>${SEC.html(getEventDisplayOrganizer(e))}</td>
                                 </tr>
                             `).join('')}
                         </tbody>
@@ -1737,6 +1772,9 @@
             const result = await FirebaseSystem.rejectEvent(eventId, reason);
             alert(result.message);
             loadPendingData();
+            if (result.success) {
+                loadDashboardData();
+            }
         }
 
         function viewEvent(eventId) {
@@ -1859,10 +1897,18 @@
         function formatDate(dateStr) {
             if (!dateStr) return '-';
             try {
+                if (typeof dateStr.toDate === 'function') {
+                    return dateStr.toDate().toLocaleDateString('pt-BR');
+                }
+                if (typeof dateStr.seconds === 'number') {
+                    return new Date(dateStr.seconds * 1000).toLocaleDateString('pt-BR');
+                }
                 const date = new Date(dateStr);
+                const timestamp = date.getTime();
+                if (!Number.isFinite(timestamp)) return '-';
                 return date.toLocaleDateString('pt-BR');
             } catch {
-                return dateStr;
+                return '-';
             }
         }
 
@@ -1887,6 +1933,69 @@
                 gerente_responsavel: 'Gerente / responsável',
                 representante_autorizado: 'Representante autorizado'
             })[String(role || '')] || 'Não informado';
+        }
+
+        function getEventDisplayTitle(eventData) {
+            return eventData && (eventData.title || eventData.nome) || 'Evento sem título';
+        }
+
+        function getEventDisplayCategory(eventData) {
+            return eventData && (eventData.categoria || eventData.category) || '—';
+        }
+
+        function getEventDisplayOrganizer(eventData) {
+            return eventData && (
+                eventData.organizer ||
+                eventData.establishmentName ||
+                eventData.linkedEstablishmentName ||
+                eventData.ownerName
+            ) || 'Não informado';
+        }
+
+        function getEventRequesterValue(eventData) {
+            return eventData && (
+                eventData.ownerEmail ||
+                eventData.submittedByEmail ||
+                eventData.submittedBy
+            ) || 'Não informado';
+        }
+
+        function getEventRequesterLabel(eventData) {
+            return eventData && (
+                eventData.ownerName ||
+                eventData.submittedByName ||
+                getEventRequesterValue(eventData)
+            ) || 'Não informado';
+        }
+
+        function getEventDisplayLocation(eventData) {
+            return eventData && (
+                eventData.local ||
+                eventData.location ||
+                eventData.address ||
+                eventData.linkedEstablishmentName ||
+                eventData.establishmentName
+            ) || '—';
+        }
+
+        function getEventDisplaySchedule(eventData) {
+            const dateValue = eventData && (eventData.dataInicio || eventData.data || eventData.date);
+            const timeValue = eventData && (eventData.time || eventData.hora);
+            const formattedDate = formatDate(dateValue);
+            const safeTime = String(timeValue || '').trim();
+
+            if (formattedDate === '-' && !safeTime) return '-';
+            if (formattedDate === '-') return safeTime || '-';
+            if (!safeTime) return formattedDate;
+            return formattedDate + ' às ' + safeTime;
+        }
+
+        function getEventImageCount(eventData) {
+            if (!eventData) return 0;
+            if (Number.isFinite(Number(eventData.imageCount))) {
+                return Number(eventData.imageCount);
+            }
+            return Array.isArray(eventData.images) ? eventData.images.length : 0;
         }
 
         function normalizeUpdateRequestStatus(status) {

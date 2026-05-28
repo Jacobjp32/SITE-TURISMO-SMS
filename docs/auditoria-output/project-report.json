@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-05-27T17:35:19.627Z",
+  "generatedAt": "2026-05-28T12:47:08.105Z",
   "totals": {
-    "files": 351,
+    "files": 352,
     "html": 36,
     "css": 21,
     "js": 35,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 35,
-      "bytes": 691131
+      "bytes": 693838
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 622681
+      "bytes": 627986
     },
     {
       "ext": ".css",
@@ -61,8 +61,8 @@
     },
     {
       "ext": ".md",
-      "files": 20,
-      "bytes": 206624
+      "files": 21,
+      "bytes": 218912
     },
     {
       "ext": ".json",
@@ -179,7 +179,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 910902
+      "bytes": 916207
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -189,7 +189,7 @@
     {
       "dir": "js",
       "files": 23,
-      "bytes": 430715
+      "bytes": 433422
     },
     {
       "dir": "css",
@@ -198,8 +198,8 @@
     },
     {
       "dir": "docs",
-      "files": 18,
-      "bytes": 192320
+      "files": 19,
+      "bytes": 204608
     },
     {
       "dir": "js/data",
@@ -780,7 +780,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 83371
+      "bytes": 88676
     },
     {
       "path": "eventos.html",
@@ -1000,7 +1000,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 83371
+      "bytes": 88676
     },
     {
       "path": "css/mapa-3d.css",
@@ -1060,7 +1060,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 65379
+      "bytes": 68086
     },
     {
       "path": "js/reservas.js",
@@ -2775,7 +2775,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 65125,
+      "bytes": 67830,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2800,9 +2800,12 @@
         "getComparableTimestamp",
         "getFirebaseAuth",
         "getFirebaseDB",
+        "getSortableTimestampValue",
         "initFirebase",
         "isActiveManagerRecord",
+        "isPendingStatus",
         "normalizeComparableId",
+        "normalizeEventReviewStatus",
         "normalizeManagerRole",
         "normalizeUpdateRequestStatus",
         "persistUserSession",

@@ -251,6 +251,48 @@ function normalizeUpdateRequestStatus(status) {
     return 'pending';
 }
 
+function normalizeEventReviewStatus(status) {
+    var normalized = String(status == null ? '' : status).trim().toLowerCase();
+
+    if (normalized === 'aprovado' || normalized === 'approved') {
+        return 'approved';
+    }
+
+    if (normalized === 'rejeitado' || normalized === 'rejected') {
+        return 'rejected';
+    }
+
+    if (!normalized || normalized === 'pendente' || normalized === 'pending') {
+        return 'pending';
+    }
+
+    return normalized;
+}
+
+function isPendingStatus(status) {
+    return normalizeEventReviewStatus(status) === 'pending';
+}
+
+function getSortableTimestampValue(value) {
+    if (!value) return 0;
+
+    try {
+        if (typeof value.toDate === 'function') {
+            return value.toDate().getTime();
+        }
+
+        if (typeof value.seconds === 'number') {
+            return value.seconds * 1000;
+        }
+
+        var parsedDate = new Date(value);
+        var timestamp = parsedDate.getTime();
+        return Number.isFinite(timestamp) ? timestamp : 0;
+    } catch (error) {
+        return 0;
+    }
+}
+
 function isActiveManagerRecord(manager, userId, establishmentId) {
     if (!manager || manager.active === false) return false;
     if (userId && manager.userId !== userId) return false;
@@ -518,11 +560,55 @@ const FirebaseSystem = {
 
     getPendingEvents: async function() {
         if (!this.isModerator()) return [];
+        var result = await this.getPendingEventsReport();
+        return result.success ? result.items : [];
+    },
+
+    getPendingEventsReport: async function() {
+        var diagnostics = {
+            collection: 'eventos_pendentes',
+            filter: 'isPendingStatus(status) em memória'
+        };
+
+        if (!this.isModerator()) {
+            return {
+                success: false,
+                items: [],
+                diagnostics: diagnostics,
+                error: new Error('Permissão negada.')
+            };
+        }
+
         try {
-            const snap = await firebase.firestore().collection('eventos_pendentes')
-                .where('status', '==', 'pendente').orderBy('submittedAt', 'desc').get();
-            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
-        } catch(e) { console.error(e); return []; }
+            const snap = await firebase.firestore().collection('eventos_pendentes').get();
+            const items = snap.docs
+                .map(function(d) { return Object.assign({ id: d.id }, d.data()); })
+                .filter(function(item) { return isPendingStatus(item && item.status); })
+                .sort(function(a, b) {
+                    return getSortableTimestampValue(b && (b.submittedAt || b.createdAt || b.updatedAt)) -
+                        getSortableTimestampValue(a && (a.submittedAt || a.createdAt || a.updatedAt));
+                });
+
+            return {
+                success: true,
+                items: items,
+                diagnostics: Object.assign({ totalDocs: snap.size, matchedDocs: items.length }, diagnostics)
+            };
+        } catch(error) {
+            console.error('[firebase-auth] Erro ao carregar eventos pendentes para o admin.', {
+                collection: diagnostics.collection,
+                filter: diagnostics.filter,
+                error: error,
+                stack: error && error.stack ? error.stack : null
+            });
+
+            return {
+                success: false,
+                items: [],
+                diagnostics: diagnostics,
+                error: error
+            };
+        }
     },
 
     approveEvent: async function(eventId, notes) {
@@ -1433,15 +1519,17 @@ const FirebaseSystem = {
         if (!this.isAdmin()) return null;
         try {
             const db = firebase.firestore();
-            const [usersSnap, pendEvtSnap, appEvtSnap, pendEstSnap] = await Promise.all([
+            const [usersSnap, pendingEventsResult, appEvtSnap, pendEstSnap] = await Promise.all([
                 db.collection('usuarios').get(),
-                db.collection('eventos_pendentes').where('status','==','pendente').get(),
+                this.getPendingEventsReport(),
                 db.collection('eventos_aprovados').get(),
                 db.collection('estabelecimentos_pendentes').where('status','==','pendente').get()
             ]);
             return {
                 totalUsers:            usersSnap.size,
-                pendingEvents:         pendEvtSnap.size,
+                pendingEvents:         pendingEventsResult.success ? pendingEventsResult.items.length : null,
+                pendingEventsLoadError: pendingEventsResult.success !== true,
+                pendingEventsDiagnostics: pendingEventsResult.diagnostics || null,
                 approvedEvents:        appEvtSnap.size,
                 pendingEstablishments: pendEstSnap.size
             };
