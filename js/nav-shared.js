@@ -369,6 +369,20 @@ body.font-larger{font-size:140%!important;}
         });
     }
 
+    function hasLoadedStylesheet(href) {
+        return Array.prototype.some.call(document.querySelectorAll('link[rel="stylesheet"]'), function(link) {
+            var currentHref = link.getAttribute('href') || '';
+            return currentHref === href || currentHref.split('?')[0] === href;
+        });
+    }
+
+    if (!hasLoadedStylesheet('css/season-theme.css')) {
+        var seasonStyles = document.createElement('link');
+        seasonStyles.rel = 'stylesheet';
+        seasonStyles.href = 'css/season-theme.css?v=season-20260602';
+        document.head.appendChild(seasonStyles);
+    }
+
     if (!hasLoadedScript('js/site-meta.js')) {
         var metaScript = document.createElement('script');
         metaScript.src = 'js/site-meta.js?v=site-meta-20260519';
@@ -399,6 +413,13 @@ body.font-larger{font-size:140%!important;}
         animScript.src = 'js/scroll-animations.js';
         animScript.defer = true;
         document.body.appendChild(animScript);
+    }
+
+    if (!hasLoadedScript('js/season-theme.js')) {
+        var seasonScript = document.createElement('script');
+        seasonScript.src = 'js/season-theme.js?v=season-20260602';
+        seasonScript.defer = true;
+        document.body.appendChild(seasonScript);
     }
 
     [

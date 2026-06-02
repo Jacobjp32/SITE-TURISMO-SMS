@@ -1,5 +1,39 @@
 # Otimizacao de imagens dos empreendimentos
 
+## Rodada 2026-06-02 - WebP das capas de rota
+
+Origem:
+
+- `EMPREENDIMENTOS/imagens para as rotas`
+
+Ferramenta usada:
+
+- Pillow `12.2.0` via runtime Python do ambiente
+
+Parametros aplicados:
+
+- resize para largura maxima de `1600 px`
+- exportacao `WebP`
+- `quality=80`
+- preservacao dos brutos fora da area publica
+
+### Antes e depois
+
+| Arquivo bruto | Dimensao original | Tamanho antes | Arquivo WebP | Dimensao final | Tamanho depois |
+| --- | --- | --- | --- | --- | ---: |
+| `ROTA SABORES E MEMÓRIAS.png` | `5504x3072` | `42,61 MB` | `images/rotas/rota-sabores-memorias.webp` | `1600x893` | `187,2 KB` |
+| `ROTA DA ERVA MATE.png` | `5504x3072` | `39,97 MB` | `images/rotas/rota-erva-mate.webp` | `1600x893` | `176,6 KB` |
+| `ROTA POLONESA.png` | `5504x3072` | `40,88 MB` | `images/rotas/rota-polonesa.webp` | `1600x893` | `333,9 KB` |
+| `ROTA DAS ÁGUAS.png` | `5504x3072` | `37,18 MB` | `images/rotas/rota-das-aguas.webp` | `1600x893` | `211,2 KB` |
+| `ROTA CAMINHOS DE FLUVIÓPOLIS.png` | `5504x3072` | `42,52 MB` | `images/rotas/rota-caminhos-fluviopolis.webp` | `1600x893` | `369,4 KB` |
+| `ROTA DA TERRA.png` | `5504x3072` | `42,31 MB` | `images/rotas/rota-da-terra.webp` | `1600x893` | `206,8 KB` |
+
+Conclusao:
+
+- 6 de 6 capas publicas ficaram abaixo de `500 KB`;
+- nenhuma imagem publica nova ultrapassou `1 MB`;
+- a pasta publica nova ficou concentrada em `images/rotas/`.
+
 ## Rodada 2026-05-27 - correção urgente de imagens públicas pesadas
 
 Problema corrigido:

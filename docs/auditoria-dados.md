@@ -1,5 +1,42 @@
 # Auditoria das bases de dados turisticas
 
+## Atualizacao 2026-06-02 - rotas com imagem, noticias oficiais e LGPD
+
+Escopo desta rodada:
+
+- adicionar imagens publicas nas 6 rotas de `js/data/rotas.js`;
+- atualizar a camada estatica de noticias em `index.html` e `noticias.html` com links oficiais recentes;
+- corrigir os blocos de LGPD em `transparencia.html` e `privacidade.html`;
+- adicionar o carregamento global do tema sazonal nas paginas publicas.
+
+Resumo dos dados atualizados:
+
+| Area | Situacao anterior | Situacao atual |
+| --- | --- | --- |
+| Rotas em `js/data/rotas.js` | `6` rotas sem `imagem` | `6` rotas com `imagem` e `galeria` |
+| Noticias recentes na home | cards estaticos com pauta de marco/2026 | cards estaticos atualizados com pautas oficiais ate junho/2026 |
+| `noticias.html` | selecao com foco em 2024-2026 misturado | selecao reorganizada por recencia e aderencia a cultura/turismo/desenvolvimento |
+| LGPD | bloco sintetico com contato incompleto | dados oficiais do Departamento de LGPD e link da pagina oficial |
+| Tema sazonal | inexistente | `css/season-theme.css` + `js/season-theme.js` com modo automatico/manual |
+
+Fonte oficial LGPD usada:
+
+- `https://www.saomateusdosul.pr.gov.br/portal/secretarias/330/departamento-de-lgpd/`
+
+Campos confirmados:
+
+- `Nicolas Addor`
+- `(42) 3912-7026`
+- `lgpd@saomateusdosul.pr.gov.br`
+- `Rua João Gabriel Martins, 435, Centro - CEP 83900-000`
+- `Segunda a Sexta-feira das 8h as 12h e das 13h15 as 17h15`
+
+Observacao de estrutura:
+
+- as noticias continuam em HTML estatico, sem CMS novo;
+- a agenda estruturada de eventos continua separada em `eventos-2026.json` e `js/data/eventos.js`;
+- `portal-usuario.html` e `admin-firebase.html` ficaram fora do tema sazonal por decisao de risco.
+
 ## Atualização 2026-05-27 - padronização WebP nas imagens públicas recentes
 
 Escopo desta correção:

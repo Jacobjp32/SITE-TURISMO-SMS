@@ -1,5 +1,33 @@
 # Atualização de empreendimentos recebidos
 
+## Rodada 2026-06-02 - capas publicas das rotas turisticas
+
+Escopo desta rodada:
+
+- auditar as imagens recebidas em `EMPREENDIMENTOS/imagens para as rotas`;
+- converter apenas as capas publicas para `WebP` otimizado;
+- atualizar `js/data/rotas.js` sem alterar a estrutura das rotas existentes.
+
+Resultado:
+
+| Rota | Bruto auditado | Arquivo publico final | Dimensao final | Peso final |
+| --- | --- | --- | --- | ---: |
+| Sabores & Memorias | `ROTA SABORES E MEMÓRIAS.png` | `images/rotas/rota-sabores-memorias.webp` | `1600x893` | `187,2 KB` |
+| Rota da Erva-Mate | `ROTA DA ERVA MATE.png` | `images/rotas/rota-erva-mate.webp` | `1600x893` | `176,6 KB` |
+| Rota Polonesa | `ROTA POLONESA.png` | `images/rotas/rota-polonesa.webp` | `1600x893` | `333,9 KB` |
+| Rota das Aguas | `ROTA DAS ÁGUAS.png` | `images/rotas/rota-das-aguas.webp` | `1600x893` | `211,2 KB` |
+| Caminhos de Fluviópolis | `ROTA CAMINHOS DE FLUVIÓPOLIS.png` | `images/rotas/rota-caminhos-fluviopolis.webp` | `1600x893` | `369,4 KB` |
+| Rota da Terra | `ROTA DA TERRA.png` | `images/rotas/rota-da-terra.webp` | `1600x893` | `206,8 KB` |
+
+Arquivos alterados nesta etapa:
+
+- `js/data/rotas.js`
+
+Observacoes:
+
+- todos os brutos originais foram preservados sem remocao;
+- a cobertura das 6 rotas passou de `0` para `6` imagens principais publicas.
+
 ## Rodada 2026-05-27 - otimização emergencial das imagens públicas
 
 Motivo da rodada:

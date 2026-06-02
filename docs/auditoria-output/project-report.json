@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-28T13:40:45.617Z",
+  "generatedAt": "2026-06-02T18:45:01.200Z",
   "totals": {
-    "files": 353,
+    "files": 361,
     "html": 36,
-    "css": 21,
+    "css": 22,
     "js": 36,
     "directoryIndexes": 14,
     "rootHtml": 22
@@ -31,8 +31,8 @@
     },
     {
       "ext": ".webp",
-      "files": 27,
-      "bytes": 8446450
+      "files": 33,
+      "bytes": 9967152
     },
     {
       "ext": ".pdf",
@@ -47,22 +47,22 @@
     {
       "ext": ".js",
       "files": 36,
-      "bytes": 738378
+      "bytes": 717661
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 641295
+      "bytes": 642151
     },
     {
       "ext": ".css",
-      "files": 21,
-      "bytes": 296081
+      "files": 22,
+      "bytes": 300611
     },
     {
       "ext": ".md",
-      "files": 21,
-      "bytes": 218912
+      "files": 22,
+      "bytes": 231025
     },
     {
       "ext": ".json",
@@ -167,6 +167,11 @@
       "bytes": 1970319
     },
     {
+      "dir": "images/rotas",
+      "files": 6,
+      "bytes": 1520702
+    },
+    {
       "dir": "images/empreendimentos/doces-e-delicias",
       "files": 8,
       "bytes": 1394028
@@ -178,8 +183,8 @@
     },
     {
       "dir": ".",
-      "files": 40,
-      "bytes": 958498
+      "files": 39,
+      "bytes": 930372
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -188,23 +193,23 @@
     },
     {
       "dir": "js",
-      "files": 23,
-      "bytes": 448980
+      "files": 24,
+      "bytes": 456619
     },
     {
       "dir": "css",
-      "files": 21,
-      "bytes": 296081
+      "files": 22,
+      "bytes": 300611
     },
     {
       "dir": "docs",
-      "files": 19,
-      "bytes": 204608
+      "files": 20,
+      "bytes": 216721
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 40265
+      "bytes": 40891
     },
     {
       "dir": "scripts",
@@ -798,7 +803,7 @@
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 147049
+      "bytes": 146580
     },
     {
       "path": "local.html",
@@ -834,7 +839,7 @@
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20921
+      "bytes": 20640
     },
     {
       "path": "o-que-fazer.html",
@@ -870,7 +875,7 @@
       "path": "privacidade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22461
+      "bytes": 22885
     },
     {
       "path": "reservas.html",
@@ -900,7 +905,7 @@
       "path": "transparencia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 21524
+      "bytes": 22706
     }
   ],
   "directoryIndexes": [
@@ -1331,6 +1336,7 @@
         "translations.js",
         "config.js",
         "js/site-meta.js",
+        "js/season-theme.js",
         "js/locais-data.js",
         "js/rotas-data.js",
         "js/data/pontos-turisticos.js",
@@ -1352,7 +1358,8 @@
       ],
       "styles": [
         "css/variables.css",
-        "css/index.css"
+        "css/index.css",
+        "css/season-theme.css"
       ],
       "anchors": [
         "viewport",
@@ -1897,11 +1904,13 @@
         "js/loading.js",
         "js/breadcrumbs.js",
         "js/site-meta.js",
+        "js/season-theme.js",
         "translations.js",
         "js/cookies.js"
       ],
       "styles": [
-        "css/shared.css"
+        "css/shared.css",
+        "css/season-theme.css"
       ],
       "anchors": [
         "viewport",
@@ -2202,6 +2211,13 @@
       "selectorCount": 72
     },
     {
+      "file": "css/season-theme.css",
+      "bytes": 4530,
+      "important": 3,
+      "media": 2,
+      "selectorCount": 23
+    },
+    {
       "file": "css/shared.css",
       "bytes": 9793,
       "important": 8,
@@ -2226,7 +2242,7 @@
   "duplicateSelectors": [
     {
       "selector": ":root",
-      "files": "css/404.css, css/index.css, css/mapa-turistico.css"
+      "files": "css/404.css, css/index.css, css/mapa-turistico.css, css/season-theme.css"
     },
     {
       "selector": ".accessibility-bar .shortcuts",
@@ -2425,6 +2441,10 @@
       "files": "css/eventos.css, css/index.css"
     },
     {
+      "selector": "@media (max-width: 640px)",
+      "files": "css/index.css, css/season-theme.css"
+    },
+    {
       "selector": "@media (max-width: 768px)",
       "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css"
     },
@@ -2454,7 +2474,7 @@
     },
     {
       "selector": "body",
-      "files": "css/404.css, css/index.css, css/mapa-completo.css, css/offline.css, css/shared.css"
+      "files": "css/404.css, css/index.css, css/mapa-completo.css, css/offline.css, css/season-theme.css, css/shared.css"
     },
     {
       "selector": "h1",
@@ -2647,7 +2667,7 @@
     },
     {
       "file": "js/data/rotas.js",
-      "bytes": 2077,
+      "bytes": 2703,
       "globals": [
         "window.TURISMO_ROTAS"
       ],
@@ -2981,7 +3001,7 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 40525,
+      "bytes": 41389,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
@@ -3004,6 +3024,7 @@
         "closeMobileMenu",
         "handleMobileMenuLink",
         "hasLoadedScript",
+        "hasLoadedStylesheet",
         "isMobileMenuActive",
         "isModifiedClick",
         "revealMascote"
@@ -3130,6 +3151,37 @@
       "addEventListeners": 8
     },
     {
+      "file": "js/season-theme.js",
+      "bytes": 6645,
+      "globals": [
+        "var AUTO_MODE",
+        "var SEASON_LABELS",
+        "var STORAGE_KEY",
+        "window.localStorage",
+        "window.matchMedia"
+      ],
+      "functions": [
+        "applySeason",
+        "bindSelect",
+        "buildSwitcher",
+        "ensureSwitcher",
+        "getAutomaticSeason",
+        "getBrazilDateParts",
+        "getModeOptions",
+        "init",
+        "mountIntoFooter",
+        "mountIntoHeader",
+        "mountIntoNav",
+        "safeGetStoredMode",
+        "safeSetStoredMode",
+        "syncReducedMotion",
+        "updateSelects"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 4
+    },
+    {
       "file": "js/security-utils.js",
       "bytes": 2142,
       "globals": [
@@ -3150,7 +3202,7 @@
     },
     {
       "file": "js/site-meta.js",
-      "bytes": 3797,
+      "bytes": 3917,
       "globals": [
         "window.SITE_META",
         "window.renderSiteMeta",
@@ -3248,59 +3300,6 @@
       "localStorage": 0,
       "serviceWorker": 0,
       "addEventListeners": 5
-    },
-    {
-      "file": "tmp-eventos-inline-check.js",
-      "bytes": 28012,
-      "globals": [
-        "const DIAS",
-        "const EVENT_BLOCKED_STATUS",
-        "const EVENT_CATEGORY_MAP",
-        "const EVENT_PUBLIC_APPROVED",
-        "const MESES",
-        "const MESES3",
-        "window.CONFIG",
-        "window.__smsCompatAppCheckInitialized",
-        "window.animRefresh",
-        "window.firebase"
-      ],
-      "functions": [
-        "abrirModal",
-        "aplicarFiltros",
-        "append",
-        "asCleanString",
-        "atualizarContadores",
-        "atualizarTitulo",
-        "cardEvento",
-        "carregarEventos",
-        "compareEvents",
-        "ensurePublicFirestore",
-        "escapeHtml",
-        "eventIdentityKey",
-        "eventSignatureKey",
-        "extractEventMainImage",
-        "fecharModal",
-        "isPublicApprovedStatus",
-        "loadApprovedFirebaseEvents",
-        "loadStaticEvents",
-        "mergeEvents",
-        "mostrarVista",
-        "normalizeCategory",
-        "normalizeCompareText",
-        "normalizeEventDate",
-        "normalizeFirebaseEvent",
-        "normalizeStaticEvent",
-        "normalizeStatus",
-        "normalizeWhatsAppLink",
-        "parseTimeSortValue",
-        "renderCalendario",
-        "renderDestaques",
-        "renderLista",
-        "sanitizePublicUrl"
-      ],
-      "localStorage": 0,
-      "serviceWorker": 0,
-      "addEventListeners": 8
     },
     {
       "file": "translations.js",
@@ -3422,6 +3421,11 @@
       "examples": "admin-firebase.html, portal-usuario.html"
     },
     {
+      "script": "js/season-theme.js",
+      "pages": 2,
+      "examples": "index.html, privacidade.html"
+    },
+    {
       "script": "js/security-utils.js",
       "pages": 2,
       "examples": "admin-firebase.html, noticia.html"
@@ -3485,16 +3489,16 @@
   "scriptDuplicateLoads": [],
   "sharedGlobals": [
     {
+      "global": "var STORAGE_KEY",
+      "files": "js/cookies.js, js/season-theme.js"
+    },
+    {
       "global": "window.__smsCompatAppCheckInitialized",
-      "files": "js/firebase-app-check.js, js/mapa-turistico.js, tmp-eventos-inline-check.js"
+      "files": "js/firebase-app-check.js, js/mapa-turistico.js"
     },
     {
       "global": "window.addEventListener",
       "files": "js/chatbot.js, js/nav-shared.js, js/site-stats.js"
-    },
-    {
-      "global": "window.animRefresh",
-      "files": "js/scroll-animations.js, tmp-eventos-inline-check.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3502,11 +3506,7 @@
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js, tmp-eventos-inline-check.js"
-    },
-    {
-      "global": "window.firebase",
-      "files": "js/mapa-turistico.js, tmp-eventos-inline-check.js"
+      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
     },
     {
       "global": "window.FirebaseSystem",
@@ -3523,6 +3523,10 @@
     {
       "global": "window.location",
       "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js"
+    },
+    {
+      "global": "window.matchMedia",
+      "files": "js/scroll-animations.js, js/season-theme.js"
     },
     {
       "global": "window.ROTAS_LEGADO_ESTABLISHMENTS",

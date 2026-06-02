@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-28T13:40:47.401Z",
+  "generatedAt": "2026-06-02T18:45:03.192Z",
   "totals": {
-    "mediaFiles": 211,
-    "referencedMedia": 131,
-    "likelyOrphans": 80,
+    "mediaFiles": 217,
+    "referencedMedia": 138,
+    "likelyOrphans": 79,
     "duplicateGroups": 0,
     "missingReferences": 0,
     "heavyMedia": 28
@@ -53,7 +53,9 @@
         "width": 1920
       },
       "sha256": "a13c6f0d5cbad8d9bffe210175ef44553f72ef622e908eca70a49a277f3d11a1",
-      "usedBy": []
+      "usedBy": [
+        "noticias.html"
+      ]
     },
     {
       "path": "images/CUIA_3.JPG",
@@ -2105,7 +2107,8 @@
       },
       "sha256": "b4b0d0e6d74b70797b5346b96d893529e999deb680a3eeb5d5012705e6ebd24d",
       "usedBy": [
-        "js/locais-data.js"
+        "js/locais-data.js",
+        "noticias.html"
       ]
     },
     {
@@ -2214,7 +2217,6 @@
         "js/cms.js",
         "js/reservas.js",
         "js/roteiro-ia.js",
-        "noticias.html",
         "sw.js"
       ]
     },
@@ -2355,8 +2357,7 @@
         "js/data/pontos-turisticos.js",
         "js/locais-data.js",
         "js/reservas.js",
-        "js/roteiro-ia.js",
-        "noticias.html"
+        "js/roteiro-ia.js"
       ]
     },
     {
@@ -2407,6 +2408,84 @@
       ]
     },
     {
+      "path": "images/rotas/rota-caminhos-fluviopolis.webp",
+      "ext": ".webp",
+      "bytes": 378274,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "b0a90eefc4915051f4835fff9be420cd06f5719bc5f99b3f08c3c5ddb6b6438c",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
+      "path": "images/rotas/rota-da-terra.webp",
+      "ext": ".webp",
+      "bytes": 211758,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "94388559384eef446539b23750002d255250e6281cc4c4aa7e8d7627e4ed078f",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
+      "path": "images/rotas/rota-das-aguas.webp",
+      "ext": ".webp",
+      "bytes": 216250,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "6cee6cd1ba29765c7eebcfc7b8a9df915f9b624b499c92adaa8ec1243c620c0a",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
+      "path": "images/rotas/rota-erva-mate.webp",
+      "ext": ".webp",
+      "bytes": 180798,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "c077974a92439a7580b231a5cfbb40d4bd6c1e689d64e310d47a0f9a3ffbdfdb",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
+      "path": "images/rotas/rota-polonesa.webp",
+      "ext": ".webp",
+      "bytes": 341958,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "ce5f034df28d738c3e87baa9dfb0af356d99bc9d3684ebba4c973a67db7b6a11",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
+      "path": "images/rotas/rota-sabores-memorias.webp",
+      "ext": ".webp",
+      "bytes": 191664,
+      "dimensions": {
+        "width": 1600,
+        "height": 893
+      },
+      "sha256": "91efc8fa0c7e4af583d6a2afb48b0a7b4c0bad13f04b6ad21121a8bde2801b02",
+      "usedBy": [
+        "js/data/rotas.js"
+      ]
+    },
+    {
       "path": "images/RUA_DO_MATHE.jpg",
       "ext": ".jpg",
       "bytes": 185039,
@@ -2422,7 +2501,8 @@
         "js/data/pontos-turisticos.js",
         "js/data/restaurantes.js",
         "js/locais-data.js",
-        "js/roteiro-ia.js"
+        "js/roteiro-ia.js",
+        "noticias.html"
       ]
     },
     {
@@ -2450,8 +2530,7 @@
       "usedBy": [
         "galeria.html",
         "js/data/eventos.js",
-        "js/locais-data.js",
-        "noticias.html"
+        "js/locais-data.js"
       ]
     },
     {
@@ -2562,7 +2641,6 @@
       "sha256": "d421caf929ae9437b4ef71b36bc5827895ade4888df35e4355114ba4f8f5c70c",
       "usedBy": [
         "galeria.html",
-        "noticias.html",
         "sabores.html"
       ]
     },
@@ -3130,17 +3208,6 @@
         "width": 1920
       },
       "sha256": "732a578b0f67415493dd9303739c11b9ea1fced1a7e0aa04dc611cedaf7735aa",
-      "usedBy": []
-    },
-    {
-      "path": "images/CUIA_1.JPG",
-      "ext": ".jpg",
-      "bytes": 481303,
-      "dimensions": {
-        "height": 1080,
-        "width": 1920
-      },
-      "sha256": "a13c6f0d5cbad8d9bffe210175ef44553f72ef622e908eca70a49a277f3d11a1",
       "usedBy": []
     },
     {

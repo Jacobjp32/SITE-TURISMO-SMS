@@ -1,12 +1,12 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-05-28T13:40:47.401Z.
+Gerado em 2026-06-02T18:45:03.192Z.
 
 ## Resumo
 
-- Midias encontradas: 211
-- Midias referenciadas: 131
-- Orfas provaveis: 80
+- Midias encontradas: 217
+- Midias referenciadas: 138
+- Orfas provaveis: 79
 - Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
 - Midias pesadas: 28
@@ -76,7 +76,6 @@ _Nenhum item encontrado._
 | images/CUIA_3.JPG | 536666 | 1920x1080 |
 | images/GINASIO_POLACAO.JPG | 528933 | 1920x1080 |
 | images/PARQUE_EXPOSICOES_7.jpg | 525567 | 1920x1080 |
-| images/CUIA_1.JPG | 481303 | 1920x1080 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 | 1200x1600 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg | 462028 | 1200x1600 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 | 1280x1600 |
