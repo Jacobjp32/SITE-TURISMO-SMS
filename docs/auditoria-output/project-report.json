@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-03T13:38:41.129Z",
+  "generatedAt": "2026-06-03T17:28:52.441Z",
   "totals": {
     "files": 362,
     "html": 36,
@@ -47,7 +47,7 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 753159
+      "bytes": 755608
     },
     {
       "ext": ".html",
@@ -194,7 +194,7 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 492117
+      "bytes": 494566
     },
     {
       "dir": "css",
@@ -1071,7 +1071,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 68251
+      "bytes": 70673
     },
     {
       "path": "js/reservas.js",
@@ -2859,7 +2859,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 67995,
+      "bytes": 70386,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2881,6 +2881,7 @@
         "buildSafeImageMetadata",
         "buildSafeRequestedChanges",
         "ensureArray",
+        "establishmentClaimErrorMessage",
         "getComparableTimestamp",
         "getFirebaseAuth",
         "getFirebaseDB",
@@ -2930,7 +2931,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 80055,
+      "bytes": 80082,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",

@@ -85,6 +85,30 @@ function authErrorMessage(error, fallback) {
     return message;
 }
 
+function establishmentClaimErrorMessage(error) {
+    if (!error) return 'Erro ao enviar solicitação de vínculo.';
+
+    if (error.code === 'auth/session-not-ready') {
+        return 'Sua sessão expirou ou ainda não foi carregada. Entre novamente para continuar.';
+    }
+    if (error.code === 'firestore/sdk-not-ready') {
+        return 'O serviço de dados ainda não carregou. Recarregue a página e tente novamente.';
+    }
+    if (error.code === 'permission-denied') {
+        return 'Sua sessão não tem permissão para concluir a solicitação. Saia e entre novamente.';
+    }
+    if (error.code === 'unauthenticated') {
+        return 'Sua sessão expirou. Faça login novamente.';
+    }
+    if (error.code === 'failed-precondition') {
+        return 'Não foi possível validar a solicitação agora. Tente novamente em instantes.';
+    }
+    if (error.code === 'deadline-exceeded' || error.code === 'unavailable') {
+        return 'O serviço está temporariamente indisponível. Tente novamente em instantes.';
+    }
+    return 'Erro ao enviar solicitação de vínculo.';
+}
+
 function normalizeComparableId(value) {
     return String(value || '')
         .normalize('NFD')
@@ -751,10 +775,26 @@ const FirebaseSystem = {
         }
 
         try {
-            var db = firebase.firestore();
-            var userId = currentUser.uid;
-            var normalizedTarget = normalizeComparableId(establishmentId);
+            var authUser = getFirebaseAuth().currentUser;
+            if (!authUser || !authUser.uid) {
+                var sessionError = new Error('Usuário autenticado indisponível para criar a solicitação.');
+                sessionError.code = 'auth/session-not-ready';
+                throw sessionError;
+            }
 
+            var db = firebase.firestore();
+            var userId = authUser.uid;
+            var userEmail = String(authUser.email || '').trim();
+            var normalizedTarget = normalizeComparableId(establishmentId);
+            var flowStage = 'validate_auth';
+
+            if (!userEmail) {
+                var emailError = new Error('E-mail autenticado indisponível para criar a solicitação.');
+                emailError.code = 'auth/session-not-ready';
+                throw emailError;
+            }
+
+            flowStage = 'query_managers';
             var managersSnap = await db.collection('establishment_managers')
                 .where('userId', '==', userId)
                 .get();
@@ -770,6 +810,7 @@ const FirebaseSystem = {
                 return { success: false, message: 'Você já possui vínculo ativo com este empreendimento.' };
             }
 
+            flowStage = 'query_claims';
             var claimsSnap = await db.collection('establishment_claims')
                 .where('userId', '==', userId)
                 .get();
@@ -791,11 +832,12 @@ const FirebaseSystem = {
             var claimId = 'claim_' + Date.now();
             var now = firebase.firestore.FieldValue.serverTimestamp();
 
+            flowStage = 'write_claim';
             await db.collection('establishment_claims').doc(claimId).set({
                 id: claimId,
                 userId: userId,
-                userEmail: currentUser.email || '',
-                userName: currentUser.nome || currentUser.displayName || currentUser.email || 'Usuário',
+                userEmail: userEmail,
+                userName: sanitizeSimpleText(currentUser.nome || authUser.displayName || userEmail || 'Usuário', 160),
                 contactPhone: String(claimData && claimData.contactPhone || '').trim(),
                 establishmentId: establishmentId,
                 establishmentName: establishmentName,
@@ -816,8 +858,16 @@ const FirebaseSystem = {
 
             return { success: true, message: 'Solicitação de vínculo enviada para análise.' };
         } catch(error) {
-            console.error(error);
-            return { success: false, message: 'Erro ao enviar solicitação de vínculo.' };
+            console.error('[establishment-claim] Falha ao enviar solicitação.', {
+                stage: typeof flowStage === 'string' ? flowStage : 'unknown',
+                establishmentId: establishmentId,
+                establishmentName: establishmentName,
+                userId: currentUser && currentUser.uid ? currentUser.uid : null,
+                errorCode: error && error.code ? error.code : '',
+                errorMessage: error && error.message ? error.message : '',
+                stack: error && error.stack ? error.stack : ''
+            });
+            return { success: false, message: establishmentClaimErrorMessage(error) };
         }
     },
 

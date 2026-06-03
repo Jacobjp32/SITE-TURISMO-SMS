@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-03T13:38:41.129Z.
+Gerado em 2026-06-03T17:28:52.441Z.
 
 ## Resumo
 
@@ -22,7 +22,7 @@ Gerado em 2026-06-03T13:38:41.129Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 753159 |
+| .js | 37 | 755608 |
 | .html | 36 | 649199 |
 | .css | 22 | 308090 |
 | .md | 22 | 231025 |
@@ -185,7 +185,7 @@ Gerado em 2026-06-03T13:38:41.129Z.
 | firebase.json | 61 |
 | js/admin-content-cms.js | 26257 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 68251 |
+| js/firebase-auth.js | 70673 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
