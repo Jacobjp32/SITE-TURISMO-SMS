@@ -1,15 +1,15 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-06-03T17:28:49.837Z.
+Gerado em 2026-06-03T18:41:47.508Z.
 
 ## Resumo
 
 - Arquivos varridos: 99
-- Links internos/externos coletados: 637
+- Links internos/externos coletados: 639
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0
 - Links legados/concorrentes: 16
-- Links redundantes com .html: 13
+- Links redundantes com .html: 14
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
@@ -46,6 +46,7 @@ _Nenhum item encontrado._
 | --- | --- | --- |
 | eventos/index.html | /eventos.html | existe variante sem .html |
 | galeria/index.html | /galeria.html | existe variante sem .html |
+| js/admin-content-cms.js | noticias.html | existe variante sem .html |
 | local/index.html | /local.html | existe variante sem .html |
 | manifest.json | /eventos.html?utm_source=pwa-shortcut | existe variante sem .html |
 | mapa-3d/index.html | /mapa-3d.html | existe variante sem .html |

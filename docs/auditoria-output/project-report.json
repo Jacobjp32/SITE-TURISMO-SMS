@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-03T17:28:52.441Z",
+  "generatedAt": "2026-06-03T18:41:47.512Z",
   "totals": {
     "files": 362,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 755608
+      "bytes": 791587
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 649199
+      "bytes": 672981
     },
     {
       "ext": ".css",
@@ -184,7 +184,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 938089
+      "bytes": 961871
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -194,7 +194,7 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 494566
+      "bytes": 530545
     },
     {
       "dir": "css",
@@ -785,7 +785,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 91870
+      "bytes": 115652
     },
     {
       "path": "eventos.html",
@@ -1005,7 +1005,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 91870
+      "bytes": 115652
     },
     {
       "path": "css/mapa-3d.css",
@@ -1059,7 +1059,7 @@
       "path": "js/admin-content-cms.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 26257
+      "bytes": 62236
     },
     {
       "path": "js/firebase-app-check.js",
@@ -2553,38 +2553,67 @@
     },
     {
       "file": "js/admin-content-cms.js",
-      "bytes": 26184,
+      "bytes": 62087,
       "globals": [
+        "var DEFAULT_IMAGE",
+        "var IMAGE_TYPE_REGEX",
+        "var MAX_IMAGE_BYTES",
         "var SEC",
         "window.AdminContentCMS",
+        "window.DOMParser",
         "window.SMSecurity",
+        "window.URL",
         "window.currentUser",
         "window.firebase",
         "window.firebaseDB",
-        "window.loadApprovedEvents"
+        "window.loadApprovedEvents",
+        "window.location"
       ],
       "functions": [
+        "applyCoverToEventImages",
         "buildEventForm",
+        "buildEventImageEntry",
         "buildMediaForm",
+        "buildMediaSelect",
         "buildNewsForm",
+        "buildNewsIdentityKey",
         "clean",
         "cleanLong",
         "compareAdminDateDesc",
         "currentAdminId",
+        "dedupeImages",
         "escapeHtml",
+        "extractBackgroundImage",
+        "extractSlugFromUrl",
+        "extractStaticPosts",
         "field",
         "formatAdminDate",
+        "formatBytes",
         "getEventDate",
         "getEventTime",
         "getLocation",
+        "getMatchingMediaId",
+        "getMediaById",
         "getOrganizer",
+        "getPrimaryEventImage",
         "getTitle",
+        "isAllowedImageUrl",
         "isPublished",
         "makeSlug",
+        "normalizeComparableUrl",
+        "normalizeEventImages",
+        "parsePtBrDate",
+        "removeFirstEventImage",
+        "renderEventCoverPreview",
+        "renderEventGalleryList",
         "safeFileName",
+        "safePreviewUrl",
         "splitList",
         "textarea",
-        "timestampToMillis"
+        "timestampToMillis",
+        "uploadImageToCms",
+        "validateImageFile",
+        "validateImageUrl"
       ],
       "localStorage": 0,
       "serviceWorker": 0,
@@ -3606,7 +3635,7 @@
     },
     {
       "global": "window.location",
-      "files": "js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js"
+      "files": "js/admin-content-cms.js, js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js"
     },
     {
       "global": "window.matchMedia",

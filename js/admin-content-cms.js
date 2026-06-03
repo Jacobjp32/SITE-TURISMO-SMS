@@ -1,10 +1,15 @@
 (function () {
     "use strict";
 
+    var DEFAULT_IMAGE = "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg";
+    var MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+    var IMAGE_TYPE_REGEX = /^image\/(jpeg|jpg|png|webp)$/i;
+
     var AdminContentCMS = {
         events: [],
         news: [],
         media: [],
+        _eventPreviewObjectUrl: "",
 
         get db() {
             return window.firebaseDB && window.firebaseDB.db ? window.firebaseDB.db : null;
@@ -24,6 +29,7 @@
         },
 
         closeModal: function () {
+            this.releaseEventPreviewUrl();
             var modal = document.getElementById("contentModal");
             if (modal) modal.hidden = true;
             var body = document.getElementById("contentModalBody");
@@ -40,6 +46,17 @@
             this.loadApprovedEvents();
             this.loadNews();
             this.loadMedia();
+        },
+
+        ensureMediaLoaded: async function (forceReload) {
+            if (!this.db) return [];
+            if (!forceReload && this.media.length) return this.media;
+
+            var snapshot = await this.db.collection("media_library").get();
+            this.media = snapshot.docs.map(function (doc) {
+                return Object.assign({ id: doc.id }, doc.data());
+            }).sort(compareAdminDateDesc);
+            return this.media;
         },
 
         loadApprovedEvents: async function () {
@@ -62,13 +79,17 @@
                 }
 
                 var SEC = this.SEC;
-                container.innerHTML = '<table class="data-table"><thead><tr>' +
+                container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr>' +
                     '<th>Evento</th><th>Data</th><th>Local</th><th>Status</th><th>Histórico</th><th>Ações</th>' +
                     '</tr></thead><tbody>' +
                     this.events.map(function (eventItem) {
                         var published = isPublished(eventItem);
+                        var cover = getPrimaryEventImage(eventItem);
                         return '<tr><td><strong>' + SEC.html(getTitle(eventItem), "Sem título") + '</strong><br><small>' +
-                            SEC.html(getOrganizer(eventItem), "Sem organizador") + '</small></td><td>' +
+                            SEC.html(getOrganizer(eventItem), "Sem organizador") + '</small>' +
+                            (cover ? '<div class="table-inline-media"><img src="' + SEC.url(cover.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(getTitle(eventItem), "Evento") + '" onerror="this.closest(\\\'.table-inline-media\\\').classList.add(\\\'is-error\\\');this.remove();"><span>' +
+                                SEC.html(cover.name || "Capa atual", "Capa atual") + '</span></div>' : "") +
+                            '</td><td>' +
                             SEC.html(getEventDate(eventItem), "—") + '<br><small>' + SEC.html(getEventTime(eventItem), "—") + '</small></td><td>' +
                             SEC.html(getLocation(eventItem), "—") + '</td><td><span class="badge ' +
                             (published ? 'badge-success">Publicado' : 'badge-warning">Despublicado') + '</span>' +
@@ -80,17 +101,27 @@
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleEventFeatured(\'' + SEC.js(eventItem.id) + '\')">' + (eventItem.destaque ? 'Remover destaque' : 'Destacar') + '</button>' +
                             '<button class="btn-sm btn-delete" onclick="AdminContentCMS.deleteEvent(\'' + SEC.js(eventItem.id) + '\')">Excluir</button>' +
                             '</td></tr>';
-                    }).join("") + '</tbody></table>';
+                    }).join("") + '</tbody></table></div>';
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao carregar eventos aprovados.", error);
                 container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar eventos aprovados.</p>';
             }
         },
 
-        openEventModal: function (eventId) {
+        openEventModal: async function (eventId, presetItem) {
             var eventItem = eventId ? this.events.find(function (item) { return item.id === eventId; }) : null;
-            var title = eventItem ? "Editar evento" : "Novo evento";
-            this.openModal(title, buildEventForm(eventItem));
+            if (!eventItem && presetItem) {
+                eventItem = Object.assign({}, presetItem);
+            }
+
+            try {
+                await this.ensureMediaLoaded(false);
+            } catch (error) {
+                console.error("[admin-content-cms] Falha ao carregar biblioteca de mídia para o evento.", error);
+            }
+
+            this.openModal(eventItem ? "Editar evento" : "Novo evento", buildEventForm(eventItem, this.media));
+            this.syncEventCoverPreview();
         },
 
         saveEvent: async function (event) {
@@ -100,8 +131,57 @@
             var form = event.target;
             var id = form.eventId.value || ("evt_" + Date.now());
             var publish = form.publicado.value === "true";
+            var existingItem = this.events.find(function (item) { return item.id === id; }) || null;
             var now = window.firebase.firestore.FieldValue.serverTimestamp();
-            var payload = {
+            var manualCoverUrl = clean(form.mainImage.value);
+            var selectedMediaItem = getMediaById(this.media, form.eventMediaId.value);
+            var removeCover = form.removeCover && form.removeCover.value === "true";
+            var removeGalleryFallback = form.removeGalleryCoverFallback && form.removeGalleryCoverFallback.value === "true";
+            var uploadedFile = form.coverUpload && form.coverUpload.files ? form.coverUpload.files[0] : null;
+            var finalCoverUrl = manualCoverUrl;
+            var newCoverEntry = null;
+            var existingImages = normalizeEventImages(existingItem && existingItem.images);
+            var payload;
+
+            if (selectedMediaItem && !uploadedFile) {
+                finalCoverUrl = clean(selectedMediaItem.url);
+                newCoverEntry = buildEventImageEntry(selectedMediaItem.url, {
+                    name: selectedMediaItem.title,
+                    contentType: selectedMediaItem.contentType,
+                    size: selectedMediaItem.size,
+                    path: selectedMediaItem.storagePath
+                });
+            }
+
+            try {
+                if (uploadedFile) {
+                    if (!this.storage) return alert("Firebase Storage não inicializado.");
+                    validateImageFile(uploadedFile);
+
+                    var uploadResult = await uploadImageToCms(this.storage, uploadedFile);
+                    finalCoverUrl = uploadResult.url;
+                    newCoverEntry = buildEventImageEntry(uploadResult.url, {
+                        name: uploadedFile.name,
+                        contentType: uploadedFile.type,
+                        size: uploadedFile.size,
+                        path: uploadResult.path,
+                        uploadedAt: new Date().toISOString()
+                    });
+                } else if (removeCover) {
+                    finalCoverUrl = "";
+                } else if (manualCoverUrl) {
+                    validateImageUrl(manualCoverUrl);
+                    newCoverEntry = buildEventImageEntry(manualCoverUrl, {
+                        name: "Capa manual"
+                    });
+                }
+            } catch (error) {
+                console.error("[admin-content-cms] Falha ao processar capa do evento.", error);
+                alert(error && error.message ? error.message : "Erro ao processar a imagem de capa.");
+                return;
+            }
+
+            payload = {
                 id: id,
                 title: clean(form.title.value),
                 nome: clean(form.title.value),
@@ -114,8 +194,6 @@
                 location: clean(form.location.value),
                 local: clean(form.location.value),
                 organizer: clean(form.organizer.value),
-                mainImage: clean(form.mainImage.value),
-                image: clean(form.mainImage.value),
                 category: clean(form.category.value) || "cultural",
                 categoria: clean(form.category.value) || "cultural",
                 destaque: form.destaque.checked,
@@ -135,6 +213,25 @@
                 payload.reviewedAt = now;
                 payload.reviewedBy = currentAdminId();
             }
+
+            if (removeCover) {
+                payload.mainImage = "";
+                payload.image = "";
+                payload.coverImage = "";
+                payload.images = removeGalleryFallback ? removeFirstEventImage(existingImages, existingItem) : existingImages;
+            } else if (finalCoverUrl) {
+                payload.mainImage = finalCoverUrl;
+                payload.image = finalCoverUrl;
+                payload.coverImage = finalCoverUrl;
+                payload.images = applyCoverToEventImages(existingImages, newCoverEntry || buildEventImageEntry(finalCoverUrl, {}));
+            } else {
+                payload.mainImage = "";
+                payload.image = "";
+                payload.coverImage = "";
+                payload.images = existingImages;
+            }
+
+            payload.imageCount = Array.isArray(payload.images) ? payload.images.length : 0;
 
             await this.db.collection("eventos_aprovados").doc(id).set(payload, { merge: true });
             this.closeModal();
@@ -172,6 +269,113 @@
             this.loadApprovedEvents();
         },
 
+        syncEventCoverPreview: function () {
+            var preview = document.getElementById("eventCoverPreview");
+            var urlField = document.getElementById("mainImage");
+            var removeField = document.getElementById("eventRemoveCover");
+            var mediaSelect = document.getElementById("eventMediaId");
+            var selectedMedia = getMediaById(this.media, mediaSelect && mediaSelect.value);
+            if (!preview || !urlField) return;
+
+            if (removeField && removeField.value === "true") {
+                preview.innerHTML = renderEventCoverPreview(null, "Capa marcada para remoção.");
+                return;
+            }
+
+            if (selectedMedia && selectedMedia.url) {
+                preview.innerHTML = renderEventCoverPreview(buildEventImageEntry(selectedMedia.url, {
+                    name: selectedMedia.title,
+                    contentType: selectedMedia.contentType,
+                    size: selectedMedia.size
+                }), "Selecionada da biblioteca de mídia.");
+                return;
+            }
+
+            if (clean(urlField.value)) {
+                preview.innerHTML = renderEventCoverPreview(buildEventImageEntry(clean(urlField.value), {
+                    name: "Capa manual"
+                }), "URL manual ativa.");
+                return;
+            }
+
+            preview.innerHTML = renderEventCoverPreview(null, "Sem capa definida.");
+        },
+
+        previewEventCoverFile: function (inputEvent) {
+            var file = inputEvent && inputEvent.target && inputEvent.target.files ? inputEvent.target.files[0] : null;
+            var preview = document.getElementById("eventCoverPreview");
+            var removeField = document.getElementById("eventRemoveCover");
+            var mediaSelect = document.getElementById("eventMediaId");
+
+            if (mediaSelect) mediaSelect.value = "";
+            if (removeField) removeField.value = "false";
+            this.releaseEventPreviewUrl();
+
+            if (!file || !preview) {
+                this.syncEventCoverPreview();
+                return;
+            }
+
+            try {
+                validateImageFile(file);
+            } catch (error) {
+                console.error("[admin-content-cms] Arquivo de capa inválido.", error);
+                alert(error.message);
+                inputEvent.target.value = "";
+                this.syncEventCoverPreview();
+                return;
+            }
+
+            this._eventPreviewObjectUrl = window.URL && typeof window.URL.createObjectURL === "function"
+                ? window.URL.createObjectURL(file)
+                : "";
+            preview.innerHTML = renderEventCoverPreview(buildEventImageEntry(this._eventPreviewObjectUrl, {
+                name: file.name,
+                contentType: file.type,
+                size: file.size
+            }), "Pré-visualização do upload.");
+        },
+
+        releaseEventPreviewUrl: function () {
+            if (this._eventPreviewObjectUrl && window.URL && typeof window.URL.revokeObjectURL === "function") {
+                window.URL.revokeObjectURL(this._eventPreviewObjectUrl);
+            }
+            this._eventPreviewObjectUrl = "";
+        },
+
+        clearEventCoverSelection: function () {
+            var fileInput = document.getElementById("eventCoverUpload");
+            var mediaSelect = document.getElementById("eventMediaId");
+            var removeField = document.getElementById("eventRemoveCover");
+
+            this.releaseEventPreviewUrl();
+            if (fileInput) fileInput.value = "";
+            if (mediaSelect) mediaSelect.value = "";
+            if (removeField) removeField.value = "false";
+            this.syncEventCoverPreview();
+        },
+
+        removeEventCover: function () {
+            var removeField = document.getElementById("eventRemoveCover");
+            var removeFallbackField = document.getElementById("eventRemoveGalleryCoverFallback");
+            var urlField = document.getElementById("mainImage");
+            var fileInput = document.getElementById("eventCoverUpload");
+            var mediaSelect = document.getElementById("eventMediaId");
+            var hasImages = document.getElementById("eventHasGalleryImages");
+
+            if (removeField) removeField.value = "true";
+            if (removeFallbackField) {
+                removeFallbackField.value = hasImages && hasImages.value === "true" && confirm("Este evento tem galeria salva. Deseja remover também a primeira imagem usada como fallback de capa? A galeria restante será preservada.")
+                    ? "true"
+                    : "false";
+            }
+            if (urlField) urlField.value = "";
+            if (fileInput) fileInput.value = "";
+            if (mediaSelect) mediaSelect.value = "";
+            this.releaseEventPreviewUrl();
+            this.syncEventCoverPreview();
+        },
+
         loadNews: async function () {
             var container = document.getElementById("noticias-admin-container");
             if (!container) return;
@@ -192,18 +396,26 @@
                 }
 
                 var SEC = this.SEC;
-                container.innerHTML = '<table class="data-table"><thead><tr><th>Notícia</th><th>Categoria</th><th>Status</th><th>Atualização</th><th>Ações</th></tr></thead><tbody>' +
+                container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr><th>Notícia</th><th>Categoria</th><th>Status</th><th>Atualização</th><th>Ações</th></tr></thead><tbody>' +
                     this.news.map(function (item) {
                         var published = item.publicado === true || item.status === "publicado";
-                        return '<tr><td><strong>' + SEC.html(item.titulo, "Sem título") + '</strong><br><small>' + SEC.html(item.resumo, "—") + '</small></td><td>' +
-                            SEC.html(item.categoria, "—") + '</td><td><span class="badge ' + (published ? 'badge-success">Publicado' : 'badge-warning">Rascunho') + '</span>' +
+                        var legacy = item.origemTipo === "legado_estatico";
+                        var originAction = item.linkOrigem
+                            ? '<a class="btn-sm btn-edit" href="' + SEC.url(item.linkOrigem, "#") + '" target="_blank" rel="noopener noreferrer">Origem</a>'
+                            : "";
+                        return '<tr><td><strong>' + SEC.html(item.titulo, "Sem título") + '</strong><br><small>' + SEC.html(item.resumo, "—") + '</small>' +
+                            (item.linkOrigem ? '<br><small><a href="' + SEC.url(item.linkOrigem, "#") + '" target="_blank" rel="noopener noreferrer">Link oficial</a></small>' : '') +
+                            '</td><td>' + SEC.html(item.categoria, "—") +
+                            (legacy ? '<br><span class="badge badge-info">Legado</span>' : '') +
+                            '</td><td><span class="badge ' + (published ? 'badge-success">Publicado' : 'badge-warning">Rascunho') + '</span>' +
                             (item.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>' +
                             SEC.html(formatAdminDate(item.updatedAt || item.publishedAt || item.data), "—") + '<br>' + SEC.html(item.updatedBy || "—") + '</small></td><td>' +
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.openNewsModal(\'' + SEC.js(item.id) + '\')">Editar</button>' +
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleNewsPublish(\'' + SEC.js(item.id) + '\')">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
+                            originAction +
                             '<button class="btn-sm btn-delete" onclick="AdminContentCMS.deleteNews(\'' + SEC.js(item.id) + '\')">Excluir</button>' +
                             '</td></tr>';
-                    }).join("") + '</tbody></table>';
+                    }).join("") + '</tbody></table></div>';
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao carregar notícias.", error);
                 container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar notícias.</p>';
@@ -276,6 +488,105 @@
             this.loadNews();
         },
 
+        importStaticNews: async function () {
+            if (!this.db) return alert("Firestore não inicializado.");
+            if (!confirm("Importar as notícias estáticas atuais para o CMS? Notícias já importadas por slug, link de origem ou título + data serão ignoradas.")) {
+                return;
+            }
+
+            try {
+                var response = await fetch("noticias.html", { cache: "no-store" });
+                if (!response.ok) throw new Error("Falha ao ler noticias.html.");
+
+                var html = await response.text();
+                var parser = new window.DOMParser();
+                var documentSource = parser.parseFromString(html, "text/html");
+                var staticPosts = extractStaticPosts(documentSource);
+
+                if (!staticPosts.length) {
+                    alert("Nenhuma notícia estática foi encontrada para importação.");
+                    return;
+                }
+
+                if (!this.news.length) {
+                    await this.loadNews();
+                }
+
+                var existingBySlug = {};
+                var existingByOrigin = {};
+                var existingByTitleDate = {};
+                this.news.forEach(function (item) {
+                    var slug = makeSlug(item.slug || item.titulo || "");
+                    var origin = normalizeComparableUrl(item.linkOrigem);
+                    var titleDateKey = buildNewsIdentityKey(item.titulo, item.publishedAt || item.data);
+                    if (slug) existingBySlug[slug] = true;
+                    if (origin) existingByOrigin[origin] = true;
+                    if (titleDateKey) existingByTitleDate[titleDateKey] = true;
+                });
+
+                var batch = this.db.batch();
+                var now = window.firebase.firestore.FieldValue.serverTimestamp();
+                var importedCount = 0;
+                var skippedCount = 0;
+
+                staticPosts.forEach(function (item) {
+                    var slug = makeSlug(item.slug || item.titulo || "");
+                    var origin = normalizeComparableUrl(item.linkOrigem);
+                    var titleDateKey = buildNewsIdentityKey(item.titulo, item.publishedAt);
+
+                    if (!slug || existingBySlug[slug] || (origin && existingByOrigin[origin]) || (titleDateKey && existingByTitleDate[titleDateKey])) {
+                        skippedCount += 1;
+                        return;
+                    }
+
+                    var id = "noticia_legacy_" + slug;
+                    batch.set(
+                        this.db.collection("noticias").doc(id),
+                        {
+                            id: id,
+                            slug: slug,
+                            titulo: item.titulo,
+                            resumo: item.resumo,
+                            conteudo: item.conteudo,
+                            categoria: item.categoria,
+                            imagem: item.imagem,
+                            galeria: [],
+                            linkOrigem: item.linkOrigem,
+                            destaque: item.destaque === true,
+                            publicado: true,
+                            status: "publicado",
+                            data: item.publishedAt,
+                            publishedAt: item.publishedAt,
+                            autor: "Portal Oficial da Prefeitura",
+                            origemTipo: "legado_estatico",
+                            origemArquivo: "noticias.html",
+                            createdAt: now,
+                            updatedAt: now,
+                            updatedBy: currentAdminId()
+                        },
+                        { merge: true }
+                    );
+
+                    existingBySlug[slug] = true;
+                    if (origin) existingByOrigin[origin] = true;
+                    if (titleDateKey) existingByTitleDate[titleDateKey] = true;
+                    importedCount += 1;
+                }, this);
+
+                if (!importedCount) {
+                    alert("Nenhuma notícia nova foi importada. As notícias estáticas já parecem estar vinculadas ao CMS.");
+                    return;
+                }
+
+                await batch.commit();
+                await this.loadNews();
+                alert(importedCount + " notícia(s) importada(s) do conteúdo estático. " + skippedCount + " duplicada(s) foram ignorada(s).");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao importar notícias estáticas.", error);
+                alert("Erro ao importar notícias estáticas.");
+            }
+        },
+
         loadMedia: async function () {
             var container = document.getElementById("midia-admin-container");
             if (!container) return;
@@ -285,10 +596,7 @@
             }
 
             try {
-                var snapshot = await this.db.collection("media_library").get();
-                this.media = snapshot.docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
-                }).sort(compareAdminDateDesc);
+                await this.ensureMediaLoaded(true);
 
                 if (!this.media.length) {
                     container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhuma mídia cadastrada.</p>';
@@ -296,11 +604,24 @@
                 }
 
                 var SEC = this.SEC;
-                container.innerHTML = '<div class="update-request-images">' + this.media.map(function (item) {
-                    return '<a href="' + SEC.url(item.url, "#") + '" target="_blank" rel="noopener noreferrer">' +
-                        '<img src="' + SEC.url(item.url, "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg") + '" alt="' + SEC.attr(item.title, "Mídia") + '">' +
-                        '<span class="update-request-image-caption"><strong>' + SEC.html(item.title, "Sem título") + '</strong><br>' +
-                        SEC.html(item.category, "Imagem") + '<br>' + SEC.html(item.url, "") + '</span></a>';
+                container.innerHTML = '<div class="media-admin-grid">' + this.media.map(function (item) {
+                    return '<article class="media-admin-card">' +
+                        '<div class="media-admin-thumb">' +
+                            '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\\\'.media-admin-thumb\\\').classList.add(\\\'is-error\\\');this.remove();">' +
+                        '</div>' +
+                        '<div class="media-admin-body">' +
+                            '<strong>' + SEC.html(item.title, "Sem título") + '</strong>' +
+                            '<span class="manager-meta">' + SEC.html(item.category, "Imagem") + '</span>' +
+                            '<span class="manager-meta">' + SEC.html(formatAdminDate(item.updatedAt || item.createdAt), "—") + '</span>' +
+                            '<div class="media-admin-url">' + SEC.html(item.url, "—") + '</div>' +
+                            '<div class="media-admin-actions">' +
+                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.copyMediaUrl(\'' + SEC.js(item.id) + '\')">Copiar URL</button>' +
+                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.openMediaModal(\'' + SEC.js(item.id) + '\')">Editar</button>' +
+                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.useMediaInNewEvent(\'' + SEC.js(item.id) + '\')">Usar em evento</button>' +
+                                '<button class="btn-sm btn-delete" type="button" onclick="AdminContentCMS.deleteMedia(\'' + SEC.js(item.id) + '\')">Excluir</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</article>';
                 }).join("") + '</div>';
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao carregar mídia.", error);
@@ -308,8 +629,9 @@
             }
         },
 
-        openMediaModal: function () {
-            this.openModal("Adicionar mídia", buildMediaForm());
+        openMediaModal: function (mediaId) {
+            var item = mediaId ? this.media.find(function (media) { return media.id === mediaId; }) : null;
+            this.openModal(item ? "Editar mídia" : "Adicionar mídia", buildMediaForm(item));
         },
 
         saveMedia: async function (event) {
@@ -320,39 +642,113 @@
             var title = clean(form.title.value);
             var url = clean(form.url.value);
             var file = form.file.files && form.file.files[0];
+            var mediaId = clean(form.mediaId.value);
+            var existingItem = mediaId ? getMediaById(this.media, mediaId) : null;
 
             if (!title) return alert("Título é obrigatório.");
-            if (!url && !file) return alert("Informe uma URL ou selecione um arquivo.");
+            if (!url && !file && !(existingItem && existingItem.url)) return alert("Informe uma URL ou selecione um arquivo.");
 
             try {
                 if (file) {
                     if (!this.storage) return alert("Firebase Storage não inicializado.");
-                    if (!/^image\/(jpeg|jpg|png|webp)$/.test(file.type)) return alert("Use imagem JPG, PNG ou WEBP.");
-                    if (file.size > 5 * 1024 * 1024) return alert("Imagem acima de 5 MB.");
-                    var path = "cms-media/" + currentAdminId() + "/" + Date.now() + "-" + safeFileName(file.name);
-                    var ref = this.storage.ref(path);
-                    await ref.put(file, { contentType: file.type });
-                    url = await ref.getDownloadURL();
+                    validateImageFile(file);
+                    var uploadResult = await uploadImageToCms(this.storage, file);
+                    url = uploadResult.url;
+                    form.storagePath.value = uploadResult.path;
+                    form.contentType.value = file.type;
+                    form.size.value = String(file.size);
+                } else if (url) {
+                    validateImageUrl(url);
+                } else if (existingItem) {
+                    url = clean(existingItem.url);
                 }
 
                 var now = window.firebase.firestore.FieldValue.serverTimestamp();
-                var id = "media_" + Date.now();
+                var id = mediaId || ("media_" + Date.now());
                 await this.db.collection("media_library").doc(id).set({
                     id: id,
                     title: title,
                     url: url,
                     category: clean(form.category.value) || "Imagem",
                     alt: clean(form.alt.value),
-                    createdAt: now,
+                    storagePath: clean(form.storagePath.value) || (existingItem && existingItem.storagePath) || "",
+                    contentType: clean(form.contentType.value) || (existingItem && existingItem.contentType) || "",
+                    size: Number(form.size.value || (existingItem && existingItem.size) || 0) || 0,
+                    createdAt: existingItem && existingItem.createdAt ? existingItem.createdAt : now,
                     updatedAt: now,
                     updatedBy: currentAdminId()
-                });
+                }, { merge: true });
                 this.closeModal();
                 await this.loadMedia();
-                alert("Mídia cadastrada.");
+                alert(mediaId ? "Mídia atualizada." : "Mídia cadastrada.");
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao salvar mídia.", error);
-                alert("Erro ao salvar mídia.");
+                alert(error && error.message ? error.message : "Erro ao salvar mídia.");
+            }
+        },
+
+        copyMediaUrl: async function (mediaId) {
+            var item = getMediaById(this.media, mediaId);
+            if (!item || !item.url) return alert("URL da mídia não encontrada.");
+
+            try {
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+                    await navigator.clipboard.writeText(item.url);
+                    alert("URL copiada.");
+                    return;
+                }
+            } catch (error) {
+                console.error("[admin-content-cms] Falha ao copiar URL.", error);
+            }
+
+            var input = document.createElement("input");
+            input.value = item.url;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+            alert("URL copiada.");
+        },
+
+        useMediaInNewEvent: function (mediaId) {
+            var item = getMediaById(this.media, mediaId);
+            if (!item) return alert("Mídia não encontrada.");
+
+            this.openEventModal("", {
+                title: "",
+                organizer: "",
+                category: "cultural",
+                mainImage: item.url,
+                image: item.url,
+                images: [buildEventImageEntry(item.url, {
+                    name: item.title,
+                    contentType: item.contentType,
+                    size: item.size,
+                    path: item.storagePath
+                })]
+            });
+        },
+
+        deleteMedia: async function (mediaId) {
+            var item = getMediaById(this.media, mediaId);
+            if (!item) return;
+            if (!confirm("Excluir esta mídia da biblioteca?")) return;
+
+            try {
+                if (item.storagePath && this.storage) {
+                    try {
+                        await this.storage.ref(item.storagePath).delete();
+                    } catch (storageError) {
+                        console.error("[admin-content-cms] Não foi possível remover o arquivo do Storage.", storageError);
+                    }
+                }
+
+                await this.db.collection("media_library").doc(mediaId).delete();
+                await this.loadMedia();
+                alert("Mídia excluída.");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao excluir mídia.", error);
+                alert("Erro ao excluir mídia.");
             }
         }
     };
@@ -422,29 +818,250 @@
         return !status || status === "aprovado" || status === "approved" || item.publicado === true;
     }
 
-    function getTitle(item) { return item.title || item.nome || item.titulo || ""; }
-    function getEventDate(item) { return item.date || item.data || item.dataInicio || ""; }
-    function getEventTime(item) { return item.time || item.hora || item.horario || ""; }
-    function getLocation(item) { return item.location || item.local || item.establishmentName || ""; }
-    function getOrganizer(item) { return item.organizer || item.organizador || item.ownerName || ""; }
+    function getTitle(item) { return item && (item.title || item.nome || item.titulo) || ""; }
+    function getEventDate(item) { return item && (item.date || item.data || item.dataInicio) || ""; }
+    function getEventTime(item) { return item && (item.time || item.hora || item.horario) || ""; }
+    function getLocation(item) { return item && (item.location || item.local || item.establishmentName) || ""; }
+    function getOrganizer(item) { return item && (item.organizer || item.organizador || item.ownerName) || ""; }
 
-    function buildEventForm(item) {
-        item = item || {};
-        return '<form id="eventCmsForm" onsubmit="AdminContentCMS.saveEvent(event)">' +
-            '<div class="admin-modal-body"><input type="hidden" name="eventId" value="' + escapeHtml(item.id || "") + '">' +
-            '<div class="admin-modal-grid">' +
-            field("title", "Título", getTitle(item), true) +
-            field("date", "Data", getEventDate(item), true, "date") +
-            field("time", "Horário", getEventTime(item), false, "time") +
-            field("location", "Local", getLocation(item)) +
-            field("organizer", "Organizador", getOrganizer(item)) +
-            field("category", "Categoria", item.category || item.categoria || "cultural") +
-            field("mainImage", "Imagem de capa (URL)", item.mainImage || item.image || item.imagem || "", false, "url") +
-            '<div class="admin-field"><label for="eventPublished">Status</label><select id="eventPublished" name="publicado"><option value="true"' + (isPublished(item) ? " selected" : "") + '>Publicado</option><option value="false"' + (!isPublished(item) ? " selected" : "") + '>Despublicado</option></select></div>' +
-            '<div class="admin-field full"><label><input type="checkbox" name="destaque" ' + (item.destaque ? "checked" : "") + '> Evento em destaque</label></div>' +
-            textarea("description", "Descrição", item.description || item.descricao || "") +
-            '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar evento</button></div></form>';
+    function getMediaById(mediaList, mediaId) {
+        var normalizedId = clean(mediaId);
+        if (!normalizedId) return null;
+        return (mediaList || []).find(function (item) { return item.id === normalizedId; }) || null;
     }
+
+    function validateImageFile(file) {
+        if (!file) throw new Error("Selecione um arquivo de imagem.");
+        if (!IMAGE_TYPE_REGEX.test(file.type || "")) throw new Error("Use imagem JPG, PNG ou WEBP.");
+        if (Number(file.size || 0) > MAX_IMAGE_BYTES) throw new Error("Imagem acima de 5 MB.");
+    }
+
+    function validateImageUrl(url) {
+        if (!isAllowedImageUrl(url)) {
+            throw new Error("Informe uma URL de imagem válida em HTTP(S) ou um caminho local permitido.");
+        }
+    }
+
+    function isAllowedImageUrl(url) {
+        var value = clean(url);
+        if (!value) return false;
+        if (/['"()\\<>]/.test(value)) return false;
+
+        if (value.charAt(0) === "/" || /^(images|docs|videos|css|js)\//i.test(value)) {
+            return true;
+        }
+
+        return /^https?:\/\//i.test(value);
+    }
+
+    async function uploadImageToCms(storage, file) {
+        var path = "cms-media/" + currentAdminId() + "/" + Date.now() + "-" + safeFileName(file.name);
+        var ref = storage.ref(path);
+        await ref.put(file, { contentType: file.type });
+        return {
+            path: path,
+            url: await ref.getDownloadURL()
+        };
+    }
+
+    function buildEventImageEntry(url, details) {
+        var safeDetails = details || {};
+        return {
+            url: clean(url),
+            path: clean(safeDetails.path),
+            name: clean(safeDetails.name || safeDetails.fileName),
+            contentType: clean(safeDetails.contentType),
+            size: Number(safeDetails.size || 0) || 0,
+            uploadedAt: clean(safeDetails.uploadedAt)
+        };
+    }
+
+    function normalizeEventImages(images) {
+        var items = Array.isArray(images) ? images : [];
+        return dedupeImages(items.map(function (item) {
+            if (typeof item === "string") return buildEventImageEntry(item, {});
+            return buildEventImageEntry(item && item.url, item);
+        }).filter(function (item) {
+            return item.url;
+        }));
+    }
+
+    function dedupeImages(images) {
+        var seen = {};
+        return (images || []).filter(function (item) {
+            var key = clean(item.url || item.path || "");
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+        });
+    }
+
+    function getPrimaryEventImage(eventItem) {
+        var images = normalizeEventImages(eventItem && eventItem.images);
+        var directUrl = clean(eventItem && (eventItem.mainImage || eventItem.image || eventItem.coverImage));
+
+        if (directUrl) {
+            return buildEventImageEntry(directUrl, images[0] || {});
+        }
+
+        return images[0] || null;
+    }
+
+    function applyCoverToEventImages(existingImages, coverEntry) {
+        var remaining = dedupeImages((existingImages || []).filter(function (item) {
+            return clean(item.url) !== clean(coverEntry && coverEntry.url);
+        }));
+        return coverEntry && coverEntry.url ? [coverEntry].concat(remaining) : remaining;
+    }
+
+    function removeFirstEventImage(existingImages, eventItem) {
+        var directUrl = clean(eventItem && (eventItem.mainImage || eventItem.image || eventItem.coverImage));
+        var filtered = (existingImages || []).slice();
+
+        if (directUrl) {
+            filtered = filtered.filter(function (item, index) {
+                if (index === 0 && clean(item.url) === directUrl) return false;
+                return clean(item.url) !== directUrl;
+            });
+        } else if (filtered.length) {
+            filtered.shift();
+        }
+
+        return filtered;
+    }
+
+    function formatBytes(size) {
+        var bytes = Number(size || 0);
+        if (!bytes) return "Tamanho não informado";
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1).replace(".", ",") + " KB";
+        return (bytes / (1024 * 1024)).toFixed(2).replace(".", ",") + " MB";
+    }
+
+    function renderEventCoverPreview(image, note) {
+        if (!image || !image.url) {
+            return '<div class="event-cover-placeholder">Sem imagem de capa</div><div class="event-cover-meta">' + escapeHtml(note || "Sem capa definida.") + '</div>';
+        }
+
+        var previewUrl = safePreviewUrl(image.url);
+        var metaParts = [];
+        if (image.name) metaParts.push(escapeHtml(image.name));
+        if (image.contentType) metaParts.push(escapeHtml(image.contentType));
+        if (image.size) metaParts.push(escapeHtml(formatBytes(image.size)));
+        if (note) metaParts.push(escapeHtml(note));
+
+        return '<img src="' + previewUrl + '" alt="' + escapeHtml(image.name || "Capa do evento") + '" onerror="this.closest(\\\'.event-cover-preview\\\').classList.add(\\\'is-error\\\');this.remove();">' +
+            '<div class="event-cover-meta">' + (metaParts.join(" · ") || "Pré-visualização da capa") + '</div>';
+    }
+
+    function renderEventGalleryList(item) {
+        var images = normalizeEventImages(item && item.images);
+        if (!images.length) {
+            return '<div class="event-gallery-admin-empty">Sem galeria salva.</div>';
+        }
+
+        return '<div class="event-gallery-admin-list">' + images.map(function (image, index) {
+            var imageUrl = safePreviewUrl(image.url);
+            return '<a href="' + imageUrl + '" target="_blank" rel="noopener noreferrer" class="event-gallery-admin-item">' +
+                '<img src="' + imageUrl + '" alt="' + escapeHtml(image.name || ("Imagem " + (index + 1))) + '" onerror="this.parentNode.classList.add(\\\'is-error\\\');this.remove();">' +
+                '<span>' + escapeHtml(image.name || ("Imagem " + (index + 1))) + '</span>' +
+                '<small>' + escapeHtml(image.contentType || "Tipo não informado") + ' · ' + escapeHtml(formatBytes(image.size)) + '</small>' +
+            '</a>';
+        }).join("") + '</div>';
+    }
+
+    function buildEventForm(item, mediaItems) {
+        item = item || {};
+        var currentCover = getPrimaryEventImage(item);
+        var images = normalizeEventImages(item.images);
+        var selectedMediaId = getMatchingMediaId(mediaItems, currentCover && currentCover.url);
+
+        return '<form id="eventCmsForm" onsubmit="AdminContentCMS.saveEvent(event)">' +
+            '<div class="admin-modal-body">' +
+                '<input type="hidden" name="eventId" value="' + escapeHtml(item.id || "") + '">' +
+                '<input type="hidden" id="eventRemoveCover" name="removeCover" value="false">' +
+                '<input type="hidden" id="eventRemoveGalleryCoverFallback" name="removeGalleryCoverFallback" value="false">' +
+                '<input type="hidden" id="eventHasGalleryImages" value="' + (images.length ? "true" : "false") + '">' +
+                '<div class="admin-modal-grid">' +
+                    field("title", "Título", getTitle(item), true) +
+                    field("date", "Data", getEventDate(item), true, "date") +
+                    field("time", "Horário", getEventTime(item), false, "time") +
+                    field("location", "Local", getLocation(item)) +
+                    field("organizer", "Organizador", getOrganizer(item)) +
+                    field("category", "Categoria", item.category || item.categoria || "cultural") +
+                    '<div class="admin-field full">' +
+                        '<label for="mainImage">Capa do evento</label>' +
+                        '<div class="event-cover-admin-layout">' +
+                            '<div class="event-cover-preview" id="eventCoverPreview">' + renderEventCoverPreview(currentCover, currentCover ? "Capa atual." : "Sem capa definida.") + '</div>' +
+                            '<div class="event-cover-controls">' +
+                                '<div class="admin-field">' +
+                                    '<label for="mainImage">URL manual</label>' +
+                                    '<input class="admin-input" id="mainImage" name="mainImage" type="url" value="' + escapeHtml(item.mainImage || item.image || item.coverImage || "") + '" oninput="document.getElementById(\\\'eventRemoveCover\\\').value=\\\'false\\\';document.getElementById(\\\'eventRemoveGalleryCoverFallback\\\').value=\\\'false\\\';document.getElementById(\\\'eventMediaId\\\').value=\\\'\\\';var fileInput=document.getElementById(\\\'eventCoverUpload\\\');if(fileInput){fileInput.value=\\\'\\\';}AdminContentCMS.releaseEventPreviewUrl();AdminContentCMS.syncEventCoverPreview();">' +
+                                '</div>' +
+                                '<div class="admin-field">' +
+                                    '<label for="eventMediaId">Biblioteca de mídia</label>' +
+                                    buildMediaSelect(mediaItems, selectedMediaId) +
+                                '</div>' +
+                                '<div class="admin-field">' +
+                                    '<label for="eventCoverUpload">Trocar por upload</label>' +
+                                    '<input class="admin-input" id="eventCoverUpload" name="coverUpload" type="file" accept="image/jpeg,image/png,image/webp" onchange="AdminContentCMS.previewEventCoverFile(event)">' +
+                                    '<small>JPG, PNG ou WEBP até 5 MB.</small>' +
+                                '</div>' +
+                                '<div class="page-actions">' +
+                                    '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.clearEventCoverSelection()">Limpar seleção</button>' +
+                                    '<button class="btn-sm btn-delete" type="button" onclick="AdminContentCMS.removeEventCover()">Remover capa</button>' +
+                                '</div>' +
+                                '<p class="admin-helper-text" style="margin-bottom:0;">A galeria existente só é alterada se você substituir a capa ou confirmar a remoção do fallback.</p>' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="event-gallery-admin">' +
+                            '<h4>Galeria atual</h4>' +
+                            renderEventGalleryList(item) +
+                        '</div>' +
+                    '</div>' +
+                    '<div class="admin-field"><label for="eventPublished">Status</label><select id="eventPublished" name="publicado"><option value="true"' + (isPublished(item) ? " selected" : "") + '>Publicado</option><option value="false"' + (!isPublished(item) ? " selected" : "") + '>Despublicado</option></select></div>' +
+                    '<div class="admin-field full"><label><input type="checkbox" name="destaque" ' + (item.destaque ? "checked" : "") + '> Evento em destaque</label></div>' +
+                    textarea("description", "Descrição", item.description || item.descricao || "") +
+                '</div>' +
+            '</div>' +
+            '<div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar evento</button></div>' +
+        '</form>';
+    }
+
+    function getMatchingMediaId(mediaItems, imageUrl) {
+        var normalized = normalizeComparableUrl(imageUrl);
+        if (!normalized) return "";
+        var match = (mediaItems || []).find(function (item) {
+            return normalizeComparableUrl(item.url) === normalized;
+        });
+        return match ? match.id : "";
+    }
+
+    function buildMediaSelect(mediaItems, selectedMediaId) {
+        return '<select class="admin-input" id="eventMediaId" name="eventMediaId" onchange="document.getElementById(\\\'eventRemoveCover\\\').value=\\\'false\\\';AdminContentCMS.handleEventMediaSelection(this.value)">' +
+            '<option value="">Selecione uma mídia da biblioteca</option>' +
+            (mediaItems || []).map(function (item) {
+                return '<option value="' + escapeHtml(item.id) + '"' + (item.id === selectedMediaId ? " selected" : "") + '>' +
+                    escapeHtml(item.title || "Mídia sem título") + ' | ' + escapeHtml(item.category || "Imagem") +
+                '</option>';
+            }).join("") +
+        '</select>';
+    }
+
+    AdminContentCMS.handleEventMediaSelection = function (mediaId) {
+        var item = getMediaById(this.media, mediaId);
+        var urlField = document.getElementById("mainImage");
+        var removeField = document.getElementById("eventRemoveCover");
+        var fileInput = document.getElementById("eventCoverUpload");
+
+        if (removeField) removeField.value = "false";
+        this.releaseEventPreviewUrl();
+        if (fileInput) fileInput.value = "";
+        if (urlField) {
+            urlField.value = item && item.url ? item.url : "";
+        }
+        this.syncEventCoverPreview();
+    };
 
     function buildNewsForm(item) {
         item = item || {};
@@ -466,15 +1083,27 @@
             '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar notícia</button></div></form>';
     }
 
-    function buildMediaForm() {
+    function buildMediaForm(item) {
+        item = item || {};
         return '<form id="mediaCmsForm" onsubmit="AdminContentCMS.saveMedia(event)">' +
-            '<div class="admin-modal-body"><div class="admin-modal-grid">' +
-            field("title", "Título", "", true) +
-            field("category", "Categoria", "Imagem") +
-            field("url", "URL existente", "", false, "url") +
-            field("file", "Enviar imagem", "", false, "file") +
-            field("alt", "Texto alternativo", "") +
-            '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar mídia</button></div></form>';
+            '<div class="admin-modal-body">' +
+                '<input type="hidden" name="mediaId" value="' + escapeHtml(item.id || "") + '">' +
+                '<input type="hidden" name="storagePath" value="' + escapeHtml(item.storagePath || "") + '">' +
+                '<input type="hidden" name="contentType" value="' + escapeHtml(item.contentType || "") + '">' +
+                '<input type="hidden" name="size" value="' + escapeHtml(String(item.size || 0)) + '">' +
+                '<div class="admin-modal-grid">' +
+                    field("title", "Título", item.title || "", true) +
+                    field("category", "Categoria", item.category || "Imagem") +
+                    field("url", "URL existente", item.url || "", false, "url") +
+                    field("file", "Enviar imagem", "", false, "file") +
+                    field("alt", "Texto alternativo", item.alt || "") +
+                '</div>' +
+                (item.url ? '<div class="event-gallery-admin"><h4>Preview atual</h4><div class="event-cover-preview">' + renderEventCoverPreview(buildEventImageEntry(item.url, {
+                    name: item.title,
+                    contentType: item.contentType,
+                    size: item.size
+                }), "Imagem da biblioteca.") + '</div></div>' : '') +
+            '</div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">' + (item.id ? "Salvar alterações" : "Salvar mídia") + '</button></div></form>';
     }
 
     function field(name, label, value, required, type) {
@@ -483,6 +1112,105 @@
 
     function textarea(name, label, value) {
         return '<div class="admin-field full"><label for="' + name + '">' + label + '</label><textarea class="admin-textarea" id="' + name + '" name="' + name + '">' + escapeHtml(value || "") + '</textarea></div>';
+    }
+
+    function extractStaticPosts(documentSource) {
+        var articles = Array.prototype.slice.call(documentSource.querySelectorAll("#postsGrid article.post-card"));
+        return articles.map(function (article, index) {
+            var titleNode = article.querySelector(".post-title");
+            var excerptNode = article.querySelector(".post-excerpt");
+            var categoryNode = article.querySelector(".post-category");
+            var linkNode = article.querySelector(".post-link");
+            var dateNode = article.querySelector(".post-meta span");
+            var imageNode = article.querySelector(".post-image");
+            var imageUrl = extractBackgroundImage(imageNode && imageNode.getAttribute("style"));
+            var title = clean(titleNode && titleNode.textContent);
+            var linkOrigem = clean(linkNode && linkNode.getAttribute("href"));
+            var publishedAt = parsePtBrDate(clean(dateNode && dateNode.textContent));
+            var slugFromLink = extractSlugFromUrl(linkOrigem);
+
+            if (!title) return null;
+
+            return {
+                titulo: title,
+                resumo: cleanLong(excerptNode && excerptNode.textContent),
+                conteudo: cleanLong(excerptNode && excerptNode.textContent),
+                categoria: clean(categoryNode && categoryNode.textContent).replace(/^Destaque\s*·\s*/i, ""),
+                imagem: imageUrl || DEFAULT_IMAGE,
+                linkOrigem: linkOrigem,
+                destaque: index === 0 || /destaque/i.test(clean(categoryNode && categoryNode.textContent)),
+                publishedAt: publishedAt || new Date().toISOString(),
+                slug: slugFromLink || makeSlug(title)
+            };
+        }).filter(Boolean);
+    }
+
+    function extractBackgroundImage(styleValue) {
+        var style = String(styleValue || "");
+        var match = style.match(/background-image:\s*url\((['"]?)(.*?)\1\)/i);
+        return match && match[2] ? clean(match[2]) : "";
+    }
+
+    function parsePtBrDate(value) {
+        var text = clean(value).replace(/^📅\s*/, "");
+        if (!text) return "";
+
+        var normalized = text.toLowerCase()
+            .replace(/\s+de\s+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+        var parts = normalized.split(" ");
+        var months = {
+            janeiro: 0,
+            fevereiro: 1,
+            marco: 2,
+            março: 2,
+            abril: 3,
+            maio: 4,
+            junho: 5,
+            julho: 6,
+            agosto: 7,
+            setembro: 8,
+            outubro: 9,
+            novembro: 10,
+            dezembro: 11
+        };
+
+        if (parts.length < 3) return "";
+        var day = Number(parts[0]);
+        var month = months[parts[1]];
+        var year = Number(parts[2]);
+
+        if (!Number.isFinite(day) || month === undefined || !Number.isFinite(year)) return "";
+        return new Date(year, month, day, 12, 0, 0).toISOString();
+    }
+
+    function extractSlugFromUrl(url) {
+        try {
+            var parsed = new URL(url, window.location.origin);
+            var parts = parsed.pathname.split("/").filter(Boolean);
+            return makeSlug(parts[parts.length - 1] || "");
+        } catch (error) {
+            return makeSlug(url || "");
+        }
+    }
+
+    function normalizeComparableUrl(url) {
+        var value = clean(url);
+        return value.toLowerCase();
+    }
+
+    function safePreviewUrl(url) {
+        if (window.SMSecurity && typeof window.SMSecurity.url === "function") {
+            return window.SMSecurity.url(url, "");
+        }
+        return escapeHtml(url || "");
+    }
+
+    function buildNewsIdentityKey(title, dateValue) {
+        var safeTitle = makeSlug(title || "");
+        var safeDate = timestampToMillis(dateValue) ? new Date(timestampToMillis(dateValue)).toISOString().slice(0, 10) : clean(dateValue);
+        return safeTitle && safeDate ? safeTitle + "|" + safeDate : "";
     }
 
     window.AdminContentCMS = AdminContentCMS;

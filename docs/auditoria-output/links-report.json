@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-03T17:28:49.837Z",
+  "generatedAt": "2026-06-03T18:41:47.508Z",
   "totals": {
     "filesScanned": 99,
-    "links": 637,
+    "links": 639,
     "routes": 43,
     "broken": 0,
     "legacy": 16,
-    "redundant": 13,
+    "redundant": 14,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
   },
@@ -276,6 +276,11 @@
     {
       "source": "galeria/index.html",
       "url": "/galeria.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/admin-content-cms.js",
+      "url": "noticias.html",
       "issue": "existe variante sem .html"
     },
     {

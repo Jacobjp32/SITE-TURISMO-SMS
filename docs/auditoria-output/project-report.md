@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-03T17:28:52.441Z.
+Gerado em 2026-06-03T18:41:47.512Z.
 
 ## Resumo
 
@@ -22,8 +22,8 @@ Gerado em 2026-06-03T17:28:52.441Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 755608 |
-| .html | 36 | 649199 |
+| .js | 37 | 791587 |
+| .html | 36 | 672981 |
 | .css | 22 | 308090 |
 | .md | 22 | 231025 |
 | .json | 3 | 63320 |
@@ -126,7 +126,7 @@ Gerado em 2026-06-03T17:28:52.441Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2866 |
-| admin-firebase.html | 91870 |
+| admin-firebase.html | 115652 |
 | eventos.html | 47505 |
 | galeria.html | 37729 |
 | index.html | 146580 |
@@ -174,7 +174,7 @@ Gerado em 2026-06-03T17:28:52.441Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 91870 |
+| admin-firebase.html | 115652 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -183,7 +183,7 @@ Gerado em 2026-06-03T17:28:52.441Z.
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
-| js/admin-content-cms.js | 26257 |
+| js/admin-content-cms.js | 62236 |
 | js/firebase-app-check.js | 2394 |
 | js/firebase-auth.js | 70673 |
 | js/reservas.js | 26198 |
@@ -358,7 +358,7 @@ _Nenhum item encontrado._
 | window.FirebaseSystem | js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
-| window.location | js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js |
+| window.location | js/admin-content-cms.js, js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js |
 | window.matchMedia | js/scroll-animations.js, js/season-theme.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/establishment-catalog.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |

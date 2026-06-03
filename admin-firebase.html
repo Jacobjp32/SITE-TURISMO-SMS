@@ -619,6 +619,261 @@
             font-size: 0.88rem;
         }
 
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .user-establishments {
+            display: grid;
+            gap: 0.55rem;
+            min-width: 240px;
+        }
+
+        .user-establishment-card {
+            border: 1px solid #e7ece7;
+            border-radius: 10px;
+            padding: 0.55rem 0.7rem;
+            background: #fafcfb;
+        }
+
+        .user-establishment-card strong,
+        .user-establishment-card small {
+            display: block;
+            line-height: 1.45;
+        }
+
+        .user-support-meta {
+            display: grid;
+            gap: 0.35rem;
+            min-width: 180px;
+        }
+
+        .user-support-actions,
+        .media-admin-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: flex-start;
+        }
+
+        .user-empty-state,
+        .filter-empty-state,
+        .event-gallery-admin-empty {
+            color: #666;
+            font-size: 0.84rem;
+            line-height: 1.45;
+        }
+
+        .filter-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.9rem 1rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            background: #eef6f2;
+            color: var(--primary);
+        }
+
+        .pending-images-cell {
+            min-width: 220px;
+            display: grid;
+            gap: 0.6rem;
+        }
+
+        .pending-images-grid,
+        .event-gallery-admin-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 0.65rem;
+        }
+
+        .pending-image-item,
+        .event-gallery-admin-item {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e6ebe6;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .pending-image-item img,
+        .event-gallery-admin-item img {
+            width: 100%;
+            height: 82px;
+            object-fit: cover;
+            display: block;
+            background: #f3f5f3;
+        }
+
+        .pending-image-item.is-error,
+        .event-gallery-admin-item.is-error,
+        .event-cover-preview.is-error,
+        .table-inline-media.is-error,
+        .media-admin-thumb.is-error {
+            border-color: #f1c7c2;
+            background: #fff5f4;
+        }
+
+        .pending-image-caption,
+        .event-gallery-admin-item span,
+        .event-gallery-admin-item small,
+        .table-inline-media span {
+            display: block;
+            padding: 0.3rem 0.45rem;
+            font-size: 0.76rem;
+            line-height: 1.4;
+            color: #555;
+            word-break: break-word;
+        }
+
+        .pending-image-caption strong {
+            display: block;
+            color: #333;
+        }
+
+        .event-admin-preview {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .event-admin-preview-grid,
+        .event-cover-admin-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 1fr;
+            gap: 1rem;
+        }
+
+        .event-preview-panel,
+        .event-gallery-admin {
+            border: 1px solid #e7ece7;
+            border-radius: 12px;
+            padding: 1rem;
+            background: #fff;
+        }
+
+        .event-preview-panel h4,
+        .event-gallery-admin h4 {
+            margin: 0 0 0.75rem;
+            color: var(--primary);
+        }
+
+        .event-preview-fields {
+            display: grid;
+            gap: 0.55rem;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .event-cover-preview {
+            min-height: 220px;
+            border: 1px dashed #c9d6cf;
+            border-radius: 14px;
+            padding: 0.85rem;
+            background: #f8fbf9;
+            display: grid;
+            align-content: start;
+            gap: 0.75rem;
+        }
+
+        .event-cover-preview img {
+            width: 100%;
+            max-height: 240px;
+            object-fit: cover;
+            border-radius: 10px;
+            display: block;
+            background: #eef3ef;
+        }
+
+        .event-cover-placeholder {
+            min-height: 160px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #eef3ef, #f7faf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7470;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .event-cover-meta {
+            font-size: 0.84rem;
+            color: #59625d;
+            line-height: 1.45;
+            word-break: break-word;
+        }
+
+        .event-cover-controls {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .table-inline-media {
+            margin-top: 0.65rem;
+            border: 1px solid #e6ebe6;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            max-width: 160px;
+        }
+
+        .table-inline-media img {
+            width: 100%;
+            height: 88px;
+            object-fit: cover;
+            display: block;
+            background: #f1f5f2;
+        }
+
+        .media-admin-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 1rem;
+        }
+
+        .media-admin-card {
+            border: 1px solid #e6ebe6;
+            border-radius: 14px;
+            overflow: hidden;
+            background: #fff;
+            display: grid;
+        }
+
+        .media-admin-thumb {
+            min-height: 180px;
+            background: #f3f6f4;
+        }
+
+        .media-admin-thumb img {
+            width: 100%;
+            height: 100%;
+            min-height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .media-admin-body {
+            display: grid;
+            gap: 0.5rem;
+            padding: 0.95rem;
+        }
+
+        .media-admin-url {
+            font-size: 0.78rem;
+            color: #58615c;
+            line-height: 1.45;
+            word-break: break-word;
+            padding: 0.55rem 0.65rem;
+            border-radius: 10px;
+            background: #f6f8f7;
+            border: 1px solid #eef2ef;
+        }
+
         .admin-field {
             display: flex;
             flex-direction: column;
@@ -708,6 +963,11 @@
             .update-request-grid {
                 grid-template-columns: 1fr;
                 display: grid;
+            }
+
+            .event-admin-preview-grid,
+            .event-cover-admin-layout {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -928,6 +1188,7 @@
                     <h1>📰 Notícias</h1>
                     <div class="page-actions">
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.openNewsModal()">Nova notícia</button>
+                        <button class="btn-primary" type="button" onclick="AdminContentCMS.importStaticNews()">Importar notícias estáticas</button>
                     </div>
                 </div>
 
@@ -1052,6 +1313,10 @@
         var adminUsersCache = [];
         var adminEstablishmentCatalog = [];
         var adminManagersCache = [];
+        var adminClaimsCache = [];
+        var adminPendingEventsCache = [];
+        var adminManagerUserFilterId = '';
+        var adminClaimUserFilterId = '';
 
         // Aguardar Firebase estar pronto antes de vincular formulário de login
         window.addEventListener('firebaseReady', function() {
@@ -1167,6 +1432,7 @@
                         }
                     };
                 const eventos = Array.isArray(eventosResult && eventosResult.items) ? eventosResult.items : [];
+                adminPendingEventsCache = eventos.slice();
 
                 if (!eventosResult || eventosResult.success === false) {
                     const diagnostics = eventosResult && eventosResult.diagnostics ? eventosResult.diagnostics : {
@@ -1213,11 +1479,11 @@
                                             <small>${SEC.html(getEventRequesterValue(e))}</small>
                                             ${e.linkedEstablishmentId ? `<br><small>Fonte: ${SEC.html(e.source || '—')}</small><br><small>Owner: ${SEC.html(e.ownerName || '—')} / ${SEC.html(e.ownerEmail || '—')}</small>` : ''}
                                         </td>
-                                        <td>${SEC.html(String(getEventImageCount(e)))}</td>
+                                        <td>${renderPendingEventImages(e)}</td>
                                         <td>
                                             <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
                                             <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
-                                            <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️</button>
+                                            <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️ Revisar</button>
                                         </td>
                                     </tr>
                                 `).join('')}
@@ -1278,105 +1544,152 @@
         }
 
         async function loadUsers() {
-            const users = await FirebaseSystem.getUsers();
+            const [users, managers, claims] = await Promise.all([
+                FirebaseSystem.getUsers(),
+                FirebaseSystem.listAllEstablishmentManagers(),
+                FirebaseSystem.getPendingEstablishmentClaims()
+            ]);
             const container = document.getElementById('usuarios-container');
-            
+
+            adminUsersCache = Array.isArray(users) ? users.slice().sort(function(a, b) {
+                return String(a.nome || a.email || '').localeCompare(String(b.nome || b.email || ''), 'pt-BR');
+            }) : [];
+            adminManagersCache = Array.isArray(managers) ? managers.slice() : [];
+            adminClaimsCache = Array.isArray(claims) ? claims.slice() : [];
+
             if (users.length === 0) {
                 container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhum usuário encontrado.</p>';
                 return;
             }
 
             container.innerHTML = `
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Nome</th>
-                            <th>E-mail</th>
-                            <th>Tipo</th>
-                            <th>Permissão</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${users.map(u => `
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <td><strong>${SEC.html(u.nome, '—')}</strong></td>
-                                <td>${SEC.html(u.email, '—')}</td>
-                                <td>${SEC.html(u.tipo || 'turista')}</td>
-                                <td>
-                                    <select onchange="changeUserRole('${SEC.js(u.id)}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
-                                        <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
-                                        <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
-                                        <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <span class="badge ${u.ativo !== false ? 'badge-success' : 'badge-danger'}">
-                                        ${u.ativo !== false ? 'Ativo' : 'Inativo'}
-                                    </span>
-                                </td>
-                                <td>
-                                    ${u.id !== window.currentUser?.uid ? `
-                                        <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" 
-                                                onclick="toggleUserStatus('${SEC.js(u.id)}', ${u.ativo === false})">
-                                            ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
-                                        </button>
-                                    ` : '<small style="color:#888;">Você</small>'}
-                                </td>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Tipo</th>
+                                <th>Permissão</th>
+                                <th>Empreendimentos vinculados</th>
+                                <th>Status / suporte</th>
+                                <th>Ações</th>
                             </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            ${adminUsersCache.map(u => {
+                                const activeManagers = adminManagersCache.filter(manager => manager.userId === u.id && manager.active !== false);
+                                const pendingClaims = adminClaimsCache.filter(claim => claim.userId === u.id && claim.status === 'pending');
+                                const hasActiveLink = activeManagers.length > 0;
+                                return `
+                                    <tr>
+                                        <td>
+                                            <strong>${SEC.html(u.nome, '—')}</strong>
+                                            <br><small>${SEC.html(u.id, '—')}</small>
+                                        </td>
+                                        <td>${SEC.html(u.email, '—')}</td>
+                                        <td>${SEC.html(u.tipo || 'turista')}</td>
+                                        <td>
+                                            <select onchange="changeUserRole('${SEC.js(u.id)}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
+                                                <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
+                                                <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
+                                                <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+                                            </select>
+                                        </td>
+                                        <td>${renderUserEstablishments(activeManagers)}</td>
+                                        <td>
+                                            <div class="user-support-meta">
+                                                <span class="badge ${u.ativo !== false ? 'badge-success' : 'badge-danger'}">
+                                                    ${u.ativo !== false ? 'Ativo' : 'Inativo'}
+                                                </span>
+                                                <span class="badge ${hasActiveLink ? 'badge-success' : 'badge-warning'}">
+                                                    ${hasActiveLink ? `${activeManagers.length} vínculo(s) ativo(s)` : 'Sem vínculo ativo'}
+                                                </span>
+                                                <span class="badge ${pendingClaims.length ? 'badge-info' : 'badge-warning'}">
+                                                    ${pendingClaims.length ? `${pendingClaims.length} solicitação(ões) pendente(s)` : 'Sem solicitação pendente'}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="user-support-actions">
+                                                <button class="btn-sm btn-edit" type="button" onclick="copyUserEmail('${SEC.js(u.email || '')}')">Copiar e-mail</button>
+                                                <button class="btn-sm btn-edit" type="button" onclick="focusUserManagers('${SEC.js(u.id)}')">Ver vínculos</button>
+                                                <button class="btn-sm btn-approve" type="button" onclick="openAddManagerModal('${SEC.js(u.id)}')">Adicionar vínculo</button>
+                                                ${pendingClaims.length
+                                                    ? `<button class="btn-sm btn-edit" type="button" onclick="focusUserClaims('${SEC.js(u.id)}')">Ver solicitações</button>`
+                                                    : '<span class="user-empty-state">Nenhuma solicitação pendente</span>'}
+                                                ${u.id !== window.currentUser?.uid ? `
+                                                    <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" type="button"
+                                                            onclick="toggleUserStatus('${SEC.js(u.id)}', ${u.ativo === false})">
+                                                        ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
+                                                    </button>
+                                                ` : '<small style="color:#888;">Você</small>'}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
             `;
         }
 
         async function loadEstablishmentClaims() {
             const claims = await FirebaseSystem.getPendingEstablishmentClaims();
             const container = document.getElementById('claims-pendentes-container');
+            adminClaimsCache = Array.isArray(claims) ? claims.slice() : [];
+            const filteredClaims = adminClaimUserFilterId
+                ? adminClaimsCache.filter(claim => claim.userId === adminClaimUserFilterId)
+                : adminClaimsCache;
 
-            if (!claims.length) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de vínculo pendente.</p>';
+            if (!filteredClaims.length) {
+                container.innerHTML = (adminClaimUserFilterId
+                    ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, 0, 'clearUserClaimsFilter()')
+                    : '') + '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de vínculo pendente.</p>';
                 return;
             }
 
             container.innerHTML = `
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Usuário</th>
-                            <th>Empreendimento</th>
-                            <th>Vínculo solicitado</th>
-                            <th>Mensagem</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${claims.map(claim => `
+                ${adminClaimUserFilterId ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, filteredClaims.length, 'clearUserClaimsFilter()') : ''}
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <strong>${SEC.html(claim.userName, '—')}</strong><br>
-                                    <small>${SEC.html(claim.userEmail, '—')}</small><br>
-                                    <small>${SEC.html(claim.contactPhone || 'Sem contato adicional')}</small>
-                                </td>
-                                <td>
-                                    <strong>${SEC.html(claim.establishmentName, '—')}</strong><br>
-                                    <small>${SEC.html(claim.establishmentCategory || 'Categoria não informada')}</small><br>
-                                    <small>Enviado em ${SEC.html(formatFirestoreDate(claim.createdAt))}</small>
-                                </td>
-                                <td>${SEC.html(getClaimRoleLabel(claim.requestedRole))}</td>
-                                <td class="claim-admin-message">${SEC.html(claim.message, '—')}</td>
-                                <td class="claim-admin-actions">
-                                    <textarea class="admin-textarea" id="claim-note-${SEC.attr(claim.id)}" placeholder="Observação interna (opcional)"></textarea>
-                                    <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
-                                    <button class="btn-sm btn-approve" onclick="approveClaim('${SEC.js(claim.id)}')">✅ Aprovar</button>
-                                    <button class="btn-sm btn-reject" onclick="rejectClaimReview('${SEC.js(claim.id)}')">❌ Rejeitar</button>
-                                    <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
-                                </td>
+                                <th>Usuário</th>
+                                <th>Empreendimento</th>
+                                <th>Vínculo solicitado</th>
+                                <th>Mensagem</th>
+                                <th>Ações</th>
                             </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            ${filteredClaims.map(claim => `
+                                <tr>
+                                    <td>
+                                        <strong>${SEC.html(claim.userName, '—')}</strong><br>
+                                        <small>${SEC.html(claim.userEmail, '—')}</small><br>
+                                        <small>${SEC.html(claim.contactPhone || 'Sem contato adicional')}</small>
+                                    </td>
+                                    <td>
+                                        <strong>${SEC.html(claim.establishmentName, '—')}</strong><br>
+                                        <small>${SEC.html(claim.establishmentCategory || 'Categoria não informada')}</small><br>
+                                        <small>Enviado em ${SEC.html(formatFirestoreDate(claim.createdAt))}</small>
+                                    </td>
+                                    <td>${SEC.html(getClaimRoleLabel(claim.requestedRole))}</td>
+                                    <td class="claim-admin-message">${SEC.html(claim.message, '—')}</td>
+                                    <td class="claim-admin-actions">
+                                        <textarea class="admin-textarea" id="claim-note-${SEC.attr(claim.id)}" placeholder="Observação interna (opcional)"></textarea>
+                                        <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
+                                        <button class="btn-sm btn-approve" onclick="approveClaim('${SEC.js(claim.id)}')">✅ Aprovar</button>
+                                        <button class="btn-sm btn-reject" onclick="rejectClaimReview('${SEC.js(claim.id)}')">❌ Rejeitar</button>
+                                        <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
             `;
         }
 
@@ -1467,56 +1780,64 @@
 
             const managers = await FirebaseSystem.listAllEstablishmentManagers();
             adminManagersCache = Array.isArray(managers) ? managers.slice() : [];
+            const filteredManagers = adminManagerUserFilterId
+                ? adminManagersCache.filter(manager => manager.userId === adminManagerUserFilterId)
+                : adminManagersCache;
 
-            if (!adminManagersCache.length) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhum vínculo cadastrado ainda.</p>';
+            if (!filteredManagers.length) {
+                container.innerHTML = (adminManagerUserFilterId
+                    ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, 0, 'clearUserManagersFilter()')
+                    : '') + '<p style="text-align:center;padding:2rem;color:#888;">Nenhum vínculo cadastrado ainda.</p>';
                 return;
             }
 
             container.innerHTML = `
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Usuário</th>
-                            <th>E-mail</th>
-                            <th>Empreendimento</th>
-                            <th>Função</th>
-                            <th>Status</th>
-                            <th>Aprovado em</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${adminManagersCache.map(manager => `
+                ${adminManagerUserFilterId ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, filteredManagers.length, 'clearUserManagersFilter()') : ''}
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
                             <tr>
-                                <td>
-                                    <strong>${SEC.html(manager.userName, '—')}</strong>
-                                    ${manager.claimId ? `<span class="manager-meta">Origem: ${SEC.html(manager.claimId === 'manual' ? 'manual' : manager.claimId)}</span>` : ''}
-                                </td>
-                                <td>${SEC.html(manager.userEmail, '—')}</td>
-                                <td>
-                                    <strong>${SEC.html(manager.establishmentName, '—')}</strong>
-                                    <span class="manager-meta">${SEC.html(manager.establishmentId || '—')}</span>
-                                    ${manager.notes ? `<span class="manager-meta">Obs.: ${SEC.html(manager.notes)}</span>` : ''}
-                                </td>
-                                <td>${SEC.html(getManagerRoleAdminLabel(manager.role))}</td>
-                                <td>
-                                    <span class="badge ${manager.active === false ? 'badge-danger' : 'badge-success'}">
-                                        ${manager.active === false ? 'Inativo' : 'Ativo'}
-                                    </span>
-                                    ${manager.revokeReason ? `<span class="manager-meta">Motivo: ${SEC.html(manager.revokeReason)}</span>` : ''}
-                                </td>
-                                <td>${SEC.html(formatFirestoreDate(manager.approvedAt))}</td>
-                                <td class="manager-actions">
-                                    <button class="btn-sm btn-edit" onclick="openEditManagerModal('${SEC.js(manager.id)}')">✏️ Editar</button>
-                                    ${manager.active === false
-                                        ? `<button class="btn-sm btn-approve" onclick="reactivateManager('${SEC.js(manager.id)}')">✅ Reativar</button>`
-                                        : `<button class="btn-sm btn-reject" onclick="deactivateManager('${SEC.js(manager.id)}')">🚫 Desativar</button>`}
-                                </td>
+                                <th>Usuário</th>
+                                <th>E-mail</th>
+                                <th>Empreendimento</th>
+                                <th>Função</th>
+                                <th>Status</th>
+                                <th>Aprovado em</th>
+                                <th>Ações</th>
                             </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            ${filteredManagers.map(manager => `
+                                <tr>
+                                    <td>
+                                        <strong>${SEC.html(manager.userName, '—')}</strong>
+                                        ${manager.claimId ? `<span class="manager-meta">Origem: ${SEC.html(manager.claimId === 'manual' ? 'manual' : manager.claimId)}</span>` : ''}
+                                    </td>
+                                    <td>${SEC.html(manager.userEmail, '—')}</td>
+                                    <td>
+                                        <strong>${SEC.html(manager.establishmentName, '—')}</strong>
+                                        <span class="manager-meta">${SEC.html(manager.establishmentId || '—')}</span>
+                                        ${manager.notes ? `<span class="manager-meta">Obs.: ${SEC.html(manager.notes)}</span>` : ''}
+                                    </td>
+                                    <td>${SEC.html(getManagerRoleAdminLabel(manager.role))}</td>
+                                    <td>
+                                        <span class="badge ${manager.active === false ? 'badge-danger' : 'badge-success'}">
+                                            ${manager.active === false ? 'Inativo' : 'Ativo'}
+                                        </span>
+                                        ${manager.revokeReason ? `<span class="manager-meta">Motivo: ${SEC.html(manager.revokeReason)}</span>` : ''}
+                                    </td>
+                                    <td>${SEC.html(formatFirestoreDate(manager.approvedAt))}</td>
+                                    <td class="manager-actions">
+                                        <button class="btn-sm btn-edit" onclick="openEditManagerModal('${SEC.js(manager.id)}')">✏️ Editar</button>
+                                        ${manager.active === false
+                                            ? `<button class="btn-sm btn-approve" onclick="reactivateManager('${SEC.js(manager.id)}')">✅ Reativar</button>`
+                                            : `<button class="btn-sm btn-reject" onclick="deactivateManager('${SEC.js(manager.id)}')">🚫 Desativar</button>`}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
             `;
         }
 
@@ -1580,7 +1901,7 @@
             document.getElementById('managerSaveBtn').textContent = 'Salvar vínculo';
         }
 
-        async function openAddManagerModal() {
+        async function openAddManagerModal(selectedUserId) {
             await ensureManagerFormSources();
 
             if (!adminUsersCache.length) {
@@ -1593,7 +1914,7 @@
                 return;
             }
 
-            populateManagerUserSelect('');
+            populateManagerUserSelect(selectedUserId || '');
             populateManagerEstablishmentSelect('');
 
             document.getElementById('managerModalTitle').textContent = 'Adicionar vínculo';
@@ -1839,8 +2160,59 @@
         }
 
         function viewEvent(eventId) {
-            // Implementar visualização detalhada se necessário
-            alert('Funcionalidade de visualização detalhada em desenvolvimento.');
+            const eventItem = adminPendingEventsCache.find(function(item) {
+                return item.id === eventId;
+            });
+
+            if (!eventItem) {
+                alert('Evento pendente não encontrado na lista atual.');
+                return;
+            }
+
+            const images = getPendingEventImages(eventItem);
+            const previewHtml = `
+                <div class="admin-modal-body">
+                    <div class="event-admin-preview">
+                        <div class="event-admin-preview-grid">
+                            <section class="event-preview-panel">
+                                <h4>Dados principais</h4>
+                                <div class="event-preview-fields">
+                                    <div><strong>Título:</strong> ${SEC.html(getEventDisplayTitle(eventItem))}</div>
+                                    <div><strong>Categoria:</strong> ${SEC.html(getEventDisplayCategory(eventItem), '—')}</div>
+                                    <div><strong>Data:</strong> ${SEC.html(getEventDisplaySchedule(eventItem), '—')}</div>
+                                    <div><strong>Local:</strong> ${SEC.html(getEventDisplayLocation(eventItem), '—')}</div>
+                                    <div><strong>Organizador:</strong> ${SEC.html(getEventDisplayOrganizer(eventItem), '—')}</div>
+                                    <div><strong>Solicitante:</strong> ${SEC.html(getEventRequesterLabel(eventItem))}</div>
+                                    <div><strong>E-mail:</strong> ${SEC.html(getEventRequesterValue(eventItem))}</div>
+                                    <div><strong>Status:</strong> ${SEC.html(eventItem.status || 'pendente')}</div>
+                                </div>
+                            </section>
+                            <section class="event-preview-panel">
+                                <h4>Imagem principal</h4>
+                                <div class="event-cover-preview">
+                                    ${renderPreviewCover(images[0])}
+                                </div>
+                            </section>
+                        </div>
+                        <section class="event-gallery-admin">
+                            <h4>Imagens enviadas</h4>
+                            ${renderPendingEventGallery(images)}
+                        </section>
+                        <section class="event-preview-panel">
+                            <h4>Descrição</h4>
+                            <div class="event-preview-fields">
+                                <div>${SEC.html(eventItem.description || eventItem.descricao || 'Sem descrição enviada.')}</div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+                <div class="admin-modal-footer">
+                    <button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button>
+                    <button class="btn-primary" type="button" onclick="AdminContentCMS.closeModal(); approveEvent('${SEC.js(eventItem.id)}');">Aprovar</button>
+                </div>
+            `;
+
+            AdminContentCMS.openModal('Revisar evento pendente', previewHtml);
         }
 
         async function approveEstablishment(estId) {
@@ -1953,6 +2325,198 @@
             const result = await FirebaseSystem.toggleUserStatus(userId, ativar);
             alert(result.message);
             loadUsers();
+        }
+
+        async function copyUserEmail(email) {
+            const safeEmail = String(email || '').trim();
+            if (!safeEmail) {
+                alert('Usuário sem e-mail cadastrado.');
+                return;
+            }
+
+            try {
+                if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+                    await navigator.clipboard.writeText(safeEmail);
+                } else {
+                    const input = document.createElement('input');
+                    input.value = safeEmail;
+                    document.body.appendChild(input);
+                    input.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(input);
+                }
+                alert('E-mail copiado.');
+            } catch (error) {
+                console.error('[admin-firebase] Falha ao copiar e-mail.', error);
+                alert('Não foi possível copiar o e-mail.');
+            }
+        }
+
+        function focusUserManagers(userId) {
+            adminManagerUserFilterId = String(userId || '').trim();
+            showSection('gerenciar-vinculos');
+        }
+
+        function clearUserManagersFilter() {
+            adminManagerUserFilterId = '';
+            loadEstablishmentManagers();
+        }
+
+        function focusUserClaims(userId) {
+            adminClaimUserFilterId = String(userId || '').trim();
+            showSection('vinculos');
+        }
+
+        function clearUserClaimsFilter() {
+            adminClaimUserFilterId = '';
+            loadEstablishmentClaims();
+        }
+
+        function renderUserEstablishments(activeManagers) {
+            if (!Array.isArray(activeManagers) || !activeManagers.length) {
+                return '<span class="user-empty-state">Nenhum vínculo ativo</span>';
+            }
+
+            return `
+                <div class="user-establishments">
+                    ${activeManagers.map(manager => `
+                        <div class="user-establishment-card">
+                            <strong>${SEC.html(manager.establishmentName, '—')}</strong>
+                            <small>${SEC.html(manager.establishmentId || '—')}</small>
+                            <small>${SEC.html(getManagerRoleAdminLabel(manager.role))} · ${manager.active === false ? 'Inativo' : 'Ativo'}</small>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderFilterBannerHtml(kind, userId, count, clearAction) {
+            return `
+                <div class="filter-banner">
+                    <div>
+                        <strong>Filtro ativo:</strong> ${SEC.html(resolveUserDisplayName(userId))}<br>
+                        <small>${SEC.html(String(count))} ${SEC.html(kind)} encontrado(s) para ${SEC.html(userId)}</small>
+                    </div>
+                    <button class="btn-sm btn-edit" type="button" onclick="${clearAction}">Limpar filtro</button>
+                </div>
+            `;
+        }
+
+        function resolveUserDisplayName(userId) {
+            const user = adminUsersCache.find(function(item) {
+                return item.id === userId;
+            });
+
+            if (!user) return userId || 'Usuário';
+            return (user.nome || user.email || user.id || 'Usuário');
+        }
+
+        function getPendingEventImages(eventData) {
+            const items = [];
+            const fields = ['mainImage', 'image', 'coverImage'];
+
+            if (Array.isArray(eventData && eventData.images)) {
+                eventData.images.forEach(function(item) {
+                    if (typeof item === 'string') {
+                        items.push(buildPendingImageEntry({ url: item }));
+                        return;
+                    }
+
+                    items.push(buildPendingImageEntry(item));
+                });
+            }
+
+            fields.forEach(function(field) {
+                const value = String(eventData && eventData[field] || '').trim();
+                if (value) {
+                    items.push(buildPendingImageEntry({ url: value, name: field }));
+                }
+            });
+
+            const dedup = [];
+            const seen = {};
+            items.forEach(function(item) {
+                const key = String(item.url || item.path || '').trim();
+                if (!key || seen[key]) return;
+                seen[key] = true;
+                dedup.push(item);
+            });
+            return dedup;
+        }
+
+        function buildPendingImageEntry(item) {
+            return {
+                url: String(item && item.url || '').trim(),
+                path: String(item && item.path || '').trim(),
+                name: String(item && (item.name || item.fileName) || '').trim(),
+                contentType: String(item && item.contentType || '').trim(),
+                size: Number(item && item.size || 0) || 0
+            };
+        }
+
+        function renderPendingEventImages(eventData) {
+            const images = getPendingEventImages(eventData);
+            if (!images.length) {
+                return '<span class="user-empty-state">Sem imagem enviada</span>';
+            }
+
+            return `
+                <div class="pending-images-cell">
+                    <div class="pending-images-grid">
+                        ${images.slice(0, 3).map(function(image, index) {
+                            return `
+                                <a class="pending-image-item" href="${SEC.url(image.url, '#')}" target="_blank" rel="noopener noreferrer">
+                                    <img src="${SEC.url(image.url, '')}" alt="Imagem do evento ${SEC.attr(image.name || ('imagem-' + (index + 1)))}" onerror="this.parentNode.classList.add('is-error');this.remove();">
+                                    <span class="pending-image-caption">
+                                        <strong>${SEC.html(image.name || ('Imagem ' + (index + 1)))}</strong>
+                                        ${SEC.html(image.contentType || 'Tipo não informado')} · ${SEC.html(formatAdminFileSize(image.size))}
+                                    </span>
+                                </a>
+                            `;
+                        }).join('')}
+                    </div>
+                    <small>${SEC.html(String(images.length))} imagem(ns) enviada(s)</small>
+                </div>
+            `;
+        }
+
+        function renderPreviewCover(image) {
+            if (!image || !image.url) {
+                return '<div class="event-cover-placeholder">Sem imagem enviada</div><div class="event-cover-meta">O evento não possui capa definida.</div>';
+            }
+
+            return `
+                <img src="${SEC.url(image.url, '')}" alt="${SEC.attr(image.name || 'Capa do evento')}" onerror="this.closest('.event-cover-preview').classList.add('is-error');this.remove();">
+                <div class="event-cover-meta">${SEC.html(image.name || 'Imagem principal')} · ${SEC.html(image.contentType || 'Tipo não informado')} · ${SEC.html(formatAdminFileSize(image.size))}</div>
+            `;
+        }
+
+        function renderPendingEventGallery(images) {
+            if (!Array.isArray(images) || !images.length) {
+                return '<div class="event-gallery-admin-empty">Sem imagem enviada.</div>';
+            }
+
+            return `
+                <div class="event-gallery-admin-list">
+                    ${images.map(function(image, index) {
+                        return `
+                            <a href="${SEC.url(image.url, '#')}" target="_blank" rel="noopener noreferrer" class="event-gallery-admin-item">
+                                <img src="${SEC.url(image.url, '')}" alt="${SEC.attr(image.name || ('Imagem ' + (index + 1)))}" onerror="this.parentNode.classList.add('is-error');this.remove();">
+                                <span>${SEC.html(image.name || ('Imagem ' + (index + 1)))}</span>
+                                <small>${SEC.html(image.contentType || 'Tipo não informado')} · ${SEC.html(formatAdminFileSize(image.size))}</small>
+                            </a>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function formatAdminFileSize(size) {
+            const bytes = Number(size || 0);
+            if (!bytes) return 'Tamanho não informado';
+            if (bytes < 1024) return `${bytes} B`;
+            if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1).replace('.', ',')} KB`;
+            return `${(bytes / (1024 * 1024)).toFixed(2).replace('.', ',')} MB`;
         }
 
         function formatDate(dateStr) {
@@ -2151,12 +2715,12 @@
 
         function getManagerRoleAdminLabel(role) {
             return ({
-                owner: 'owner',
-                manager: 'manager',
-                representative: 'representative',
-                proprietario: 'owner',
-                gerente_responsavel: 'manager',
-                representante_autorizado: 'representative'
+                owner: 'Proprietário',
+                manager: 'Gestor',
+                representative: 'Representante',
+                proprietario: 'Proprietário',
+                gerente_responsavel: 'Gestor',
+                representante_autorizado: 'Representante'
             })[String(role || '')] || 'não informado';
         }
 
