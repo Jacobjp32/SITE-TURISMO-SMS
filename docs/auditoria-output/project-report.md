@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-03T12:55:05.937Z.
+Gerado em 2026-06-03T13:38:41.129Z.
 
 ## Resumo
 
@@ -22,9 +22,9 @@ Gerado em 2026-06-03T12:55:05.937Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 746359 |
+| .js | 37 | 753159 |
 | .html | 36 | 649199 |
-| .css | 22 | 302141 |
+| .css | 22 | 308090 |
 | .md | 22 | 231025 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
@@ -268,7 +268,7 @@ _Nenhum item encontrado._
 | css/rotas-completas.css | 13946 | 11 | 4 | 73 |
 | css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
 | css/sabores.css | 7813 | 9 | 2 | 72 |
-| css/season-theme.css | 6058 | 3 | 1 | 31 |
+| css/season-theme.css | 12007 | 6 | 1 | 46 |
 | css/shared.css | 9793 | 8 | 7 | 51 |
 | css/transparencia.css | 6387 | 0 | 1 | 33 |
 | css/variables.css | 1375 | 0 | 0 | 0 |
@@ -279,6 +279,7 @@ _Nenhum item encontrado._
 | selector | files |
 | --- | --- |
 | :root | css/404.css, css/index.css, css/mapa-turistico.css, css/season-theme.css |
+| .accessibility-bar .controls | css/index.css, css/season-theme.css |
 | .accessibility-bar .shortcuts | css/index.css, css/transparencia.css |
 | .back-to-top:hover | css/index.css, css/rotas-completas.css |
 | .back-to-top.visible | css/index.css, css/rotas-completas.css |

@@ -63,6 +63,10 @@
       missingDescription: "Alguns itens ainda nao possuem localizacao cadastrada, mas continuam disponiveis para consulta e podem ser completados futuramente.",
       missingSummarySingle: "1 item sem localizacao exata",
       missingSummaryMany: "{count} itens sem localizacao exata",
+      thematicRoutesTitle: "Rotas tematicas sem ponto unico",
+      thematicRoutesDescription: "Estas rotas representam percursos ou colecoes tematicas. Elas ficam disponiveis para consulta, mas nao entram na contagem de itens sem localizacao exata.",
+      thematicRoutesSummarySingle: "1 rota tematica sem ponto unico",
+      thematicRoutesSummaryMany: "{count} rotas tematicas sem ponto unico",
       popupDetails: "Ver detalhes",
       popupDirections: "Como chegar",
       upcomingEventsTitle: "Proximos eventos neste local",
@@ -163,6 +167,10 @@
       missingDescription: "Some items do not yet have a registered location, but remain available for consultation and can be completed later.",
       missingSummarySingle: "1 item without exact location",
       missingSummaryMany: "{count} items without exact location",
+      thematicRoutesTitle: "Themed routes without a single point",
+      thematicRoutesDescription: "These routes represent itineraries or thematic collections. They remain available for consultation but are not counted as items without exact location.",
+      thematicRoutesSummarySingle: "1 themed route without a single point",
+      thematicRoutesSummaryMany: "{count} themed routes without a single point",
       popupDetails: "View details",
       popupDirections: "Directions",
       upcomingEventsTitle: "Upcoming events at this place",
@@ -263,6 +271,10 @@
       missingDescription: "Algunos elementos aun no tienen ubicacion registrada, pero siguen disponibles para consulta y pueden completarse mas adelante.",
       missingSummarySingle: "1 elemento sin ubicacion exacta",
       missingSummaryMany: "{count} elementos sin ubicacion exacta",
+      thematicRoutesTitle: "Rutas tematicas sin punto unico",
+      thematicRoutesDescription: "Estas rutas representan recorridos o colecciones tematicas. Siguen disponibles para consulta, pero no entran en el conteo de elementos sin ubicacion exacta.",
+      thematicRoutesSummarySingle: "1 ruta tematica sin punto unico",
+      thematicRoutesSummaryMany: "{count} rutas tematicas sin punto unico",
       popupDetails: "Ver detalles",
       popupDirections: "Como llegar",
       upcomingEventsTitle: "Proximos eventos en este lugar",
@@ -363,6 +375,10 @@
       missingDescription: "Niektore elementy nie maja jeszcze zapisanej lokalizacji, ale nadal sa dostepne do przegladania i moga zostac uzupelnione pozniej.",
       missingSummarySingle: "1 element bez dokladnej lokalizacji",
       missingSummaryMany: "{count} elementow bez dokladnej lokalizacji",
+      thematicRoutesTitle: "Trasy tematyczne bez jednego punktu",
+      thematicRoutesDescription: "Te trasy reprezentuja przebiegi lub zbiory tematyczne. Pozostaja dostepne do przegladania, ale nie sa liczone jako elementy bez dokladnej lokalizacji.",
+      thematicRoutesSummarySingle: "1 trasa tematyczna bez jednego punktu",
+      thematicRoutesSummaryMany: "{count} tras tematycznych bez jednego punktu",
       popupDetails: "Zobacz szczegoly",
       popupDirections: "Jak dojechac",
       upcomingEventsTitle: "Nadchodzace wydarzenia w tym miejscu",
@@ -987,6 +1003,49 @@
     return !!item && item.panelGroup === "routes";
   }
 
+  function isStructuralInfoItem(item) {
+    if (!item || item.tipo !== "servico") return false;
+
+    var structuralIds = {
+      "mapa-turistico": true,
+      "roteiros": true,
+      "onde-ficar": true,
+      "previsao-do-tempo": true,
+      "contato-turismo": true
+    };
+    var structuralNames = {
+      "mapa turistico": true,
+      "roteiros": true,
+      "onde ficar": true,
+      "previsao do tempo": true,
+      "contato": true
+    };
+    var structuralUrls = {
+      "/mapa-turistico.html": true,
+      "/mapa-turistico.html?grupo=roteiros": true,
+      "/mapa-turistico.html?categoria=hospedagem": true,
+      "/#weather-title": true,
+      "/#contato": true
+    };
+
+    var normalizedId = normalizeText(item.id);
+    var normalizedName = normalizeText(item.nome);
+    var normalizedUrl = String(item.url || "").trim().toLowerCase();
+
+    return !!(structuralIds[normalizedId] || structuralNames[normalizedName] || structuralUrls[normalizedUrl]);
+  }
+
+  function shouldListAsMissingLocation(item) {
+    if (!item || item.possuiCoordenadas) return false;
+    if (isRouteItem(item)) return false;
+    if (isStructuralInfoItem(item)) return false;
+    return true;
+  }
+
+  function shouldListAsThematicRoute(item) {
+    return !!item && !item.possuiCoordenadas && isRouteItem(item);
+  }
+
   function getPanelGroup(itemType) {
     if (itemType === "rota") return "routes";
     if (itemType === "ponto") return "points";
@@ -1198,7 +1257,7 @@
     });
 
     state.missingItems = state.filteredItems.filter(function (item) {
-      return !item.possuiCoordenadas;
+      return shouldListAsMissingLocation(item);
     });
   }
 
@@ -1236,7 +1295,11 @@
   }
 
   function getCurrentMissingItems() {
-    return getCurrentListItems().filter(function (item) { return !item.possuiCoordenadas; });
+    return getCurrentListItems().filter(shouldListAsMissingLocation);
+  }
+
+  function getCurrentThematicRouteItems() {
+    return getCurrentListItems().filter(shouldListAsThematicRoute);
   }
 
   function getSelectedItem() {
@@ -1277,6 +1340,11 @@
   function getMissingSummary(count) {
     if (count === 1) return t("missingSummarySingle");
     return replaceCount(t("missingSummaryMany"), count);
+  }
+
+  function getThematicRoutesSummary(count) {
+    if (count === 1) return t("thematicRoutesSummarySingle");
+    return replaceCount(t("thematicRoutesSummaryMany"), count);
   }
 
   function getImageHtml(item, className) {
@@ -1680,18 +1748,36 @@
     if (!missingContainer) return;
 
     var missingItems = getCurrentMissingItems();
-    if (!missingItems.length) {
+    var thematicRoutes = getCurrentThematicRouteItems();
+
+    if (!missingItems.length && !thematicRoutes.length) {
       missingContainer.innerHTML = "";
       return;
     }
 
-    missingContainer.innerHTML = '<details class="map-missing-list"><summary>'
-      + '<span class="map-missing-summary-label">' + getMissingSummary(missingItems.length) + "</span>"
-      + '<span class="map-missing-summary-hint">▼</span>'
-      + "</summary>"
-      + "<p>" + t("missingDescription") + "</p><ul>"
-      + missingItems.map(function (item) { return "<li>" + escapeHtml(item.nome) + "</li>"; }).join("")
-      + "</ul></details>";
+    var sections = [];
+
+    if (missingItems.length) {
+      sections.push('<details class="map-missing-list"><summary>'
+        + '<span class="map-missing-summary-label">' + getMissingSummary(missingItems.length) + "</span>"
+        + '<span class="map-missing-summary-hint">▼</span>'
+        + "</summary>"
+        + "<h3>" + t("missingTitle") + "</h3><p>" + t("missingDescription") + "</p><ul>"
+        + missingItems.map(function (item) { return "<li>" + escapeHtml(item.nome) + "</li>"; }).join("")
+        + "</ul></details>");
+    }
+
+    if (thematicRoutes.length) {
+      sections.push('<details class="map-missing-list"><summary>'
+        + '<span class="map-missing-summary-label">' + getThematicRoutesSummary(thematicRoutes.length) + "</span>"
+        + '<span class="map-missing-summary-hint">▼</span>'
+        + "</summary>"
+        + "<h3>" + t("thematicRoutesTitle") + "</h3><p>" + t("thematicRoutesDescription") + "</p><ul>"
+        + thematicRoutes.map(function (item) { return "<li>" + escapeHtml(item.nome) + "</li>"; }).join("")
+        + "</ul></details>");
+    }
+
+    missingContainer.innerHTML = sections.join("");
   }
 
   function renderList() {

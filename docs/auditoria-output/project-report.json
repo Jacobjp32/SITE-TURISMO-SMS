@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-03T12:55:05.937Z",
+  "generatedAt": "2026-06-03T13:38:41.129Z",
   "totals": {
     "files": 362,
     "html": 36,
@@ -47,7 +47,7 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 746359
+      "bytes": 753159
     },
     {
       "ext": ".html",
@@ -57,7 +57,7 @@
     {
       "ext": ".css",
       "files": 22,
-      "bytes": 302141
+      "bytes": 308090
     },
     {
       "ext": ".md",
@@ -194,12 +194,12 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 485317
+      "bytes": 492117
     },
     {
       "dir": "css",
       "files": 22,
-      "bytes": 302141
+      "bytes": 308090
     },
     {
       "dir": "docs",
@@ -2230,10 +2230,10 @@
     },
     {
       "file": "css/season-theme.css",
-      "bytes": 6058,
-      "important": 3,
+      "bytes": 12007,
+      "important": 6,
       "media": 1,
-      "selectorCount": 31
+      "selectorCount": 46
     },
     {
       "file": "css/shared.css",
@@ -2261,6 +2261,10 @@
     {
       "selector": ":root",
       "files": "css/404.css, css/index.css, css/mapa-turistico.css, css/season-theme.css"
+    },
+    {
+      "selector": ".accessibility-bar .controls",
+      "files": "css/index.css, css/season-theme.css"
     },
     {
       "selector": ".accessibility-bar .shortcuts",
@@ -2926,7 +2930,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 76111,
+      "bytes": 80055,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -2972,6 +2976,7 @@
         "getCoordinates",
         "getCurrentListItems",
         "getCurrentMissingItems",
+        "getCurrentThematicRouteItems",
         "getDefaultPanelGroupForFilter",
         "getFilterCount",
         "getFirstPhoneDigits",
@@ -2989,12 +2994,14 @@
         "getPanelItems",
         "getSearchStatusMessage",
         "getSelectedItem",
+        "getThematicRoutesSummary",
         "getUpcomingApprovedEventsForItem",
         "handleDetailsKeydown",
         "initMap",
         "isExternalUrl",
         "isPublicApprovedStatus",
         "isRouteItem",
+        "isStructuralInfoItem",
         "isUpcomingApprovedEvent",
         "loadApprovedEventsForMap",
         "normalizeApprovedEvent",
@@ -3025,6 +3032,8 @@
         "resolvePanelGroupAlias",
         "sanitizeActionUrl",
         "selectItem",
+        "shouldListAsMissingLocation",
+        "shouldListAsThematicRoute",
         "syncSelectedItemVisibility",
         "syncUrlState",
         "t",
@@ -3205,11 +3214,12 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 8472,
+      "bytes": 11313,
       "globals": [
         "var AUTO_MODE",
-        "var SEASON_LABELS",
+        "var SEASON_META",
         "var STORAGE_KEY",
+        "window.__SMSSeasonThemeInitialized",
         "window.localStorage",
         "window.matchMedia"
       ],
@@ -3217,13 +3227,17 @@
         "applySeason",
         "buildSwitcher",
         "closeAllPopovers",
+        "createSlot",
         "ensureSwitcher",
         "getAutomaticSeason",
         "getBrazilDateParts",
         "getModeOptions",
+        "getResolvedSeason",
         "init",
+        "isKnownMode",
         "mountIntoFooter",
-        "mountIntoHeader",
+        "mountIntoHeaderFallback",
+        "mountIntoUtilityBar",
         "safeGetStoredMode",
         "safeSetStoredMode",
         "syncReducedMotion",
