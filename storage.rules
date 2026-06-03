@@ -10,6 +10,12 @@ service firebase.storage {
       return firestore.get(/databases/(default)/documents/usuarios/$(request.auth.uid));
     }
 
+    function isAdmin() {
+      return signedIn() &&
+        userDoc().data.ativo != false &&
+        userDoc().data.role == 'admin';
+    }
+
     function isStaff() {
       return signedIn() &&
         userDoc().data.ativo != false &&
@@ -18,6 +24,14 @@ service firebase.storage {
 
     function validPendingImageUpload(uid) {
       return signedIn() &&
+        request.auth.uid == uid &&
+        request.resource != null &&
+        request.resource.size <= 5 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
+    }
+
+    function validCmsImageUpload(uid) {
+      return isAdmin() &&
         request.auth.uid == uid &&
         request.resource != null &&
         request.resource.size <= 5 * 1024 * 1024 &&
@@ -40,6 +54,12 @@ service firebase.storage {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
       allow write: if validPendingImageUpload(uid);
       allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+    }
+
+    match /cms-media/{uid}/{fileName} {
+      allow read: if true;
+      allow write: if validCmsImageUpload(uid);
+      allow delete: if isAdmin();
     }
 
     match /{allPaths=**} {

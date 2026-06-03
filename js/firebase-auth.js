@@ -622,9 +622,12 @@ const FirebaseSystem = {
             await db.collection('eventos_aprovados').doc(eventId).set(
                 Object.assign({}, doc.data(), {
                     status:      'aprovado',
+                    publicado:   true,
                     reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
                     reviewedBy:  currentUser.uid,
-                    reviewNotes: notes
+                    reviewNotes: notes,
+                    updatedAt:   firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy:   currentUser.uid
                 })
             );
             await ref.delete();

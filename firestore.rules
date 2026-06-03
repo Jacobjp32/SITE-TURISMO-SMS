@@ -251,6 +251,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /media_library/{mediaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /reservas/{reservaId} {
       allow create: if request.resource.data.status == 'pendente' &&
         request.resource.data.keys().hasOnly([

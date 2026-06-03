@@ -55,6 +55,18 @@
             document.getElementById('meta-canonical').href = pageUrl;
             document.getElementById('og-url').content = pageUrl;
             
+            const galeria = Array.isArray(post.galeria) ? post.galeria : [];
+            const galeriaHtml = galeria.length ? `
+                <div class="article-gallery" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin:2rem 0;">
+                    ${galeria.map(url => `<img src="${SEC.url(url, '')}" alt="${SEC.attr(post.titulo, 'Galeria')}" loading="lazy" style="width:100%;height:150px;object-fit:cover;border-radius:10px;">`).join('')}
+                </div>` : '';
+            const videoHtml = post.videoUrl
+                ? `<p><a href="${SEC.url(post.videoUrl, '#')}" target="_blank" rel="noopener noreferrer">Ver vídeo ou conteúdo complementar</a></p>`
+                : '';
+            const origemHtml = post.linkOrigem
+                ? `<p><a href="${SEC.url(post.linkOrigem, '#')}" target="_blank" rel="noopener noreferrer">Fonte/origem da notícia</a></p>`
+                : '';
+
             container.innerHTML = `
                 <a href="/noticias" class="back-link">← Voltar para Notícias</a>
                 <header>
@@ -68,6 +80,9 @@
                 <img src="${SEC.url(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}" alt="${SEC.attr(post.titulo, 'Notícia')}" class="article-image" loading="lazy">
                 <div class="article-content">
                     ${SEC.value(post.conteudo).split('\n\n').map(p => '<p>' + SEC.html(p) + '</p>').join('')}
+                    ${galeriaHtml}
+                    ${videoHtml}
+                    ${origemHtml}
                 </div>
                 <div class="article-share">
                     <h4>Compartilhar:</h4>

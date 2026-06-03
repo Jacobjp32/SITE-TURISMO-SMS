@@ -311,6 +311,7 @@
     const DIAS   = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
     const EVENT_PUBLIC_APPROVED = new Set(['aprovado', 'approved']);
     const EVENT_BLOCKED_STATUS = new Set(['pendente', 'pending', 'rejeitado', 'rejected']);
+    const EVENT_UNPUBLISHED_STATUS = new Set(['rascunho', 'draft', 'despublicado', 'unpublished']);
     const EVENT_CATEGORY_MAP = {
         religioso: 'religioso',
         religiosa: 'religioso',
@@ -364,6 +365,7 @@
         const normalized = normalizeStatus(status);
         if (!normalized) return true;
         if (EVENT_BLOCKED_STATUS.has(normalized)) return false;
+        if (EVENT_UNPUBLISHED_STATUS.has(normalized)) return false;
         return EVENT_PUBLIC_APPROVED.has(normalized);
     }
 
@@ -493,7 +495,7 @@
         return {
             id: asCleanString((doc && doc.id) || raw.id || ''),
             originalId: asCleanString((doc && doc.id) || raw.id || ''),
-            titulo: asCleanString(raw.title || raw.nome) || 'Evento sem título',
+            titulo: asCleanString(raw.title || raw.nome || raw.titulo) || 'Evento sem título',
             descricao: asCleanString(raw.description || raw.descricao),
             data: data,
             horario: asCleanString(raw.time || raw.hora || raw.horaInicio),
@@ -506,6 +508,7 @@
             categoria: normalizeCategory(categoriaBruta, 'cultural'),
             recorrente: Boolean(raw.recorrente),
             destaque: Boolean(raw.destaque),
+            publicado: raw.publicado !== false,
             origem: 'firebase',
             firebaseStatus: status
         };
@@ -604,8 +607,8 @@
             const snapshot = await db.collection('eventos_aprovados').get();
             return snapshot.docs
                 .filter(doc => {
-                    const status = doc.exists ? doc.data().status : '';
-                    return isPublicApprovedStatus(status);
+                    const data = doc.exists ? doc.data() : {};
+                    return data.publicado !== false && isPublicApprovedStatus(data.status);
                 })
                 .map(normalizeFirebaseEvent)
                 .filter(Boolean);

@@ -60,7 +60,7 @@
     <!-- Main Content -->
     <main class="main-content">
         <!-- Posts -->
-        <div class="posts-grid">
+        <div class="posts-grid" id="postsGrid">
 
             <!-- Banner fonte -->
             <div class="fonte-banner" style="grid-column: 1 / -1;">
@@ -306,6 +306,48 @@
         <p><a href="/" data-lang-key="footer-voltar-portal">← Voltar para o Portal</a></p>
     </footer>
 
+    <script src="js/security-utils.js"></script>
+    <script src="js/cms.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            if (!window.CMS || !window.SMSecurity) return;
+            await CMS.init();
+            if (CMS.source !== 'firebase') return;
+
+            const posts = CMS.getPostsPublicados();
+            if (!posts.length) return;
+
+            const SEC = window.SMSecurity;
+            const grid = document.getElementById('postsGrid');
+            const featured = posts.find(post => post.destaque) || posts[0];
+            const ordered = [featured].concat(posts.filter(post => post.id !== featured.id));
+
+            grid.innerHTML = `
+                <div class="fonte-banner" style="grid-column: 1 / -1;">
+                    <span>🏛️</span>
+                    <div>Notícias administradas pelo painel do Turismo. O conteúdo estático permanece como fallback caso o Firebase falhe.</div>
+                </div>
+                ${ordered.map(function(post, index) {
+                    const link = post.linkOrigem || ('/noticia?slug=' + encodeURIComponent(post.slug));
+                    const external = post.linkOrigem ? ' target="_blank" rel="noopener noreferrer"' : '';
+                    return `
+                        <article class="post-card ${index === 0 ? 'featured' : ''}">
+                            <div class="post-image" style="background-image: url('${SEC.url(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}'); background-color:#0a3d2e;"></div>
+                            <div class="post-content">
+                                <span class="post-category">${SEC.html(post.categoria, 'Notícia')}${post.destaque ? ' · Destaque' : ''}</span>
+                                ${index === 0 ? '<h2 class="post-title">' : '<h3 class="post-title">'}${SEC.html(post.titulo, 'Sem título')}${index === 0 ? '</h2>' : '</h3>'}
+                                <p class="post-excerpt">${SEC.html(post.resumo, '')}</p>
+                                <div class="post-meta">
+                                    <span>📅 ${CMS.formatarData(post.dataPublicacao)}</span>
+                                    <a href="${SEC.url(link, '/noticias')}"${external} class="post-link">${post.linkOrigem ? 'Leia na origem →' : 'Leia mais →'}</a>
+                                </div>
+                            </div>
+                        </article>
+                    `;
+                }).join('')}
+            `;
+        });
+    </script>
     <script src="js/cookies.js"></script>
 </body>
 </html>

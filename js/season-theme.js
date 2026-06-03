@@ -75,11 +75,14 @@
         ];
     }
 
-    function updateSelects(mode) {
-        document.querySelectorAll("[data-season-select]").forEach(function (select) {
-            if (select.value !== mode) {
-                select.value = mode;
-            }
+    function updateControls(mode) {
+        document.querySelectorAll("[data-season-option]").forEach(function (button) {
+            button.classList.toggle("is-active", button.dataset.seasonOption === mode);
+            button.setAttribute("aria-pressed", button.dataset.seasonOption === mode ? "true" : "false");
+        });
+
+        document.querySelectorAll("[data-season-current]").forEach(function (label) {
+            label.textContent = SEASON_LABELS[mode] || SEASON_LABELS[AUTO_MODE];
         });
     }
 
@@ -91,66 +94,86 @@
         root.dataset.season = season;
         root.dataset.seasonMode = selectedMode;
 
-        updateSelects(selectedMode);
+        updateControls(selectedMode);
         safeSetStoredMode(selectedMode);
     }
 
-    function bindSelect(select) {
-        if (!select || select.dataset.seasonBound === "true") return;
-
-        select.dataset.seasonBound = "true";
-        select.addEventListener("change", function (event) {
-            applySeason(event.target.value);
+    function closeAllPopovers(except) {
+        document.querySelectorAll(".season-switcher.is-open").forEach(function (switcher) {
+            if (switcher === except) return;
+            switcher.classList.remove("is-open");
+            var trigger = switcher.querySelector(".season-switcher__trigger");
+            if (trigger) trigger.setAttribute("aria-expanded", "false");
         });
     }
 
     function buildSwitcher(isSurface) {
-        var wrapper = document.createElement("label");
+        var wrapper = document.createElement("div");
         wrapper.className = "season-switcher" + (isSurface ? " season-switcher--surface" : "");
-        wrapper.setAttribute("aria-label", "Selecionar estação do site");
 
-        var title = document.createElement("span");
-        title.className = "season-switcher__label";
-        title.textContent = "Estação";
+        var trigger = document.createElement("button");
+        trigger.type = "button";
+        trigger.className = "season-switcher__trigger";
+        trigger.setAttribute("aria-haspopup", "true");
+        trigger.setAttribute("aria-expanded", "false");
+        trigger.setAttribute("aria-label", "Selecionar estação visual do site");
 
-        var select = document.createElement("select");
-        select.className = "season-switcher__select";
-        select.setAttribute("data-season-select", "");
-        select.setAttribute("aria-label", "Selecionar estação");
+        var icon = document.createElement("span");
+        icon.className = "season-switcher__icon";
+        icon.setAttribute("aria-hidden", "true");
+        icon.textContent = "◌";
+
+        var current = document.createElement("span");
+        current.className = "season-switcher__current";
+        current.setAttribute("data-season-current", "");
+        current.textContent = SEASON_LABELS[AUTO_MODE];
+
+        trigger.appendChild(icon);
+        trigger.appendChild(current);
+
+        var menu = document.createElement("div");
+        menu.className = "season-switcher__popover";
+        menu.setAttribute("role", "menu");
 
         getModeOptions().forEach(function (optionData) {
-            var option = document.createElement("option");
-            option.value = optionData.value;
+            var option = document.createElement("button");
+            option.type = "button";
+            option.className = "season-switcher__option";
+            option.setAttribute("role", "menuitemradio");
+            option.setAttribute("data-season-option", optionData.value);
+            option.setAttribute("aria-pressed", "false");
             option.textContent = optionData.label;
-            select.appendChild(option);
+            option.addEventListener("click", function () {
+                applySeason(optionData.value);
+                closeAllPopovers();
+            });
+            menu.appendChild(option);
         });
 
-        wrapper.appendChild(title);
-        wrapper.appendChild(select);
-        bindSelect(select);
+        trigger.addEventListener("click", function (event) {
+            event.stopPropagation();
+            var shouldOpen = !wrapper.classList.contains("is-open");
+            closeAllPopovers(wrapper);
+            wrapper.classList.toggle("is-open", shouldOpen);
+            trigger.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+        });
+
+        wrapper.appendChild(trigger);
+        wrapper.appendChild(menu);
 
         return wrapper;
     }
 
-    function mountIntoNav() {
-        var navLinks = document.querySelector(".nav-links");
-        if (!navLinks || navLinks.querySelector(".season-nav-item")) return false;
-
-        var item = document.createElement("li");
-        item.className = "season-nav-item";
-        item.appendChild(buildSwitcher(false));
-
-        var languageItem = navLinks.querySelector(".language-selector");
-        if (languageItem && languageItem.closest("li")) {
-            navLinks.insertBefore(item, languageItem.closest("li"));
+    function mountIntoHeader() {
+        var languageSelector = document.querySelector(".language-selector");
+        if (languageSelector && !languageSelector.parentElement.querySelector(".season-inline-slot")) {
+            var slot = document.createElement("div");
+            slot.className = "season-inline-slot";
+            slot.appendChild(buildSwitcher(false));
+            languageSelector.parentElement.insertBefore(slot, languageSelector);
             return true;
         }
 
-        navLinks.appendChild(item);
-        return true;
-    }
-
-    function mountIntoHeader() {
         var headerNav = document.querySelector(".header-nav");
         if (!headerNav || headerNav.querySelector(".season-inline-slot")) return false;
 
@@ -174,7 +197,7 @@
     }
 
     function ensureSwitcher() {
-        return mountIntoNav() || mountIntoHeader() || mountIntoFooter();
+        return mountIntoHeader() || mountIntoFooter();
     }
 
     function syncReducedMotion() {
@@ -201,6 +224,18 @@
         syncReducedMotion();
         ensureSwitcher();
         applySeason(safeGetStoredMode());
+
+        document.addEventListener("click", function (event) {
+            if (!event.target.closest(".season-switcher")) {
+                closeAllPopovers();
+            }
+        });
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "Escape") {
+                closeAllPopovers();
+            }
+        });
     }
 
     if (document.readyState === "loading") {

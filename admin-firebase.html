@@ -748,6 +748,8 @@
                 <li><a data-section="gerenciar-vinculos">🗂️ <span>Gerenciar Vínculos</span></a></li>
                 <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
+                <li><a data-section="noticias">📰 <span>Notícias</span></a></li>
+                <li><a data-section="midia">🖼️ <span>Mídia</span></a></li>
                 <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
             </ul>
             
@@ -909,10 +911,49 @@
             <section class="admin-section" id="section-eventos">
                 <div class="page-header">
                     <h1>📅 Eventos Aprovados</h1>
+                    <div class="page-actions">
+                        <button class="btn-primary" type="button" onclick="AdminContentCMS.openEventModal()">Novo evento</button>
+                    </div>
                 </div>
                 
                 <div class="card">
                     <div id="eventos-aprovados-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section" id="section-noticias">
+                <div class="page-header">
+                    <h1>📰 Notícias</h1>
+                    <div class="page-actions">
+                        <button class="btn-primary" type="button" onclick="AdminContentCMS.openNewsModal()">Nova notícia</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p class="admin-helper-text">
+                        Notícias publicadas aparecem em <code>/noticias</code> e <code>/noticia?slug=...</code>. Rascunhos ficam restritos ao admin.
+                    </p>
+                    <div id="noticias-admin-container">
+                        <div class="loading">Carregando...</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-section" id="section-midia">
+                <div class="page-header">
+                    <h1>🖼️ Biblioteca de Mídia</h1>
+                    <div class="page-actions">
+                        <button class="btn-primary" type="button" onclick="AdminContentCMS.openMediaModal()">Adicionar mídia</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <p class="admin-helper-text">
+                        Base simples para reutilizar imagens em eventos e notícias. Imagens enviadas ficam no Storage em <code>cms-media/{uid}/...</code>.
+                    </p>
+                    <div id="midia-admin-container">
                         <div class="loading">Carregando...</div>
                     </div>
                 </div>
@@ -980,6 +1021,19 @@
         </div>
     </div>
 
+    <div class="admin-modal" id="contentModal" hidden>
+        <div class="admin-modal-backdrop" onclick="AdminContentCMS.closeModal()"></div>
+        <div class="admin-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="contentModalTitle">
+            <div class="admin-modal-header">
+                <div class="admin-modal-title">
+                    <h2 id="contentModalTitle">Conteúdo</h2>
+                    <button class="admin-modal-close" type="button" aria-label="Fechar" onclick="AdminContentCMS.closeModal()">&times;</button>
+                </div>
+            </div>
+            <div id="contentModalBody"></div>
+        </div>
+    </div>
+
     <script src="js/security-utils.js"></script>
     <script src="js/data/restaurantes.js"></script>
     <script src="js/data/hospedagens.js"></script>
@@ -989,8 +1043,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
     <script src="js/firebase-auth.js?v=auth-login-fix-20260525"></script>
+    <script src="js/admin-content-cms.js?v=cms-admin-20260603"></script>
     <script>
         const SEC = window.SMSecurity;
         var adminUsersCache = [];
@@ -1073,6 +1129,8 @@
             if (section === 'gerenciar-vinculos') loadEstablishmentManagers();
             if (section === 'usuarios') loadUsers();
             if (section === 'eventos') loadApprovedEvents();
+            if (section === 'noticias') AdminContentCMS.loadNews();
+            if (section === 'midia') AdminContentCMS.loadMedia();
         }
 
         function updateDate() {
@@ -1716,6 +1774,9 @@
         }
 
         async function loadApprovedEvents() {
+            if (window.AdminContentCMS && typeof AdminContentCMS.loadApprovedEvents === 'function') {
+                return AdminContentCMS.loadApprovedEvents();
+            }
             // Buscar eventos aprovados diretamente
             try {
                 const db = window.firebaseDB && window.firebaseDB.db;

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-02T18:45:01.200Z",
+  "generatedAt": "2026-06-03T12:55:05.937Z",
   "totals": {
-    "files": 361,
+    "files": 362,
     "html": 36,
     "css": 22,
-    "js": 36,
+    "js": 37,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,18 +46,18 @@
     },
     {
       "ext": ".js",
-      "files": 36,
-      "bytes": 717661
+      "files": 37,
+      "bytes": 746359
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 642151
+      "bytes": 649199
     },
     {
       "ext": ".css",
       "files": 22,
-      "bytes": 300611
+      "bytes": 302141
     },
     {
       "ext": ".md",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 11986
+      "bytes": 12655
     },
     {
       "ext": ".xml",
@@ -184,7 +184,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 930372
+      "bytes": 938089
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -193,13 +193,13 @@
     },
     {
       "dir": "js",
-      "files": 24,
-      "bytes": 456619
+      "files": 25,
+      "bytes": 485317
     },
     {
       "dir": "css",
       "files": 22,
-      "bytes": 300611
+      "bytes": 302141
     },
     {
       "dir": "docs",
@@ -785,13 +785,13 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 88676
+      "bytes": 91870
     },
     {
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 47251
+      "bytes": 47505
     },
     {
       "path": "galeria.html",
@@ -833,13 +833,13 @@
       "path": "noticia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6297
+      "bytes": 7337
     },
     {
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20640
+      "bytes": 23200
     },
     {
       "path": "o-que-fazer.html",
@@ -1005,7 +1005,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 88676
+      "bytes": 91870
     },
     {
       "path": "css/mapa-3d.css",
@@ -1056,6 +1056,12 @@
       "bytes": 61
     },
     {
+      "path": "js/admin-content-cms.js",
+      "ext": ".js",
+      "dir": "js",
+      "bytes": 26257
+    },
+    {
       "path": "js/firebase-app-check.js",
       "ext": ".js",
       "dir": "js",
@@ -1065,7 +1071,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 68086
+      "bytes": 68251
     },
     {
       "path": "js/reservas.js",
@@ -1173,8 +1179,10 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
+        "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
-        "js/firebase-auth.js"
+        "js/firebase-auth.js",
+        "js/admin-content-cms.js"
       ],
       "styles": [],
       "anchors": [
@@ -1205,6 +1213,10 @@
         "usuarios-container",
         "section-eventos",
         "eventos-aprovados-container",
+        "section-noticias",
+        "noticias-admin-container",
+        "section-midia",
+        "midia-admin-container",
         "managerModal",
         "managerModalTitle",
         "managerForm",
@@ -1219,6 +1231,9 @@
         "managerActive",
         "managerNotes",
         "managerSaveBtn",
+        "contentModal",
+        "contentModalTitle",
+        "contentModalBody",
         "claim-note-${SEC.attr(claim.id)}",
         "claim-reason-${SEC.attr(claim.id)}",
         "update-review-note-${SEC.attr(request.id)}",
@@ -1641,6 +1656,8 @@
         "js/scroll-animations.js",
         "js/breadcrumbs.js",
         "js/nav-shared.js",
+        "js/security-utils.js",
+        "js/cms.js",
         "js/cookies.js"
       ],
       "styles": [
@@ -1651,7 +1668,8 @@
         "viewport",
         "referrer",
         "description",
-        "keywords"
+        "keywords",
+        "postsGrid"
       ]
     },
     {
@@ -2212,10 +2230,10 @@
     },
     {
       "file": "css/season-theme.css",
-      "bytes": 4530,
+      "bytes": 6058,
       "important": 3,
-      "media": 2,
-      "selectorCount": 23
+      "media": 1,
+      "selectorCount": 31
     },
     {
       "file": "css/shared.css",
@@ -2441,10 +2459,6 @@
       "files": "css/eventos.css, css/index.css"
     },
     {
-      "selector": "@media (max-width: 640px)",
-      "files": "css/index.css, css/season-theme.css"
-    },
-    {
       "selector": "@media (max-width: 768px)",
       "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css"
     },
@@ -2534,6 +2548,45 @@
       "addEventListeners": 1
     },
     {
+      "file": "js/admin-content-cms.js",
+      "bytes": 26184,
+      "globals": [
+        "var SEC",
+        "window.AdminContentCMS",
+        "window.SMSecurity",
+        "window.currentUser",
+        "window.firebase",
+        "window.firebaseDB",
+        "window.loadApprovedEvents"
+      ],
+      "functions": [
+        "buildEventForm",
+        "buildMediaForm",
+        "buildNewsForm",
+        "clean",
+        "cleanLong",
+        "compareAdminDateDesc",
+        "currentAdminId",
+        "escapeHtml",
+        "field",
+        "formatAdminDate",
+        "getEventDate",
+        "getEventTime",
+        "getLocation",
+        "getOrganizer",
+        "getTitle",
+        "isPublished",
+        "makeSlug",
+        "safeFileName",
+        "splitList",
+        "textarea",
+        "timestampToMillis"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
       "file": "js/avaliacoes.js",
       "bytes": 8693,
       "globals": [
@@ -2580,14 +2633,14 @@
     },
     {
       "file": "js/cms.js",
-      "bytes": 11726,
+      "bytes": 12177,
       "globals": [
         "const CMS",
         "window.CMS",
         "window.SMSecurity"
       ],
       "functions": [],
-      "localStorage": 7,
+      "localStorage": 8,
       "serviceWorker": 0,
       "addEventListeners": 1
     },
@@ -2802,7 +2855,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 67830,
+      "bytes": 67995,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -3152,7 +3205,7 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 6645,
+      "bytes": 8472,
       "globals": [
         "var AUTO_MODE",
         "var SEASON_LABELS",
@@ -3162,8 +3215,8 @@
       ],
       "functions": [
         "applySeason",
-        "bindSelect",
         "buildSwitcher",
+        "closeAllPopovers",
         "ensureSwitcher",
         "getAutomaticSeason",
         "getBrazilDateParts",
@@ -3171,15 +3224,14 @@
         "init",
         "mountIntoFooter",
         "mountIntoHeader",
-        "mountIntoNav",
         "safeGetStoredMode",
         "safeSetStoredMode",
         "syncReducedMotion",
-        "updateSelects"
+        "updateControls"
       ],
       "localStorage": 3,
       "serviceWorker": 0,
-      "addEventListeners": 4
+      "addEventListeners": 7
     },
     {
       "file": "js/security-utils.js",
@@ -3381,6 +3433,16 @@
       "examples": "index.html, mapa-completo.html, mapa-turistico.html"
     },
     {
+      "script": "js/security-utils.js",
+      "pages": 3,
+      "examples": "admin-firebase.html, noticia.html, noticias.html"
+    },
+    {
+      "script": "js/cms.js",
+      "pages": 2,
+      "examples": "noticia.html, noticias.html"
+    },
+    {
       "script": "js/data/eventos.js",
       "pages": 2,
       "examples": "index.html, mapa-turistico.html"
@@ -3426,9 +3488,9 @@
       "examples": "index.html, privacidade.html"
     },
     {
-      "script": "js/security-utils.js",
-      "pages": 2,
-      "examples": "admin-firebase.html, noticia.html"
+      "script": "js/admin-content-cms.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
     },
     {
       "script": "js/avaliacoes.js",
@@ -3439,11 +3501,6 @@
       "script": "js/chatbot.js",
       "pages": 1,
       "examples": "index.html"
-    },
-    {
-      "script": "js/cms.js",
-      "pages": 1,
-      "examples": "noticia.html"
     },
     {
       "script": "js/mapa-turistico.js",
@@ -3509,6 +3566,18 @@
       "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
     },
     {
+      "global": "window.currentUser",
+      "files": "js/admin-content-cms.js, js/firebase-auth.js"
+    },
+    {
+      "global": "window.firebase",
+      "files": "js/admin-content-cms.js, js/mapa-turistico.js"
+    },
+    {
+      "global": "window.firebaseDB",
+      "files": "js/admin-content-cms.js, js/firebase-auth.js"
+    },
+    {
       "global": "window.FirebaseSystem",
       "files": "js/firebase-auth.js, js/nav-shared.js"
     },
@@ -3542,7 +3611,7 @@
     },
     {
       "global": "window.SMSecurity",
-      "files": "js/cms.js, js/security-utils.js"
+      "files": "js/admin-content-cms.js, js/cms.js, js/security-utils.js"
     },
     {
       "global": "window.translations",
