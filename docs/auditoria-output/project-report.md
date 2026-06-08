@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-03T18:41:47.512Z.
+Gerado em 2026-06-08T13:12:39.469Z.
 
 ## Resumo
 
-- Arquivos mapeados: 362
+- Arquivos mapeados: 368
 - HTMLs: 36
 - CSS: 22
 - JS: 37
@@ -22,15 +22,15 @@ Gerado em 2026-06-03T18:41:47.512Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 791587 |
-| .html | 36 | 672981 |
-| .css | 22 | 308090 |
-| .md | 22 | 231025 |
+| .js | 37 | 804129 |
+| .html | 36 | 673443 |
+| .css | 22 | 316627 |
+| .md | 24 | 234678 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
 | .xml | 1 | 3852 |
-| (sem ext) | 4 | 2687 |
+| (sem ext) | 8 | 2691 |
 | .log | 1 | 1550 |
 | .txt | 2 | 1368 |
 
@@ -125,28 +125,28 @@ Gerado em 2026-06-03T18:41:47.512Z.
 
 | path | bytes |
 | --- | --- |
-| 404.html | 2866 |
-| admin-firebase.html | 115652 |
-| eventos.html | 47505 |
-| galeria.html | 37729 |
+| 404.html | 2893 |
+| admin-firebase.html | 115528 |
+| eventos.html | 47532 |
+| galeria.html | 37756 |
 | index.html | 146580 |
-| local.html | 20710 |
-| mapa-3d.html | 6274 |
-| mapa-completo.html | 10456 |
+| local.html | 20737 |
+| mapa-3d.html | 6301 |
+| mapa-completo.html | 10483 |
 | mapa-turistico.html | 11046 |
-| noticia.html | 7337 |
-| noticias.html | 23200 |
+| noticia.html | 7364 |
+| noticias.html | 23227 |
 | o-que-fazer.html | 5895 |
-| offline.html | 2356 |
-| onde-ficar.html | 17798 |
-| para-o-trade.html | 15034 |
-| portal-usuario.html | 98221 |
-| privacidade.html | 22885 |
-| reservas.html | 5675 |
+| offline.html | 2383 |
+| onde-ficar.html | 17825 |
+| para-o-trade.html | 15061 |
+| portal-usuario.html | 98375 |
+| privacidade.html | 22912 |
+| reservas.html | 5702 |
 | rotas-completas.html | 4224 |
-| roteiro-ia.html | 3264 |
-| sabores.html | 30248 |
-| transparencia.html | 22706 |
+| roteiro-ia.html | 3291 |
+| sabores.html | 30275 |
+| transparencia.html | 22733 |
 
 
 ## Rotas com index.html
@@ -174,7 +174,7 @@ Gerado em 2026-06-03T18:41:47.512Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 115652 |
+| admin-firebase.html | 115528 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -189,16 +189,16 @@ Gerado em 2026-06-03T18:41:47.512Z.
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
-| mapa-3d.html | 6274 |
+| mapa-3d.html | 6301 |
 | mapa-completo/index.html | 751 |
-| mapa-completo.html | 10456 |
-| para-o-trade.html | 15034 |
+| mapa-completo.html | 10483 |
+| para-o-trade.html | 15061 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 98221 |
-| reservas.html | 5675 |
+| portal-usuario.html | 98375 |
+| reservas.html | 5702 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |
-| roteiro-ia.html | 3264 |
+| roteiro-ia.html | 3291 |
 
 
 ## Scripts mais carregados por HTML
@@ -268,7 +268,7 @@ _Nenhum item encontrado._
 | css/rotas-completas.css | 13946 | 11 | 4 | 73 |
 | css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
 | css/sabores.css | 7813 | 9 | 2 | 72 |
-| css/season-theme.css | 12007 | 6 | 1 | 46 |
+| css/season-theme.css | 20544 | 8 | 3 | 106 |
 | css/shared.css | 9793 | 8 | 7 | 51 |
 | css/transparencia.css | 6387 | 0 | 1 | 33 |
 | css/variables.css | 1375 | 0 | 0 | 0 |
@@ -329,13 +329,15 @@ _Nenhum item encontrado._
 | @media (max-width: 1024px) | css/index.css, css/mapa-turistico.css |
 | @media (max-width: 480px) | css/index.css, css/noticias.css, css/sabores.css, css/shared.css |
 | @media (max-width: 600px) | css/eventos.css, css/index.css |
+| @media (max-width: 640px) | css/index.css, css/season-theme.css |
 | @media (max-width: 768px) | css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css |
+| @media (prefers-reduced-motion: reduce) | css/season-theme.css, css/shared.css |
 | /* ============================================            BOTÃO VOLTAR AO TOPO         ============================================ */         .back-to-top | css/index.css, css/rotas-completas.css |
 | /* Modal */         .modal-overlay | css/eventos.css, css/portal-usuario.css |
 | /* Responsive */         @media (max-width: 768px) | css/portal-usuario.css, css/transparencia.css |
 | /* Responsive */         @media (max-width: 968px) | css/eventos.css, css/index.css |
 | /* Responsive */ @media (max-width: 768px) | css/onde-ficar.css, css/para-o-trade.css, css/sabores.css |
-| 50% | css/index.css, css/offline.css, css/roteiro-ia.css |
+| 50% | css/index.css, css/offline.css, css/roteiro-ia.css, css/season-theme.css |
 | body | css/404.css, css/index.css, css/mapa-completo.css, css/offline.css, css/season-theme.css, css/shared.css |
 | h1 | css/404.css, css/offline.css |
 | html, body | css/index.css, css/shared.css |

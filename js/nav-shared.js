@@ -422,6 +422,14 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(seasonScript);
     }
 
+    var isRestrictedPage = /\/(?:admin-firebase|portal-usuario)(?:\.html)?$/.test(window.location.pathname);
+    if (!isRestrictedPage && !hasLoadedScript('js/weather.js')) {
+        var weatherScript = document.createElement('script');
+        weatherScript.src = 'js/weather.js?v=weather-context-20260608';
+        weatherScript.defer = true;
+        document.body.appendChild(weatherScript);
+    }
+
     [
         'js/locais-data.js',
         'js/rotas-data.js',

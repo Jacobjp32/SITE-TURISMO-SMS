@@ -34,6 +34,18 @@ https://api.open-meteo.com/v1/forecast
 
 O script usa coordenadas centralizadas em `js/weather.js`, cache local em `localStorage` por 1 hora e fallback honesto. Se a API falhar, usa cache antigo quando existir; se nao houver cache, mostra dados indisponiveis sem inventar temperatura.
 
+O tema sazonal (`js/season-theme.js` e `css/season-theme.css`) tambem usa esse contexto para exibir um badge compacto no topo das paginas publicas. Em paginas sem bloco completo de previsao, `nav-shared.js` carrega `js/weather.js` para atualizar apenas o badge contextual. A configuracao publica fica em:
+
+- `CITY`, `CACHE_KEY` e `CACHE_TTL_MS` dentro de `js/weather.js`;
+- `window.SMS_WEATHER_API_OVERRIDE`, opcional, para sobrescrever a URL em testes locais;
+- fallback visual do badge em `js/season-theme.js`, sem temperatura falsa quando a API/cache nao estiverem disponiveis.
+
+## Assets sazonais
+
+A estrutura tecnica dos mascotes, badges, stickers e icones sazonais fica em `images/seasonal/`.
+
+Consulte `docs/seasonal-assets.md` para nomes esperados, formatos recomendados, tamanhos e override manual por `window.SMS_SEASON_ASSETS`.
+
 ## Validacao visual/interativa local
 
 Para rodadas de ajuste visual sem dependencias novas:

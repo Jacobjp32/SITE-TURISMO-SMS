@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v15';
+const CACHE_NAME = 'turismo-sms-v16';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -27,8 +27,7 @@ const PRECACHE_ASSETS = [
     'images/WEBP/PRACA-DO-IGUACU_1.webp',
     'images/mascotes/MASCOTE_CAPIVARA_PINHAO.png',
     'images/mascotes/MASCOTE_MENINO_POLONES_1.png',
-    'images/mascotes/MASCOTE_PERY.png',
-    'https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@400;500;600;700&display=swap'
+    'images/mascotes/MASCOTE_PERY.png'
 ];
 
 // URLs que nunca devem ser cacheadas
@@ -41,7 +40,10 @@ const NEVER_CACHE = [
     'content-firebaseappcheck.googleapis.com',
     'firebaseappcheck.googleapis.com',
     'www.gstatic.com/firebasejs/',
+    'fonts.googleapis.com',
+    'fonts.gstatic.com',
     'config.js',
+    'js/admin-content-cms.js',
     'js/firebase-auth.js',
     'js/firebase-app-check.js',
     'js/nav-shared.js',
@@ -68,7 +70,7 @@ self.addEventListener('activate', event => {
         caches.keys().then(cacheNames => {
             return Promise.all(
                 cacheNames
-                    .filter(name => name !== CACHE_NAME)
+                    .filter(name => name !== CACHE_NAME && name.startsWith('turismo-sms-'))
                     .map(name => caches.delete(name))
             );
         }).then(() => self.clients.claim())
@@ -88,6 +90,7 @@ self.addEventListener('fetch', event => {
 
     // Nunca cachear navegacoes, JSON e HTML — sempre buscar da rede
     const url = new URL(event.request.url);
+    if (isSensitivePath(url.pathname)) return;
     if (event.request.mode === 'navigate') return;
     if (NEVER_CACHE_EXT.some(ext => url.pathname.endsWith(ext))) return;
     
@@ -132,6 +135,13 @@ function fetchAndCache(request) {
             }
         })
         .catch(() => {});
+}
+
+function isSensitivePath(pathname) {
+    return [
+        '/admin-firebase.html',
+        '/portal-usuario.html'
+    ].some(path => pathname.endsWith(path));
 }
 
 // Push notifications (preparado para futuro)

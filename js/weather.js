@@ -213,24 +213,52 @@
   }
 
   function renderUnavailable(root) {
+    if (!root) return;
     renderCard(root, "today", t("weather-today", "Hoje"), "--°C", t("weather-data-unavailable", "Dados indisponíveis"));
     renderCard(root, "tomorrow", t("weather-tomorrow", "Amanhã"), "--°C", t("weather-data-unavailable", "Dados indisponíveis"));
     renderCard(root, "next", t("weather-next", "Próximos dias"), "--°C", t("weather-data-unavailable", "Dados indisponíveis"));
     setStatus(root, t("weather-unavailable", "Dados climáticos temporariamente indisponíveis"));
   }
 
+  function announceWeather(payload, fetchedAt, statusMessage) {
+    var current = payload && payload.current ? payload.current : {};
+    document.dispatchEvent(new CustomEvent("sms:weatherchange", {
+      detail: {
+        available: Number.isFinite(Number(current.temp)),
+        temp: current.temp,
+        code: current.code,
+        condition: getCondition(current.code),
+        fetchedAt: fetchedAt || "",
+        status: statusMessage || ""
+      }
+    }));
+  }
+
+  function announceUnavailable(statusMessage) {
+    document.dispatchEvent(new CustomEvent("sms:weatherchange", {
+      detail: {
+        available: false,
+        condition: t("weather-data-unavailable", "Dados indisponíveis"),
+        status: statusMessage || t("weather-unavailable", "Dados climáticos temporariamente indisponíveis")
+      }
+    }));
+  }
+
   function renderWeather(root, payload, fetchedAt, statusMessage) {
     var daily = payload.daily || [];
-    renderCard(root, "today", t("weather-today", "Hoje"), roundTemp(payload.current.temp) + "°C", getCondition(payload.current.code));
-    renderCard(root, "tomorrow", t("weather-tomorrow", "Amanhã"), formatRange(daily[1] && daily[1].min, daily[1] && daily[1].max), getCondition(daily[1] && daily[1].code));
-    renderCard(root, "next", t("weather-next", "Próximos dias"), formatRange(daily[2] && daily[2].min, daily[2] && daily[2].max), getCondition(daily[2] && daily[2].code));
+    if (root) {
+      renderCard(root, "today", t("weather-today", "Hoje"), roundTemp(payload.current.temp) + "°C", getCondition(payload.current.code));
+      renderCard(root, "tomorrow", t("weather-tomorrow", "Amanhã"), formatRange(daily[1] && daily[1].min, daily[1] && daily[1].max), getCondition(daily[1] && daily[1].code));
+      renderCard(root, "next", t("weather-next", "Próximos dias"), formatRange(daily[2] && daily[2].min, daily[2] && daily[2].max), getCondition(daily[2] && daily[2].code));
 
-    var updated = root.querySelector("[data-weather-updated]");
-    if (updated) {
-      var formatted = formatDateTime(fetchedAt || new Date().toISOString());
-      updated.textContent = formatted ? t("weather-updated-at", "Atualizado em") + ": " + formatted : "";
+      var updated = root.querySelector("[data-weather-updated]");
+      if (updated) {
+        var formatted = formatDateTime(fetchedAt || new Date().toISOString());
+        updated.textContent = formatted ? t("weather-updated-at", "Atualizado em") + ": " + formatted : "";
+      }
+      setStatus(root, statusMessage || "");
     }
-    setStatus(root, statusMessage || "");
+    announceWeather(payload, fetchedAt, statusMessage);
   }
 
   function fetchWeather() {
@@ -244,16 +272,18 @@
 
   function initWeather() {
     var root = document.querySelector("[data-weather-root]");
-    if (!root) return;
 
-    document.addEventListener("translationsApplied", function () {
-      var cached = readCache(true);
-      if (cached) {
-        renderWeather(root, cached.payload, cached.fetchedAt);
-      } else if (root.getAttribute("data-weather-unavailable") === "true") {
-        renderUnavailable(root);
-      }
-    });
+    if (root) {
+      document.addEventListener("translationsApplied", function () {
+        var cached = readCache(true);
+        if (cached) {
+          renderWeather(root, cached.payload, cached.fetchedAt);
+        } else if (root.getAttribute("data-weather-unavailable") === "true") {
+          renderUnavailable(root);
+          announceUnavailable();
+        }
+      });
+    }
 
     var validCache = readCache(false);
     if (validCache) {
@@ -270,8 +300,9 @@
         renderWeather(root, staleCache.payload, staleCache.fetchedAt, t("weather-stale-cache", "Dados climáticos temporariamente indisponíveis. Exibindo última previsão salva."));
         return;
       }
-      root.setAttribute("data-weather-unavailable", "true");
+      if (root) root.setAttribute("data-weather-unavailable", "true");
       renderUnavailable(root);
+      announceUnavailable();
     });
   }
 

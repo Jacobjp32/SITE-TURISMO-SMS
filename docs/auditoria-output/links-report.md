@@ -1,15 +1,15 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-06-03T18:41:47.508Z.
+Gerado em 2026-06-08T13:12:39.526Z.
 
 ## Resumo
 
-- Arquivos varridos: 99
+- Arquivos varridos: 100
 - Links internos/externos coletados: 639
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0
 - Links legados/concorrentes: 16
-- Links redundantes com .html: 14
+- Links redundantes com .html: 15
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
@@ -57,6 +57,7 @@ _Nenhum item encontrado._
 | portal-usuario/index.html | /portal-usuario.html | existe variante sem .html |
 | privacidade/index.html | /privacidade.html | existe variante sem .html |
 | rotas-completas/index.html | /rotas-completas.html | existe variante sem .html |
+| sw.js | /portal-usuario.html | existe variante sem .html |
 | transparencia/index.html | /transparencia.html | existe variante sem .html |
 
 

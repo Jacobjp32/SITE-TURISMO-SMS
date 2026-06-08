@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-03T18:41:47.512Z",
+  "generatedAt": "2026-06-08T13:12:39.469Z",
   "totals": {
-    "files": 362,
+    "files": 368,
     "html": 36,
     "css": 22,
     "js": 37,
@@ -47,22 +47,22 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 791587
+      "bytes": 804129
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 672981
+      "bytes": 673443
     },
     {
       "ext": ".css",
       "files": 22,
-      "bytes": 308090
+      "bytes": 316627
     },
     {
       "ext": ".md",
-      "files": 22,
-      "bytes": 231025
+      "files": 24,
+      "bytes": 234678
     },
     {
       "ext": ".json",
@@ -86,8 +86,8 @@
     },
     {
       "ext": "(sem ext)",
-      "files": 4,
-      "bytes": 2687
+      "files": 8,
+      "bytes": 2691
     },
     {
       "ext": ".log",
@@ -184,7 +184,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 961871
+      "bytes": 962502
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -194,17 +194,17 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 530545
+      "bytes": 542918
     },
     {
       "dir": "css",
       "files": 22,
-      "bytes": 308090
+      "bytes": 316627
     },
     {
       "dir": "docs",
-      "files": 20,
-      "bytes": 216721
+      "files": 21,
+      "bytes": 219834
     },
     {
       "dir": "js/data",
@@ -290,6 +290,31 @@
       "dir": "galeria",
       "files": 1,
       "bytes": 719
+    },
+    {
+      "dir": "images/seasonal",
+      "files": 1,
+      "bytes": 540
+    },
+    {
+      "dir": "images/seasonal/autumn",
+      "files": 1,
+      "bytes": 1
+    },
+    {
+      "dir": "images/seasonal/spring",
+      "files": 1,
+      "bytes": 1
+    },
+    {
+      "dir": "images/seasonal/summer",
+      "files": 1,
+      "bytes": 1
+    },
+    {
+      "dir": "images/seasonal/winter",
+      "files": 1,
+      "bytes": 1
     }
   ],
   "largest": [
@@ -779,25 +804,25 @@
       "path": "404.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 2866
+      "bytes": 2893
     },
     {
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 115652
+      "bytes": 115528
     },
     {
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 47505
+      "bytes": 47532
     },
     {
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37729
+      "bytes": 37756
     },
     {
       "path": "index.html",
@@ -809,19 +834,19 @@
       "path": "local.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20710
+      "bytes": 20737
     },
     {
       "path": "mapa-3d.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6274
+      "bytes": 6301
     },
     {
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10456
+      "bytes": 10483
     },
     {
       "path": "mapa-turistico.html",
@@ -833,13 +858,13 @@
       "path": "noticia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 7337
+      "bytes": 7364
     },
     {
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 23200
+      "bytes": 23227
     },
     {
       "path": "o-que-fazer.html",
@@ -851,37 +876,37 @@
       "path": "offline.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 2356
+      "bytes": 2383
     },
     {
       "path": "onde-ficar.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 17798
+      "bytes": 17825
     },
     {
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15034
+      "bytes": 15061
     },
     {
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98221
+      "bytes": 98375
     },
     {
       "path": "privacidade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22885
+      "bytes": 22912
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5675
+      "bytes": 5702
     },
     {
       "path": "rotas-completas.html",
@@ -893,19 +918,19 @@
       "path": "roteiro-ia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 3264
+      "bytes": 3291
     },
     {
       "path": "sabores.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 30248
+      "bytes": 30275
     },
     {
       "path": "transparencia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22706
+      "bytes": 22733
     }
   ],
   "directoryIndexes": [
@@ -1005,7 +1030,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 115652
+      "bytes": 115528
     },
     {
       "path": "css/mapa-3d.css",
@@ -1095,7 +1120,7 @@
       "path": "mapa-3d.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 6274
+      "bytes": 6301
     },
     {
       "path": "mapa-completo/index.html",
@@ -1107,13 +1132,13 @@
       "path": "mapa-completo.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 10456
+      "bytes": 10483
     },
     {
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15034
+      "bytes": 15061
     },
     {
       "path": "portal-usuario/index.html",
@@ -1125,13 +1150,13 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98221
+      "bytes": 98375
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5675
+      "bytes": 5702
     },
     {
       "path": "rotas-completas/index.html",
@@ -1149,7 +1174,7 @@
       "path": "roteiro-ia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 3264
+      "bytes": 3291
     }
   ],
   "htmlAssets": [
@@ -2230,10 +2255,10 @@
     },
     {
       "file": "css/season-theme.css",
-      "bytes": 12007,
-      "important": 6,
-      "media": 1,
-      "selectorCount": 46
+      "bytes": 20544,
+      "important": 8,
+      "media": 3,
+      "selectorCount": 106
     },
     {
       "file": "css/shared.css",
@@ -2463,8 +2488,16 @@
       "files": "css/eventos.css, css/index.css"
     },
     {
+      "selector": "@media (max-width: 640px)",
+      "files": "css/index.css, css/season-theme.css"
+    },
+    {
       "selector": "@media (max-width: 768px)",
       "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css"
+    },
+    {
+      "selector": "@media (prefers-reduced-motion: reduce)",
+      "files": "css/season-theme.css, css/shared.css"
     },
     {
       "selector": "/* ============================================\r\n           BOTÃO VOLTAR AO TOPO\r\n        ============================================ */\r\n        .back-to-top",
@@ -2488,7 +2521,7 @@
     },
     {
       "selector": "50%",
-      "files": "css/index.css, css/offline.css, css/roteiro-ia.css"
+      "files": "css/index.css, css/offline.css, css/roteiro-ia.css, css/season-theme.css"
     },
     {
       "selector": "body",
@@ -3093,7 +3126,7 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 41389,
+      "bytes": 41791,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
@@ -3244,38 +3277,60 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 11313,
+      "bytes": 22239,
       "globals": [
+        "var ASSET_BASE",
+        "var ASSET_CACHE",
         "var AUTO_MODE",
+        "var SEASON_ASSETS",
         "var SEASON_META",
         "var STORAGE_KEY",
+        "var WEATHER_FALLBACK",
+        "var WEATHER_STATE",
+        "window.SMSSeasonTheme",
+        "window.SMS_SEASON_ASSETS",
         "window.__SMSSeasonThemeInitialized",
         "window.localStorage",
         "window.matchMedia"
       ],
       "functions": [
         "applySeason",
+        "buildMascotSlot",
         "buildSwitcher",
+        "buildWeatherBadge",
         "closeAllPopovers",
         "createSlot",
+        "ensureAmbientLayer",
         "ensureSwitcher",
+        "formatWeatherTemp",
+        "getAssetRoleSource",
+        "getAssetUrl",
         "getAutomaticSeason",
         "getBrazilDateParts",
+        "getBrazilHour",
+        "getDayPeriod",
         "getModeOptions",
         "getResolvedSeason",
+        "getSeasonAssetManifest",
         "init",
         "isKnownMode",
+        "loadAsset",
         "mountIntoFooter",
         "mountIntoHeaderFallback",
         "mountIntoUtilityBar",
+        "mountMascotSlot",
+        "onWeatherChange",
+        "renderWeatherBadges",
         "safeGetStoredMode",
         "safeSetStoredMode",
+        "setAssetElement",
         "syncReducedMotion",
-        "updateControls"
+        "updateControls",
+        "updateSeasonAssets"
       ],
       "localStorage": 3,
       "serviceWorker": 0,
-      "addEventListeners": 7
+      "addEventListeners": 8
     },
     {
       "file": "js/security-utils.js",
@@ -3347,7 +3402,7 @@
     },
     {
       "file": "js/weather.js",
-      "bytes": 9210,
+      "bytes": 10245,
       "globals": [
         "var CACHE_KEY",
         "var CACHE_TTL_MS",
@@ -3359,6 +3414,8 @@
         "window.translations"
       ],
       "functions": [
+        "announceUnavailable",
+        "announceWeather",
         "buildUrl",
         "fetchWeather",
         "formatDateTime",
@@ -3382,7 +3439,7 @@
     },
     {
       "file": "sw.js",
-      "bytes": 5438,
+      "bytes": 5607,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",
@@ -3391,7 +3448,8 @@
         "const PRECACHE_ASSETS"
       ],
       "functions": [
-        "fetchAndCache"
+        "fetchAndCache",
+        "isSensitivePath"
       ],
       "localStorage": 0,
       "serviceWorker": 0,

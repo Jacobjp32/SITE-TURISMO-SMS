@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-03T18:41:47.508Z",
+  "generatedAt": "2026-06-08T13:12:39.526Z",
   "totals": {
-    "filesScanned": 99,
+    "filesScanned": 100,
     "links": 639,
     "routes": 43,
     "broken": 0,
     "legacy": 16,
-    "redundant": 14,
+    "redundant": 15,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
   },
@@ -331,6 +331,11 @@
     {
       "source": "rotas-completas/index.html",
       "url": "/rotas-completas.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "sw.js",
+      "url": "/portal-usuario.html",
       "issue": "existe variante sem .html"
     },
     {
