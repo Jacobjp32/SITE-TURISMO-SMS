@@ -59,7 +59,8 @@ function basicUserFromAuth(user) {
         uid: user.uid,
         email: user.email,
         nome: user.displayName || user.email || 'Usuário',
-        _profilePending: true
+        _profilePending: true,
+        _profileError: false
     };
 }
 
@@ -379,13 +380,15 @@ function initFirebase() {
                                 'firestore/profile-timeout'
                             );
                             if (userDoc.exists) {
-                                currentUser = Object.assign({ uid: user.uid, email: user.email, _profilePending: false }, userDoc.data());
+                                currentUser = Object.assign({ uid: user.uid, email: user.email, _profilePending: false, _profileError: false }, userDoc.data());
                             } else {
                                 currentUser._profilePending = false;
+                                currentUser._profileError = false;
                             }
                         } catch(e) {
                             console.warn('[firebase-auth] Não foi possível carregar o perfil completo do usuário.', e);
                             currentUser._profilePending = false;
+                            currentUser._profileError = true;
                         }
                         window.currentUser = currentUser;
                         persistUserSession(currentUser);

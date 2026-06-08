@@ -9,6 +9,7 @@
         events: [],
         news: [],
         media: [],
+        mediaUsageMap: {},
         _eventPreviewObjectUrl: "",
 
         get db() {
@@ -96,7 +97,9 @@
                             (eventItem.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>Atualizado: ' +
                             SEC.html(formatAdminDate(eventItem.updatedAt || eventItem.reviewedAt), "—") + '<br>Por: ' +
                             SEC.html(eventItem.updatedBy || eventItem.reviewedBy || "—") + '</small></td><td>' +
+                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.previewEvent(\'' + SEC.js(eventItem.id) + '\')">Prévia</button>' +
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.openEventModal(\'' + SEC.js(eventItem.id) + '\')">Editar</button>' +
+                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.duplicateEvent(\'' + SEC.js(eventItem.id) + '\')">Duplicar</button>' +
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleEventPublish(\'' + SEC.js(eventItem.id) + '\')">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
                             '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleEventFeatured(\'' + SEC.js(eventItem.id) + '\')">' + (eventItem.destaque ? 'Remover destaque' : 'Destacar') + '</button>' +
                             '<button class="btn-sm btn-delete" onclick="AdminContentCMS.deleteEvent(\'' + SEC.js(eventItem.id) + '\')">Excluir</button>' +
@@ -120,7 +123,7 @@
                 console.error("[admin-content-cms] Falha ao carregar biblioteca de mídia para o evento.", error);
             }
 
-            this.openModal(eventItem ? "Editar evento" : "Novo evento", buildEventForm(eventItem, this.media));
+            this.openModal(eventItem && eventItem.id ? "Editar evento" : "Novo evento", buildEventForm(eventItem, this.media));
             this.syncEventCoverPreview();
         },
 
@@ -237,6 +240,31 @@
             this.closeModal();
             await this.loadApprovedEvents();
             alert("Evento salvo.");
+        },
+
+        previewEvent: function (eventId) {
+            var eventItem = this.events.find(function (item) { return item.id === eventId; });
+            if (!eventItem) return alert("Evento não encontrado.");
+            this.openModal("Pré-visualizar evento", buildApprovedEventPreview(eventItem));
+        },
+
+        duplicateEvent: function (eventId) {
+            var eventItem = this.events.find(function (item) { return item.id === eventId; });
+            if (!eventItem) return alert("Evento não encontrado.");
+
+            this.openEventModal("", Object.assign({}, eventItem, {
+                id: "",
+                title: getTitle(eventItem) ? (getTitle(eventItem) + " (cópia)") : "",
+                nome: getTitle(eventItem) ? (getTitle(eventItem) + " (cópia)") : "",
+                publicado: false,
+                status: "rascunho",
+                destaque: false,
+                updatedAt: "",
+                updatedBy: "",
+                reviewedAt: "",
+                reviewedBy: "",
+                reviewNotes: ""
+            }));
         },
 
         toggleEventPublish: async function (eventId) {
@@ -422,9 +450,12 @@
             }
         },
 
-        openNewsModal: function (newsId) {
+        openNewsModal: function (newsId, presetItem) {
             var item = newsId ? this.news.find(function (post) { return post.id === newsId; }) : null;
-            this.openModal(item ? "Editar notícia" : "Nova notícia", buildNewsForm(item));
+            if (!item && presetItem) {
+                item = Object.assign({}, presetItem);
+            }
+            this.openModal(item && item.id ? "Editar notícia" : "Nova notícia", buildNewsForm(item));
         },
 
         saveNews: async function (event) {
@@ -596,7 +627,18 @@
             }
 
             try {
-                await this.ensureMediaLoaded(true);
+                var results = await Promise.all([
+                    this.ensureMediaLoaded(true),
+                    this.db.collection("eventos_aprovados").get(),
+                    this.db.collection("noticias").get()
+                ]);
+                this.events = results[1].docs.map(function (doc) {
+                    return Object.assign({ id: doc.id }, doc.data());
+                }).sort(compareAdminDateDesc);
+                this.news = results[2].docs.map(function (doc) {
+                    return Object.assign({ id: doc.id }, doc.data());
+                }).sort(compareAdminDateDesc);
+                this.mediaUsageMap = buildMediaUsageMap(this.events, this.news);
 
                 if (!this.media.length) {
                     container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhuma mídia cadastrada.</p>';
@@ -605,6 +647,7 @@
 
                 var SEC = this.SEC;
                 container.innerHTML = '<div class="media-admin-grid">' + this.media.map(function (item) {
+                    var usage = getMediaUsageInfo(item.url, this.mediaUsageMap);
                     return '<article class="media-admin-card">' +
                         '<div class="media-admin-thumb">' +
                             '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\\\'.media-admin-thumb\\\').classList.add(\\\'is-error\\\');this.remove();">' +
@@ -613,16 +656,19 @@
                             '<strong>' + SEC.html(item.title, "Sem título") + '</strong>' +
                             '<span class="manager-meta">' + SEC.html(item.category, "Imagem") + '</span>' +
                             '<span class="manager-meta">' + SEC.html(formatAdminDate(item.updatedAt || item.createdAt), "—") + '</span>' +
+                            '<span class="badge ' + (usage.total ? 'badge-info' : 'badge-warning') + '">' + SEC.html(usage.total ? 'Em uso no CMS' : 'Sem uso detectado') + '</span>' +
+                            '<span class="manager-meta">' + SEC.html(formatMediaUsageSummary(usage)) + '</span>' +
                             '<div class="media-admin-url">' + SEC.html(item.url, "—") + '</div>' +
                             '<div class="media-admin-actions">' +
                                 '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.copyMediaUrl(\'' + SEC.js(item.id) + '\')">Copiar URL</button>' +
                                 '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.openMediaModal(\'' + SEC.js(item.id) + '\')">Editar</button>' +
                                 '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.useMediaInNewEvent(\'' + SEC.js(item.id) + '\')">Usar em evento</button>' +
+                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.useMediaInNewNews(\'' + SEC.js(item.id) + '\')">Usar em notícia</button>' +
                                 '<button class="btn-sm btn-delete" type="button" onclick="AdminContentCMS.deleteMedia(\'' + SEC.js(item.id) + '\')">Excluir</button>' +
                             '</div>' +
                         '</div>' +
                     '</article>';
-                }).join("") + '</div>';
+                }, this).join("") + '</div>';
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao carregar mídia.", error);
                 container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar mídia.</p>';
@@ -729,10 +775,27 @@
             });
         },
 
+        useMediaInNewNews: function (mediaId) {
+            var item = getMediaById(this.media, mediaId);
+            if (!item) return alert("Mídia não encontrada.");
+
+            this.openNewsModal("", {
+                titulo: "",
+                categoria: "Turismo",
+                imagem: item.url,
+                galeria: [],
+                linkOrigem: ""
+            });
+        },
+
         deleteMedia: async function (mediaId) {
             var item = getMediaById(this.media, mediaId);
             if (!item) return;
-            if (!confirm("Excluir esta mídia da biblioteca?")) return;
+            var usage = getMediaUsageInfo(item.url, this.mediaUsageMap);
+            var confirmMessage = usage.total
+                ? "Esta mídia parece estar em uso em " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "") + ". Excluir mesmo assim? Eventos ou notícias referenciados podem ficar sem imagem."
+                : "Excluir esta mídia da biblioteca?";
+            if (!confirm(confirmMessage)) return;
 
             try {
                 if (item.storagePath && this.storage) {
@@ -760,6 +823,12 @@
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#39;");
+    }
+
+    function escapeJsString(value) {
+        return String(value == null ? "" : value)
+            .replace(/\\/g, "\\\\")
+            .replace(/'/g, "\\'");
     }
 
     function clean(value) {
@@ -968,6 +1037,34 @@
                 '<small>' + escapeHtml(image.contentType || "Tipo não informado") + ' · ' + escapeHtml(formatBytes(image.size)) + '</small>' +
             '</a>';
         }).join("") + '</div>';
+    }
+
+    function buildApprovedEventPreview(item) {
+        var cover = getPrimaryEventImage(item);
+        var statusLabel = isPublished(item) ? "Publicado" : "Despublicado";
+        return '<div class="admin-modal-body"><div class="event-admin-preview">' +
+            '<div class="event-admin-preview-grid">' +
+                '<section class="event-preview-panel">' +
+                    '<h4>Dados principais</h4>' +
+                    '<div class="event-preview-fields">' +
+                        '<div><strong>Título:</strong> ' + escapeHtml(getTitle(item) || "Sem título") + '</div>' +
+                        '<div><strong>Categoria:</strong> ' + escapeHtml(item.category || item.categoria || "—") + '</div>' +
+                        '<div><strong>Data:</strong> ' + escapeHtml(getEventDate(item) || "—") + '</div>' +
+                        '<div><strong>Horário:</strong> ' + escapeHtml(getEventTime(item) || "—") + '</div>' +
+                        '<div><strong>Local:</strong> ' + escapeHtml(getLocation(item) || "—") + '</div>' +
+                        '<div><strong>Organizador:</strong> ' + escapeHtml(getOrganizer(item) || "—") + '</div>' +
+                        '<div><strong>Status:</strong> ' + escapeHtml(statusLabel) + '</div>' +
+                        '<div><strong>Destaque:</strong> ' + escapeHtml(item.destaque ? "Sim" : "Não") + '</div>' +
+                    '</div>' +
+                '</section>' +
+                '<section class="event-preview-panel">' +
+                    '<h4>Capa atual</h4>' +
+                    '<div class="event-cover-preview">' + renderEventCoverPreview(cover, cover ? "Prévia da capa salva." : "Sem capa definida.") + '</div>' +
+                '</section>' +
+            '</div>' +
+            '<section class="event-gallery-admin"><h4>Galeria atual</h4>' + renderEventGalleryList(item) + '</section>' +
+            '<section class="event-preview-panel"><h4>Descrição</h4><div class="event-preview-fields"><div>' + escapeHtml(item.description || item.descricao || "Sem descrição cadastrada.") + '</div></div></section>' +
+        '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button><button class="btn-primary" type="button" onclick="AdminContentCMS.closeModal();AdminContentCMS.openEventModal(\'' + escapeJsString(item.id || "") + '\')">Editar este evento</button></div>';
     }
 
     function buildEventForm(item, mediaItems) {
@@ -1198,6 +1295,109 @@
     function normalizeComparableUrl(url) {
         var value = clean(url);
         return value.toLowerCase();
+    }
+
+    function getEventImageUrls(item) {
+        var urls = normalizeEventImages(item && item.images).map(function (image) {
+            return image.url;
+        });
+        var directCover = clean(item && (item.mainImage || item.image || item.coverImage));
+        if (directCover) {
+            urls.unshift(directCover);
+        }
+        return dedupeTextValues(urls);
+    }
+
+    function getNewsImageUrls(item) {
+        var urls = [];
+        if (item && item.imagem) urls.push(clean(item.imagem));
+        if (Array.isArray(item && item.galeria)) {
+            item.galeria.forEach(function (url) {
+                urls.push(clean(url));
+            });
+        }
+        return dedupeTextValues(urls);
+    }
+
+    function dedupeTextValues(items) {
+        var seen = {};
+        return (items || []).map(clean).filter(function (value) {
+            if (!value || seen[value]) return false;
+            seen[value] = true;
+            return true;
+        });
+    }
+
+    function buildMediaUsageMap(events, news) {
+        var usageMap = {};
+
+        (events || []).forEach(function (eventItem) {
+            var title = getTitle(eventItem) || "Evento sem título";
+            getEventImageUrls(eventItem).forEach(function (url) {
+                registerMediaUsage(usageMap, url, "event", title);
+            });
+        });
+
+        (news || []).forEach(function (newsItem) {
+            var title = clean(newsItem && newsItem.titulo) || "Notícia sem título";
+            getNewsImageUrls(newsItem).forEach(function (url) {
+                registerMediaUsage(usageMap, url, "news", title);
+            });
+        });
+
+        return usageMap;
+    }
+
+    function registerMediaUsage(usageMap, url, type, title) {
+        var key = normalizeComparableUrl(url);
+        if (!key) return;
+
+        if (!usageMap[key]) {
+            usageMap[key] = {
+                total: 0,
+                eventCount: 0,
+                newsCount: 0,
+                eventTitles: [],
+                newsTitles: []
+            };
+        }
+
+        var target = usageMap[key];
+        if (type === "event") {
+            if (target.eventTitles.indexOf(title) !== -1) return;
+            target.eventTitles.push(title);
+            target.eventCount += 1;
+            target.total += 1;
+            return;
+        }
+
+        if (target.newsTitles.indexOf(title) !== -1) return;
+        target.newsTitles.push(title);
+        target.newsCount += 1;
+        target.total += 1;
+    }
+
+    function getMediaUsageInfo(url, usageMap) {
+        var key = normalizeComparableUrl(url);
+        var usage = key && usageMap ? usageMap[key] : null;
+        return usage || {
+            total: 0,
+            eventCount: 0,
+            newsCount: 0,
+            eventTitles: [],
+            newsTitles: []
+        };
+    }
+
+    function formatMediaUsageSummary(usage) {
+        if (!usage || !usage.total) {
+            return "Sem uso detectado em eventos ou notícias do CMS.";
+        }
+
+        var parts = [];
+        if (usage.eventCount) parts.push(usage.eventCount + " evento(s)");
+        if (usage.newsCount) parts.push(usage.newsCount + " notícia(s)");
+        return "Em uso em " + parts.join(" e ") + ".";
     }
 
     function safePreviewUrl(url) {

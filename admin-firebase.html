@@ -70,14 +70,80 @@
             margin-bottom: 2rem;
             font-size: 0.9rem;
         }
-        
+
+        .login-form {
+            display: grid;
+            gap: 1rem;
+        }
+
         .login-form input {
             width: 100%;
             padding: 1rem;
             border: 1px solid #ddd;
             border-radius: 10px;
-            margin-bottom: 1rem;
             font-size: 1rem;
+        }
+
+        .login-password-field {
+            position: relative;
+        }
+
+        .login-password-field input {
+            padding-right: 7.5rem;
+            margin-bottom: 0;
+        }
+
+        .login-password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 0.6rem;
+            transform: translateY(-50%);
+            width: auto;
+            border: none;
+            border-radius: 999px;
+            background: #eef3ef;
+            color: var(--primary);
+            padding: 0.45rem 0.8rem;
+            font-size: 0.84rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .login-password-toggle:hover {
+            background: #dce9e1;
+        }
+
+        .login-password-toggle:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .login-feedback {
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            text-align: left;
+            font-size: 0.88rem;
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .login-feedback.is-error {
+            background: #fff1f0;
+            color: #a61b1b;
+            border: 1px solid #f5c2c0;
+        }
+
+        .login-feedback.is-warning {
+            background: #fff8e6;
+            color: #7a5600;
+            border: 1px solid #f1dda0;
+        }
+
+        .login-feedback.is-info {
+            background: #edf6ff;
+            color: #0b4f8a;
+            border: 1px solid #c7def7;
         }
         
         .login-form button {
@@ -628,6 +694,21 @@
             min-width: 240px;
         }
 
+        .user-establishments-toggle {
+            min-width: 240px;
+        }
+
+        .user-establishments-toggle summary {
+            cursor: pointer;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .user-establishments-toggle[open] summary {
+            margin-bottom: 0.85rem;
+        }
+
         .user-establishment-card {
             border: 1px solid #e7ece7;
             border-radius: 10px;
@@ -979,8 +1060,12 @@
             <p>Turismo São Mateus do Sul</p>
             
             <form class="login-form" id="adminLoginForm">
-                <input type="email" id="loginEmail" placeholder="E-mail" required>
-                <input type="password" id="loginPass" placeholder="Senha" required>
+                <div class="login-feedback" id="loginFeedback" hidden aria-live="polite"></div>
+                <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="username" required>
+                <div class="login-password-field">
+                    <input type="password" id="loginPass" placeholder="Senha" autocomplete="current-password" required>
+                    <button type="button" class="login-password-toggle" id="toggleLoginPassword" aria-label="Mostrar senha" aria-pressed="false">Mostrar</button>
+                </div>
                 <button type="submit" id="loginBtn">Entrar</button>
             </form>
             
@@ -1157,7 +1242,7 @@
                     </div>
                     <p class="admin-helper-text">
                         Permissão define acesso global ao sistema. Para liberar um usuário a gerenciar um empreendimento específico, use a seção <strong>Gerenciar Vínculos</strong>.
-                        <code>user</code> atende turistas e empreendedores, <code>moderator</code> é moderação global e <code>admin</code> é administração global.
+                        <code>user</code> atende turistas e empreendedores, <code>moderator</code> é moderação global e <code>admin</code> é administração global. Os papéis do vínculo do empreendimento aparecem separados nesta tabela.
                     </p>
                     <div id="usuarios-container">
                         <div class="loading">Carregando...</div>
@@ -1175,6 +1260,9 @@
                 </div>
                 
                 <div class="card">
+                    <p class="admin-helper-text">
+                        Eventos aprovados podem ser revisados, duplicados, destacados e publicados ou despublicados daqui. A edição mantém compatibilidade com <code>mainImage</code>, <code>image</code>, <code>coverImage</code> e <code>images</code>.
+                    </p>
                     <div id="eventos-aprovados-container">
                         <div class="loading">Carregando...</div>
                     </div>
@@ -1192,7 +1280,7 @@
 
                 <div class="card">
                     <p class="admin-helper-text">
-                        Notícias publicadas aparecem em <code>/noticias</code> e <code>/noticia?slug=...</code>. Rascunhos ficam restritos ao admin.
+                        Notícias publicadas aparecem em <code>/noticias</code> e <code>/noticia?slug=...</code>. Rascunhos ficam restritos ao admin. A importação das notícias já existentes é manual e ignora duplicações por slug, link de origem ou título + data.
                     </p>
                     <div id="noticias-admin-container">
                         <div class="loading">Carregando...</div>
@@ -1210,7 +1298,7 @@
 
                 <div class="card">
                     <p class="admin-helper-text">
-                        Base simples para reutilizar imagens em eventos e notícias. Imagens enviadas ficam no Storage em <code>cms-media/{uid}/...</code>.
+                        Base simples para reutilizar imagens em eventos e notícias. Imagens enviadas ficam no Storage em <code>cms-media/{uid}/...</code>. Quando uma mídia parece estar em uso no CMS, o admin recebe esse contexto antes de excluir.
                     </p>
                     <div id="midia-admin-container">
                         <div class="loading">Carregando...</div>
@@ -1315,10 +1403,19 @@
         var adminPendingEventsCache = [];
         var adminManagerUserFilterId = '';
         var adminClaimUserFilterId = '';
+        const ADMIN_SESSION_TIMEOUT_MS = 2 * 60 * 60 * 1000;
+        const ADMIN_SESSION_LAST_ACTIVITY_KEY = 'sms-admin-last-activity';
+        const ADMIN_SESSION_START_KEY = 'sms-admin-session-start';
+        let adminLoginIntent = false;
+        let adminSessionMonitorId = null;
+        let adminActivityListenersBound = false;
+        let adminSessionLogoutInProgress = false;
+        let adminLastActivityPersistAt = 0;
 
         // Aguardar Firebase estar pronto antes de vincular formulário de login
         window.addEventListener('firebaseReady', function() {
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
+            document.getElementById('toggleLoginPassword').addEventListener('click', toggleLoginPasswordVisibility);
             document.getElementById('managerForm').addEventListener('submit', handleManagerFormSubmit);
             document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
                 link.addEventListener('click', () => showSection(link.dataset.section));
@@ -1331,23 +1428,193 @@
             checkAdminAuth();
         });
 
+        function setLoginFeedback(message, type) {
+            const feedback = document.getElementById('loginFeedback');
+            if (!feedback) return;
+
+            const safeType = ['error', 'warning', 'info'].includes(type) ? type : 'info';
+            feedback.textContent = message || '';
+            feedback.className = `login-feedback is-${safeType}`;
+            feedback.hidden = !message;
+        }
+
+        function clearLoginFeedback() {
+            const feedback = document.getElementById('loginFeedback');
+            if (!feedback) return;
+            feedback.hidden = true;
+            feedback.textContent = '';
+            feedback.className = 'login-feedback';
+        }
+
+        function toggleLoginPasswordVisibility() {
+            const passwordInput = document.getElementById('loginPass');
+            const toggleButton = document.getElementById('toggleLoginPassword');
+            if (!passwordInput || !toggleButton) return;
+
+            const shouldShow = passwordInput.type === 'password';
+            passwordInput.type = shouldShow ? 'text' : 'password';
+            toggleButton.textContent = shouldShow ? 'Ocultar' : 'Mostrar';
+            toggleButton.setAttribute('aria-label', shouldShow ? 'Ocultar senha' : 'Mostrar senha');
+            toggleButton.setAttribute('aria-pressed', shouldShow ? 'true' : 'false');
+        }
+
+        function getAdminStoredTimestamp(key) {
+            try {
+                const value = Number(localStorage.getItem(key));
+                return Number.isFinite(value) ? value : 0;
+            } catch (error) {
+                return 0;
+            }
+        }
+
+        function setAdminStoredTimestamp(key, value) {
+            try {
+                localStorage.setItem(key, String(value));
+            } catch (error) {}
+        }
+
+        function clearAdminSessionStorage() {
+            try {
+                localStorage.removeItem(ADMIN_SESSION_LAST_ACTIVITY_KEY);
+                localStorage.removeItem(ADMIN_SESSION_START_KEY);
+            } catch (error) {}
+        }
+
+        function getAdminSessionSnapshot() {
+            const sessionStart = getAdminStoredTimestamp(ADMIN_SESSION_START_KEY);
+            const lastActivity = getAdminStoredTimestamp(ADMIN_SESSION_LAST_ACTIVITY_KEY);
+            const now = Date.now();
+            const inactiveFor = lastActivity ? now - lastActivity : Number.POSITIVE_INFINITY;
+            return {
+                sessionStart,
+                lastActivity,
+                inactiveFor,
+                isValid: Boolean(lastActivity) && inactiveFor <= ADMIN_SESSION_TIMEOUT_MS
+            };
+        }
+
+        function touchAdminSession(resetSession) {
+            const now = Date.now();
+            if (resetSession || !getAdminStoredTimestamp(ADMIN_SESSION_START_KEY)) {
+                setAdminStoredTimestamp(ADMIN_SESSION_START_KEY, now);
+            }
+
+            if (resetSession || (now - adminLastActivityPersistAt) >= 15000) {
+                setAdminStoredTimestamp(ADMIN_SESSION_LAST_ACTIVITY_KEY, now);
+                adminLastActivityPersistAt = now;
+            }
+        }
+
+        function stopAdminSessionMonitor() {
+            if (adminSessionMonitorId) {
+                clearInterval(adminSessionMonitorId);
+                adminSessionMonitorId = null;
+            }
+        }
+
+        function bindAdminActivityListeners() {
+            if (adminActivityListenersBound) return;
+
+            const activityHandler = function(event) {
+                if (!window.currentUser || window.currentUser.role !== 'admin') return;
+                if (event && event.type === 'visibilitychange' && document.hidden) return;
+
+                const session = getAdminSessionSnapshot();
+                if (!session.isValid) {
+                    expireAdminSession('Sua sessão administrativa expirou por segurança. Entre novamente para continuar.');
+                    return;
+                }
+
+                touchAdminSession(false);
+            };
+
+            ['click', 'keydown', 'scroll'].forEach(function(eventName) {
+                window.addEventListener(eventName, activityHandler, { passive: eventName === 'scroll' });
+            });
+            window.addEventListener('focus', activityHandler);
+            document.addEventListener('visibilitychange', activityHandler);
+            adminActivityListenersBound = true;
+        }
+
+        function startAdminSessionMonitor() {
+            stopAdminSessionMonitor();
+            adminSessionMonitorId = window.setInterval(function() {
+                if (!window.currentUser || window.currentUser.role !== 'admin') return;
+                const session = getAdminSessionSnapshot();
+                if (!session.isValid) {
+                    expireAdminSession('Sua sessão administrativa expirou por segurança. Entre novamente para continuar.');
+                }
+            }, 60000);
+        }
+
+        function showAdminLogin(options) {
+            const settings = options || {};
+            document.getElementById('loginScreen').style.display = 'flex';
+            document.getElementById('dashboard').classList.remove('active');
+            stopAdminSessionMonitor();
+
+            if (!settings.preserveFeedback) {
+                clearLoginFeedback();
+            }
+        }
+
+        function showAdminDashboard() {
+            const dashboard = document.getElementById('dashboard');
+            const shouldLoadData = !dashboard.classList.contains('active');
+            document.getElementById('loginScreen').style.display = 'none';
+            dashboard.classList.add('active');
+            clearLoginFeedback();
+            bindAdminActivityListeners();
+            touchAdminSession(false);
+            startAdminSessionMonitor();
+            if (shouldLoadData) {
+                loadDashboardData();
+            }
+        }
+
+        async function forceAdminLogout(message, type) {
+            if (adminSessionLogoutInProgress) return;
+
+            adminSessionLogoutInProgress = true;
+            adminLoginIntent = false;
+            clearAdminSessionStorage();
+            showAdminLogin({ preserveFeedback: true });
+            setLoginFeedback(message, type || 'error');
+
+            try {
+                await FirebaseSystem.logout();
+            } catch (error) {
+                console.warn('[admin-firebase] Falha ao encerrar a sessão administrativa.', error);
+            } finally {
+                adminSessionLogoutInProgress = false;
+            }
+        }
+
+        function expireAdminSession(message) {
+            return forceAdminLogout(message || 'Sua sessão administrativa expirou por segurança. Entre novamente para continuar.', 'warning');
+        }
+
         async function handleLogin(e) {
             e.preventDefault();
             const btn = document.getElementById('loginBtn');
             btn.disabled = true;
             btn.textContent = 'Entrando...';
+            clearLoginFeedback();
 
             const email = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginPass').value;
 
             try {
+                adminLoginIntent = true;
                 const result = await FirebaseSystem.login(email, senha);
 
                 if (!result.success) {
-                    alert(result.message);
+                    adminLoginIntent = false;
+                    setLoginFeedback(result.message || 'Não foi possível entrar. Tente novamente.', 'error');
                 }
             } catch (error) {
-                alert(error.message || 'Não foi possível entrar. Tente novamente.');
+                adminLoginIntent = false;
+                setLoginFeedback(error.message || 'Não foi possível entrar. Tente novamente.', 'error');
             } finally {
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
@@ -1357,29 +1624,61 @@
 
         function checkAdminAuth() {
             const user = window.currentUser;
-            
-            if (user && user.role === 'admin') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('dashboard').classList.add('active');
-                loadDashboardData();
-            } else if (user && user._profilePending) {
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('dashboard').classList.remove('active');
-            } else if (user && user.role !== 'admin') {
-                alert('Acesso negado. Você não tem permissão de administrador.');
-                FirebaseSystem.logout();
-            } else {
-                document.getElementById('loginScreen').style.display = 'flex';
-                document.getElementById('dashboard').classList.remove('active');
+
+            if (!user) {
+                adminLoginIntent = false;
+                if (!adminSessionLogoutInProgress) {
+                    showAdminLogin();
+                }
+                return;
             }
+
+            if (user._profilePending) {
+                showAdminLogin({ preserveFeedback: adminLoginIntent });
+                if (adminLoginIntent) {
+                    setLoginFeedback('Confirmando sua permissão administrativa...', 'info');
+                }
+                return;
+            }
+
+            if (user._profileError) {
+                adminLoginIntent = false;
+                clearAdminSessionStorage();
+                showAdminLogin({ preserveFeedback: true });
+                setLoginFeedback('Não foi possível confirmar sua permissão agora. Verifique a conexão e tente novamente.', 'error');
+                return;
+            }
+
+            if (user.role !== 'admin') {
+                forceAdminLogout('Esta conta não possui permissão administrativa.', 'error');
+                return;
+            }
+
+            if (adminLoginIntent) {
+                touchAdminSession(true);
+                adminLoginIntent = false;
+                showAdminDashboard();
+                return;
+            }
+
+            const session = getAdminSessionSnapshot();
+            if (!session.isValid) {
+                expireAdminSession('Sua sessão administrativa expirou por segurança. Entre novamente para continuar.');
+                return;
+            }
+
+            showAdminDashboard();
         }
 
         async function handleLogout() {
+            adminLoginIntent = false;
+            clearAdminSessionStorage();
+            showAdminLogin();
             await FirebaseSystem.logout();
-            location.reload();
         }
 
         function showSection(section) {
+            touchAdminSession(false);
             document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
             document.getElementById('section-' + section).classList.add('active');
             
@@ -2376,15 +2675,18 @@
             }
 
             return `
-                <div class="user-establishments">
-                    ${activeManagers.map(manager => `
-                        <div class="user-establishment-card">
-                            <strong>${SEC.html(manager.establishmentName, '—')}</strong>
-                            <small>${SEC.html(manager.establishmentId || '—')}</small>
-                            <small>${SEC.html(getManagerRoleAdminLabel(manager.role))} · ${manager.active === false ? 'Inativo' : 'Ativo'}</small>
-                        </div>
-                    `).join('')}
-                </div>
+                <details class="user-establishments-toggle">
+                    <summary>${SEC.html(String(activeManagers.length))} empreendimento(s) vinculado(s)</summary>
+                    <div class="user-establishments">
+                        ${activeManagers.map(manager => `
+                            <div class="user-establishment-card">
+                                <strong>${SEC.html(manager.establishmentName, '—')}</strong>
+                                <small>${SEC.html(manager.establishmentId || '—')}</small>
+                                <small>${SEC.html(getManagerRoleAdminLabel(manager.role))} · ${manager.active === false ? 'Inativo' : 'Ativo'}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </details>
             `;
         }
 
