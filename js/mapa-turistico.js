@@ -849,18 +849,17 @@
     var events = getUpcomingApprovedEventsForItem(item);
     if (!events.length) return "";
 
-    var visibleEvents = events.slice(0, 3);
     var countLabel = events.length === 1
       ? t("upcomingEventsSingle")
       : replaceCount(t("upcomingEventsMany"), events.length);
 
-    return '<section class="map-related-events is-' + escapeHtml(context || "panel") + '">'
+    return '<section class="establishment-events-box map-related-events is-' + escapeHtml(context || "panel") + '">'
       + '<div class="map-related-events-head">'
       + '<h3>' + escapeHtml(t("upcomingEventsTitle")) + '</h3>'
       + '<span>' + escapeHtml(countLabel) + "</span>"
       + "</div>"
-      + '<div class="map-related-events-list">'
-      + visibleEvents.map(function (event, index) {
+      + '<div class="establishment-events-scroll map-related-events-list">'
+      + events.map(function (event, index) {
         var description = truncateText(event.description, context === "modal" ? 180 : 110);
         var schedule = formatApprovedEventSchedule(event);
         var chips = [];
@@ -872,7 +871,7 @@
           chips.push('<span class="map-related-event-chip">💲 ' + escapeHtml(event.value) + "</span>");
         }
 
-        return '<article class="map-related-event-card' + (events.length === 1 && index === 0 ? " is-featured" : "") + '">'
+        return '<article class="establishment-event-card map-related-event-card' + (events.length === 1 && index === 0 ? " is-featured" : "") + '">'
           + '<div class="map-related-event-media">' + renderApprovedEventImage(event) + "</div>"
           + '<div class="map-related-event-body">'
           + '<h4>' + escapeHtml(event.title) + "</h4>"
@@ -885,9 +884,6 @@
           + "</article>";
       }).join("")
       + "</div>"
-      + (events.length > visibleEvents.length
-        ? '<p class="map-related-events-more">' + escapeHtml(replaceCount(t("upcomingEventsMore"), events.length - visibleEvents.length)) + "</p>"
-        : "")
       + "</section>";
   }
 

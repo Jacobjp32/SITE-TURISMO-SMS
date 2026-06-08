@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-08T13:59:27.955Z.
+Gerado em 2026-06-08T14:32:21.706Z.
 
 ## Resumo
 
-- Arquivos mapeados: 368
+- Arquivos mapeados: 369
 - HTMLs: 36
 - CSS: 22
 - JS: 37
@@ -22,13 +22,14 @@ Gerado em 2026-06-08T13:59:27.955Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 814389 |
+| .js | 37 | 814111 |
 | .html | 36 | 685323 |
-| .css | 22 | 316627 |
-| .md | 24 | 236171 |
+| .css | 22 | 317211 |
+| .md | 24 | 237603 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
+| .ico | 1 | 6837 |
 | .xml | 1 | 3852 |
 | (sem ext) | 8 | 2691 |
 | .log | 1 | 1550 |
@@ -256,7 +257,7 @@ _Nenhum item encontrado._
 | css/index.css | 133856 | 460 | 40 | 762 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
-| css/mapa-turistico.css | 36668 | 13 | 7 | 258 |
+| css/mapa-turistico.css | 37252 | 13 | 7 | 263 |
 | css/noticia.css | 2034 | 0 | 1 | 18 |
 | css/noticias.css | 3926 | 0 | 2 | 40 |
 | css/o-que-fazer.css | 3662 | 1 | 1 | 21 |

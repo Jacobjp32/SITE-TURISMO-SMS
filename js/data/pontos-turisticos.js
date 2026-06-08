@@ -61,14 +61,17 @@ window.TURISMO_PONTOS = [
   },
   {
     id: "vapor-pery",
-    nome: "Vapor Pery",
+    nome: "Monumento Vapor Pery",
     categoria: "História",
     descricao: "Referência simbólica da navegação no Rio Iguaçu e da memória dos antigos ciclos de transporte.",
     imagem: "images/vapor-pery.webp",
     galeria: ["images/vapor-pery.webp"],
     url: "/#sobre",
-    coordenadas: { lat: null, lng: null },
-    tags: ["vapor pery", "história", "rio iguaçu", "navegação", "memória", "patrimônio"]
+    localizacao: "R. João Gabriel Martins, 1 - São Mateus do Sul, PR, 83900-000",
+    endereco: "R. João Gabriel Martins, 1 - São Mateus do Sul, PR, 83900-000",
+    mapsUrl: "https://maps.app.goo.gl/Un5naGFe5cT3o3pp9",
+    coordenadas: { lat: -25.8769375, lng: -50.3866875 },
+    tags: ["vapor pery", "monumento vapor pery", "história", "rio iguaçu", "navegação", "memória", "patrimônio", "4JF7+68"]
   },
   {
     id: "chimarrodromo",

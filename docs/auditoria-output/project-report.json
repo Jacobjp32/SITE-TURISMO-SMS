@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-08T13:59:27.955Z",
+  "generatedAt": "2026-06-08T14:32:21.706Z",
   "totals": {
-    "files": 368,
+    "files": 369,
     "html": 36,
     "css": 22,
     "js": 37,
@@ -47,7 +47,7 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 814389
+      "bytes": 814111
     },
     {
       "ext": ".html",
@@ -57,12 +57,12 @@
     {
       "ext": ".css",
       "files": 22,
-      "bytes": 316627
+      "bytes": 317211
     },
     {
       "ext": ".md",
       "files": 24,
-      "bytes": 236171
+      "bytes": 237603
     },
     {
       "ext": ".json",
@@ -78,6 +78,11 @@
       "ext": ".rules",
       "files": 2,
       "bytes": 12655
+    },
+    {
+      "ext": ".ico",
+      "files": 1,
+      "bytes": 6837
     },
     {
       "ext": ".xml",
@@ -183,8 +188,8 @@
     },
     {
       "dir": ".",
-      "files": 39,
-      "bytes": 974382
+      "files": 40,
+      "bytes": 981219
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -194,22 +199,22 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 553178
+      "bytes": 552618
     },
     {
       "dir": "css",
       "files": 22,
-      "bytes": 316627
+      "bytes": 317211
     },
     {
       "dir": "docs",
       "files": 21,
-      "bytes": 221327
+      "bytes": 222519
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 40891
+      "bytes": 41173
     },
     {
       "dir": "scripts",
@@ -235,6 +240,11 @@
       "dir": "o-que-fazer",
       "files": 1,
       "bytes": 860
+    },
+    {
+      "dir": "images/seasonal",
+      "files": 1,
+      "bytes": 780
     },
     {
       "dir": "rotas-completas",
@@ -290,11 +300,6 @@
       "dir": "galeria",
       "files": 1,
       "bytes": 719
-    },
-    {
-      "dir": "images/seasonal",
-      "files": 1,
-      "bytes": 540
     },
     {
       "dir": "images/seasonal/autumn",
@@ -2173,10 +2178,10 @@
     },
     {
       "file": "css/mapa-turistico.css",
-      "bytes": 36668,
+      "bytes": 37252,
       "important": 13,
       "media": 7,
-      "selectorCount": 258
+      "selectorCount": 263
     },
     {
       "file": "css/noticia.css",
@@ -2775,7 +2780,7 @@
     },
     {
       "file": "js/data/pontos-turisticos.js",
-      "bytes": 3517,
+      "bytes": 3795,
       "globals": [
         "window.TURISMO_PONTOS"
       ],
@@ -3004,7 +3009,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 80817,
+      "bytes": 80637,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -3289,7 +3294,7 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 22239,
+      "bytes": 21859,
       "globals": [
         "var ASSET_BASE",
         "var ASSET_CACHE",

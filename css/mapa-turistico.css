@@ -863,6 +863,32 @@ body.map-page-body {
     gap: 0.75rem;
 }
 
+.establishment-events-scroll {
+    max-height: 360px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.25rem;
+    scrollbar-width: thin;
+}
+
+.map-related-events.is-modal .establishment-events-scroll {
+    max-height: min(56vh, 560px);
+}
+
+.establishment-events-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.establishment-events-scroll::-webkit-scrollbar-track {
+    background: rgba(10, 61, 46, 0.06);
+    border-radius: 999px;
+}
+
+.establishment-events-scroll::-webkit-scrollbar-thumb {
+    background: rgba(10, 61, 46, 0.28);
+    border-radius: 999px;
+}
+
 .map-related-event-card {
     display: grid;
     grid-template-columns: 104px minmax(0, 1fr);

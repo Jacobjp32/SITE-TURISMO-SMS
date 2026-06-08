@@ -14,12 +14,17 @@ Critério da lista de coordenadas: entram apenas itens reais que deveriam poder 
 
 | Item | Tipo | Categoria atual | Coordenadas? | Imagem? | URL? | Ação recomendada |
 | --- | --- | --- | --- | --- | --- | --- |
-| Vapor Pery | Ponto turístico | História | Não | Sim | Sim | Confirmar local exato no projeto e cadastrar `lat/lng` confiáveis. |
 | Hotel São Mateus | Hospedagem | Hospedagem | Não | Não | Sim | Confirmar localização exata do hotel e cadastrar coordenadas. |
 | Hotel Nora | Hospedagem | Hospedagem | Não | Não | Sim | Confirmar localização exata do hotel e cadastrar coordenadas. |
 | Hotel Dom Leopoldo | Hospedagem | Hospedagem | Não | Não | Sim | Confirmar localização exata do hotel e cadastrar coordenadas. |
 | Pousadas Rurais | Hospedagem | Hospedagem | Não | Não | Sim | Definir ao menos uma referência geográfica ou separar por empreendimento. |
 | Feira da Lua | Evento | Eventos | Não | Não | Sim | Confirmar ponto exato na Vila Pinheirinho e cadastrar coordenadas. |
+
+## Coordenadas resolvidas nesta rodada
+
+| Item | Tipo | Coordenadas | Fonte registrada |
+| --- | --- | --- | --- |
+| Monumento Vapor Pery | Ponto turístico | `lat -25.8769375`, `lng -50.3866875` | Plus Code `4JF7+68 São Mateus do Sul, Paraná`, endereço `R. João Gabriel Martins, 1 - São Mateus do Sul, PR, 83900-000` e Google Maps `https://maps.app.goo.gl/Un5naGFe5cT3o3pp9`, fornecidos pelo usuário. |
 
 ## Itens informativos fora da lista de coordenadas
 

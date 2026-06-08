@@ -19,38 +19,38 @@
     var SEASON_ASSETS = {
         summer: {
             folder: "summer",
-            mascot: "summer/mascot.webp",
-            headerBadge: "summer/header-badge.svg",
-            heroAccent: "summer/hero-accent.webp",
-            sticker: "summer/sticker.svg",
-            weatherIcon: "summer/weather-icon.svg",
+            mascot: null,
+            headerBadge: null,
+            heroAccent: null,
+            sticker: null,
+            weatherIcon: null,
             effects: ["sunGlow"]
         },
         autumn: {
             folder: "autumn",
-            mascot: "autumn/mascot.webp",
-            headerBadge: "autumn/header-badge.svg",
-            heroAccent: "autumn/hero-accent.webp",
-            sticker: "autumn/sticker.svg",
-            weatherIcon: "autumn/weather-icon.svg",
+            mascot: null,
+            headerBadge: null,
+            heroAccent: null,
+            sticker: null,
+            weatherIcon: null,
             effects: ["leafDrift"]
         },
         winter: {
             folder: "winter",
-            mascot: "winter/mascot.webp",
-            headerBadge: "winter/header-badge.svg",
-            heroAccent: "winter/hero-accent.webp",
-            sticker: "winter/sticker.svg",
-            weatherIcon: "winter/weather-icon.svg",
+            mascot: null,
+            headerBadge: null,
+            heroAccent: null,
+            sticker: null,
+            weatherIcon: null,
             effects: ["mateSteam"]
         },
         spring: {
             folder: "spring",
-            mascot: "spring/mascot.webp",
-            headerBadge: "spring/header-badge.svg",
-            heroAccent: "spring/hero-accent.webp",
-            sticker: "spring/sticker.svg",
-            weatherIcon: "spring/weather-icon.svg",
+            mascot: null,
+            headerBadge: null,
+            heroAccent: null,
+            sticker: null,
+            weatherIcon: null,
             effects: ["sproutBloom"]
         }
     };

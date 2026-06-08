@@ -3,7 +3,7 @@
 
   window.SITE_META = window.SITE_META || {
     version: "Turismo SMS 1.0",
-    updatedAt: "2026-06-08T11:10:38-03:00",
+    updatedAt: "2026-06-08T11:36:57-03:00",
     environment: "production"
   };
 

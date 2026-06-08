@@ -9,9 +9,9 @@ Use a pasta `images/seasonal/`, separada por estacao:
 - `images/seasonal/winter/`
 - `images/seasonal/spring/`
 
-## Arquivos esperados
+## Arquivos previstos
 
-Por estacao, o tema procura estes nomes:
+Por estacao, o tema esta preparado para estes roles:
 
 | Uso | Arquivo |
 | --- | --- |
@@ -21,7 +21,7 @@ Por estacao, o tema procura estes nomes:
 | Sticker pequeno | `sticker.svg` |
 | Icone de clima/estacao | `weather-icon.svg` |
 
-Se algum arquivo ainda nao existir, o site mantem o placeholder visual atual.
+Enquanto um arquivo ainda nao existir, mantenha o respectivo role como `null` no manifest interno de `js/season-theme.js`. O site usa fallback visual CSS/emoji e nao deve fazer request para `images/seasonal/{season}/...` inexistente.
 
 ## Formatos e tamanhos
 
@@ -46,7 +46,7 @@ Mantenha cada arquivo abaixo de 80 KB quando possivel. Evite imagens grandes, so
 1. preferencia manual salva em `localStorage`;
 2. modo `Automático`, calculado por data no fuso `America/Sao_Paulo`.
 
-Depois ele busca o manifest interno da estacao e tenta carregar os assets correspondentes. Se o carregamento falhar, o slot continua com o fallback CSS.
+Depois ele busca o manifest interno da estacao e carrega apenas assets explicitamente preenchidos. Se o role estiver `null` ou vazio, o slot continua com fallback CSS sem request externo.
 
 Roles disponiveis:
 
@@ -73,6 +73,8 @@ window.SMS_SEASON_ASSETS = {
 ```
 
 Os caminhos relativos partem de `images/seasonal/`.
+
+Ative overrides apenas para arquivos que ja existam fisicamente. Exemplo: `winter/mascot.webp` so deve ser informado depois que `images/seasonal/winter/mascot.webp` estiver no projeto.
 
 ## Ideias previstas
 

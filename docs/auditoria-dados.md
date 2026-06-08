@@ -1,6 +1,6 @@
 # Auditoria das bases de dados turisticas
 
-## Atualizacao 2026-06-08 - mapa turistico, pendencias de coordenadas e Vapor Pery
+## Atualizacao 2026-06-08 - mapa turistico, pendencias de coordenadas, Vapor Pery e assets sazonais
 
 Escopo: refinamento da lista publica de itens sem localizacao exata em `mapa-turistico.html`, sem alteracao de login, admin, portal do usuario, Firebase Rules ou Storage Rules.
 
@@ -10,13 +10,18 @@ Resultado:
 - paginas estruturais, links institucionais, itens de navegacao e servicos informativos nao entram mais na lista de pendencias de coordenadas;
 - rotas cadastradas em `js/data/rotas.js` seguem preservadas, mas aparecem em secao propria como "Rotas tematicas sem ponto unico";
 - o texto publico explica que ausencia de coordenada nao e erro do site, e sim pendencia de dados.
+- a area de eventos vinculados ao empreendimento no mapa mostra todos os eventos em uma caixa interna rolavel, sem esticar indefinidamente o painel lateral ou o modal;
+- o manifest sazonal interno nao aponta mais para assets ainda inexistentes; enquanto os arquivos reais nao forem cadastrados, os slots usam fallback CSS sem gerar request 404.
 
 Vapor Pery:
 
-- link informado pelo usuario: `https://share.google/Pa034hTUFAVu9c7BM`;
-- tentativa de resolucao em 2026-06-08 retornou pagina generica de Google Search no ambiente, sem URL final de Maps, endereco ou coordenadas extraiveis;
-- nenhuma coordenada foi adicionada, para evitar aproximacao ou dado inventado;
-- pendencia: confirmar fonte publica ou oficial com latitude/longitude ou endereco exato antes de atualizar `js/data/pontos-turisticos.js`.
+- item atualizado para `Monumento Vapor Pery`;
+- endereco fornecido pelo usuario: `R. Joao Gabriel Martins, 1 - Sao Mateus do Sul, PR, 83900-000`;
+- Plus Code informado pelo usuario: `4JF7+68 Sao Mateus do Sul, Parana`;
+- URL Google Maps fornecida pelo usuario: `https://maps.app.goo.gl/Un5naGFe5cT3o3pp9`;
+- coordenada derivada do Plus Code informado pelo usuario: `lat -25.8769375`, `lng -50.3866875`;
+- o termo `Vapor Pery` foi preservado em tags para busca e compatibilidade;
+- com coordenada preenchida, o item deixa de entrar na lista de itens reais ainda sem coordenada e volta a ter acao "Como chegar".
 
 ## Atualizacao 2026-06-02 - rotas com imagem, noticias oficiais e LGPD
 
