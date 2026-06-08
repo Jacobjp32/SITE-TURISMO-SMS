@@ -89,34 +89,43 @@
         }
 
         .login-password-field input {
-            padding-right: 7.5rem;
+            padding-right: 3.75rem;
             margin-bottom: 0;
         }
 
         .login-password-toggle {
             position: absolute;
             top: 50%;
-            right: 0.6rem;
+            right: 0.75rem;
             transform: translateY(-50%);
-            width: auto;
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
             border: none;
             border-radius: 999px;
-            background: #eef3ef;
+            background: transparent;
             color: var(--primary);
-            padding: 0.45rem 0.8rem;
-            font-size: 0.84rem;
-            font-weight: 700;
+            font-size: 1.05rem;
+            line-height: 1;
             cursor: pointer;
             font-family: inherit;
         }
 
         .login-password-toggle:hover {
-            background: #dce9e1;
+            background: rgba(10, 61, 46, 0.08);
         }
 
         .login-password-toggle:focus-visible {
             outline: 2px solid var(--accent);
             outline-offset: 2px;
+        }
+
+        .login-password-toggle-icon {
+            display: block;
+            pointer-events: none;
         }
 
         .login-feedback {
@@ -146,7 +155,7 @@
             border: 1px solid #c7def7;
         }
         
-        .login-form button {
+        .login-submit-btn {
             width: 100%;
             padding: 1rem;
             background: var(--primary);
@@ -159,11 +168,11 @@
             transition: background 0.3s;
         }
         
-        .login-form button:hover {
+        .login-submit-btn:hover {
             background: var(--primary-light);
         }
 
-        .login-form button:disabled {
+        .login-submit-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
@@ -1064,9 +1073,11 @@
                 <input type="email" id="loginEmail" placeholder="E-mail" autocomplete="username" required>
                 <div class="login-password-field">
                     <input type="password" id="loginPass" placeholder="Senha" autocomplete="current-password" required>
-                    <button type="button" class="login-password-toggle" id="toggleLoginPassword" aria-label="Mostrar senha" aria-pressed="false">Mostrar</button>
+                    <button type="button" class="login-password-toggle" id="toggleLoginPassword" aria-label="Mostrar senha" aria-pressed="false" title="Mostrar senha">
+                        <span class="login-password-toggle-icon" aria-hidden="true">👁</span>
+                    </button>
                 </div>
-                <button type="submit" id="loginBtn">Entrar</button>
+                <button type="submit" class="login-submit-btn" id="loginBtn">Entrar</button>
             </form>
             
             <p style="margin-top: 1.5rem; font-size: 0.8rem; color: #999;">
@@ -1453,9 +1464,9 @@
 
             const shouldShow = passwordInput.type === 'password';
             passwordInput.type = shouldShow ? 'text' : 'password';
-            toggleButton.textContent = shouldShow ? 'Ocultar' : 'Mostrar';
             toggleButton.setAttribute('aria-label', shouldShow ? 'Ocultar senha' : 'Mostrar senha');
             toggleButton.setAttribute('aria-pressed', shouldShow ? 'true' : 'false');
+            toggleButton.setAttribute('title', shouldShow ? 'Ocultar senha' : 'Mostrar senha');
         }
 
         function getAdminStoredTimestamp(key) {
