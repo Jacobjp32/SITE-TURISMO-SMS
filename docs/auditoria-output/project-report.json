@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-08T18:15:06.654Z",
+  "generatedAt": "2026-06-08T18:58:37.621Z",
   "totals": {
     "files": 377,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 814939
+      "bytes": 817236
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 685742
+      "bytes": 688424
     },
     {
       "ext": ".css",
@@ -61,8 +61,8 @@
     },
     {
       "ext": ".md",
-      "files": 24,
-      "bytes": 242172
+      "files": 25,
+      "bytes": 252345
     },
     {
       "ext": ".json",
@@ -92,12 +92,7 @@
     {
       "ext": "(sem ext)",
       "files": 8,
-      "bytes": 3067
-    },
-    {
-      "ext": ".log",
-      "files": 1,
-      "bytes": 1550
+      "bytes": 3122
     },
     {
       "ext": ".txt",
@@ -193,8 +188,8 @@
     },
     {
       "dir": ".",
-      "files": 40,
-      "bytes": 982033
+      "files": 39,
+      "bytes": 983220
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -204,7 +199,7 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 553427
+      "bytes": 555724
     },
     {
       "dir": "css",
@@ -213,8 +208,8 @@
     },
     {
       "dir": "docs",
-      "files": 21,
-      "bytes": 227088
+      "files": 22,
+      "bytes": 237261
     },
     {
       "dir": "js/data",
@@ -826,7 +821,7 @@
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 47532
+      "bytes": 50214
     },
     {
       "path": "galeria.html",
@@ -3148,7 +3143,7 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 41791,
+      "bytes": 43320,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
@@ -3174,7 +3169,8 @@
         "hasLoadedStylesheet",
         "isMobileMenuActive",
         "isModifiedClick",
-        "revealMascote"
+        "revealMascote",
+        "updateLanguageAccessibility"
       ],
       "localStorage": 9,
       "serviceWorker": 2,
@@ -3299,7 +3295,7 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 21859,
+      "bytes": 22610,
       "globals": [
         "var ASSET_BASE",
         "var ASSET_CACHE",
@@ -3334,6 +3330,7 @@
         "getModeOptions",
         "getResolvedSeason",
         "getSeasonAssetManifest",
+        "getSeasonOptionAriaLabel",
         "init",
         "isKnownMode",
         "loadAsset",

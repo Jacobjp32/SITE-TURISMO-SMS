@@ -12,6 +12,9 @@ secrets.js
 
 # Local assistant/worktree artifacts
 .claude/worktrees/
+.codex-chrome-*/
+.codex-chrome-dump-profile/
+.tmp-chrome/
 bfg.jar
 
 # Dependency directories
