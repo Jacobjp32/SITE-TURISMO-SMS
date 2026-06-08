@@ -12,7 +12,7 @@
       heroPointsLabel: "pontos no mapa",
       heroPlacesLabel: "locais cadastrados",
       heroCategoriesLabel: "categorias",
-      heroNote: "Itens sem coordenadas continuam disponiveis no painel para consulta e futura geolocalizacao.",
+      heroNote: "Itens reais sem coordenadas ficam sinalizados como pendencia de dados. Rotas tematicas sem ponto unico aparecem em secao propria.",
       actionHome: "Voltar a HOME",
       actionGuide: "Voltar ao guia do visitante",
       actionPlan: "Planejar visita",
@@ -59,10 +59,10 @@
       cardSelected: "Selecionado no mapa",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} itens",
-      missingTitle: "Itens sem localizacao exata",
-      missingDescription: "Alguns itens ainda nao possuem localizacao cadastrada, mas continuam disponiveis para consulta e podem ser completados futuramente.",
-      missingSummarySingle: "1 item sem localizacao exata",
-      missingSummaryMany: "{count} itens sem localizacao exata",
+      missingTitle: "Itens reais ainda sem coordenada",
+      missingDescription: "Esta lista mostra apenas locais fisicos que ainda precisam de latitude e longitude confirmadas. Nao e erro do site: e uma pendencia de dados. Paginas informativas nao entram nesta lista.",
+      missingSummarySingle: "1 item real ainda sem coordenada",
+      missingSummaryMany: "{count} itens reais ainda sem coordenada",
       thematicRoutesTitle: "Rotas tematicas sem ponto unico",
       thematicRoutesDescription: "Estas rotas representam percursos ou colecoes tematicas. Elas ficam disponiveis para consulta, mas nao entram na contagem de itens sem localizacao exata.",
       thematicRoutesSummarySingle: "1 rota tematica sem ponto unico",
@@ -116,7 +116,7 @@
       heroPointsLabel: "map points",
       heroPlacesLabel: "listed places",
       heroCategoriesLabel: "categories",
-      heroNote: "Items without coordinates remain available in the panel for consultation and future geolocation.",
+      heroNote: "Real items without coordinates are flagged as data pending. Themed routes without a single point appear in their own section.",
       actionHome: "Back to Home",
       actionGuide: "Back to visitor guide",
       actionPlan: "Plan visit",
@@ -163,10 +163,10 @@
       cardSelected: "Selected on map",
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} items",
-      missingTitle: "Items without exact location",
-      missingDescription: "Some items do not yet have a registered location, but remain available for consultation and can be completed later.",
-      missingSummarySingle: "1 item without exact location",
-      missingSummaryMany: "{count} items without exact location",
+      missingTitle: "Real items still without coordinates",
+      missingDescription: "This list only shows physical places that still need confirmed latitude and longitude. It is not a site error: it is pending data. Informational pages are not included here.",
+      missingSummarySingle: "1 real item still without coordinates",
+      missingSummaryMany: "{count} real items still without coordinates",
       thematicRoutesTitle: "Themed routes without a single point",
       thematicRoutesDescription: "These routes represent itineraries or thematic collections. They remain available for consultation but are not counted as items without exact location.",
       thematicRoutesSummarySingle: "1 themed route without a single point",
@@ -220,7 +220,7 @@
       heroPointsLabel: "puntos en el mapa",
       heroPlacesLabel: "lugares registrados",
       heroCategoriesLabel: "categorias",
-      heroNote: "Los elementos sin coordenadas siguen disponibles en el panel para consulta y futura geolocalizacion.",
+      heroNote: "Los elementos reales sin coordenadas se senalan como datos pendientes. Las rutas tematicas sin punto unico aparecen en una seccion propia.",
       actionHome: "Volver al inicio",
       actionGuide: "Volver a la guia del visitante",
       actionPlan: "Planificar visita",
@@ -267,10 +267,10 @@
       cardSelected: "Seleccionado en el mapa",
       groupItemsSingle: "1 elemento",
       groupItemsMany: "{count} elementos",
-      missingTitle: "Elementos sin ubicacion exacta",
-      missingDescription: "Algunos elementos aun no tienen ubicacion registrada, pero siguen disponibles para consulta y pueden completarse mas adelante.",
-      missingSummarySingle: "1 elemento sin ubicacion exacta",
-      missingSummaryMany: "{count} elementos sin ubicacion exacta",
+      missingTitle: "Elementos reales aun sin coordenada",
+      missingDescription: "Esta lista muestra solo lugares fisicos que todavia necesitan latitud y longitud confirmadas. No es un error del sitio: es una pendiente de datos. Las paginas informativas no entran en esta lista.",
+      missingSummarySingle: "1 elemento real aun sin coordenada",
+      missingSummaryMany: "{count} elementos reales aun sin coordenada",
       thematicRoutesTitle: "Rutas tematicas sin punto unico",
       thematicRoutesDescription: "Estas rutas representan recorridos o colecciones tematicas. Siguen disponibles para consulta, pero no entran en el conteo de elementos sin ubicacion exacta.",
       thematicRoutesSummarySingle: "1 ruta tematica sin punto unico",
@@ -324,7 +324,7 @@
       heroPointsLabel: "punkty na mapie",
       heroPlacesLabel: "zarejestrowane miejsca",
       heroCategoriesLabel: "kategorie",
-      heroNote: "Elementy bez wspolrzednych pozostaja dostepne w panelu do przegladania i przyszlej geolokalizacji.",
+      heroNote: "Realne elementy bez wspolrzednych sa oznaczone jako oczekujace dane. Trasy tematyczne bez jednego punktu maja osobna sekcje.",
       actionHome: "Powrot do strony glownej",
       actionGuide: "Powrot do przewodnika",
       actionPlan: "Zaplanuj wizyte",
@@ -371,10 +371,10 @@
       cardSelected: "Wybrane na mapie",
       groupItemsSingle: "1 element",
       groupItemsMany: "{count} elementow",
-      missingTitle: "Elementy bez dokladnej lokalizacji",
-      missingDescription: "Niektore elementy nie maja jeszcze zapisanej lokalizacji, ale nadal sa dostepne do przegladania i moga zostac uzupelnione pozniej.",
-      missingSummarySingle: "1 element bez dokladnej lokalizacji",
-      missingSummaryMany: "{count} elementow bez dokladnej lokalizacji",
+      missingTitle: "Realne elementy nadal bez wspolrzednych",
+      missingDescription: "Ta lista pokazuje tylko fizyczne miejsca, ktore nadal wymagaja potwierdzonej szerokosci i dlugosci geograficznej. To nie jest blad strony, lecz brakujace dane. Strony informacyjne nie sa tu uwzgledniane.",
+      missingSummarySingle: "1 realny element nadal bez wspolrzednych",
+      missingSummaryMany: "{count} realnych elementow nadal bez wspolrzednych",
       thematicRoutesTitle: "Trasy tematyczne bez jednego punktu",
       thematicRoutesDescription: "Te trasy reprezentuja przebiegi lub zbiory tematyczne. Pozostaja dostepne do przegladania, ale nie sa liczone jako elementy bez dokladnej lokalizacji.",
       thematicRoutesSummarySingle: "1 trasa tematyczna bez jednego punktu",
@@ -1003,8 +1003,17 @@
     return !!item && item.panelGroup === "routes";
   }
 
+  function isLocatableRealItem(item) {
+    if (!item) return false;
+    return item.tipo === "ponto"
+      || item.tipo === "hospedagem"
+      || item.tipo === "restaurante"
+      || item.tipo === "evento";
+  }
+
   function isStructuralInfoItem(item) {
-    if (!item || item.tipo !== "servico") return false;
+    if (!item) return false;
+    if (item.tipo === "servico") return true;
 
     var structuralIds = {
       "mapa-turistico": true,
@@ -1039,6 +1048,7 @@
     if (!item || item.possuiCoordenadas) return false;
     if (isRouteItem(item)) return false;
     if (isStructuralInfoItem(item)) return false;
+    if (!isLocatableRealItem(item)) return false;
     return true;
   }
 

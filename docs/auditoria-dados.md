@@ -1,5 +1,23 @@
 # Auditoria das bases de dados turisticas
 
+## Atualizacao 2026-06-08 - mapa turistico, pendencias de coordenadas e Vapor Pery
+
+Escopo: refinamento da lista publica de itens sem localizacao exata em `mapa-turistico.html`, sem alteracao de login, admin, portal do usuario, Firebase Rules ou Storage Rules.
+
+Resultado:
+
+- a lista "Itens sem localizacao exata" passa a considerar apenas itens reais que deveriam poder receber coordenadas: pontos/atrativos, hospedagens, restaurantes e eventos;
+- paginas estruturais, links institucionais, itens de navegacao e servicos informativos nao entram mais na lista de pendencias de coordenadas;
+- rotas cadastradas em `js/data/rotas.js` seguem preservadas, mas aparecem em secao propria como "Rotas tematicas sem ponto unico";
+- o texto publico explica que ausencia de coordenada nao e erro do site, e sim pendencia de dados.
+
+Vapor Pery:
+
+- link informado pelo usuario: `https://share.google/Pa034hTUFAVu9c7BM`;
+- tentativa de resolucao em 2026-06-08 retornou pagina generica de Google Search no ambiente, sem URL final de Maps, endereco ou coordenadas extraiveis;
+- nenhuma coordenada foi adicionada, para evitar aproximacao ou dado inventado;
+- pendencia: confirmar fonte publica ou oficial com latitude/longitude ou endereco exato antes de atualizar `js/data/pontos-turisticos.js`.
+
 ## Atualizacao 2026-06-02 - rotas com imagem, noticias oficiais e LGPD
 
 Escopo desta rodada:

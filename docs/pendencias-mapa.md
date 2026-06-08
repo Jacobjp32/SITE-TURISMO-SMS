@@ -8,6 +8,8 @@ Base auditada:
 - `js/data/eventos.js`
 - `js/data/informacoes-essenciais.js`
 
+Critério da lista de coordenadas: entram apenas itens reais que deveriam poder virar marcador no mapa. Páginas estruturais, links institucionais, itens de navegação e rotas temáticas sem ponto único não entram como erro de localização.
+
 ## Pendentes de coordenadas
 
 | Item | Tipo | Categoria atual | Coordenadas? | Imagem? | URL? | Ação recomendada |
@@ -18,11 +20,16 @@ Base auditada:
 | Hotel Dom Leopoldo | Hospedagem | Hospedagem | Não | Não | Sim | Confirmar localização exata do hotel e cadastrar coordenadas. |
 | Pousadas Rurais | Hospedagem | Hospedagem | Não | Não | Sim | Definir ao menos uma referência geográfica ou separar por empreendimento. |
 | Feira da Lua | Evento | Eventos | Não | Não | Sim | Confirmar ponto exato na Vila Pinheirinho e cadastrar coordenadas. |
-| Mapa Turístico | Serviço | Serviços | Não | Não | Sim | Manter sem coordenadas ou vincular a um ponto institucional se houver necessidade futura. |
-| Roteiros | Serviço | Roteiros | Não | Não | Sim | Manter sem coordenadas ou vincular a um ponto institucional se houver necessidade futura. |
-| Onde Ficar | Serviço | Hospedagem | Não | Não | Sim | Manter sem coordenadas ou vincular a um ponto institucional se houver necessidade futura. |
-| Previsão do Tempo | Serviço | Serviços | Não | Não | Sim | Manter sem coordenadas; item é utilitário. |
-| Contato | Serviço | Institucional | Não | Não | Sim | Se houver endereço oficial do atendimento turístico no projeto, cadastrar coordenadas. |
+
+## Itens informativos fora da lista de coordenadas
+
+| Item | Tipo | Motivo |
+| --- | --- | --- |
+| Mapa Turístico | Serviço/navegação | Página estrutural; não representa marcador turístico próprio. |
+| Roteiros | Serviço/navegação | Atalho de navegação; rotas devem ficar na seção de rotas temáticas sem ponto único. |
+| Onde Ficar | Serviço/navegação | Atalho para hospedagem; não representa um empreendimento específico. |
+| Previsão do Tempo | Serviço/utilitário | Informação de apoio ao visitante, sem ponto físico único. |
+| Contato | Serviço/institucional | Link institucional; só deve virar marcador se houver endereço oficial confirmado. |
 
 ## Pendentes de imagem
 

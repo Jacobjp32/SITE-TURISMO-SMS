@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-08T13:12:39.469Z",
+  "generatedAt": "2026-06-08T13:59:27.955Z",
   "totals": {
     "files": 368,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 804129
+      "bytes": 814389
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 673443
+      "bytes": 685323
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 24,
-      "bytes": 234678
+      "bytes": 236171
     },
     {
       "ext": ".json",
@@ -184,7 +184,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 962502
+      "bytes": 974382
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -194,7 +194,7 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 542918
+      "bytes": 553178
     },
     {
       "dir": "css",
@@ -204,7 +204,7 @@
     {
       "dir": "docs",
       "files": 21,
-      "bytes": 219834
+      "bytes": 221327
     },
     {
       "dir": "js/data",
@@ -810,7 +810,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 115528
+      "bytes": 127408
     },
     {
       "path": "eventos.html",
@@ -1030,7 +1030,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 115528
+      "bytes": 127408
     },
     {
       "path": "css/mapa-3d.css",
@@ -1084,7 +1084,7 @@
       "path": "js/admin-content-cms.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 62236
+      "bytes": 71580
     },
     {
       "path": "js/firebase-app-check.js",
@@ -1096,7 +1096,7 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 70673
+      "bytes": 70854
     },
     {
       "path": "js/reservas.js",
@@ -1216,8 +1216,10 @@
         "robots",
         "loginScreen",
         "adminLoginForm",
+        "loginFeedback",
         "loginEmail",
         "loginPass",
+        "toggleLoginPassword",
         "loginBtn",
         "dashboard",
         "section-home",
@@ -2586,7 +2588,7 @@
     },
     {
       "file": "js/admin-content-cms.js",
-      "bytes": 62087,
+      "bytes": 71396,
       "globals": [
         "var DEFAULT_IMAGE",
         "var IMAGE_TYPE_REGEX",
@@ -2604,10 +2606,12 @@
       ],
       "functions": [
         "applyCoverToEventImages",
+        "buildApprovedEventPreview",
         "buildEventForm",
         "buildEventImageEntry",
         "buildMediaForm",
         "buildMediaSelect",
+        "buildMediaUsageMap",
         "buildNewsForm",
         "buildNewsIdentityKey",
         "clean",
@@ -2615,18 +2619,24 @@
         "compareAdminDateDesc",
         "currentAdminId",
         "dedupeImages",
+        "dedupeTextValues",
         "escapeHtml",
+        "escapeJsString",
         "extractBackgroundImage",
         "extractSlugFromUrl",
         "extractStaticPosts",
         "field",
         "formatAdminDate",
         "formatBytes",
+        "formatMediaUsageSummary",
         "getEventDate",
+        "getEventImageUrls",
         "getEventTime",
         "getLocation",
         "getMatchingMediaId",
         "getMediaById",
+        "getMediaUsageInfo",
+        "getNewsImageUrls",
         "getOrganizer",
         "getPrimaryEventImage",
         "getTitle",
@@ -2636,6 +2646,7 @@
         "normalizeComparableUrl",
         "normalizeEventImages",
         "parsePtBrDate",
+        "registerMediaUsage",
         "removeFirstEventImage",
         "renderEventCoverPreview",
         "renderEventGalleryList",
@@ -2921,7 +2932,7 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 70386,
+      "bytes": 70567,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
@@ -2993,7 +3004,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 80082,
+      "bytes": 80817,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -3062,6 +3073,7 @@
         "handleDetailsKeydown",
         "initMap",
         "isExternalUrl",
+        "isLocatableRealItem",
         "isPublicApprovedStatus",
         "isRouteItem",
         "isStructuralInfoItem",

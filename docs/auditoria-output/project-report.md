@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-08T13:12:39.469Z.
+Gerado em 2026-06-08T13:59:27.955Z.
 
 ## Resumo
 
@@ -22,10 +22,10 @@ Gerado em 2026-06-08T13:12:39.469Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 804129 |
-| .html | 36 | 673443 |
+| .js | 37 | 814389 |
+| .html | 36 | 685323 |
 | .css | 22 | 316627 |
-| .md | 24 | 234678 |
+| .md | 24 | 236171 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
@@ -126,7 +126,7 @@ Gerado em 2026-06-08T13:12:39.469Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2893 |
-| admin-firebase.html | 115528 |
+| admin-firebase.html | 127408 |
 | eventos.html | 47532 |
 | galeria.html | 37756 |
 | index.html | 146580 |
@@ -174,7 +174,7 @@ Gerado em 2026-06-08T13:12:39.469Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 115528 |
+| admin-firebase.html | 127408 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -183,9 +183,9 @@ Gerado em 2026-06-08T13:12:39.469Z.
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | firebase.json | 61 |
-| js/admin-content-cms.js | 62236 |
+| js/admin-content-cms.js | 71580 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 70673 |
+| js/firebase-auth.js | 70854 |
 | js/reservas.js | 26198 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
