@@ -62,7 +62,7 @@
                         <label for="loginSenha">Senha</label>
                         <div class="password-wrapper">
                             <input type="password" id="loginSenha" placeholder="Sua senha" autocomplete="current-password">
-                            <button type="button" class="password-toggle" onclick="toggleSenha('loginSenha', this)" title="Mostrar senha">👁️</button>
+                            <button type="button" class="password-toggle" onclick="toggleSenha('loginSenha', this)" title="Mostrar senha" aria-label="Mostrar senha" aria-pressed="false">👁️</button>
                         </div>
                     </div>
                     <button type="button" class="btn-primary" id="btnEntrar" onclick="fazerLogin()">Entrar</button>
@@ -102,14 +102,14 @@
                             <label for="regSenha">Senha *</label>
                             <div class="password-wrapper">
                                 <input type="password" id="regSenha" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
-                                <button type="button" class="password-toggle" onclick="toggleSenha('regSenha', this)" title="Mostrar senha">👁️</button>
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regSenha', this)" title="Mostrar senha" aria-label="Mostrar senha" aria-pressed="false">👁️</button>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="regConfirm">Confirmar Senha *</label>
                             <div class="password-wrapper">
                                 <input type="password" id="regConfirm" placeholder="Repita a senha" autocomplete="new-password">
-                                <button type="button" class="password-toggle" onclick="toggleSenha('regConfirm', this)" title="Mostrar senha">👁️</button>
+                                <button type="button" class="password-toggle" onclick="toggleSenha('regConfirm', this)" title="Mostrar senha" aria-label="Mostrar senha" aria-pressed="false">👁️</button>
                             </div>
                         </div>
                     </div>
@@ -506,10 +506,14 @@
             input.type = 'text';
             btn.textContent = '🙈';
             btn.title = 'Ocultar senha';
+            btn.setAttribute('aria-label', 'Ocultar senha');
+            btn.setAttribute('aria-pressed', 'true');
         } else {
             input.type = 'password';
             btn.textContent = '👁️';
             btn.title = 'Mostrar senha';
+            btn.setAttribute('aria-label', 'Mostrar senha');
+            btn.setAttribute('aria-pressed', 'false');
         }
     }
 

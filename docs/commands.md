@@ -24,6 +24,25 @@ O comando direto abaixo continua disponivel para atualizar somente a data do por
 node scripts/update-site-meta.mjs
 ```
 
+## Cache, Service Worker e versao antiga
+
+O Service Worker usa cache versionado em `sw.js` (`CACHE_NAME`). Sempre que alterar assets que possam ficar em cache, incremente essa versao para forcar a limpeza dos caches `turismo-sms-*` antigos na ativacao.
+
+Regras operacionais:
+
+- HTML deve revalidar com a rede; nao dependa de HTML cacheado para admin, portal ou paginas publicas atualizadas.
+- `admin-firebase.html` e `portal-usuario.html` devem permanecer com `Cache-Control: no-store` em `_headers`.
+- `sw.js`, `config.js` e `js/site-meta.js` devem revalidar com a rede para evitar painel/admin preso em versao antiga.
+- `favicon.ico` existe na raiz e deve carregar sem 404; ele nao deve ser armazenado pelo Service Worker.
+- Depois do deploy, abra uma janela anonima e confira `index.html`, `mapa-turistico.html`, `portal-usuario.html` e `admin-firebase.html`.
+
+Se um usuario ainda vir versao antiga apos deploy:
+
+1. peça para fechar e abrir novamente o navegador/app instalado;
+2. confirme no DevTools se o Service Worker ativo esta na versao esperada;
+3. valide se `_headers` publicado contem as regras de cache atuais;
+4. se for admin/portal, teste login em aba anonima antes de orientar limpeza manual de cache.
+
 ## Previsao do tempo
 
 A HOME carrega `js/weather.js`, que consulta a API publica sem chave da Open-Meteo para Sao Mateus do Sul:
@@ -45,6 +64,8 @@ O tema sazonal (`js/season-theme.js` e `css/season-theme.css`) tambem usa esse c
 A estrutura tecnica dos mascotes, badges, stickers e icones sazonais fica em `images/seasonal/`.
 
 Consulte `docs/seasonal-assets.md` para nomes esperados, formatos recomendados, tamanhos e override manual por `window.SMS_SEASON_ASSETS`.
+
+Os roles `mascot`, `headerBadge`, `heroAccent`, `sticker` e `weatherIcon` devem ficar vazios/null no manifest enquanto os arquivos reais nao existirem fisicamente. Isso evita 404 em `images/seasonal/{season}/...` e mantem o fallback CSS discreto.
 
 ## Validacao visual/interativa local
 
@@ -83,6 +104,8 @@ E abrir:
 
 - `http://127.0.0.1:8080/portal-usuario.html`
 - `http://127.0.0.1:8080/admin-firebase.html`
+
+Em localhost/headless, App Check, dominio autorizado e sessao real podem limitar a validacao de Firebase. Trate essa etapa como validacao estrutural quando nao houver conta/sessao real; a validacao funcional completa deve ser feita no dominio publicado com conta administrativa e usuario comum.
 
 Checklist minimo para a fase de eventos vinculados:
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-08T14:32:21.706Z",
+  "generatedAt": "2026-06-08T17:42:06.042Z",
   "totals": {
     "files": 369,
     "html": 36,
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 814111
+      "bytes": 814130
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 685323
+      "bytes": 685685
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 24,
-      "bytes": 237603
+      "bytes": 241058
     },
     {
       "ext": ".json",
@@ -92,7 +92,7 @@
     {
       "ext": "(sem ext)",
       "files": 8,
-      "bytes": 2691
+      "bytes": 3067
     },
     {
       "ext": ".log",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 40,
-      "bytes": 981219
+      "bytes": 981976
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -209,7 +209,7 @@
     {
       "dir": "docs",
       "files": 21,
-      "bytes": 222519
+      "bytes": 225974
     },
     {
       "dir": "js/data",
@@ -899,7 +899,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98375
+      "bytes": 98737
     },
     {
       "path": "privacidade.html",
@@ -1155,7 +1155,7 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98375
+      "bytes": 98737
     },
     {
       "path": "reservas.html",
@@ -3456,7 +3456,7 @@
     },
     {
       "file": "sw.js",
-      "bytes": 5607,
+      "bytes": 5626,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",

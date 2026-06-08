@@ -1,6 +1,6 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-08T14:32:21.706Z.
+Gerado em 2026-06-08T17:42:06.042Z.
 
 ## Resumo
 
@@ -22,16 +22,16 @@ Gerado em 2026-06-08T14:32:21.706Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 814111 |
-| .html | 36 | 685323 |
+| .js | 37 | 814130 |
+| .html | 36 | 685685 |
 | .css | 22 | 317211 |
-| .md | 24 | 237603 |
+| .md | 24 | 241058 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
 | .ico | 1 | 6837 |
 | .xml | 1 | 3852 |
-| (sem ext) | 8 | 2691 |
+| (sem ext) | 8 | 3067 |
 | .log | 1 | 1550 |
 | .txt | 2 | 1368 |
 
@@ -141,7 +141,7 @@ Gerado em 2026-06-08T14:32:21.706Z.
 | offline.html | 2383 |
 | onde-ficar.html | 17825 |
 | para-o-trade.html | 15061 |
-| portal-usuario.html | 98375 |
+| portal-usuario.html | 98737 |
 | privacidade.html | 22912 |
 | reservas.html | 5702 |
 | rotas-completas.html | 4224 |
@@ -195,7 +195,7 @@ Gerado em 2026-06-08T14:32:21.706Z.
 | mapa-completo.html | 10483 |
 | para-o-trade.html | 15061 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 98375 |
+| portal-usuario.html | 98737 |
 | reservas.html | 5702 |
 | rotas-completas/index.html | 767 |
 | rotas-completas.html | 4224 |

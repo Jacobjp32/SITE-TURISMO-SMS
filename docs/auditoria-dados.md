@@ -1,5 +1,30 @@
 # Auditoria das bases de dados turisticas
 
+## Atualizacao 2026-06-08 - hardening final de producao
+
+Escopo: revisao final de robustez em cache, Service Worker, console, mobile, acessibilidade basica, mapa, tema sazonal, clima, admin e portal, sem redesign, sem nova funcionalidade grande e sem alteracao de Firestore Rules ou Storage Rules.
+
+Correcoes aplicadas:
+
+- `_headers` passou a explicitar revalidacao de HTML, `sw.js`, `config.js` e `js/site-meta.js`, alem de `no-store` para `admin-firebase.html` e `portal-usuario.html`;
+- `sw.js` teve o cache incrementado para `turismo-sms-v17` e `favicon.ico` foi excluido da estrategia runtime de cache;
+- os botoes de mostrar/ocultar senha do portal receberam `aria-label` e `aria-pressed`, sincronizados pelo toggle;
+- `docs/commands.md` recebeu orientacao operacional sobre cache/SW, usuario vendo versao antiga, assets sazonais e validacao admin/portal apos deploy.
+
+Validacoes desta rodada confirmaram que:
+
+- `/favicon.ico` existe e carrega sem 404;
+- Open-Meteo segue permitido pela CSP em `connect-src`;
+- assets sazonais inexistentes nao geram requests quando os roles ficam nulos no manifest;
+- `Monumento Vapor Pery` segue com coordenada e acao "Como chegar";
+- a area de eventos vinculados do mapa mantem todos os eventos em box interna rolavel.
+
+Pendencias operacionais:
+
+- validar login/admin/portal no dominio publicado com contas reais, pois localhost/headless pode sofrer limitacoes de App Check, dominio autorizado ou sessao;
+- criar os assets sazonais reais antes de ativar paths no manifest ou via `window.SMS_SEASON_ASSETS`;
+- publicar Firebase Rules somente quando houver mudanca deliberada em rules; esta rodada nao alterou `firestore.rules` nem `storage.rules`.
+
 ## Atualizacao 2026-06-08 - mapa turistico, pendencias de coordenadas, Vapor Pery e assets sazonais
 
 Escopo: refinamento da lista publica de itens sem localizacao exata em `mapa-turistico.html`, sem alteracao de login, admin, portal do usuario, Firebase Rules ou Storage Rules.
