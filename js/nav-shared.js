@@ -112,16 +112,16 @@
 
             <li>
                 <div class="language-selector">
-                    <button class="current-language" id="currentLang">
+                    <button class="current-language" id="currentLang" type="button" aria-label="Selecionar idioma Português" aria-haspopup="true" aria-expanded="false">
                         <span class="flag">🇧🇷</span>
                         <span class="lang-code">PT</span>
                         <span class="dropdown-arrow">▼</span>
                     </button>
                     <div class="language-dropdown" id="langDropdown">
-                        <button class="lang-option active" data-lang="pt" data-flag="🇧🇷"><span class="flag">🇧🇷</span><span>Português</span></button>
-                        <button class="lang-option" data-lang="en" data-flag="🇺🇸"><span class="flag">🇺🇸</span><span>English</span></button>
-                        <button class="lang-option" data-lang="es" data-flag="🇪🇸"><span class="flag">🇪🇸</span><span>Español</span></button>
-                        <button class="lang-option" data-lang="pl" data-flag="🇵🇱"><span class="flag">🇵🇱</span><span>Polski</span></button>
+                        <button class="lang-option active" type="button" data-lang="pt" data-flag="🇧🇷" aria-label="Selecionar idioma Português" aria-pressed="true"><span class="flag">🇧🇷</span><span>Português</span></button>
+                        <button class="lang-option" type="button" data-lang="en" data-flag="🇺🇸" aria-label="Selecionar idioma English" aria-pressed="false"><span class="flag">🇺🇸</span><span>English</span></button>
+                        <button class="lang-option" type="button" data-lang="es" data-flag="🇪🇸" aria-label="Selecionar idioma Español" aria-pressed="false"><span class="flag">🇪🇸</span><span>Español</span></button>
+                        <button class="lang-option" type="button" data-lang="pl" data-flag="🇵🇱" aria-label="Selecionar idioma Polski" aria-pressed="false"><span class="flag">🇵🇱</span><span>Polski</span></button>
                     </div>
                 </div>
             </li>
@@ -590,12 +590,30 @@ body.font-larger{font-size:140%!important;}
         var langBtn  = document.getElementById('currentLang');
         var langDrop = document.getElementById('langDropdown');
         if (langBtn && langDrop) {
+            function updateLanguageAccessibility(activeLang) {
+                var activeOption = null;
+                langDrop.querySelectorAll('.lang-option').forEach(function(opt) {
+                    var isActive = opt.dataset.lang === activeLang;
+                    opt.classList.toggle('active', isActive);
+                    opt.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                    if (isActive) activeOption = opt;
+                });
+
+                if (!activeOption) return;
+
+                var labelText = activeOption.textContent ? activeOption.textContent.trim() : activeLang.toUpperCase();
+                langBtn.setAttribute('aria-label', 'Selecionar idioma ' + labelText);
+                langBtn.setAttribute('title', 'Idioma atual: ' + labelText);
+            }
+
             langBtn.addEventListener('click', function(e) {
                 e.stopPropagation();
                 langDrop.classList.toggle('open');
+                langBtn.setAttribute('aria-expanded', langDrop.classList.contains('open') ? 'true' : 'false');
             });
             document.addEventListener('click', function() {
                 langDrop.classList.remove('open');
+                langBtn.setAttribute('aria-expanded', 'false');
             });
             langDrop.querySelectorAll('.lang-option').forEach(function(opt) {
                 opt.addEventListener('click', function(event) {
@@ -605,6 +623,8 @@ body.font-larger{font-size:140%!important;}
                     document.querySelector('#currentLang .flag').textContent = flag;
                     document.querySelector('#currentLang .lang-code').textContent = lang.toUpperCase();
                     langDrop.classList.remove('open');
+                    langBtn.setAttribute('aria-expanded', 'false');
+                    updateLanguageAccessibility(lang);
                     // Disparar troca de idioma se translations.js estiver carregado
                     if (window.applyTranslations) window.applyTranslations(lang);
                     else if (window.translations) {
@@ -623,6 +643,7 @@ body.font-larger{font-size:140%!important;}
                 var opt = langDrop.querySelector('[data-lang="' + saved + '"]');
                 if (opt) opt.click();
             }
+            updateLanguageAccessibility(saved || 'pt');
         }
 
         // Mascotes: scroll-reveal (ativa .mascote-peek em qualquer página que os use)

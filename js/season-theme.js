@@ -237,6 +237,16 @@
         ];
     }
 
+    function getSeasonOptionAriaLabel(mode) {
+        var labels = {};
+        labels[AUTO_MODE] = "Selecionar estação Automático";
+        labels.summer = "Selecionar estação Verão";
+        labels.autumn = "Selecionar estação Outono";
+        labels.winter = "Selecionar estação Inverno";
+        labels.spring = "Selecionar estação Primavera";
+        return labels[mode] || "Selecionar estação visual do site";
+    }
+
     function updateControls(mode, season) {
         var resolvedMode = isKnownMode(mode) ? mode : AUTO_MODE;
         var resolvedSeason = isKnownMode(season) && season !== AUTO_MODE ? season : getAutomaticSeason();
@@ -248,6 +258,8 @@
             var isActive = button.dataset.seasonOption === resolvedMode;
             button.classList.toggle("is-active", isActive);
             button.setAttribute("aria-checked", isActive ? "true" : "false");
+            button.setAttribute("aria-pressed", isActive ? "true" : "false");
+            button.setAttribute("aria-label", getSeasonOptionAriaLabel(button.dataset.seasonOption));
         });
 
         document.querySelectorAll("[data-season-current]").forEach(function (label) {
@@ -379,6 +391,8 @@
             option.setAttribute("role", "menuitemradio");
             option.setAttribute("data-season-option", optionData.value);
             option.setAttribute("aria-checked", "false");
+            option.setAttribute("aria-pressed", "false");
+            option.setAttribute("aria-label", getSeasonOptionAriaLabel(optionData.value));
             option.textContent = optionData.label;
             option.addEventListener("click", function () {
                 applySeason(optionData.value);
