@@ -447,6 +447,8 @@
         var flagEl = document.getElementById('smsFlag');
         var codeEl = document.getElementById('smsCode');
 
+        if (!btn || !dropdown || !flagEl || !codeEl) return;
+
         function applyLang(lang) {
             currentLang = lang;
             localStorage.setItem('smsLang', lang);

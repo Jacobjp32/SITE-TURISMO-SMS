@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-08T17:42:06.042Z.
+Gerado em 2026-06-08T18:04:26.189Z.
 
 ## Resumo
 
-- Arquivos mapeados: 369
+- Arquivos mapeados: 378
 - HTMLs: 36
 - CSS: 22
 - JS: 37
@@ -16,16 +16,16 @@ Gerado em 2026-06-08T17:42:06.042Z.
 | ext | files | bytes |
 | --- | --- | --- |
 | .mp4 | 3 | 287052567 |
-| .png | 30 | 43973044 |
+| .jpg | 61 | 54403748 |
+| .png | 31 | 44260688 |
 | .jpeg | 98 | 40608066 |
-| .jpg | 53 | 36817774 |
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 37 | 814130 |
-| .html | 36 | 685685 |
+| .js | 37 | 814939 |
+| .html | 36 | 685742 |
 | .css | 22 | 317211 |
-| .md | 24 | 241058 |
+| .md | 24 | 242172 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
@@ -52,16 +52,23 @@ Gerado em 2026-06-08T17:42:06.042Z.
 | images/IGREJA_MATRIZ_1.png | 3614212 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 |
 | images/IGREJA_MATRIZ_2.png | 3315073 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg | 3265322 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg | 3125516 |
 | images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg | 3078694 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 |
 | docs/comtur/loa-2025.pdf | 2675327 |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png | 2617603 |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png | 2337143 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg | 2226619 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg | 2218444 |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png | 2175710 |
 | images/empreendimentos/all-garden/all-garden-02.jpeg | 2118493 |
 | docs/comtur/atas-comtur-2024-2025.docx | 2034102 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg | 1937259 |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 |
+| images/empreendimentos/dona-bernardina/dona-bernardina-07.jpg | 1612188 |
 | images/diorama_sao_mateus.png | 1414760 |
 | images/IMIGRANTES_IA_2.png | 1410765 |
 | images/IMG_2326.jpg | 1282786 |
@@ -113,13 +120,6 @@ Gerado em 2026-06-08T17:42:06.042Z.
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg | 520824 |
 | images/WEBP/NATAL-_20_.webp | 501040 |
 | images/IGREJA_AGUA_BRANCA_6.jpg | 484862 |
-| images/CUIA_1.JPG | 481303 |
-| images/empreendimentos/all-garden/all-garden-09.jpeg | 468502 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg | 466760 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg | 462028 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg | 458160 |
-| images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg | 450988 |
-| images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp | 450726 |
 
 
 ## HTMLs principais na raiz
@@ -146,7 +146,7 @@ Gerado em 2026-06-08T17:42:06.042Z.
 | reservas.html | 5702 |
 | rotas-completas.html | 4224 |
 | roteiro-ia.html | 3291 |
-| sabores.html | 30275 |
+| sabores.html | 30332 |
 | transparencia.html | 22733 |
 
 

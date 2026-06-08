@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-08T17:42:06.042Z",
+  "generatedAt": "2026-06-08T18:04:26.189Z",
   "totals": {
-    "files": 369,
+    "files": 378,
     "html": 36,
     "css": 22,
     "js": 37,
@@ -15,19 +15,19 @@
       "bytes": 287052567
     },
     {
+      "ext": ".jpg",
+      "files": 61,
+      "bytes": 54403748
+    },
+    {
       "ext": ".png",
-      "files": 30,
-      "bytes": 43973044
+      "files": 31,
+      "bytes": 44260688
     },
     {
       "ext": ".jpeg",
       "files": 98,
       "bytes": 40608066
-    },
-    {
-      "ext": ".jpg",
-      "files": 53,
-      "bytes": 36817774
     },
     {
       "ext": ".webp",
@@ -47,12 +47,12 @@
     {
       "ext": ".js",
       "files": 37,
-      "bytes": 814130
+      "bytes": 814939
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 685685
+      "bytes": 685742
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 24,
-      "bytes": 241058
+      "bytes": 242172
     },
     {
       "ext": ".json",
@@ -115,6 +115,11 @@
       "dir": "images",
       "files": 69,
       "bytes": 48499977
+    },
+    {
+      "dir": "images/empreendimentos/dona-bernardina",
+      "files": 8,
+      "bytes": 17751686
     },
     {
       "dir": "images/empreendimentos/marina-barra-do-iguacu",
@@ -188,8 +193,8 @@
     },
     {
       "dir": ".",
-      "files": 40,
-      "bytes": 981976
+      "files": 41,
+      "bytes": 1103965
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -199,7 +204,7 @@
     {
       "dir": "js",
       "files": 25,
-      "bytes": 552618
+      "bytes": 553427
     },
     {
       "dir": "css",
@@ -209,7 +214,7 @@
     {
       "dir": "docs",
       "files": 21,
-      "bytes": 225974
+      "bytes": 227088
     },
     {
       "dir": "js/data",
@@ -396,16 +401,34 @@
       "bytes": 3315073
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 3265322
+    },
+    {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
       "ext": ".jpg",
       "dir": "images/empreendimentos/nova-esperanca-equoterapia",
       "bytes": 3169922
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 3125516
+    },
+    {
       "path": "images/empreendimentos/agrosamas/agrosamas-03.jpeg",
       "ext": ".jpeg",
       "dir": "images/empreendimentos/agrosamas",
       "bytes": 3102073
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 3078694
     },
     {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg",
@@ -432,6 +455,18 @@
       "bytes": 2337143
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 2226619
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 2218444
+    },
+    {
       "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png",
       "ext": ".png",
       "dir": "images/empreendimentos/ribeiro-pesca",
@@ -450,10 +485,22 @@
       "bytes": 2034102
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 1937259
+    },
+    {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
       "ext": ".jpg",
       "dir": "images/empreendimentos/nova-esperanca-equoterapia",
       "bytes": 1826030
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-07.jpg",
+      "ext": ".jpg",
+      "dir": "images/empreendimentos/dona-bernardina",
+      "bytes": 1612188
     },
     {
       "path": "images/diorama_sao_mateus.png",
@@ -760,48 +807,6 @@
       "ext": ".jpg",
       "dir": "images",
       "bytes": 484862
-    },
-    {
-      "path": "images/CUIA_1.JPG",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 481303
-    },
-    {
-      "path": "images/empreendimentos/all-garden/all-garden-09.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/all-garden",
-      "bytes": 468502
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-12.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 466760
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-29.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 462028
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-16.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 458160
-    },
-    {
-      "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-20.jpeg",
-      "ext": ".jpeg",
-      "dir": "images/empreendimentos/marina-barra-do-iguacu",
-      "bytes": 450988
-    },
-    {
-      "path": "images/WEBP/PARQUE-DE-EXPOSICOES-ARENA-DE-ESPORTES-PORTAL-POLONES-_7_.webp",
-      "ext": ".webp",
-      "dir": "images/WEBP",
-      "bytes": 450726
     }
   ],
   "rootHtml": [
@@ -929,7 +934,7 @@
       "path": "sabores.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 30275
+      "bytes": 30332
     },
     {
       "path": "transparencia.html",
@@ -3189,7 +3194,7 @@
     },
     {
       "file": "js/rotas-data.js",
-      "bytes": 35093,
+      "bytes": 35900,
       "globals": [
         "window.ROTAS_LEGADO_ESTABLISHMENTS",
         "window.ROTAS_LEGADO_ROUTE_INFO"

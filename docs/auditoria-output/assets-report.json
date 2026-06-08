@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-08T17:42:07.703Z",
+  "generatedAt": "2026-06-08T18:04:27.064Z",
   "totals": {
-    "mediaFiles": 217,
-    "referencedMedia": 138,
-    "likelyOrphans": 79,
+    "mediaFiles": 226,
+    "referencedMedia": 146,
+    "likelyOrphans": 80,
     "duplicateGroups": 0,
     "missingReferences": 0,
-    "heavyMedia": 28
+    "heavyMedia": 35
   },
   "assets": [
     {
@@ -506,6 +506,110 @@
       },
       "sha256": "7680f4fcff67d9291324021f8bc380235b80ddb7face8cf02076e25259d33358",
       "usedBy": []
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg",
+      "ext": ".jpg",
+      "bytes": 3078694,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "7832c38ec03cd29e8bb3d4035c057896d0450389215b7921a434ede3c5a5a277",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg",
+      "ext": ".jpg",
+      "bytes": 3125516,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "271e08918107deff854a4be9df40c6b80c0fd8cdf6c4bb939e3f446df88ce7ad",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg",
+      "ext": ".jpg",
+      "bytes": 2218444,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "4625e209aad83922ba802a24aa9abbc9af2e384a5c2fe0c2cfb52079854746cf",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg",
+      "ext": ".jpg",
+      "bytes": 1937259,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "39ee84fb99e15bfc8e33dd98fe235a1fe5f12123da713d608fa2b8847a660c6b",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg",
+      "ext": ".jpg",
+      "bytes": 2226619,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "f7b5286f6afcb907efb42862a94aa857e5110c2f3527e5e0ae970ee42ad1098e",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg",
+      "ext": ".jpg",
+      "bytes": 3265322,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "2c86d7e5364c840bee1c40ec99d7c5df61c112d3b27f9fa0a3586bdc348613d7",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-07.jpg",
+      "ext": ".jpg",
+      "bytes": 1612188,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "b5d0811a205cfb89f1b0d91a9ce0fd5296dbee4c0a61e783666ac228952ec9c8",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-logo.png",
+      "ext": ".png",
+      "bytes": 287644,
+      "dimensions": {
+        "width": 1080,
+        "height": 1350
+      },
+      "sha256": "6f36012b6dcba2dcd6e666a55c71bb5cac1752e390ebf7b3ee1891e95eba812c",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
     },
     {
       "path": "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg",
@@ -2761,6 +2865,17 @@
       ]
     },
     {
+      "path": "tmp-dona-bernardina-contact.jpg",
+      "ext": ".jpg",
+      "bytes": 121932,
+      "dimensions": {
+        "height": 705,
+        "width": 840
+      },
+      "sha256": "c0658ccb417cba608f32df32b1e236267575247fa29d1f70fd0bdcfe89055873",
+      "usedBy": []
+    },
+    {
       "path": "videos/INSTITUCIONAL_POLONES.mp4",
       "ext": ".mp4",
       "bytes": 97037240,
@@ -2843,6 +2958,15 @@
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-06.jpeg",
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg",
       "images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg"
+    ],
+    [
+      "images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg",
+      "images/empreendimentos/dona-bernardina/dona-bernardina-07.jpg"
     ],
     [
       "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg",
@@ -3817,6 +3941,17 @@
       "usedBy": []
     },
     {
+      "path": "tmp-dona-bernardina-contact.jpg",
+      "ext": ".jpg",
+      "bytes": 121932,
+      "dimensions": {
+        "height": 705,
+        "width": 840
+      },
+      "sha256": "c0658ccb417cba608f32df32b1e236267575247fa29d1f70fd0bdcfe89055873",
+      "usedBy": []
+    },
+    {
       "path": "images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg",
       "ext": ".jpeg",
       "bytes": 97679,
@@ -4038,6 +4173,19 @@
       ]
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg",
+      "ext": ".jpg",
+      "bytes": 3265322,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "2c86d7e5364c840bee1c40ec99d7c5df61c112d3b27f9fa0a3586bdc348613d7",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg",
       "ext": ".jpg",
       "bytes": 3169922,
@@ -4046,6 +4194,19 @@
         "width": 3672
       },
       "sha256": "f98ed9acff751c74d398ab581dc5d9a61136c50d581a19e1d74b3b5db56bebe5",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg",
+      "ext": ".jpg",
+      "bytes": 3125516,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "271e08918107deff854a4be9df40c6b80c0fd8cdf6c4bb939e3f446df88ce7ad",
       "usedBy": [
         "js/rotas-data.js"
       ]
@@ -4061,6 +4222,19 @@
       "sha256": "d3d9c212a8d8a82ba23bc1a5ba95de260d1dbd190255ec27951e12c7e7249e3c",
       "usedBy": [
         "js/data/eventos.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg",
+      "ext": ".jpg",
+      "bytes": 3078694,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "7832c38ec03cd29e8bb3d4035c057896d0450389215b7921a434ede3c5a5a277",
+      "usedBy": [
+        "js/rotas-data.js"
       ]
     },
     {
@@ -4101,6 +4275,32 @@
       "usedBy": []
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg",
+      "ext": ".jpg",
+      "bytes": 2226619,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "f7b5286f6afcb907efb42862a94aa857e5110c2f3527e5e0ae970ee42ad1098e",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg",
+      "ext": ".jpg",
+      "bytes": 2218444,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "4625e209aad83922ba802a24aa9abbc9af2e384a5c2fe0c2cfb52079854746cf",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
       "path": "images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png",
       "ext": ".png",
       "bytes": 2175710,
@@ -4127,6 +4327,19 @@
       ]
     },
     {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg",
+      "ext": ".jpg",
+      "bytes": 1937259,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "39ee84fb99e15bfc8e33dd98fe235a1fe5f12123da713d608fa2b8847a660c6b",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
       "path": "images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg",
       "ext": ".jpg",
       "bytes": 1826030,
@@ -4135,6 +4348,19 @@
         "width": 3672
       },
       "sha256": "6a4afb3174c4a70188d2e84844e65b6cc5e4e8b8ea94a53ba7e3fa9e981de696",
+      "usedBy": [
+        "js/rotas-data.js"
+      ]
+    },
+    {
+      "path": "images/empreendimentos/dona-bernardina/dona-bernardina-07.jpg",
+      "ext": ".jpg",
+      "bytes": 1612188,
+      "dimensions": {
+        "height": 3024,
+        "width": 4032
+      },
+      "sha256": "b5d0811a205cfb89f1b0d91a9ce0fd5296dbee4c0a61e783666ac228952ec9c8",
       "usedBy": [
         "js/rotas-data.js"
       ]

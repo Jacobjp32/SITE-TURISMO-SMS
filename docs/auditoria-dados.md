@@ -1,5 +1,20 @@
 # Auditoria das bases de dados turisticas
 
+## Atualizacao 2026-06-08 - Dona Bernardina
+
+Escopo: atualizacao do empreendimento existente `Delicias da Bernardina` (`id: delicias-da-bernardina`) com imagens locais fornecidas em `EMPREENDIMENTOS/dona bernardina`, sem alterar login, admin, portal, CMS, Firestore Rules ou Storage Rules.
+
+Resultado:
+
+- o cadastro ja existia em `js/rotas-data.js`, vinculado a `route: polonesa`;
+- foram preservados id, rota, localizacao textual, telefone, horario, URL do Google Maps e coordenadas existentes;
+- o texto foi ajustado para mencionar `Dona Bernardina` e culinaria polonesa sem inventar pratos, horarios, endereco ou redes sociais;
+- as imagens publicas foram copiadas para `images/empreendimentos/dona-bernardina/`;
+- a capa definida foi `images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg`;
+- a galeria do cadastro usa as imagens suportadas da pasta local, incluindo a logo como ultimo item;
+- `PÃES.DNG` permaneceu apenas na pasta original por nao ser formato publico adequado para o site;
+- nao houve nova pendencia de localizacao: o cadastro ja possui `mapsUrl`, `lat`, `lng` e `coordStatus: ok`.
+
 ## Atualizacao 2026-06-08 - hardening final de producao
 
 Escopo: revisao final de robustez em cache, Service Worker, console, mobile, acessibilidade basica, mapa, tema sazonal, clima, admin e portal, sem redesign, sem nova funcionalidade grande e sem alteracao de Firestore Rules ou Storage Rules.
