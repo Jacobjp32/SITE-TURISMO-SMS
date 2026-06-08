@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-06-08T18:04:27.064Z",
+  "generatedAt": "2026-06-08T18:15:08.071Z",
   "totals": {
-    "mediaFiles": 226,
+    "mediaFiles": 225,
     "referencedMedia": 146,
-    "likelyOrphans": 80,
+    "likelyOrphans": 79,
     "duplicateGroups": 0,
     "missingReferences": 0,
     "heavyMedia": 35
@@ -2865,17 +2865,6 @@
       ]
     },
     {
-      "path": "tmp-dona-bernardina-contact.jpg",
-      "ext": ".jpg",
-      "bytes": 121932,
-      "dimensions": {
-        "height": 705,
-        "width": 840
-      },
-      "sha256": "c0658ccb417cba608f32df32b1e236267575247fa29d1f70fd0bdcfe89055873",
-      "usedBy": []
-    },
-    {
       "path": "videos/INSTITUCIONAL_POLONES.mp4",
       "ext": ".mp4",
       "bytes": 97037240,
@@ -3938,17 +3927,6 @@
         "width": 1440
       },
       "sha256": "7277da31ddaa3ee75809dedb9eaf7a9bd2d54b936d9a8c7b4aa824d874df9c02",
-      "usedBy": []
-    },
-    {
-      "path": "tmp-dona-bernardina-contact.jpg",
-      "ext": ".jpg",
-      "bytes": 121932,
-      "dimensions": {
-        "height": 705,
-        "width": 840
-      },
-      "sha256": "c0658ccb417cba608f32df32b1e236267575247fa29d1f70fd0bdcfe89055873",
       "usedBy": []
     },
     {

@@ -1,0 +1,341 @@
+{
+  "generatedAt": "2026-06-08T18:26:37.838Z",
+  "base": "http://127.0.0.1:8080",
+  "checks": [
+    {
+      "name": "mapa desktop busca/filtros/marcador",
+      "inputs": [
+        {
+          "i": 0,
+          "id": "search",
+          "type": "search",
+          "placeholder": "Buscar no turismo...",
+          "visible": false,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          }
+        },
+        {
+          "i": 1,
+          "id": "mapSearchInput",
+          "type": "search",
+          "placeholder": "Busque por igreja, hotel, erva-mate...",
+          "visible": true,
+          "rect": {
+            "x": 40.1875,
+            "y": 551.78125,
+            "w": 720.765625,
+            "h": 54
+          }
+        },
+        {
+          "i": 2,
+          "id": "chatbot-input-field",
+          "type": "text",
+          "placeholder": "Digite sua pergunta...",
+          "visible": false,
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "w": 0,
+            "h": 0
+          }
+        }
+      ],
+      "before": {
+        "markers": 66,
+        "mapReady": true,
+        "panelCards": 3,
+        "text": "Ir para conteúdo principal [Alt+1]\nIr para navegação [Alt+2]\nIr para rodapé [Alt+4]\nConteúdo [1]\nMenu [2]\nRodapé [4]\nTransparência\nA-\nA\nA+\n◐\nContraste\n◌\nOutono\nAUTO\nSão Mateus do Sul\n19°C\nNublado\nINÍCIO\nEXPLORE\n▼\nSABORES\n▼\nAGENDA\n▼\nPLANEJE SUA VISITA\n▼\nSOBRE\n▼\n🔍\n👤 ÁREA RESTRITA\n🇧🇷\nPT\n▼\nEXPLORAR O DESTINO\nMapa Turístico Interativo\n\nExplore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.\n\nNavegue pelos principais atrativos de São Mateus do Sul, descubra experiencias por categoria e use o mapa como ponto de partida para montar sua visita.\n\nExplorar roteiros\nPlanejar visita\nVoltar a HOME\nVISAO RAPIDA\n\nUma leitura organizada para explorar o destino com mapa, filtros e atalhos de consulta.\n\n66\npontos no mapa\n82\nlocais cadastrados\n7\ncategorias\nItens reais sem coordenadas ficam sinalizados como pendencia de dados. Rotas tematicas sem ponto unico aparecem em secao propria.\nLimpar\n\n82 locais encontrados.\n\n82\nitens visiveis\n66\ncom localizacao\nVolt"
+      },
+      "searchOk": true,
+      "afterSearchHasAncestral": true,
+      "clicked": [
+        "Gastronomia",
+        "Eventos",
+        "Hospedagem",
+        "Roteiros"
+      ],
+      "after": {
+        "markers": 1,
+        "popup": true,
+        "bodyHasAncestral": true,
+        "directions": true
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:26:40.595Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:26:40.596Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:26:40.607Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-comp"
+        }
+      ],
+      "errs": []
+    },
+    {
+      "name": "eventos mobile fallback/cards",
+      "before": {
+        "cards": 0,
+        "text": "Ir para conteúdo principal [Alt+1]\nIr para navegação [Alt+2]\nIr para rodapé [Alt+4]\nA-\nA\nA+\n◐\nContraste\n◌\nOutono\nAUTO\n19°C\nNublado\nINÍCIO\nEXPLORE\n▼\nSABORES\n▼\nAGENDA\n▼\nPLANEJE SUA VISITA\n▼\nSOBRE\n▼\n🔍\nBUSCAR\n👤 ÁREA RESTRITA\n🇧🇷\nPT\n▼\nInício\n›\nEventos\n📅 Calendário de Eventos 2026\n\nFestas, feiras e celebrações que fazem de São Mateus do Sul a Capital Polonesa do Paraná\n\n⭐ DESTAQUE 2026\n5º AgroSamas\n\nO maior evento de música, gastronomia e agronegócio da região!\n\n📅 17–21 Set\n🆓 Gratuito\nSite Oficial →\n📆 Mês\nTodos\nJan\nFev\nMar\nAbr\nMai\nJun\nJul\nAgo\nSet\nOut\nNov\nDez\n🏷️ Categoria\nTodas\n0\n⭐ Destaques\n0\nReligiosos\n0\nCulturais\n0\nFeiras\n0\nEsportivos\n0\nPastéis & Bingos\n0\n🌟 Próximos Destaques\nTodos os Eventos\n📋 Lista\n📅 Calendário\n\nCarregando eventos...\n\n© 2026 Secretaria Municipal de Turismo de São Mateus do Sul\n\nVoltar ao Portal | Transparência\n\nVersão do Sistema: Turismo SMS 1.0\nPortal atualizado em: 08/06/2026 15:06\n🧉\n1\n\n🍪 Cookies e Privacidade\nUtilizamos cookies para melhorar sua experiência, analisar o tráfego e personalizar o conteúdo. Ao continuar navegando você concorda com nossa Política de Privacidade em conformidade com a LGPD (Lei 13.709/2018).\n\nApenas essenciais\nAceitar todos",
+        "brokenImgs": [],
+        "buttons": [
+          {
+            "text": "Ir para conteúdo principal [Alt+1]",
+            "href": "http://127.0.0.1:8080/eventos.html#main-content"
+          },
+          {
+            "text": "Ir para navegação [Alt+2]",
+            "href": "http://127.0.0.1:8080/eventos.html#navLinks"
+          },
+          {
+            "text": "Ir para rodapé [Alt+4]",
+            "href": "http://127.0.0.1:8080/eventos.html#footer"
+          },
+          {
+            "text": "Conteúdo [1]",
+            "href": "http://127.0.0.1:8080/eventos.html#main-content"
+          },
+          {
+            "text": "Menu [2]",
+            "href": "http://127.0.0.1:8080/eventos.html#navLinks"
+          },
+          {
+            "text": "Rodapé [4]",
+            "href": "http://127.0.0.1:8080/eventos.html#footer"
+          },
+          {
+            "text": "Transparência",
+            "href": "http://127.0.0.1:8080/transparencia"
+          },
+          {
+            "text": "A-",
+            "href": ""
+          },
+          {
+            "text": "A",
+            "href": ""
+          },
+          {
+            "text": "A+",
+            "href": ""
+          },
+          {
+            "text": "◐\nContraste",
+            "href": ""
+          },
+          {
+            "text": "◌\nOutono\nAUTO",
+            "href": ""
+          },
+          {
+            "text": "Automático",
+            "href": ""
+          },
+          {
+            "text": "Verão",
+            "href": ""
+          },
+          {
+            "text": "Outono",
+            "href": ""
+          },
+          {
+            "text": "Inverno",
+            "href": ""
+          },
+          {
+            "text": "Primavera",
+            "href": ""
+          },
+          {
+            "text": "",
+            "href": "http://127.0.0.1:8080/"
+          },
+          {
+            "text": "Menu",
+            "href": ""
+          },
+          {
+            "text": "INÍCIO",
+            "href": "http://127.0.0.1:8080/"
+          },
+          {
+            "text": "EXPLORE\n▼",
+            "href": ""
+          },
+          {
+            "text": "Mapa Turístico",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html"
+          },
+          {
+            "text": "Pontos Turísticos",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?grupo=pontos-turisticos"
+          },
+          {
+            "text": "Roteiros",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?grupo=roteiros"
+          },
+          {
+            "text": "Galeria",
+            "href": "http://127.0.0.1:8080/galeria"
+          },
+          {
+            "text": "Experiências",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?grupo=roteiros"
+          },
+          {
+            "text": "SABORES\n▼",
+            "href": ""
+          },
+          {
+            "text": "Gastronomia Polonesa",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?categoria=Gastronomia"
+          },
+          {
+            "text": "Erva-mate",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?grupo=roteiros"
+          },
+          {
+            "text": "Restaurantes",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?categoria=Gastronomia"
+          },
+          {
+            "text": "Produtos Locais",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?categoria=Gastronomia"
+          },
+          {
+            "text": "AGENDA\n▼",
+            "href": ""
+          },
+          {
+            "text": "Eventos",
+            "href": "http://127.0.0.1:8080/eventos/"
+          },
+          {
+            "text": "Notícias",
+            "href": "http://127.0.0.1:8080/noticias"
+          },
+          {
+            "text": "PLANEJE SUA VISITA\n▼",
+            "href": ""
+          },
+          {
+            "text": "Onde Ficar",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?categoria=Hospedagem"
+          },
+          {
+            "text": "Como Chegar",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html"
+          },
+          {
+            "text": "Informações Essenciais",
+            "href": "http://127.0.0.1:8080/#visitor-guide-title"
+          },
+          {
+            "text": "Previsão do Tempo",
+            "href": "http://127.0.0.1:8080/#weather-title"
+          },
+          {
+            "text": "Contato",
+            "href": "http://127.0.0.1:8080/#contato"
+          },
+          {
+            "text": "SOBRE\n▼",
+            "href": ""
+          },
+          {
+            "text": "São Mateus do Sul",
+            "href": "http://127.0.0.1:8080/#sobre"
+          },
+          {
+            "text": "História",
+            "href": "http://127.0.0.1:8080/#sobre"
+          },
+          {
+            "text": "Capital Polonesa do Paraná",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?categoria=Cultura"
+          },
+          {
+            "text": "Terra da Erva-mate",
+            "href": "http://127.0.0.1:8080/mapa-turistico.html?grupo=roteiros"
+          },
+          {
+            "text": "Xisto",
+            "href": "http://127.0.0.1:8080/#sobre"
+          },
+          {
+            "text": "Institucional",
+            "href": "http://127.0.0.1:8080/transparencia"
+          },
+          {
+            "text": "🔍\nBUSCAR",
+            "href": ""
+          },
+          {
+            "text": "👤 ÁREA RESTRITA",
+            "href": "http://127.0.0.1:8080/portal-usuario"
+          },
+          {
+            "text": "👤 Usuário",
+            "href": "http://127.0.0.1:8080/portal-usuario"
+          },
+          {
+            "text": "Sair",
+            "href": ""
+          },
+          {
+            "text": "🇧🇷\nPT\n▼",
+            "href": ""
+          },
+          {
+            "text": "",
+            "href": ""
+          },
+          {
+            "text": "",
+            "href": ""
+          },
+          {
+            "text": "",
+            "href": ""
+          },
+          {
+            "text": "",
+            "href": ""
+          },
+          {
+            "text": "Início",
+            "href": "http://127.0.0.1:8080/"
+          },
+          {
+            "text": "×",
+            "href": ""
+          },
+          {
+            "text": "Voltar ao topo",
+            "href": ""
+          },
+          {
+            "text": "Site Oficial →",
+            "href": "https://agrosamas.com.br/"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdeli"
+        }
+      ]
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-08T18:04:26.189Z",
+  "generatedAt": "2026-06-08T18:15:06.654Z",
   "totals": {
-    "files": 378,
+    "files": 377,
     "html": 36,
     "css": 22,
     "js": 37,
@@ -16,8 +16,8 @@
     },
     {
       "ext": ".jpg",
-      "files": 61,
-      "bytes": 54403748
+      "files": 60,
+      "bytes": 54281816
     },
     {
       "ext": ".png",
@@ -193,8 +193,8 @@
     },
     {
       "dir": ".",
-      "files": 41,
-      "bytes": 1103965
+      "files": 40,
+      "bytes": 982033
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",

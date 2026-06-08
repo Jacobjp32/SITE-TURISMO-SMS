@@ -1,12 +1,12 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-06-08T18:04:27.064Z.
+Gerado em 2026-06-08T18:15:08.071Z.
 
 ## Resumo
 
-- Midias encontradas: 226
+- Midias encontradas: 225
 - Midias referenciadas: 146
-- Orfas provaveis: 80
+- Orfas provaveis: 79
 - Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
 - Midias pesadas: 35
@@ -132,7 +132,6 @@ _Nenhum item encontrado._
 | images/IMIGRANTES_IA_1.jpg | 133075 | 1200x669 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-02.jpeg | 124381 | 1200x1600 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-35.jpeg | 123123 | 1440x960 |
-| tmp-dona-bernardina-contact.jpg | 121932 | 840x705 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg | 97679 | 1024x683 |
 | images/mascotes/MASCOTE_MENINO_POLONES_1.webp | 95512 | 306945x4997377 |
 | images/diorama_sao_mateus.webp | 94108 | 1200x669 |

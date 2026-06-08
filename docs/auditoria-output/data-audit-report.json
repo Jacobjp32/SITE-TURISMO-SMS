@@ -1,0 +1,819 @@
+{
+  "counts": {
+    "pontos": 8,
+    "restaurantes": 5,
+    "hospedagens": 5,
+    "eventos": 8,
+    "informacoes": 0,
+    "rotas": 6,
+    "locais": 0,
+    "legadoEstabelecimentos": 47
+  },
+  "total": 79,
+  "issues": [
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "restaurantes[2] Restaurante e Churrascaria Dallas"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "restaurantes[2] Restaurante e Churrascaria Dallas",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "restaurantes[3] Parada Pinoli"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "restaurantes[3] Parada Pinoli",
+      "field": "imagem"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "restaurantes[4] Rua do Mathe",
+      "other": "pontos[4] Rua do Mathe"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "restaurantes[4] Rua do Mathe",
+      "other": "pontos[4] Rua do Mathe"
+    },
+    {
+      "severity": "baixa",
+      "type": "coordenada nula pendente",
+      "label": "hospedagens[0] Hotel São Mateus"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "hospedagens[1] Hotel Nora"
+    },
+    {
+      "severity": "baixa",
+      "type": "coordenada nula pendente",
+      "label": "hospedagens[1] Hotel Nora"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "hospedagens[1] Hotel Nora",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "hospedagens[2] Hotel Dom Leopoldo"
+    },
+    {
+      "severity": "baixa",
+      "type": "coordenada nula pendente",
+      "label": "hospedagens[2] Hotel Dom Leopoldo"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "hospedagens[2] Hotel Dom Leopoldo",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "hospedagens[3] Pousadas Rurais"
+    },
+    {
+      "severity": "baixa",
+      "type": "coordenada nula pendente",
+      "label": "hospedagens[3] Pousadas Rurais"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "hospedagens[3] Pousadas Rurais",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "hospedagens[3] Pousadas Rurais",
+      "field": "telefone"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "hospedagens[4] Hotel Moro"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "hospedagens[4] Hotel Moro",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "eventos[4] Feira Gastronômica"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "eventos[4] Feira Gastronômica",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "eventos[5] Feira do Produtor"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "eventos[5] Feira do Produtor",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "eventos[6] Roda de Mathe"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "eventos[6] Roda de Mathe",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "eventos[7] Feira da Lua"
+    },
+    {
+      "severity": "baixa",
+      "type": "coordenada nula pendente",
+      "label": "eventos[7] Feira da Lua"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "eventos[7] Feira da Lua",
+      "field": "imagem"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[0] Dalety — Queijos e Doces"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[0] Dalety — Queijos e Doces"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[1] All Garden"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[2] Nova Esperança"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[3] Cabana Campo de Telha"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[3] Cabana Campo de Telha"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[3] Cabana Campo de Telha",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[4] Ervateira Rei Verde"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[4] Ervateira Rei Verde"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[5] Baldo S/A Comércio, Indústria e Exportação"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[5] Baldo S/A Comércio, Indústria e Exportação"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[6] Parada do Chimarrão"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[6] Parada do Chimarrão"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[7] Ervateira Taquaral"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[7] Ervateira Taquaral"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[8] Vivenda do Mate"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[8] Vivenda do Mate"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[9] Viveiro Santana"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[9] Viveiro Santana"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[9] Viveiro Santana",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[10] BierHerr"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[10] BierHerr"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "legadoEstabelecimentos[11] Igreja Centenária da Água Branca",
+      "other": "pontos[1] Igreja Centenária da Água Branca"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[11] Igreja Centenária da Água Branca",
+      "other": "pontos[1] Igreja Centenária da Água Branca"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[11] Igreja Centenária da Água Branca"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[11] Igreja Centenária da Água Branca"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[11] Igreja Centenária da Água Branca",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[12] Delícias da Bernardina"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[12] Delícias da Bernardina",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[13] Armazém Campestre"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[13] Armazém Campestre"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[13] Armazém Campestre",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[14] Queijos Artesanais da Cleonice"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[14] Queijos Artesanais da Cleonice"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[14] Queijos Artesanais da Cleonice",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[15] Propriedade da Inês e do Lucival"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[15] Propriedade da Inês e do Lucival"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[15] Propriedade da Inês e do Lucival",
+      "field": "social"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "legadoEstabelecimentos[16] Ancestral Gastronomia",
+      "other": "restaurantes[0] Ancestral Gastronomia"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[16] Ancestral Gastronomia",
+      "other": "restaurantes[0] Ancestral Gastronomia"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[16] Ancestral Gastronomia"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[17] Artur Biergarten"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[17] Artur Biergarten"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[18] Ribeiro Pesca e Turismo"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "legadoEstabelecimentos[19] Marina Barra do Iguaçu",
+      "other": "restaurantes[1] Marina Barra do Iguaçu"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[19] Marina Barra do Iguaçu",
+      "other": "restaurantes[1] Marina Barra do Iguaçu"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[19] Marina Barra do Iguaçu"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[20] Área de Lazer Ulbrich"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[20] Área de Lazer Ulbrich"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[21] Pesqueiro Tio Ivo"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[21] Pesqueiro Tio Ivo"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[22] Pesqueiro da Joana"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[22] Pesqueiro da Joana"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[23] Pesqueiro do Luizão"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[23] Pesqueiro do Luizão"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[24] Pesqueiro do Kiko"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[24] Pesqueiro do Kiko"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[24] Pesqueiro do Kiko",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[25] Rancho Samas"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[25] Rancho Samas"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[26] Pesqueiro do Pedrão"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[26] Pesqueiro do Pedrão"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[26] Pesqueiro do Pedrão",
+      "field": "phone"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[26] Pesqueiro do Pedrão",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[27] Frigorífico 3M — Casa de Carnes"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[27] Frigorífico 3M — Casa de Carnes"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[28] Canil e CT São José"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[28] Canil e CT São José"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "legadoEstabelecimentos[29] Parada Pinoli",
+      "other": "restaurantes[3] Parada Pinoli"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[29] Parada Pinoli",
+      "other": "restaurantes[3] Parada Pinoli"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[29] Parada Pinoli"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[29] Parada Pinoli"
+    },
+    {
+      "severity": "media",
+      "type": "id duplicado",
+      "label": "legadoEstabelecimentos[30] Hotel Moro",
+      "other": "hospedagens[4] Hotel Moro"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[30] Hotel Moro",
+      "other": "hospedagens[4] Hotel Moro"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[30] Hotel Moro"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[30] Hotel Moro"
+    },
+    {
+      "severity": "baixa",
+      "type": "nome duplicado suspeito",
+      "label": "legadoEstabelecimentos[31] Restaurante e Churrascaria Dallas",
+      "other": "restaurantes[2] Restaurante e Churrascaria Dallas"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[31] Restaurante e Churrascaria Dallas"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[31] Restaurante e Churrascaria Dallas"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[32] Propriedade Eduardo Pachek"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[32] Propriedade Eduardo Pachek"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[32] Propriedade Eduardo Pachek",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[33] Pitayas Dragão do Iguaçu"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[33] Pitayas Dragão do Iguaçu"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[34] Posto Pelanda"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[34] Posto Pelanda"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[34] Posto Pelanda",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[35] Viveiro Fluviópolis"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[35] Viveiro Fluviópolis"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[35] Viveiro Fluviópolis",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[36] Propriedade do Seu Luiz"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[36] Propriedade do Seu Luiz"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[36] Propriedade do Seu Luiz",
+      "field": "phone"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[36] Propriedade do Seu Luiz",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[37] Sítio Pica-pau Vermelho"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[37] Sítio Pica-pau Vermelho"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[37] Sítio Pica-pau Vermelho",
+      "field": "phone"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[37] Sítio Pica-pau Vermelho",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[38] Viveiro MK"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[38] Viveiro MK"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[39] Sawe Parque Aquático"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[40] Mag Verduras"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[40] Mag Verduras"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[40] Mag Verduras",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[41] Propriedade do Tico"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[41] Propriedade do Tico"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[41] Propriedade do Tico",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[42] Sítio Sapopema"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[42] Sítio Sapopema"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[42] Sítio Sapopema",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[43] Propriedade da Sabrina"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[43] Propriedade da Sabrina"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[43] Propriedade da Sabrina",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[44] Propriedade da Antonia e Gabriel"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[44] Propriedade da Antonia e Gabriel"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[44] Propriedade da Antonia e Gabriel",
+      "field": "phone"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[44] Propriedade da Antonia e Gabriel",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[45] Propriedade do Beto"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[45] Propriedade do Beto"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[45] Propriedade do Beto",
+      "field": "social"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem categoria/tipo/rota",
+      "label": "legadoEstabelecimentos[46] Sítio Ludevico"
+    },
+    {
+      "severity": "baixa",
+      "type": "sem imagem principal",
+      "label": "legadoEstabelecimentos[46] Sítio Ludevico"
+    },
+    {
+      "severity": "baixa",
+      "type": "string vazia",
+      "label": "legadoEstabelecimentos[46] Sítio Ludevico",
+      "field": "social"
+    }
+  ]
+}

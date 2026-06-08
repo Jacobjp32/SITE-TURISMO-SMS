@@ -1,0 +1,1908 @@
+{
+  "generatedAt": "2026-06-08T18:21:24.366Z",
+  "base": "http://127.0.0.1:8080",
+  "pages": [
+    "index.html",
+    "mapa-turistico.html",
+    "sabores.html",
+    "eventos.html",
+    "noticias.html",
+    "noticia.html",
+    "onde-ficar.html",
+    "portal-usuario.html",
+    "admin-firebase.html"
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1366,
+      "height": 900
+    },
+    {
+      "name": "mobile390",
+      "width": 390,
+      "height": 844
+    },
+    {
+      "name": "mobile430",
+      "width": 430,
+      "height": 932
+    }
+  ],
+  "browser": "playwright chromium with local Chrome executable",
+  "records": [
+    {
+      "page": "index.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/index.html",
+        "title": "São Mateus do Sul - Capital Polonesa do Paraná | Turismo Oficial"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 10341,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:30.460Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:30.468Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:30.485Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)\n    at async getToken$2 (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:14779)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942886021&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=1709667675.1780942889&frm=0&pscdl=noapi&rcb=13&sr=1366x900&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616986~115938465~115938469~118228215~119027222&sid=1780942888&sct=1&seg=0&dl=http%3A%2F%2F127.0.0.1%2Findex.html&dt=S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1%20%7C%20Turismo%20Oficial&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=3149",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "mapa-turistico.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/mapa-turistico.html",
+        "title": "Mapa Turístico Interativo - São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 16820,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 93005,
+          "tag": "DIV",
+          "id": "",
+          "cls": "leaflet-proxy leaflet-zoom-animated",
+          "text": ""
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:34.079Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:34.080Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:34.092Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "sabores.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/sabores.html",
+        "title": "Sabores de São Mateus | Gastronomia Polonesa"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 3663,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942896997&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1709667675.1780942889&frm=0&pscdl=noapi&rcb=2&sr=1366x900&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616985~115938466~115938469~118228215~119027224&sid=1780942888&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fsabores.html&dt=Sabores%20de%20S%C3%A3o%20Mateus%20%7C%20Gastronomia%20Polonesa&en=page_view&_ee=1&tfd=252",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "eventos.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/eventos.html",
+        "title": "Calendário de Eventos 2026 | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 1257,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticias.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticias.html",
+        "title": "Notícias | São Mateus do Sul - Capital Polonesa do Paraná"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 4310,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942904749&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1709667675.1780942889&frm=0&pscdl=noapi&rcb=1&sr=1366x900&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616985~115938466~115938468~118228214~119027222&sid=1780942888&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticias.html&dt=Not%C3%ADcias%20%7C%20S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1&en=page_view&_ee=1&tfd=161",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticia.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticia.html",
+        "title": "Notícia | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 850,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "warning",
+          "text": "Firebase CMS indisponível, usando localStorage: CONFIG.firebase ausente"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942908649&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1709667675.1780942889&frm=0&pscdl=noapi&rcb=5&sr=1366x900&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938469~118228215~119027222&sid=1780942888&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticia.html&dt=Not%C3%ADcia%20%7C%20S%C3%A3o%20Mateus%20do%20Sul&en=page_view&_ee=1&tfd=412",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "onde-ficar.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/onde-ficar.html",
+        "title": "Onde Ficar | Hospedagem em São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 3025,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [],
+      "pageErrors": []
+    },
+    {
+      "page": "portal-usuario.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/portal-usuario.html",
+        "title": "Portal do Usuário — Turismo São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 1192,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option is-active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "season-switcher__option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:21:57.135Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "admin-firebase.html",
+      "viewport": {
+        "name": "desktop",
+        "width": 1366,
+        "height": 900
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/admin-firebase.html",
+        "title": "Painel Admin | Turismo SMS"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 94,
+        "visibleProblemText": [],
+        "scrollWidth": 1366,
+        "clientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": []
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:01.592Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942921055&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1709667675.1780942889&frm=0&pscdl=noapi&rcb=15&sr=1366x900&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938468~118228214~119027222&sid=1780942888&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fadmin-firebase.html&dt=Painel%20Admin%20%7C%20Turismo%20SMS&en=page_view&_ee=1&tfd=268",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "index.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/index.html",
+        "title": "São Mateus do Sul - Capital Polonesa do Paraná | Turismo Oficial"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 10153,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 146,
+          "tag": "DIV",
+          "id": "",
+          "cls": "active",
+          "text": ""
+        },
+        "buttonsMissingNames": []
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:07.874Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:07.875Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:07.891Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)\n    at async getToken$2 (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:14779)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942925504&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=1675771958.1780942927&frm=0&pscdl=noapi&rcb=16&sr=390x844&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616986~115938465~115938469~118228215~119027224&sid=1780942926&sct=1&seg=0&dl=http%3A%2F%2F127.0.0.1%2Findex.html&dt=S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1%20%7C%20Turismo%20Oficial&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=1270",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "mapa-turistico.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/mapa-turistico.html",
+        "title": "Mapa Turístico Interativo - São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 16762,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 46798.796875,
+          "tag": "DIV",
+          "id": "",
+          "cls": "leaflet-proxy leaflet-zoom-animated",
+          "text": ""
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:11.349Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:11.350Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:11.374Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "sabores.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/sabores.html",
+        "title": "Sabores de São Mateus | Gastronomia Polonesa"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 3605,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942933962&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1675771958.1780942927&frm=0&pscdl=noapi&rcb=3&sr=390x844&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616985~115938465~115938468~118228214~118395334~119027224&sid=1780942926&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fsabores.html&dt=Sabores%20de%20S%C3%A3o%20Mateus%20%7C%20Gastronomia%20Polonesa&en=page_view&_ee=1&tfd=160",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "eventos.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/eventos.html",
+        "title": "Calendário de Eventos 2026 | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 1199,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticias.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticias.html",
+        "title": "Notícias | São Mateus do Sul - Capital Polonesa do Paraná"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 4252,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942941690&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1675771958.1780942927&frm=0&pscdl=noapi&rcb=6&sr=390x844&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938469~118228214~119027222&sid=1780942926&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticias.html&dt=Not%C3%ADcias%20%7C%20S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1&en=page_view&_ee=1&tfd=150",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticia.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticia.html",
+        "title": "Notícia | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 792,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "warning",
+          "text": "Firebase CMS indisponível, usando localStorage: CONFIG.firebase ausente"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942945534&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1675771958.1780942927&frm=0&pscdl=noapi&rcb=11&sr=390x844&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938468~118228214~119027222&sid=1780942926&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticia.html&dt=Not%C3%ADcia%20%7C%20S%C3%A3o%20Mateus%20do%20Sul&en=page_view&_ee=1&tfd=326",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "onde-ficar.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/onde-ficar.html",
+        "title": "Onde Ficar | Hospedagem em São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 2963,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [],
+      "pageErrors": []
+    },
+    {
+      "page": "portal-usuario.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/portal-usuario.html",
+        "title": "Portal do Usuário — Turismo São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 824,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 390,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:33.940Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "admin-firebase.html",
+      "viewport": {
+        "name": "mobile390",
+        "width": 390,
+        "height": 844
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/admin-firebase.html",
+        "title": "Painel Admin | Turismo SMS"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 94,
+        "visibleProblemText": [],
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "bodyScrollWidth": 390,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": []
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:38.477Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942957741&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=1675771958.1780942927&frm=0&pscdl=noapi&rcb=6&sr=390x844&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938466~115938468~118228215~119027224&sid=1780942926&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fadmin-firebase.html&dt=Painel%20Admin%20%7C%20Turismo%20SMS&en=page_view&_ee=1&tfd=441",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "index.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/index.html",
+        "title": "São Mateus do Sul - Capital Polonesa do Paraná | Turismo Oficial"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 10153,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 146,
+          "tag": "DIV",
+          "id": "",
+          "cls": "active",
+          "text": ""
+        },
+        "buttonsMissingNames": []
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:44.235Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:44.236Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:44.245Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ReCaptchaV3Provider.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:19252)\n    at async getToken$2 (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check.js:1:14779)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942962033&gcd=13l3l3l3l1l1&npa=0&dma=0&are=1&cid=94198435.1780942963&frm=0&pscdl=noapi&rcb=14&sr=430x932&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115616985~115938466~115938468~118228215~119027222&sid=1780942963&sct=1&seg=0&dl=http%3A%2F%2F127.0.0.1%2Findex.html&dt=S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1%20%7C%20Turismo%20Oficial&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=1145",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "mapa-turistico.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/mapa-turistico.html",
+        "title": "Mapa Turístico Interativo - São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 16762,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 93931.890625,
+          "tag": "DIV",
+          "id": "",
+          "cls": "leaflet-proxy leaflet-zoom-animated",
+          "text": ""
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:47.791Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:47.791Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)"
+        },
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:22:47.810Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async Promise.all (index 1)"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "sabores.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/sabores.html",
+        "title": "Sabores de São Mateus | Gastronomia Polonesa"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 3605,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942970256&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=94198435.1780942963&frm=0&pscdl=noapi&rcb=9&sr=430x932&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938466~115938468~118228214~119027224&sid=1780942963&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fsabores.html&dt=Sabores%20de%20S%C3%A3o%20Mateus%20%7C%20Gastronomia%20Polonesa&en=page_view&_ee=1&tfd=151",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "eventos.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/eventos.html",
+        "title": "Calendário de Eventos 2026 | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 1199,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticias.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticias.html",
+        "title": "Notícias | São Mateus do Sul - Capital Polonesa do Paraná"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 4252,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "Loading the script 'https://www.google.com/recaptcha/api.js' violates the following Content Security Policy directive: \"script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com\". Note that 'script-src-elem' was not explicitly set, so 'script-src' is used as a fallback. The action has been bloc"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942977758&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=94198435.1780942963&frm=0&pscdl=noapi&rcb=11&sr=430x932&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938466~115938469~118228214~119027222&sid=1780942963&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticias.html&dt=Not%C3%ADcias%20%7C%20S%C3%A3o%20Mateus%20do%20Sul%20-%20Capital%20Polonesa%20do%20Paran%C3%A1&en=page_view&_ee=1&tfd=176",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api.js",
+          "failure": "csp"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "noticia.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/noticia.html",
+        "title": "Notícia | São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 792,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "warning",
+          "text": "Firebase CMS indisponível, usando localStorage: CONFIG.firebase ausente"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942981651&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=94198435.1780942963&frm=0&pscdl=noapi&rcb=14&sr=430x932&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938468~118228215~119027224&sid=1780942963&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fnoticia.html&dt=Not%C3%ADcia%20%7C%20S%C3%A3o%20Mateus%20do%20Sul&en=page_view&_ee=1&tfd=427",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "onde-ficar.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/onde-ficar.html",
+        "title": "Onde Ficar | Hospedagem em São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 2963,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [],
+      "requests": [],
+      "pageErrors": []
+    },
+    {
+      "page": "portal-usuario.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/portal-usuario.html",
+        "title": "Portal do Usuário — Turismo São Mateus do Sul"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 824,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 430,
+          "tag": "UL",
+          "id": "navLinks",
+          "cls": "nav-links",
+          "text": "INÍCIO EXPLORE ▼ SABORES ▼ AGENDA ▼ PLANEJE SUA VISITA ▼ SOBRE ▼ 🔍 BUSCAR 👤 ÁREA RESTRITA 🇧🇷 PT ▼"
+        },
+        "buttonsMissingNames": [
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option active"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          },
+          {
+            "tag": "BUTTON",
+            "id": "",
+            "cls": "lang-option"
+          }
+        ]
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:23:10.134Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "page": "admin-firebase.html",
+      "viewport": {
+        "name": "mobile430",
+        "width": 430,
+        "height": 932
+      },
+      "nav": {
+        "ok": true,
+        "status": 200,
+        "url": "http://127.0.0.1:8080/admin-firebase.html",
+        "title": "Painel Admin | Turismo SMS"
+      },
+      "metrics": {
+        "hasBody": true,
+        "bodyTextLength": 94,
+        "visibleProblemText": [],
+        "scrollWidth": 430,
+        "clientWidth": 430,
+        "bodyScrollWidth": 430,
+        "overflowX": 0,
+        "worstOverflowElement": {
+          "overflow": 0
+        },
+        "buttonsMissingNames": []
+      },
+      "logs": [
+        {
+          "type": "error",
+          "text": "[2026-06-08T18:23:14.512Z]  @firebase/app-check: FirebaseError: AppCheck: ReCAPTCHA error. (appCheck/recaptcha-error).\n    at ve.getToken (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:4797)\n    at async ee (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1107)\n    at async P.operation (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js:3:1950)\n    at async P.process (https://www.gstatic.com/firebasejs/10.7.1/firebase-app-ch"
+        }
+      ],
+      "requests": [
+        {
+          "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-YPRT7FFFV8&gtm=45je6631v9246579983za200zd9246579983&_p=1780942993774&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAAAAQ&are=1&cid=94198435.1780942963&frm=0&pscdl=noapi&rcb=12&sr=430x932&uaa=x86&uab=64&uafvl=Chromium%3B148.0.7778.217%7CGoogle%2520Chrome%3B148.0.7778.217%7CNot%252FA)Brand%3B99.0.0.0&uam=&uamb=0&uap=Windows&uapv=19.0.0&uaw=0&ul=pt-br&_s=1&tag_exp=0~115938465~115938468~118228214~119027224&sid=1780942963&sct=1&seg=1&dl=http%3A%2F%2F127.0.0.1%2Fadmin-firebase.html&dt=Painel%20Admin%20%7C%20Turismo%20SMS&en=page_view&_ee=1&tfd=417",
+          "failure": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://www.google.com/recaptcha/api2/clr?k=6LcK1_MsAAAAADlnxG0cphHf9ihlQ56WPIz-JiHa",
+          "failure": "net::ERR_ABORTED"
+        }
+      ],
+      "pageErrors": []
+    }
+  ]
+}
