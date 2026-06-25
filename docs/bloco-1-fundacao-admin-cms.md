@@ -478,3 +478,47 @@ a UI de um card de dashboard — sempre com revisão do Claude.
 > Validar com o checklist da seção 10 (foco: paridade total e console limpo) antes de
 > qualquer commit.
 ```
+
+---
+
+## 13. Etapa 1 — Implementação realizada (2026-06-25)
+
+Camada modular base criada em **modo passthrough**, aditiva e inerte. Comportamento do
+painel **inalterado**.
+
+### Arquivos criados
+- `js/admin/admin-context.js` → `window.AdminContext` (getters lazy/seguros para
+  firebase/auth/db/storage, `api=FirebaseSystem`, `cms=AdminContentCMS`, `sec=SMSecurity`,
+  `config=CONFIG`, `siteMeta=SITE_META`, `currentUser`/`currentRole`, `isAdmin/isModerator`,
+  `isMaster` (cosmético), `serverTimestamp`, `toast`, `state`).
+- `js/admin/admin-ui.js` → `window.AdminUI` (`escapeHtml`, `formatDate`,
+  `states.{loading,empty,error}`, `showToast`). **Não** toca `#managerModal`/`#contentModal`.
+- `js/admin/admin-registry.js` → `window.AdminRegistry` (`register/has/get/list/listSorted/
+  count`, valida id e duplicidade). Nenhum módulo registrado nesta etapa.
+- `js/admin/admin-router.js` → `window.AdminRouter` (`init/navigate/getCurrentSection/
+  disposeCurrent/registerLegacyBridge`). `navigate()` **delega** ao `showSection` legado.
+- `js/admin/admin-shell.js` → `window.AdminShell` (boot tardio em `firebaseReady`/
+  `DOMContentLoaded`; só inicializa o router e loga em modo debug). Idempotente.
+
+### Arquivo alterado
+- `admin-firebase.html`: +6 linhas — 5 `<script src="js/admin/*.js?v=admin-modular-20260625">`
+  inseridos **após** `admin-content-cms.js` e **antes** do `<script>` inline. Nada removido.
+
+### Modo passthrough
+Os scripts carregam antes do inline, mas o `AdminShell` só inicializa em
+`firebaseReady`/`DOMContentLoaded`, quando o `showSection` legado já existe. Nenhum botão
+chama `AdminRouter.navigate` ainda — a sidebar continua usando o `showSection` inline
+inalterado. `window.showSection` **preservado**; nenhum `onclick` alterado.
+
+### O que continua legado / não migrado
+Todo o shell inline (auth gate, monitor de sessão, `showSection`, loaders), os modais
+`#managerModal`/`#contentModal`, e todos os módulos (dashboard, aprovações, vínculos,
+usuários, eventos, notícias, mídia). Nenhum CRUD novo, nenhuma collection nova.
+
+### Rollback
+Remover as 5 linhas `<script src="js/admin/...">` de `admin-firebase.html` e a pasta
+`js/admin/`. Nenhum outro arquivo de produção foi tocado.
+
+### Próxima etapa
+Etapa 2 — migrar **Dashboard** para `modules/dashboard.js` com shim global de
+`loadDashboardData`, sem mexer em rules.

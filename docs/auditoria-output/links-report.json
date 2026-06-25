@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-06-08T18:58:21.764Z",
+  "generatedAt": "2026-06-25T13:29:49.975Z",
   "totals": {
-    "filesScanned": 100,
-    "links": 639,
+    "filesScanned": 105,
+    "links": 644,
     "routes": 43,
     "broken": 0,
     "legacy": 16,

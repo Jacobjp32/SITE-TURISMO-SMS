@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-08T18:58:37.621Z",
+  "generatedAt": "2026-06-25T13:29:52.414Z",
   "totals": {
-    "files": 377,
+    "files": 384,
     "html": 36,
     "css": 22,
-    "js": 37,
+    "js": 42,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,13 +46,13 @@
     },
     {
       "ext": ".js",
-      "files": 37,
-      "bytes": 817236
+      "files": 42,
+      "bytes": 834227
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 688424
+      "bytes": 691451
     },
     {
       "ext": ".css",
@@ -61,8 +61,8 @@
     },
     {
       "ext": ".md",
-      "files": 25,
-      "bytes": 252345
+      "files": 27,
+      "bytes": 314009
     },
     {
       "ext": ".json",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 983220
+      "bytes": 986247
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -208,8 +208,8 @@
     },
     {
       "dir": "docs",
-      "files": 22,
-      "bytes": 237261
+      "files": 24,
+      "bytes": 298925
     },
     {
       "dir": "js/data",
@@ -220,6 +220,11 @@
       "dir": "scripts",
       "files": 5,
       "bytes": 32606
+    },
+    {
+      "dir": "js/admin",
+      "files": 5,
+      "bytes": 16991
     },
     {
       "dir": "cloudflare-worker",
@@ -815,7 +820,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 127408
+      "bytes": 130435
     },
     {
       "path": "eventos.html",
@@ -1035,7 +1040,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 127408
+      "bytes": 130435
     },
     {
       "path": "css/mapa-3d.css",
@@ -1080,10 +1085,52 @@
       "bytes": 9638
     },
     {
+      "path": "docs/bloco-1-fundacao-admin-cms.md",
+      "ext": ".md",
+      "dir": "docs",
+      "bytes": 27163
+    },
+    {
+      "path": "docs/plano-admin-cms-completo.md",
+      "ext": ".md",
+      "dir": "docs",
+      "bytes": 33643
+    },
+    {
       "path": "firebase.json",
       "ext": ".json",
       "dir": ".",
       "bytes": 61
+    },
+    {
+      "path": "js/admin/admin-context.js",
+      "ext": ".js",
+      "dir": "js/admin",
+      "bytes": 4021
+    },
+    {
+      "path": "js/admin/admin-registry.js",
+      "ext": ".js",
+      "dir": "js/admin",
+      "bytes": 3270
+    },
+    {
+      "path": "js/admin/admin-router.js",
+      "ext": ".js",
+      "dir": "js/admin",
+      "bytes": 3209
+    },
+    {
+      "path": "js/admin/admin-shell.js",
+      "ext": ".js",
+      "dir": "js/admin",
+      "bytes": 2914
+    },
+    {
+      "path": "js/admin/admin-ui.js",
+      "ext": ".js",
+      "dir": "js/admin",
+      "bytes": 3577
     },
     {
       "path": "js/admin-content-cms.js",
@@ -1212,7 +1259,12 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "js/firebase-auth.js",
-        "js/admin-content-cms.js"
+        "js/admin-content-cms.js",
+        "js/admin/admin-context.js",
+        "js/admin/admin-ui.js",
+        "js/admin/admin-registry.js",
+        "js/admin/admin-router.js",
+        "js/admin/admin-shell.js"
       ],
       "styles": [],
       "anchors": [
@@ -2592,6 +2644,99 @@
       "addEventListeners": 1
     },
     {
+      "file": "js/admin/admin-context.js",
+      "bytes": 3992,
+      "globals": [
+        "window.AdminContentCMS",
+        "window.AdminContext",
+        "window.CONFIG",
+        "window.FirebaseSystem",
+        "window.SITE_META",
+        "window.SMSecurity",
+        "window.currentUser",
+        "window.firebase",
+        "window.firebaseDB"
+      ],
+      "functions": [
+        "safe"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/admin/admin-registry.js",
+      "bytes": 3251,
+      "globals": [
+        "window.AdminRegistry"
+      ],
+      "functions": [
+        "normalize",
+        "validate"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/admin/admin-router.js",
+      "bytes": 3173,
+      "globals": [
+        "window.AdminContext",
+        "window.AdminRegistry",
+        "window.AdminRouter",
+        "window.showSection"
+      ],
+      "functions": [
+        "getModule",
+        "resolveLegacyNavigate"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
+      "file": "js/admin/admin-shell.js",
+      "bytes": 2895,
+      "globals": [
+        "window.AdminContext",
+        "window.AdminRegistry",
+        "window.AdminRouter",
+        "window.AdminShell",
+        "window.SITE_META",
+        "window.addEventListener",
+        "window.localStorage",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "debugLog",
+        "init",
+        "isDebug"
+      ],
+      "localStorage": 2,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
+      "file": "js/admin/admin-ui.js",
+      "bytes": 3554,
+      "globals": [
+        "window.AdminUI",
+        "window.FirebaseSystem",
+        "window.SMSecurity"
+      ],
+      "functions": [
+        "escapeHtml",
+        "formatDate",
+        "isElement",
+        "showToast",
+        "timestampToMillis"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
       "file": "js/admin-content-cms.js",
       "bytes": 71396,
       "globals": [
@@ -3614,6 +3759,31 @@
       "examples": "admin-firebase.html"
     },
     {
+      "script": "js/admin/admin-context.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
+      "script": "js/admin/admin-registry.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
+      "script": "js/admin/admin-router.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
+      "script": "js/admin/admin-shell.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
+      "script": "js/admin/admin-ui.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
       "script": "js/avaliacoes.js",
       "pages": 1,
       "examples": "index.html"
@@ -3676,7 +3846,23 @@
     },
     {
       "global": "window.addEventListener",
-      "files": "js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+      "files": "js/admin/admin-shell.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+    },
+    {
+      "global": "window.AdminContentCMS",
+      "files": "js/admin/admin-context.js, js/admin-content-cms.js"
+    },
+    {
+      "global": "window.AdminContext",
+      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js"
+    },
+    {
+      "global": "window.AdminRegistry",
+      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js"
+    },
+    {
+      "global": "window.AdminRouter",
+      "files": "js/admin/admin-router.js, js/admin/admin-shell.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3684,23 +3870,23 @@
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
+      "files": "config.js, js/admin/admin-context.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
     },
     {
       "global": "window.currentUser",
-      "files": "js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.firebase",
-      "files": "js/admin-content-cms.js, js/mapa-turistico.js"
+      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/mapa-turistico.js"
     },
     {
       "global": "window.firebaseDB",
-      "files": "js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.FirebaseSystem",
-      "files": "js/firebase-auth.js, js/nav-shared.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/firebase-auth.js, js/nav-shared.js"
     },
     {
       "global": "window.innerHeight",
@@ -3709,6 +3895,10 @@
     {
       "global": "window.locaisData",
       "files": "js/data/turismo-data-adapter.js, js/locais-data.js"
+    },
+    {
+      "global": "window.localStorage",
+      "files": "js/admin/admin-shell.js, js/season-theme.js"
     },
     {
       "global": "window.location",
@@ -3728,11 +3918,15 @@
     },
     {
       "global": "window.setTimeout",
-      "files": "js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+      "files": "js/admin/admin-shell.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+    },
+    {
+      "global": "window.SITE_META",
+      "files": "js/admin/admin-context.js, js/admin/admin-shell.js, js/site-meta.js"
     },
     {
       "global": "window.SMSecurity",
-      "files": "js/admin-content-cms.js, js/cms.js, js/security-utils.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/security-utils.js"
     },
     {
       "global": "window.translations",
