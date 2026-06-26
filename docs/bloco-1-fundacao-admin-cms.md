@@ -577,3 +577,159 @@ Nenhum outro arquivo de produção foi tocado.
 ### Próxima etapa recomendada
 Etapa 3 — migrar **Mídia/Notícias/Eventos** (wrappers finos sobre `AdminContentCMS`),
 convertendo `onclick`→`data-action` por seção com shims, sem mexer em rules.
+
+---
+
+## 15. Etapa 3A — Placeholders de módulos futuros (2026-06-26)
+
+Criados **placeholders visuais e estruturais** para os próximos módulos do Admin CMS —
+**sem CRUD real**, **sem collection nova**, **sem escrita em Firestore/Storage** e **sem
+tocar em Rules, auth, roles ou claims**. O admin legado e o Dashboard modular permanecem
+inalterados.
+
+### Arquivo criado
+- `js/admin/modules/placeholder.js` → `window.AdminPlaceholderModule` (factory genérica de
+  placeholders). API: `create(config)`, `register(config)`, `renderAll()`, `list()`,
+  `isMasterCosmetic()`, `DEFAULT_NOTICE`.
+  - `create(config)` devolve uma definição compatível com o contrato do `AdminRegistry`
+    (`render/load/dispose`). Campos aceitos: `id, label, icon, description, requiredRole,
+    master, navGroup, order, statusLabel, requiredNextStep, plannedFeatures[], warnings[],
+    docHref`.
+  - `render()` injeta **HTML estático** (título + badge "Em preparação" + descrição +
+    "Recursos planejados" + bloco "Status de implementação" com o aviso padrão + botão
+    **desabilitado**). É **idempotente**.
+  - `load()` retorna `false` e **não toca Firebase**. `dispose()` é no-op.
+  - O próprio arquivo registra os **8 placeholders** e, em `firebaseReady`/`DOMContentLoaded`,
+    chama `renderAll()` para preencher os containers `#section-<id>`.
+
+### Namespace criado
+- `window.AdminPlaceholderModule` (factory + utilitários de placeholder).
+
+### Placeholders registrados (id · navGroup · master cosmético)
+| id | Módulo | Grupo | Master-only (cosmético) |
+| --- | --- | --- | --- |
+| `banners` | Banners / Pop-ups | Conteúdo | Não |
+| `empreendimentos` | Empreendimentos | Conteúdo | Não |
+| `rotas` | Rotas | Conteúdo | Não |
+| `galeria` | Galeria | Conteúdo | Não |
+| `configuracoes` | Configurações | Sistema | **Sim** |
+| `sazonal` | Sazonal / Clima | Sistema | **Sim** |
+| `mascote` | Mascote | Sistema | **Sim** |
+| `audit-logs` | Logs / Auditoria | Sistema | **Sim** |
+
+### Arquivos alterados (`admin-firebase.html`)
+1. **Sidebar** (`.sidebar-menu`): +1 rótulo de grupo "Em preparação"
+   (`<li class="sidebar-group-label">`) e +8 itens `data-section` (banners, empreendimentos,
+   rotas, galeria, configuracoes, sazonal, mascote, audit-logs). Os 4 master recebem um selo
+   visual `Master` (`<em class="sidebar-master-tag">`). Nenhum item existente foi removido ou
+   alterado; "Ver Site" continua por último.
+2. **Containers de seção**: +8 `<section class="admin-section" id="section-<id>">` **vazios**
+   (preenchidos pelo módulo placeholder), inseridos após `#section-midia`.
+3. **CSS**: +classes cosméticas (`.sidebar-group-label`, `.sidebar-master-tag`,
+   `.admin-placeholder-notice`, `.admin-placeholder-list`, `.admin-placeholder-next`). Sem
+   redesign do layout atual.
+4. **Script**: +1 `<script src="js/admin/modules/placeholder.js?v=admin-modular-20260626">`
+   após `modules/dashboard.js`.
+
+### Itens que aparecem para admin comum vs. master-only
+- **Admin comum:** Banners, Empreendimentos, Rotas, Galeria (grupo *Conteúdo*).
+- **Master-only (cosmético):** Configurações, Sazonal/Clima, Mascote, Logs/Auditoria
+  (grupo *Sistema*) — exibidos com selo **Master** na sidebar e aviso no conteúdo.
+
+### Decisão sobre "master-only" (documentada)
+Como **ainda não existe admin master real** (`AdminContext.isMaster()` é cosmético e hoje
+retorna `false` para todos), **esconder** os itens master ocultaria-os de todos. Optou-se
+por **exibir** os 4 itens master para o admin atual, com:
+- selo **Master** na sidebar (puramente visual);
+- aviso no placeholder: *"Master-only (cosmético): … a proteção real dependerá das Firestore
+  Rules em rodada futura — esconder no client não é segurança."*
+
+> **Importante:** esconder/exibir item no client é **apenas visual**, nunca segurança real.
+> A separação master só passa a valer quando as **Firestore Rules** a exigirem.
+
+### Como o CRUD real foi evitado
+- O placeholder só renderiza **HTML estático**; o único "botão" é `disabled` (ou um link de
+  documentação quando `docHref` for definido). Não há `<form>` funcional, nem handlers de
+  salvar/editar/excluir.
+- `load()` retorna `false` e nunca chama API/Firebase; `dispose()` é no-op.
+
+### Como a escrita em Firestore/Storage foi evitada
+- O módulo **não referencia** `firebase`, `firestore`, `storage`, `FirebaseSystem` nem
+  `AdminContentCMS`. O smoke test inclui um *tripwire* que falha se `window.firebase` for
+  acessado durante o carregamento/render do placeholder (passou). Nenhuma collection nova,
+  nenhum upload novo.
+
+### `showSection` preservado / Dashboard modular / seções legadas
+- **`showSection` preservado** e **não envolvido** (sem wrapper). Os novos itens da sidebar
+  usam a **mesma** delegação já existente (`firebaseReady` → bind de
+  `.sidebar-menu a[data-section]` → `showSection`), sem novos listeners e sem duplicação. O
+  conteúdo do placeholder é pré-renderizado nos containers, então o clique via `showSection`
+  apenas alterna a seção visível — sem loop com `AdminRouter.navigate`.
+- **`AdminRouter` inalterado:** `navigate('banners')`/`navigate('empreendimentos')` já
+  funcionam (passthrough visual + render do módulo registrado); `navigate('home')` mantém o
+  Dashboard; `navigate('usuarios')` continua **delegando ao legado**. Nenhum ajuste foi
+  necessário no router (Tarefa 6 dispensada).
+- **Dashboard continua modular** (Etapa 2) e **todas as seções legadas** (Aprovações,
+  Vínculos, Gerenciar Vínculos, Usuários, Eventos, Notícias, Mídia) seguem 100% no fluxo
+  inline.
+
+### Validações executadas
+- `node --check` em todos os arquivos exigidos (admin-context, admin-ui, admin-registry,
+  admin-router, admin-shell, modules/dashboard, **modules/placeholder**, firebase-auth,
+  admin-content-cms, config, sw) → **OK**.
+- **Smoke test** (Node + shim de DOM, sem rede): namespace existe; registry aceita 8
+  placeholders; master-only correto (4/4); render injeta "Em preparação" + aviso + botão
+  `disabled` e **não** cria `<form>`; `load()` = `false`; **nenhum acesso a Firebase**;
+  `navigate()` abre placeholders, mantém Dashboard e delega `usuarios` ao legado → **OK**.
+- Audits: `audit-links` (646 links, **0 broken**), `audit-assets` (225 mídias, **0 missing**),
+  `audit-project` (386 arquivos) → todos **exit 0**.
+
+### Validação visual
+- **Servidor local** (`python -m http.server`) + painel de preview. A página `admin-firebase.html`
+  carregou; mesmo na tela de login (placeholders renderizam em `DOMContentLoaded`, sem auth):
+  - `AdminPlaceholderModule` presente; `AdminRegistry.count()` = 9 (8 placeholders + Dashboard);
+  - os 8 containers `#section-*` existem e foram renderizados;
+  - sidebar lista os 16 `data-section`; 4 selos **Master** + rótulo de grupo presentes;
+  - `showSection('banners')` ativa a seção e destaca o item; `navigate()` abre placeholders,
+    Dashboard e delega `usuarios`;
+  - **screenshot** do placeholder de Banners confirmou o layout (badges, recursos, aviso,
+    botão desabilitado).
+- **Browser/Playwright:** não foi necessário insistir — o preview estático cobriu a validação
+  estrutural. **Teste final de ponta a ponta com login real** (Firebase + reCAPTCHA/AppCheck)
+  deve ser feito manualmente no navegador real, pois o AppCheck não autoriza `localhost`.
+- Console: os únicos erros são de **AppCheck/reCAPTCHA** (esperados em `localhost`, alheios a
+  esta etapa). Nenhum erro novo originado por `placeholder.js`/registry/router.
+
+### Riscos
+- Baixo. Placeholders são inertes (sem persistência). O risco residual é **cosmético**
+  (esconder master no client não é segurança — já documentado).
+- Containers `#section-*` e ids são contrato implícito; não renomear sem ajustar a sidebar e o
+  placeholder.
+
+### Rollback
+1. Remover o `<script src="js/admin/modules/placeholder.js...">` de `admin-firebase.html`.
+2. Remover os 8 itens novos da sidebar (+ rótulo de grupo) e os 8 `<section id="section-*">`
+   vazios; remover as classes CSS adicionadas.
+3. (Opcional) apagar `js/admin/modules/placeholder.js`.
+Nenhum arquivo de produção além de `admin-firebase.html` foi tocado; rules/auth intactas.
+
+### Precisa publicar Firestore Rules? **Não.**
+Nada foi alterado em `firestore.rules` e nenhum placeholder grava/lê collection nova.
+
+### Precisa publicar Storage Rules? **Não.**
+Nada foi alterado em `storage.rules`; nenhum upload novo.
+
+### Precisa configurar algo no GitHub/publicação? **Não além do deploy estático habitual.**
+Publicação continua via repositório (arquivos estáticos). Apenas garantir que os novos
+`?v=` (`placeholder.js?v=admin-modular-20260626`) sejam servidos (cache/Service Worker).
+
+### Módulos que exigem rules futuras (antes do CRUD real)
+- `banners`, `empreendimentos`, `rotas`, `galeria`, `configuracoes`, `sazonal`, `mascote`,
+  `audit-logs` — todas dependem de **definir/permitir a collection** correspondente (e, para
+  galeria, novos `contentType`/paths de vídeo no Storage; para os master, enforcement real de
+  `isMaster()`). Hoje caem no catch-all `allow … if false` — por isso **nenhum** grava dados.
+
+### Próxima etapa recomendada
+Etapa 3 (migração funcional de Mídia/Notícias/Eventos e depois Aprovações/Vínculos/Usuários)
+**ou** iniciar a **rodada de Firestore/Storage Rules** que habilita o primeiro CRUD real de
+um placeholder (sugestão: `banners`, por ser o mais isolado), seguida da Etapa 5 do plano.

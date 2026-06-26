@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-25T13:58:03.915Z.
+Gerado em 2026-06-26T12:50:57.757Z.
 
 ## Resumo
 
-- Arquivos mapeados: 385
+- Arquivos mapeados: 386
 - HTMLs: 36
 - CSS: 22
-- JS: 43
+- JS: 44
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,10 +22,10 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 43 | 839780 |
-| .html | 36 | 692220 |
+| .js | 44 | 857055 |
+| .html | 36 | 695519 |
+| .md | 27 | 319499 |
 | .css | 22 | 317211 |
-| .md | 27 | 316390 |
 | .json | 3 | 63320 |
 | .mjs | 5 | 32606 |
 | .rules | 2 | 12655 |
@@ -126,7 +126,7 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2893 |
-| admin-firebase.html | 131204 |
+| admin-firebase.html | 134503 |
 | eventos.html | 50214 |
 | galeria.html | 37756 |
 | index.html | 146580 |
@@ -174,7 +174,7 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 131204 |
+| admin-firebase.html | 134503 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -182,7 +182,7 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | css/reservas.css | 772 |
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
-| docs/bloco-1-fundacao-admin-cms.md | 29544 |
+| docs/bloco-1-fundacao-admin-cms.md | 32653 |
 | docs/plano-admin-cms-completo.md | 33643 |
 | firebase.json | 61 |
 | js/admin/admin-context.js | 4021 |
@@ -191,6 +191,7 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | js/admin/admin-shell.js | 2914 |
 | js/admin/admin-ui.js | 3577 |
 | js/admin/modules/dashboard.js | 4521 |
+| js/admin/modules/placeholder.js | 17275 |
 | js/admin-content-cms.js | 71580 |
 | js/firebase-app-check.js | 2394 |
 | js/firebase-auth.js | 70854 |
@@ -243,6 +244,7 @@ Gerado em 2026-06-25T13:58:03.915Z.
 | js/admin/admin-shell.js | 1 | admin-firebase.html |
 | js/admin/admin-ui.js | 1 | admin-firebase.html |
 | js/admin/modules/dashboard.js | 1 | admin-firebase.html |
+| js/admin/modules/placeholder.js | 1 | admin-firebase.html |
 | js/avaliacoes.js | 1 | index.html |
 | js/chatbot.js | 1 | index.html |
 | js/mapa-turistico.js | 1 | mapa-turistico.html |
@@ -365,14 +367,15 @@ _Nenhum item encontrado._
 | --- | --- |
 | var STORAGE_KEY | js/cookies.js, js/season-theme.js |
 | window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js |
-| window.addEventListener | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js |
+| window.addEventListener | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js |
 | window.AdminContentCMS | js/admin/admin-context.js, js/admin-content-cms.js |
-| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js |
-| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js |
+| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
+| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
 | window.AdminRouter | js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js |
+| window.AdminUI | js/admin/admin-ui.js, js/admin/modules/placeholder.js |
 | window.applyTranslations | js/nav-shared.js, translations.js |
 | window.CONFIG | config.js, js/admin/admin-context.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js |
-| window.currentUser | js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js |
+| window.currentUser | js/admin/admin-context.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js |
 | window.firebase | js/admin/admin-context.js, js/admin-content-cms.js, js/mapa-turistico.js |
 | window.firebaseDB | js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js |
 | window.FirebaseSystem | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js |
@@ -383,7 +386,7 @@ _Nenhum item encontrado._
 | window.matchMedia | js/scroll-animations.js, js/season-theme.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/establishment-catalog.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
-| window.setTimeout | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
+| window.setTimeout | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
 | window.showSection | js/admin/admin-router.js, js/admin/modules/dashboard.js |
 | window.SITE_META | js/admin/admin-context.js, js/admin/admin-shell.js, js/site-meta.js |
 | window.SMSecurity | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/security-utils.js |

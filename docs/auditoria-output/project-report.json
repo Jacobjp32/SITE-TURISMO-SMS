@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-25T13:58:03.915Z",
+  "generatedAt": "2026-06-26T12:50:57.757Z",
   "totals": {
-    "files": 385,
+    "files": 386,
     "html": 36,
     "css": 22,
-    "js": 43,
+    "js": 44,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,23 +46,23 @@
     },
     {
       "ext": ".js",
-      "files": 43,
-      "bytes": 839780
+      "files": 44,
+      "bytes": 857055
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 692220
+      "bytes": 695519
+    },
+    {
+      "ext": ".md",
+      "files": 27,
+      "bytes": 319499
     },
     {
       "ext": ".css",
       "files": 22,
       "bytes": 317211
-    },
-    {
-      "ext": ".md",
-      "files": 27,
-      "bytes": 316390
     },
     {
       "ext": ".json",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 987016
+      "bytes": 990315
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -209,7 +209,7 @@
     {
       "dir": "docs",
       "files": 24,
-      "bytes": 301306
+      "bytes": 304415
     },
     {
       "dir": "js/data",
@@ -222,6 +222,11 @@
       "bytes": 32606
     },
     {
+      "dir": "js/admin/modules",
+      "files": 2,
+      "bytes": 21796
+    },
+    {
       "dir": "js/admin",
       "files": 5,
       "bytes": 18023
@@ -230,11 +235,6 @@
       "dir": "cloudflare-worker",
       "files": 1,
       "bytes": 14643
-    },
-    {
-      "dir": "js/admin/modules",
-      "files": 1,
-      "bytes": 4521
     },
     {
       "dir": "sabores",
@@ -825,7 +825,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 131204
+      "bytes": 134503
     },
     {
       "path": "eventos.html",
@@ -1045,7 +1045,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 131204
+      "bytes": 134503
     },
     {
       "path": "css/mapa-3d.css",
@@ -1093,7 +1093,7 @@
       "path": "docs/bloco-1-fundacao-admin-cms.md",
       "ext": ".md",
       "dir": "docs",
-      "bytes": 29544
+      "bytes": 32653
     },
     {
       "path": "docs/plano-admin-cms-completo.md",
@@ -1142,6 +1142,12 @@
       "ext": ".js",
       "dir": "js/admin/modules",
       "bytes": 4521
+    },
+    {
+      "path": "js/admin/modules/placeholder.js",
+      "ext": ".js",
+      "dir": "js/admin/modules",
+      "bytes": 17275
     },
     {
       "path": "js/admin-content-cms.js",
@@ -1276,7 +1282,8 @@
         "js/admin/admin-registry.js",
         "js/admin/admin-router.js",
         "js/admin/admin-shell.js",
-        "js/admin/modules/dashboard.js"
+        "js/admin/modules/dashboard.js",
+        "js/admin/modules/placeholder.js"
       ],
       "styles": [],
       "anchors": [
@@ -1313,6 +1320,14 @@
         "noticias-admin-container",
         "section-midia",
         "midia-admin-container",
+        "section-banners",
+        "section-empreendimentos",
+        "section-rotas",
+        "section-galeria",
+        "section-configuracoes",
+        "section-sazonal",
+        "section-mascote",
+        "section-audit-logs",
         "managerModal",
         "managerModalTitle",
         "managerForm",
@@ -2774,6 +2789,37 @@
       "addEventListeners": 2
     },
     {
+      "file": "js/admin/modules/placeholder.js",
+      "bytes": 17030,
+      "globals": [
+        "var DEFAULT_NOTICE",
+        "var PLACEHOLDERS",
+        "window.AdminContext",
+        "window.AdminPlaceholderModule",
+        "window.AdminRegistry",
+        "window.AdminUI",
+        "window.addEventListener",
+        "window.currentUser",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "activate",
+        "asArray",
+        "buildHtml",
+        "create",
+        "escapeHtml",
+        "isElement",
+        "isMasterCosmetic",
+        "normalizeConfig",
+        "register",
+        "registerAll",
+        "renderAll"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
       "file": "js/admin-content-cms.js",
       "bytes": 71396,
       "globals": [
@@ -3826,6 +3872,11 @@
       "examples": "admin-firebase.html"
     },
     {
+      "script": "js/admin/modules/placeholder.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
       "script": "js/avaliacoes.js",
       "pages": 1,
       "examples": "index.html"
@@ -3888,7 +3939,7 @@
     },
     {
       "global": "window.addEventListener",
-      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
     },
     {
       "global": "window.AdminContentCMS",
@@ -3896,15 +3947,19 @@
     },
     {
       "global": "window.AdminContext",
-      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRegistry",
-      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
+      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRouter",
       "files": "js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
+    },
+    {
+      "global": "window.AdminUI",
+      "files": "js/admin/admin-ui.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3916,7 +3971,7 @@
     },
     {
       "global": "window.currentUser",
-      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.firebase",
@@ -3960,7 +4015,7 @@
     },
     {
       "global": "window.setTimeout",
-      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
     },
     {
       "global": "window.showSection",

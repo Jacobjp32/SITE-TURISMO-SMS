@@ -248,6 +248,47 @@
             color: var(--primary);
         }
         
+        /* Etapa 3A: rótulo de grupo e selo Master na sidebar (cosmético). */
+        .sidebar-group-label {
+            margin-top: 1rem;
+            padding: 0 1rem;
+            font-size: 0.7rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.45);
+        }
+
+        .sidebar-master-tag {
+            margin-left: auto;
+            font-size: 0.6rem;
+            font-style: normal;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 0.1rem 0.4rem;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.75);
+        }
+
+        /* Etapa 3A: realce do bloco de status dos placeholders. */
+        .admin-placeholder-notice {
+            border-left: 4px solid #f0ad4e;
+            background: #fffaf0;
+        }
+
+        .admin-placeholder-list {
+            margin: 0.5rem 0 0;
+            padding-left: 1.4rem;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .admin-placeholder-next {
+            margin-top: 0.8rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
         .sidebar-footer {
             position: absolute;
             bottom: 1.5rem;
@@ -1104,6 +1145,16 @@
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
                 <li><a data-section="noticias">📰 <span>Notícias</span></a></li>
                 <li><a data-section="midia">🖼️ <span>Mídia</span></a></li>
+                <!-- Etapa 3A: placeholders de módulos futuros (sem CRUD, sem persistência). -->
+                <li class="sidebar-group-label"><span>Em preparação</span></li>
+                <li><a data-section="banners">📢 <span>Banners / Pop-ups</span></a></li>
+                <li><a data-section="empreendimentos">🏨 <span>Empreendimentos</span></a></li>
+                <li><a data-section="rotas">🗺️ <span>Rotas</span></a></li>
+                <li><a data-section="galeria">🖼️ <span>Galeria</span></a></li>
+                <li><a data-section="configuracoes">⚙️ <span>Configurações</span> <em class="sidebar-master-tag">Master</em></a></li>
+                <li><a data-section="sazonal">🌦️ <span>Sazonal / Clima</span> <em class="sidebar-master-tag">Master</em></a></li>
+                <li><a data-section="mascote">🐾 <span>Mascote</span> <em class="sidebar-master-tag">Master</em></a></li>
+                <li><a data-section="audit-logs">📜 <span>Logs / Auditoria</span> <em class="sidebar-master-tag">Master</em></a></li>
                 <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
             </ul>
             
@@ -1316,6 +1367,17 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Etapa 3A: containers de placeholders (preenchidos por js/admin/modules/placeholder.js).
+                 Sem forms reais, sem botões de salvar, sem chamadas Firebase. -->
+            <section class="admin-section" id="section-banners"></section>
+            <section class="admin-section" id="section-empreendimentos"></section>
+            <section class="admin-section" id="section-rotas"></section>
+            <section class="admin-section" id="section-galeria"></section>
+            <section class="admin-section" id="section-configuracoes"></section>
+            <section class="admin-section" id="section-sazonal"></section>
+            <section class="admin-section" id="section-mascote"></section>
+            <section class="admin-section" id="section-audit-logs"></section>
         </main>
     </div>
 
@@ -1413,6 +1475,8 @@
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
     <!-- Módulos migrados (Etapa 2): Dashboard. Demais seções seguem no fluxo legado. -->
     <script src="js/admin/modules/dashboard.js?v=admin-modular-20260625"></script>
+    <!-- Placeholders de módulos futuros (Etapa 3A): sem CRUD, sem persistência. -->
+    <script src="js/admin/modules/placeholder.js?v=admin-modular-20260626"></script>
     <script>
         const SEC = window.SMSecurity;
         var adminUsersCache = [];
