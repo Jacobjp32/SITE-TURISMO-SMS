@@ -1,15 +1,15 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-06-26T16:42:09.326Z.
+Gerado em 2026-06-26T17:34:38.592Z.
 
 ## Resumo
 
 - Arquivos varridos: 108
-- Links internos/externos coletados: 646
+- Links internos/externos coletados: 652
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0
-- Links legados/concorrentes: 16
-- Links redundantes com .html: 15
+- Links legados/concorrentes: 17
+- Links redundantes com .html: 18
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
@@ -22,6 +22,7 @@ _Nenhum item encontrado._
 
 | source | url | issue |
 | --- | --- | --- |
+| js/admin/modules/banners.js | sabores.html | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /o-que-fazer | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /sabores | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /onde-ficar | rota legada ou concorrente ao mapa |
@@ -46,6 +47,9 @@ _Nenhum item encontrado._
 | --- | --- | --- |
 | eventos/index.html | /eventos.html | existe variante sem .html |
 | galeria/index.html | /galeria.html | existe variante sem .html |
+| js/admin/modules/banners.js | eventos.html | existe variante sem .html |
+| js/admin/modules/banners.js | sabores.html | existe variante sem .html |
+| js/admin/modules/banners.js | noticias.html | existe variante sem .html |
 | js/admin-content-cms.js | noticias.html | existe variante sem .html |
 | local/index.html | /local.html | existe variante sem .html |
 | manifest.json | /eventos.html?utm_source=pwa-shortcut | existe variante sem .html |

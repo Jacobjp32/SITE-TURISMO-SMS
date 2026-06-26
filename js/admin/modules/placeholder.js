@@ -220,6 +220,13 @@
             console.warn("[admin-placeholder] Placeholder sem id ignorado.");
             return null;
         }
+        // Cede a um módulo REAL já registrado com o mesmo id (ex.: Banners no
+        // Bloco 4C). O placeholder não entra em `placeholderIds`, então o
+        // `renderAll()` não sobrescreve a seção do módulo real.
+        if (window.AdminRegistry && typeof window.AdminRegistry.has === "function" &&
+            window.AdminRegistry.has(def.id)) {
+            return null;
+        }
         if (window.AdminRegistry && typeof window.AdminRegistry.register === "function") {
             var ok = window.AdminRegistry.register(def);
             if (ok && placeholderIds.indexOf(def.id) === -1) {

@@ -1483,6 +1483,9 @@
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
     <!-- Módulos migrados (Etapa 2): Dashboard. Demais seções seguem no fluxo legado. -->
     <script src="js/admin/modules/dashboard.js?v=admin-modular-20260625"></script>
+    <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
+         do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
+    <script src="js/admin/modules/banners.js?v=admin-modular-20260626"></script>
     <!-- Placeholders de módulos futuros (Etapa 3A): sem CRUD, sem persistência. -->
     <script src="js/admin/modules/placeholder.js?v=admin-modular-20260626"></script>
     <script>
@@ -1784,6 +1787,10 @@
             if (section === 'eventos') loadApprovedEvents();
             if (section === 'noticias') AdminContentCMS.loadNews();
             if (section === 'midia') AdminContentCMS.loadMedia();
+            // Bloco 4C: módulo real Banners / Pop-ups (renderiza shell + recarrega lista).
+            if (section === 'banners' && window.AdminBannersModule && typeof window.AdminBannersModule.activate === 'function') {
+                window.AdminBannersModule.activate(window.AdminContext || null);
+            }
         }
 
         function updateDate() {

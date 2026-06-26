@@ -1,13 +1,13 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-26T16:42:11.643Z.
+Gerado em 2026-06-26T17:34:40.401Z.
 
 ## Resumo
 
-- Arquivos mapeados: 389
+- Arquivos mapeados: 391
 - HTMLs: 36
 - CSS: 22
-- JS: 44
+- JS: 45
 - Diretórios com index.html: 14
 - HTMLs na raiz: 22
 
@@ -22,12 +22,12 @@ Gerado em 2026-06-26T16:42:11.643Z.
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 44 | 857055 |
-| .html | 36 | 695807 |
-| .md | 29 | 367471 |
+| .js | 45 | 900085 |
+| .html | 36 | 696384 |
+| .md | 30 | 376767 |
 | .css | 22 | 317211 |
-| .json | 4 | 63463 |
-| .mjs | 5 | 32606 |
+| .json | 3 | 63372 |
+| .mjs | 6 | 38653 |
 | .rules | 2 | 16388 |
 | .ico | 1 | 6837 |
 | .xml | 1 | 3852 |
@@ -126,7 +126,7 @@ Gerado em 2026-06-26T16:42:11.643Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2893 |
-| admin-firebase.html | 134791 |
+| admin-firebase.html | 135368 |
 | eventos.html | 50214 |
 | galeria.html | 37756 |
 | index.html | 146580 |
@@ -174,7 +174,7 @@ Gerado em 2026-06-26T16:42:11.643Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 134791 |
+| admin-firebase.html | 135368 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -190,8 +190,9 @@ Gerado em 2026-06-26T16:42:11.643Z.
 | js/admin/admin-router.js | 4241 |
 | js/admin/admin-shell.js | 2914 |
 | js/admin/admin-ui.js | 3577 |
+| js/admin/modules/banners.js | 42634 |
 | js/admin/modules/dashboard.js | 4521 |
-| js/admin/modules/placeholder.js | 17275 |
+| js/admin/modules/placeholder.js | 17671 |
 | js/admin-content-cms.js | 71580 |
 | js/firebase-app-check.js | 2394 |
 | js/firebase-auth.js | 70854 |
@@ -243,6 +244,7 @@ Gerado em 2026-06-26T16:42:11.643Z.
 | js/admin/admin-router.js | 1 | admin-firebase.html |
 | js/admin/admin-shell.js | 1 | admin-firebase.html |
 | js/admin/admin-ui.js | 1 | admin-firebase.html |
+| js/admin/modules/banners.js | 1 | admin-firebase.html |
 | js/admin/modules/dashboard.js | 1 | admin-firebase.html |
 | js/admin/modules/placeholder.js | 1 | admin-firebase.html |
 | js/avaliacoes.js | 1 | index.html |
@@ -365,20 +367,21 @@ _Nenhum item encontrado._
 
 | global | files |
 | --- | --- |
+| var SECTION_ID | js/admin/modules/banners.js, js/admin/modules/dashboard.js |
 | var STORAGE_KEY | js/cookies.js, js/season-theme.js |
 | window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js |
 | window.addEventListener | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js |
-| window.AdminContentCMS | js/admin/admin-context.js, js/admin-content-cms.js |
-| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
-| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
+| window.AdminContentCMS | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js |
+| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
+| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
 | window.AdminRouter | js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js |
-| window.AdminUI | js/admin/admin-ui.js, js/admin/modules/placeholder.js |
+| window.AdminUI | js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js |
 | window.applyTranslations | js/nav-shared.js, translations.js |
 | window.CONFIG | config.js, js/admin/admin-context.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js |
-| window.currentUser | js/admin/admin-context.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js |
-| window.firebase | js/admin/admin-context.js, js/admin-content-cms.js, js/mapa-turistico.js |
-| window.firebaseDB | js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js |
-| window.FirebaseSystem | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js |
+| window.currentUser | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js |
+| window.firebase | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/mapa-turistico.js |
+| window.firebaseDB | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/firebase-auth.js |
+| window.FirebaseSystem | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
 | window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
 | window.localStorage | js/admin/admin-shell.js, js/season-theme.js |

@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-26T16:42:11.643Z",
+  "generatedAt": "2026-06-26T17:34:40.401Z",
   "totals": {
-    "files": 389,
+    "files": 391,
     "html": 36,
     "css": 22,
-    "js": 44,
+    "js": 45,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,18 +46,18 @@
     },
     {
       "ext": ".js",
-      "files": 44,
-      "bytes": 857055
+      "files": 45,
+      "bytes": 900085
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 695807
+      "bytes": 696384
     },
     {
       "ext": ".md",
-      "files": 29,
-      "bytes": 367471
+      "files": 30,
+      "bytes": 376767
     },
     {
       "ext": ".css",
@@ -66,13 +66,13 @@
     },
     {
       "ext": ".json",
-      "files": 4,
-      "bytes": 63463
+      "files": 3,
+      "bytes": 63372
     },
     {
       "ext": ".mjs",
-      "files": 5,
-      "bytes": 32606
+      "files": 6,
+      "bytes": 38653
     },
     {
       "ext": ".rules",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 994388
+      "bytes": 994965
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -203,13 +203,18 @@
     },
     {
       "dir": "docs",
-      "files": 26,
-      "bytes": 352387
+      "files": 27,
+      "bytes": 361683
     },
     {
       "dir": "css",
       "files": 22,
       "bytes": 317211
+    },
+    {
+      "dir": "js/admin/modules",
+      "files": 3,
+      "bytes": 64826
     },
     {
       "dir": "js/data",
@@ -218,13 +223,8 @@
     },
     {
       "dir": "scripts",
-      "files": 5,
-      "bytes": 32606
-    },
-    {
-      "dir": "js/admin/modules",
-      "files": 2,
-      "bytes": 21796
+      "files": 6,
+      "bytes": 38653
     },
     {
       "dir": "js/admin",
@@ -310,11 +310,6 @@
       "dir": "galeria",
       "files": 1,
       "bytes": 719
-    },
-    {
-      "dir": ".claude",
-      "files": 1,
-      "bytes": 91
     },
     {
       "dir": "images/seasonal/autumn",
@@ -830,7 +825,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 134791
+      "bytes": 135368
     },
     {
       "path": "eventos.html",
@@ -1050,7 +1045,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 134791
+      "bytes": 135368
     },
     {
       "path": "css/mapa-3d.css",
@@ -1143,6 +1138,12 @@
       "bytes": 3577
     },
     {
+      "path": "js/admin/modules/banners.js",
+      "ext": ".js",
+      "dir": "js/admin/modules",
+      "bytes": 42634
+    },
+    {
       "path": "js/admin/modules/dashboard.js",
       "ext": ".js",
       "dir": "js/admin/modules",
@@ -1152,7 +1153,7 @@
       "path": "js/admin/modules/placeholder.js",
       "ext": ".js",
       "dir": "js/admin/modules",
-      "bytes": 17275
+      "bytes": 17671
     },
     {
       "path": "js/admin-content-cms.js",
@@ -1288,6 +1289,7 @@
         "js/admin/admin-router.js",
         "js/admin/admin-shell.js",
         "js/admin/modules/dashboard.js",
+        "js/admin/modules/banners.js",
         "js/admin/modules/placeholder.js"
       ],
       "styles": [],
@@ -2769,6 +2771,96 @@
       "addEventListeners": 0
     },
     {
+      "file": "js/admin/modules/banners.js",
+      "bytes": 42456,
+      "globals": [
+        "var COLLECTION",
+        "var CTA_TARGETS",
+        "var FREQUENCIES",
+        "var LIMITS",
+        "var MAXWIDTH_MAX",
+        "var MAXWIDTH_MIN",
+        "var PLACEMENTS",
+        "var PRIORITY_MAX",
+        "var PRIORITY_MIN",
+        "var SECTION_ID",
+        "var SHOW_DELAY_MAX",
+        "var STATUSES",
+        "var TARGET_PAGES",
+        "var TYPES",
+        "window.AdminBannersModule",
+        "window.AdminContentCMS",
+        "window.AdminContext",
+        "window.AdminRegistry",
+        "window.AdminUI",
+        "window.FirebaseSystem",
+        "window.confirm",
+        "window.currentUser",
+        "window.firebase",
+        "window.firebaseDB"
+      ],
+      "functions": [
+        "archive",
+        "buildArchivePayload",
+        "buildForm",
+        "buildPayload",
+        "buildSelect",
+        "buildShell",
+        "cancelForm",
+        "checked",
+        "clampInt",
+        "clean",
+        "closeModal",
+        "ctx",
+        "currentUid",
+        "duplicate",
+        "escapeAttr",
+        "escapeHtml",
+        "escapeJs",
+        "fieldSelect",
+        "fieldText",
+        "fieldTextarea",
+        "filteredItems",
+        "findItem",
+        "formatDateShort",
+        "formatDateTime",
+        "getDb",
+        "getFirebase",
+        "getSection",
+        "handleWriteError",
+        "inEnum",
+        "inputValueToMillis",
+        "isAllowedUrl",
+        "limit",
+        "load",
+        "makeId",
+        "makeSlug",
+        "millisToInputValue",
+        "onFilterChange",
+        "openForm",
+        "openModal",
+        "pad",
+        "periodText",
+        "placementText",
+        "readForm",
+        "refresh",
+        "render",
+        "renderList",
+        "row",
+        "serverTimestamp",
+        "statusBadge",
+        "submitForm",
+        "timestampFromMillis",
+        "toMillis",
+        "toast",
+        "val",
+        "viewDetails"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
+    },
+    {
       "file": "js/admin/modules/dashboard.js",
       "bytes": 4478,
       "globals": [
@@ -2795,7 +2887,7 @@
     },
     {
       "file": "js/admin/modules/placeholder.js",
-      "bytes": 17030,
+      "bytes": 17418,
       "globals": [
         "var DEFAULT_NOTICE",
         "var PLACEHOLDERS",
@@ -3872,6 +3964,11 @@
       "examples": "admin-firebase.html"
     },
     {
+      "script": "js/admin/modules/banners.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
       "script": "js/admin/modules/dashboard.js",
       "pages": 1,
       "examples": "admin-firebase.html"
@@ -3935,6 +4032,10 @@
   "scriptDuplicateLoads": [],
   "sharedGlobals": [
     {
+      "global": "var SECTION_ID",
+      "files": "js/admin/modules/banners.js, js/admin/modules/dashboard.js"
+    },
+    {
       "global": "var STORAGE_KEY",
       "files": "js/cookies.js, js/season-theme.js"
     },
@@ -3948,15 +4049,15 @@
     },
     {
       "global": "window.AdminContentCMS",
-      "files": "js/admin/admin-context.js, js/admin-content-cms.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js"
     },
     {
       "global": "window.AdminContext",
-      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRegistry",
-      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRouter",
@@ -3964,7 +4065,7 @@
     },
     {
       "global": "window.AdminUI",
-      "files": "js/admin/admin-ui.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3976,19 +4077,19 @@
     },
     {
       "global": "window.currentUser",
-      "files": "js/admin/admin-context.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.firebase",
-      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/mapa-turistico.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/mapa-turistico.js"
     },
     {
       "global": "window.firebaseDB",
-      "files": "js/admin/admin-context.js, js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.FirebaseSystem",
-      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js"
     },
     {
       "global": "window.innerHeight",

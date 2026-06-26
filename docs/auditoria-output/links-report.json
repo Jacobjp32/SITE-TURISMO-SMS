@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-26T16:42:09.326Z",
+  "generatedAt": "2026-06-26T17:34:38.592Z",
   "totals": {
     "filesScanned": 108,
-    "links": 646,
+    "links": 652,
     "routes": 43,
     "broken": 0,
-    "legacy": 16,
-    "redundant": 15,
+    "legacy": 17,
+    "redundant": 18,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
   },
@@ -187,6 +187,11 @@
   "broken": [],
   "legacy": [
     {
+      "source": "js/admin/modules/banners.js",
+      "url": "sabores.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
       "source": "js/breadcrumbs.js",
       "url": "/o-que-fazer",
       "issue": "rota legada ou concorrente ao mapa"
@@ -276,6 +281,21 @@
     {
       "source": "galeria/index.html",
       "url": "/galeria.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/admin/modules/banners.js",
+      "url": "eventos.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/admin/modules/banners.js",
+      "url": "sabores.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/admin/modules/banners.js",
+      "url": "noticias.html",
       "issue": "existe variante sem .html"
     },
     {
