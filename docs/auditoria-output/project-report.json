@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-26T12:50:57.757Z",
+  "generatedAt": "2026-06-26T13:20:34.101Z",
   "totals": {
-    "files": 386,
+    "files": 387,
     "html": 36,
     "css": 22,
     "js": 44,
@@ -52,12 +52,12 @@
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 695519
+      "bytes": 695807
     },
     {
       "ext": ".md",
       "files": 27,
-      "bytes": 319499
+      "bytes": 329021
     },
     {
       "ext": ".css",
@@ -66,8 +66,8 @@
     },
     {
       "ext": ".json",
-      "files": 3,
-      "bytes": 63320
+      "files": 4,
+      "bytes": 63411
     },
     {
       "ext": ".mjs",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 990315
+      "bytes": 990603
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -209,7 +209,7 @@
     {
       "dir": "docs",
       "files": 24,
-      "bytes": 304415
+      "bytes": 313937
     },
     {
       "dir": "js/data",
@@ -310,6 +310,11 @@
       "dir": "galeria",
       "files": 1,
       "bytes": 719
+    },
+    {
+      "dir": ".claude",
+      "files": 1,
+      "bytes": 91
     },
     {
       "dir": "images/seasonal/autumn",
@@ -825,7 +830,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 134503
+      "bytes": 134791
     },
     {
       "path": "eventos.html",
@@ -1045,7 +1050,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 134503
+      "bytes": 134791
     },
     {
       "path": "css/mapa-3d.css",
@@ -1093,7 +1098,7 @@
       "path": "docs/bloco-1-fundacao-admin-cms.md",
       "ext": ".md",
       "dir": "docs",
-      "bytes": 32653
+      "bytes": 42175
     },
     {
       "path": "docs/plano-admin-cms-completo.md",

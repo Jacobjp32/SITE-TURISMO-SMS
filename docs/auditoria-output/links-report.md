@@ -1,10 +1,10 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-06-26T12:50:54.854Z.
+Gerado em 2026-06-26T13:20:30.559Z.
 
 ## Resumo
 
-- Arquivos varridos: 107
+- Arquivos varridos: 108
 - Links internos/externos coletados: 646
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0

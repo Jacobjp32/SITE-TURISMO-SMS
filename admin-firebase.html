@@ -196,7 +196,9 @@
             background: var(--primary);
             color: white;
             padding: 1.5rem;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
         
         .sidebar-logo {
@@ -206,6 +208,7 @@
             padding-bottom: 1.5rem;
             border-bottom: 1px solid rgba(255,255,255,0.1);
             margin-bottom: 1.5rem;
+            flex-shrink: 0;
         }
         
         .sidebar-logo img {
@@ -219,6 +222,9 @@
         
         .sidebar-menu {
             list-style: none;
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
         }
         
         .sidebar-menu li {
@@ -290,10 +296,10 @@
         }
 
         .sidebar-footer {
-            position: absolute;
-            bottom: 1.5rem;
-            left: 1.5rem;
-            right: 1.5rem;
+            flex-shrink: 0;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
         
         .btn-logout {
@@ -1046,10 +1052,12 @@
             }
             
             .sidebar-logo span,
-            .sidebar-menu a span {
+            .sidebar-menu a span,
+            .sidebar-menu a .sidebar-master-tag,
+            .sidebar-group-label {
                 display: none;
             }
-            
+
             .sidebar-menu a {
                 justify-content: center;
             }

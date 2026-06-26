@@ -733,3 +733,30 @@ Publicação continua via repositório (arquivos estáticos). Apenas garantir qu
 Etapa 3 (migração funcional de Mídia/Notícias/Eventos e depois Aprovações/Vínculos/Usuários)
 **ou** iniciar a **rodada de Firestore/Storage Rules** que habilita o primeiro CRUD real de
 um placeholder (sugestão: `banners`, por ser o mais isolado), seguida da Etapa 5 do plano.
+
+---
+
+## 16. Etapa 3A — Hotfix visual da sidebar (2026-06-26)
+
+**Motivo:** com os 8 novos itens da Etapa 3A, o botão **"Sair"** (`.sidebar-footer`) — que era
+`position: absolute; bottom: 1.5rem` dentro da `.sidebar` rolável — passou a **sobrepor** os
+últimos itens do menu (Sazonal/Clima, Mascote, Logs/Auditoria, Ver Site), pois o footer
+absoluto fica fora do fluxo e o menu não reservava espaço para ele.
+
+**Correção (mínima, só CSS):** a `.sidebar` virou **flex column** com três regiões:
+- `.sidebar-logo` → `flex-shrink: 0` (topo fixo);
+- `.sidebar-menu` → `flex: 1 1 auto; min-height: 0; overflow-y: auto` (**área rolável**);
+- `.sidebar-footer` → fluxo normal (`position` removido), `flex-shrink: 0` + borda superior
+  (rodapé fixo abaixo do menu).
+
+A `.sidebar` passou a `overflow: hidden` (quem rola agora é o menu). Também, no breakpoint
+`≤1024px` (sidebar colapsada em 70px), o selo `Master` e o rótulo de grupo são ocultados
+junto com os demais labels.
+
+**Comportamento esperado:** "Sair" sempre visível no rodapé, **sem sobrepor** itens; o menu
+rola quando há muitos itens; "Ver Site" e os itens master continuam acessíveis. Nenhuma
+mudança de largura, cores, ícones, ordem de itens ou lógica de placeholders.
+
+**Arquivo alterado:** apenas `admin-firebase.html` (bloco `<style>`). Sem JS novo, sem rules,
+sem auth. **Rollback:** reverter as 4 regras CSS (`.sidebar`, `.sidebar-logo`,
+`.sidebar-menu`, `.sidebar-footer`) e a linha do `≤1024px` para o estado da seção 15.
