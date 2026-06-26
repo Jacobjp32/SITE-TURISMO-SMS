@@ -56,7 +56,11 @@ service firebase.storage {
       allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
     }
 
-    match /cms-media/{uid}/{fileName} {
+    // Recursivo ({allFiles=**}) para cobrir tanto os uploads atuais do CMS
+    // (cms-media/{uid}/{file}) quanto imagens de banners/pop-ups
+    // (cms-media/{uid}/banners/{bannerId}/{file}) sem nova arvore. Bloco 4B.
+    // Escrita: validCmsImageUpload = isAdmin + uid proprio + <=5MB + jpeg/jpg/png/webp.
+    match /cms-media/{uid}/{allFiles=**} {
       allow read: if true;
       allow write: if validCmsImageUpload(uid);
       allow delete: if isAdmin();

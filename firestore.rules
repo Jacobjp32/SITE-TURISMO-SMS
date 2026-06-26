@@ -72,6 +72,82 @@ service cloud.firestore {
         managerDoc(request.resource.data.linkedManagerId).data.role == request.resource.data.linkedEstablishmentRole;
     }
 
+    // --- Banners / Pop-ups (Bloco 4B) ---
+    // Schema e decisoes em docs/bloco-4b-rules-banners.md.
+    // Leitura publica: apenas status == 'published' (janela startAt/endAt
+    // filtrada no client). Escrita: somente isAdmin(). Sem delete direto.
+    function isBannerType(value) {
+      return value in ['banner', 'popup'];
+    }
+
+    function isBannerStatus(value) {
+      return value in ['draft', 'published', 'archived'];
+    }
+
+    function bannerFieldsAllowed(data) {
+      return data.keys().hasOnly([
+        'id', 'title', 'slug', 'description', 'type', 'status', 'placement',
+        'targetPages', 'imageUrl', 'imagePath', 'imageAlt', 'mediaId',
+        'ctaLabel', 'ctaUrl', 'ctaTarget', 'startAt', 'endAt', 'priority',
+        'frequency', 'dismissible', 'showDelayMs', 'maxWidth',
+        'createdAt', 'updatedAt', 'createdBy', 'updatedBy',
+        'publishedAt', 'archivedAt'
+      ]);
+    }
+
+    function bannerHasImage(data) {
+      return (data.imageUrl is string && data.imageUrl.size() > 0) ||
+        (data.mediaId is string && data.mediaId.size() > 0);
+    }
+
+    function bannerHasPlacement(data) {
+      return (data.placement is string && data.placement.size() > 0) ||
+        (data.targetPages is list && data.targetPages.size() > 0);
+    }
+
+    function isValidBannerBase(data) {
+      return data.title is string && data.title.size() > 0 &&
+        isBannerType(data.type) &&
+        isBannerStatus(data.status) &&
+        bannerFieldsAllowed(data);
+    }
+
+    // Janela de datas: so valida coerencia quando ambos definidos.
+    function bannerDatesOk(data) {
+      return !(data.startAt != null && data.endAt != null) ||
+        data.endAt > data.startAt;
+    }
+
+    // Para publicar exige imagem (url ou mediaId) e destino (placement/targetPages).
+    function isValidBannerPublished(data) {
+      return data.status != 'published' ||
+        (bannerHasImage(data) && bannerHasPlacement(data));
+    }
+
+    function isValidBannerCreate(bannerId) {
+      return isAdmin() &&
+        request.resource.data.id == bannerId &&
+        isValidBannerBase(request.resource.data) &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.createdAt is timestamp &&
+        request.resource.data.updatedAt is timestamp &&
+        bannerDatesOk(request.resource.data) &&
+        isValidBannerPublished(request.resource.data);
+    }
+
+    function isValidBannerUpdate() {
+      return isAdmin() &&
+        request.resource.data.id == resource.data.id &&
+        isValidBannerBase(request.resource.data) &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.updatedAt is timestamp &&
+        bannerDatesOk(request.resource.data) &&
+        isValidBannerPublished(request.resource.data);
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if isAdmin() || (
@@ -276,6 +352,17 @@ service cloud.firestore {
           'firestoreId'
         ]);
       allow read, update, delete: if isAdmin();
+    }
+
+    match /banners/{bannerId} {
+      // Publico le apenas banners publicados; admin le todos.
+      allow read: if isAdmin() || resource.data.status == 'published';
+      allow create: if isValidBannerCreate(bannerId);
+      allow update: if isValidBannerUpdate();
+      // Sem delete direto nesta fase: usar status 'archived'.
+      // Outras collections usam delete por moderador/admin, mas banners
+      // ficam mais seguros sem exclusao definitiva (ver doc 4B).
+      allow delete: if false;
     }
 
     match /{document=**} {

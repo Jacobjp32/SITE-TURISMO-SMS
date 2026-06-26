@@ -1,10 +1,10 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-26T13:20:34.101Z.
+Gerado em 2026-06-26T16:42:11.643Z.
 
 ## Resumo
 
-- Arquivos mapeados: 387
+- Arquivos mapeados: 389
 - HTMLs: 36
 - CSS: 22
 - JS: 44
@@ -24,11 +24,11 @@ Gerado em 2026-06-26T13:20:34.101Z.
 | .docx | 4 | 3402708 |
 | .js | 44 | 857055 |
 | .html | 36 | 695807 |
-| .md | 27 | 329021 |
+| .md | 29 | 367471 |
 | .css | 22 | 317211 |
-| .json | 4 | 63411 |
+| .json | 4 | 63463 |
 | .mjs | 5 | 32606 |
-| .rules | 2 | 12655 |
+| .rules | 2 | 16388 |
 | .ico | 1 | 6837 |
 | .xml | 1 | 3852 |
 | (sem ext) | 8 | 3122 |
@@ -182,9 +182,9 @@ Gerado em 2026-06-26T13:20:34.101Z.
 | css/reservas.css | 772 |
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
-| docs/bloco-1-fundacao-admin-cms.md | 42175 |
+| docs/bloco-1-fundacao-admin-cms.md | 43701 |
 | docs/plano-admin-cms-completo.md | 33643 |
-| firebase.json | 61 |
+| firebase.json | 113 |
 | js/admin/admin-context.js | 4021 |
 | js/admin/admin-registry.js | 3270 |
 | js/admin/admin-router.js | 4241 |

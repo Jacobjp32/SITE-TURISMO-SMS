@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-06-26T13:20:34.101Z",
+  "generatedAt": "2026-06-26T16:42:11.643Z",
   "totals": {
-    "files": 387,
+    "files": 389,
     "html": 36,
     "css": 22,
     "js": 44,
@@ -56,8 +56,8 @@
     },
     {
       "ext": ".md",
-      "files": 27,
-      "bytes": 329021
+      "files": 29,
+      "bytes": 367471
     },
     {
       "ext": ".css",
@@ -67,7 +67,7 @@
     {
       "ext": ".json",
       "files": 4,
-      "bytes": 63411
+      "bytes": 63463
     },
     {
       "ext": ".mjs",
@@ -77,7 +77,7 @@
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 12655
+      "bytes": 16388
     },
     {
       "ext": ".ico",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 990603
+      "bytes": 994388
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -202,14 +202,14 @@
       "bytes": 555724
     },
     {
+      "dir": "docs",
+      "files": 26,
+      "bytes": 352387
+    },
+    {
       "dir": "css",
       "files": 22,
       "bytes": 317211
-    },
-    {
-      "dir": "docs",
-      "files": 24,
-      "bytes": 313937
     },
     {
       "dir": "js/data",
@@ -1098,7 +1098,7 @@
       "path": "docs/bloco-1-fundacao-admin-cms.md",
       "ext": ".md",
       "dir": "docs",
-      "bytes": 42175
+      "bytes": 43701
     },
     {
       "path": "docs/plano-admin-cms-completo.md",
@@ -1110,7 +1110,7 @@
       "path": "firebase.json",
       "ext": ".json",
       "dir": ".",
-      "bytes": 61
+      "bytes": 113
     },
     {
       "path": "js/admin/admin-context.js",
