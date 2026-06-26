@@ -1,24 +1,31 @@
 /**
- * modules/banners.js — Admin CMS · Bloco 4C (CRUD inicial Banners / Pop-ups)
- * --------------------------------------------------------------------------
- * Substitui o placeholder `banners` por um módulo funcional em MODO RASCUNHO.
+ * modules/banners.js — Admin CMS · Blocos 4C + 4D
+ * ------------------------------------------------
+ * Substitui o placeholder `banners` por um módulo funcional em MODO RASCUNHO
+ * com suporte a upload de imagem para Firebase Storage.
  * Collection Firestore: `banners` (rules do Bloco 4B já publicadas).
  *
  * Esta etapa PERMITE:
- *  - listar banners; filtrar por status e tipo;
+ *  - listar banners com miniatura quando há imagem; filtrar por status e tipo;
  *  - criar rascunho (status sempre `draft`);
- *  - editar rascunho; arquivar (status `archived`); duplicar como rascunho;
- *  - ver detalhes básicos.
+ *  - editar rascunho com upload de imagem ou URL manual;
+ *  - upload para cms-media/{uid}/banners/{bannerId}/{arquivo} (rules 4B);
+ *  - preview da imagem no formulário e miniatura na lista;
+ *  - arquivar (status `archived`); duplicar como rascunho; ver detalhes.
  *
  * Esta etapa NÃO faz (deliberadamente — etapas futuras):
- *  - upload de imagem / seleção de mídia;
  *  - publicar banner (botão exibido DESABILITADO);
  *  - exibição pública no site / pop-up público;
- *  - delete definitivo (rules já bloqueiam `delete`).
+ *  - delete definitivo (rules já bloqueiam `delete`);
+ *  - apagar arquivo antigo do Storage ao trocar imagem (mitigação futura).
  *
- * Segurança: as Firestore Rules são a proteção REAL. A sanitização aqui é
- * apenas para evitar enviar lixo (undefined/NaN, URLs perigosas, enums
- * inválidos). Nunca confiar só no client.
+ * Helper de upload: `uploadBannerImage` interno (path: cms-media/{uid}/banners/{bannerId}/...),
+ * seguindo os padrões de `admin-content-cms.js` (validateImageFile, safeFileName, MAX 5 MB,
+ * jpeg/png/webp). O helper público `uploadImageToCms` de admin-content-cms.js é privado;
+ * reutilizamos apenas os padrões, não a função em si.
+ *
+ * Segurança: as Firestore e Storage Rules são a proteção REAL. A sanitização aqui é
+ * apenas defesa em profundidade. Nunca confiar só no client.
  *
  * IIFE, sem build step, sem import/export. Namespace: window.AdminBannersModule.
  */
@@ -29,6 +36,10 @@
 
     var COLLECTION = "banners";
     var SECTION_ID = "banners";
+
+    // ---- Limites de upload (idênticos ao CMS de mídia existente) ----
+    var MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+    var IMAGE_TYPE_REGEX = /^image\/(jpeg|jpg|png|webp)$/i;
 
     // ---- Enums permitidos (espelham firestore.rules + doc 4/4B) ----
     var TYPES = ["banner", "popup"];
@@ -53,7 +64,7 @@
     var MAXWIDTH_MIN = 240;
     var MAXWIDTH_MAX = 960;
 
-    // ---- Estado leve do módulo ----
+    // ---- Estado do módulo ----
     var state = {
         items: [],
         loading: false,
@@ -62,6 +73,9 @@
         filterStatus: "all",
         filterType: "all"
     };
+
+    // Estado de upload (object URL para preview client-side).
+    var uploadState = { previewObjectUrl: "" };
 
     // ======================================================================
     // Helpers seguros
@@ -186,7 +200,7 @@
         if (!value) return false;
         if (/['"()\\<>]/.test(value)) return false;
         if (value.charAt(0) === "/" || /^(images|docs|videos|css|js)\//i.test(value)) return true;
-        if (/\.html(\?|#|$)/i.test(value) && !/^[a-z]+:/i.test(value)) return true; // caminho interno tipo eventos.html
+        if (/\.html(\?|#|$)/i.test(value) && !/^[a-z]+:/i.test(value)) return true;
         return /^https?:\/\//i.test(value);
     }
 
@@ -221,6 +235,129 @@
     }
 
     // ======================================================================
+    // Storage / upload
+    // ======================================================================
+
+    function getStorage() {
+        var c = ctx();
+        if (c && c.firebase && typeof c.firebase.storage === "function") {
+            return c.firebase.storage();
+        }
+        if (window.firebase && typeof window.firebase.storage === "function") {
+            return window.firebase.storage();
+        }
+        return null;
+    }
+
+    function safeFileName(value) {
+        return String(value || "imagem").normalize("NFD").replace(/[̀-ͯ]/g, "")
+            .replace(/[^a-zA-Z0-9._-]/g, "-").slice(0, 90);
+    }
+
+    function formatBytes(bytes) {
+        var n = Number(bytes || 0);
+        if (!n) return "";
+        if (n < 1024 * 1024) return (n / 1024).toFixed(1).replace(".", ",") + " KB";
+        return (n / (1024 * 1024)).toFixed(2).replace(".", ",") + " MB";
+    }
+
+    function validateBannerImageFile(file) {
+        if (!file) throw new Error("Selecione um arquivo de imagem.");
+        if (!IMAGE_TYPE_REGEX.test(file.type || "")) {
+            throw new Error("Tipo de arquivo inválido. Use JPG, PNG ou WEBP.");
+        }
+        if (Number(file.size || 0) > MAX_IMAGE_BYTES) {
+            throw new Error("Imagem muito grande. Limite: 5 MB. Selecione uma imagem menor.");
+        }
+    }
+
+    // Retorna Promise<{ url, path }>.
+    // Path: cms-media/{uid}/banners/{bannerId}/{timestamp}-{filename}
+    function uploadBannerImage(storage, file, uid, bannerId) {
+        var filename = Date.now() + "-" + safeFileName(file.name);
+        var path = "cms-media/" + uid + "/banners/" + bannerId + "/" + filename;
+        var ref = storage.ref(path);
+        return ref.put(file, { contentType: file.type }).then(function () {
+            return ref.getDownloadURL().then(function (url) {
+                return { url: url, path: path };
+            });
+        });
+    }
+
+    function releaseBannerPreviewUrl() {
+        if (uploadState.previewObjectUrl && window.URL && typeof window.URL.revokeObjectURL === "function") {
+            window.URL.revokeObjectURL(uploadState.previewObjectUrl);
+        }
+        uploadState.previewObjectUrl = "";
+    }
+
+    function updateImagePreview(url, note) {
+        var preview = document.getElementById ? document.getElementById("bannerImagePreview") : null;
+        if (!preview) return;
+        if (!url) {
+            preview.innerHTML = '<div style="width:100%;min-height:72px;display:flex;align-items:center;' +
+                'justify-content:center;border:2px dashed #ddd;border-radius:4px;' +
+                'color:#aaa;font-size:0.8rem;text-align:center;padding:0.5rem;">' +
+                escapeHtml(note || "Sem imagem") + '</div>';
+            return;
+        }
+        preview.innerHTML =
+            '<img src="' + escapeAttr(url) + '" alt="Preview" ' +
+            'style="max-width:160px;max-height:100px;object-fit:contain;border-radius:4px;' +
+            'border:1px solid #ddd;display:block;" ' +
+            'onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' +
+            '<div style="display:none;color:#b42318;font-size:0.8rem;padding:0.25rem;' +
+            'min-height:72px;align-items:center;">Erro ao carregar imagem.</div>' +
+            (note ? '<div style="font-size:0.7rem;color:#666;margin-top:0.25rem;word-break:break-all;">' + escapeHtml(note) + '</div>' : '');
+    }
+
+    // ======================================================================
+    // Handlers de imagem (expostos via AdminBannersModule)
+    // ======================================================================
+
+    function onImageFileChange(event) {
+        var file = event && event.target && event.target.files ? event.target.files[0] : null;
+        releaseBannerPreviewUrl();
+
+        if (!file) {
+            updateImagePreview(null, "Nenhum arquivo selecionado.");
+            return;
+        }
+
+        try {
+            validateBannerImageFile(file);
+        } catch (err) {
+            toast(err.message, "error");
+            if (event.target) event.target.value = "";
+            updateImagePreview(null, err.message);
+            return;
+        }
+
+        uploadState.previewObjectUrl = window.URL && typeof window.URL.createObjectURL === "function"
+            ? window.URL.createObjectURL(file) : "";
+
+        var note = file.name + (file.size ? " · " + formatBytes(file.size) : "") + " — aguardando salvar";
+
+        if (uploadState.previewObjectUrl) {
+            updateImagePreview(uploadState.previewObjectUrl, note);
+            // Upload terá prioridade: limpar URL manual para não causar confusão.
+            var urlField = document.getElementById ? document.getElementById("banner_imageUrl") : null;
+            if (urlField) urlField.value = "";
+        } else {
+            updateImagePreview(null, note + " (sem pré-visualização neste navegador)");
+        }
+    }
+
+    function clearImageSelection() {
+        releaseBannerPreviewUrl();
+        var fileInput = document.getElementById ? document.getElementById("banner_imageFile") : null;
+        var urlField = document.getElementById ? document.getElementById("banner_imageUrl") : null;
+        if (fileInput) fileInput.value = "";
+        if (urlField) urlField.value = "";
+        updateImagePreview(null, "Seleção limpa. Sem imagem.");
+    }
+
+    // ======================================================================
     // Firestore — leitura
     // ======================================================================
 
@@ -239,8 +376,6 @@
         state.permissionDenied = false;
         renderList();
 
-        // Admin lê todos (rules: isAdmin()). Sem orderBy no servidor para não
-        // exigir índice composto: ordenamos no client por updatedAt desc.
         return db.collection(COLLECTION).get().then(function (snapshot) {
             var items = [];
             snapshot.forEach(function (doc) {
@@ -293,13 +428,13 @@
         return '' +
             '<div class="page-header">' +
                 '<h1>📢 Banners / Pop-ups</h1>' +
-                '<span class="badge badge-info">Rascunhos · sem publicação</span>' +
+                '<span class="badge badge-info">Rascunhos com upload de imagem</span>' +
             '</div>' +
 
             '<div class="card">' +
                 '<div class="card-header"><h2>Campanhas visuais</h2></div>' +
                 '<p class="admin-helper-text">Gerencie campanhas e pop-ups do site (imagem, texto, CTA, período e páginas-alvo). ' +
-                'Nesta etapa só é possível trabalhar em <strong>rascunho</strong>: publicar e enviar imagem chegam em etapas futuras.</p>' +
+                'Nesta etapa é possível trabalhar em <strong>rascunho</strong> e enviar imagem. Publicar chega em etapa futura.</p>' +
                 '<div class="banners-toolbar" style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:flex-end;margin-top:0.75rem;">' +
                     '<div class="admin-field" style="margin:0;">' +
                         '<label for="bannersFilterStatus">Status</label>' +
@@ -416,8 +551,23 @@
                     : '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.archive(' + jsId + ')">Arquivar</button> ') +
                 '<button class="btn-secondary btn-sm" type="button" disabled title="Publicação disponível em etapa futura">Publicar</button>';
 
+            // Miniatura: visível quando há imageUrl; falha silenciosa via onerror.
+            var thumb = "";
+            if (clean(item.imageUrl)) {
+                thumb = '<div style="margin-top:0.3rem;">' +
+                    '<img src="' + escapeAttr(clean(item.imageUrl)) + '" ' +
+                    'alt="' + escapeAttr(clean(item.imageAlt) || "Miniatura") + '" ' +
+                    'style="max-width:72px;max-height:40px;object-fit:cover;border-radius:2px;' +
+                    'border:1px solid #e0e0e0;vertical-align:middle;" ' +
+                    'onerror="this.style.display=\'none\'">' +
+                    '</div>';
+            } else {
+                thumb = '<div style="margin-top:0.3rem;font-size:0.7rem;color:#bbb;">sem imagem</div>';
+            }
+
             return '<tr>' +
-                '<td>' + escapeHtml(clean(item.title) || "(sem título)") + '<br><small style="color:#888;">' + escapeHtml(clean(item.slug)) + '</small></td>' +
+                '<td>' + escapeHtml(clean(item.title) || "(sem título)") + '<br>' +
+                '<small style="color:#888;">' + escapeHtml(clean(item.slug)) + '</small>' + thumb + '</td>' +
                 '<td>' + escapeHtml(clean(item.type) || "—") + '</td>' +
                 '<td>' + statusBadge(clean(item.status) || "draft") + '</td>' +
                 '<td>' + placementText(item) + '</td>' +
@@ -495,6 +645,7 @@
     // ======================================================================
 
     function openForm(id) {
+        releaseBannerPreviewUrl();
         var item = id ? findItem(id) : null;
         var isEdit = !!item;
         openModal(isEdit ? "Editar rascunho" : "Novo rascunho", buildForm(item));
@@ -532,6 +683,66 @@
             }).join("") + '</select></div>';
     }
 
+    // Seção de imagem com upload + URL manual + preview.
+    function buildImageSection(item) {
+        item = item || {};
+        var currentUrl = clean(item.imageUrl || "");
+        var hasPath = !!clean(item.imagePath || "");
+        var sourceNote = currentUrl
+            ? (hasPath ? "Imagem atual (enviada por upload)." : "Imagem atual (URL manual).")
+            : "Sem imagem definida.";
+
+        var previewHtml;
+        if (currentUrl) {
+            previewHtml =
+                '<img src="' + escapeAttr(currentUrl) + '" alt="Preview" ' +
+                'style="max-width:160px;max-height:100px;object-fit:contain;border-radius:4px;' +
+                'border:1px solid #ddd;display:block;" ' +
+                'onerror="this.style.display=\'none\';this.nextSibling.style.display=\'flex\'">' +
+                '<div style="display:none;color:#b42318;font-size:0.8rem;padding:0.25rem;' +
+                'min-height:40px;align-items:center;">Erro ao carregar imagem atual.</div>' +
+                '<div style="font-size:0.7rem;color:#666;margin-top:0.25rem;">' + escapeHtml(sourceNote) + '</div>';
+        } else {
+            previewHtml = '<div style="width:100%;min-height:72px;display:flex;align-items:center;' +
+                'justify-content:center;border:2px dashed #ddd;border-radius:4px;' +
+                'color:#aaa;font-size:0.8rem;text-align:center;padding:0.5rem;">' +
+                escapeHtml(sourceNote) + '</div>';
+        }
+
+        return '<div class="admin-field full">' +
+            '<label>Imagem do banner / pop-up</label>' +
+            '<div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start;margin-top:0.25rem;">' +
+                '<div id="bannerImagePreview" style="width:160px;flex-shrink:0;">' + previewHtml + '</div>' +
+                '<div style="flex:1;min-width:180px;display:flex;flex-direction:column;gap:0.6rem;">' +
+                    '<div>' +
+                        '<label for="banner_imageFile" ' +
+                        'style="font-size:0.8rem;font-weight:normal;color:#555;">' +
+                        'Upload (JPG, PNG, WEBP · máx. 5 MB)</label>' +
+                        '<input class="admin-input" type="file" id="banner_imageFile" name="imageFile" ' +
+                        'accept="image/jpeg,image/png,image/webp" ' +
+                        'onchange="AdminBannersModule.onImageFileChange(event)">' +
+                    '</div>' +
+                    '<div>' +
+                        '<label for="banner_imageUrl" ' +
+                        'style="font-size:0.8rem;font-weight:normal;color:#555;">' +
+                        'ou URL externa (https://…)</label>' +
+                        '<input class="admin-input" type="url" id="banner_imageUrl" name="imageUrl" ' +
+                        'value="' + escapeAttr(currentUrl) + '" maxlength="' + LIMITS.url + '" ' +
+                        'placeholder="https://">' +
+                        (hasPath
+                            ? '<small style="color:#888;">Upload ativo. Selecione um novo arquivo para substituir a imagem.</small>'
+                            : '<small style="color:#888;">Usado se nenhum arquivo for enviado acima.</small>') +
+                    '</div>' +
+                    '<div>' +
+                        '<button class="btn-secondary" type="button" ' +
+                        'style="padding:0.25rem 0.75rem;font-size:0.8rem;" ' +
+                        'onclick="AdminBannersModule.clearImageSelection()">Limpar imagem</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
+    }
+
     function buildForm(item) {
         item = item || {};
         var isEdit = !!item.__id;
@@ -556,7 +767,7 @@
             '<div class="admin-modal-body">' +
                 '<input type="hidden" name="bannerId" value="' + escapeAttr(item.__id || "") + '">' +
                 '<p class="admin-helper-text" style="margin-bottom:0.75rem;">Status fixo em <strong>rascunho</strong> nesta etapa. ' +
-                'Imagem por upload e publicação chegam depois.</p>' +
+                'Publicação de banner chega em etapa futura.</p>' +
                 '<div class="admin-modal-grid">' +
                     fieldText("title", "Título *", item.title || "", { required: true, maxlength: LIMITS.title }) +
                     fieldSelect("type", "Tipo *", typeOptions, inEnum(clean(item.type), TYPES, "banner")) +
@@ -570,8 +781,8 @@
                     fieldText("ctaLabel", "Texto do botão (CTA)", item.ctaLabel || "", { maxlength: LIMITS.ctaLabel }) +
                     fieldText("ctaUrl", "Link do CTA", item.ctaUrl || "", { type: "url", maxlength: LIMITS.url }) +
                     fieldSelect("ctaTarget", "Abertura do CTA", targetOptions, inEnum(clean(item.ctaTarget), CTA_TARGETS, "_self")) +
-                    fieldText("imageUrl", "Imagem (URL manual, opcional)", item.imageUrl || "", { type: "url", maxlength: LIMITS.url }) +
-                    fieldText("imageAlt", "Texto alternativo da imagem", item.imageAlt || "", { maxlength: LIMITS.imageAlt }) +
+                    buildImageSection(item) +
+                    fieldText("imageAlt", "Texto alternativo (alt)", item.imageAlt || "", { maxlength: LIMITS.imageAlt }) +
                     '<div class="admin-field full"><label><input type="checkbox" name="dismissible" ' +
                         (item.dismissible === false ? "" : "checked") + '> Permitir fechar (dismissible)</label></div>' +
                     fieldTextarea("targetPages", "Páginas-alvo (uma por linha — só quando posição = personalizado)", targetPages) +
@@ -586,6 +797,7 @@
     }
 
     function cancelForm() {
+        releaseBannerPreviewUrl();
         closeModal();
     }
 
@@ -628,7 +840,6 @@
 
         var placement = inEnum(clean(val("placement")), PLACEMENTS, "home");
 
-        // targetPages: uma por linha, filtradas para páginas conhecidas.
         var targetPages = clean(val("targetPages")).split(/\r?\n/).map(function (line) {
             return clean(line);
         }).filter(function (line) {
@@ -657,15 +868,45 @@
         return { data: data };
     }
 
-    // Monta o payload final (apenas campos permitidos pelas rules).
-    function buildPayload(form, base) {
-        // base: documento original (em edição) ou null (criação).
+    // Monta o payload final (apenas campos permitidos pelas rules 4B + imageUpdatedAt/By adicionados em 4D).
+    // uploadResult: { url, path } do Storage, ou null se não houve upload.
+    // overrideId: força o id (usado para garantir consistência quando o id foi gerado antes do upload).
+    function buildPayload(form, base, uploadResult, overrideId) {
         var data = form.data;
         var uid = currentUid();
         var isCreate = !base;
 
-        var id = isCreate ? makeId(data.title) : base.__id;
+        var id = overrideId || (isCreate ? makeId(data.title) : base.__id);
         var slug = isCreate ? makeSlug(data.title) : (clean(base.slug) || makeSlug(data.title));
+
+        // Resolução de campos de imagem:
+        // Upload > form imageUrl > preservar existente (se URL inalterada em edição).
+        var imageUrl = data.imageUrl;
+        var imagePath = null;
+        var imageUpdatedAt = null;
+        var imageUpdatedBy = null;
+
+        if (uploadResult && uploadResult.url) {
+            // Upload bem-sucedido: sobrescreve URL e caminho.
+            imageUrl = uploadResult.url;
+            imagePath = uploadResult.path;
+            imageUpdatedAt = serverTimestamp();
+            imageUpdatedBy = uid;
+        } else if (!isCreate && base) {
+            var baseUrl = clean(base.imageUrl || "");
+            var formUrl = clean(imageUrl || "");
+            if (formUrl === baseUrl) {
+                // URL não mudou: preservar caminho Storage e metadados existentes.
+                if (clean(base.imagePath)) imagePath = base.imagePath;
+                imageUpdatedAt = base.imageUpdatedAt || null;
+                imageUpdatedBy = base.imageUpdatedBy || null;
+            } else if (formUrl && formUrl !== baseUrl) {
+                // URL manual trocada: registrar atualização (sem caminho Storage).
+                imageUpdatedAt = serverTimestamp();
+                imageUpdatedBy = uid;
+            }
+            // formUrl vazio + baseUrl presente → imagem removida; sem imageUpdatedAt/By.
+        }
 
         var payload = {
             id: id,
@@ -673,11 +914,11 @@
             slug: slug,
             description: data.description,
             type: data.type,
-            // status nunca vira 'published' por aqui. Criação = draft.
+            // status nunca vira 'published' nesta etapa.
             status: isCreate ? "draft" : inEnum(clean(base.status), ["draft", "archived"], "draft"),
             placement: data.placement,
             targetPages: data.targetPages,
-            imageUrl: data.imageUrl,
+            imageUrl: imageUrl,
             imageAlt: data.imageAlt,
             ctaLabel: data.ctaLabel,
             ctaUrl: data.ctaUrl,
@@ -693,14 +934,17 @@
             updatedBy: uid
         };
 
+        // Campos opcionais de imagem (só inseridos se preenchidos).
+        if (imagePath) payload.imagePath = imagePath;
+        if (imageUpdatedAt) payload.imageUpdatedAt = imageUpdatedAt;
+        if (imageUpdatedBy) payload.imageUpdatedBy = imageUpdatedBy;
+
         if (isCreate) {
             payload.createdAt = serverTimestamp();
             payload.createdBy = uid;
         } else {
-            payload.createdAt = base.createdAt;            // preservado (rules: imutável)
-            payload.createdBy = base.createdBy || uid;     // preservado
-            // Preserva imagePath/mediaId existentes (não há upload nesta etapa).
-            if (clean(base.imagePath)) payload.imagePath = base.imagePath;
+            payload.createdAt = base.createdAt;            // imutável (rules)
+            payload.createdBy = base.createdBy || uid;     // imutável (rules)
             if (clean(base.mediaId)) payload.mediaId = base.mediaId;
             if (base.publishedAt) payload.publishedAt = base.publishedAt;
             if (base.archivedAt) payload.archivedAt = base.archivedAt;
@@ -733,19 +977,91 @@
 
         var bannerId = clean(form.elements.bannerId ? form.elements.bannerId.value : "");
         var base = bannerId ? findItem(bannerId) : null;
-        var built = buildPayload({ data: parsed.data }, base);
+
+        // Lê arquivo (se houver); validação antecipa possível erro antes de desabilitar o botão.
+        var fileInputEl = form.elements.imageFile;
+        var file = fileInputEl && fileInputEl.files ? fileInputEl.files[0] : null;
+
+        if (file) {
+            try {
+                validateBannerImageFile(file);
+            } catch (err) {
+                toast(err.message, "error");
+                return;
+            }
+        }
+
+        // ID estável gerado antes do upload (garante mesmo id no path e no documento).
+        var stableId = bannerId || makeId(parsed.data.title);
 
         var submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Salvando..."; }
 
-        db.collection(COLLECTION).doc(built.id).set(built.payload).then(function () {
-            closeModal();
-            toast(base ? "Rascunho atualizado." : "Rascunho criado.", "success");
-            return load(ctx());
-        }).catch(function (error) {
-            if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = base ? "Salvar rascunho" : "Criar rascunho"; }
-            handleWriteError(error, "salvar o rascunho");
-        });
+        function resetBtn() {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = base ? "Salvar rascunho" : "Criar rascunho";
+            }
+        }
+
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = file ? "Enviando imagem..." : "Salvando...";
+        }
+
+        function doSave(uploadResult) {
+            if (submitBtn && file && uploadResult) submitBtn.textContent = "Salvando...";
+            var built = buildPayload({ data: parsed.data }, base, uploadResult, stableId);
+            return db.collection(COLLECTION).doc(built.id).set(built.payload).then(function () {
+                releaseBannerPreviewUrl();
+                closeModal();
+                toast(base ? "Rascunho atualizado." : "Rascunho criado.", "success");
+                return load(ctx());
+            });
+        }
+
+        if (file) {
+            var storage = getStorage();
+            if (!storage) {
+                resetBtn();
+                toast("Firebase Storage não disponível. Verifique o login de admin.", "error");
+                return;
+            }
+            uploadBannerImage(storage, file, uid, stableId).then(function (uploadResult) {
+                return doSave(uploadResult);
+            }).catch(function (error) {
+                resetBtn();
+                handleUploadError(error);
+            });
+        } else {
+            doSave(null).catch(function (error) {
+                resetBtn();
+                handleWriteError(error, "salvar o rascunho");
+            });
+        }
+    }
+
+    // ======================================================================
+    // Erros de upload
+    // ======================================================================
+
+    function handleUploadError(error) {
+        var code = error && error.code ? error.code : "";
+        var msg;
+        if (code === "storage/unauthorized") {
+            msg = "Permissão negada no Storage. Verifique se as Storage Rules do Bloco 4B estão publicadas e se você é admin.";
+        } else if (code === "storage/canceled") {
+            msg = "Upload cancelado.";
+        } else if (code === "storage/network-request-failed" || code === "storage/unknown") {
+            msg = "Erro de rede ao enviar imagem. Verifique sua conexão e tente novamente.";
+        } else if (code === "storage/quota-exceeded") {
+            msg = "Cota de armazenamento excedida.";
+        } else if (code === "storage/invalid-argument") {
+            msg = "Arquivo inválido para upload. Verifique o tipo e o tamanho.";
+        } else {
+            msg = "Erro ao enviar imagem. Tente novamente ou use URL manual.";
+        }
+        toast(msg, "error");
+        console.warn("[admin-banners] Falha no upload de imagem.", error);
     }
 
     // ======================================================================
@@ -776,7 +1092,8 @@
         });
     }
 
-    // Reaproveita os campos atuais, mudando apenas status/archivedAt/updated*.
+    // Reaproveita campos atuais, mudando apenas status/archivedAt/updated*.
+    // Preserva imageUrl, imagePath, imageAlt, imageUpdatedAt, imageUpdatedBy.
     function buildArchivePayload(item, uid) {
         var payload = {
             id: item.__id,
@@ -807,6 +1124,8 @@
         };
         if (clean(item.imagePath)) payload.imagePath = item.imagePath;
         if (clean(item.mediaId)) payload.mediaId = item.mediaId;
+        if (item.imageUpdatedAt) payload.imageUpdatedAt = item.imageUpdatedAt;
+        if (clean(item.imageUpdatedBy)) payload.imageUpdatedBy = item.imageUpdatedBy;
         if (item.publishedAt) payload.publishedAt = item.publishedAt;
         return payload;
     }
@@ -827,10 +1146,12 @@
             slug: makeSlug(newTitle),
             description: limit(item.description, LIMITS.description),
             type: inEnum(clean(item.type), TYPES, "banner"),
-            status: "draft", // duplicata sempre nasce rascunho
+            status: "draft",
             placement: inEnum(clean(item.placement), PLACEMENTS, "home"),
             targetPages: Array.isArray(item.targetPages) ? item.targetPages.slice() : [],
-            // imageUrl manual pode ser copiada; imagePath/mediaId NÃO (vínculo de storage/mídia).
+            // imageUrl manual ou de Storage pode ser copiada (o arquivo continua acessível pela URL);
+            // imagePath NÃO (vínculo de storage/mídia pertence ao original).
+            // imageUpdatedAt/By NÃO copiados (sem vínculo de storage, seria informação falsa).
             imageUrl: clean(item.imageUrl),
             imageAlt: limit(item.imageAlt, LIMITS.imageAlt),
             ctaLabel: limit(item.ctaLabel, LIMITS.ctaLabel),
@@ -847,7 +1168,7 @@
             createdBy: uid,
             updatedAt: serverTimestamp(),
             updatedBy: uid
-            // publishedAt/archivedAt deliberadamente NÃO copiados.
+            // publishedAt/archivedAt/imagePath/mediaId/imageUpdatedAt/imageUpdatedBy deliberadamente NÃO copiados.
         };
 
         db.collection(COLLECTION).doc(newId).set(payload).then(function () {
@@ -867,6 +1188,22 @@
                 '<td>' + (value || "—") + '</td></tr>';
         }
 
+        // Preview de imagem nos detalhes.
+        var imagePreviewHtml;
+        if (clean(item.imageUrl)) {
+            var safeImgSrc = escapeAttr(clean(item.imageUrl));
+            imagePreviewHtml =
+                '<div style="margin-bottom:0.4rem;">' +
+                '<img src="' + safeImgSrc + '" ' +
+                'alt="' + escapeAttr(clean(item.imageAlt) || "Imagem do banner") + '" ' +
+                'style="max-width:280px;max-height:160px;object-fit:contain;border-radius:4px;' +
+                'border:1px solid #ddd;display:block;" ' +
+                'onerror="this.style.display=\'none\'">' +
+                '</div>';
+        } else {
+            imagePreviewHtml = '<em style="color:#aaa;">Sem imagem</em>';
+        }
+
         var html = '<div class="admin-modal-body"><table class="data-table"><tbody>' +
             row("ID", escapeHtml(item.__id)) +
             row("Título", escapeHtml(clean(item.title))) +
@@ -878,7 +1215,9 @@
             row("Frequência", escapeHtml(clean(item.frequency))) +
             row("Período", periodText(item)) +
             row("CTA", escapeHtml(clean(item.ctaLabel)) + (clean(item.ctaUrl) ? " → " + escapeHtml(clean(item.ctaUrl)) : "")) +
-            row("Imagem (URL)", escapeHtml(clean(item.imageUrl))) +
+            row("Imagem", imagePreviewHtml) +
+            (clean(item.imageUrl) ? row("URL da imagem", '<small style="word-break:break-all;">' + escapeHtml(clean(item.imageUrl)) + '</small>') : '') +
+            (clean(item.imagePath) ? row("Caminho Storage", '<small style="word-break:break-all;color:#888;">' + escapeHtml(clean(item.imagePath)) + '</small>') : '') +
             row("Texto alt.", escapeHtml(clean(item.imageAlt))) +
             row("Descrição", escapeHtml(clean(item.description))) +
             row("Criado em", escapeHtml(formatDateTime(item.createdAt))) +
@@ -918,16 +1257,15 @@
         render: render,
         load: load,
         dispose: function () {
-            // Sem listeners/timers globais próprios: nada a limpar.
+            releaseBannerPreviewUrl();
         },
 
-        // Atalho usado pelo showSection: garante shell + recarrega lista.
         activate: function (context) {
             render(getSection(), context || ctx());
             load(context || ctx());
         },
 
-        // Ações expostas para os handlers inline.
+        // Ações inline do HTML.
         openForm: openForm,
         submitForm: submitForm,
         cancelForm: cancelForm,
@@ -937,16 +1275,22 @@
         onFilterChange: onFilterChange,
         refresh: refresh,
 
+        // Handlers de imagem (chamados por eventos inline no formulário).
+        onImageFileChange: onImageFileChange,
+        clearImageSelection: clearImageSelection,
+
         // Introspecção para smoke tests.
         _state: state,
         _readForm: readForm,
         _buildPayload: buildPayload,
         _isAllowedUrl: isAllowedUrl,
-        _makeSlug: makeSlug
+        _makeSlug: makeSlug,
+        _validateBannerImageFile: validateBannerImageFile,
+        _MAX_IMAGE_BYTES: MAX_IMAGE_BYTES,
+        _IMAGE_TYPE_REGEX: IMAGE_TYPE_REGEX
     };
 
-    // Registro imediato (admin-registry.js já carregou). Carregar ESTE script
-    // ANTES de placeholder.js garante que o módulo real vença o placeholder.
+    // Registro imediato: carregar ANTES de placeholder.js garante que o módulo real vença.
     if (window.AdminRegistry && typeof window.AdminRegistry.register === "function") {
         window.AdminRegistry.register(AdminBannersModule);
     }

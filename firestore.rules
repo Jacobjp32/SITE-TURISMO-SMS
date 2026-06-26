@@ -88,6 +88,7 @@ service cloud.firestore {
       return data.keys().hasOnly([
         'id', 'title', 'slug', 'description', 'type', 'status', 'placement',
         'targetPages', 'imageUrl', 'imagePath', 'imageAlt', 'mediaId',
+        'imageUpdatedAt', 'imageUpdatedBy',
         'ctaLabel', 'ctaUrl', 'ctaTarget', 'startAt', 'endAt', 'priority',
         'frequency', 'dismissible', 'showDelayMs', 'maxWidth',
         'createdAt', 'updatedAt', 'createdBy', 'updatedBy',
