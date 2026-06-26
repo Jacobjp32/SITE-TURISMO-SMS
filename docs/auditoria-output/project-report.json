@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-06-25T13:29:52.414Z",
+  "generatedAt": "2026-06-25T13:58:03.915Z",
   "totals": {
-    "files": 384,
+    "files": 385,
     "html": 36,
     "css": 22,
-    "js": 42,
+    "js": 43,
     "directoryIndexes": 14,
     "rootHtml": 22
   },
@@ -46,13 +46,13 @@
     },
     {
       "ext": ".js",
-      "files": 42,
-      "bytes": 834227
+      "files": 43,
+      "bytes": 839780
     },
     {
       "ext": ".html",
       "files": 36,
-      "bytes": 691451
+      "bytes": 692220
     },
     {
       "ext": ".css",
@@ -62,7 +62,7 @@
     {
       "ext": ".md",
       "files": 27,
-      "bytes": 314009
+      "bytes": 316390
     },
     {
       "ext": ".json",
@@ -189,7 +189,7 @@
     {
       "dir": ".",
       "files": 39,
-      "bytes": 986247
+      "bytes": 987016
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -209,7 +209,7 @@
     {
       "dir": "docs",
       "files": 24,
-      "bytes": 298925
+      "bytes": 301306
     },
     {
       "dir": "js/data",
@@ -224,12 +224,17 @@
     {
       "dir": "js/admin",
       "files": 5,
-      "bytes": 16991
+      "bytes": 18023
     },
     {
       "dir": "cloudflare-worker",
       "files": 1,
       "bytes": 14643
+    },
+    {
+      "dir": "js/admin/modules",
+      "files": 1,
+      "bytes": 4521
     },
     {
       "dir": "sabores",
@@ -820,7 +825,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 130435
+      "bytes": 131204
     },
     {
       "path": "eventos.html",
@@ -1040,7 +1045,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 130435
+      "bytes": 131204
     },
     {
       "path": "css/mapa-3d.css",
@@ -1088,7 +1093,7 @@
       "path": "docs/bloco-1-fundacao-admin-cms.md",
       "ext": ".md",
       "dir": "docs",
-      "bytes": 27163
+      "bytes": 29544
     },
     {
       "path": "docs/plano-admin-cms-completo.md",
@@ -1118,7 +1123,7 @@
       "path": "js/admin/admin-router.js",
       "ext": ".js",
       "dir": "js/admin",
-      "bytes": 3209
+      "bytes": 4241
     },
     {
       "path": "js/admin/admin-shell.js",
@@ -1131,6 +1136,12 @@
       "ext": ".js",
       "dir": "js/admin",
       "bytes": 3577
+    },
+    {
+      "path": "js/admin/modules/dashboard.js",
+      "ext": ".js",
+      "dir": "js/admin/modules",
+      "bytes": 4521
     },
     {
       "path": "js/admin-content-cms.js",
@@ -1264,7 +1275,8 @@
         "js/admin/admin-ui.js",
         "js/admin/admin-registry.js",
         "js/admin/admin-router.js",
-        "js/admin/admin-shell.js"
+        "js/admin/admin-shell.js",
+        "js/admin/modules/dashboard.js"
       ],
       "styles": [],
       "anchors": [
@@ -2680,7 +2692,7 @@
     },
     {
       "file": "js/admin/admin-router.js",
-      "bytes": 3173,
+      "bytes": 4196,
       "globals": [
         "window.AdminContext",
         "window.AdminRegistry",
@@ -2735,6 +2747,31 @@
       "localStorage": 0,
       "serviceWorker": 0,
       "addEventListeners": 0
+    },
+    {
+      "file": "js/admin/modules/dashboard.js",
+      "bytes": 4478,
+      "globals": [
+        "var SECTION_ID",
+        "window.AdminContext",
+        "window.AdminDashboardModule",
+        "window.AdminRegistry",
+        "window.AdminRouter",
+        "window.FirebaseSystem",
+        "window.addEventListener",
+        "window.setTimeout",
+        "window.showSection",
+        "window.updateDate"
+      ],
+      "functions": [
+        "activate",
+        "pick",
+        "resolveApi",
+        "setText"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 2
     },
     {
       "file": "js/admin-content-cms.js",
@@ -3784,6 +3821,11 @@
       "examples": "admin-firebase.html"
     },
     {
+      "script": "js/admin/modules/dashboard.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
       "script": "js/avaliacoes.js",
       "pages": 1,
       "examples": "index.html"
@@ -3846,7 +3888,7 @@
     },
     {
       "global": "window.addEventListener",
-      "files": "js/admin/admin-shell.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
     },
     {
       "global": "window.AdminContentCMS",
@@ -3854,15 +3896,15 @@
     },
     {
       "global": "window.AdminContext",
-      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
     },
     {
       "global": "window.AdminRegistry",
-      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js"
+      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
     },
     {
       "global": "window.AdminRouter",
-      "files": "js/admin/admin-router.js, js/admin/admin-shell.js"
+      "files": "js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js"
     },
     {
       "global": "window.applyTranslations",
@@ -3886,7 +3928,7 @@
     },
     {
       "global": "window.FirebaseSystem",
-      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/firebase-auth.js, js/nav-shared.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js"
     },
     {
       "global": "window.innerHeight",
@@ -3918,7 +3960,11 @@
     },
     {
       "global": "window.setTimeout",
-      "files": "js/admin/admin-shell.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+    },
+    {
+      "global": "window.showSection",
+      "files": "js/admin/admin-router.js, js/admin/modules/dashboard.js"
     },
     {
       "global": "window.SITE_META",

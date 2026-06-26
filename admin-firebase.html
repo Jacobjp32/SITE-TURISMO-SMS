@@ -1411,6 +1411,8 @@
     <script src="js/admin/admin-registry.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-router.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
+    <!-- Módulos migrados (Etapa 2): Dashboard. Demais seções seguem no fluxo legado. -->
+    <script src="js/admin/modules/dashboard.js?v=admin-modular-20260625"></script>
     <script>
         const SEC = window.SMSecurity;
         var adminUsersCache = [];
@@ -1723,6 +1725,16 @@
         }
 
         async function loadDashboardData() {
+            // Etapa 2: delega ao módulo Dashboard quando disponível; mantém o
+            // fallback legado abaixo se o módulo não existir ou falhar.
+            if (window.AdminDashboardModule && typeof window.AdminDashboardModule.load === 'function') {
+                try {
+                    await window.AdminDashboardModule.load(window.AdminContext || null);
+                    return;
+                } catch (moduleError) {
+                    console.warn('[admin] Dashboard modular falhou; usando fallback legado.', moduleError);
+                }
+            }
             const stats = await FirebaseSystem.getAdminStats();
             if (stats) {
                 document.getElementById('stat-usuarios').textContent = stats.totalUsers;

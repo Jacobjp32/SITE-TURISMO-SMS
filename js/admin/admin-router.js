@@ -64,9 +64,12 @@
 
         /**
          * navigate(sectionId)
-         * MODO PASSTHROUGH: delega à navegação legada. Em etapas futuras,
-         * quando uma seção tiver módulo migrado, este ponto passará a
-         * renderizar o módulo em vez de delegar.
+         * Faz a alternância visual via navegação legada (sempre) e, se a seção
+         * tiver um módulo registrado (Etapa 2: apenas o Dashboard), renderiza e
+         * carrega esse módulo. Seções sem módulo continuam 100% legadas.
+         *
+         * Sem recursão: a "ponte legada" registrada é o `showSection` ORIGINAL,
+         * nunca um wrapper.
          */
         navigate: function (sectionId) {
             if (!sectionId) return false;
@@ -77,15 +80,33 @@
                 window.AdminContext.state.currentModuleId = sectionId;
             }
 
-            // --- Etapa 1: sempre passthrough para preservar o comportamento atual ---
+            // 1) Alternância visual + loaders legados (preserva comportamento atual).
             var nav = resolveLegacyNavigate();
             if (nav) {
                 nav(sectionId);
+            }
+
+            // 2) Se houver módulo para esta seção, renderiza/carrega (modo modular).
+            var mod = getModule(sectionId);
+            if (mod) {
+                try {
+                    var activeCtx = ctx || window.AdminContext || null;
+                    var container = (typeof document !== "undefined" && document.getElementById)
+                        ? document.getElementById("section-" + sectionId)
+                        : null;
+                    if (typeof mod.render === "function") mod.render(container, activeCtx);
+                    if (typeof mod.load === "function") mod.load(activeCtx);
+                } catch (error) {
+                    console.warn("[admin-router] Falha ao renderizar módulo '" + sectionId + "'.", error);
+                }
                 return true;
             }
 
-            console.warn("[admin-router] Navegação legada indisponível para '" + sectionId + "'.");
-            return false;
+            if (!nav) {
+                console.warn("[admin-router] Navegação legada indisponível para '" + sectionId + "'.");
+                return false;
+            }
+            return true;
         }
     };
 

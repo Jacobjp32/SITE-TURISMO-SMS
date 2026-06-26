@@ -522,3 +522,58 @@ Remover as 5 linhas `<script src="js/admin/...">` de `admin-firebase.html` e a p
 ### Próxima etapa
 Etapa 2 — migrar **Dashboard** para `modules/dashboard.js` com shim global de
 `loadDashboardData`, sem mexer em rules.
+
+---
+
+## 14. Etapa 2 — Dashboard migrado (2026-06-25)
+
+Migrado **somente** o Dashboard (seção `home`) para o sistema modular, preservando visual,
+cards, ações rápidas e o admin legado. Nenhum CRUD/collection novo; rules intocadas.
+
+### Seção real
+- **id da seção:** `section-home` · **nome no `showSection`:** `home`.
+- **Cards:** `#stat-usuarios`, `#stat-pendentes`, `#stat-aprovados`, `#stat-estabelecimentos`.
+- **Loader legado:** `loadDashboardData()` (inline) via `FirebaseSystem.getAdminStats()`.
+
+### Arquivo criado
+- `js/admin/modules/dashboard.js` → `window.AdminDashboardModule` (contrato:
+  `id:'home', label:'Dashboard', icon:'📊', requiredRole:'admin', navGroup:'Operação',
+  order:10, render, load, dispose`). `render()` **reaproveita** o markup de `#section-home`
+  (não recria visual) e atualiza a data via `updateDate` se existir; `load()` replica o
+  comportamento legado com guardas extras (null/NaN → mantém `-`, erro de contagem → `Erro`).
+  Auto-registra no `AdminRegistry` e registra a ponte legada no `AdminRouter`.
+
+### Arquivos alterados
+- `js/admin/admin-router.js`: `navigate()` agora, além do passthrough visual, **renderiza
+  e carrega** o módulo registrado da seção (Etapa 2: só o Dashboard). Sem recursão — a ponte
+  legada é o `showSection` **original**.
+- `admin-firebase.html`: (a) +1 `<script>` para `modules/dashboard.js?v=admin-modular-20260625`;
+  (b) `loadDashboardData()` inline passou a **delegar** ao `AdminDashboardModule.load()` com
+  **fallback legado** completo se o módulo não existir ou falhar.
+
+### Como o Dashboard usa o módulo
+- **Integração viva:** no login, `showAdminDashboard()` → `loadDashboardData()` (inline) →
+  delega a `AdminDashboardModule.load()`. Os cards passam a vir do módulo.
+- **Router:** `AdminRouter.navigate('home')` renderiza+carrega o módulo (disponível para uso
+  programático/futuro). Seções não-Dashboard continuam 100% legadas.
+
+### `showSection` e shims
+- `showSection` **preservado e NÃO envolvido** (sem wrapper). A sidebar e as quick-actions
+  continuam chamando a `showSection` inline inalterada.
+- `loadDashboardData` **preservado** com delegação + fallback legado (não removido).
+- Quick actions (`onclick="showSection(...)"` + link `/portal-usuario`) **inalteradas**.
+
+### O que continua legado / não migrado
+Aprovações, Solicitações de vínculo, Gerenciar Vínculos, Usuários, Eventos, Notícias, Mídia
+— todas no fluxo inline. Modais `#managerModal`/`#contentModal` inalterados.
+
+### Rollback
+1. Remover o `<script src="js/admin/modules/dashboard.js...">` de `admin-firebase.html`;
+2. Reverter o `loadDashboardData()` inline para o corpo legado (sem o bloco de delegação);
+3. Reverter o `navigate()` em `admin-router.js` para o passthrough da Etapa 1;
+4. (Opcional) apagar `js/admin/modules/dashboard.js`.
+Nenhum outro arquivo de produção foi tocado.
+
+### Próxima etapa recomendada
+Etapa 3 — migrar **Mídia/Notícias/Eventos** (wrappers finos sobre `AdminContentCMS`),
+convertendo `onclick`→`data-action` por seção com shims, sem mexer em rules.
