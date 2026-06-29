@@ -226,29 +226,17 @@
                 <li><a href="#map-hero" data-lang-key="nav-inicio">Início</a></li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeExploreMenu" aria-label="Abrir menu Explore">
                         <span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span>
                     </button>
-                    <div class="dropdown-menu" role="menu">
-                        <a href="/mapa-turistico.html" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
-                        <a href="/mapa-turistico.html?grupo=pontos-turisticos" data-lang-key="nav-pontos-turisticos">Pontos Turísticos</a>
-                        <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-roteiros">Roteiros</a>
-                        <a href="/galeria" data-lang-key="nav-galeria">Galeria</a>
-                        <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-experiencias">Experiências</a>
+                    <div class="dropdown-menu" id="homeExploreMenu" role="menu">
+                        <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
+                        <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-rotas">Rotas</a>
+                        <a href="/galeria" role="menuitem" data-lang-key="nav-galeria">Galeria</a>
                     </div>
                 </li>
 
-                <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
-                        <span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span>
-                    </button>
-                    <div class="dropdown-menu" role="menu">
-                        <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-gastronomia-polonesa">Gastronomia Polonesa</a>
-                        <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-erva-mate-menu">Erva-mate</a>
-                        <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-restaurantes-clean">Restaurantes</a>
-                        <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-produtos-locais">Produtos Locais</a>
-                    </div>
-                </li>
+                <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
                 <li>
                     <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">

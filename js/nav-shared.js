@@ -44,54 +44,44 @@
             <li><a href="/" data-lang-key="nav-inicio">Início</a></li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-turistico.html" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
-                    <a href="/mapa-turistico.html?grupo=pontos-turisticos" data-lang-key="nav-pontos-turisticos">Pontos Turísticos</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-roteiros">Roteiros</a>
-                    <a href="/galeria" data-lang-key="nav-galeria">Galeria</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-experiencias">Experiências</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navExploreMenu" aria-label="Abrir menu Explore"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" id="navExploreMenu" role="menu">
+                    <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
+                    <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-rotas">Rotas</a>
+                    <a href="/galeria" role="menuitem" data-lang-key="nav-galeria">Galeria</a>
                 </div>
             </li>
 
-            <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-sabores">Sabores</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-gastronomia-polonesa">Gastronomia Polonesa</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-erva-mate-menu">Erva-mate</a>
-                    <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-restaurantes-clean">Restaurantes</a>
-                    <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="nav-produtos-locais">Produtos Locais</a>
-                </div>
-            </li>
+            <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/eventos/" data-lang-key="nav-eventos">Eventos</a>
-                    <a href="/noticias" data-lang-key="nav-noticias-clean">Notícias</a>
+                    <a href="/eventos/" role="menuitem" data-lang-key="nav-eventos">Eventos</a>
+                    <a href="/noticias" role="menuitem" data-lang-key="nav-noticias-clean">Notícias</a>
                 </div>
             </li>
 
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
-                    <a href="/mapa-turistico.html" data-lang-key="nav-como-chegar">Como Chegar</a>
-                    <a href="/#visitor-guide-title" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
-                    <a href="/#weather-title" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
-                    <a href="/#contato" data-lang-key="nav-contato">Contato</a>
+                    <a href="/mapa-turistico.html?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                    <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
+                    <a href="/#visitor-guide-title" role="menuitem" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
+                    <a href="/#weather-title" role="menuitem" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
+                    <a href="/#contato" role="menuitem" data-lang-key="nav-contato">Contato</a>
                 </div>
             </li>
 
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/#sobre" data-lang-key="nav-sao-mateus">São Mateus do Sul</a>
-                    <a href="/#sobre" data-lang-key="nav-historia">História</a>
-                    <a href="/mapa-turistico.html?categoria=Cultura" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="nav-terra-erva-mate">Terra da Erva-mate</a>
-                    <a href="/#sobre" data-lang-key="nav-xisto">Xisto</a>
-                    <a href="/transparencia" data-lang-key="nav-institucional">Institucional</a>
+                    <a href="/#sobre" role="menuitem" data-lang-key="nav-sao-mateus">São Mateus do Sul</a>
+                    <a href="/#sobre" role="menuitem" data-lang-key="nav-historia">História</a>
+                    <a href="/mapa-turistico.html?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
+                    <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-terra-erva-mate">Terra da Erva-mate</a>
+                    <a href="/#sobre" role="menuitem" data-lang-key="nav-xisto">Xisto</a>
+                    <a href="/transparencia" role="menuitem" data-lang-key="nav-institucional">Institucional</a>
                 </div>
             </li>
 
