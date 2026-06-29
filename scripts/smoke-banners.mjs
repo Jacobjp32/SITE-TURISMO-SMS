@@ -1,5 +1,5 @@
 /**
- * smoke-banners.mjs — Smoke test do módulo Admin Banners (Blocos 4C + 4D).
+ * smoke-banners.mjs — Smoke test do módulo Admin Banners (Blocos 4C + 4D + 4E).
  * Carrega admin-registry.js + banners.js + placeholder.js num sandbox (vm)
  * com window/document stubbados (sem Firebase) e valida os contratos do bloco:
  *
@@ -22,8 +22,20 @@
  *   - buildPayload nunca permite status published;
  *   - formulário contém campo de arquivo e preview de imagem;
  *   - lista renderiza thumbnail <img> quando há imageUrl;
- *   - lista não quebra quando não há imageUrl;
- *   - botão Publicar continua desabilitado.
+ *   - lista não quebra quando não há imageUrl.
+ *
+ * Contratos 4E (publicação):
+ *   - botão Publicar não é mais sempre disabled;
+ *   - getPublishBlockers bloqueia rascunho incompleto (sem imagem/destino);
+ *   - getPublishBlockers libera rascunho completo;
+ *   - buildTransitionPayload('published') gera status published + publishedAt;
+ *   - publicação atualiza updatedAt/updatedBy;
+ *   - payload de publicação NÃO contém publishedBy (campo proibido nas rules);
+ *   - despublicar gera status draft preservando publishedAt;
+ *   - arquivar publicado gera status archived;
+ *   - duplicar publicado gera cópia draft sem publishedAt;
+ *   - status arbitrário cai para draft (nunca status fora do enum);
+ *   - archived não pode ser publicado diretamente.
  *
  * Uso: node scripts/smoke-banners.mjs
  */
@@ -83,7 +95,7 @@ const W = sandbox.window;
 const reg = W.AdminRegistry;
 const mod = W.AdminBannersModule;
 
-console.log("Smoke test — Admin Banners (Blocos 4C + 4D)");
+console.log("Smoke test — Admin Banners (Blocos 4C + 4D + 4E)");
 console.log("");
 console.log("--- Contratos 4C ---");
 
@@ -155,9 +167,10 @@ check("_isAllowedUrl rejeita aspas/parênteses",
 check("módulo NÃO chama .delete()",
     read("js/admin/modules/banners.js").indexOf(".delete(") === -1);
 
-// botão Publicar desabilitado.
-check("botão Publicar é exibido como disabled",
-    read("js/admin/modules/banners.js").indexOf('disabled title="Publicação disponível em etapa futura"') !== -1);
+// botão Publicar NÃO é mais sempre desabilitado (4E habilita publicação).
+check("botão Publicar deixou de ser sempre disabled",
+    read("js/admin/modules/banners.js").indexOf('disabled title="Publicação disponível em etapa futura"') === -1 &&
+    read("js/admin/modules/banners.js").indexOf("AdminBannersModule.publish(") !== -1);
 
 console.log("");
 console.log("--- Contratos 4D (upload) ---");
@@ -345,6 +358,94 @@ check("lista não quebra quando não há imageUrl", listSemImagem);
     }
 });
 check("buildPayload NUNCA produz status 'published' (com e sem upload)", true);
+
+console.log("");
+console.log("--- Contratos 4E (publicação) ---");
+
+check("getPublishBlockers exposto", typeof mod._getPublishBlockers === "function");
+check("buildTransitionPayload exposto", typeof mod._buildTransitionPayload === "function");
+
+// Rascunho incompleto (sem imagem/destino) NÃO pode publicar.
+const draftIncompleto = {
+    __id: "draft-incompleto",
+    title: "Rascunho sem imagem",
+    type: "banner",
+    status: "draft",
+    imageUrl: "",
+    mediaId: "",
+    placement: "",
+    targetPages: [],
+    priority: 50
+};
+check("getPublishBlockers bloqueia rascunho sem imagem/destino",
+    mod._getPublishBlockers(draftIncompleto).length > 0);
+
+// Rascunho completo PODE publicar.
+const draftCompleto = {
+    __id: "draft-completo",
+    title: "Campanha pronta",
+    type: "banner",
+    status: "draft",
+    imageUrl: "https://exemplo.com/banner.jpg",
+    imageAlt: "Banner de campanha",
+    placement: "home",
+    targetPages: [],
+    ctaUrl: "https://exemplo.com",
+    priority: 50,
+    createdAt: null,
+    createdBy: "admin-uid-test"
+};
+check("getPublishBlockers libera rascunho completo",
+    mod._getPublishBlockers(draftCompleto).length === 0);
+
+// buildTransitionPayload('published') → status published + publishedAt + updated*.
+const pubPayload = mod._buildTransitionPayload(draftCompleto, "admin-uid-test", "published");
+check("buildTransitionPayload('published') gera status 'published'",
+    pubPayload.status === "published");
+check("buildTransitionPayload('published') grava publishedAt",
+    Object.prototype.hasOwnProperty.call(pubPayload, "publishedAt"));
+check("buildTransitionPayload('published') grava updatedBy = uid atual",
+    pubPayload.updatedBy === "admin-uid-test");
+check("payload de publicação NÃO contém publishedBy (campo proibido nas rules)",
+    !Object.prototype.hasOwnProperty.call(pubPayload, "publishedBy"));
+
+// Despublicar: published → draft, preservando publishedAt.
+const publicado = Object.assign({}, draftCompleto, {
+    __id: "publicado-1",
+    status: "published",
+    publishedAt: { seconds: 1719360000 }
+});
+const unpubPayload = mod._buildTransitionPayload(publicado, "admin-uid-test", "draft");
+check("despublicar gera status 'draft'", unpubPayload.status === "draft");
+check("despublicar preserva publishedAt existente",
+    unpubPayload.publishedAt === publicado.publishedAt);
+
+// Arquivar publicado → archived (com archivedAt).
+const arcPayload = mod._buildTransitionPayload(publicado, "admin-uid-test", "archived");
+check("arquivar publicado gera status 'archived'", arcPayload.status === "archived");
+check("arquivar grava archivedAt", Object.prototype.hasOwnProperty.call(arcPayload, "archivedAt"));
+
+// Status arbitrário cai para draft (nunca status fora do enum).
+const arbPayload = mod._buildTransitionPayload(draftCompleto, "admin-uid-test", "live");
+check("status arbitrário ('live') cai para 'draft'", arbPayload.status === "draft");
+
+// Archived não pode ser publicado diretamente.
+const arquivado = Object.assign({}, draftCompleto, { __id: "arq-1", status: "archived" });
+check("getPublishBlockers bloqueia banner archived",
+    mod._getPublishBlockers(arquivado).length > 0);
+
+// Duplicar publicado → cópia draft sem publishedAt: validado pelo source da função duplicate().
+check("duplicate() força status 'draft' na cópia",
+    src.indexOf('status: "draft"') !== -1);
+check("duplicate() NÃO copia publishedAt/archivedAt (comentário explícito)",
+    src.indexOf("publishedAt/archivedAt/imagePath/mediaId/imageUpdatedAt/imageUpdatedBy deliberadamente NÃO copiados") !== -1);
+
+// Exibição pública não existe neste módulo (Bloco 4F ainda não implementado).
+check("módulo não define exibição pública (sem renderPublic/showPublicBanner)",
+    src.indexOf("renderPublic") === -1 && src.indexOf("showPublicBanner") === -1);
+// Render do módulo só mira a seção do admin, nunca páginas públicas.
+check("render do módulo mira apenas #section-banners (admin)",
+    src.indexOf('"section-" + SECTION_ID') !== -1);
 
 console.log(failures === 0
     ? "\nTodos os checks passaram ✅"

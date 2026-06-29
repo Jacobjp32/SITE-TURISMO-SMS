@@ -11,13 +11,16 @@
  *  - editar rascunho com upload de imagem ou URL manual;
  *  - upload para cms-media/{uid}/banners/{bannerId}/{arquivo} (rules 4B);
  *  - preview da imagem no formulário e miniatura na lista;
- *  - arquivar (status `archived`); duplicar como rascunho; ver detalhes.
+ *  - PUBLICAR rascunho apto (status `published`, grava `publishedAt`) — Bloco 4E;
+ *  - DESPUBLICAR (published → draft), preservando `publishedAt`;
+ *  - arquivar (status `archived`, com confirmação reforçada se publicado);
+ *  - duplicar como rascunho; ver detalhes com aptidão de publicação.
  *
  * Esta etapa NÃO faz (deliberadamente — etapas futuras):
- *  - publicar banner (botão exibido DESABILITADO);
- *  - exibição pública no site / pop-up público;
+ *  - exibição pública no site / pop-up público (Bloco 4F);
  *  - delete definitivo (rules já bloqueiam `delete`);
- *  - apagar arquivo antigo do Storage ao trocar imagem (mitigação futura).
+ *  - apagar arquivo antigo do Storage ao trocar imagem (mitigação futura);
+ *  - gravar `publishedBy` (campo NÃO permitido nas rules 4B — só `publishedAt`).
  *
  * Helper de upload: `uploadBannerImage` interno (path: cms-media/{uid}/banners/{bannerId}/...),
  * seguindo os padrões de `admin-content-cms.js` (validateImageFile, safeFileName, MAX 5 MB,
@@ -541,15 +544,29 @@
         var rows = items.map(function (item) {
             var id = item.__id;
             var jsId = "'" + escapeJs(id) + "'";
-            var isArchived = clean(item.status) === "archived";
-            var actions = '' +
-                '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.openForm(' + jsId + ')">Editar</button> ' +
-                '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.viewDetails(' + jsId + ')">Detalhes</button> ' +
-                '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.duplicate(' + jsId + ')">Duplicar</button> ' +
-                (isArchived
-                    ? '<button class="btn-secondary btn-sm" type="button" disabled title="Já arquivado">Arquivar</button> '
-                    : '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.archive(' + jsId + ')">Arquivar</button> ') +
-                '<button class="btn-secondary btn-sm" type="button" disabled title="Publicação disponível em etapa futura">Publicar</button>';
+            var status = clean(item.status) || "draft";
+
+            var btnEdit = '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.openForm(' + jsId + ')">Editar</button> ';
+            var btnDetails = '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.viewDetails(' + jsId + ')">Detalhes</button> ';
+            var btnDuplicate = '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.duplicate(' + jsId + ')">Duplicar</button> ';
+            var btnArchive = '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.archive(' + jsId + ')">Arquivar</button> ';
+            var btnUnpublish = '<button class="btn-secondary btn-sm" type="button" onclick="AdminBannersModule.unpublish(' + jsId + ')">Despublicar</button> ';
+
+            var actions;
+            if (status === "published") {
+                // published: despublicar, duplicar, arquivar, detalhes (sem publicar/editar direto).
+                actions = btnUnpublish + btnDuplicate + btnArchive + btnDetails;
+            } else if (status === "archived") {
+                // archived: apenas detalhes e duplicar como rascunho — nunca publicar direto.
+                actions = btnDetails + btnDuplicate;
+            } else {
+                // draft (e qualquer status desconhecido tratado como draft): editar, publicar, duplicar, arquivar, detalhes.
+                var blockers = getPublishBlockers(item);
+                var btnPublish = blockers.length
+                    ? '<button class="btn-secondary btn-sm" type="button" disabled title="' + escapeAttr("Não pode publicar: " + blockers.join(" ")) + '">Publicar</button> '
+                    : '<button class="btn-primary btn-sm" type="button" onclick="AdminBannersModule.publish(' + jsId + ')">Publicar</button> ';
+                actions = btnEdit + btnPublish + btnDuplicate + btnArchive + btnDetails;
+            }
 
             // Miniatura: visível quando há imageUrl; falha silenciosa via onerror.
             var thumb = "";
@@ -766,8 +783,8 @@
         return '<form id="bannerForm" onsubmit="AdminBannersModule.submitForm(event);return false;">' +
             '<div class="admin-modal-body">' +
                 '<input type="hidden" name="bannerId" value="' + escapeAttr(item.__id || "") + '">' +
-                '<p class="admin-helper-text" style="margin-bottom:0.75rem;">Status fixo em <strong>rascunho</strong> nesta etapa. ' +
-                'Publicação de banner chega em etapa futura.</p>' +
+                '<p class="admin-helper-text" style="margin-bottom:0.75rem;">A edição mantém o status atual (<strong>rascunho</strong> ou arquivado). ' +
+                'Para publicar, salve o rascunho e use o botão <strong>Publicar</strong> na lista ou nos detalhes.</p>' +
                 '<div class="admin-modal-grid">' +
                     fieldText("title", "Título *", item.title || "", { required: true, maxlength: LIMITS.title }) +
                     fieldSelect("type", "Tipo *", typeOptions, inEnum(clean(item.type), TYPES, "banner")) +
@@ -914,7 +931,8 @@
             slug: slug,
             description: data.description,
             type: data.type,
-            // status nunca vira 'published' nesta etapa.
+            // O formulário nunca publica diretamente: publicação é feita por publish().
+            // Edita apenas draft/archived; published não chega aqui (sem botão Editar).
             status: isCreate ? "draft" : inEnum(clean(base.status), ["draft", "archived"], "draft"),
             placement: data.placement,
             targetPages: data.targetPages,
@@ -1075,15 +1093,19 @@
             toast("Este banner já está arquivado.", "info");
             return;
         }
-        var ok = window.confirm('Arquivar "' + (clean(item.title) || "este banner") + '"? Ele sai de circulação mas não é apagado.');
-        if (!ok) return;
+        var wasPublished = clean(item.status) === "published";
+        var confirmMsg = wasPublished
+            ? 'Este banner está PUBLICADO. Arquivar vai retirá-lo de publicação imediatamente. ' +
+              'Arquivar "' + (clean(item.title) || "este banner") + '"?'
+            : 'Arquivar "' + (clean(item.title) || "este banner") + '"? Ele sai de circulação mas não é apagado.';
+        if (!window.confirm(confirmMsg)) return;
 
         var db = getDb();
         if (!db) { toast("Firebase indisponível.", "error"); return; }
         var uid = currentUid();
         if (!uid) { toast("Sessão de admin não identificada.", "error"); return; }
 
-        var payload = buildArchivePayload(item, uid);
+        var payload = buildTransitionPayload(item, uid, "archived");
         db.collection(COLLECTION).doc(item.__id).set(payload).then(function () {
             toast("Banner arquivado.", "success");
             return load(ctx());
@@ -1092,16 +1114,56 @@
         });
     }
 
-    // Reaproveita campos atuais, mudando apenas status/archivedAt/updated*.
-    // Preserva imageUrl, imagePath, imageAlt, imageUpdatedAt, imageUpdatedBy.
-    function buildArchivePayload(item, uid) {
+    // ======================================================================
+    // Publicação / despublicação (Bloco 4E)
+    // ======================================================================
+
+    // Requisitos de publicação espelham isValidBannerPublished das rules 4B:
+    // imagem (imageUrl OU mediaId) + destino (placement OU targetPages), além do
+    // base válido (title/type) e coerência de datas. Validação local é defesa em
+    // profundidade — as Firestore Rules continuam sendo o gate real.
+    // Retorna lista de motivos; vazia significa "apto a publicar".
+    function getPublishBlockers(item) {
+        item = item || {};
+        var blockers = [];
+        if (!clean(item.title)) blockers.push("título é obrigatório;");
+        if (TYPES.indexOf(clean(item.type)) === -1) blockers.push("tipo deve ser banner ou pop-up;");
+        var status = clean(item.status) || "draft";
+        if (status !== "draft") blockers.push("apenas rascunhos podem ser publicados (status atual: " + status + ");");
+        var hasImage = !!clean(item.imageUrl) || !!clean(item.mediaId);
+        if (!hasImage) blockers.push("defina uma imagem (upload ou URL);");
+        var hasPlacement = !!clean(item.placement) ||
+            (Array.isArray(item.targetPages) && item.targetPages.length > 0);
+        if (!hasPlacement) blockers.push("defina a posição (placement) ou páginas-alvo;");
+        var ctaUrl = clean(item.ctaUrl);
+        if (ctaUrl && !isAllowedUrl(ctaUrl)) blockers.push("link do CTA inválido;");
+        var startMs = toMillis(item.startAt);
+        var endMs = toMillis(item.endAt);
+        if (startMs && endMs && endMs <= startMs) blockers.push("período inválido (fim deve ser maior que início);");
+        if (item.priority != null && !Number.isFinite(Number(item.priority))) blockers.push("prioridade deve ser numérica;");
+        return blockers;
+    }
+
+    // Avisos amigáveis que NÃO bloqueiam a publicação (ex.: acessibilidade).
+    function getPublishWarnings(item) {
+        item = item || {};
+        var warnings = [];
+        if (!clean(item.imageAlt)) warnings.push("texto alternativo (alt) recomendado para acessibilidade.");
+        return warnings;
+    }
+
+    // Monta payload completo para transição de status (publicar / despublicar / arquivar),
+    // preservando todos os campos atuais e gravando SOMENTE campos permitidos pelas rules 4B.
+    // newStatus arbitrário cai para 'draft' (impede status fora do enum).
+    function buildTransitionPayload(item, uid, newStatus) {
+        var status = inEnum(newStatus, STATUSES, "draft");
         var payload = {
             id: item.__id,
             title: limit(item.title, LIMITS.title) || "(sem título)",
             slug: clean(item.slug) || makeSlug(item.title),
             description: limit(item.description, LIMITS.description),
             type: inEnum(clean(item.type), TYPES, "banner"),
-            status: "archived",
+            status: status,
             placement: inEnum(clean(item.placement), PLACEMENTS, "home"),
             targetPages: Array.isArray(item.targetPages) ? item.targetPages : [],
             imageUrl: clean(item.imageUrl),
@@ -1119,15 +1181,84 @@
             createdAt: item.createdAt,
             createdBy: item.createdBy || uid,
             updatedAt: serverTimestamp(),
-            updatedBy: uid,
-            archivedAt: serverTimestamp()
+            updatedBy: uid
         };
+
+        // Campos opcionais de imagem preservados (nunca inventados).
         if (clean(item.imagePath)) payload.imagePath = item.imagePath;
         if (clean(item.mediaId)) payload.mediaId = item.mediaId;
         if (item.imageUpdatedAt) payload.imageUpdatedAt = item.imageUpdatedAt;
         if (clean(item.imageUpdatedBy)) payload.imageUpdatedBy = item.imageUpdatedBy;
-        if (item.publishedAt) payload.publishedAt = item.publishedAt;
+
+        // publishedAt: setado AGORA ao publicar; preservado nas demais transições.
+        // publishedBy NÃO é gravado — não está em bannerFieldsAllowed (rules 4B).
+        if (status === "published") {
+            payload.publishedAt = serverTimestamp();
+        } else if (item.publishedAt) {
+            payload.publishedAt = item.publishedAt;
+        }
+
+        // archivedAt: setado AGORA ao arquivar; preservado se já existia.
+        if (status === "archived") {
+            payload.archivedAt = serverTimestamp();
+        } else if (item.archivedAt) {
+            payload.archivedAt = item.archivedAt;
+        }
+
         return payload;
+    }
+
+    function publish(id) {
+        var item = findItem(id);
+        if (!item) return;
+
+        var blockers = getPublishBlockers(item);
+        if (blockers.length) {
+            toast("Não é possível publicar: " + blockers.join(" "), "error");
+            return;
+        }
+
+        var warnings = getPublishWarnings(item);
+        var msg = 'Publicar "' + (clean(item.title) || "este banner") + '"? O status passará a “Publicado”.';
+        if (warnings.length) msg += "\n\nRecomendação: " + warnings.join(" ");
+        if (!window.confirm(msg)) return;
+
+        var db = getDb();
+        if (!db) { toast("Firebase indisponível.", "error"); return; }
+        var uid = currentUid();
+        if (!uid) { toast("Sessão de admin não identificada.", "error"); return; }
+
+        var payload = buildTransitionPayload(item, uid, "published");
+        db.collection(COLLECTION).doc(item.__id).set(payload).then(function () {
+            toast("Banner publicado.", "success");
+            return load(ctx());
+        }).catch(function (error) {
+            handleWriteError(error, "publicar o banner");
+        });
+    }
+
+    function unpublish(id) {
+        var item = findItem(id);
+        if (!item) return;
+        if (clean(item.status) !== "published") {
+            toast("Este banner não está publicado.", "info");
+            return;
+        }
+        if (!window.confirm('Despublicar "' + (clean(item.title) || "este banner") +
+            '"? Ele volta para rascunho e sai de circulação. A imagem é preservada.')) return;
+
+        var db = getDb();
+        if (!db) { toast("Firebase indisponível.", "error"); return; }
+        var uid = currentUid();
+        if (!uid) { toast("Sessão de admin não identificada.", "error"); return; }
+
+        var payload = buildTransitionPayload(item, uid, "draft");
+        db.collection(COLLECTION).doc(item.__id).set(payload).then(function () {
+            toast("Banner despublicado (voltou para rascunho).", "success");
+            return load(ctx());
+        }).catch(function (error) {
+            handleWriteError(error, "despublicar o banner");
+        });
     }
 
     function duplicate(id) {
@@ -1179,6 +1310,28 @@
         });
     }
 
+    // Botões contextuais do rodapé de detalhes, conforme o status.
+    function detailsFooterButtons(item, status) {
+        var jsId = escapeJs(item.__id);
+        var close = '<button class="btn-secondary" type="button" onclick="AdminBannersModule.cancelForm()">Fechar</button>';
+        if (status === "published") {
+            return close +
+                '<button class="btn-secondary" type="button" onclick="AdminBannersModule.cancelForm();AdminBannersModule.unpublish(\'' + jsId + '\')">Despublicar</button>';
+        }
+        if (status === "archived") {
+            // Arquivado: apenas duplicar como rascunho (e fechar).
+            return close +
+                '<button class="btn-secondary" type="button" onclick="AdminBannersModule.cancelForm();AdminBannersModule.duplicate(\'' + jsId + '\')">Duplicar como rascunho</button>';
+        }
+        // draft: editar sempre; publicar só quando apto.
+        var buttons = close +
+            '<button class="btn-primary" type="button" onclick="AdminBannersModule.cancelForm();AdminBannersModule.openForm(\'' + jsId + '\')">Editar</button>';
+        if (!getPublishBlockers(item).length) {
+            buttons += '<button class="btn-primary" type="button" onclick="AdminBannersModule.cancelForm();AdminBannersModule.publish(\'' + jsId + '\')">Publicar</button>';
+        }
+        return buttons;
+    }
+
     function viewDetails(id) {
         var item = findItem(id);
         if (!item) return;
@@ -1204,12 +1357,33 @@
             imagePreviewHtml = '<em style="color:#aaa;">Sem imagem</em>';
         }
 
+        // Aptidão para publicação (espelha getPublishBlockers / rules 4B).
+        var status = clean(item.status) || "draft";
+        var readinessHtml;
+        if (status === "published") {
+            readinessHtml = '<span style="color:#0a7f3f;">Publicado.</span>';
+        } else if (status === "archived") {
+            readinessHtml = '<span style="color:#888;">Arquivado. Duplique como rascunho para reutilizar.</span>';
+        } else {
+            var blockers = getPublishBlockers(item);
+            var warnings = getPublishWarnings(item);
+            if (blockers.length) {
+                readinessHtml = '<span style="color:#b42318;">Falta para publicar:</span>' +
+                    '<ul style="margin:0.25rem 0 0 1rem;padding:0;">' +
+                    blockers.map(function (b) { return '<li>' + escapeHtml(b) + '</li>'; }).join("") +
+                    '</ul>';
+            } else {
+                readinessHtml = '<span style="color:#0a7f3f;">Pronto para publicar.</span>' +
+                    (warnings.length ? '<br><small style="color:#a15c00;">' + escapeHtml(warnings.join(" ")) + '</small>' : "");
+            }
+        }
+
         var html = '<div class="admin-modal-body"><table class="data-table"><tbody>' +
             row("ID", escapeHtml(item.__id)) +
             row("Título", escapeHtml(clean(item.title))) +
             row("Slug", escapeHtml(clean(item.slug))) +
             row("Tipo", escapeHtml(clean(item.type))) +
-            row("Status", statusBadge(clean(item.status) || "draft")) +
+            row("Status", statusBadge(status)) +
             row("Posição", placementText(item)) +
             row("Prioridade", escapeHtml(String(item.priority != null ? item.priority : "—"))) +
             row("Frequência", escapeHtml(clean(item.frequency))) +
@@ -1222,10 +1396,13 @@
             row("Descrição", escapeHtml(clean(item.description))) +
             row("Criado em", escapeHtml(formatDateTime(item.createdAt))) +
             row("Atualizado em", escapeHtml(formatDateTime(item.updatedAt))) +
+            (item.publishedAt ? row("Publicado em", escapeHtml(formatDateTime(item.publishedAt))) : '') +
+            (item.archivedAt ? row("Arquivado em", escapeHtml(formatDateTime(item.archivedAt))) : '') +
+            row("Responsável (atualização)", escapeHtml(clean(item.updatedBy) || clean(item.createdBy))) +
+            row("Apto para publicação", readinessHtml) +
             '</tbody></table></div>' +
             '<div class="admin-modal-footer">' +
-                '<button class="btn-secondary" type="button" onclick="AdminBannersModule.cancelForm()">Fechar</button>' +
-                '<button class="btn-primary" type="button" onclick="AdminBannersModule.cancelForm();AdminBannersModule.openForm(\'' + escapeJs(item.__id) + '\')">Editar</button>' +
+                detailsFooterButtons(item, status) +
             '</div>';
 
         openModal("Detalhes do banner", html);
@@ -1270,6 +1447,8 @@
         submitForm: submitForm,
         cancelForm: cancelForm,
         archive: archive,
+        publish: publish,
+        unpublish: unpublish,
         duplicate: duplicate,
         viewDetails: viewDetails,
         onFilterChange: onFilterChange,
@@ -1283,6 +1462,9 @@
         _state: state,
         _readForm: readForm,
         _buildPayload: buildPayload,
+        _buildTransitionPayload: buildTransitionPayload,
+        _getPublishBlockers: getPublishBlockers,
+        _getPublishWarnings: getPublishWarnings,
         _isAllowedUrl: isAllowedUrl,
         _makeSlug: makeSlug,
         _validateBannerImageFile: validateBannerImageFile,
