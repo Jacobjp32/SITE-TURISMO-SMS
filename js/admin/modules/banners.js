@@ -431,13 +431,15 @@
         return '' +
             '<div class="page-header">' +
                 '<h1>📢 Banners / Pop-ups</h1>' +
-                '<span class="badge badge-info">Rascunhos com upload de imagem</span>' +
+                '<span class="badge badge-info">Faixas e janelas do site</span>' +
             '</div>' +
 
             '<div class="card">' +
                 '<div class="card-header"><h2>Campanhas visuais</h2></div>' +
-                '<p class="admin-helper-text">Gerencie campanhas e pop-ups do site (imagem, texto, CTA, período e páginas-alvo). ' +
-                'Nesta etapa é possível trabalhar em <strong>rascunho</strong> e enviar imagem. Publicar chega em etapa futura.</p>' +
+                '<p class="admin-helper-text">Gerencie as campanhas do site (imagem, texto, CTA, período e páginas-alvo). ' +
+                'O <strong>banner</strong> aparece como uma <strong>faixa pública</strong> dentro da página; ' +
+                'o <strong>pop-up</strong> aparece como uma <strong>janela/modal</strong> sobre a página. ' +
+                'Crie em <strong>rascunho</strong>, envie a imagem e use <strong>Publicar</strong> para exibir no site.</p>' +
                 '<div class="banners-toolbar" style="display:flex;flex-wrap:wrap;gap:0.75rem;align-items:flex-end;margin-top:0.75rem;">' +
                     '<div class="admin-field" style="margin:0;">' +
                         '<label for="bannersFilterStatus">Status</label>' +
@@ -766,14 +768,19 @@
         var targetPages = Array.isArray(item.targetPages) ? item.targetPages.join("\n") : "";
 
         var typeOptions = TYPES.map(function (t) {
-            return { value: t, label: t === "banner" ? "Banner (faixa)" : "Pop-up (modal)" };
+            return { value: t, label: t === "banner" ? "Banner (faixa pública na página)" : "Pop-up (janela/modal sobre a página)" };
         });
         var placementOptions = PLACEMENTS.map(function (p) {
             var labels = { home: "Home", mapa: "Mapa", eventos: "Eventos", noticias: "Notícias", sabores: "Sabores", all: "Todas", custom: "Personalizado (targetPages)" };
             return { value: p, label: labels[p] || p };
         });
         var freqOptions = FREQUENCIES.map(function (f) {
-            var labels = { always: "Sempre", oncePerSession: "1x por sessão", oncePerDay: "1x por dia", oncePerCampaign: "1x por campanha" };
+            var labels = {
+                always: "Sempre (a cada carregamento da página)",
+                oncePerSession: "1× por sessão (até fechar o navegador)",
+                oncePerDay: "1× por dia (volta no dia seguinte)",
+                oncePerCampaign: "1× por campanha (não repete para o visitante)"
+            };
             return { value: f, label: labels[f] || f };
         });
         var targetOptions = CTA_TARGETS.map(function (t) {
@@ -790,7 +797,7 @@
                     fieldSelect("type", "Tipo *", typeOptions, inEnum(clean(item.type), TYPES, "banner")) +
                     fieldSelect("placement", "Posição", placementOptions, inEnum(clean(item.placement), PLACEMENTS, "home")) +
                     fieldText("priority", "Prioridade (0–100)", item.priority != null ? item.priority : 50, { type: "number", min: PRIORITY_MIN, max: PRIORITY_MAX }) +
-                    fieldSelect("frequency", "Frequência", freqOptions, inEnum(clean(item.frequency), FREQUENCIES, "always")) +
+                    fieldSelect("frequency", "Frequência (somente pop-up)", freqOptions, inEnum(clean(item.frequency), FREQUENCIES, "always")) +
                     fieldText("showDelayMs", "Atraso do pop-up (ms)", item.showDelayMs != null ? item.showDelayMs : 0, { type: "number", min: 0, max: SHOW_DELAY_MAX }) +
                     fieldText("maxWidth", "Largura máx. pop-up (px)", item.maxWidth != null ? item.maxWidth : "", { type: "number", min: MAXWIDTH_MIN, max: MAXWIDTH_MAX }) +
                     fieldText("startAt", "Início", millisToInputValue(item.startAt), { type: "datetime-local" }) +

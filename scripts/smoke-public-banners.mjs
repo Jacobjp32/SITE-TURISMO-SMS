@@ -364,6 +364,50 @@ PB._resetPopupLoadFlag();
 check("maybeShowPopup exibe um popup published apto",
     PB._maybeShowPopup(PB._selectPopups([pop({ __id: "p-ok", frequency: "always" })], "index.html")) === true);
 
+// ======================================================================
+// Bloco 4H — integração com notícias (noticias.html) + nomes amigáveis
+// ======================================================================
+
+console.log("");
+console.log("Bloco 4H — notícias + mapeamento de páginas");
+
+// noticias.html é página suportada (placement nomeado).
+check("banner placement 'noticias' aparece em noticias.html",
+    PB._selectBanners([mk({ placement: "noticias" })], "noticias.html").length === 1);
+check("popup placement 'noticias' aparece em noticias.html",
+    PB._selectPopups([pop({ placement: "noticias" })], "noticias.html").length === 1);
+
+// placement 'all' também cobre notícias.
+check("placement 'all' casa com noticias.html",
+    PB._selectBanners([mk({ placement: "all" })], "noticias.html").length === 1);
+
+// targetPages com o nome de arquivo (padrão gravado pelo admin).
+check("targetPages ['noticias.html'] casa com noticias.html",
+    PB._selectBanners([mk({ placement: "custom", targetPages: ["noticias.html"] })], "noticias.html").length === 1);
+check("popup custom + targetPages ['noticias.html'] casa com noticias.html",
+    PB._selectPopups([pop({ placement: "custom", targetPages: ["noticias.html"] })], "noticias.html").length === 1);
+
+// targetPages com nome amigável (retrocompat / robustez 4H).
+check("targetPages com nome amigável 'noticias' casa com noticias.html",
+    PB._selectBanners([mk({ placement: "custom", targetPages: ["noticias"] })], "noticias.html").length === 1);
+check("_targetMatches aceita nome de arquivo e nome amigável",
+    PB._targetMatches(["noticias.html"], "noticias.html", "noticias") === true &&
+    PB._targetMatches(["noticias"], "noticias.html", "noticias") === true &&
+    PB._targetMatches(["eventos"], "noticias.html", "noticias") === false);
+
+// Regressão: placement de outra página NÃO vaza para notícias.
+check("placement 'home' NÃO aparece em noticias.html",
+    PB._selectBanners([mk({ placement: "home" })], "noticias.html").length === 0);
+check("targetPages ['sabores.html'] NÃO casa com noticias.html",
+    PB._selectBanners([mk({ placement: "custom", targetPages: ["sabores.html"] })], "noticias.html").length === 0);
+
+// Regressão das demais páginas (nome amigável não quebra o casamento por arquivo).
+check("regressão: home/eventos/mapa/sabores continuam casando",
+    PB._selectBanners([mk({ placement: "home" })], "index.html").length === 1 &&
+    PB._selectBanners([mk({ placement: "eventos" })], "eventos.html").length === 1 &&
+    PB._selectBanners([mk({ placement: "mapa" })], "mapa-turistico.html").length === 1 &&
+    PB._selectBanners([mk({ placement: "sabores" })], "sabores.html").length === 1);
+
 console.log("");
 console.log(failures === 0
     ? "Todos os checks passaram ✅"

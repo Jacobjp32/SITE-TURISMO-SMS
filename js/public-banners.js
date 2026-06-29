@@ -43,7 +43,7 @@
     var MAX_POPUPS = 1;            // no máximo 1 pop-up por carregamento (não invasivo)
     var COLLECTION = "banners";
     var APP_NAME = "public-banners-app";
-    var CSS_HREF = "css/public-banners.css?v=public-banners-4g-20260629";
+    var CSS_HREF = "css/public-banners.css?v=public-banners-4h-20260629";
 
     // Limites de segurança do pop-up.
     var MAX_DELAY_MS = 60000;      // teto do showDelayMs (igual ao SHOW_DELAY_MAX do admin)
@@ -118,15 +118,32 @@
         return file;
     }
 
+    // targetPages casa quando algum item bate com o arquivo atual OU com o nome
+    // amigável (chave de placement) da página. Aceitar os dois formatos mantém
+    // retrocompatibilidade: o admin grava nomes de arquivo (ex.: "noticias.html"),
+    // mas nomes amigáveis (ex.: "noticias") também são reconhecidos.
+    function targetMatches(targetPages, file, placementKey) {
+        if (!Array.isArray(targetPages) || !targetPages.length) return false;
+        var fileLc = String(file || "").toLowerCase();
+        var keyLc = String(placementKey || "").toLowerCase();
+        for (var i = 0; i < targetPages.length; i++) {
+            var t = clean(targetPages[i]).toLowerCase();
+            if (!t) continue;
+            if (t === fileLc) return true;                  // nome de arquivo (padrão do admin)
+            if (keyLc && t === keyLc) return true;          // nome amigável (home/eventos/…)
+        }
+        return false;
+    }
+
     // Um item casa com a página quando:
     //  - placement == 'all'; ou
-    //  - placement == 'custom' e targetPages contém o arquivo atual; ou
+    //  - placement == 'custom' e targetPages aponta para a página atual; ou
     //  - placement nomeado == chave da página atual; ou
-    //  - targetPages contém o arquivo atual (compatibilidade extra).
+    //  - targetPages aponta para a página atual (compatibilidade extra).
     function pageMatches(item, file) {
         var placement = clean(item.placement);
         var placementKey = FILE_TO_PLACEMENT[file] || "";
-        var inTarget = Array.isArray(item.targetPages) && item.targetPages.indexOf(file) !== -1;
+        var inTarget = targetMatches(item.targetPages, file, placementKey);
 
         if (placement === "all") return true;
         if (placement === "custom") return inTarget;
@@ -594,6 +611,7 @@
         _selectBanners: selectBanners,
         _selectPopups: selectPopups,
         _pageMatches: pageMatches,
+        _targetMatches: targetMatches,
         _withinWindow: withinWindow,
         _renderBanner: renderBanner,
         _renderInto: renderInto,

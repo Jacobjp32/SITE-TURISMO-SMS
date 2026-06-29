@@ -70,6 +70,8 @@
     font-size: 1.4rem;
     line-height: 1.2;
     color: var(--forest-deep, #0a3d2e);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-banner__desc {
@@ -78,10 +80,13 @@
     font-size: 0.95rem;
     line-height: 1.5;
     color: #444;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-banner__cta {
     align-self: flex-start;
+    max-width: 100%;
     margin-top: 0.25rem;
     display: inline-block;
     padding: 0.55rem 1.25rem;
@@ -93,6 +98,8 @@
     color: var(--forest-deep, #0a3d2e);
     background: var(--gold-polish, #d4a574);
     transition: filter 0.2s ease, transform 0.2s ease;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-banner__cta:hover {
@@ -223,6 +230,8 @@
     font-size: 1.6rem;
     line-height: 1.15;
     color: var(--forest-deep, #0a3d2e);
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-popup__desc {
@@ -231,10 +240,13 @@
     font-size: 0.98rem;
     line-height: 1.55;
     color: #444;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-popup__cta {
     align-self: flex-start;
+    max-width: 100%;
     margin-top: 0.35rem;
     display: inline-block;
     padding: 0.6rem 1.5rem;
@@ -246,6 +258,8 @@
     color: var(--forest-deep, #0a3d2e);
     background: var(--gold-polish, #d4a574);
     transition: filter 0.2s ease, transform 0.2s ease;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .public-popup__cta:hover {
@@ -265,9 +279,18 @@
     }
     .public-popup__card {
         max-width: 100%;
+        max-height: calc(100vh - 1rem);
+    }
+    .public-popup__body {
+        padding: 1rem 1.1rem 1.25rem;
     }
     .public-popup__title {
         font-size: 1.35rem;
+    }
+    /* Alvo de toque confortável para o botão de fechar no mobile. */
+    .public-popup__close {
+        width: 40px;
+        height: 40px;
     }
 }
 
