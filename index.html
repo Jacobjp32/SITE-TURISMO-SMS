@@ -425,16 +425,21 @@
 
     <!-- Map Hero -->
     <section id="map-hero">
-        <div id="map">
+        <div id="map" class="hero-video-frame" role="img" aria-label="Vista panorâmica de São Mateus do Sul">
             <video
+                class="hero-video"
                 autoplay
                 muted
                 loop
                 playsinline
-                preload="auto"
-                style="width:100%;height:100%;object-fit:cover;display:block;"
+                preload="metadata"
+                width="1920"
+                height="1080"
+                aria-hidden="true"
+                tabindex="-1"
                 poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
                 <source src="videos/ROTA_DO_TURISMO.mp4" type="video/mp4">
+                Sua navegacao nao suporta video em HTML5.
             </video>
             <!-- Overlay escuro sutil para o painel de info ser legível -->
             <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);pointer-events:none;z-index:1;"></div>

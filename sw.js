@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v17';
+const CACHE_NAME = 'turismo-sms-v18';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -22,7 +22,6 @@ const PRECACHE_ASSETS = [
     'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
     'images/PRACA_DO_RIO_IGUACU.jpg',
     'images/PARRERAL__1_.jpg',
-    'images/IGREJA_MATRIZ_1.png',
     'images/WEBP/RUA-DO-MATHE-_1_.webp',
     'images/WEBP/PRACA-DO-IGUACU_1.webp',
     'images/mascotes/MASCOTE_CAPIVARA_PINHAO.png',
@@ -54,7 +53,7 @@ const NEVER_CACHE = [
 ];
 
 // Extensões que nunca devem ser cacheadas (sempre busca da rede)
-const NEVER_CACHE_EXT = ['.json', '.html'];
+const NEVER_CACHE_EXT = ['.json', '.html', '.mp4', '.webm', '.mov', '.m4v'];
 
 // Instalação
 self.addEventListener('install', event => {
