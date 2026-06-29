@@ -118,3 +118,180 @@
         color: #cdd6d0;
     }
 }
+
+/* ============================================================ */
+/* Pop-up público — Bloco 4G                                    */
+/* Modal central discreto, responsivo e acessível.             */
+/* ============================================================ */
+
+.public-popup__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+    background: rgba(10, 61, 46, 0.55);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    animation: public-popup-fade 0.18s ease-out;
+}
+
+@keyframes public-popup-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.public-popup__card {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    max-height: calc(100vh - 2rem);
+    overflow: auto;
+    box-sizing: border-box;
+    border-radius: 14px;
+    background: var(--white-pure, #ffffff);
+    box-shadow: 0 18px 50px rgba(10, 61, 46, 0.30);
+    animation: public-popup-pop 0.2s ease-out;
+}
+
+@keyframes public-popup-pop {
+    from { transform: translateY(12px) scale(0.98); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.public-popup__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 2;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--forest-deep, #0a3d2e);
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(10, 61, 46, 0.18);
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.public-popup__close:hover {
+    background: #ffffff;
+    transform: scale(1.05);
+}
+
+.public-popup__close:focus-visible {
+    outline: 3px solid var(--gold-polish, #d4a574);
+    outline-offset: 2px;
+}
+
+.public-popup__media {
+    width: 100%;
+    line-height: 0;
+    background: var(--cream-light, #f8f6f0);
+    border-radius: 14px 14px 0 0;
+    overflow: hidden;
+}
+
+.public-popup__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.public-popup__body {
+    padding: 1.25rem 1.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.public-popup__title {
+    margin: 0;
+    font-family: var(--font-display, 'Cormorant Garamond', serif);
+    font-size: 1.6rem;
+    line-height: 1.15;
+    color: var(--forest-deep, #0a3d2e);
+}
+
+.public-popup__desc {
+    margin: 0;
+    font-family: var(--font-body, 'Raleway', sans-serif);
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: #444;
+}
+
+.public-popup__cta {
+    align-self: flex-start;
+    margin-top: 0.35rem;
+    display: inline-block;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    font-family: var(--font-body, 'Raleway', sans-serif);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--forest-deep, #0a3d2e);
+    background: var(--gold-polish, #d4a574);
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.public-popup__cta:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+.public-popup__cta:focus-visible {
+    outline: 3px solid var(--forest-deep, #0a3d2e);
+    outline-offset: 2px;
+}
+
+/* Responsivo: em telas pequenas o card ocupa quase toda a largura. */
+@media (max-width: 480px) {
+    .public-popup__overlay {
+        padding: 0.5rem;
+    }
+    .public-popup__card {
+        max-width: 100%;
+    }
+    .public-popup__title {
+        font-size: 1.35rem;
+    }
+}
+
+/* Reduz animações para quem prefere menos movimento. */
+@media (prefers-reduced-motion: reduce) {
+    .public-popup__overlay,
+    .public-popup__card {
+        animation: none;
+    }
+}
+
+/* Modo escuro do site (quando aplicável). */
+@media (prefers-color-scheme: dark) {
+    .public-popup__card {
+        background: #14241d;
+    }
+    .public-popup__close {
+        color: var(--gold-light, #e8c9a0);
+        background: rgba(20, 36, 29, 0.92);
+    }
+    .public-popup__title {
+        color: var(--gold-light, #e8c9a0);
+    }
+    .public-popup__desc {
+        color: #cdd6d0;
+    }
+}
