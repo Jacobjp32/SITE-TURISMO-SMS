@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-29T13:31:19.991Z",
+  "generatedAt": "2026-06-29T14:10:36.418Z",
   "heroFound": true,
   "videoFound": true,
   "attrs": {
@@ -16,15 +16,26 @@
     "poster": "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg"
   },
   "sources": [
-    "videos/ROTA_DO_TURISMO.mp4"
+    "videos/ROTA_DO_TURISMO.hero-720p.mp4"
   ],
   "poster": "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg",
+  "originalHeroVideo": {
+    "path": "videos/ROTA_DO_TURISMO.mp4",
+    "ext": ".mp4",
+    "bytes": 91975315,
+    "size": "87.71 MB",
+    "usedBy": [
+      "scripts/audit-hero-video.mjs"
+    ],
+    "preserved": true,
+    "referencedByHero": false
+  },
   "heroVideos": [
     {
-      "path": "videos/ROTA_DO_TURISMO.mp4",
+      "path": "videos/ROTA_DO_TURISMO.hero-720p.mp4",
       "ext": ".mp4",
-      "bytes": 91975315,
-      "size": "87.71 MB",
+      "bytes": 33565857,
+      "size": "32.01 MB",
       "usedBy": [
         "index.html"
       ],
@@ -74,6 +85,15 @@
       "ext": ".mp4",
       "bytes": 91975315,
       "size": "87.71 MB",
+      "usedBy": [
+        "scripts/audit-hero-video.mjs"
+      ]
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.hero-720p.mp4",
+      "ext": ".mp4",
+      "bytes": 33565857,
+      "size": "32.01 MB",
       "usedBy": [
         "index.html"
       ]
@@ -139,7 +159,8 @@
       ".webm",
       ".mov",
       ".m4v"
-    ]
+    ],
+    "videoExtensionsCovered": true
   },
   "recommendations": [
     "Manter o video fora do precache e impedir cache dinamico por extensao.",

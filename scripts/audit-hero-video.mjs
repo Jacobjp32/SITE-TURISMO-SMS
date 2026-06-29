@@ -103,6 +103,8 @@ const files = await walk(root);
 const refs = await collectReferences(files);
 
 const heroVideos = (await Promise.all(sources.map((source) => getAsset(source, refs)))).filter(Boolean);
+const originalHeroVideoPath = "videos/ROTA_DO_TURISMO.mp4";
+const originalHeroVideo = await getAsset(originalHeroVideoPath, refs);
 const posterAsset = poster ? await getAsset(poster, refs) : null;
 const allMedia = (await Promise.all(files
   .filter((file) => mediaExts.has(path.extname(file).toLowerCase()))
@@ -129,6 +131,15 @@ const report = {
   attrs: videoAttrs,
   sources,
   poster,
+  originalHeroVideo: originalHeroVideo ? {
+    ...originalHeroVideo,
+    preserved: true,
+    referencedByHero: sources.includes(originalHeroVideoPath),
+  } : {
+    path: originalHeroVideoPath,
+    preserved: false,
+    referencedByHero: false,
+  },
   heroVideos: heroVideos.map((asset) => ({
     ...asset,
     inServiceWorkerPrecache: swPrecacheItems.includes(asset.path),
@@ -143,6 +154,7 @@ const report = {
   sw: {
     cacheName: sw.match(/const\s+CACHE_NAME\s*=\s*['"]([^'"]+)['"]/)?.[1] || null,
     neverCacheExt,
+    videoExtensionsCovered: [".mp4", ".webm", ".mov", ".m4v"].every((ext) => neverCacheExt.includes(ext)),
   },
   recommendations: [
     "Manter o video fora do precache e impedir cache dinamico por extensao.",
@@ -166,6 +178,9 @@ Gerado em ${report.generatedAt}.
 - Video encontrado: ${report.videoFound ? "sim" : "nao"}
 - Poster: ${posterAsset ? `${posterAsset.path} (${posterAsset.size})` : "nao encontrado"}
 - Cache SW atual: ${report.sw.cacheName || "nao detectado"}
+- Original preservado: ${report.originalHeroVideo.preserved ? "sim" : "nao"}
+- Original referenciado pela hero: ${report.originalHeroVideo.referencedByHero ? "sim" : "nao"}
+- Extensoes de video em NEVER_CACHE_EXT: ${report.sw.videoExtensionsCovered ? "sim" : "nao"}
 
 ## Atributos do video
 
@@ -174,12 +189,22 @@ ${mdTable(Object.entries(videoAttrs).map(([attr, value]) => ({ attr, valor: valu
 ## Video da hero
 
 ${mdTable(report.heroVideos.map((asset) => ({
+  tipo: asset.ext === ".webm" ? "WebM" : "MP4",
   arquivo: asset.path,
   tamanho: asset.size,
   uso: asset.usedBy.join(", ") || "sem referencia",
   precache: asset.inServiceWorkerPrecache ? "sim" : "nao",
   neverCacheExt: asset.neverCacheByExtension ? "sim" : "nao",
-})), ["arquivo", "tamanho", "uso", "precache", "neverCacheExt"])}
+})), ["tipo", "arquivo", "tamanho", "uso", "precache", "neverCacheExt"])}
+
+## Original preservado
+
+${mdTable([{
+  arquivo: report.originalHeroVideo.path,
+  tamanho: report.originalHeroVideo.size || "nao encontrado",
+  preservado: report.originalHeroVideo.preserved ? "sim" : "nao",
+  hero: report.originalHeroVideo.referencedByHero ? "sim" : "nao",
+}], ["arquivo", "tamanho", "preservado", "hero"])}
 
 ## Maiores videos do projeto
 

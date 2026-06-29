@@ -1,6 +1,6 @@
 # Saida da auditoria da hero com video
 
-Gerado em 2026-06-29T13:31:19.991Z.
+Gerado em 2026-06-29T14:10:36.418Z.
 
 ## Hero
 
@@ -8,6 +8,9 @@ Gerado em 2026-06-29T13:31:19.991Z.
 - Video encontrado: sim
 - Poster: images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg (0.13 MB)
 - Cache SW atual: turismo-sms-v18
+- Original preservado: sim
+- Original referenciado pela hero: nao
+- Extensoes de video em NEVER_CACHE_EXT: sim
 
 ## Atributos do video
 
@@ -28,9 +31,16 @@ Gerado em 2026-06-29T13:31:19.991Z.
 
 ## Video da hero
 
-| arquivo | tamanho | uso | precache | neverCacheExt |
-| --- | --- | --- | --- | --- |
-| videos/ROTA_DO_TURISMO.mp4 | 87.71 MB | index.html | nao | sim |
+| tipo | arquivo | tamanho | uso | precache | neverCacheExt |
+| --- | --- | --- | --- | --- | --- |
+| MP4 | videos/ROTA_DO_TURISMO.hero-720p.mp4 | 32.01 MB | index.html | nao | sim |
+
+
+## Original preservado
+
+| arquivo | tamanho | preservado | hero |
+| --- | --- | --- | --- |
+| videos/ROTA_DO_TURISMO.mp4 | 87.71 MB | sim | nao |
 
 
 ## Maiores videos do projeto
@@ -39,7 +49,8 @@ Gerado em 2026-06-29T13:31:19.991Z.
 | --- | --- | --- |
 | videos/VIDEO_ABERTURA_4K.mp4 | 93.50 MB | galeria.html |
 | videos/INSTITUCIONAL_POLONES.mp4 | 92.54 MB | galeria.html |
-| videos/ROTA_DO_TURISMO.mp4 | 87.71 MB | index.html |
+| videos/ROTA_DO_TURISMO.mp4 | 87.71 MB | scripts/audit-hero-video.mjs |
+| videos/ROTA_DO_TURISMO.hero-720p.mp4 | 32.01 MB | index.html |
 
 
 ## Imagens pesadas da home e poster
