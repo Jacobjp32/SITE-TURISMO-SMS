@@ -1,0 +1,120 @@
+/* ============================================================ */
+/* public-banners.css — Bloco 4F                                */
+/* Exibição pública de banners publicados (slot discreto).      */
+/* Visual alinhado aos tokens globais (variables.css) com       */
+/* fallbacks para funcionar mesmo sem variables.css carregado.  */
+/* ============================================================ */
+
+#public-banners-slot[hidden] {
+    display: none !important;
+}
+
+.public-banners {
+    width: 100%;
+    max-width: 1200px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+/* Quando há mais de um banner, distribui em colunas em telas largas. */
+@media (min-width: 768px) {
+    .public-banners {
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    }
+}
+
+.public-banner {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--white-pure, #ffffff);
+    border: 1px solid rgba(10, 61, 46, 0.10);
+    box-shadow: 0 4px 16px rgba(10, 61, 46, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.public-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10, 61, 46, 0.14);
+}
+
+.public-banner__media {
+    width: 100%;
+    line-height: 0;
+    background: var(--cream-light, #f8f6f0);
+}
+
+.public-banner__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.public-banner__body {
+    padding: 1rem 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.public-banner__title {
+    margin: 0;
+    font-family: var(--font-display, 'Cormorant Garamond', serif);
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: var(--forest-deep, #0a3d2e);
+}
+
+.public-banner__desc {
+    margin: 0;
+    font-family: var(--font-body, 'Raleway', sans-serif);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #444;
+}
+
+.public-banner__cta {
+    align-self: flex-start;
+    margin-top: 0.25rem;
+    display: inline-block;
+    padding: 0.55rem 1.25rem;
+    border-radius: 999px;
+    font-family: var(--font-body, 'Raleway', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--forest-deep, #0a3d2e);
+    background: var(--gold-polish, #d4a574);
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.public-banner__cta:hover {
+    filter: brightness(0.95);
+    transform: translateY(-1px);
+}
+
+.public-banner__cta:focus-visible {
+    outline: 3px solid var(--forest-deep, #0a3d2e);
+    outline-offset: 2px;
+}
+
+/* Modo escuro do site (quando aplicável). */
+@media (prefers-color-scheme: dark) {
+    .public-banner {
+        background: #14241d;
+        border-color: rgba(212, 165, 116, 0.18);
+    }
+    .public-banner__title {
+        color: var(--gold-light, #e8c9a0);
+    }
+    .public-banner__desc {
+        color: #cdd6d0;
+    }
+}
