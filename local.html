@@ -10,6 +10,15 @@
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-YPRT7FFFV8');</script>
     <title>Carregando... | Turismo São Mateus do Sul</title>
     <meta name="description" content="Informações turísticas de São Mateus do Sul — Capital Polonesa do Paraná.">
+    <!-- SEO dinâmico: canonical/robots/OG atualizados por JS conforme o ?id= (ver bloco no fim do body). -->
+    <link rel="canonical" id="local-canonical" href="https://turismo.saomateusdosul.pr.gov.br/local">
+    <meta name="robots" id="local-robots" content="index,follow">
+    <meta property="og:type" content="place">
+    <meta property="og:site_name" content="Turismo São Mateus do Sul">
+    <meta property="og:title" id="og-title" content="Turismo São Mateus do Sul">
+    <meta property="og:description" id="og-desc" content="Informações turísticas de São Mateus do Sul — Capital Polonesa do Paraná.">
+    <meta property="og:image" id="og-image" content="https://turismo.saomateusdosul.pr.gov.br/images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+    <meta property="og:url" id="og-url" content="https://turismo.saomateusdosul.pr.gov.br/local">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -265,14 +274,49 @@
         .rel-card-body h4 { font-family: var(--font-d); font-size: 1rem; color: var(--verde); margin-bottom: 0.2rem; }
         .rel-card-body p { font-size: 0.78rem; color: #777; }
 
+        /* ── AÇÕES / CTAs ── */
+        .local-actions {
+            display: flex; flex-wrap: wrap; gap: 0.6rem;
+            margin: 0 0 2rem;
+        }
+        .btn-acao {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            padding: 0.75rem 1.2rem;
+            border-radius: 10px;
+            font-family: var(--font-b);
+            font-size: 0.9rem; font-weight: 700;
+            text-decoration: none; cursor: pointer;
+            border: 1px solid transparent;
+            background: none;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        .btn-acao.primary { background: var(--verde); color: #fff; }
+        .btn-acao.primary:hover { background: var(--verde2); }
+        .btn-acao.ghost { background: #fff; color: var(--verde); border-color: rgba(10,61,46,0.25); }
+        .btn-acao.ghost:hover { background: rgba(10,61,46,0.06); }
+        .info-unavailable { color: #999; font-style: italic; }
+
+        /* ── FOCO VISÍVEL (acessibilidade) ── */
+        a:focus-visible, button:focus-visible,
+        .btn-acao:focus-visible, .btn-voltar:focus-visible,
+        .btn-maps:focus-visible, .btn-social:focus-visible,
+        .rel-card:focus-visible, .galeria-grid img:focus-visible {
+            outline: 3px solid var(--ouro);
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+
         /* ── NOT FOUND ── */
         .not-found {
             text-align: center;
             padding: 5rem 2rem;
+            max-width: 640px;
+            margin: 0 auto;
         }
         .not-found h2 { font-family: var(--font-d); font-size: 2rem; color: var(--verde); margin-bottom: 1rem; }
         .not-found p { color: #666; margin-bottom: 2rem; }
         .not-found a { color: var(--verde2); font-weight: 600; }
+        .not-found .local-actions { justify-content: center; }
 
         /* ── LIGHTBOX ── */
         .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; }
@@ -288,6 +332,7 @@
         footer { background: var(--verde); color: rgba(255,255,255,0.7); padding: 1.5rem; text-align: center; font-size: 0.82rem; margin-top: 3rem; }
         footer a { color: var(--ouro); text-decoration: none; }
     </style>
+    <script src="js/security-utils.js"></script>
     <script src="js/locais-data.js"></script>
     <script src="js/site-meta.js?v=site-meta-20260519" defer></script>
     <script src="js/breadcrumbs.js"></script>
@@ -306,159 +351,341 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 (function () {
-    // Pega o slug da URL: local.html?id=igreja-matriz
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    const local = window.locaisData && window.locaisData[id];
-    const root = document.getElementById('page-root');
+    "use strict";
 
+    var SITE = "https://turismo.saomateusdosul.pr.gov.br";
+    var FALLBACK_IMG = "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg";
+    // Escaping/fallback helpers (js/security-utils.js). Degrada com segurança se ausente.
+    var SEC = window.SMSecurity || {
+        value: function (v, f) { return (v === null || v === undefined || String(v).trim() === "") ? (f || "") : String(v); },
+        html: function (v, f) { return this.value(v, f); },
+        attr: function (v, f) { return this.value(v, f); },
+        url: function (v, f) { return this.value(v, f); }
+    };
+
+    // ── i18n leve para o "chrome" da página (rótulos/botões/erros).
+    // O conteúdo turístico em si (nome, descrição, história) permanece em PT-BR
+    // porque o dataset é monolíngue — limitação documentada em docs/bloco-s8-local-detalhe.md.
+    var STRINGS = {
+        pt: {
+            about: "Sobre o Local", history: "📖 História", gallery: "📸 Galeria",
+            location: "📍 Localização", info: "Informações", address: "Endereço",
+            hours: "Horário", phone: "Telefone", accessibility: "Acessibilidade",
+            route: "Rota", alsoVisit: "Conheça também", openMaps: "🗺️ Abrir no Google Maps",
+            traceRoute: "🧭 Traçar rota", viewOnMap: "🗺️ Ver no mapa turístico",
+            backToMap: "← Voltar ao mapa", officialSite: "🌐 Site oficial", back: "← Voltar",
+            notFoundTitle: "Local não encontrado",
+            notFoundMsg: "O local solicitado não existe ou ainda não foi cadastrado.",
+            noIdTitle: "Nenhum local selecionado",
+            noIdMsg: "Escolha um atrativo no mapa turístico para ver os detalhes.",
+            unavailable: "Informação não disponível", photo: "foto",
+            rights: "© 2026 Secretaria Municipal de Turismo de São Mateus do Sul",
+            portal: "← Portal do Turismo", routes: "Rotas Turísticas"
+        },
+        en: {
+            about: "About this place", history: "📖 History", gallery: "📸 Gallery",
+            location: "📍 Location", info: "Information", address: "Address",
+            hours: "Hours", phone: "Phone", accessibility: "Accessibility",
+            route: "Route", alsoVisit: "See also", openMaps: "🗺️ Open in Google Maps",
+            traceRoute: "🧭 Get directions", viewOnMap: "🗺️ View on tourist map",
+            backToMap: "← Back to the map", officialSite: "🌐 Official website", back: "← Back",
+            notFoundTitle: "Place not found",
+            notFoundMsg: "The requested place does not exist or has not been registered yet.",
+            noIdTitle: "No place selected",
+            noIdMsg: "Pick an attraction on the tourist map to see its details.",
+            unavailable: "Information not available", photo: "photo",
+            rights: "© 2026 Municipal Tourism Department of São Mateus do Sul",
+            portal: "← Tourism Portal", routes: "Tourist Routes"
+        },
+        es: {
+            about: "Sobre el lugar", history: "📖 Historia", gallery: "📸 Galería",
+            location: "📍 Ubicación", info: "Información", address: "Dirección",
+            hours: "Horario", phone: "Teléfono", accessibility: "Accesibilidad",
+            route: "Ruta", alsoVisit: "Conoce también", openMaps: "🗺️ Abrir en Google Maps",
+            traceRoute: "🧭 Cómo llegar", viewOnMap: "🗺️ Ver en el mapa turístico",
+            backToMap: "← Volver al mapa", officialSite: "🌐 Sitio oficial", back: "← Volver",
+            notFoundTitle: "Lugar no encontrado",
+            notFoundMsg: "El lugar solicitado no existe o aún no ha sido registrado.",
+            noIdTitle: "Ningún lugar seleccionado",
+            noIdMsg: "Elige un atractivo en el mapa turístico para ver los detalles.",
+            unavailable: "Información no disponible", photo: "foto",
+            rights: "© 2026 Departamento Municipal de Turismo de São Mateus do Sul",
+            portal: "← Portal de Turismo", routes: "Rutas Turísticas"
+        },
+        pl: {
+            about: "O tym miejscu", history: "📖 Historia", gallery: "📸 Galeria",
+            location: "📍 Lokalizacja", info: "Informacje", address: "Adres",
+            hours: "Godziny", phone: "Telefon", accessibility: "Dostępność",
+            route: "Trasa", alsoVisit: "Zobacz też", openMaps: "🗺️ Otwórz w Google Maps",
+            traceRoute: "🧭 Wyznacz trasę", viewOnMap: "🗺️ Zobacz na mapie turystycznej",
+            backToMap: "← Powrót do mapy", officialSite: "🌐 Oficjalna strona", back: "← Powrót",
+            notFoundTitle: "Nie znaleziono miejsca",
+            notFoundMsg: "Żądane miejsce nie istnieje lub nie zostało jeszcze dodane.",
+            noIdTitle: "Nie wybrano miejsca",
+            noIdMsg: "Wybierz atrakcję na mapie turystycznej, aby zobaczyć szczegóły.",
+            unavailable: "Informacja niedostępna", photo: "zdjęcie",
+            rights: "© 2026 Wydział Turystyki Miasta São Mateus do Sul",
+            portal: "← Portal Turystyczny", routes: "Trasy Turystyczne"
+        }
+    };
+
+    function detectLang() {
+        var stored = "";
+        try { stored = localStorage.getItem("sms-lang") || ""; } catch (e) { stored = ""; }
+        var lang = (stored || (navigator.language || "pt")).toLowerCase().split("-")[0];
+        return STRINGS[lang] ? lang : "pt";
+    }
+    var L_STR = STRINGS[detectLang()];
+    function t(key) { return L_STR[key] || STRINGS.pt[key] || key; }
+
+    function setMeta(id, attr, value) {
+        var el = document.getElementById(id);
+        if (el) el.setAttribute(attr, value);
+    }
+    function absUrl(path) {
+        if (!path) return SITE;
+        if (/^https?:\/\//i.test(path)) return path;
+        return SITE + "/" + String(path).replace(/^\/+/, "");
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var id = (params.get("id") || "").trim();
+    var local = id && window.locaisData ? window.locaisData[id] : null;
+    var root = document.getElementById("page-root");
+
+    // ── Estados de erro amigáveis (id ausente ou inexistente) ──
     if (!local) {
-        root.innerHTML = `
-            <div class="not-found">
-                <h2>Local não encontrado</h2>
-                <p>O local solicitado não existe ou ainda não foi cadastrado.</p>
-                <p><a href="/">← Voltar ao Portal</a></p>
-            </div>`;
+        setMeta("local-robots", "content", "noindex,follow");
+        var isMissingId = !id;
+        var errTitle = isMissingId ? t("noIdTitle") : t("notFoundTitle");
+        var errMsg = isMissingId ? t("noIdMsg") : t("notFoundMsg");
+        document.title = errTitle + " | Turismo São Mateus do Sul";
+        setMeta("og-title", "content", errTitle);
+        root.innerHTML =
+            '<div class="not-found">' +
+                '<h2>' + SEC.html(errTitle) + '</h2>' +
+                '<p>' + SEC.html(errMsg) + '</p>' +
+                '<div class="local-actions">' +
+                    '<a class="btn-acao primary" href="/mapa-turistico.html">' + SEC.html(t("viewOnMap")) + '</a>' +
+                    '<a class="btn-acao ghost" href="/">' + SEC.html(t("portal")) + '</a>' +
+                '</div>' +
+            '</div>';
         return;
     }
 
-    // SEO dinâmico
-    document.title = local.nome + ' | Turismo São Mateus do Sul';
-    document.querySelector('meta[name="description"]').content = local.descricao.substring(0, 160);
+    var nome = SEC.value(local.nome, id);
+    var descricao = SEC.value(local.descricao, "");
 
-    // Galeria HTML
-    const galeriaHTML = local.galeria && local.galeria.length > 0
-        ? `<section class="galeria-section">
-            <span class="sec-label">📸 Galeria</span>
-            <div class="galeria-grid">
-                ${local.galeria.map((src, i) => `<img src="${src}" alt="${local.nome} — foto ${i+1}" onclick="lbOpen('${src}','${local.nome}')" loading="lazy">`).join('')}
-            </div>
-           </section>`
-        : '';
+    // ── SEO dinâmico por id (canonical/robots/OG). Não colapsa as fichas numa só URL. ──
+    var pageUrl = SITE + "/local?id=" + encodeURIComponent(id);
+    var metaDesc = descricao ? descricao.substring(0, 160) : SEC.value(local.subtitulo, nome);
+    document.title = nome + " | Turismo São Mateus do Sul";
+    var descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute("content", metaDesc);
+    setMeta("local-canonical", "href", pageUrl);
+    setMeta("og-title", "content", nome + " | Turismo São Mateus do Sul");
+    setMeta("og-desc", "content", metaDesc);
+    setMeta("og-url", "content", pageUrl);
+    setMeta("og-image", "content", absUrl(local.imagem || FALLBACK_IMG));
 
-    // Mapa HTML
-    const mapaHTML = local.lat
-        ? `<section class="mapa-section">
-            <span class="sec-label">📍 Localização</span>
-            <div id="local-map"></div>
-            <a href="${local.mapsUrl || 'https://www.google.com/maps/search/?api=1&query=' + local.lat + ',' + local.lng}" target="_blank" rel="noopener noreferrer" class="btn-maps">🗺️ Abrir no Google Maps</a>
-           </section>`
-        : '';
+    var heroImg = SEC.url(local.imagem, FALLBACK_IMG) || FALLBACK_IMG;
 
-    // Redes sociais
-    const sociais = [];
-    if (local.telefone) sociais.push(`<a class="btn-social phone" href="tel:${local.telefone.replace(/\D/g,'')}">📞 ${local.telefone}</a>`);
-    if (local.instagram) sociais.push(`<a class="btn-social instagram" href="https://instagram.com/${local.instagram.replace('@','')}" target="_blank" rel="noopener noreferrer">📸 ${local.instagram}</a>`);
-    if (local.site) sociais.push(`<a class="btn-social website" href="${local.site}" target="_blank" rel="noopener noreferrer">🌐 Site oficial</a>`);
+    // ── Galeria (opcional) ──
+    var galeria = Array.isArray(local.galeria) ? local.galeria : [];
+    var galeriaHTML = galeria.length
+        ? '<section class="galeria-section">' +
+            '<span class="sec-label">' + SEC.html(t("gallery")) + '</span>' +
+            '<div class="galeria-grid">' +
+                galeria.map(function (src, i) {
+                    var safeSrc = SEC.url(src, FALLBACK_IMG) || FALLBACK_IMG;
+                    var altTxt = nome + " — " + t("photo") + " " + (i + 1);
+                    return '<img src="' + safeSrc + '" alt="' + SEC.attr(altTxt) + '" tabindex="0" ' +
+                        'onclick="lbOpen(this.src, this.alt)" ' +
+                        'onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();lbOpen(this.src,this.alt);}" ' +
+                        'onerror="imgFallback(this)" loading="lazy">';
+                }).join("") +
+            '</div></section>'
+        : "";
 
-    // Tags de rota
-    const rotaTags = local.rota.split('·').map(r => `<span class="tag-rota">${r.trim()}</span>`).join('');
+    // ── Coordenadas / mapa (não quebra se ausentes) ──
+    var hasCoords = typeof local.lat === "number" && typeof local.lng === "number" &&
+        isFinite(local.lat) && isFinite(local.lng);
+    var coordQuery = hasCoords ? (local.lat + "," + local.lng) : "";
+    // mapsUrl ausente + coordenadas presentes => mantém fallback por coordenadas (busca).
+    var mapsViewUrl = SEC.value(local.mapsUrl, "") || (hasCoords ? "https://www.google.com/maps/search/?api=1&query=" + coordQuery : "");
+    // "Traçar rota" = direções; usa coordenadas quando houver, senão mapsUrl.
+    var directionsUrl = hasCoords
+        ? "https://www.google.com/maps/dir/?api=1&destination=" + coordQuery
+        : SEC.value(local.mapsUrl, "");
 
-    // Locais relacionados (até 3, excluindo o atual)
-    const relacionados = Object.values(window.locaisData)
-        .filter(l => l.id !== id)
+    var mapaHTML = hasCoords
+        ? '<section class="mapa-section">' +
+            '<span class="sec-label">' + SEC.html(t("location")) + '</span>' +
+            '<div id="local-map"></div>' +
+            (mapsViewUrl ? '<a href="' + SEC.url(mapsViewUrl, "#") + '" target="_blank" rel="noopener noreferrer" class="btn-maps">' + SEC.html(t("openMaps")) + '</a>' : "") +
+           '</section>'
+        : "";
+
+    // ── Bloco de ações/CTAs (Traçar rota · Ver no mapa · Voltar ao mapa) ──
+    var actionsHTML = '<div class="local-actions">' +
+        (directionsUrl ? '<a class="btn-acao primary" href="' + SEC.url(directionsUrl, "#") + '" target="_blank" rel="noopener noreferrer">' + SEC.html(t("traceRoute")) + '</a>' : "") +
+        '<a class="btn-acao ghost" href="/mapa-turistico.html">' + SEC.html(t("viewOnMap")) + '</a>' +
+        '<a class="btn-acao ghost" href="/mapa-turistico.html" onclick="voltarAoMapa(event)">' + SEC.html(t("backToMap")) + '</a>' +
+        '</div>';
+
+    // ── Redes sociais / contato (só o que existir) ──
+    var sociais = [];
+    if (SEC.value(local.telefone, "")) {
+        var telDigits = String(local.telefone).replace(/\D/g, "");
+        sociais.push('<a class="btn-social phone" href="tel:' + telDigits + '">📞 ' + SEC.html(local.telefone) + '</a>');
+    }
+    if (SEC.value(local.instagram, "")) {
+        var handle = String(local.instagram).replace("@", "");
+        sociais.push('<a class="btn-social instagram" href="' + SEC.url("https://instagram.com/" + handle, "#") + '" target="_blank" rel="noopener noreferrer">📸 ' + SEC.html(local.instagram) + '</a>');
+    }
+    if (SEC.value(local.site, "")) {
+        sociais.push('<a class="btn-social website" href="' + SEC.url(local.site, "#") + '" target="_blank" rel="noopener noreferrer">' + SEC.html(t("officialSite")) + '</a>');
+    }
+
+    // ── Tags de rota (guardado: rota pode faltar) ──
+    var rotaTags = SEC.value(local.rota, "")
+        ? String(local.rota).split("·").map(function (r) {
+            return '<span class="tag-rota">' + SEC.html(r.trim()) + '</span>';
+        }).join("")
+        : '<span class="info-unavailable">' + SEC.html(t("unavailable")) + '</span>';
+
+    // ── Relacionados (até 3, exceto o atual) ──
+    var relacionados = Object.keys(window.locaisData)
+        .filter(function (key) { return key !== id; })
         .slice(0, 3)
-        .map(l => `
-            <a href="/local?id=${l.id}" class="rel-card">
-                <img src="${l.imagem}" alt="${l.nome}" loading="lazy">
-                <div class="rel-card-body">
-                    <h4>${l.nome}</h4>
-                    <p>${l.subtitulo}</p>
-                </div>
-            </a>
-        `).join('');
+        .map(function (key) {
+            var l = window.locaisData[key];
+            var relImg = SEC.url(l.imagem, FALLBACK_IMG) || FALLBACK_IMG;
+            return '<a href="/local?id=' + encodeURIComponent(l.id || key) + '" class="rel-card">' +
+                '<img src="' + relImg + '" alt="' + SEC.attr(SEC.value(l.nome, "")) + '" onerror="imgFallback(this)" loading="lazy">' +
+                '<div class="rel-card-body">' +
+                    '<h4>' + SEC.html(l.nome, "") + '</h4>' +
+                    '<p>' + SEC.html(l.subtitulo, "") + '</p>' +
+                '</div>' +
+            '</a>';
+        }).join("");
 
-    root.innerHTML = `
-        <!-- HERO -->
-        <div class="hero">
-            <img src="${local.imagem}" alt="${local.nome}" id="hero-img" loading="lazy">
-            <div class="hero-overlay"></div>
-            <a class="btn-voltar" onclick="history.back()" href="/">← Voltar</a>
-            <div class="hero-content">
-                <div class="hero-badge">${local.badge}</div>
-                <h1 class="hero-title">${local.nome}</h1>
-                <p class="hero-sub">${local.subtitulo}</p>
-            </div>
-        </div>
+    // ── Linhas do card de informações (oculta o que faltar) ──
+    function infoRow(icon, label, valueHtml) {
+        return '<div class="info-row"><span class="info-icon">' + icon + '</span>' +
+            '<div class="info-text"><strong>' + SEC.html(label) + '</strong>' + valueHtml + '</div></div>';
+    }
+    var infoRows = "";
+    if (SEC.value(local.endereco, "")) infoRows += infoRow("📍", t("address"), '<span>' + SEC.html(local.endereco) + '</span>');
+    if (SEC.value(local.horario, "")) infoRows += infoRow("⏰", t("hours"), '<span>' + SEC.html(local.horario) + '</span>');
+    if (SEC.value(local.telefone, "")) infoRows += infoRow("📞", t("phone"), '<a href="tel:' + String(local.telefone).replace(/\D/g, "") + '">' + SEC.html(local.telefone) + '</a>');
+    if (SEC.value(local.acessibilidade, "")) infoRows += infoRow("♿", t("accessibility"), '<span>' + SEC.html(local.acessibilidade) + '</span>');
+    infoRows += infoRow("🗺️", t("route"), '<div style="margin-top:0.3rem">' + rotaTags + '</div>');
 
-        <!-- CONTEÚDO -->
-        <div class="container">
+    var badge = SEC.value(local.badge, "");
+    var subtitulo = SEC.value(local.subtitulo, "");
+    var categoria = SEC.value(local.categoria, "");
 
-            <!-- COLUNA ESQUERDA -->
-            <div class="col-left">
-                <span class="sec-label">Sobre o Local</span>
-                <h2 class="sec-title">${local.nome}</h2>
-                <p class="descricao">${local.descricao}</p>
+    root.innerHTML =
+        '<div class="hero">' +
+            '<img src="' + heroImg + '" alt="' + SEC.attr(nome) + '" id="hero-img" onerror="imgFallback(this)" loading="lazy">' +
+            '<div class="hero-overlay"></div>' +
+            '<a class="btn-voltar" href="/mapa-turistico.html" onclick="voltarAoMapa(event)">' + SEC.html(t("back")) + '</a>' +
+            '<div class="hero-content">' +
+                (badge ? '<div class="hero-badge">' + SEC.html(badge) + '</div>' : "") +
+                '<h1 class="hero-title">' + SEC.html(nome) + '</h1>' +
+                (subtitulo ? '<p class="hero-sub">' + SEC.html(subtitulo) + '</p>' : "") +
+            '</div>' +
+        '</div>' +
 
-                ${local.historia ? `
-                <div class="historia-box">
-                    <h3>📖 História</h3>
-                    <p>${local.historia}</p>
-                </div>` : ''}
+        '<div class="container">' +
+            '<div class="col-left">' +
+                '<span class="sec-label">' + SEC.html(t("about")) + '</span>' +
+                '<h2 class="sec-title">' + SEC.html(nome) + '</h2>' +
+                (descricao ? '<p class="descricao">' + SEC.html(descricao) + '</p>' : '<p class="descricao info-unavailable">' + SEC.html(t("unavailable")) + '</p>') +
 
-                ${galeriaHTML}
-                ${mapaHTML}
+                actionsHTML +
 
-                <!-- Locais relacionados -->
-                <div class="relacionados">
-                    <span class="sec-label">Conheça também</span>
-                    <div class="relacionados-grid">${relacionados}</div>
-                </div>
-            </div>
+                (SEC.value(local.historia, "")
+                    ? '<div class="historia-box"><h3>' + SEC.html(t("history")) + '</h3><p>' + SEC.html(local.historia) + '</p></div>'
+                    : "") +
 
-            <!-- COLUNA DIREITA: CARD INFO -->
-            <div class="col-right">
-                <div class="info-card">
-                    <div class="info-card-header">
-                        <h3>Informações</h3>
-                        <p>${local.categoria}</p>
-                    </div>
-                    <div class="info-list">
-                        ${local.endereco ? `<div class="info-row"><span class="info-icon">📍</span><div class="info-text"><strong>Endereço</strong><span>${local.endereco}</span></div></div>` : ''}
-                        ${local.horario ? `<div class="info-row"><span class="info-icon">⏰</span><div class="info-text"><strong>Horário</strong><span>${local.horario}</span></div></div>` : ''}
-                        ${local.telefone ? `<div class="info-row"><span class="info-icon">📞</span><div class="info-text"><strong>Telefone</strong><a href="tel:${local.telefone.replace(/\D/g,'')}">${local.telefone}</a></div></div>` : ''}
-                        ${local.acessibilidade ? `<div class="info-row"><span class="info-icon">♿</span><div class="info-text"><strong>Acessibilidade</strong><span>${local.acessibilidade}</span></div></div>` : ''}
-                        <div class="info-row"><span class="info-icon">🗺️</span><div class="info-text"><strong>Rota</strong><div style="margin-top:0.3rem">${rotaTags}</div></div></div>
-                    </div>
-                    ${sociais.length ? `<div class="info-card-footer">${sociais.join('')}</div>` : ''}
-                </div>
-            </div>
-        </div>
+                galeriaHTML +
+                mapaHTML +
 
-        <footer>
-            <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
-            <p style="margin-top:.5rem"><a href="/">← Portal do Turismo</a> · <a href="/mapa-turistico.html?grupo=roteiros">Rotas Turísticas</a></p>
-        </footer>
-    `;
+                '<div class="relacionados">' +
+                    '<span class="sec-label">' + SEC.html(t("alsoVisit")) + '</span>' +
+                    '<div class="relacionados-grid">' + relacionados + '</div>' +
+                '</div>' +
+            '</div>' +
 
-    // Inicializa mapa Leaflet se houver coordenadas
-    if (local.lat) {
+            '<div class="col-right">' +
+                '<div class="info-card">' +
+                    '<div class="info-card-header">' +
+                        '<h3>' + SEC.html(t("info")) + '</h3>' +
+                        (categoria ? '<p>' + SEC.html(categoria) + '</p>' : "") +
+                    '</div>' +
+                    '<div class="info-list">' + infoRows + '</div>' +
+                    (sociais.length ? '<div class="info-card-footer">' + sociais.join("") + '</div>' : "") +
+                '</div>' +
+            '</div>' +
+        '</div>' +
+
+        '<footer>' +
+            '<p>' + SEC.html(t("rights")) + '</p>' +
+            '<p style="margin-top:.5rem"><a href="/">' + SEC.html(t("portal")) + '</a> · <a href="/mapa-turistico.html?grupo=roteiros">' + SEC.html(t("routes")) + '</a></p>' +
+        '</footer>';
+
+    // ── Mapa Leaflet (só com coordenadas válidas) ──
+    if (hasCoords && window.L) {
         setTimeout(function () {
-            const map = L.map('local-map', { center: [local.lat, local.lng], zoom: 15 });
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap',
-                maxZoom: 19
-            }).addTo(map);
-            L.marker([local.lat, local.lng])
-                .addTo(map)
-                .bindPopup('<strong>' + local.nome + '</strong><br>' + (local.endereco || ''))
-                .openPopup();
+            try {
+                var map = L.map("local-map", { center: [local.lat, local.lng], zoom: 15 });
+                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                    attribution: "© OpenStreetMap",
+                    maxZoom: 19
+                }).addTo(map);
+                L.marker([local.lat, local.lng])
+                    .addTo(map)
+                    .bindPopup("<strong>" + SEC.html(nome) + "</strong><br>" + SEC.html(SEC.value(local.endereco, "")))
+                    .openPopup();
+            } catch (e) {
+                var mapEl = document.getElementById("local-map");
+                if (mapEl) mapEl.style.display = "none";
+            }
         }, 100);
     }
 })();
 
+// Fallback de imagem: troca por imagem segura e evita loop infinito.
+function imgFallback(img) {
+    if (img.dataset.fallbackApplied) return;
+    img.dataset.fallbackApplied = "1";
+    img.src = "images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg";
+}
+
+// "Voltar ao mapa": usa histórico quando veio de outra página do site; senão vai ao mapa.
+function voltarAoMapa(e) {
+    if (e) e.preventDefault();
+    if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
+        window.history.back();
+    } else {
+        window.location.href = "/mapa-turistico.html";
+    }
+}
+
 // Lightbox simples
 function lbOpen(src, alt) {
-    document.getElementById('lb-img').src = src;
-    document.getElementById('lb-img').alt = alt;
-    document.getElementById('lb').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    document.getElementById("lb-img").src = src;
+    document.getElementById("lb-img").alt = alt;
+    document.getElementById("lb").classList.add("open");
+    document.body.style.overflow = "hidden";
 }
 function lbClose() {
-    document.getElementById('lb').classList.remove('open');
-    document.body.style.overflow = '';
+    document.getElementById("lb").classList.remove("open");
+    document.body.style.overflow = "";
 }
-document.addEventListener('keydown', e => { if (e.key === 'Escape') lbClose(); });
+document.addEventListener("keydown", function (e) { if (e.key === "Escape") lbClose(); });
 </script>
 
     <script src="translations.js"></script>
