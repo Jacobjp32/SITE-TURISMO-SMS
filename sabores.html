@@ -99,6 +99,33 @@
     <!-- Main -->
     <main class="main-content">
 
+        <!-- Bloco S4B: atalhos internos (herdam os antigos itens do menu Sabores) -->
+        <nav class="sabores-atalhos" aria-labelledby="sabores-atalhos-titulo">
+            <h2 id="sabores-atalhos-titulo" class="sabores-atalhos-titulo" data-lang-key="sab-atalhos-titulo">Explore os sabores</h2>
+            <div class="sabores-atalhos-grid">
+                <a class="sabores-atalho-card" href="#polonesa">
+                    <span class="sabores-atalho-icon" aria-hidden="true">🥟</span>
+                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-polonesa">Culinária Polonesa</span>
+                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-polonesa-desc">Pierogi, bigos e mais</span>
+                </a>
+                <a class="sabores-atalho-card" href="#erva-mate">
+                    <span class="sabores-atalho-icon" aria-hidden="true">🧉</span>
+                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-ervamate">Erva-mate</span>
+                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-ervamate-desc">Ouro verde com IG própria</span>
+                </a>
+                <a class="sabores-atalho-card" href="#feiras">
+                    <span class="sabores-atalho-icon" aria-hidden="true">🛒</span>
+                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-feiras">Feiras e Produtores</span>
+                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-feiras-desc">Compre direto do campo</span>
+                </a>
+                <a class="sabores-atalho-card" href="#restaurantes">
+                    <span class="sabores-atalho-icon" aria-hidden="true">🍴</span>
+                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-restaurantes">Restaurantes</span>
+                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-restaurantes-desc">Onde comer na cidade</span>
+                </a>
+            </div>
+        </nav>
+
         <!-- Filter nav -->
         <nav class="filter-nav" aria-label="Filtrar seção">
             <button class="fnav-btn fnav-btn--active" data-filter="">Tudo</button>
@@ -320,6 +347,9 @@
 
             </div>
         </section>
+
+    <!-- Bloco S4B: âncora Erva-mate aponta para os produtores de erva-mate (IG São Matheus). -->
+    <div id="erva-mate" class="sabores-anchor" aria-hidden="true"></div>
 
     <!-- DIRETO DO PRODUTOR - Seção Interativa -->
     <section class="produtor-section" id="produtor" style="margin-top:3rem">
@@ -555,12 +585,28 @@
             });
         });
 
+        function scrollToId(id) {
+            var t = document.getElementById(id);
+            if (t) setTimeout(function() { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
+        }
+
+        // Trata hashes de seções filtráveis e a âncora especial #erva-mate.
+        function handleHash(h, scroll) {
+            if (h && sections.indexOf(h) !== -1) {
+                activateFilter(h, scroll);
+            } else if (h === 'erva-mate') {
+                activateFilter('', false); // limpa filtro para manter a página inteira visível
+                if (scroll) scrollToId('erva-mate');
+            } else {
+                activateFilter('', false);
+            }
+        }
+
         var hash = window.location.hash.slice(1);
-        if (hash && sections.indexOf(hash) !== -1) activateFilter(hash, true);
+        if (hash) handleHash(hash, true);
 
         window.addEventListener('hashchange', function() {
-            var h = window.location.hash.slice(1);
-            activateFilter(sections.indexOf(h) !== -1 ? h : '', true);
+            handleHash(window.location.hash.slice(1), true);
         });
     })();
     </script>

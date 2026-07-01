@@ -74,13 +74,10 @@
             </li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu" role="menu">
-                    <a href="/#sobre" role="menuitem" data-lang-key="nav-sao-mateus">São Mateus do Sul</a>
-                    <a href="/#sobre" role="menuitem" data-lang-key="nav-historia">História</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navSobreMenu" aria-label="Abrir menu Sobre"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" id="navSobreMenu" role="menu">
+                    <a href="/#sobre" role="menuitem" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
                     <a href="/mapa-turistico.html?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-terra-erva-mate">Terra da Erva-mate</a>
-                    <a href="/#sobre" role="menuitem" data-lang-key="nav-xisto">Xisto</a>
                     <a href="/transparencia" role="menuitem" data-lang-key="nav-institucional">Institucional</a>
                 </div>
             </li>
