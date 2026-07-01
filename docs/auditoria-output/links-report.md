@@ -1,15 +1,16 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-06-26T17:34:38.592Z.
+Gerado em 2026-07-01T18:45:16.939Z.
 
 ## Resumo
 
-- Arquivos varridos: 108
-- Links internos/externos coletados: 652
+- Arquivos varridos: 110
+- Links internos/externos coletados: 663
 - Rotas HTML conhecidas: 43
 - Links quebrados: 0
-- Links legados/concorrentes: 17
-- Links redundantes com .html: 18
+- Falsos positivos conhecidos: 1
+- Links legados/concorrentes: 20
+- Links redundantes com .html: 21
 - Decisoes humanas: 17
 - Ver detalhes ainda como link: 0
 
@@ -18,10 +19,18 @@ Gerado em 2026-06-26T17:34:38.592Z.
 _Nenhum item encontrado._
 
 
+## Falsos positivos conhecidos (Bloco S5)
+
+| source | url | reason |
+| --- | --- | --- |
+| js/admin/modules/banners.js | /banners/ | Fragmento do path de upload do Storage (cms-media/{uid}/banners/{bannerId}/...), não uma rota pública. |
+
+
 ## Links legados ou concorrentes
 
 | source | url | issue |
 | --- | --- | --- |
+| index.html | /sabores | rota legada ou concorrente ao mapa |
 | js/admin/modules/banners.js | sabores.html | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /o-que-fazer | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /sabores | rota legada ou concorrente ao mapa |
@@ -29,6 +38,8 @@ _Nenhum item encontrado._
 | js/breadcrumbs.js | /rotas-completas | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /mapa-completo | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /mapa-3d | rota legada ou concorrente ao mapa |
+| js/nav-shared.js | /sabores | rota legada ou concorrente ao mapa |
+| js/public-banners.js | sabores.html | rota legada ou concorrente ao mapa |
 | mapa-3d/index.html | /mapa-3d.html | rota legada ou concorrente ao mapa |
 | mapa-3d.html | /mapa-3d | rota legada ou concorrente ao mapa |
 | mapa-3d.html | /mapa-completo | rota legada ou concorrente ao mapa |
@@ -51,6 +62,9 @@ _Nenhum item encontrado._
 | js/admin/modules/banners.js | sabores.html | existe variante sem .html |
 | js/admin/modules/banners.js | noticias.html | existe variante sem .html |
 | js/admin-content-cms.js | noticias.html | existe variante sem .html |
+| js/public-banners.js | eventos.html | existe variante sem .html |
+| js/public-banners.js | sabores.html | existe variante sem .html |
+| js/public-banners.js | noticias.html | existe variante sem .html |
 | local/index.html | /local.html | existe variante sem .html |
 | manifest.json | /eventos.html?utm_source=pwa-shortcut | existe variante sem .html |
 | mapa-3d/index.html | /mapa-3d.html | existe variante sem .html |

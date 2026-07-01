@@ -8,6 +8,22 @@ const ignoredFiles = new Set(["SECURITY_AUDIT_REPORT.md", "SECURITY_REMEDIATION_
 const textExts = new Set([".html", ".js", ".mjs", ".json", ".md", ".xml", ".css"]);
 const assetExts = new Set([".png", ".jpg", ".jpeg", ".webp", ".gif", ".svg", ".mp4", ".webm", ".mov", ".pdf", ".docx", ".css", ".js", ".json", ".xml", ".ico", ".webmanifest"]);
 
+// Falsos positivos conhecidos (Bloco S5): pares source|url que o extrator captura como
+// "link" mas que na verdade são fragmentos de caminho (ex.: paths do Firebase Storage
+// montados por concatenação de strings), NÃO rotas de navegação. Ficam fora de "broken"
+// e são listados numa seção própria do relatório para não mascarar problemas reais.
+const knownFalsePositives = [
+  {
+    source: "js/admin/modules/banners.js",
+    url: "/banners/",
+    reason: "Fragmento do path de upload do Storage (cms-media/{uid}/banners/{bannerId}/...), não uma rota pública.",
+  },
+];
+const falsePositiveKeys = new Set(knownFalsePositives.map((item) => `${item.source}|${item.url}`));
+function isKnownFalsePositive(source, url) {
+  return falsePositiveKeys.has(`${source}|${url}`);
+}
+
 function rel(file) {
   return path.relative(root, file).replace(/\\/g, "/");
 }
@@ -152,6 +168,7 @@ for (const link of links) {
 }
 
 const broken = [];
+const falsePositives = [];
 const external = [];
 const legacy = [];
 const redundant = [];
@@ -177,7 +194,13 @@ for (const link of uniqueLinks) {
   if (isAssetPath(pathname)) {
     const rootRelativePath = pathname.replace(/^\/+/, "");
     const exists = existingFileSet.has(relativePath) || existingFileSet.has(rootRelativePath);
-    if (!exists) broken.push({ source: link.source, url: link.url, issue: "asset interno inexistente" });
+    if (!exists) {
+      if (isKnownFalsePositive(link.source, link.url)) {
+        falsePositives.push({ source: link.source, url: link.url, issue: "asset interno inexistente (falso positivo conhecido)" });
+      } else {
+        broken.push({ source: link.source, url: link.url, issue: "asset interno inexistente" });
+      }
+    }
     continue;
   }
 
@@ -185,7 +208,11 @@ for (const link of uniqueLinks) {
   const fileExists = existingFileSet.has(relativePath) || existingFileSet.has(`${relativePath}.html`) || existingFileSet.has(`${relativePath}/index.html`);
 
   if (!routeExists && !fileExists) {
-    broken.push({ source: link.source, url: link.url, issue: "rota interna inexistente" });
+    if (isKnownFalsePositive(link.source, link.url)) {
+      falsePositives.push({ source: link.source, url: link.url, issue: "rota interna inexistente (falso positivo conhecido)" });
+    } else {
+      broken.push({ source: link.source, url: link.url, issue: "rota interna inexistente" });
+    }
   }
 
   if (hash && routeExists) {
@@ -223,6 +250,7 @@ const report = {
     links: uniqueLinks.length,
     routes: routes.size,
     broken: broken.length,
+    falsePositives: falsePositives.length,
     legacy: legacy.length,
     redundant: redundant.length,
     humanDecision: decisions.length,
@@ -230,6 +258,8 @@ const report = {
   },
   routes: [...routes.entries()].map(([route, file]) => ({ route, file })),
   broken,
+  falsePositives,
+  knownFalsePositives,
   legacy,
   redundant,
   humanDecision: decisions,
@@ -237,9 +267,9 @@ const report = {
   externalPlaceholders: decisions.filter((item) => item.issue.includes("placeholder")),
 };
 
-const markdown = `# Saida da auditoria de links e rotas\n\nGerado em ${report.generatedAt}.\n\n## Resumo\n\n- Arquivos varridos: ${report.totals.filesScanned}\n- Links internos/externos coletados: ${report.totals.links}\n- Rotas HTML conhecidas: ${report.totals.routes}\n- Links quebrados: ${report.totals.broken}\n- Links legados/concorrentes: ${report.totals.legacy}\n- Links redundantes com .html: ${report.totals.redundant}\n- Decisoes humanas: ${report.totals.humanDecision}\n- Ver detalhes ainda como link: ${report.totals.verDetalhesNavigation}\n\n## Links quebrados\n\n${mdTable(broken, ["source", "url", "issue"], 150)}\n\n## Links legados ou concorrentes\n\n${mdTable(legacy, ["source", "url", "issue"], 150)}\n\n## Links redundantes com .html\n\n${mdTable(redundant, ["source", "url", "issue"], 150)}\n\n## Links que precisam de decisao humana\n\n${mdTable(decisions, ["source", "url", "issue"], 150)}\n\n## Ver detalhes ainda como link\n\n${mdTable(verDetalhesNavigation, ["source", "url", "issue"], 150)}\n\n## Rotas conhecidas\n\n${mdTable(report.routes, ["route", "file"], 200)}\n`;
+const markdown = `# Saida da auditoria de links e rotas\n\nGerado em ${report.generatedAt}.\n\n## Resumo\n\n- Arquivos varridos: ${report.totals.filesScanned}\n- Links internos/externos coletados: ${report.totals.links}\n- Rotas HTML conhecidas: ${report.totals.routes}\n- Links quebrados: ${report.totals.broken}\n- Falsos positivos conhecidos: ${report.totals.falsePositives}\n- Links legados/concorrentes: ${report.totals.legacy}\n- Links redundantes com .html: ${report.totals.redundant}\n- Decisoes humanas: ${report.totals.humanDecision}\n- Ver detalhes ainda como link: ${report.totals.verDetalhesNavigation}\n\n## Links quebrados\n\n${mdTable(broken, ["source", "url", "issue"], 150)}\n\n## Falsos positivos conhecidos (Bloco S5)\n\n${mdTable(falsePositives.map((item) => ({ ...item, reason: (knownFalsePositives.find((fp) => fp.source === item.source && fp.url === item.url) || {}).reason || "" })), ["source", "url", "reason"], 150)}\n\n## Links legados ou concorrentes\n\n${mdTable(legacy, ["source", "url", "issue"], 150)}\n\n## Links redundantes com .html\n\n${mdTable(redundant, ["source", "url", "issue"], 150)}\n\n## Links que precisam de decisao humana\n\n${mdTable(decisions, ["source", "url", "issue"], 150)}\n\n## Ver detalhes ainda como link\n\n${mdTable(verDetalhesNavigation, ["source", "url", "issue"], 150)}\n\n## Rotas conhecidas\n\n${mdTable(report.routes, ["route", "file"], 200)}\n`;
 
 await fs.writeFile(path.join(outputDir, "links-report.json"), JSON.stringify(report, null, 2), "utf8");
 await fs.writeFile(path.join(outputDir, "links-report.md"), markdown, "utf8");
 
-console.log(`Link audit: ${uniqueLinks.length} links, ${broken.length} broken, ${legacy.length} legacy/redundant candidates.`);
+console.log(`Link audit: ${uniqueLinks.length} links, ${broken.length} broken, ${falsePositives.length} known false positives, ${legacy.length} legacy/redundant candidates.`);

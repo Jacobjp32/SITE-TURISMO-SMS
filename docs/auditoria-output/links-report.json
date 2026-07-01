@@ -1,12 +1,13 @@
 {
-  "generatedAt": "2026-06-26T17:34:38.592Z",
+  "generatedAt": "2026-07-01T18:45:16.939Z",
   "totals": {
-    "filesScanned": 108,
-    "links": 652,
+    "filesScanned": 110,
+    "links": 663,
     "routes": 43,
     "broken": 0,
-    "legacy": 17,
-    "redundant": 18,
+    "falsePositives": 1,
+    "legacy": 20,
+    "redundant": 21,
     "humanDecision": 17,
     "verDetalhesNavigation": 0
   },
@@ -185,7 +186,26 @@
     }
   ],
   "broken": [],
+  "falsePositives": [
+    {
+      "source": "js/admin/modules/banners.js",
+      "url": "/banners/",
+      "issue": "rota interna inexistente (falso positivo conhecido)"
+    }
+  ],
+  "knownFalsePositives": [
+    {
+      "source": "js/admin/modules/banners.js",
+      "url": "/banners/",
+      "reason": "Fragmento do path de upload do Storage (cms-media/{uid}/banners/{bannerId}/...), não uma rota pública."
+    }
+  ],
   "legacy": [
+    {
+      "source": "index.html",
+      "url": "/sabores",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
     {
       "source": "js/admin/modules/banners.js",
       "url": "sabores.html",
@@ -219,6 +239,16 @@
     {
       "source": "js/breadcrumbs.js",
       "url": "/mapa-3d",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "js/nav-shared.js",
+      "url": "/sabores",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "js/public-banners.js",
+      "url": "sabores.html",
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
@@ -300,6 +330,21 @@
     },
     {
       "source": "js/admin-content-cms.js",
+      "url": "noticias.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/public-banners.js",
+      "url": "eventos.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/public-banners.js",
+      "url": "sabores.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "js/public-banners.js",
       "url": "noticias.html",
       "issue": "existe variante sem .html"
     },
