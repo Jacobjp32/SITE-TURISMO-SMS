@@ -613,6 +613,11 @@ const translations = {
     'sab-atalho-feiras-desc': 'Compre direto do campo',
     'sab-atalho-restaurantes': 'Restaurantes',
     'sab-atalho-restaurantes-desc': 'Onde comer na cidade',
+    'sab-filtro-aria': 'Filtrar seção',
+    'sab-filtro-tudo': 'Tudo',
+    'sab-filtro-polonesa': '🥟 Culinária Polonesa',
+    'sab-filtro-feiras': '🛒 Feiras e Produtores',
+    'sab-filtro-restaurantes': '🍴 Restaurantes',
     'sab-pratos-h': '🥟 Pratos Típicos Poloneses',
     'sab-pratos-sub': 'A herança culinária dos imigrantes preservada com amor',
     'sab-tag-polones': '🇵🇱 Polonês',
@@ -1389,6 +1394,11 @@ const translations = {
     'sab-atalho-feiras-desc': 'Buy straight from the farm',
     'sab-atalho-restaurantes': 'Restaurants',
     'sab-atalho-restaurantes-desc': 'Where to eat in town',
+    'sab-filtro-aria': 'Filter section',
+    'sab-filtro-tudo': 'All',
+    'sab-filtro-polonesa': '🥟 Polish Cuisine',
+    'sab-filtro-feiras': '🛒 Fairs & Producers',
+    'sab-filtro-restaurantes': '🍴 Restaurants',
     'sab-pratos-h': '🥟 Traditional Polish Dishes',
     'sab-pratos-sub': 'The culinary heritage of immigrants preserved with love',
     'sab-tag-polones': '🇵🇱 Polish',
@@ -2165,6 +2175,11 @@ const translations = {
     'sab-atalho-feiras-desc': 'Compra directo del campo',
     'sab-atalho-restaurantes': 'Restaurantes',
     'sab-atalho-restaurantes-desc': 'Dónde comer en la ciudad',
+    'sab-filtro-aria': 'Filtrar sección',
+    'sab-filtro-tudo': 'Todo',
+    'sab-filtro-polonesa': '🥟 Cocina Polaca',
+    'sab-filtro-feiras': '🛒 Ferias y Productores',
+    'sab-filtro-restaurantes': '🍴 Restaurantes',
     'sab-pratos-h': '🥟 Platos Típicos Polacos',
     'sab-pratos-sub': 'La herencia culinaria de los inmigrantes preservada con amor',
     'sab-tag-polones': '🇵🇱 Polaco',
@@ -2941,6 +2956,11 @@ const translations = {
     'sab-atalho-feiras-desc': 'Kup prosto od rolnika',
     'sab-atalho-restaurantes': 'Restauracje',
     'sab-atalho-restaurantes-desc': 'Gdzie zjeść w mieście',
+    'sab-filtro-aria': 'Filtruj sekcję',
+    'sab-filtro-tudo': 'Wszystko',
+    'sab-filtro-polonesa': '🥟 Kuchnia Polska',
+    'sab-filtro-feiras': '🛒 Targi i Producenci',
+    'sab-filtro-restaurantes': '🍴 Restauracje',
     'sab-pratos-h': '🥟 Tradycyjne Dania Polskie',
     'sab-pratos-sub': 'Dziedzictwo kulinarne imigrantów zachowane z miłością',
     'sab-tag-polones': '🇵🇱 Polskie',
@@ -3146,6 +3166,14 @@ function applyTranslations(lang) {
     var key = el.getAttribute('data-lang-key-title');
     if (dict[key] !== undefined) {
       el.title = dict[key];
+    }
+  });
+
+  // 4. data-lang-key-aria-label (atributo aria-label para leitores de tela)
+  document.querySelectorAll('[data-lang-key-aria-label]').forEach(function(el) {
+    var key = el.getAttribute('data-lang-key-aria-label');
+    if (dict[key] !== undefined) {
+      el.setAttribute('aria-label', dict[key]);
     }
   });
 
