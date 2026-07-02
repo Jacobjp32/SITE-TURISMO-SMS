@@ -6841,3 +6841,226 @@ body.nav-menu-open .nav-toggle {
         padding: 0.7rem !important;
     }
 }
+
+/* S18: acabamento fino de densidade mobile, legenda do video e menu drawer. */
+#map-hero.home-hero-editorial .hero-media-label {
+    bottom: clamp(0.92rem, 1.6vw, 1.2rem);
+    padding: 0.46rem 0.66rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    background: rgba(4, 27, 20, 0.78);
+    box-shadow: 0 8px 18px rgba(4, 27, 20, 0.18);
+}
+
+#map-hero.home-hero-editorial #map::after {
+    background: linear-gradient(180deg, rgba(4, 27, 20, 0) 58%, rgba(4, 27, 20, 0.18) 80%, rgba(4, 27, 20, 0.44) 100%);
+}
+
+@media (max-width: 768px) {
+    #map-hero.home-hero-editorial {
+        padding: 0.48rem 0.68rem 0.68rem !important;
+    }
+
+    #map-hero.home-hero-editorial .home-hero-inner {
+        gap: 0.46rem;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.66rem !important;
+        border-left-width: 3px !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel h1 {
+        font-size: clamp(1.32rem, 5.7vw, 1.66rem) !important;
+        line-height: 1.05 !important;
+        margin-bottom: 0.38rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel > p {
+        margin-bottom: 0.56rem !important;
+        font-size: 0.8rem !important;
+        line-height: 1.34 !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-actions {
+        gap: 0.32rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-primary-cta,
+    #map-hero.home-hero-editorial .hero-secondary-cta {
+        min-height: 42px !important;
+        padding: 0.48rem 0.68rem !important;
+        font-size: 0.82rem !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-secondary-cta {
+        box-shadow: none !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links {
+        gap: 0.26rem;
+        margin-top: 0.42rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links a {
+        min-height: 30px;
+        padding: 0.28rem 0.46rem;
+        font-size: 0.7rem;
+        font-weight: 750;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        aspect-ratio: 16 / 8.1;
+        max-height: 182px;
+    }
+
+    #map-hero.home-hero-editorial .hero-media-label {
+        bottom: 0.62rem;
+        left: 0.58rem;
+        padding: 0.34rem 0.5rem;
+        font-size: 0.66rem;
+        max-width: calc(100% - 1.16rem);
+    }
+
+    .home-trust-strip {
+        padding: 0.48rem 0.68rem !important;
+    }
+
+    .home-trust-grid {
+        gap: 0.34rem;
+    }
+
+    .home-trust-grid .stat-item {
+        min-height: 46px !important;
+        gap: 0.08rem !important;
+        padding: 0.28rem 0.3rem !important;
+    }
+
+    .home-trust-grid .stat-number {
+        font-size: 1.08rem !important;
+    }
+
+    .home-trust-grid .stat-label {
+        font-size: 0.62rem !important;
+        line-height: 1.12 !important;
+    }
+
+    .featured-experiences-section {
+        padding: 1.32rem 0.68rem 1.24rem !important;
+    }
+
+    .home-upcoming-section,
+    .home-map-preview {
+        padding: 1.32rem 0.68rem !important;
+    }
+
+    .home-section-heading,
+    .featured-experiences-heading {
+        gap: 0.42rem;
+        margin-bottom: 0.68rem;
+    }
+
+    .home-section-heading .section-title,
+    .featured-experiences-heading .section-title,
+    .home-map-preview .section-title {
+        font-size: clamp(1.32rem, 5.9vw, 1.64rem);
+    }
+
+    .home-section-heading .section-subtitle,
+    .featured-experiences-heading .section-subtitle,
+    .home-map-preview .section-subtitle {
+        font-size: 0.82rem;
+        line-height: 1.32;
+    }
+
+    .featured-experience-card {
+        flex-basis: min(72vw, 260px);
+    }
+
+    .featured-experience-body,
+    .home-event-body,
+    .home-map-preview .experience-link-card {
+        padding: 0.58rem !important;
+    }
+
+    .featured-experience-body h3,
+    .home-map-preview .experience-link-card h3 {
+        font-size: 0.94rem;
+    }
+
+    .home-event-card {
+        grid-template-columns: 50px minmax(0, 1fr);
+        min-height: 108px;
+    }
+
+    .home-event-date strong {
+        font-size: 1.26rem;
+    }
+
+    .home-event-body h3 {
+        font-size: 0.94rem;
+    }
+
+    .home-event-body p,
+    .home-map-preview .experience-link-card p {
+        font-size: 0.75rem;
+        line-height: 1.28;
+    }
+
+    .nav-links a,
+    .nav-links .dropdown-toggle,
+    .nav-search-btn {
+        min-height: 42px !important;
+        padding: 0.68rem 1.15rem !important;
+        font-size: 0.82rem !important;
+        line-height: 1.18 !important;
+    }
+
+    .nav-links .dropdown-toggle {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        text-transform: none !important;
+    }
+
+    .nav-links .dropdown-toggle .arrow {
+        margin-left: auto;
+        font-size: 0.56rem;
+    }
+
+    .nav-links .dropdown-menu a {
+        min-height: 38px !important;
+        padding: 0.54rem 1.15rem 0.54rem 1.75rem !important;
+        font-size: 0.78rem !important;
+    }
+
+    .nav-links li:has(.language-selector) {
+        padding: 0.58rem 1.15rem !important;
+    }
+
+    .nav-links .current-language {
+        min-height: 40px !important;
+        padding: 0.5rem 0.72rem !important;
+        font-size: 0.82rem !important;
+    }
+
+    .nav-links .language-dropdown .lang-option {
+        min-height: 36px;
+        padding: 0.5rem 0.72rem !important;
+        font-size: 0.78rem;
+    }
+}
+
+@media (max-width: 420px) {
+    #map-hero.home-hero-editorial {
+        padding-top: 0.42rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.62rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel h1 {
+        font-size: clamp(1.26rem, 5.8vw, 1.54rem) !important;
+    }
+}

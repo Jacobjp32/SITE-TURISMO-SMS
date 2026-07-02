@@ -825,6 +825,11 @@ body.home-page #map-hero.home-hero-editorial .season-mascot--map {
     opacity: 0.82;
 }
 
+body.home-page #map-hero.home-hero-editorial .season-mascot--map,
+body.home-page #map-hero.home-hero-editorial [data-season-mascot] {
+    display: none !important;
+}
+
 @media (min-width: 1440px) {
     body.home-page #map-hero.home-hero-editorial .season-mascot--map {
         right: calc((100vw - var(--home-container)) / 2 + 1rem);

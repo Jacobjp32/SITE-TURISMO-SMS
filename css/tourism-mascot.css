@@ -257,6 +257,58 @@
     .sms-mascot-panel { width: min(280px, calc(100vw - 28px)); }
 }
 
+/* Mapa mobile: deixa o mascote visivel sem cobrir cards, filtros ou a visao rapida. */
+@media (max-width: 768px) {
+    body.map-page-body #sms-mascot {
+        left: auto;
+        right: 12px;
+        top: 150px;
+        bottom: auto;
+        z-index: 9989;
+    }
+
+    body.map-page-body .sms-mascot-launcher {
+        width: 44px;
+        height: 44px;
+        border-width: 1px;
+        box-shadow: 0 5px 16px rgba(10, 61, 46, 0.22);
+    }
+
+    body.map-page-body .sms-mascot-launcher img {
+        width: 34px;
+        height: 34px;
+    }
+
+    body.map-page-body .sms-mascot-launcher .sms-mascot-dot {
+        width: 15px;
+        height: 15px;
+        font-size: 9px;
+        line-height: 15px;
+    }
+
+    body.map-page-body .sms-mascot-bubble,
+    body.map-page-body .sms-mascot-panel {
+        left: auto;
+        right: 0;
+        bottom: 54px;
+    }
+
+    body.map-page-body .sms-mascot-bubble {
+        max-width: min(220px, calc(100vw - 28px));
+        border-radius: 14px 14px 4px 14px;
+        font-size: 0.78rem;
+    }
+
+    body.map-page-body .sms-mascot-bubble::after {
+        left: auto;
+        right: 15px;
+    }
+
+    body.map-page-body .sms-mascot-panel {
+        width: min(270px, calc(100vw - 28px));
+    }
+}
+
 /* ── Respeitar preferência de movimento reduzido ── */
 @media (prefers-reduced-motion: reduce) {
     .sms-mascot-launcher,

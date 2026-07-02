@@ -344,10 +344,15 @@ body.font-larger{font-size:140%!important;}
     }
     .nav-links.active { right:0 !important; }
     .nav-links li { width:100% !important; border-bottom:1px solid rgba(255,255,255,0.1) !important; }
-    .nav-links a, .nav-links .dropdown-toggle, .nav-search-btn { width:100% !important; justify-content:flex-start !important; padding:0.9rem 1.5rem !important; font-size:0.9rem !important; border-radius:0 !important; }
+    .nav-links a, .nav-links .dropdown-toggle, .nav-search-btn { width:100% !important; min-height:42px!important; justify-content:flex-start !important; padding:0.68rem 1.15rem !important; font-size:0.82rem !important; line-height:1.18!important; border-radius:0 !important; }
+    .nav-links .dropdown-toggle{display:flex!important;align-items:center!important;justify-content:space-between!important;text-transform:none!important;}
+    .nav-links .dropdown-toggle .arrow{margin-left:auto;font-size:0.56rem;}
     .dropdown-menu { position:static !important; opacity:1 !important; visibility:visible !important; transform:none !important; box-shadow:none !important; background:rgba(0,0,0,0.2) !important; border-radius:0 !important; display:none; }
     .dropdown-menu.open { display:block !important; }
-    .dropdown-menu a { color:#d4a574 !important; padding:0.6rem 2rem !important; }
+    .dropdown-menu a { color:#d4a574 !important; min-height:38px!important; padding:0.54rem 1.15rem 0.54rem 1.75rem !important; font-size:0.78rem!important; }
+    .nav-links li:has(.language-selector){padding:0.58rem 1.15rem!important;}
+    .nav-links .current-language{min-height:40px!important;padding:0.5rem 0.72rem!important;font-size:0.82rem!important;}
+    .nav-links .language-dropdown .lang-option{min-height:36px;padding:0.5rem 0.72rem!important;font-size:0.78rem;}
     .nav-logo img { height:50px; max-width:180px; }
     .nav-search-text { display: inline; }
     .search-modal { padding: 1rem; align-items: flex-start; }
@@ -394,7 +399,7 @@ body.font-larger{font-size:140%!important;}
     if (!hasLoadedStylesheet('css/season-theme.css')) {
         var seasonStyles = document.createElement('link');
         seasonStyles.rel = 'stylesheet';
-        seasonStyles.href = 'css/season-theme.css?v=season-20260602';
+        seasonStyles.href = 'css/season-theme.css?v=season-home-polish-20260702b';
         document.head.appendChild(seasonStyles);
     }
 
