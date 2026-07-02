@@ -799,3 +799,126 @@ html.season-reduced-motion *::after {
         animation: none !important;
     }
 }
+
+/* Home refinada: evita ornamentos sazonais soltos fora do rail editorial. */
+body.home-page::before,
+body.home-page::after {
+    content: none !important;
+}
+
+body.home-page .season-ambient {
+    display: none !important;
+}
+
+body.home-page #map-hero.home-hero-editorial::before {
+    content: none !important;
+    display: none !important;
+}
+
+body.home-page #map-hero.home-hero-editorial {
+    isolation: isolate;
+}
+
+body.home-page #map-hero.home-hero-editorial .season-mascot--map {
+    right: max(1rem, calc((100vw - var(--home-container)) / 2 + 1rem));
+    top: clamp(8.25rem, 9vw, 9.5rem);
+    opacity: 0.82;
+}
+
+@media (min-width: 1440px) {
+    body.home-page #map-hero.home-hero-editorial .season-mascot--map {
+        right: calc((100vw - var(--home-container)) / 2 + 1rem);
+    }
+}
+
+@media (max-width: 768px) {
+    body.home-page #map-hero.home-hero-editorial .season-mascot--map {
+        right: 0.85rem;
+        top: 0.85rem;
+        opacity: 0.72;
+    }
+}
+
+/* Mantem clima/controles sazonais no mobile como uma faixa utilitaria compacta. */
+@media (max-width: 768px) {
+    html[data-season] .accessibility-bar .controls {
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    html[data-season] .accessibility-bar .controls::-webkit-scrollbar {
+        display: none;
+    }
+
+    html[data-season] .season-inline-slot--aux {
+        width: auto;
+        max-width: 168px;
+        flex: 0 1 auto;
+        justify-content: flex-start;
+        flex-wrap: nowrap !important;
+        padding-top: 0;
+        margin-left: 0;
+        min-width: 0;
+        gap: 0.22rem;
+        overflow: hidden;
+    }
+
+    html[data-season] .season-inline-slot--aux .season-switcher {
+        width: auto;
+        flex: 0 0 auto;
+    }
+
+    html[data-season] .season-inline-slot--aux .season-switcher__trigger {
+        min-height: 28px;
+        padding: 0.12rem 0.34rem;
+        gap: 0.2rem;
+        box-shadow: none;
+        font-size: 0.66rem;
+    }
+
+    html[data-season] .season-inline-slot--aux .season-switcher__meta {
+        display: none;
+    }
+
+    html[data-season] .season-inline-slot--aux .season-switcher__current {
+        max-width: 44px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    html[data-season] .season-weather {
+        min-height: 28px;
+        max-width: 82px;
+        padding: 0.14rem 0.42rem;
+        gap: 0.28rem;
+        border-color: rgba(10, 61, 46, 0.12);
+        box-shadow: none;
+        font-size: 0.66rem;
+    }
+
+    html[data-season] .season-weather__place,
+    html[data-season] .season-weather__condition {
+        display: none;
+    }
+
+    html[data-season] .season-weather__mark.season-asset-loaded {
+        width: 16px;
+        height: 16px;
+        flex-basis: 16px;
+    }
+
+    html[data-season] .season-weather__temp {
+        font-size: 0.74rem;
+    }
+}
+
+@media (max-width: 420px) {
+    html[data-season] .season-weather {
+        max-width: 118px;
+    }
+
+    html[data-season] .season-weather__condition {
+        display: none;
+    }
+}

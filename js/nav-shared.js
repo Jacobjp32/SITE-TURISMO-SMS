@@ -1,7 +1,7 @@
 /**
  * nav-shared.js
  * Injeta o nav padrão do portal em páginas secundárias.
- * Inclui: barra de acessibilidade eMAG, nav, chatbot, botão voltar ao topo, SW.
+ * Inclui: barra de acessibilidade eMAG, nav, botão voltar ao topo, SW.
  */
 (function () {
     const NAV_HTML = `
@@ -253,6 +253,7 @@ body.nav-menu-open .nav-toggle { z-index:10022 !important; }
 .search-result-description, .search-empty-state p { color: #5f625d; line-height: 1.55; font-size: 0.94rem; }
 .search-empty-state strong { display: block; color: #0a3d2e; margin-bottom: 0.35rem; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+#chatbot-widget,#chatbot-styles{display:none!important;}
 /* Body offset para nav fixo + barra de acessibilidade fixa */
 body { padding-top: 132px; }
 /* Barra de progresso de leitura (scroll) */
@@ -296,34 +297,44 @@ body.font-larger{font-size:140%!important;}
 }
 @media(max-width:768px){
   html,body{max-width:100%;overflow-x:hidden!important;}
-  body{padding-top:132px;}
-  .accessibility-bar{position:static!important;padding:0.4rem 1rem!important;min-height:auto;height:auto;}
+  body{padding-top:140px;}
+  html{scroll-padding-top:142px;}
+  .accessibility-bar{position:fixed!important;top:4px!important;padding:0.14rem 0.55rem!important;min-height:30px!important;height:auto;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;}
+  .accessibility-bar::-webkit-scrollbar{display:none;}
+  .accessibility-bar .container{min-height:30px!important;justify-content:center!important;flex-wrap:nowrap!important;gap:0.3rem!important;}
   .accessibility-bar .shortcuts{display:none;}
-  .accessibility-bar .controls{width:100%;justify-content:center;}
-  .nav{top:0!important;width:100vw!important;max-width:100vw!important;min-height:78px!important;padding:0.7rem 1rem!important;overflow:visible!important;}
+  .accessibility-bar .controls{width:auto!important;min-width:0;justify-content:flex-start!important;flex-wrap:nowrap!important;gap:0.28rem!important;}
+  .accessibility-bar a,.accessibility-bar button{min-height:30px!important;padding:0.16rem 0.42rem!important;font-size:0.68rem!important;line-height:1!important;}
+  .accessibility-bar .font-controls{gap:0.18rem!important;}
+  .accessibility-bar .font-controls button{width:28px!important;height:28px!important;min-height:28px!important;padding:0!important;}
+  .accessibility-bar .contrast-btn{gap:0.2rem!important;}
+  .nav{top:34px!important;width:100vw!important;max-width:100vw!important;min-height:62px!important;padding:0.48rem 0.85rem!important;overflow:visible!important;}
   .nav-container{width:100%!important;max-width:100%!important;gap:0.75rem!important;}
   .nav-logo{min-width:0!important;max-width:calc(100vw - 6rem)!important;}
-  .nav-logo img{height:50px!important;max-width:170px!important;}
-  .nav-toggle{flex:0 0 44px!important;width:44px!important;height:44px!important;margin-left:auto!important;}
-  .nav-mobile-shortcuts{position:fixed;top:78px;left:0;right:0;z-index:9998;display:flex;gap:0.45rem;min-height:50px;padding:0.4rem 0.75rem 0.55rem;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;background:rgba(255,253,248,0.98);border-bottom:1px solid rgba(10,61,46,0.1);box-shadow:0 10px 24px rgba(10,61,46,0.08);}
+  .nav-logo img{height:44px!important;max-width:158px!important;}
+  .nav-toggle{flex:0 0 42px!important;width:42px!important;height:42px!important;margin-left:auto!important;}
+  .nav-mobile-shortcuts{position:fixed;top:96px;left:0;right:0;z-index:9998;display:flex;gap:0.38rem;min-height:44px;padding:0.28rem 0.65rem 0.36rem;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;background:rgba(255,253,248,0.98);border-bottom:1px solid rgba(10,61,46,0.1);box-shadow:0 10px 24px rgba(10,61,46,0.08);}
   .nav-mobile-shortcuts::-webkit-scrollbar{display:none;}
-  .nav-mobile-shortcuts a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0.55rem 0.85rem;border-radius:999px;background:rgba(10,61,46,0.08);color:#0a3d2e;font-size:0.88rem;font-weight:800;text-decoration:none;}
+  .nav-mobile-shortcuts a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0.42rem 0.68rem;border-radius:999px;background:rgba(10,61,46,0.08);color:#0a3d2e;font-size:0.8rem;font-weight:800;text-decoration:none;}
   .nav-mobile-shortcuts a:focus-visible{outline:3px solid #d4a574;outline-offset:3px;}
   div[vw] [vw-access-button]{left:1rem!important;right:auto!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;transform:scale(0.9)!important;transform-origin:left bottom!important;}
   div[vw] [vw-plugin-wrapper]{left:0!important;right:auto!important;max-width:calc(100vw - 1rem)!important;}
 }
 @media(max-width:420px){
-  body{padding-top:126px;}
+  body{padding-top:134px;}
+  html{scroll-padding-top:136px;}
   .nav{padding-right:0.8rem!important;}
-  .nav-logo img{height:46px!important;max-width:150px!important;}
+  .nav-logo img{height:42px!important;max-width:148px!important;}
   .nav-toggle{flex-basis:42px!important;width:42px!important;height:42px!important;}
-  .nav-mobile-shortcuts{top:72px;}
+  .nav{top:33px!important;min-height:58px!important;}
+  .nav-mobile-shortcuts{top:91px;}
+  .nav-links{top:91px!important;height:calc(100dvh - 91px)!important;}
 }
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }
     .nav-links {
-        position:fixed !important; top:78px !important; right:-100% !important;
-        width:82% !important; max-width:300px !important; height:calc(100dvh - 78px) !important;
+        position:fixed !important; top:96px !important; right:-100% !important;
+        width:82% !important; max-width:300px !important; height:calc(100dvh - 96px) !important;
         background: linear-gradient(180deg,#0a3d2e 0%,#062118 100%) !important;
         flex-direction:column !important; padding:0 0 calc(1.5rem + env(safe-area-inset-bottom)) !important;
         gap:0 !important; transition:right 0.35s ease !important;
@@ -341,6 +352,9 @@ body.font-larger{font-size:140%!important;}
     .nav-search-text { display: inline; }
     .search-modal { padding: 1rem; align-items: flex-start; }
     .search-modal-dialog { width: 100%; margin-top: 5rem; padding: 1rem; border-radius: 20px; }
+}
+@media(max-width:420px){
+  .nav-links{top:91px!important;height:calc(100dvh - 91px)!important;}
 }
 </style>`;
 
@@ -391,15 +405,30 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(metaScript);
     }
 
-    // Carregar chatbot (se ainda não carregado)
-    if (!document.getElementById('chatbot-script')) {
-        var cbScript = document.createElement('script');
-        cbScript.id  = 'chatbot-script';
-        cbScript.src = 'js/chatbot.js';
-        cbScript.onload = function() {
-            if (typeof Chatbot !== 'undefined') Chatbot.init();
+    // Chatbot legado/Cuia permanece desativado nas páginas secundárias.
+    document.querySelectorAll('#chatbot-widget, #chatbot-styles').forEach(function(el) {
+        el.remove();
+    });
+
+    if (!document.querySelector('div[vw]')) {
+        document.body.insertAdjacentHTML('beforeend',
+            '<div vw class="enabled">'
+            + '<div vw-access-button class="active"></div>'
+            + '<div vw-plugin-wrapper><div class="vw-plugin-top-wrapper"></div></div>'
+            + '</div>'
+        );
+    }
+
+    if (!hasLoadedScript('https://vlibras.gov.br/app/vlibras-plugin.js') && !document.getElementById('vlibras-plugin-script')) {
+        var vlibrasScript = document.createElement('script');
+        vlibrasScript.id = 'vlibras-plugin-script';
+        vlibrasScript.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+        vlibrasScript.onload = function() {
+            if (window.VLibras && window.VLibras.Widget) {
+                new window.VLibras.Widget('https://vlibras.gov.br/app');
+            }
         };
-        document.body.appendChild(cbScript);
+        document.body.appendChild(vlibrasScript);
     }
 
     // Registrar Service Worker

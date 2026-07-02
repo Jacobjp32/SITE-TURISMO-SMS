@@ -6487,3 +6487,357 @@ body.nav-menu-open .nav-toggle {
         padding: 0.82rem !important;
     }
 }
+
+/* S17: densidade final mobile e leitura da janela de midia do hero */
+#map-hero.home-hero-editorial #map::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: block !important;
+    background: linear-gradient(180deg, rgba(4, 27, 20, 0) 48%, rgba(4, 27, 20, 0.22) 72%, rgba(4, 27, 20, 0.52) 100%);
+    pointer-events: none;
+}
+
+#map-hero.home-hero-editorial .hero-media-label {
+    z-index: 3;
+    bottom: clamp(1.15rem, 2vw, 1.55rem);
+    padding: 0.58rem 0.82rem;
+    background: rgba(4, 27, 20, 0.84);
+    box-shadow: 0 10px 24px rgba(4, 27, 20, 0.22);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.24);
+}
+
+@media (max-width: 768px) {
+    html {
+        scroll-padding-top: 142px;
+    }
+
+    body {
+        padding-top: 140px;
+    }
+
+    .accessibility-bar {
+        position: fixed !important;
+        top: 4px !important;
+        padding: 0.14rem 0.55rem !important;
+        min-height: 30px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        scrollbar-width: none;
+    }
+
+    .accessibility-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .accessibility-bar .container {
+        min-height: 30px !important;
+        justify-content: center !important;
+        flex-wrap: nowrap !important;
+        gap: 0.3rem !important;
+    }
+
+    .accessibility-bar .controls {
+        width: auto !important;
+        min-width: 0;
+        justify-content: flex-start !important;
+        flex-wrap: nowrap !important;
+        gap: 0.28rem !important;
+    }
+
+    .accessibility-bar a,
+    .accessibility-bar button {
+        min-height: 30px !important;
+        padding: 0.16rem 0.42rem !important;
+        font-size: 0.68rem !important;
+        line-height: 1 !important;
+    }
+
+    .accessibility-bar .font-controls {
+        gap: 0.18rem !important;
+    }
+
+    .accessibility-bar .font-controls button {
+        width: 28px !important;
+        height: 28px !important;
+        min-height: 28px !important;
+        padding: 0 !important;
+    }
+
+    .accessibility-bar .contrast-btn {
+        gap: 0.2rem !important;
+    }
+
+    .nav {
+        top: 34px !important;
+        min-height: 62px !important;
+        padding: 0.48rem 0.85rem !important;
+    }
+
+    .nav-logo img {
+        height: 44px !important;
+        max-width: 158px !important;
+    }
+
+    .nav-toggle {
+        flex-basis: 42px !important;
+        width: 42px !important;
+        height: 42px !important;
+    }
+
+    .nav-links {
+        top: 96px !important;
+        height: calc(100dvh - 96px) !important;
+    }
+
+    .nav-mobile-shortcuts {
+        top: 96px;
+        min-height: 44px;
+        gap: 0.38rem;
+        padding: 0.28rem 0.65rem 0.36rem;
+    }
+
+    .nav-mobile-shortcuts a {
+        min-height: 38px;
+        padding: 0.42rem 0.68rem;
+        font-size: 0.8rem;
+    }
+
+    #map-hero.home-hero-editorial {
+        padding: 0.62rem 0.75rem 0.82rem !important;
+    }
+
+    #map-hero.home-hero-editorial .home-hero-inner {
+        gap: 0.55rem;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.76rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel h1 {
+        font-size: clamp(1.42rem, 6.1vw, 1.78rem) !important;
+        line-height: 1.04 !important;
+        margin-bottom: 0.48rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel > p {
+        margin-bottom: 0.68rem !important;
+        font-size: 0.84rem !important;
+        line-height: 1.38 !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-actions {
+        gap: 0.38rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-primary-cta,
+    #map-hero.home-hero-editorial .hero-secondary-cta {
+        min-height: 44px !important;
+        padding: 0.56rem 0.78rem !important;
+        font-size: 0.86rem !important;
+        box-shadow: 0 10px 22px rgba(10, 61, 46, 0.12) !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links {
+        gap: 0.32rem;
+        margin-top: 0.52rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links a {
+        min-height: 32px;
+        padding: 0.32rem 0.54rem;
+        font-size: 0.74rem;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        aspect-ratio: 16 / 8.4;
+        max-height: 196px;
+    }
+
+    #map-hero.home-hero-editorial .hero-media-label {
+        left: 0.65rem;
+        bottom: 0.95rem;
+        max-width: calc(100% - 1.3rem);
+        padding: 0.46rem 0.62rem;
+        font-size: 0.72rem;
+    }
+
+    .home-trust-strip {
+        padding: 0.62rem 0.75rem !important;
+    }
+
+    .home-trust-grid {
+        gap: 0.42rem;
+    }
+
+    .home-trust-grid .stat-item {
+        min-height: 52px;
+        padding: 0.46rem 0.42rem;
+    }
+
+    .home-trust-grid .stat-number {
+        font-size: 1.2rem;
+    }
+
+    .home-trust-grid .stat-label {
+        font-size: 0.64rem;
+    }
+
+    .featured-experiences-section {
+        padding: 1.55rem 0.75rem 1.45rem !important;
+    }
+
+    .home-upcoming-section,
+    .home-map-preview {
+        padding: 1.55rem 0.75rem !important;
+    }
+
+    .home-section-heading,
+    .featured-experiences-heading {
+        gap: 0.5rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .home-section-heading .section-title,
+    .featured-experiences-heading .section-title,
+    .home-map-preview .section-title {
+        font-size: clamp(1.42rem, 6.3vw, 1.78rem);
+        line-height: 1.08;
+    }
+
+    .home-section-heading .section-subtitle,
+    .featured-experiences-heading .section-subtitle,
+    .home-map-preview .section-subtitle {
+        font-size: 0.86rem;
+        line-height: 1.36;
+    }
+
+    .home-section-link,
+    .experience-summary-btn {
+        min-height: 44px;
+        padding: 0.56rem 0.78rem !important;
+        font-size: 0.84rem;
+    }
+
+    .featured-experience-card {
+        flex-basis: min(74vw, 280px);
+    }
+
+    .featured-experience-body {
+        gap: 0.3rem;
+        padding: 0.68rem;
+    }
+
+    .featured-experience-body h3 {
+        font-size: 0.98rem;
+    }
+
+    .featured-experience-body small {
+        min-height: 0;
+        font-size: 0.8rem;
+        line-height: 1.35;
+    }
+
+    .home-upcoming-grid {
+        gap: 0.62rem;
+    }
+
+    .home-event-card {
+        grid-template-columns: 54px minmax(0, 1fr);
+        min-height: 122px;
+    }
+
+    .home-event-date strong {
+        font-size: 1.4rem;
+    }
+
+    .home-event-body {
+        gap: 0.28rem;
+        padding: 0.64rem;
+    }
+
+    .home-event-body h3 {
+        font-size: 1rem;
+    }
+
+    .home-event-body p {
+        font-size: 0.78rem;
+        line-height: 1.3;
+    }
+
+    .home-recurring-events {
+        margin-top: 0.72rem;
+        padding: 0.75rem;
+    }
+
+    .home-recurring-card {
+        min-height: 68px;
+        padding: 0.62rem;
+    }
+
+    .home-map-preview .experience-links-grid {
+        gap: 0.62rem;
+    }
+
+    .home-map-preview .experience-link-card {
+        gap: 0.45rem;
+        padding: 0.64rem !important;
+    }
+
+    .home-map-preview .experience-link-visual {
+        aspect-ratio: 16 / 8.2;
+    }
+
+    .home-map-preview .experience-link-card h3 {
+        font-size: 0.98rem;
+    }
+
+    .home-map-preview .experience-link-card p {
+        font-size: 0.78rem;
+        line-height: 1.32;
+    }
+
+    .home-map-preview .experience-links-summary {
+        margin-top: 0.68rem;
+        padding: 0.72rem;
+    }
+}
+
+@media (max-width: 420px) {
+    body {
+        padding-top: 134px;
+    }
+
+    html {
+        scroll-padding-top: 136px;
+    }
+
+    .nav {
+        top: 33px !important;
+        min-height: 58px !important;
+    }
+
+    .nav-logo img {
+        height: 42px !important;
+        max-width: 148px !important;
+    }
+
+    .nav-links {
+        top: 91px !important;
+        height: calc(100dvh - 91px) !important;
+    }
+
+    .nav-mobile-shortcuts {
+        top: 91px;
+    }
+
+    #map-hero.home-hero-editorial {
+        padding-top: 0.52rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.7rem !important;
+    }
+}

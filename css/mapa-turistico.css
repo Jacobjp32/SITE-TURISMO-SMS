@@ -1885,3 +1885,399 @@ body.map-details-open {
         height: 320px;
     }
 }
+
+/* Ajuste final: contraste, lateral mais limpa e fechamento visual do mapa. */
+.map-page {
+    padding-bottom: 2.35rem;
+}
+
+.map-page-shell {
+    max-width: 1320px;
+}
+
+.map-hero {
+    margin-bottom: 1rem;
+    padding: 1.35rem;
+    border-radius: 28px;
+}
+
+.map-hero-panel {
+    border-radius: 20px;
+}
+
+.map-hero-stat-card {
+    min-height: 88px;
+    padding: 0.78rem 0.68rem;
+    border-radius: 16px;
+}
+
+.map-toolbar {
+    gap: 0.8rem;
+    padding: 1rem;
+    border-radius: 22px;
+}
+
+.map-layout {
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 360px);
+    gap: 1.1rem;
+    margin-top: 1rem;
+}
+
+#tourismMap {
+    height: clamp(420px, 56vh, 640px);
+}
+
+.map-sidebar {
+    gap: 0.8rem;
+}
+
+.map-stage-card,
+.map-panel-card {
+    border-radius: 22px;
+}
+
+.map-panel-card {
+    padding: 0.88rem;
+}
+
+.map-overview-card {
+    gap: 0.68rem;
+}
+
+.map-sidebar .map-overview-grid {
+    grid-template-columns: 1fr;
+    gap: 0.48rem;
+}
+
+.map-sidebar .map-overview-stat {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.7rem;
+    min-height: 46px;
+    padding: 0.6rem 0.72rem;
+    border-radius: 14px;
+}
+
+.map-sidebar .map-overview-stat strong {
+    font-size: 1.08rem;
+}
+
+.map-sidebar .map-overview-stat span {
+    text-align: right;
+    font-size: 0.7rem;
+}
+
+.map-overview-note,
+.map-panel-intro,
+.map-selected-empty,
+.map-list-empty {
+    color: #355347;
+}
+
+.map-selected-empty,
+.map-list-empty {
+    padding: 0.82rem;
+    border: 1px solid rgba(10, 61, 46, 0.08);
+    border-radius: 16px;
+    background: #fff8ec;
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+.map-panel-title {
+    margin-bottom: 0.42rem;
+    font-size: 1.38rem;
+}
+
+.map-panel-kicker {
+    font-size: 0.7rem;
+}
+
+.map-detail {
+    gap: 0.68rem;
+}
+
+.map-detail-image {
+    height: 172px;
+    border-radius: 16px;
+}
+
+.map-detail-top {
+    flex-wrap: wrap;
+    gap: 0.55rem;
+}
+
+.map-detail-top h3 {
+    margin-top: 0.25rem;
+    font-size: 1.08rem;
+}
+
+.map-detail-category,
+.map-detail-category.is-soft,
+.map-list-badge {
+    border: 1px solid rgba(10, 61, 46, 0.10);
+}
+
+.map-detail-category.is-soft {
+    color: #173d31;
+    background: var(--detail-accent, rgba(212, 165, 116, 0.16));
+}
+
+.map-detail p {
+    font-size: 0.86rem;
+    line-height: 1.54;
+}
+
+.map-detail-support,
+.map-list-support {
+    color: #594d39 !important;
+}
+
+.map-meta-chip,
+.map-related-event-chip,
+.map-detail-badge {
+    min-height: 30px;
+    color: #173d31;
+}
+
+.map-related-events {
+    gap: 0.65rem;
+    padding: 0.78rem;
+    border-radius: 16px;
+}
+
+.map-related-event-card {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: 0.68rem;
+    padding: 0.65rem;
+    border-radius: 14px;
+}
+
+.map-related-event-media,
+.map-related-event-media img,
+.map-related-event-fallback {
+    min-height: 82px;
+}
+
+.map-related-event-body {
+    gap: 0.42rem;
+}
+
+.map-related-event-body h4 {
+    font-size: 0.94rem;
+}
+
+.map-related-event-body p {
+    font-size: 0.8rem;
+    line-height: 1.42;
+}
+
+.map-button {
+    min-height: 40px;
+    padding-inline: 0.8rem;
+    font-size: 0.8rem;
+}
+
+.map-explore-section {
+    margin-top: 1rem;
+}
+
+.map-list-panel {
+    padding: 1rem;
+}
+
+.map-list-panel-head {
+    margin-bottom: 0;
+}
+
+.map-panel-groups {
+    margin-bottom: 0.75rem;
+}
+
+.map-list-group-section + .map-list-group-section {
+    margin-top: 1.15rem;
+}
+
+.map-list-group-head {
+    margin-bottom: 0.72rem;
+    padding-bottom: 0.55rem;
+}
+
+.map-list-group-grid {
+    grid-template-columns: repeat(auto-fit, minmax(276px, 1fr));
+    gap: 0.78rem;
+}
+
+.map-list-card {
+    gap: 0.62rem;
+    padding: 0.72rem;
+    border-radius: 16px;
+}
+
+.map-list-card-select {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 0.72rem;
+}
+
+.map-list-thumb {
+    width: 92px;
+    height: 92px;
+    border-radius: 14px;
+}
+
+.map-list-content {
+    gap: 0.42rem;
+}
+
+.map-list-card h4 {
+    font-size: 0.94rem;
+    line-height: 1.25;
+}
+
+.map-list-card p {
+    font-size: 0.8rem;
+    line-height: 1.46;
+}
+
+.map-list-badge {
+    min-height: 26px;
+    padding-inline: 0.56rem;
+    color: var(--badge-color, #173d31);
+}
+
+.map-missing-list {
+    margin-top: 1rem;
+    padding-top: 0.82rem;
+}
+
+@media (max-width: 1120px) {
+    .map-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .map-sidebar .map-overview-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .map-sidebar .map-overview-stat {
+        display: grid;
+        gap: 0.15rem;
+        min-height: 0;
+        text-align: center;
+    }
+
+    .map-sidebar .map-overview-stat span {
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .map-page {
+        padding: 0.88rem 0.72rem 1.65rem;
+    }
+
+    .map-hero {
+        padding: 0.95rem;
+        border-radius: 22px;
+    }
+
+    .map-hero h1 {
+        font-size: clamp(2rem, 8.6vw, 2.9rem);
+    }
+
+    .map-hero-subtitle {
+        font-size: 0.96rem;
+        line-height: 1.48;
+    }
+
+    .map-hero-support {
+        margin-top: 0.62rem;
+        font-size: 0.84rem;
+        line-height: 1.5;
+    }
+
+    .map-actions {
+        gap: 0.55rem;
+        margin-top: 1rem;
+    }
+
+    .map-action-link {
+        min-height: 44px;
+        padding-inline: 0.9rem;
+        font-size: 0.86rem;
+    }
+
+    .map-toolbar {
+        padding: 0.82rem;
+    }
+
+    .map-search input {
+        min-height: 48px;
+        border-radius: 14px;
+        font-size: 0.88rem;
+    }
+
+    .map-stat-chip,
+    .map-filter-btn {
+        min-height: 40px;
+        font-size: 0.78rem;
+    }
+
+    .map-stage-head,
+    .map-stage-foot {
+        padding: 0.78rem 0.86rem;
+    }
+
+    .map-stage-head h2 {
+        font-size: 1.42rem;
+    }
+
+    #tourismMap {
+        height: 340px;
+    }
+
+    .map-panel-card,
+    .map-list-panel {
+        padding: 0.78rem;
+    }
+}
+
+@media (max-width: 520px) {
+    .map-sidebar .map-overview-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .map-list-card-select {
+        grid-template-columns: 1fr;
+    }
+
+    .map-list-thumb {
+        width: 100%;
+        height: 148px;
+    }
+
+    #tourismMap {
+        height: 306px;
+    }
+}
+
+@media (max-width: 430px) {
+    .map-page {
+        padding-left: 0.58rem;
+        padding-right: 0.58rem;
+    }
+
+    .map-hero,
+    .map-toolbar,
+    .map-stage-card,
+    .map-panel-card {
+        border-radius: 18px;
+    }
+
+    .map-related-event-media,
+    .map-related-event-media img,
+    .map-related-event-fallback {
+        min-height: 148px;
+    }
+}
