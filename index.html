@@ -420,41 +420,43 @@
     <main id="main-content" tabindex="-1">
     <!-- Map Hero -->
     <section id="map-hero" class="home-hero-editorial" aria-labelledby="home-hero-title">
-        <div class="map-info-panel">
-            <h1 id="home-hero-title" data-lang-key="hero-title">Planeje sua visita a São Mateus do Sul</h1>
-            <p data-lang-key="hero-map-desc">Encontre pontos turísticos, rotas, gastronomia, hospedagem e eventos em um só lugar.</p>
+        <div class="home-hero-inner">
+            <div class="map-info-panel">
+                <h1 id="home-hero-title" data-lang-key="hero-title">Planeje sua visita a São Mateus do Sul</h1>
+                <p data-lang-key="hero-map-desc">Encontre pontos turísticos, rotas, gastronomia, hospedagem e eventos em um só lugar.</p>
 
-            <div class="hero-actions" aria-label="Ações principais">
-                <a href="/mapa-turistico.html" class="explore-btn hero-primary-cta" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
-                <a href="/eventos/" class="hero-secondary-cta" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
+                <div class="hero-actions" aria-label="Ações principais">
+                    <a href="/mapa-turistico.html" class="explore-btn hero-primary-cta" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
+                    <a href="/eventos/" class="hero-secondary-cta" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
+                </div>
+
+                <div class="hero-quick-links" aria-label="Atalhos para planejar a visita">
+                    <a href="/mapa-turistico.html?grupo=pontos-turisticos" data-lang-key="hero-chip-atracoes">Atrações</a>
+                    <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="hero-chip-rotas">Rotas</a>
+                    <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
+                    <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="hero-chip-ficar">Onde Ficar</a>
+                    <a href="/mapa-turistico.html" data-lang-key="hero-chip-chegar">Como Chegar</a>
+                </div>
             </div>
 
-            <div class="hero-quick-links" aria-label="Atalhos para planejar a visita">
-                <a href="/mapa-turistico.html?grupo=pontos-turisticos" data-lang-key="hero-chip-atracoes">Atrações</a>
-                <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="hero-chip-rotas">Rotas</a>
-                <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
-                <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="hero-chip-ficar">Onde Ficar</a>
-                <a href="/mapa-turistico.html" data-lang-key="hero-chip-chegar">Como Chegar</a>
+            <div id="map" class="hero-video-frame" role="group" aria-label="São Mateus do Sul em imagens" data-lang-key-aria-label="hero-media-label">
+                <div class="hero-media-label" data-lang-key="hero-media-label">São Mateus do Sul em imagens</div>
+                <video
+                    class="hero-video"
+                    autoplay
+                    muted
+                    loop
+                    playsinline
+                    preload="metadata"
+                    width="1920"
+                    height="1080"
+                    aria-label="Vídeo panorâmico de São Mateus do Sul"
+                    data-lang-key-aria-label="hero-media-video-label"
+                    poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+                    <source src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
+                    Sua navegacao nao suporta video em HTML5.
+                </video>
             </div>
-        </div>
-
-        <div id="map" class="hero-video-frame" role="group" aria-label="São Mateus do Sul em imagens" data-lang-key-aria-label="hero-media-label">
-            <div class="hero-media-label" data-lang-key="hero-media-label">São Mateus do Sul em imagens</div>
-            <video
-                class="hero-video"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                width="1920"
-                height="1080"
-                aria-label="Vídeo panorâmico de São Mateus do Sul"
-                data-lang-key-aria-label="hero-media-video-label"
-                poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
-                <source src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
-                Sua navegacao nao suporta video em HTML5.
-            </video>
         </div>
     </section>
 

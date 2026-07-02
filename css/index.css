@@ -6183,3 +6183,307 @@ body.nav-menu-open .nav-toggle {
         animation: none !important;
     }
 }
+
+/* S16: ajuste final de rail e densidade responsiva da home */
+#map-hero.home-hero-editorial {
+    display: block !important;
+    min-height: auto !important;
+    height: auto !important;
+    padding: clamp(9.25rem, 10vw, 10.6rem) clamp(1.25rem, 4vw, 2rem) clamp(2.5rem, 5vh, 3.4rem) !important;
+}
+
+#map-hero.home-hero-editorial .home-hero-inner {
+    position: relative;
+    z-index: 1;
+    width: min(100%, var(--home-container));
+    margin-inline: auto;
+    display: grid;
+    grid-template-columns: minmax(0, 0.94fr) minmax(390px, 1.06fr);
+    align-items: center;
+    gap: clamp(1.25rem, 3vw, 2.35rem);
+}
+
+#map-hero.home-hero-editorial .map-info-panel {
+    width: min(540px, 100%) !important;
+    padding: clamp(1.25rem, 2.2vw, 2rem) !important;
+}
+
+#map-hero.home-hero-editorial .map-info-panel h1 {
+    font-size: clamp(2.25rem, 4.2vw, 3.9rem) !important;
+}
+
+#map-hero.home-hero-editorial .map-info-panel > p {
+    font-size: clamp(0.98rem, 1.15vw, 1.08rem) !important;
+}
+
+#map-hero.home-hero-editorial #map {
+    max-width: 620px;
+    justify-self: end;
+}
+
+.home-trust-grid,
+.featured-experiences-container,
+.home-section-container,
+.home-map-preview .reviews-container {
+    max-width: var(--home-container) !important;
+}
+
+@media (max-width: 1020px) {
+    #map-hero.home-hero-editorial {
+        padding-top: clamp(9.25rem, 10vw, 10.6rem) !important;
+    }
+
+    #map-hero.home-hero-editorial .home-hero-inner {
+        grid-template-columns: minmax(0, 1fr);
+        width: min(100%, 760px);
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        width: min(720px, 100%) !important;
+        margin: 0 auto !important;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        width: min(760px, 100%) !important;
+        margin: 0 auto !important;
+        justify-self: center;
+    }
+}
+
+@media (max-width: 768px) {
+    #map-hero.home-hero-editorial {
+        padding: 0.85rem 0.85rem 1rem !important;
+    }
+
+    #map-hero.home-hero-editorial .home-hero-inner {
+        gap: 0.7rem;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.9rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel h1 {
+        max-width: 100% !important;
+        font-size: clamp(1.5rem, 6.6vw, 1.92rem) !important;
+        line-height: 1.02 !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel > p {
+        margin-bottom: 0.8rem !important;
+        font-size: 0.9rem !important;
+        line-height: 1.42 !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-actions {
+        gap: 0.45rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-primary-cta,
+    #map-hero.home-hero-editorial .hero-secondary-cta {
+        min-height: 44px !important;
+        padding: 0.68rem 0.9rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links {
+        gap: 0.4rem;
+        margin-top: 0.65rem;
+    }
+
+    #map-hero.home-hero-editorial .hero-quick-links a {
+        min-height: 34px;
+        padding: 0.38rem 0.62rem;
+        font-size: 0.8rem;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        aspect-ratio: 16 / 8.7;
+        max-height: 218px;
+    }
+
+    .home-trust-strip {
+        padding: 0.8rem 0.85rem !important;
+    }
+
+    .home-trust-grid {
+        gap: 0.5rem;
+    }
+
+    .home-trust-grid .stat-item {
+        min-height: 58px;
+        padding: 0.55rem 0.5rem;
+    }
+
+    .home-trust-grid .stat-number {
+        font-size: 1.32rem;
+        line-height: 1;
+    }
+
+    .home-trust-grid .stat-label {
+        font-size: 0.68rem;
+        line-height: 1.2;
+    }
+
+    .featured-experiences-section {
+        padding: 2rem 0.85rem 1.9rem !important;
+    }
+
+    .home-upcoming-section,
+    .home-map-preview {
+        padding: 2rem 0.85rem !important;
+    }
+
+    .home-section-heading,
+    .featured-experiences-heading {
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+    }
+
+    .home-section-heading .section-title,
+    .featured-experiences-heading .section-title,
+    .home-map-preview .section-title {
+        font-size: clamp(1.55rem, 7vw, 1.95rem);
+        line-height: 1.06;
+    }
+
+    .home-section-heading .section-subtitle,
+    .featured-experiences-heading .section-subtitle,
+    .home-map-preview .section-subtitle {
+        font-size: 0.92rem;
+        line-height: 1.42;
+    }
+
+    .featured-experiences-section .section-label,
+    .home-upcoming-section .section-label,
+    .home-map-preview .section-label {
+        font-size: 0.72rem;
+    }
+
+    .home-section-link,
+    .experience-summary-btn {
+        min-height: 44px;
+        padding: 0.65rem 0.9rem !important;
+        font-size: 0.9rem;
+    }
+
+    .featured-carousel-track {
+        margin-inline: -0.85rem;
+        padding-inline: 0.85rem;
+        scroll-padding-inline: 0.85rem;
+    }
+
+    .featured-experience-card {
+        flex-basis: min(78vw, 300px);
+    }
+
+    .featured-experience-body {
+        gap: 0.35rem;
+        padding: 0.78rem;
+    }
+
+    .featured-experience-body h3 {
+        font-size: 1.02rem;
+    }
+
+    .featured-experience-body small {
+        min-height: 30px;
+        font-size: 0.84rem;
+    }
+
+    .home-upcoming-grid {
+        gap: 0.75rem;
+    }
+
+    .home-event-card {
+        grid-template-columns: 58px minmax(0, 1fr);
+        min-height: 136px;
+    }
+
+    .home-event-date strong {
+        font-size: 1.55rem;
+    }
+
+    .home-event-date span {
+        font-size: 0.68rem;
+    }
+
+    .home-event-body {
+        gap: 0.35rem;
+        padding: 0.75rem;
+    }
+
+    .home-event-body h3 {
+        font-size: 1.08rem;
+    }
+
+    .home-event-body p {
+        font-size: 0.82rem;
+        line-height: 1.34;
+    }
+
+    .home-recurring-events {
+        margin-top: 0.9rem;
+        padding: 0.9rem;
+    }
+
+    .home-recurring-events h3 {
+        margin-bottom: 0.65rem;
+        font-size: 1.2rem;
+    }
+
+    .home-recurring-grid {
+        gap: 0.55rem;
+    }
+
+    .home-recurring-card {
+        min-height: 76px;
+        padding: 0.7rem;
+    }
+
+    .home-recurring-card strong {
+        font-size: 0.92rem;
+    }
+
+    .home-recurring-card span,
+    .home-recurring-card small {
+        font-size: 0.8rem;
+    }
+
+    .home-map-preview .experience-links-grid {
+        gap: 0.75rem;
+    }
+
+    .home-map-preview .experience-link-card {
+        gap: 0.55rem;
+        padding: 0.75rem !important;
+    }
+
+    .home-map-preview .experience-link-visual {
+        aspect-ratio: 16 / 8.5;
+    }
+
+    .home-map-preview .experience-link-card h3 {
+        font-size: 1.05rem;
+    }
+
+    .home-map-preview .experience-link-card p {
+        font-size: 0.82rem;
+        line-height: 1.36;
+    }
+
+    .home-map-preview .experience-links-summary {
+        margin-top: 0.85rem;
+        padding: 0.85rem;
+    }
+}
+
+@media (max-width: 420px) {
+    #map-hero.home-hero-editorial {
+        padding-top: 0.7rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.82rem !important;
+    }
+}
