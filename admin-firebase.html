@@ -1249,7 +1249,7 @@
                         <h2>🛠️ Alterações de empreendimentos</h2>
                     </div>
                     <p class="admin-helper-text">
-                        Esta fila registra apenas a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não publica nada automaticamente</strong> no mapa público nem nos dados estáticos.
+                        Esta fila registra apenas a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não publica nada automaticamente</strong> no mapa público nem nos dados estáticos; a publicação/atualização pode depender de validação/aplicação pela equipe responsável.
                     </p>
                     <div id="establishment-update-requests-container">
                         <div class="loading">Carregando...</div>
@@ -2151,12 +2151,12 @@
                                 <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
                                 <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
                                 <div class="page-actions">
-                                    <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar</button>
+                                    <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar para revisão</button>
                                     <button class="btn-sm btn-reject" onclick="rejectEstablishmentUpdateRequest('${SEC.js(request.id)}')">❌ Rejeitar</button>
                                     <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
                                 </div>
                                 <div class="update-request-callout">
-                                    Solicitação aprovada para revisão/publicação. A aplicação no site público ainda depende de atualização controlada dos dados.
+                                    Solicitação aprovada pela equipe. A publicação/atualização no site pode depender de validação/aplicação pela equipe responsável.
                                 </div>
                             </section>
                         </article>
@@ -3041,7 +3041,7 @@
         function getUpdateRequestStatusLabel(status) {
             return ({
                 pending: 'Pendente',
-                approved: 'Aprovada',
+                approved: 'Aprovada pela equipe',
                 rejected: 'Rejeitada',
                 changes_requested: 'Ajustes necessários'
             })[normalizeUpdateRequestStatus(status)] || 'Pendente';

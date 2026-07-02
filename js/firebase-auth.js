@@ -1129,7 +1129,7 @@ const FirebaseSystem = {
             if (targetStatus === 'approved') {
                 return {
                     success: true,
-                    message: 'Solicitação aprovada para revisão/publicação. A aplicação no site público ainda depende de atualização controlada dos dados.'
+                    message: 'Solicitação aprovada pela equipe. A publicação/atualização no site pode depender de validação/aplicação pela equipe responsável.'
                 };
             }
 
