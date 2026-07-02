@@ -798,8 +798,11 @@ const FirebaseSystem = {
             }
 
             flowStage = 'query_managers';
+            // As rules exigem resource.data.active == true para leitura do proprio
+            // vinculo; sem este filtro a query inteira retorna permission-denied.
             var managersSnap = await db.collection('establishment_managers')
                 .where('userId', '==', userId)
+                .where('active', '==', true)
                 .get();
 
             var alreadyManager = managersSnap.docs
@@ -893,8 +896,12 @@ const FirebaseSystem = {
     getUserManagedEstablishments: async function() {
         if (!this.isLoggedIn()) return [];
         try {
+            // As rules so permitem ao usuario ler o proprio vinculo quando
+            // active == true; a query precisa refletir isso ou o Firestore
+            // rejeita tudo com permission-denied (rules nao sao filtros).
             var snap = await firebase.firestore().collection('establishment_managers')
                 .where('userId', '==', currentUser.uid)
+                .where('active', '==', true)
                 .get();
 
             return snap.docs.map(function(doc) {
