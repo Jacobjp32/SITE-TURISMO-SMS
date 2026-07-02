@@ -5986,3 +5986,200 @@ body.nav-menu-open .nav-toggle {
         transition: none !important;
     }
 }
+
+/* S15: hero editorial, cards visuais do mapa e remoção do chatbot Mathe/Cuia */
+#chatbot-widget,
+#chatbot-styles {
+    display: none !important;
+}
+
+#map-hero.home-hero-editorial {
+    display: grid !important;
+    grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.05fr) !important;
+    align-items: center !important;
+    gap: clamp(1.5rem, 4vw, 3.5rem) !important;
+    min-height: auto !important;
+    height: auto !important;
+    /* padding-top must clear the fixed accessibility bar + nav (~142px) since desktop <body> has no top offset */
+    padding: clamp(9.75rem, 11vw, 11rem) clamp(1.25rem, 5vw, 4rem) clamp(2.5rem, 5vh, 3.5rem) !important;
+    background:
+        radial-gradient(circle at 84% 18%, rgba(212, 165, 116, 0.18), transparent 28%),
+        linear-gradient(135deg, #fffdf8 0%, #f5efe4 55%, #edf4ef 100%) !important;
+    overflow: hidden !important;
+}
+
+#map-hero.home-hero-editorial::before {
+    content: "";
+    position: absolute;
+    inset: auto -8% -44% 48%;
+    height: 56%;
+    background: rgba(10, 61, 46, 0.08);
+    transform: rotate(-7deg);
+    pointer-events: none;
+}
+
+#map-hero.home-hero-editorial .map-info-panel {
+    position: relative !important;
+    z-index: 2 !important;
+    width: min(620px, 100%) !important;
+    margin: 0 !important;
+    padding: clamp(1.4rem, 2.7vw, 2.35rem) !important;
+    border: 1px solid rgba(10, 61, 46, 0.1) !important;
+    border-left: 4px solid rgba(212, 165, 116, 0.86) !important;
+    background: rgba(255, 253, 248, 0.94) !important;
+    box-shadow: 0 20px 44px rgba(6, 33, 24, 0.12) !important;
+    backdrop-filter: none;
+}
+
+#map-hero.home-hero-editorial .map-info-panel h1 {
+    max-width: 13ch !important;
+    font-size: clamp(2.35rem, 5vw, 4.55rem) !important;
+    line-height: 0.98 !important;
+}
+
+#map-hero.home-hero-editorial .map-info-panel > p {
+    color: #3f4f48 !important;
+    font-size: clamp(1.02rem, 1.3vw, 1.15rem) !important;
+}
+
+#map-hero.home-hero-editorial #map {
+    position: relative !important;
+    inset: auto !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 16 / 9;
+    border: 1px solid rgba(10, 61, 46, 0.12);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #0a3d2e;
+    box-shadow: 0 24px 54px rgba(6, 33, 24, 0.18);
+}
+
+#map-hero.home-hero-editorial #map::after {
+    display: none !important;
+}
+
+#map-hero.home-hero-editorial .hero-video {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center center;
+}
+
+.hero-media-label {
+    position: absolute;
+    z-index: 2;
+    left: 1rem;
+    bottom: 1rem;
+    max-width: calc(100% - 2rem);
+    padding: 0.55rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(4, 27, 20, 0.76);
+    color: #fffdf8;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0;
+}
+
+.home-map-preview .experience-link-card {
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 0.7rem;
+    padding-top: 0.8rem !important;
+}
+
+.home-map-preview .experience-link-visual {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #e8e1d3;
+}
+
+.home-map-preview .experience-link-visual img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-map-preview .experience-link-card h3,
+.home-map-preview .experience-link-card p,
+.home-map-preview .experience-link-cta {
+    margin-left: 0.2rem;
+    margin-right: 0.2rem;
+}
+
+@media (max-width: 1020px) {
+    #map-hero.home-hero-editorial {
+        grid-template-columns: minmax(0, 1fr) !important;
+        /* keep clearing the fixed chrome (~142px) down to the 768px breakpoint, where body padding-top takes over */
+        padding-top: clamp(9.75rem, 11vw, 11rem) !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        width: min(720px, 100%) !important;
+        margin: 0 auto !important;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        width: min(760px, 100%) !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (max-width: 768px) {
+    #map-hero.home-hero-editorial {
+        gap: 1rem !important;
+        padding: 1.1rem 1rem 1.35rem !important;
+    }
+
+    #map-hero.home-hero-editorial::before {
+        display: none;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 1rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel h1 {
+        max-width: 14ch !important;
+        font-size: clamp(1.75rem, 8vw, 2.35rem) !important;
+        line-height: 1.02 !important;
+    }
+
+    #map-hero.home-hero-editorial #map {
+        aspect-ratio: 16 / 9;
+        box-shadow: 0 14px 28px rgba(6, 33, 24, 0.14);
+    }
+
+    .hero-media-label {
+        left: 0.75rem;
+        bottom: 0.75rem;
+        font-size: 0.76rem;
+    }
+
+    .home-map-preview .experience-link-card {
+        grid-template-rows: auto auto auto auto;
+    }
+}
+
+@media (max-width: 420px) {
+    #map-hero.home-hero-editorial {
+        padding-top: 0.9rem !important;
+    }
+
+    #map-hero.home-hero-editorial .map-info-panel {
+        padding: 0.9rem !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #map-hero.home-hero-editorial .hero-video {
+        animation: none !important;
+    }
+}

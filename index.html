@@ -419,27 +419,7 @@
 
     <main id="main-content" tabindex="-1">
     <!-- Map Hero -->
-    <section id="map-hero" aria-labelledby="home-hero-title">
-        <div id="map" class="hero-video-frame" role="img" aria-label="Vista panorâmica de São Mateus do Sul">
-            <video
-                class="hero-video"
-                autoplay
-                muted
-                loop
-                playsinline
-                preload="metadata"
-                width="1920"
-                height="1080"
-                aria-hidden="true"
-                tabindex="-1"
-                poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
-                <source src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
-                Sua navegacao nao suporta video em HTML5.
-            </video>
-            <!-- Overlay escuro sutil para o painel de info ser legível -->
-            <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.1) 60%,transparent 100%);pointer-events:none;z-index:1;"></div>
-        </div>
-
+    <section id="map-hero" class="home-hero-editorial" aria-labelledby="home-hero-title">
         <div class="map-info-panel">
             <h1 id="home-hero-title" data-lang-key="hero-title">Planeje sua visita a São Mateus do Sul</h1>
             <p data-lang-key="hero-map-desc">Encontre pontos turísticos, rotas, gastronomia, hospedagem e eventos em um só lugar.</p>
@@ -456,6 +436,25 @@
                 <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="hero-chip-ficar">Onde Ficar</a>
                 <a href="/mapa-turistico.html" data-lang-key="hero-chip-chegar">Como Chegar</a>
             </div>
+        </div>
+
+        <div id="map" class="hero-video-frame" role="group" aria-label="São Mateus do Sul em imagens" data-lang-key-aria-label="hero-media-label">
+            <div class="hero-media-label" data-lang-key="hero-media-label">São Mateus do Sul em imagens</div>
+            <video
+                class="hero-video"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="metadata"
+                width="1920"
+                height="1080"
+                aria-label="Vídeo panorâmico de São Mateus do Sul"
+                data-lang-key-aria-label="hero-media-video-label"
+                poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+                <source src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
+                Sua navegacao nao suporta video em HTML5.
+            </video>
         </div>
     </section>
 
@@ -500,45 +499,23 @@
 
                 <div class="featured-carousel-track" data-featured-track tabindex="0" aria-label="Experiências em destaque" data-lang-key-aria-label="featured-experiences-title">
                     <article class="featured-experience-card">
-                        <a href="/local?id=igreja-matriz">
-                            <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" alt="Igreja Matriz São Mateus" loading="lazy">
-                            <div class="featured-experience-body">
-                                <span data-lang-key="featured-cat-historia">História</span>
-                                <h3>Igreja Matriz São Mateus</h3>
-                                <small data-lang-key="featured-cta-know">Conhecer</small>
-                            </div>
-                        </a>
-                    </article>
-
-                    <article class="featured-experience-card">
-                        <a href="/local?id=ponte-rio-iguacu">
-                            <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" alt="Rio Iguaçu em São Mateus do Sul" loading="lazy">
-                            <div class="featured-experience-body">
-                                <span data-lang-key="featured-cat-natureza">Natureza</span>
-                                <h3>Rio Iguaçu</h3>
-                                <small data-lang-key="featured-cta-know">Conhecer</small>
-                            </div>
-                        </a>
-                    </article>
-
-                    <article class="featured-experience-card">
-                        <a href="/local?id=rua-do-mathe">
-                            <img src="images/RUA_DO_MATHE.jpg" alt="Rua do Mathe" loading="lazy">
+                        <a href="/mapa-turistico.html?categoria=Gastronomia">
+                            <img src="images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg" alt="Delícias da Bernardina" loading="lazy">
                             <div class="featured-experience-body">
                                 <span data-lang-key="featured-cat-gastronomia">Gastronomia</span>
-                                <h3>Rua do Mathe</h3>
-                                <small data-lang-key="featured-cta-know">Conhecer</small>
+                                <h3>Delícias da Bernardina</h3>
+                                <small data-lang-key="featured-cta-map">Ver no mapa</small>
                             </div>
                         </a>
                     </article>
 
                     <article class="featured-experience-card">
-                        <a href="/local?id=casa-da-memoria">
-                            <img src="images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg" alt="Casa da Memória Padre Bauer" loading="lazy">
+                        <a href="/mapa-turistico.html?grupo=roteiros">
+                            <img src="images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-01.jpeg" alt="Marina Barra do Iguaçu" loading="lazy">
                             <div class="featured-experience-body">
-                                <span data-lang-key="featured-cat-historia">História</span>
-                                <h3>Casa da Memória Padre Bauer</h3>
-                                <small data-lang-key="featured-cta-know">Conhecer</small>
+                                <span data-lang-key="featured-cat-nautico">Lazer náutico</span>
+                                <h3>Marina Barra do Iguaçu</h3>
+                                <small data-lang-key="featured-cta-map">Ver no mapa</small>
                             </div>
                         </a>
                     </article>
@@ -566,12 +543,45 @@
                     </article>
 
                     <article class="featured-experience-card">
-                        <a href="/mapa-turistico.html?grupo=roteiros">
-                            <img src="images/rotas/rota-erva-mate.webp" alt="Rota da Erva-Mate" loading="lazy">
+                        <a href="/mapa-turistico.html?categoria=Natureza">
+                            <img src="images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png" alt="Ribeiro Pesca e Turismo" loading="lazy">
                             <div class="featured-experience-body">
-                                <span data-lang-key="featured-cat-rota-cultural">Rota Cultural</span>
-                                <h3>Rota da Erva-Mate</h3>
+                                <span data-lang-key="featured-cat-natureza">Natureza</span>
+                                <h3>Ribeiro Pesca e Turismo</h3>
                                 <small data-lang-key="featured-cta-map">Ver no mapa</small>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="featured-experience-card">
+                        <a href="/mapa-turistico.html?grupo=roteiros">
+                            <img src="images/empreendimentos/sawe/sawe-01.jpeg" alt="Sawe Parque Aquático" loading="lazy">
+                            <div class="featured-experience-body">
+                                <span data-lang-key="featured-cat-lazer">Lazer</span>
+                                <h3>Sawe Parque Aquático</h3>
+                                <small data-lang-key="featured-cta-map">Ver no mapa</small>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="featured-experience-card">
+                        <a href="/local?id=rua-do-mathe">
+                            <img src="images/WEBP/RUA-DO-MATHE-_1_.webp" alt="Rua do Mathe" loading="lazy">
+                            <div class="featured-experience-body">
+                                <span data-lang-key="featured-cat-gastronomia">Gastronomia</span>
+                                <h3>Rua do Mathe</h3>
+                                <small data-lang-key="featured-cta-know">Conhecer</small>
+                            </div>
+                        </a>
+                    </article>
+
+                    <article class="featured-experience-card">
+                        <a href="/local?id=casa-da-memoria">
+                            <img src="images/empreendimentos/casa-da-memoria/casa-da-memoria-01.jpeg" alt="Casa da Memória Padre Bauer" loading="lazy">
+                            <div class="featured-experience-body">
+                                <span data-lang-key="featured-cat-historia">História</span>
+                                <h3>Casa da Memória Padre Bauer</h3>
+                                <small data-lang-key="featured-cta-know">Conhecer</small>
                             </div>
                         </a>
                     </article>
@@ -642,37 +652,49 @@
 
             <div class="experience-links-grid">
                 <a href="/mapa-turistico.html?grupo=pontos-turisticos" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">P</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-1-title">Pontos turísticos</h3>
                     <p data-lang-key="experience-card-1-desc">Comece pelas atrações principais e veja os locais cadastrados no mapa.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
                 </a>
                 <a href="/mapa-turistico.html?categoria=Cultura" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">C</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/IGREJA_AGUA_BRANCA.jpg" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-2-title">Cultura polonesa</h3>
                     <p data-lang-key="experience-card-2-desc">Igrejas, patrimônio, memória da imigração e referências culturais.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
                 </a>
                 <a href="/mapa-turistico.html?categoria=Gastronomia" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">S</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/WEBP/RUA-DO-MATHE-_1_.webp" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-3-title">Erva-mate e sabores</h3>
                     <p data-lang-key="experience-card-3-desc">Encontre gastronomia, feiras e experiências ligadas ao mate.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
                 </a>
                 <a href="/mapa-turistico.html?categoria=Natureza" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">N</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/WEBP/PONTE-ENTRADA-CIDADE-1-_2_.webp" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-4-title">Rio Iguaçu e natureza</h3>
                     <p data-lang-key="experience-card-4-desc">Praças, paisagens, áreas de contemplação e pontos ligados ao rio.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
                 </a>
                 <a href="/mapa-turistico.html?categoria=Hospedagem" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">H</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-5-title">Hospedagem</h3>
                     <p data-lang-key="experience-card-5-desc">Veja opções para montar a estadia junto do restante da visita.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
                 </a>
                 <a href="/mapa-turistico.html?categoria=Eventos" class="experience-link-card">
-                    <span class="experience-link-icon" aria-hidden="true">E</span>
+                    <span class="experience-link-visual" aria-hidden="true">
+                        <img src="images/agrosamas-publico-show-noturno.webp" alt="" loading="lazy">
+                    </span>
                     <h3 data-lang-key="experience-card-6-title">Eventos</h3>
                     <p data-lang-key="experience-card-6-desc">Cruze a programação da cidade com pontos e roteiros turísticos.</p>
                     <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
@@ -1959,6 +1981,8 @@
                 'nav-contato': 'Contato',
                 'hero-subtitle': 'Capital Polonesa do Paraná',
                 'hero-cta': 'Explorar',
+                'hero-media-label': 'São Mateus do Sul em imagens',
+                'hero-media-video-label': 'Vídeo panorâmico de São Mateus do Sul',
                 'label-calendario': 'Calendário 2026',
                 'section-eventos': 'Próximos Eventos',
                 'section-eventos-desc': 'Eventos, feiras e experiências para incluir no seu roteiro.',
@@ -1971,6 +1995,8 @@
                 'featured-cta-know': 'Conhecer',
                 'featured-prev': 'Anterior',
                 'featured-next': 'Próximo',
+                'featured-cat-nautico': 'Lazer náutico',
+                'featured-cat-lazer': 'Lazer',
                 'section-eventos-semanais': '📅 Eventos Semanais Fixos',
                 'section-onde-ficar': 'Onde Ficar',
                 'btn-ver-mais': 'Ver mais'
@@ -1998,6 +2024,8 @@
                 'nav-contato': 'Contact',
                 'hero-subtitle': 'Polish Capital of Paraná',
                 'hero-cta': 'Explore',
+                'hero-media-label': 'São Mateus do Sul in images',
+                'hero-media-video-label': 'Panoramic video of São Mateus do Sul',
                 'label-calendario': 'Calendar 2026',
                 'section-eventos': 'Upcoming Events',
                 'section-eventos-desc': 'Events, fairs and experiences to add to your route.',
@@ -2010,6 +2038,8 @@
                 'featured-cta-know': 'Learn more',
                 'featured-prev': 'Previous',
                 'featured-next': 'Next',
+                'featured-cat-nautico': 'Nautical leisure',
+                'featured-cat-lazer': 'Leisure',
                 'section-eventos-semanais': '📅 Weekly Events',
                 'section-onde-ficar': 'Where to Stay',
                 'btn-ver-mais': 'See more'
@@ -2037,6 +2067,8 @@
                 'nav-contato': 'Contacto',
                 'hero-subtitle': 'Capital Polaca de Paraná',
                 'hero-cta': 'Explorar',
+                'hero-media-label': 'São Mateus do Sul en imágenes',
+                'hero-media-video-label': 'Video panorámico de São Mateus do Sul',
                 'label-calendario': 'Calendario 2026',
                 'section-eventos': 'Próximos Eventos',
                 'section-eventos-desc': 'Eventos, ferias y experiencias para incluir en tu ruta.',
@@ -2049,6 +2081,8 @@
                 'featured-cta-know': 'Conocer',
                 'featured-prev': 'Anterior',
                 'featured-next': 'Siguiente',
+                'featured-cat-nautico': 'Ocio náutico',
+                'featured-cat-lazer': 'Ocio',
                 'section-eventos-semanais': '📅 Eventos Semanales',
                 'section-onde-ficar': 'Dónde Hospedarse',
                 'btn-ver-mais': 'Ver más'
@@ -2076,6 +2110,8 @@
                 'nav-contato': 'Kontakt',
                 'hero-subtitle': 'Polska Stolica Parany',
                 'hero-cta': 'Odkryj',
+                'hero-media-label': 'São Mateus do Sul w obrazach',
+                'hero-media-video-label': 'Panoramiczne wideo São Mateus do Sul',
                 'label-calendario': 'Kalendarz 2026',
                 'section-eventos': 'Nadchodzące wydarzenia',
                 'section-eventos-desc': 'Wydarzenia, targi i doświadczenia do dodania do trasy.',
@@ -2088,6 +2124,8 @@
                 'featured-cta-know': 'Poznaj',
                 'featured-prev': 'Poprzedni',
                 'featured-next': 'Następny',
+                'featured-cat-nautico': 'Wypoczynek nad wodą',
+                'featured-cat-lazer': 'Wypoczynek',
                 'section-eventos-semanais': '📅 Wydarzenia tygodniowe',
                 'section-onde-ficar': 'Gdzie się zatrzymać',
                 'btn-ver-mais': 'Zobacz więcej'
@@ -2670,26 +2708,13 @@
     <!-- Animações de scroll -->
     <script src="js/scroll-animations.js" defer></script>
 
-    <!-- Chatbot Mathe -->
-    <script src="js/chatbot.js"></script>
+    <!-- Chatbot Mathe/Cuia desativado na home para evitar duplicidade com o mascote visual. -->
     <script>
-        // Inicializar chatbot automaticamente - sempre inicializa
+        window.__smsChatbotDisabled = true;
         document.addEventListener('DOMContentLoaded', function() {
-            // Tentar inicializar de qualquer forma
-            try {
-                if (typeof Chatbot !== 'undefined') {
-                    Chatbot.init();
-                    console.log('✅ Chatbot inicializado');
-                }
-            } catch(e) {
-                console.log('Erro ao inicializar chatbot:', e);
-            }
-        });
-        
-        // Fallback: inicializar após window load
-        window.addEventListener('load', function() {
-            if (!document.getElementById('chatbot-widget') && typeof Chatbot !== 'undefined') {
-                Chatbot.init();
+            var chatbotWidget = document.getElementById('chatbot-widget');
+            if (chatbotWidget) {
+                chatbotWidget.remove();
             }
         });
     </script>
