@@ -1249,7 +1249,7 @@
                         <h2>🛠️ Alterações de empreendimentos</h2>
                     </div>
                     <p class="admin-helper-text">
-                        Esta fila registra apenas a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não publica nada automaticamente</strong> no mapa público nem nos dados estáticos; a publicação/atualização pode depender de validação/aplicação pela equipe responsável.
+                        Esta fila registra apenas a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não publica nada automaticamente</strong> no mapa público nem nos dados estáticos; a solicitação aprovada fica aguardando publicação/atualização controlada pela equipe responsável.
                     </p>
                     <div id="establishment-update-requests-container">
                         <div class="loading">Carregando...</div>
@@ -2156,7 +2156,7 @@
                                     <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
                                 </div>
                                 <div class="update-request-callout">
-                                    Solicitação aprovada pela equipe. A publicação/atualização no site pode depender de validação/aplicação pela equipe responsável.
+                                    Solicitação aprovada pela equipe e aguardando publicação/atualização controlada. Não existe aplicação automática no site público neste fluxo.
                                 </div>
                             </section>
                         </article>
@@ -2667,7 +2667,7 @@
 
         async function approveEstablishmentUpdateRequest(requestId) {
             const reviewNotes = getClaimInputValue('update-review-note-', requestId);
-            if (!confirm('Aprovar esta solicitação para revisão/publicação futura? Isso não publica nada automaticamente no site público.')) return;
+            if (!confirm('Aprovar esta solicitação e marcar como aguardando publicação/atualização controlada? Isso não publica nada automaticamente no site público.')) return;
 
             const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
                 status: 'approved',
@@ -3041,7 +3041,7 @@
         function getUpdateRequestStatusLabel(status) {
             return ({
                 pending: 'Pendente',
-                approved: 'Aprovada pela equipe',
+                approved: 'Aprovada, aguardando publicação',
                 rejected: 'Rejeitada',
                 changes_requested: 'Ajustes necessários'
             })[normalizeUpdateRequestStatus(status)] || 'Pendente';

@@ -258,7 +258,7 @@
                     <h2>🛠️ Minhas solicitações de alteração</h2>
                 </div>
                 <p class="section-copy">
-                    Aqui você acompanha os pedidos enviados para corrigir ou atualizar informações dos empreendimentos que gerencia. Nada é publicado automaticamente no site público; mesmo uma solicitação aprovada pode depender de validação/aplicação pela equipe responsável.
+                    Aqui você acompanha os pedidos enviados para corrigir ou atualizar informações dos empreendimentos que gerencia. Nada é publicado automaticamente no site público; uma solicitação aprovada fica aguardando publicação/atualização controlada pela equipe responsável.
                 </p>
                 <div class="events-list" id="establishmentUpdateRequestsList">
                     <div class="empty-state">
@@ -1288,7 +1288,7 @@
     function getUpdateRequestStatusLabel(status) {
         return ({
             pending: '⏳ Enviada para análise',
-            approved: '✅ Aprovada pela equipe',
+            approved: '✅ Aprovada, aguardando publicação',
             rejected: '❌ Rejeitado',
             changes_requested: '🛠️ Ajustes necessários'
         })[normalizeUpdateRequestStatus(status)];
@@ -1485,7 +1485,7 @@
             var rejection = request.rejectionReason ? '<p class="claim-extra"><strong>Motivo da rejeição:</strong> ' + escapeHtml(request.rejectionReason) + '</p>' : '';
             var adjustments = request.changesRequestedNotes ? '<p class="claim-extra"><strong>Ajustes solicitados:</strong> ' + escapeHtml(request.changesRequestedNotes) + '</p>' : '';
             var approvedPublicationHint = status === 'approved'
-                ? '<p class="claim-extra claim-success">Solicitação aprovada pela equipe. A publicação/atualização no site pode depender de validação/aplicação pela equipe responsável.</p>'
+                ? '<p class="claim-extra claim-success">Solicitação aprovada pela equipe e aguardando publicação/atualização controlada no site público.</p>'
                 : '';
             var imagesInfo = Number(request.imageCount || 0) > 0
                 ? '<p class="claim-extra claim-info">Imagens anexadas: ' + escapeHtml(String(request.imageCount)) + '</p>'
