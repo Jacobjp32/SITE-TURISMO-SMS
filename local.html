@@ -449,7 +449,10 @@
     }
 
     var params = new URLSearchParams(window.location.search);
-    var id = (params.get("id") || "").trim();
+    var rawId = (params.get("id") || "").trim();
+    // Resolve slug legado → id canônico (ex.: casa-memoria-padre-bauer → casa-da-memoria).
+    var aliases = window.locaisAliases || {};
+    var id = (rawId && aliases[rawId]) ? aliases[rawId] : rawId;
     var local = id && window.locaisData ? window.locaisData[id] : null;
     var root = document.getElementById("page-root");
 

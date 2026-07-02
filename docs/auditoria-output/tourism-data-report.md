@@ -1,6 +1,12 @@
 # Auditoria de Dados Turísticos
 
-Gerado em 2026-06-29T13:09:24.926Z.
+Gerado em 2026-07-02T12:04:13.589Z.
+
+## Consistência entre bases (locais-data.js × pontos-turisticos.js)
+
+- Links `/local?id=` verificados em pontos-turisticos.js: 7
+- Aliases verificados (locaisAliases): 1
+- ✅ Nenhuma divergência de id entre as bases.
 
 ## Resumo
 
@@ -58,7 +64,7 @@ Gerado em 2026-06-29T13:09:24.926Z.
 
 - **[ℹ️ Info]** `mapsUrl`: mapsUrl: null — fallback por coordenada ativo (lat=-25.8775, lng=-50.3838)
 
-### Casa da Memória Padre Bauer (`casa-memoria-padre-bauer`)
+### Casa da Memória Padre Bauer (`casa-da-memoria`)
 
 - Coordenadas: ✅
 - mapsUrl: `null` — status: **null-com-fallback**

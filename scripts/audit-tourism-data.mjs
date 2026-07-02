@@ -13,6 +13,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const OUT_DIR = path.join(ROOT, 'docs', 'auditoria-output');
 const DATA_FILE = path.join(ROOT, 'js', 'locais-data.js');
+const PONTOS_FILE = path.join(ROOT, 'js', 'data', 'pontos-turisticos.js');
 
 // ── Parser de locais-data.js ─────────────────────────────────────────────────
 
@@ -60,6 +61,75 @@ function parseLocaisData() {
   }
 
   return locais;
+}
+
+// Aliases de compatibilidade (slug legado → id canônico) definidos em locais-data.js
+function parseLocaisAliases() {
+  const src = fs.readFileSync(DATA_FILE, 'utf8');
+  const aliases = {};
+  const block = /const\s+locaisAliases\s*=\s*\{([\s\S]*?)\};/.exec(src);
+  if (!block) return aliases;
+  const pairRe = /'([a-z0-9-]+)'\s*:\s*'([a-z0-9-]+)'/g;
+  let m;
+  while ((m = pairRe.exec(block[1])) !== null) {
+    aliases[m[1]] = m[2];
+  }
+  return aliases;
+}
+
+// Links /local?id=<slug> declarados na fonte primária js/data/pontos-turisticos.js
+function parsePontosLocalLinks() {
+  if (!fs.existsSync(PONTOS_FILE)) return [];
+  const src = fs.readFileSync(PONTOS_FILE, 'utf8');
+  const links = [];
+  const entryRe = /\{[\s\S]*?\}/g;
+  let block;
+  while ((block = entryRe.exec(src)) !== null) {
+    const chunk = block[0];
+    const urlMatch = /url\s*:\s*["']\/local\?id=([a-z0-9-]+)["']/.exec(chunk);
+    if (!urlMatch) continue;
+    const idMatch = /id\s*:\s*["']([a-z0-9-]+)["']/.exec(chunk);
+    links.push({ id: idMatch ? idMatch[1] : null, targetSlug: urlMatch[1] });
+  }
+  return links;
+}
+
+// ── Verificação cruzada entre bases (locais-data.js × pontos-turisticos.js) ─────
+
+function analyzeCrossBase(locais, aliases, pontosLinks) {
+  const slugs = new Set(Object.keys(locais));
+  const aliasKeys = new Set(Object.keys(aliases));
+  const resolvable = (slug) => slugs.has(slug) || (aliasKeys.has(slug) && slugs.has(aliases[slug]));
+
+  const issues = [];
+  for (const link of pontosLinks) {
+    if (resolvable(link.targetSlug)) continue;
+    issues.push({
+      severity: 'high',
+      source: 'pontos-turisticos.js',
+      pontoId: link.id,
+      targetSlug: link.targetSlug,
+      message: `pontos-turisticos.js aponta para /local?id=${link.targetSlug}, mas esse id não existe em locais-data.js nem em locaisAliases — a ficha cairia em "Local não encontrado".`
+    });
+  }
+
+  // Aliases órfãos (apontam para um id inexistente)
+  for (const [alias, target] of Object.entries(aliases)) {
+    if (slugs.has(target)) continue;
+    issues.push({
+      severity: 'medium',
+      source: 'locais-data.js',
+      pontoId: alias,
+      targetSlug: target,
+      message: `Alias "${alias}" aponta para id canônico "${target}" que não existe em locaisData.`
+    });
+  }
+
+  return {
+    pontosLinksVerificados: pontosLinks.length,
+    aliasesVerificados: aliasKeys.size,
+    issues
+  };
 }
 
 // ── Análise ───────────────────────────────────────────────────────────────────
@@ -196,12 +266,32 @@ function analyzeLocais(locais) {
 
 function generateMarkdown(results, generatedAt) {
   const s = results.stats;
+  const cb = results.crossBase;
   const lines = [];
 
   lines.push('# Auditoria de Dados Turísticos');
   lines.push('');
   lines.push(`Gerado em ${generatedAt}.`);
   lines.push('');
+
+  if (cb) {
+    lines.push('## Consistência entre bases (locais-data.js × pontos-turisticos.js)');
+    lines.push('');
+    lines.push(`- Links \`/local?id=\` verificados em pontos-turisticos.js: ${cb.pontosLinksVerificados}`);
+    lines.push(`- Aliases verificados (locaisAliases): ${cb.aliasesVerificados}`);
+    if (!cb.issues.length) {
+      lines.push('- ✅ Nenhuma divergência de id entre as bases.');
+    } else {
+      lines.push(`- ❌ Divergências encontradas: ${cb.issues.length}`);
+      lines.push('');
+      lines.push('| Origem | Id | Alvo | Problema |');
+      lines.push('| --- | --- | --- | --- |');
+      for (const i of cb.issues) {
+        lines.push(`| ${i.source} | \`${i.pontoId || '-'}\` | \`${i.targetSlug}\` | ${i.message} |`);
+      }
+    }
+    lines.push('');
+  }
   lines.push('## Resumo');
   lines.push('');
   lines.push(`- Total de locais: **${results.total}**`);
@@ -290,6 +380,20 @@ async function main() {
   console.log(`[audit-tourism-data] ${slugCount} locais encontrados.`);
 
   const results = analyzeLocais(locais);
+
+  // Verificação cruzada de ids entre bases (detecta o tipo de divergência do Bloco S10).
+  const aliases = parseLocaisAliases();
+  const pontosLinks = parsePontosLocalLinks();
+  results.crossBase = analyzeCrossBase(locais, aliases, pontosLinks);
+  if (results.crossBase.issues.length) {
+    console.warn(`[audit-tourism-data] ⚠️  ${results.crossBase.issues.length} divergência(s) de id entre bases:`);
+    for (const i of results.crossBase.issues) {
+      console.warn(`  - ${i.message}`);
+    }
+  } else {
+    console.log('[audit-tourism-data] Consistência entre bases: OK (nenhum id divergente).');
+  }
+
   const generatedAt = new Date().toISOString();
   results.generatedAt = generatedAt;
 

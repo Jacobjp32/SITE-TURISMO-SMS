@@ -143,8 +143,8 @@ const locaisData = {
         acessibilidade: 'Área pública acessível.',
     },
 
-    'casa-memoria-padre-bauer': {
-        id: 'casa-memoria-padre-bauer',
+    'casa-da-memoria': {
+        id: 'casa-da-memoria',
         nome: 'Casa da Memória Padre Bauer',
         subtitulo: 'Museu · Memória · Patrimônio',
         badge: '🏛️ Museu',
@@ -364,5 +364,17 @@ const locaisData = {
 
 };
 
+/**
+ * Aliases de compatibilidade: slug legado → id canônico.
+ * Mantém funcionando links antigos sem duplicar dados nem poluir Object.keys(locaisData).
+ * 'casa-memoria-padre-bauer' foi o id usado no Bloco S8; o id canônico passou a ser
+ * 'casa-da-memoria' (alinhado à fonte primária js/data/pontos-turisticos.js e à pasta
+ * de imagens images/empreendimentos/casa-da-memoria/).
+ */
+const locaisAliases = {
+    'casa-memoria-padre-bauer': 'casa-da-memoria',
+};
+
 // Exporta para uso global
 window.locaisData = locaisData;
+window.locaisAliases = locaisAliases;

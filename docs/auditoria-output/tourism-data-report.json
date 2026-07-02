@@ -40,14 +40,14 @@
       "field": "mapsUrl",
       "severity": "info",
       "message": "mapsUrl: null — fallback por coordenada ativo (lat=-25.877, lng=-50.3835)",
-      "localId": "casa-memoria-padre-bauer",
+      "localId": "casa-da-memoria",
       "localNome": "Casa da Memória Padre Bauer"
     },
     {
       "field": "endereco",
       "severity": "medium",
       "message": "Campo \"endereco\" contém nota de pendência: \"Centro — São Mateus do Sul, PR (confirmar endereço)\"",
-      "localId": "casa-memoria-padre-bauer",
+      "localId": "casa-da-memoria",
       "localNome": "Casa da Memória Padre Bauer"
     },
     {
@@ -223,7 +223,7 @@
       ]
     },
     {
-      "id": "casa-memoria-padre-bauer",
+      "id": "casa-da-memoria",
       "nome": "Casa da Memória Padre Bauer",
       "hasCoordenadas": true,
       "mapsUrl": null,
@@ -377,5 +377,10 @@
       ]
     }
   ],
-  "generatedAt": "2026-06-29T13:09:24.926Z"
+  "crossBase": {
+    "pontosLinksVerificados": 7,
+    "aliasesVerificados": 1,
+    "issues": []
+  },
+  "generatedAt": "2026-07-02T12:04:13.589Z"
 }
