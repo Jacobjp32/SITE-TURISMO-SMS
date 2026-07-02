@@ -115,6 +115,13 @@
         </ul>
     </div>
 </nav>
+<nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo">
+    <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa">Mapa</a>
+    <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos">Eventos</a>
+    <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas">Rotas</a>
+    <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer">Comer</a>
+    <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar">Ficar</a>
+</nav>
 <div class="mobile-menu-overlay" id="menuOverlay"></div>
 <div class="search-modal" id="searchModal" aria-hidden="true">
     <div class="search-modal-dialog" id="searchDialog" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
@@ -165,6 +172,7 @@
     border-radius: 999px !important; padding: 0.65rem 1rem !important;
 }
 .nav-login-btn:hover { background: rgba(212,165,116,0.18) !important; border-color: rgba(212,165,116,0.5) !important; }
+.nav-mobile-shortcuts { display: none; }
 .dropdown-toggle .arrow { font-size: 0.55rem; transition: transform 0.3s; }
 .nav-links li:hover .dropdown-toggle .arrow, .nav-links li.dropdown-open .dropdown-toggle .arrow, .nav-links li:focus-within .dropdown-toggle .arrow { transform: rotate(180deg); }
 .dropdown-menu {
@@ -288,7 +296,7 @@ body.font-larger{font-size:140%!important;}
 }
 @media(max-width:768px){
   html,body{max-width:100%;overflow-x:hidden!important;}
-  body{padding-top:84px;}
+  body{padding-top:132px;}
   .accessibility-bar{position:static!important;padding:0.4rem 1rem!important;min-height:auto;height:auto;}
   .accessibility-bar .shortcuts{display:none;}
   .accessibility-bar .controls{width:100%;justify-content:center;}
@@ -297,13 +305,19 @@ body.font-larger{font-size:140%!important;}
   .nav-logo{min-width:0!important;max-width:calc(100vw - 6rem)!important;}
   .nav-logo img{height:50px!important;max-width:170px!important;}
   .nav-toggle{flex:0 0 44px!important;width:44px!important;height:44px!important;margin-left:auto!important;}
+  .nav-mobile-shortcuts{position:fixed;top:78px;left:0;right:0;z-index:9998;display:flex;gap:0.45rem;min-height:50px;padding:0.4rem 0.75rem 0.55rem;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;background:rgba(255,253,248,0.98);border-bottom:1px solid rgba(10,61,46,0.1);box-shadow:0 10px 24px rgba(10,61,46,0.08);}
+  .nav-mobile-shortcuts::-webkit-scrollbar{display:none;}
+  .nav-mobile-shortcuts a{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:0.55rem 0.85rem;border-radius:999px;background:rgba(10,61,46,0.08);color:#0a3d2e;font-size:0.88rem;font-weight:800;text-decoration:none;}
+  .nav-mobile-shortcuts a:focus-visible{outline:3px solid #d4a574;outline-offset:3px;}
   div[vw] [vw-access-button]{left:1rem!important;right:auto!important;bottom:calc(78px + env(safe-area-inset-bottom))!important;transform:scale(0.9)!important;transform-origin:left bottom!important;}
   div[vw] [vw-plugin-wrapper]{left:0!important;right:auto!important;max-width:calc(100vw - 1rem)!important;}
 }
 @media(max-width:420px){
+  body{padding-top:126px;}
   .nav{padding-right:0.8rem!important;}
   .nav-logo img{height:46px!important;max-width:150px!important;}
   .nav-toggle{flex-basis:42px!important;width:42px!important;height:42px!important;}
+  .nav-mobile-shortcuts{top:72px;}
 }
 @media (max-width: 968px) {
     .nav-toggle { display: flex !important; }

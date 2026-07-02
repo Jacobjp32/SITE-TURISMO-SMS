@@ -240,36 +240,36 @@
                 <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeAgendaMenu" aria-label="Abrir menu Agenda">
                         <span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span>
                     </button>
-                    <div class="dropdown-menu" role="menu">
-                        <a href="/eventos/" data-lang-key="nav-eventos">Eventos</a>
-                        <a href="/noticias" data-lang-key="nav-noticias-clean">Notícias</a>
+                    <div class="dropdown-menu" id="homeAgendaMenu" role="menu">
+                        <a href="/eventos/" role="menuitem" data-lang-key="nav-eventos">Eventos</a>
+                        <a href="/noticias" role="menuitem" data-lang-key="nav-noticias-clean">Notícias</a>
                     </div>
                 </li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homePlanMenu" aria-label="Abrir menu Planeje sua Visita">
                         <span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span>
                     </button>
-                    <div class="dropdown-menu" role="menu">
-                        <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
-                        <a href="/mapa-turistico.html" data-lang-key="nav-como-chegar">Como Chegar</a>
-                        <a href="#visitor-guide-title" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
-                        <a href="#weather-title" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
-                        <a href="#contato" data-lang-key="nav-contato">Contato</a>
+                    <div class="dropdown-menu" id="homePlanMenu" role="menu">
+                        <a href="/mapa-turistico.html?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                        <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
+                        <a href="#visitor-guide-title" role="menuitem" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
+                        <a href="#weather-title" role="menuitem" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
+                        <a href="#contato" role="menuitem" data-lang-key="nav-contato">Contato</a>
                     </div>
                 </li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeSobreMenu" aria-label="Abrir menu Sobre">
                         <span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span>
                     </button>
-                    <div class="dropdown-menu" role="menu">
-                        <a href="#sobre" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
-                        <a href="/mapa-turistico.html?categoria=Cultura" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
-                        <a href="/transparencia" data-lang-key="nav-institucional">Institucional</a>
+                    <div class="dropdown-menu" id="homeSobreMenu" role="menu">
+                        <a href="#sobre" role="menuitem" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
+                        <a href="/mapa-turistico.html?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
+                        <a href="/transparencia" role="menuitem" data-lang-key="nav-institucional">Institucional</a>
                     </div>
                 </li>
 
@@ -287,7 +287,7 @@
                 </li>
 
                 <li><div class="language-selector">
-                    <button class="current-language" id="currentLang">
+                    <button class="current-language" id="currentLang" type="button" aria-label="Selecionar idioma Português" aria-haspopup="true" aria-expanded="false">
                         <span class="flag">🇧🇷</span>
                         <span class="lang-code">PT</span>
                         <span class="dropdown-arrow">▼</span>
@@ -317,6 +317,14 @@
     
             
         </nav>
+
+    <nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo">
+        <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa">Mapa</a>
+        <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos">Eventos</a>
+        <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas">Rotas</a>
+        <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer">Comer</a>
+        <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar">Ficar</a>
+    </nav>
 
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu-overlay" id="mobileOverlay"></div>
@@ -409,8 +417,9 @@
     // });
     </script>
 
+    <main id="main-content" tabindex="-1">
     <!-- Map Hero -->
-    <section id="map-hero">
+    <section id="map-hero" aria-labelledby="home-hero-title">
         <div id="map" class="hero-video-frame" role="img" aria-label="Vista panorâmica de São Mateus do Sul">
             <video
                 class="hero-video"
@@ -432,36 +441,143 @@
         </div>
 
         <div class="map-info-panel">
-            <h1 data-lang-key="hero-title">São Mateus do Sul</h1>
-            <p data-lang-key="hero-map-desc">Descubra as rotas turísticas, a cultura polonesa e as belezas naturais da Capital Polonesa do Paraná.</p>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number" data-site-stat="withCoordinates">66</span>
-                    <span class="stat-label" data-lang-key="stat-pontos-mapa">Pontos no mapa</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-site-stat="totalItems">83</span>
-                    <span class="stat-label" data-lang-key="stat-locais-cadastrados">Locais cadastrados</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-site-stat="categoryCount">7</span>
-                    <span class="stat-label" data-lang-key="stat-categorias">Categorias</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" data-site-stat="routes">6</span>
-                    <span class="stat-label" data-lang-key="stat-rotas">Rotas Temáticas</span>
-                </div>
+            <h1 id="home-hero-title" data-lang-key="hero-title">Planeje sua visita a São Mateus do Sul</h1>
+            <p data-lang-key="hero-map-desc">Encontre pontos turísticos, rotas, gastronomia, hospedagem e eventos em um só lugar.</p>
+
+            <div class="hero-actions" aria-label="Ações principais">
+                <a href="/mapa-turistico.html" class="explore-btn hero-primary-cta" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
+                <a href="/eventos/" class="hero-secondary-cta" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
             </div>
 
-            <a href="/mapa-turistico.html?grupo=roteiros" class="explore-btn" data-lang-key="btn-ver-rotas">
-                Ver Todas as Rotas →
-            </a>
+            <div class="hero-quick-links" aria-label="Atalhos para planejar a visita">
+                <a href="/mapa-turistico.html?grupo=pontos-turisticos" data-lang-key="hero-chip-atracoes">Atrações</a>
+                <a href="/mapa-turistico.html?grupo=roteiros" data-lang-key="hero-chip-rotas">Rotas</a>
+                <a href="/mapa-turistico.html?categoria=Gastronomia" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
+                <a href="/mapa-turistico.html?categoria=Hospedagem" data-lang-key="hero-chip-ficar">Onde Ficar</a>
+                <a href="/mapa-turistico.html" data-lang-key="hero-chip-chegar">Como Chegar</a>
+            </div>
         </div>
+    </section>
 
-        <div class="scroll-indicator">
-            <span style="font-size: 2rem;">↓</span>
-            <p data-lang-key="scroll-explorar">Role para explorar mais</p>
+    <section class="home-trust-strip" aria-label="Resumo do mapa turístico">
+        <div class="home-trust-grid">
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="withCoordinates">66</span>
+                <span class="stat-label" data-lang-key="stat-pontos-mapa">Pontos no mapa</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="totalItems">83</span>
+                <span class="stat-label" data-lang-key="stat-locais-cadastrados">Locais cadastrados</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="categoryCount">7</span>
+                <span class="stat-label" data-lang-key="stat-categorias">Categorias</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="routes">6</span>
+                <span class="stat-label" data-lang-key="stat-rotas">Rotas Temáticas</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Acontece em breve -->
+    <section id="eventos" class="home-upcoming-section" aria-labelledby="home-upcoming-title">
+        <div class="home-section-container">
+            <div class="home-section-heading">
+                <div>
+                    <span class="section-label" data-lang-key="home-upcoming-label">Agenda turística</span>
+                    <h2 id="home-upcoming-title" class="section-title" data-lang-key="section-proximos-eventos">Acontece em breve</h2>
+                    <p class="section-subtitle" data-lang-key="section-eventos-desc">Eventos, feiras e experiências para incluir no seu roteiro.</p>
+                </div>
+                <a href="/eventos" class="home-section-link" data-lang-key="btn-ver-calendario">Ver calendário completo</a>
+            </div>
+
+            <div id="proximosEventosHome" class="home-upcoming-grid" aria-live="polite">
+                <p class="home-events-status" data-lang-key="loading-eventos">Carregando eventos...</p>
+            </div>
+
+            <div class="home-recurring-events" aria-labelledby="home-recurring-title">
+                <h3 id="home-recurring-title" data-lang-key="section-eventos-fixos">Experiências recorrentes</h3>
+                <div class="home-recurring-grid">
+                    <a href="/eventos" class="home-recurring-card">
+                        <strong data-lang-key="ev-feira-gastro">Feira Gastronômica</strong>
+                        <span data-lang-key="ev-feira-gastro-horario">Qua e Sex • 17h-22h</span>
+                        <small data-lang-key="ev-local-mathe">Rua do Mathe</small>
+                    </a>
+                    <a href="/eventos" class="home-recurring-card">
+                        <strong data-lang-key="ev-feira-produtor">Feira do Produtor</strong>
+                        <span data-lang-key="ev-feira-produtor-horario">Sábados • 7h-12h</span>
+                        <small data-lang-key="ev-local-mathe">Rua do Mathe</small>
+                    </a>
+                    <a href="/eventos" class="home-recurring-card">
+                        <strong data-lang-key="ev-roda-mathe">Roda de Mathe</strong>
+                        <span data-lang-key="ev-roda-mathe-horario">1º Domingo • 9h</span>
+                        <small data-lang-key="ev-local-chimarrodromo">Chimarródromo</small>
+                    </a>
+                    <a href="/eventos" class="home-recurring-card">
+                        <strong data-lang-key="ev-feira-lua">Feira da Lua</strong>
+                        <span data-lang-key="ev-feira-lua-horario">2ª Terça • 17h-22h</span>
+                        <small data-lang-key="ev-local-vila">Vila Pinheirinho</small>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Prévia do mapa turístico -->
+    <section class="reviews-section home-map-preview" aria-labelledby="home-map-preview-title">
+        <div class="reviews-container">
+            <div class="section-header">
+                <span class="section-label" data-lang-key="reviews-badge">Mapa turístico</span>
+                <h2 id="home-map-preview-title" class="section-title" data-lang-key="reviews-titulo-html">Explore pelo mapa turístico</h2>
+                <p class="section-subtitle" data-lang-key="reviews-desc">
+                    Escolha uma categoria e monte seu roteiro pela cidade.
+                </p>
+            </div>
+
+            <div class="experience-links-grid">
+                <a href="/mapa-turistico.html?grupo=pontos-turisticos" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">P</span>
+                    <h3 data-lang-key="experience-card-1-title">Pontos turísticos</h3>
+                    <p data-lang-key="experience-card-1-desc">Comece pelas atrações principais e veja os locais cadastrados no mapa.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+                <a href="/mapa-turistico.html?categoria=Cultura" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">C</span>
+                    <h3 data-lang-key="experience-card-2-title">Cultura polonesa</h3>
+                    <p data-lang-key="experience-card-2-desc">Igrejas, patrimônio, memória da imigração e referências culturais.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+                <a href="/mapa-turistico.html?categoria=Gastronomia" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">S</span>
+                    <h3 data-lang-key="experience-card-3-title">Erva-mate e sabores</h3>
+                    <p data-lang-key="experience-card-3-desc">Encontre gastronomia, feiras e experiências ligadas ao mate.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+                <a href="/mapa-turistico.html?categoria=Natureza" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">N</span>
+                    <h3 data-lang-key="experience-card-4-title">Rio Iguaçu e natureza</h3>
+                    <p data-lang-key="experience-card-4-desc">Praças, paisagens, áreas de contemplação e pontos ligados ao rio.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+                <a href="/mapa-turistico.html?categoria=Hospedagem" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">H</span>
+                    <h3 data-lang-key="experience-card-5-title">Hospedagem</h3>
+                    <p data-lang-key="experience-card-5-desc">Veja opções para montar a estadia junto do restante da visita.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+                <a href="/mapa-turistico.html?categoria=Eventos" class="experience-link-card">
+                    <span class="experience-link-icon" aria-hidden="true">E</span>
+                    <h3 data-lang-key="experience-card-6-title">Eventos</h3>
+                    <p data-lang-key="experience-card-6-desc">Cruze a programação da cidade com pontos e roteiros turísticos.</p>
+                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa</span>
+                </a>
+            </div>
+
+            <div class="experience-links-summary">
+                <p data-lang-key="experience-summary">O mapa concentra atrações, rotas, gastronomia, hospedagem e eventos.</p>
+                <a href="/mapa-turistico.html" class="explore-btn experience-summary-btn" data-lang-key="experience-summary-cta">Abrir mapa completo</a>
+            </div>
         </div>
     </section>
 
@@ -609,10 +725,10 @@
                 </div>
             </div>
             
-            <h1 data-lang-key="sobre-titulo">
+            <h2 data-lang-key="sobre-titulo">
                 São Mateus do Sul:<br>
                 Onde a <strong>Tradição</strong> Encontra o <strong>Futuro</strong>
-            </h1>
+            </h2>
             
             <p class="about-hero-subtitle" data-lang-key="sobre-subtitulo">
                 Banhada pelo lendário Rio Iguaçu, nossa cidade é o encontro harmonioso entre 
@@ -946,65 +1062,6 @@
         </div>
     </section>
 
-    <!-- PRÓXIMOS EVENTOS (reposicionado: antes do Contato para melhorar jornada do visitante) -->
-    <section id="eventos" style="background: linear-gradient(180deg, #f8f6f0 0%, #fff 100%); padding: 5rem 2rem;">
-        <div style="max-width: 1200px; margin: 0 auto;">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem; flex-wrap: wrap; gap: 1.5rem;">
-                <div>
-                    <span style="display: inline-block; background: #d4a574; color: #0a3d2e; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;" data-lang-key="label-calendario">Calendário 2026</span>
-                    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: #0a3d2e; margin-bottom: 0.5rem;" data-lang-key="section-proximos-eventos">Próximos Eventos</h2>
-                    <p style="color: #666; font-size: 1.1rem;" data-lang-key="section-eventos-desc">Festas, feiras e celebrações da Capital Polonesa</p>
-                </div>
-                <a href="/eventos" style="display: inline-flex; align-items: center; gap: 0.5rem; padding: 1rem 2rem; background: #0a3d2e; color: white; text-decoration: none; border-radius: 30px; font-weight: 500; transition: all 0.3s;" data-lang-key="btn-ver-calendario">
-                    Ver Calendário Completo →
-                </a>
-            </div>
-
-            <div id="proximosEventosHome" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
-                <p style="grid-column: 1/-1; text-align: center; color: #666;" data-lang-key="loading-eventos">Carregando eventos...</p>
-            </div>
-
-            <!-- Eventos Recorrentes -->
-            <div style="background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 5px 30px rgba(0,0,0,0.08);">
-                <h3 style="font-family: 'Cormorant Garamond', serif; color: #0a3d2e; margin-bottom: 1.5rem; font-size: 1.5rem;" data-lang-key="section-eventos-fixos">📅 Eventos Semanais Fixos</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🍽️</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-gastro">Feira Gastronômica</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-gastro-horario">Qua e Sex • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🥬</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-produtor">Feira do Produtor</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-produtor-horario">Sábados • 7h-12h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-mathe">Rua do Mathe</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🧉</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-roda-mathe">Roda de Mathe</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-roda-mathe-horario">1º Domingo • 9h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-chimarrodromo">Chimarródromo</span>
-                        </div>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: #f8f6f0; border-radius: 12px;">
-                        <span style="font-size: 2rem;">🌙</span>
-                        <div>
-                            <strong style="color: #0a3d2e;" data-lang-key="ev-feira-lua">Feira da Lua</strong>
-                            <p style="font-size: 0.85rem; color: #666; margin: 0;" data-lang-key="ev-feira-lua-horario">2ª Terça • 17h-22h</p>
-                            <span style="font-size: 0.75rem; color: #999;" data-lang-key="ev-local-vila">Vila Pinheirinho</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- ONDE FICAR (reposicionado: antes do Contato para melhorar jornada do visitante) -->
     <section class="section-where-stay" id="onde-ficar">
         <div class="container">
@@ -1071,65 +1128,6 @@
                         <p data-lang-key="hotel4-loc">📍 Área Rural</p>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experiências conectadas ao mapa -->
-    <section class="reviews-section">
-        <div class="reviews-container">
-            <div class="section-header">
-                <span class="section-label" data-lang-key="reviews-badge">Experiências no mapa</span>
-                <h2 class="section-title">
-                    <span data-lang-key="reviews-titulo-html">Experiências para viver em <strong>São Mateus do Sul</strong></span>
-                </h2>
-                <p class="section-subtitle" data-lang-key="reviews-desc">
-                    Use o mapa turístico como base para combinar roteiros, cultura, natureza, sabores, hospedagem e agenda em uma mesma visita.
-                </p>
-            </div>
-
-            <div class="experience-links-grid">
-                <a href="/mapa-turistico.html?grupo=roteiros" class="experience-link-card">
-                    <span class="experience-link-icon">🗺️</span>
-                    <h3 data-lang-key="experience-card-1-title">Roteiros no mapa</h3>
-                    <p data-lang-key="experience-card-1-desc">Comece pelos caminhos temáticos e descubra os locais relacionados em uma leitura única do destino.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-                <a href="/mapa-turistico.html?categoria=Cultura" class="experience-link-card">
-                    <span class="experience-link-icon">🇵🇱</span>
-                    <h3 data-lang-key="experience-card-2-title">Cultura polonesa</h3>
-                    <p data-lang-key="experience-card-2-desc">Igrejas, patrimônio, memória da imigração e referências culturais concentradas em um só fluxo.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-                <a href="/mapa-turistico.html?categoria=Gastronomia" class="experience-link-card">
-                    <span class="experience-link-icon">🧉</span>
-                    <h3 data-lang-key="experience-card-3-title">Erva-mate e sabores</h3>
-                    <p data-lang-key="experience-card-3-desc">Use a categoria de gastronomia para encontrar experiências ligadas ao mate, feiras e comida local.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-                <a href="/mapa-turistico.html?categoria=Natureza" class="experience-link-card">
-                    <span class="experience-link-icon">🌊</span>
-                    <h3 data-lang-key="experience-card-4-title">Rio Iguaçu e natureza</h3>
-                    <p data-lang-key="experience-card-4-desc">Praças, paisagens, áreas de contemplação e pontos ligados à presença do rio no território.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-                <a href="/mapa-turistico.html?categoria=Hospedagem" class="experience-link-card">
-                    <span class="experience-link-icon">🛏️</span>
-                    <h3 data-lang-key="experience-card-5-title">Hospedagem</h3>
-                    <p data-lang-key="experience-card-5-desc">Veja hotéis, pousadas e opções para montar a estadia já conectada ao restante da visita.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-                <a href="/mapa-turistico.html?categoria=Eventos" class="experience-link-card">
-                    <span class="experience-link-icon">📅</span>
-                    <h3 data-lang-key="experience-card-6-title">Eventos e agenda</h3>
-                    <p data-lang-key="experience-card-6-desc">Cruze a programação da cidade com os pontos e roteiros para planejar melhor o tempo de visita.</p>
-                    <span class="experience-link-cta" data-lang-key="experience-card-cta">Abrir no mapa →</span>
-                </a>
-            </div>
-
-            <div class="experience-links-summary">
-                <p data-lang-key="experience-summary">A exploração turística principal agora está concentrada no Mapa Turístico Interativo.</p>
-                <a href="/mapa-turistico.html" class="explore-btn experience-summary-btn" data-lang-key="experience-summary-cta">Explorar mapa completo →</a>
             </div>
         </div>
     </section>
@@ -1388,8 +1386,6 @@
 
     <!-- Estilo CSS para galeria -->
 
-    <!-- Footer -->
-
     <!-- ONDE FICAR original removido daqui — bloco reposicionado antes dos Depoimentos -->
     <section class="section-where-stay" id="onde-ficar-placeholder" style="display:none" aria-hidden="true">
         <div class="container">
@@ -1466,6 +1462,8 @@
             </div>
         </div>
     </section>
+
+    </main>
 
     
     <!-- BOTÃO VOLTAR AO TOPO -->
@@ -1858,8 +1856,8 @@
                 'hero-cta': 'Explorar',
                 'label-calendario': 'Calendário 2026',
                 'section-eventos': 'Próximos Eventos',
-                'section-eventos-desc': 'Festas, feiras e celebrações da Capital Polonesa',
-                'btn-ver-calendario': 'Ver Calendário Completo →',
+                'section-eventos-desc': 'Eventos, feiras e experiências para incluir no seu roteiro.',
+                'btn-ver-calendario': 'Ver calendário completo',
                 'loading-eventos': 'Carregando eventos...',
                 'section-eventos-semanais': '📅 Eventos Semanais Fixos',
                 'section-onde-ficar': 'Onde Ficar',
@@ -1890,8 +1888,8 @@
                 'hero-cta': 'Explore',
                 'label-calendario': 'Calendar 2026',
                 'section-eventos': 'Upcoming Events',
-                'section-eventos-desc': 'Festivals, fairs and celebrations of the Polish Capital',
-                'btn-ver-calendario': 'View Full Calendar →',
+                'section-eventos-desc': 'Events, fairs and experiences to add to your route.',
+                'btn-ver-calendario': 'View full calendar',
                 'loading-eventos': 'Loading events...',
                 'section-eventos-semanais': '📅 Weekly Events',
                 'section-onde-ficar': 'Where to Stay',
@@ -1922,8 +1920,8 @@
                 'hero-cta': 'Explorar',
                 'label-calendario': 'Calendario 2026',
                 'section-eventos': 'Próximos Eventos',
-                'section-eventos-desc': 'Fiestas, ferias y celebraciones de la Capital Polaca',
-                'btn-ver-calendario': 'Ver Calendario Completo →',
+                'section-eventos-desc': 'Eventos, ferias y experiencias para incluir en tu ruta.',
+                'btn-ver-calendario': 'Ver calendario completo',
                 'loading-eventos': 'Cargando eventos...',
                 'section-eventos-semanais': '📅 Eventos Semanales',
                 'section-onde-ficar': 'Dónde Hospedarse',
@@ -1954,8 +1952,8 @@
                 'hero-cta': 'Odkryj',
                 'label-calendario': 'Kalendarz 2026',
                 'section-eventos': 'Nadchodzące wydarzenia',
-                'section-eventos-desc': 'Festiwale, targi i uroczystości Polskiej Stolicy',
-                'btn-ver-calendario': 'Zobacz pełny kalendarz →',
+                'section-eventos-desc': 'Wydarzenia, targi i doświadczenia do dodania do trasy.',
+                'btn-ver-calendario': 'Zobacz pełny kalendarz',
                 'loading-eventos': 'Ładowanie wydarzeń...',
                 'section-eventos-semanais': '📅 Wydarzenia tygodniowe',
                 'section-onde-ficar': 'Gdzie się zatrzymać',
@@ -2261,6 +2259,15 @@
             document.body.classList.add('high-contrast');
         }
 
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.querySelectorAll('.hero-video').forEach(function(video) {
+                try {
+                    video.pause();
+                    video.removeAttribute('autoplay');
+                } catch (erro) {}
+            });
+        }
+
         // ============================================
         // CARREGAR PRÓXIMOS EVENTOS
         // ============================================
@@ -2277,6 +2284,7 @@
 
         const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+        const statusBloqueados = new Set(['pendente', 'pending', 'rejeitado', 'rejected', 'rascunho', 'draft']);
 
         function esc(value) {
             return String(value || '').replace(/[&<>"']/g, function(ch) {
@@ -2284,50 +2292,101 @@
             });
         }
 
+        function normalizarTexto(value) {
+            return String(value || '').trim().toLowerCase();
+        }
+
+        function statusPublico(evento) {
+            const status = normalizarTexto(evento && evento.status);
+            if (statusBloqueados.has(status)) return false;
+            return !status || status === 'aprovado' || status === 'approved' || evento.publicado === true || evento._fonte === 'static';
+        }
+
+        function normalizarData(value) {
+            if (!value) return '';
+            if (typeof value === 'object' && typeof value.toDate === 'function') {
+                return value.toDate().toISOString().slice(0, 10);
+            }
+            if (typeof value === 'object' && typeof value.seconds === 'number') {
+                return new Date(value.seconds * 1000).toISOString().slice(0, 10);
+            }
+            return String(value).slice(0, 10);
+        }
+
+        function obterDataEvento(evento) {
+            const dataStr = normalizarData(evento && (evento.data || evento.dataInicio || evento.startDate || evento.inicio));
+            if (!/^\d{4}-\d{2}-\d{2}$/.test(dataStr)) return null;
+            const data = new Date(dataStr + 'T12:00:00');
+            return Number.isNaN(data.getTime()) ? null : data;
+        }
+
+        function eventoComVinculo(evento) {
+            return Boolean(evento && (
+                evento.estabelecimentoId ||
+                evento.empreendimentoId ||
+                evento.localId ||
+                evento.mapaId ||
+                evento.placeId ||
+                evento.businessId
+            ));
+        }
+
+        function renderFallback() {
+            container.innerHTML = `
+                <div class="home-events-fallback">
+                    <strong data-lang-key="home-events-fallback-title">Consulte as experiências recorrentes</strong>
+                    <p data-lang-key="home-events-fallback-desc">Não há eventos futuros com data segura para destacar agora. Veja as feiras e experiências conhecidas abaixo ou abra o calendário completo.</p>
+                    <a href="/eventos" data-lang-key="btn-ver-calendario">Ver calendário completo</a>
+                </div>
+            `;
+            if (window.applyTranslations) {
+                window.applyTranslations(localStorage.getItem('sms-lang') || 'pt');
+            }
+        }
+
         function renderEventos(eventos) {
-            // Filtrar futuros com destaque ou não recorrentes
-            const filtrados = eventos
-                .filter(e => {
-                    const d = new Date((e.data || e.dataInicio || '') + 'T12:00:00');
-                    return d >= hoje && (e.destaque || !e.recorrente);
+            const filtrados = (eventos || [])
+                .map(evento => Object.assign({}, evento, { _dataObj: obterDataEvento(evento) }))
+                .filter(evento => evento._dataObj && evento._dataObj >= hoje && statusPublico(evento))
+                .sort((a, b) => {
+                    const diff = a._dataObj - b._dataObj;
+                    if (diff !== 0) return diff;
+                    return Number(eventoComVinculo(b)) - Number(eventoComVinculo(a));
                 })
-                .sort((a, b) => new Date((a.data||a.dataInicio)+'T12:00:00') - new Date((b.data||b.dataInicio)+'T12:00:00'))
-                .slice(0, 6);
+                .slice(0, 4);
 
             if (!filtrados.length) {
-                container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#999;">Nenhum evento em destaque no momento.</p>';
+                renderFallback();
                 return;
             }
 
             container.innerHTML = filtrados.map(evento => {
                 const titulo = esc(evento.titulo || evento.nome || 'Evento');
-                const dataStr = evento.data || evento.dataInicio || '';
-                const data = new Date(dataStr + 'T12:00:00');
+                const data = evento._dataObj;
                 const dia = data.getDate();
                 const mes = meses[data.getMonth() + 1];
                 const diaSemana = diasSemana[data.getDay()];
-                const isDestaque = evento.destaque;
-                const fonte = evento._fonte === 'firebase' ? ' ✨' : '';
+                const categoria = esc(evento.categoria || 'Evento');
+                const horario = esc(evento.horario || evento.hora || '');
+                const local = esc(evento.local || evento.localNome || evento.venue || '');
+                const mapUrl = evento.mapUrl || evento.mapaUrl || '';
+                const detalheUrl = mapUrl || evento.url || '/eventos';
+                const cta = mapUrl ? 'Abrir no mapa' : 'Ver detalhes';
 
                 return `
-                    <a href="/eventos" style="background: white; border-radius: 16px; overflow: hidden; box-shadow: 0 5px 25px rgba(0,0,0,0.08); transition: transform 0.3s, box-shadow 0.3s; text-decoration: none; ${isDestaque ? 'border: 2px solid #d4a574;' : ''}">
-                        <div style="background: ${isDestaque ? 'linear-gradient(135deg, #0a3d2e, #0a5d3e)' : '#0a3d2e'}; color: white; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-                            <div style="text-align: center; min-width: 55px;">
-                                <div style="font-size: 1.8rem; font-weight: 700; line-height: 1;">${dia}</div>
-                                <div style="font-size: 0.75rem; text-transform: uppercase; opacity: 0.9;">${mes}</div>
-                            </div>
-                            <div>
-                                <h4 style="font-size: 1rem; margin: 0 0 0.25rem 0; color: white;">${isDestaque ? '⭐ ' : ''}${titulo}${fonte}</h4>
-                                <span style="font-size: 0.8rem; opacity: 0.8;">${esc(diaSemana)}</span>
-                            </div>
+                    <article class="home-event-card">
+                        <div class="home-event-date" aria-label="${dia} de ${mes}">
+                            <strong>${dia}</strong>
+                            <span>${mes}</span>
                         </div>
-                        <div style="padding: 1.25rem;">
-                            <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; color: #666;">
-                                <span>🕐 ${esc(evento.horario)}</span>
-                                <span>📍 ${esc(evento.local)}</span>
-                            </div>
+                        <div class="home-event-body">
+                            <span class="home-event-badge">${categoria}</span>
+                            <h3>${titulo}</h3>
+                            <p>${esc(diaSemana)}${horario ? ' · ' + horario : ''}</p>
+                            ${local ? '<p class="home-event-place">' + local + '</p>' : ''}
+                            <a href="${esc(detalheUrl)}" class="home-event-link">${esc(cta)}</a>
                         </div>
-                    </a>
+                    </article>
                 `;
             }).join('');
         }
@@ -2335,22 +2394,16 @@
         try {
             // 1. Carregar JSON estático primeiro (rápido)
             const jsonRes = await fetch('eventos-2026.json');
-            const jsonEventos = await jsonRes.json();
+            const jsonEventos = (await jsonRes.json()).map(evento => Object.assign({ _fonte: 'static' }, evento));
             renderEventos(jsonEventos); // exibe imediatamente
 
             // 2. Tentar enriquecer com Firebase
             try {
                 const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
                 const { initModularAppCheck } = await import('./js/firebase-app-check.js');
-                const firebaseConfig = {
-                    apiKey: 'AIzaSyAy5161iVe7JoLgLMp1EN52OsBHXjo3JYQ',
-                    authDomain: 'turismo-sms.firebaseapp.com',
-                    projectId: 'turismo-sms',
-                    storageBucket: 'turismo-sms.firebasestorage.app',
-                    messagingSenderId: '1042825829044',
-                    appId: '1:1042825829044:web:13173093e28be3199955e1'
-                };
+                const firebaseConfig = window.CONFIG && window.CONFIG.firebase;
+                if (!firebaseConfig) throw new Error('CONFIG.firebase ausente');
                 const existingApp = getApps().find(a => a.name === 'home-eventos');
                 const app = existingApp || initializeApp(firebaseConfig, 'home-eventos');
                 await initModularAppCheck(app);
@@ -2362,16 +2415,23 @@
                         return {
                             id: 90000 + i,
                             titulo: e.nome || e.titulo || 'Evento',
-                            data: e.data || e.dataInicio || '',
-                            horario: e.horario || '',
-                            local: e.local || '',
+                            data: normalizarData(e.data || e.dataInicio || e.startDate || e.inicio),
+                            horario: e.horario || e.hora || '',
+                            local: e.local || e.localNome || e.venue || '',
                             categoria: e.categoria || 'cultural',
                             descricao: e.descricao || '',
                             destaque: e.destaque || false,
                             recorrente: false,
+                            status: e.status,
+                            publicado: e.publicado,
+                            estabelecimentoId: e.estabelecimentoId,
+                            empreendimentoId: e.empreendimentoId,
+                            localId: e.localId,
+                            mapaId: e.mapaId,
+                            mapUrl: e.mapUrl || e.mapaUrl || '',
                             _fonte: 'firebase'
                         };
-                    });
+                    }).filter(statusPublico);
                     renderEventos([...jsonEventos, ...fbEventos]); // re-renderiza com Firebase
                     console.log(`✅ Home: ${fbEventos.length} eventos do Firebase mesclados`);
                 }
@@ -2380,7 +2440,7 @@
             }
         } catch (error) {
             console.error('Erro ao carregar eventos:', error);
-            container.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">Não foi possível carregar os eventos.</p>';
+            renderFallback();
         }
     }
     
