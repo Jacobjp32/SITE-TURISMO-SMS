@@ -75,17 +75,17 @@
             'quais opcoes':     'Posso te ajudar com: 🗺️\n\n🧉 Rotas turísticas (6 no total)\n🏨 Hospedagem (hotéis e pousadas rurais)\n🍽️ Gastronomia polonesa e feiras\n⛪ Pontos históricos e igrejas\n🌊 Natureza e Rio Iguaçu\n📅 Eventos e festas 2026\n\nO que você quer saber?',
             // Natureza e trilhas
             'natureza':         'Opções de natureza em São Mateus do Sul: 🌿\n\n🌊 Rio Iguaçu — passeios de barco e canoagem\n🌳 Praça do Rio Iguaçu — deck e contemplação\n🚶 Trilhas nas colônias rurais\n🐟 Pesca esportiva\n🌄 Paisagens da zona rural polonesa\n\nA Rota das Águas é a mais indicada para quem busca contato com a natureza!',
-            'trilha':           'As trilhas de São Mateus do Sul passam pelas colônias rurais polonesas — paisagens incríveis! 🌿\n\nA Rota das Águas e a Rota da Terra incluem caminhos rurais com contato direto com a natureza. Para detalhes de percursos, entre em contato: (42) 3532-0000.',
-            'trilhas':          'As trilhas de São Mateus do Sul passam pelas colônias rurais polonesas — paisagens incríveis! 🌿\n\nA Rota das Águas e a Rota da Terra incluem caminhos rurais com contato direto com a natureza. Para detalhes de percursos, entre em contato: (42) 3532-0000.',
+            'trilha':           'As trilhas de São Mateus do Sul passam pelas colônias rurais polonesas — paisagens incríveis! 🌿\n\nA Rota das Águas e a Rota da Terra incluem caminhos rurais com contato direto com a natureza. Para detalhes de percursos, entre em contato: (42) 3532-4163.',
+            'trilhas':          'As trilhas de São Mateus do Sul passam pelas colônias rurais polonesas — paisagens incríveis! 🌿\n\nA Rota das Águas e a Rota da Terra incluem caminhos rurais com contato direto com a natureza. Para detalhes de percursos, entre em contato: (42) 3532-4163.',
             'rio':              'O Rio Iguaçu é o cartão postal de São Mateus do Sul! 🌊\n\n• Passeios de barco\n• Canoagem\n• Pesca esportiva\n• Praça do Rio Iguaçu (deck, playground)\n• Vista panorâmica da ponte de entrada\n\nUm dos programas mais procurados pelos visitantes!',
-            'barco':            'Passeios de barco no Rio Iguaçu! 🚢\nUm dos passeios mais procurados. Para reservas e horários, entre em contato: (42) 3532-0000.',
-            'pesca':            'O Rio Iguaçu é excelente para pesca esportiva! 🎣\nConsulte regulamentações e períodos permitidos na Secretaria de Turismo: (42) 3532-0000.',
+            'barco':            'Passeios de barco no Rio Iguaçu! 🚢\nUm dos passeios mais procurados. Para reservas e horários, entre em contato: (42) 3532-4163.',
+            'pesca':            'O Rio Iguaçu é excelente para pesca esportiva! 🎣\nConsulte regulamentações e períodos permitidos na Secretaria de Turismo: (42) 3532-4163.',
             // Pousadas e hospedagem com natureza
-            'pousada':          'Temos pousadas rurais nas colônias polonesas! 🏡\n\n• Café colonial incluso\n• Contato direto com a natureza\n• Paisagens rurais da imigração polonesa\n• Tranquilidade longe do centro\n\nConsulte a página "Onde Ficar" ou ligue: (42) 3532-0000 para indicações.',
+            'pousada':          'Temos pousadas rurais nas colônias polonesas! 🏡\n\n• Café colonial incluso\n• Contato direto com a natureza\n• Paisagens rurais da imigração polonesa\n• Tranquilidade longe do centro\n\nConsulte a página "Onde Ficar" ou ligue: (42) 3532-4163 para indicações.',
             'hotel':            'Opções de hospedagem em São Mateus do Sul: 🏨\n\n🏨 Hotel São Mateus — centro, café colonial\n🏨 Hotel Nora — aconchegante, central\n🏨 Hotel Dom Leopoldo — gastronomia polonesa\n🏡 Pousadas Rurais — contato com a natureza\n\nVisite a página "Onde Ficar" para contatos e detalhes!',
             'hospedagem':       'Temos hotéis no centro e pousadas rurais nas colônias! 🏨\nConsulte a página "Onde Ficar" para ver todas as opções.',
-            'onde dormir':      'Opções de hospedagem: 🏨\n\n🏨 Hotéis no centro (São Mateus, Nora, Dom Leopoldo)\n🏡 Pousadas rurais nas colônias polonesas\n\nVisite a página "Onde Ficar" ou ligue: (42) 3532-0000.',
-            'onde ficar':       'Opções de hospedagem: 🏨\n\n🏨 Hotéis no centro (São Mateus, Nora, Dom Leopoldo)\n🏡 Pousadas rurais nas colônias polonesas\n\nVisite a página "Onde Ficar" ou ligue: (42) 3532-0000.',
+            'onde dormir':      'Opções de hospedagem: 🏨\n\n🏨 Hotéis no centro (São Mateus, Nora, Dom Leopoldo)\n🏡 Pousadas rurais nas colônias polonesas\n\nVisite a página "Onde Ficar" ou ligue: (42) 3532-4163.',
+            'onde ficar':       'Opções de hospedagem: 🏨\n\n🏨 Hotéis no centro (São Mateus, Nora, Dom Leopoldo)\n🏡 Pousadas rurais nas colônias polonesas\n\nVisite a página "Onde Ficar" ou ligue: (42) 3532-4163.',
             'acomodacao':       'Temos hotéis no centro e pousadas rurais! 🏨 Consulte a página "Onde Ficar" para detalhes.',
             // Atrações
             'atracoes':         'São Mateus do Sul tem muitas atrações! 🏛️\n\n• Igreja Matriz neogótica\n• Rio Iguaçu (barco, canoagem)\n• Rua do Mathe (erva-mate)\n• Igrejas polonesas históricas\n• Praça do Rio Iguaçu\n• Usina de Xisto (SIX/Petrobras)',
@@ -109,7 +109,7 @@
             'cultura':          'A cultura polonesa de São Mateus do Sul é viva e autêntica! 🇵🇱\n\n• Igrejas e capelas centenárias\n• Gastronomia típica preservada\n• Grupos folclóricos (Karolinka)\n• Festas tradicionais o ano todo\n• Arquitetura rural de madeira',
             'polskie':          'A 7ª Polskie Smaki será em 29/08/2026! 🇵🇱\nDesfile na Av. Ozy Mendonça, comidas polonesas na Rua do Mathe e Concurso Papa Pierogi.',
             'pierogi':          'O Baile do Pierogi é em 25/04/2026 no CEPOM! 🥟\nAbertura da Vodka Polonesa, escolha da rainha e o tradicional pierogi ao molho.',
-            'xisto':            'A Usina de Xisto (SIX) da Petrobras é um dos pontos de turismo industrial de São Mateus do Sul! ⚡\nUma das mais avançadas unidades de processamento de xisto betuminoso do mundo. Consulte visitas: (42) 3532-0000.',
+            'xisto':            'A Usina de Xisto (SIX) da Petrobras é um dos pontos de turismo industrial de São Mateus do Sul! ⚡\nUma das mais avançadas unidades de processamento de xisto betuminoso do mundo. Consulte visitas: (42) 3532-4163.',
             // Gastronomia
             'restaurante':      'Nossa gastronomia mistura tradições polonesas e coloniais! 🍽️\n\n🥟 Pierogi — pastel polonês recheado\n🥬 Gołąbki — repolho recheado\n🧀 Queijos artesanais defumados\n🍞 Pães coloniais de fermentação natural\n🍓 Morangos frescos\n🧉 Chimarrão com erva-mate IG\n\nVisite a página "Sabores" para restaurantes e feiras!',
             'restaurantes':     'Para comer bem em São Mateus do Sul: 🍽️\n\n• Restaurantes com culinária polonesa no centro\n• Feira Gastronômica na Rua do Mathe (qua e sex, 17h-22h)\n• Feira do Produtor (sáb, 7h-12h)\n• Café colonial nas pousadas rurais\n\nConsulte a página "Sabores" para lista completa!',
@@ -133,11 +133,11 @@
             'dezembro':         'Em dezembro temos o Natal Ouro Verde (6-20/12)! 🎄\nDesfiles temáticos, shows, chegada do Papai Noel e feira gastronômica.',
             'cordeiro':         'Festival do Cordeiro: 7 a 9/08/2026! 🐑\nGastronomia de cordeiro, shows nativistas e exposição de ovinos.',
             // Contato
-            'contato':          '📞 (42) 3532-0000\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Chalé da Cultura — Praça do Rio Iguaçu\n⏰ Seg-Sex: 8h-17h | Sáb: 9h-13h',
-            'telefone':         '📞 Secretaria de Turismo: (42) 3532-0000',
+            'contato':          '📞 (42) 3532-4163\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Chalé da Cultura — Praça do Rio Iguaçu\n⏰ Seg-Sex: 8h-12h e 13h-16h',
+            'telefone':         '📞 Secretaria de Turismo: (42) 3532-4163',
             'email':            '📧 turismo@saomateusdosul.pr.gov.br',
-            'secretaria':       '📞 Secretaria de Cultura e Turismo: (42) 3532-0000\n📧 turismo@saomateusdosul.pr.gov.br\n⏰ Seg-Sex: 8h-17h | Sáb: 9h-13h',
-            'falar':            '📞 Para falar com a Secretaria de Turismo: (42) 3532-0000\n⏰ Seg-Sex: 8h-17h | Sáb: 9h-13h',
+            'secretaria':       '📞 Secretaria de Cultura e Turismo: (42) 3532-4163\n📧 turismo@saomateusdosul.pr.gov.br\n⏰ Seg-Sex: 8h-12h e 13h-16h',
+            'falar':            '📞 Para falar com a Secretaria de Turismo: (42) 3532-4163\n⏰ Seg-Sex: 8h-12h e 13h-16h',
             // Como chegar
             'como chegar':      '📍 São Mateus do Sul:\n• 150 km de Curitiba (BR-376, ~2h)\n• 60 km de União da Vitória\nAeroporto mais próximo: Afonso Pena (Curitiba).',
             'como ir':          '📍 São Mateus do Sul fica a 150 km de Curitiba pela BR-376, aproximadamente 2 horas de carro. Aeroporto mais próximo: Afonso Pena (Curitiba).',
@@ -154,7 +154,7 @@
             'fe':               'Turismo de Fé em São Mateus do Sul: ⛪\n\n• Igreja Matriz (centro)\n• Igreja Água Branca (Localidade de Água Branca)\n• Capelas rurais nas colônias polonesas\n• Santuário N. Sra. Częstochowa\n\nA Rota Turismo de Fé cobre todos esses pontos!',
             'turismo de fe':    'Turismo de Fé em São Mateus do Sul: ⛪\n\n• Igreja Matriz (centro)\n• Igreja Água Branca\n• Capelas rurais nas colônias polonesas\n• Santuário N. Sra. Częstochowa\n\nA Rota Turismo de Fé cobre todos esses pontos!',
             // Reservas e roteiro
-            'reserva':          'Para reservar atividades e passeios: 📝\n\nPasseios no Rio Iguaçu, visitas guiadas, degustações de erva-mate.\nLigue: (42) 3532-0000 ou acesse o portal do usuário!',
+            'reserva':          'Para reservar atividades e passeios: 📝\n\nPasseios no Rio Iguaçu, visitas guiadas, degustações de erva-mate.\nLigue: (42) 3532-4163 ou acesse o portal do usuário!',
             'roteiro':          'Sugestão de roteiro para 1 dia em São Mateus do Sul: 🗺️\n\n🌅 Manhã: Igreja Matriz + Centro Histórico\n🌞 Tarde: Rota da Erva-Mate ou Igreja Água Branca\n🌙 Noite: Feira Gastronômica na Rua do Mathe (qua/sex)\n\nPara mais dias, posso sugerir as 6 rotas completas!',
             'roteiros':         'Sugestão de roteiro para 1 dia em São Mateus do Sul: 🗺️\n\n🌅 Manhã: Igreja Matriz + Centro Histórico\n🌞 Tarde: Rota da Erva-Mate ou Igreja Água Branca\n🌙 Noite: Feira Gastronômica na Rua do Mathe (qua/sex)\n\nPara mais dias, posso sugerir as 6 rotas completas!',
             'fim de semana':    'Sugestão de fim de semana em São Mateus do Sul: 🗓️\n\n🟩 Sábado:\n• Feira do Produtor (7h-12h, Rua do Mathe)\n• Rota da Erva-Mate\n• Igreja Água Branca\n\n🟦 Domingo:\n• Igreja Matriz\n• Passeio de barco no Rio Iguaçu\n• Chimarródromo (1º domingo do mês)\n\nQuer mais detalhes?',
@@ -191,8 +191,8 @@
             'agrosamas':  'V AgroSamas 2026: September 18–21! 🌿\nNational shows, food fair, agribusiness expo. Free entry!',
             'christmas':  'Ouro Verde Christmas: Dec 6–20, 2026! 🎄\nParades, shows, Santa Claus arrival and food fair.',
             // Contact
-            'contact':    '📞 +55 (42) 3532-0000\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Culture Cottage — Iguaçu River Square\n⏰ Mon–Fri: 8 AM–5 PM | Sat: 9 AM–1 PM',
-            'phone':      '📞 Tourism Secretariat: +55 (42) 3532-0000',
+            'contact':    '📞 +55 (42) 3532-4163\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Culture Cottage — Iguaçu River Square\n⏰ Mon–Fri: 8 AM–12 PM and 1 PM–4 PM',
+            'phone':      '📞 Tourism Secretariat: +55 (42) 3532-4163',
             // How to get there
             'how to get': '📍 São Mateus do Sul:\n• 150 km from Curitiba (BR-376, ~2h drive)\n• 60 km from União da Vitória\nNearest airport: Afonso Pena (Curitiba).',
             'curitiba':   'From Curitiba: ~150 km via BR-376, about 2 hours by car! 🚗',
@@ -201,7 +201,7 @@
             // Church
             'church':     'Historic churches:\n\n• Igreja Matriz — neo-Gothic, city center\n• Igreja Água Branca — rural Polish architecture\n• Colony chapels\n• N. Lady of Częstochowa Shrine ⛪',
             // Booking
-            'book':       'Book tourism activities on our portal! 📝\n\nRiver tours, guided visits, tastings. Or call: +55 (42) 3532-0000',
+            'book':       'Book tourism activities on our portal! 📝\n\nRiver tours, guided visits, tastings. Or call: +55 (42) 3532-4163',
         },
 
         es: {
@@ -233,8 +233,8 @@
             'agrosamas':  'V AgroSamas 2026: 18 al 21 de septiembre! 🌿\n¡Shows nacionales, feria gastronómica, exposición agropecuaria. ¡Entrada gratuita!',
             'navidad':    '¡Navidad Ouro Verde: 6 al 20/12/2026! 🎄\nDesfiles, shows, llegada de Papá Noel y feria gastronómica.',
             // Contacto
-            'contacto':   '📞 +55 (42) 3532-0000\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Cabaña de la Cultura — Plaza del Río Iguaçu\n⏰ Lun-Vie: 8-17h | Sáb: 9-13h',
-            'telefono':   '📞 Secretaría de Turismo: +55 (42) 3532-0000',
+            'contacto':   '📞 +55 (42) 3532-4163\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Cabaña de la Cultura — Plaza del Río Iguaçu\n⏰ Lun-Vie: 8-12h y 13-16h',
+            'telefono':   '📞 Secretaría de Turismo: +55 (42) 3532-4163',
             // Cómo llegar
             'como llegar':'📍 São Mateus do Sul:\n• 150 km de Curitiba (BR-376, ~2h)\n• 60 km de União da Vitória\nAeropuerto más cercano: Afonso Pena (Curitiba).',
             // Galería
@@ -242,7 +242,7 @@
             // Iglesia
             'iglesia':    'Iglesias históricas:\n\n• Igreja Matriz — neogótica, centro\n• Igreja Água Branca — arquitectura polaca rural\n• Capillas en las colonias ⛪',
             // Reservas
-            'reserva':    '¡Reserva actividades turísticas en el portal! 📝\n\nPaseos en el río, visitas guiadas, degustaciones. O llama: +55 (42) 3532-0000',
+            'reserva':    '¡Reserva actividades turísticas en el portal! 📝\n\nPaseos en el río, visitas guiadas, degustaciones. O llama: +55 (42) 3532-4163',
         },
 
         pl: {
@@ -274,8 +274,8 @@
             'agrosamas':  'V AgroSamas 2026: 18-21 września! 🌿\nNarodowe pokazy, targ gastronomiczny, targi rolnicze. Wstęp wolny!',
             'swięta':     'Boże Narodzenie Ouro Verde: 6-20/12/2026! 🎄\nParady, pokazy, przybycie Świętego Mikołaja i targ gastronomiczny.',
             // Kontakt
-            'kontakt':    '📞 +55 (42) 3532-0000\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Chata Kultury — Plac Rzeki Iguaçu\n⏰ Pon-Pt: 8-17h | Sob: 9-13h',
-            'telefon':    '📞 Sekretariat Turystyki: +55 (42) 3532-0000',
+            'kontakt':    '📞 +55 (42) 3532-4163\n📧 turismo@saomateusdosul.pr.gov.br\n📍 Chata Kultury — Plac Rzeki Iguaçu\n⏰ Pon-Pt: 8-12 i 13-16h',
+            'telefon':    '📞 Sekretariat Turystyki: +55 (42) 3532-4163',
             // Jak dojechać
             'jak dojechac':'📍 São Mateus do Sul:\n• 150 km od Kurytyby (BR-376, ~2h)\n• 60 km od União da Vitória\nNajbliższe lotnisko: Afonso Pena (Kurytyba).',
             'kurytyba':   'Z Kurytyby: ~150 km drogą BR-376, około 2 godziny jazdy samochodem! 🚗',
@@ -284,7 +284,7 @@
             // Kościół
             'kosciol':    'Historyczne kościoły:\n\n• Igreja Matriz — neogotycka, centrum miasta\n• Igreja Água Branca — polska architektura wiejska\n• Kaplice w koloniach\n• Sanktuarium N.M.P. Częstochowskiej ⛪',
             // Rezerwacje
-            'rezerwacja': 'Zarezerwuj atrakcje turystyczne przez portal! 📝\n\nRejsy rzeczne, wycieczki z przewodnikiem, degustacje. Lub zadzwoń: +55 (42) 3532-0000',
+            'rezerwacja': 'Zarezerwuj atrakcje turystyczne przez portal! 📝\n\nRejsy rzeczne, wycieczki z przewodnikiem, degustacje. Lub zadzwoń: +55 (42) 3532-4163',
         }
     };
 

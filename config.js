@@ -17,9 +17,9 @@ const CONFIG = {
         slogan: 'Capital Polonesa do Paraná',
         url: 'https://turismo.saomateusdosul.pr.gov.br',
         email: 'turismo@saomateusdosul.pr.gov.br',
-        telefone: '(42) 3532-0000',
+        telefone: '(42) 3532-4163',
         anoFundacao: 1908,
-        endereco: 'Rua João Gabriel Martins s/n • CEP 83900-114 • São Mateus do Sul - PR'
+        endereco: 'Chalé do Produtor - Praça do Rio Iguaçu • São Mateus do Sul - PR'
     },
 
     // ============================================================
@@ -27,7 +27,7 @@ const CONFIG = {
     // ============================================================
     redesSociais: {
         facebook: 'https://www.facebook.com/share/1CC3pQvqsi/',
-        instagram: 'https://instagram.com/depculturaeturismosms',
+        instagram: 'https://www.instagram.com/depculturaeturismosms',
         instagram2: 'https://www.instagram.com/depculturaeturismosms/',
         youtube: 'https://youtube.com/@prefeiturasms',
         tiktok: 'https://www.tiktok.com/@prefeiturasms'

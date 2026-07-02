@@ -11,7 +11,7 @@ const Reservas = {
     
     // Configurações
     config: {
-        whatsapp: '554235320000', // Secretaria Municipal de Turismo
+        whatsapp: '554235324163', // Departamento de Cultura e Turismo (WhatsApp)
         email: 'turismo@saomateusdosul.pr.gov.br',
         storageKey: 'sms_reservas'
     },
