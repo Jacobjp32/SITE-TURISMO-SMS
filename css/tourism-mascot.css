@@ -1,0 +1,268 @@
+/**
+ * ============================================================
+ * MASCOTE INTERATIVO DE TURISMO — São Mateus do Sul
+ * Bloco S12 — primeira versão leve (sem chatbot / sem IA)
+ * ------------------------------------------------------------
+ * Componente discreto, fixo no canto inferior ESQUERDO
+ * (o canto inferior direito é ocupado pelo chatbot "Mathe").
+ * Sem bibliotecas externas, sem vídeo, apenas 1 imagem webp.
+ * ============================================================ */
+
+#sms-mascot {
+    position: fixed;
+    left: 22px;
+    bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+    z-index: 9990; /* abaixo do nav (9999), back-to-top (9998) e chatbot (999999) */
+    font-family: 'Raleway', system-ui, sans-serif;
+    /* Falha silenciosa: se escondido por preferência, o JS aplica [hidden] */
+}
+
+#sms-mascot[hidden] { display: none !important; }
+
+/* ── Botão/ícone do mascote (launcher) ── */
+.sms-mascot-launcher {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border: 2px solid rgba(212, 165, 116, 0.9);
+    border-radius: 50%;
+    background: linear-gradient(160deg, #ffffff 0%, #f8f6f0 100%);
+    box-shadow: 0 6px 22px rgba(10, 61, 46, 0.28);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.sms-mascot-launcher:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 28px rgba(10, 61, 46, 0.34); }
+.sms-mascot-launcher:focus-visible { outline: 3px solid #0a3d2e; outline-offset: 3px; }
+
+.sms-mascot-launcher img {
+    width: 46px;
+    height: 46px;
+    object-fit: contain;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+/* Fallback visual simples caso a imagem não carregue (emoji) */
+.sms-mascot-launcher .sms-mascot-fallback {
+    font-size: 1.9rem;
+    line-height: 1;
+}
+
+/* Selo "!" discreto para indicar dica disponível */
+.sms-mascot-launcher .sms-mascot-dot {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #0a3d2e;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align: center;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+#sms-mascot.is-open .sms-mascot-dot,
+#sms-mascot.dot-seen .sms-mascot-dot { display: none; }
+
+/* ── Balão de fala curto (teaser) ── */
+.sms-mascot-bubble {
+    position: absolute;
+    left: 0;
+    bottom: 74px;
+    max-width: 240px;
+    background: #0a3d2e;
+    color: #fff;
+    padding: 0.7rem 2rem 0.7rem 0.9rem;
+    border-radius: 14px 14px 14px 4px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    box-shadow: 0 8px 24px rgba(10, 61, 46, 0.32);
+    opacity: 0;
+    transform: translateY(8px);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.sms-mascot-bubble.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.sms-mascot-bubble::after {
+    content: '';
+    position: absolute;
+    left: 18px;
+    bottom: -7px;
+    width: 0; height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #0a3d2e;
+}
+.sms-mascot-bubble .sms-bubble-close {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 6px;
+}
+.sms-mascot-bubble .sms-bubble-close:hover { color: #fff; background: rgba(255, 255, 255, 0.15); }
+.sms-mascot-bubble .sms-bubble-close:focus-visible { outline: 2px solid #d4a574; outline-offset: 1px; }
+
+/* ── Painel de atalhos/dicas ── */
+.sms-mascot-panel {
+    position: absolute;
+    left: 0;
+    bottom: 74px;
+    width: min(300px, calc(100vw - 44px));
+    background: #ffffff;
+    border: 1px solid rgba(10, 61, 46, 0.12);
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(10, 61, 46, 0.28);
+    overflow: hidden;
+    display: none;
+    flex-direction: column;
+}
+#sms-mascot.is-open .sms-mascot-panel { display: flex; animation: smsMascotUp 0.28s ease; }
+@keyframes smsMascotUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+.sms-mascot-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.85rem 0.9rem;
+    background: linear-gradient(135deg, #0a3d2e 0%, #0d5540 100%);
+    color: #fff;
+}
+.sms-mascot-panel-header img {
+    width: 38px; height: 38px; object-fit: contain;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    padding: 2px;
+}
+.sms-mascot-panel-header .sms-mascot-title { font-weight: 700; font-size: 0.95rem; display: block; }
+.sms-mascot-panel-header .sms-mascot-subtitle { font-size: 0.72rem; opacity: 0.85; display: block; }
+.sms-mascot-panel-header .sms-mascot-close {
+    margin-left: auto;
+    background: rgba(255, 255, 255, 0.18);
+    border: none;
+    color: #fff;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex: 0 0 auto;
+}
+.sms-mascot-panel-header .sms-mascot-close:hover { background: rgba(255, 255, 255, 0.32); }
+.sms-mascot-panel-header .sms-mascot-close:focus-visible { outline: 2px solid #d4a574; outline-offset: 2px; }
+
+.sms-mascot-message {
+    padding: 0.9rem 1rem 0.4rem;
+    color: #0a3d2e;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.sms-mascot-shortcuts-label {
+    display: block;
+    padding: 0.4rem 1rem 0.3rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8b6a47;
+    font-weight: 700;
+}
+
+.sms-mascot-links {
+    list-style: none;
+    margin: 0;
+    padding: 0 0.6rem 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+.sms-mascot-links a {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.6rem 0.7rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #0a3d2e;
+    font-size: 0.86rem;
+    font-weight: 500;
+    background: #f8f6f0;
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+.sms-mascot-links a:hover { background: #efe7d8; transform: translateX(2px); }
+.sms-mascot-links a:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; }
+.sms-mascot-links a .sms-link-icon { font-size: 1.1rem; line-height: 1; flex: 0 0 auto; }
+
+.sms-mascot-footer {
+    padding: 0.35rem 1rem 0.8rem;
+    text-align: center;
+}
+.sms-mascot-hide-btn {
+    background: none;
+    border: none;
+    color: #8b6a47;
+    font-size: 0.75rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0.25rem;
+    font-family: inherit;
+}
+.sms-mascot-hide-btn:hover { color: #0a3d2e; }
+.sms-mascot-hide-btn:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; border-radius: 4px; }
+
+/* ── Mini botão de "reabrir" (quando o visitante oculta o mascote) ── */
+.sms-mascot-reopen {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgba(10, 61, 46, 0.25);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 4px 14px rgba(10, 61, 46, 0.2);
+    cursor: pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+    opacity: 0.72;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.sms-mascot-reopen:hover { opacity: 1; transform: scale(1.08); }
+.sms-mascot-reopen:focus-visible { outline: 3px solid #0a3d2e; outline-offset: 3px; opacity: 1; }
+
+/* ── Mobile: reduz tamanho e sobe acima do botão "voltar ao topo" ── */
+@media (max-width: 600px) {
+    #sms-mascot {
+        left: 12px;
+        bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+    }
+    .sms-mascot-launcher { width: 50px; height: 50px; }
+    .sms-mascot-launcher img { width: 38px; height: 38px; }
+    .sms-mascot-bubble, .sms-mascot-panel { bottom: 62px; }
+    .sms-mascot-panel { width: min(280px, calc(100vw - 28px)); }
+}
+
+/* ── Respeitar preferência de movimento reduzido ── */
+@media (prefers-reduced-motion: reduce) {
+    .sms-mascot-launcher,
+    .sms-mascot-bubble,
+    .sms-mascot-links a,
+    .sms-mascot-reopen { transition: none !important; }
+    #sms-mascot.is-open .sms-mascot-panel { animation: none !important; }
+    .sms-mascot-launcher:hover { transform: none; }
+}

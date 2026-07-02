@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v18';
+const CACHE_NAME = 'turismo-sms-v19';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -17,6 +17,8 @@ const PRECACHE_ASSETS = [
     'offline.html',
     'translations.js',
     'js/chatbot.js',
+    'js/tourism-mascot.js',
+    'css/tourism-mascot.css',
     'js/reservas.js',
     'images/logo_pin_turismo_3d.png',
     'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
@@ -25,6 +27,7 @@ const PRECACHE_ASSETS = [
     'images/WEBP/RUA-DO-MATHE-_1_.webp',
     'images/WEBP/PRACA-DO-IGUACU_1.webp',
     'images/mascotes/MASCOTE_CAPIVARA_PINHAO.png',
+    'images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp',
     'images/mascotes/MASCOTE_MENINO_POLONES_1.png',
     'images/mascotes/MASCOTE_PERY.png'
 ];

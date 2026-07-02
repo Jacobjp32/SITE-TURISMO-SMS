@@ -6,6 +6,29 @@
 const translations = {
 
   pt: {
+    // ── MASCOTE INTERATIVO (Bloco S12) ──
+    'mascot-title': 'Guia de Turismo',
+    'mascot-subtitle': 'São Mateus do Sul',
+    'mascot-aria-open': 'Abrir o guia de turismo',
+    'mascot-aria-reopen': 'Reabrir o guia de turismo',
+    'mascot-close': 'Fechar o guia de turismo',
+    'mascot-hide': 'Ocultar guia',
+    'mascot-shortcuts': 'Atalhos rápidos',
+    'mascot-link-mapa': 'Mapa Turístico',
+    'mascot-link-eventos': 'Eventos',
+    'mascot-link-sabores': 'Sabores locais',
+    'mascot-link-ondeficar': 'Onde ficar',
+    'mascot-link-contato': 'Fale com Cultura e Turismo',
+    'mascot-msg-home': 'Olá! Quer começar pelo mapa turístico?',
+    'mascot-msg-mapa': 'Use os filtros para encontrar atrativos.',
+    'mascot-msg-sabores': 'Explore gastronomia, feiras e restaurantes.',
+    'mascot-msg-eventos': 'Confira a programação atualizada.',
+    'mascot-msg-noticias': 'Veja as últimas novidades da cidade.',
+    'mascot-msg-ondeficar': 'Encontre hotéis e pousadas para sua estadia.',
+    'mascot-msg-oquefazer': 'Descubra rotas e experiências pela cidade.',
+    'mascot-msg-local': 'Você pode traçar rota até este ponto.',
+    'mascot-msg-default': 'Posso ajudar você a explorar São Mateus do Sul.',
+
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 O Que Fazer',
     'page-oqfazer-subtitulo': 'Esta página foi mantida por compatibilidade. A exploração principal agora acontece no Mapa Turístico.',
@@ -787,6 +810,29 @@ const translations = {
   },
 
   en: {
+    // ── MASCOTE INTERATIVO (Bloco S12) ──
+    'mascot-title': 'Tourism Guide',
+    'mascot-subtitle': 'São Mateus do Sul',
+    'mascot-aria-open': 'Open the tourism guide',
+    'mascot-aria-reopen': 'Reopen the tourism guide',
+    'mascot-close': 'Close the tourism guide',
+    'mascot-hide': 'Hide guide',
+    'mascot-shortcuts': 'Quick links',
+    'mascot-link-mapa': 'Tourist Map',
+    'mascot-link-eventos': 'Events',
+    'mascot-link-sabores': 'Local flavors',
+    'mascot-link-ondeficar': 'Where to stay',
+    'mascot-link-contato': 'Contact Culture & Tourism',
+    'mascot-msg-home': 'Hi! Want to start with the tourist map?',
+    'mascot-msg-mapa': 'Use the filters to find attractions.',
+    'mascot-msg-sabores': 'Explore food, markets and restaurants.',
+    'mascot-msg-eventos': 'Check the updated schedule.',
+    'mascot-msg-noticias': 'See the latest city news.',
+    'mascot-msg-ondeficar': 'Find hotels and inns for your stay.',
+    'mascot-msg-oquefazer': 'Discover routes and experiences in the city.',
+    'mascot-msg-local': 'You can get directions to this spot.',
+    'mascot-msg-default': 'I can help you explore São Mateus do Sul.',
+
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 Things to Do',
     'page-oqfazer-subtitulo': 'Experiences, routes and attractions are now gathered in the Interactive Tourism Map.',
@@ -1568,6 +1614,29 @@ const translations = {
   },
 
   es: {
+    // ── MASCOTE INTERATIVO (Bloco S12) ──
+    'mascot-title': 'Guía de Turismo',
+    'mascot-subtitle': 'São Mateus do Sul',
+    'mascot-aria-open': 'Abrir la guía de turismo',
+    'mascot-aria-reopen': 'Reabrir la guía de turismo',
+    'mascot-close': 'Cerrar la guía de turismo',
+    'mascot-hide': 'Ocultar guía',
+    'mascot-shortcuts': 'Accesos rápidos',
+    'mascot-link-mapa': 'Mapa Turístico',
+    'mascot-link-eventos': 'Eventos',
+    'mascot-link-sabores': 'Sabores locales',
+    'mascot-link-ondeficar': 'Dónde alojarse',
+    'mascot-link-contato': 'Contacta Cultura y Turismo',
+    'mascot-msg-home': '¡Hola! ¿Quieres empezar por el mapa turístico?',
+    'mascot-msg-mapa': 'Usa los filtros para encontrar atractivos.',
+    'mascot-msg-sabores': 'Explora gastronomía, ferias y restaurantes.',
+    'mascot-msg-eventos': 'Consulta la programación actualizada.',
+    'mascot-msg-noticias': 'Mira las últimas novedades de la ciudad.',
+    'mascot-msg-ondeficar': 'Encuentra hoteles y posadas para tu estadía.',
+    'mascot-msg-oquefazer': 'Descubre rutas y experiencias por la ciudad.',
+    'mascot-msg-local': 'Puedes trazar la ruta hasta este punto.',
+    'mascot-msg-default': 'Puedo ayudarte a explorar São Mateus do Sul.',
+
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 Qué Hacer',
     'page-oqfazer-subtitulo': 'Las experiencias, rutas y puntos turísticos ahora están reunidos en el Mapa Turístico Interactivo.',
@@ -2349,6 +2418,29 @@ const translations = {
   },
 
   pl: {
+    // ── MASCOTE INTERATIVO (Bloco S12) ──
+    'mascot-title': 'Przewodnik Turystyczny',
+    'mascot-subtitle': 'São Mateus do Sul',
+    'mascot-aria-open': 'Otwórz przewodnik turystyczny',
+    'mascot-aria-reopen': 'Ponownie otwórz przewodnik',
+    'mascot-close': 'Zamknij przewodnik turystyczny',
+    'mascot-hide': 'Ukryj przewodnik',
+    'mascot-shortcuts': 'Szybkie linki',
+    'mascot-link-mapa': 'Mapa Turystyczna',
+    'mascot-link-eventos': 'Wydarzenia',
+    'mascot-link-sabores': 'Lokalne smaki',
+    'mascot-link-ondeficar': 'Gdzie spać',
+    'mascot-link-contato': 'Kontakt: Kultura i Turystyka',
+    'mascot-msg-home': 'Cześć! Chcesz zacząć od mapy turystycznej?',
+    'mascot-msg-mapa': 'Użyj filtrów, aby znaleźć atrakcje.',
+    'mascot-msg-sabores': 'Odkryj gastronomię, targi i restauracje.',
+    'mascot-msg-eventos': 'Sprawdź aktualny program.',
+    'mascot-msg-noticias': 'Zobacz najnowsze wiadomości z miasta.',
+    'mascot-msg-ondeficar': 'Znajdź hotele i pensjonaty na pobyt.',
+    'mascot-msg-oquefazer': 'Odkryj trasy i doświadczenia w mieście.',
+    'mascot-msg-local': 'Możesz wyznaczyć trasę do tego miejsca.',
+    'mascot-msg-default': 'Mogę pomóc Ci zwiedzić São Mateus do Sul.',
+
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 Co Zwiedzić',
     'page-oqfazer-subtitulo': 'Doswiadczenia, trasy i atrakcje sa teraz zebrane na Interaktywnej Mapie Turystycznej.',
