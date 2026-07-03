@@ -842,7 +842,7 @@
       return '<div class="map-related-event-fallback" aria-hidden="true"><span>EV</span><small>' + escapeHtml(t("categories.events")) + "</small></div>";
     }
 
-    return '<img src="' + escapeHtml(event.mainImage) + '" alt="' + escapeHtml(event.title) + '" loading="lazy">';
+    return '<img src="' + escapeHtml(event.mainImage) + '" alt="' + escapeHtml(event.title) + '" loading="lazy" decoding="async" width="640" height="360">';
   }
 
   function renderApprovedEventsSection(item, context) {
@@ -1360,7 +1360,7 @@
       }
       return '<div class="' + className + ' map-image-fallback" aria-hidden="true"><span>' + getCategoryConfig(item.categoriaMapa).icon + '</span><small>' + t("noImage") + "</small></div>";
     }
-    return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '">';
+    return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '" loading="lazy" decoding="async" width="640" height="360">';
   }
 
   function createMarkerIcon(filterId, isSelected) {
@@ -1553,7 +1553,7 @@
       + '<h3>' + escapeHtml(t("gallery")) + '</h3>'
       + '<div class="map-details-gallery-grid">'
       + images.slice(1, 7).map(function (image) {
-        return '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.nome) + '">';
+        return '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.nome) + '" loading="lazy" decoding="async" width="640" height="360">';
       }).join("")
       + "</div></section>";
   }
