@@ -329,6 +329,16 @@
     const EVENT_BLOCKED_STATUS = new Set(['pendente', 'pending', 'rejeitado', 'rejected']);
     const EVENT_UNPUBLISHED_STATUS = new Set(['rascunho', 'draft', 'despublicado', 'unpublished']);
     const FIREBASE_PUBLIC_TIMEOUT_MS = 2500;
+    const CONFIRMED_EVENT_PLACES_BY_ID = {
+        'igreja-matriz': { id: 'igreja-matriz', nome: 'Igreja Matriz São Mateus' },
+        'parque-exposicoes': { id: 'parque-exposicoes', nome: 'Parque de Exposições' },
+        'rua-do-mathe': { id: 'rua-do-mathe', nome: 'Rua do Mathe' }
+    };
+    const CONFIRMED_EVENT_PLACE_NAMES = {
+        'igreja matriz sao mateus': CONFIRMED_EVENT_PLACES_BY_ID['igreja-matriz'],
+        'parque de exposicoes': CONFIRMED_EVENT_PLACES_BY_ID['parque-exposicoes'],
+        'rua do mathe': CONFIRMED_EVENT_PLACES_BY_ID['rua-do-mathe']
+    };
     const EVENT_CATEGORY_MAP = {
         religioso: 'religioso',
         religiosa: 'religioso',
@@ -372,6 +382,42 @@
             .replace(/[^a-z0-9\s]/g, ' ')
             .replace(/\s+/g, ' ')
             .trim();
+    }
+
+    function getKnownLocalById(value) {
+        const rawId = asCleanString(value);
+        if (!rawId) return null;
+        return CONFIRMED_EVENT_PLACES_BY_ID[rawId] || null;
+    }
+
+    function getConfirmedEventPlace(evento) {
+        if (!evento) return null;
+
+        const idFields = [
+            evento.localId,
+            evento.placeId,
+            evento.mapaId,
+            evento.estabelecimentoId,
+            evento.empreendimentoId,
+            evento.businessId
+        ];
+
+        for (const id of idFields) {
+            const local = getKnownLocalById(id);
+            if (local) return local;
+        }
+
+        const eventLocation = normalizeCompareText(evento.local);
+        if (!eventLocation) return null;
+        return CONFIRMED_EVENT_PLACE_NAMES[eventLocation] || null;
+    }
+
+    function getEventLocationDisplay(evento) {
+        const local = asCleanString(evento && evento.local);
+        if (!local || normalizeCompareText(local) === 'a confirmar') {
+            return 'Local a confirmar';
+        }
+        return local;
     }
 
     function normalizeStatus(status) {
@@ -484,6 +530,7 @@
             data: data,
             horario: asCleanString(evento.horario),
             local: asCleanString(evento.local),
+            localId: asCleanString(evento.localId || evento.placeId || evento.mapaId),
             organizador: asCleanString(evento.organizador),
             imagem: sanitizePublicUrl(evento.imagem || evento.image),
             valor: asCleanString(evento.valor),
@@ -517,6 +564,7 @@
             data: data,
             horario: asCleanString(raw.time || raw.hora || raw.horaInicio),
             local: asCleanString(raw.location || raw.local || raw.establishmentName || raw.organizer),
+            localId: asCleanString(raw.localId || raw.placeId || raw.mapaId || raw.establishmentId || raw.linkedEstablishmentId || raw.establishmentSlug),
             organizador: asCleanString(raw.organizer || raw.establishmentName || raw.ownerName),
             imagem: sanitizePublicUrl(raw.mainImage || extractEventMainImage(raw.images) || raw.image),
             valor: asCleanString(raw.value || raw.valor || raw.entrada),
@@ -941,8 +989,9 @@
 
         const d = new Date(ev.data + 'T12:00:00');
         const dataStr = `${d.getDate()} de ${MESES[d.getMonth()+1]} de ${d.getFullYear()} (${DIAS[d.getDay()]})`;
+        const localConfirmado = getConfirmedEventPlace(ev);
         const imageMarkup = ev.imagem
-            ? `<img src="${escapeHtml(ev.imagem)}" alt="${escapeHtml(ev.titulo)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:1rem;" onerror="this.style.display='none'">`
+            ? `<img src="${escapeHtml(ev.imagem)}" alt="${escapeHtml(ev.titulo)}" loading="lazy" decoding="async" width="640" height="360" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:1rem;" onerror="this.style.display='none'">`
             : '';
         const organizadorMarkup = ev.organizador
             ? `<div class="modal-row"><div class="ic">👤</div><div><div class="label">Organizador</div>${escapeHtml(ev.organizador)}</div></div>`
@@ -956,13 +1005,17 @@
         const whatsappMarkup = ev.whatsapp
             ? `<div class="modal-row"><div class="ic">💬</div><div><div class="label">WhatsApp</div><a href="${escapeHtml(ev.whatsapp)}" target="_blank" rel="noopener noreferrer">Abrir contato</a></div></div>`
             : '';
+        const localActionsMarkup = localConfirmado
+            ? `<div class="modal-row"><div class="ic">🗺️</div><div><div class="label">Local vinculado</div><a href="/local?id=${encodeURIComponent(localConfirmado.id)}">Abrir ficha</a></div></div>`
+            : '';
 
         document.getElementById('modalTitulo').textContent = (ev.destaque ? '⭐ ' : '') + ev.titulo;
         document.getElementById('modalBody').innerHTML = `
             ${imageMarkup}
             <div class="modal-row"><div class="ic">📅</div><div><div class="label">Data</div>${escapeHtml(dataStr)}</div></div>
             <div class="modal-row"><div class="ic">🕐</div><div><div class="label">Horário</div>${escapeHtml(ev.horario)}</div></div>
-            <div class="modal-row"><div class="ic">📍</div><div><div class="label">Local</div>${escapeHtml(ev.local)}</div></div>
+            <div class="modal-row"><div class="ic">📍</div><div><div class="label">Local</div>${escapeHtml(getEventLocationDisplay(ev))}</div></div>
+            ${localActionsMarkup}
             ${organizadorMarkup}
             ${valorMarkup}
             ${siteMarkup}

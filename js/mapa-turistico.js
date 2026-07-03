@@ -1098,6 +1098,8 @@
       imagem: item.imagem || gallery[0] || "",
       galeria: gallery,
       url: item.url || "",
+      localId: item.localId || item.placeId || "",
+      localUrl: item.localUrl || item.localDetailUrl || "",
       telefone: item.telefone || "",
       whatsappUrl: createWhatsAppLink(item.telefone),
       localizacao: item.localizacao || item.local || item.endereco || "",
@@ -1368,6 +1370,20 @@
   }
 
   function getLocalDetailUrl(item) {
+    var localUrl = String(item && (item.localUrl || item.localDetailUrl) || "").trim();
+    var localUrlMatch = localUrl.match(/^\/local(?:\.html)?\?id=([^#&?]+)(?:$|[&#])/);
+    if (localUrlMatch && window.locaisData) {
+      var localUrlId = decodeURIComponent(localUrlMatch[1]);
+      var resolvedLocalUrlId = window.locaisAliases && window.locaisAliases[localUrlId] ? window.locaisAliases[localUrlId] : localUrlId;
+      if (window.locaisData[resolvedLocalUrlId]) return "/local?id=" + encodeURIComponent(resolvedLocalUrlId);
+    }
+
+    var localId = cleanTextValue(item && (item.localId || item.placeId));
+    if (localId && window.locaisData) {
+      var resolvedId = window.locaisAliases && window.locaisAliases[localId] ? window.locaisAliases[localId] : localId;
+      if (window.locaisData[resolvedId]) return "/local?id=" + encodeURIComponent(resolvedId);
+    }
+
     var raw = String(item && item.url || "").trim();
     if (!/^\/local(?:\.html)?\?id=[^#&?]+(?:$|[&#])/.test(raw)) return "";
     return raw;
