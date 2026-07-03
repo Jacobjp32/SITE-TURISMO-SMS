@@ -162,8 +162,8 @@
     <script src="js/nav-shared.js?v=agenda-weather-20260519"></script>
 
     <section class="hero">
-        <h1>📅 Calendário de Eventos 2026</h1>
-        <p>Festas, feiras e celebrações que fazem de São Mateus do Sul a Capital Polonesa do Paraná</p>
+        <h1 data-lang-key="ev-hero-title">📅 Calendário de Eventos 2026</h1>
+        <p data-lang-key="ev-hero-subtitle">Festas, feiras e celebrações que fazem de São Mateus do Sul a Capital Polonesa do Paraná</p>
     </section>
 
     <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
@@ -177,67 +177,67 @@
             <!-- AgroSamas destaque -->
             <div class="filter-card agrosamas-highlight">
                 <div class="agrosamas-card-header">
-                    <span class="agrosamas-card-badge">⭐ DESTAQUE 2026</span>
+                    <span class="agrosamas-card-badge" data-lang-key="ev-agrosamas-card-badge">⭐ DESTAQUE 2026</span>
                     <h3>5º AgroSamas</h3>
                 </div>
-                <p class="agrosamas-card-desc">O maior evento de música, gastronomia e agronegócio da região!</p>
+                <p class="agrosamas-card-desc" data-lang-key="ev-agrosamas-desc">O maior evento de música, gastronomia e agronegócio da região!</p>
                 <div class="agrosamas-card-info">
                     <span>📅 17–21 Set</span>
-                    <span>🆓 Gratuito</span>
+                    <span data-lang-key="ev-gratuito">🆓 Gratuito</span>
                 </div>
-                <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="agrosamas-card-btn">Site Oficial →</a>
+                <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="agrosamas-card-btn" data-lang-key="ev-agrosamas-site">Site Oficial →</a>
             </div>
 
             <!-- Filtro mês -->
             <div class="filter-card">
-                <h3>📆 Mês</h3>
+                <h3 data-lang-key="ev-filtro-mes">📆 Mês</h3>
                 <div class="mes-nav" id="mesNav">
-                    <button class="mes-btn ativo" data-mes="all">Todos</button>
-                    <button class="mes-btn" data-mes="1">Jan</button>
-                    <button class="mes-btn" data-mes="2">Fev</button>
-                    <button class="mes-btn" data-mes="3">Mar</button>
-                    <button class="mes-btn" data-mes="4">Abr</button>
-                    <button class="mes-btn" data-mes="5">Mai</button>
-                    <button class="mes-btn" data-mes="6">Jun</button>
-                    <button class="mes-btn" data-mes="7">Jul</button>
-                    <button class="mes-btn" data-mes="8">Ago</button>
-                    <button class="mes-btn" data-mes="9">Set</button>
-                    <button class="mes-btn" data-mes="10">Out</button>
-                    <button class="mes-btn" data-mes="11">Nov</button>
-                    <button class="mes-btn" data-mes="12">Dez</button>
+                    <button class="mes-btn ativo" data-mes="all" data-lang-key="ev-btn-todos">Todos</button>
+                    <button class="mes-btn" data-mes="1" data-lang-key="ev-month-short-1">Jan</button>
+                    <button class="mes-btn" data-mes="2" data-lang-key="ev-month-short-2">Fev</button>
+                    <button class="mes-btn" data-mes="3" data-lang-key="ev-month-short-3">Mar</button>
+                    <button class="mes-btn" data-mes="4" data-lang-key="ev-month-short-4">Abr</button>
+                    <button class="mes-btn" data-mes="5" data-lang-key="ev-month-short-5">Mai</button>
+                    <button class="mes-btn" data-mes="6" data-lang-key="ev-month-short-6">Jun</button>
+                    <button class="mes-btn" data-mes="7" data-lang-key="ev-month-short-7">Jul</button>
+                    <button class="mes-btn" data-mes="8" data-lang-key="ev-month-short-8">Ago</button>
+                    <button class="mes-btn" data-mes="9" data-lang-key="ev-month-short-9">Set</button>
+                    <button class="mes-btn" data-mes="10" data-lang-key="ev-month-short-10">Out</button>
+                    <button class="mes-btn" data-mes="11" data-lang-key="ev-month-short-11">Nov</button>
+                    <button class="mes-btn" data-mes="12" data-lang-key="ev-month-short-12">Dez</button>
                 </div>
             </div>
 
             <!-- Filtro categoria -->
             <div class="filter-card">
-                <h3>🏷️ Categoria</h3>
+                <h3 data-lang-key="ev-filtro-cat">🏷️ Categoria</h3>
                 <button class="filter-btn ativo" data-cat="all">
                     <span class="cat-dot" style="background:linear-gradient(45deg,#f8a5a5,#99ccff);"></span>
-                    Todas <span class="badge" id="cAll">0</span>
+                    <span data-lang-key="ev-cat-all">Todas</span> <span class="badge" id="cAll">0</span>
                 </button>
                 <button class="filter-btn" data-cat="destaque">
                     <span class="cat-dot" style="background:#d4a574;"></span>
-                    ⭐ Destaques <span class="badge" id="cDest">0</span>
+                    <span data-lang-key="ev-cat-featured">⭐ Destaques</span> <span class="badge" id="cDest">0</span>
                 </button>
                 <button class="filter-btn" data-cat="religioso">
                     <span class="cat-dot religioso"></span>
-                    Religiosos <span class="badge" id="cRel">0</span>
+                    <span data-lang-key="ev-cat-religious">Religiosos</span> <span class="badge" id="cRel">0</span>
                 </button>
                 <button class="filter-btn" data-cat="cultural">
                     <span class="cat-dot cultural"></span>
-                    Culturais <span class="badge" id="cCul">0</span>
+                    <span data-lang-key="ev-cat-cultural">Culturais</span> <span class="badge" id="cCul">0</span>
                 </button>
                 <button class="filter-btn" data-cat="feira">
                     <span class="cat-dot feira"></span>
-                    Feiras <span class="badge" id="cFei">0</span>
+                    <span data-lang-key="ev-cat-fair">Feiras</span> <span class="badge" id="cFei">0</span>
                 </button>
                 <button class="filter-btn" data-cat="esportivo">
                     <span class="cat-dot esportivo"></span>
-                    Esportivos <span class="badge" id="cEsp">0</span>
+                    <span data-lang-key="ev-cat-sports">Esportivos</span> <span class="badge" id="cEsp">0</span>
                 </button>
                 <button class="filter-btn" data-cat="bingo">
                     <span class="cat-dot" style="background:#f0c040;"></span>
-                    Pastéis &amp; Bingos <span class="badge" id="cBin">0</span>
+                    <span data-lang-key="ev-cat-bingo">Pastéis &amp; Bingos</span> <span class="badge" id="cBin">0</span>
                 </button>
             </div>
 
@@ -248,23 +248,23 @@
 
             <!-- Destaques -->
             <section id="secDestaques">
-                <h3 style="font-family:'Cormorant Garamond',serif;color:#0a3d2e;margin-bottom:1rem;font-size:1.4rem;">🌟 Próximos Destaques</h3>
+                <h3 style="font-family:'Cormorant Garamond',serif;color:#0a3d2e;margin-bottom:1rem;font-size:1.4rem;" data-lang-key="ev-section-featured">🌟 Próximos Destaques</h3>
                 <div class="destaque-grid" id="destaqueGrid"></div>
             </section>
 
             <!-- Header lista/calendário -->
             <div class="events-header" style="margin-top:1.5rem;">
-                <h2 id="tituloSecao" style="font-family:'Cormorant Garamond',serif;color:#0a3d2e;font-size:1.7rem;">Todos os Eventos</h2>
+                <h2 id="tituloSecao" style="font-family:'Cormorant Garamond',serif;color:#0a3d2e;font-size:1.7rem;" data-lang-key="ev-section-all">Todos os Eventos</h2>
                 <div class="view-tabs">
-                    <button class="view-tab ativo" data-view="lista">📋 Lista</button>
-                    <button class="view-tab" data-view="calendario">📅 Calendário</button>
+                    <button class="view-tab ativo" data-view="lista" data-lang-key="ev-btn-lista">📋 Lista</button>
+                    <button class="view-tab" data-view="calendario" data-lang-key="ev-btn-cal">📅 Calendário</button>
                 </div>
             </div>
 
             <!-- Loading -->
             <div id="loading" style="text-align:center;padding:3rem;">
                 <div class="spinner"></div>
-                <p style="color:#666;">Carregando eventos...</p>
+                <p style="color:#666;" data-lang-key="ev-loading">Carregando eventos...</p>
             </div>
 
             <!-- VISTA LISTA -->
@@ -278,8 +278,8 @@
                     <button id="calNext">›</button>
                 </div>
                 <div class="cal-header">
-                    <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div>
-                    <div>Qui</div><div>Sex</div><div>Sáb</div>
+                    <div data-lang-key="ev-day-short-0">Dom</div><div data-lang-key="ev-day-short-1">Seg</div><div data-lang-key="ev-day-short-2">Ter</div><div data-lang-key="ev-day-short-3">Qua</div>
+                    <div data-lang-key="ev-day-short-4">Qui</div><div data-lang-key="ev-day-short-5">Sex</div><div data-lang-key="ev-day-short-6">Sáb</div>
                 </div>
                 <div class="cal-days" id="calDays"></div>
             </div>
@@ -287,7 +287,7 @@
             <!-- Sem resultados -->
             <div id="semResultados" class="sem-resultados" style="display:none;">
                 <div class="ic">🔍</div>
-                <p>Nenhum evento encontrado para os filtros selecionados.</p>
+                <p data-lang-key="ev-nenhum">Nenhum evento encontrado para os filtros selecionados.</p>
             </div>
 
         </div>
@@ -298,17 +298,17 @@
         <div class="modal">
             <div class="modal-header">
                 <h3 id="modalTitulo">Evento</h3>
-                <button class="modal-fechar" onclick="fecharModal()">×</button>
+                <button class="modal-fechar" onclick="fecharModal()" aria-label="Fechar detalhes do evento" data-lang-key-aria-label="ev-modal-close">×</button>
             </div>
             <div class="modal-body" id="modalBody"></div>
         </div>
     </div>
 
     <footer class="footer">
-        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p data-lang-key="footer-copyright">© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
         <p style="margin-top:0.5rem;">
-            <a href="/">Voltar ao Portal</a> |
-            <a href="/transparencia">Transparência</a>
+            <a href="/" data-lang-key="ev-back-portal">Voltar ao Portal</a> |
+            <a href="/transparencia" data-lang-key="footer-transparencia">Transparência</a>
         </p>
     </footer>
 
@@ -325,6 +325,42 @@
                    'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     const MESES3 = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     const DIAS   = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    function currentLang() {
+        try {
+            // documentElement.lang é definido por applyTranslations ANTES de disparar
+            // 'translationsApplied'; o switcher (nav-shared.js) só grava sms-lang depois.
+            // Por isso lemos o lang do <html> primeiro para o re-render dinâmico não ficar
+            // um idioma atrasado ao trocar de idioma.
+            return (document.documentElement.lang || localStorage.getItem('sms-lang') || 'pt').toLowerCase().split('-')[0];
+        } catch (error) {
+            return 'pt';
+        }
+    }
+    function tr(key, fallback) {
+        const dicts = window.translations || {};
+        const dict = dicts[currentLang()] || dicts.pt || {};
+        return dict[key] || fallback || key;
+    }
+    function tpl(key, fallback, values) {
+        return tr(key, fallback).replace(/\{(\w+)\}/g, function(match, name) {
+            return values && values[name] !== undefined ? values[name] : match;
+        });
+    }
+    function monthName(month) {
+        return tr('ev-month-' + month, MESES[month]);
+    }
+    function monthShort(month) {
+        return tr('ev-month-short-' + month, MESES3[month]);
+    }
+    function dayShort(day) {
+        return tr('ev-day-short-' + day, DIAS[day]);
+    }
+    function eventCountLabel(count) {
+        return count === 1 ? tr('ev-count-single', 'evento') : tr('ev-count-many', 'eventos');
+    }
+    function occurrenceLabel(count) {
+        return count === 1 ? tr('ev-occurrence-single', 'ocorrência') : tr('ev-occurrence-many', 'ocorrências');
+    }
     const EVENT_PUBLIC_APPROVED = new Set(['aprovado', 'approved']);
     const EVENT_BLOCKED_STATUS = new Set(['pendente', 'pending', 'rejeitado', 'rejected']);
     const EVENT_UNPUBLISHED_STATUS = new Set(['rascunho', 'draft', 'despublicado', 'unpublished']);
@@ -358,6 +394,7 @@
     let vistaAtual = 'lista'; // 'lista' | 'calendario'
     let calMes     = new Date().getMonth() + 1;
     let calAno     = 2026;
+    let modalAtualUid = null;
 
     function asCleanString(value) {
         if (value === null || value === undefined) return '';
@@ -415,7 +452,7 @@
     function getEventLocationDisplay(evento) {
         const local = asCleanString(evento && evento.local);
         if (!local || normalizeCompareText(local) === 'a confirmar') {
-            return 'Local a confirmar';
+            return tr('ev-place-to-confirm', 'Local a confirmar');
         }
         return local;
     }
@@ -630,9 +667,9 @@
         document.getElementById('loading').innerHTML =
             '<div style="text-align:center;padding:3rem">' +
             '<div style="font-size:2.5rem;margin-bottom:1rem">📅</div>' +
-            '<h3 style="color:#0a3d2e;margin-bottom:0.5rem">Não foi possível carregar os eventos</h3>' +
-            '<p style="color:#666;margin-bottom:1rem">Nenhuma fonte de eventos respondeu a tempo. Verifique sua conexão.</p>' +
-            '<button onclick="carregarEventos()" style="background:#0a3d2e;color:white;border:none;padding:0.7rem 1.8rem;border-radius:25px;cursor:pointer;">🔄 Tentar novamente</button>' +
+            '<h3 style="color:#0a3d2e;margin-bottom:0.5rem">' + escapeHtml(tr('ev-load-error-title', 'Não foi possível carregar os eventos')) + '</h3>' +
+            '<p style="color:#666;margin-bottom:1rem">' + escapeHtml(tr('ev-load-error-desc', 'Nenhuma fonte de eventos respondeu a tempo. Verifique sua conexão.')) + '</p>' +
+            '<button onclick="carregarEventos()" style="background:#0a3d2e;color:white;border:none;padding:0.7rem 1.8rem;border-radius:25px;cursor:pointer;">' + escapeHtml(tr('ev-retry', '🔄 Tentar novamente')) + '</button>' +
             '</div>';
     }
 
@@ -746,7 +783,7 @@
     async function carregarEventos() {
         const loading = document.getElementById('loading');
         loading.style.display = 'block';
-        loading.innerHTML = '<div class="spinner"></div><p style="color:#666;">Carregando eventos...</p>';
+        loading.innerHTML = '<div class="spinner"></div><p style="color:#666;">' + escapeHtml(tr('ev-loading', 'Carregando eventos...')) + '</p>';
 
         const staticResult = await loadStaticEvents();
         if (staticResult.loaded) {
@@ -805,10 +842,9 @@
     }
 
     function atualizarTitulo() {
-        let t = 'Todos os Eventos';
-        if (catFiltro === 'destaque') t = 'Eventos em Destaque';
-        else if (mesFiltro !== 'all' && catFiltro === 'all') t = 'Eventos de ' + MESES[parseInt(mesFiltro)];
-        else if (mesFiltro !== 'all') t = 'Eventos de ' + MESES[parseInt(mesFiltro)];
+        let t = tr('ev-section-all', 'Todos os Eventos');
+        if (catFiltro === 'destaque') t = tr('ev-section-featured-title', 'Eventos em Destaque');
+        else if (mesFiltro !== 'all') t = tpl('ev-section-month', 'Eventos de {month}', { month: monthName(parseInt(mesFiltro)) });
         document.getElementById('tituloSecao').textContent = t;
     }
 
@@ -836,7 +872,7 @@
 
         Object.keys(porMes).sort((a,b) => a-b).forEach(m => {
             const evs = porMes[m];
-            const mesNome = MESES[parseInt(m)];
+            const mesNome = monthName(parseInt(m));
 
             // Separar: únicos e recorrentes
             const unicos      = evs.filter(e => !e.recorrente || e.destaque);
@@ -856,7 +892,7 @@
 
             html += `<div class="mes-secao">
                 <h3 class="mes-titulo">
-                    ${escapeHtml(mesNome)} <span class="mes-count">(${evs.length} evento${evs.length!==1?'s':''})</span>
+                    ${escapeHtml(mesNome)} <span class="mes-count">(${evs.length} ${escapeHtml(eventCountLabel(evs.length))})</span>
                 </h3>`;
 
             // Cards de eventos únicos (não recorrentes ou destaques)
@@ -868,14 +904,14 @@
             Object.entries(grupos).forEach(([titulo, lista]) => {
                 const primeiro = lista[0];
                 const ocorr = lista.length;
-                const freq  = titulo.includes('Gastronômica') ? 'Quarta e Sexta' :
-                              titulo.includes('Produtor')      ? 'Todo Sábado' : `${ocorr}× no mês`;
+                const freq  = titulo.includes('Gastronômica') ? tr('ev-frequency-wed-fri', 'Quarta e sexta') :
+                              titulo.includes('Produtor')      ? tr('ev-frequency-saturday', 'Todo sábado') : tpl('ev-frequency-month', '{count}x no mês', { count: ocorr });
 
                 html += `<div class="feira-resumo">
                     <span style="font-size:1.3rem;">🏪</span>
                     <div>
                         <strong>${escapeHtml(titulo)}</strong>
-                        — ${escapeHtml(freq)} · ${ocorr} ocorrência${ocorr!==1?'s':''} em ${escapeHtml(mesNome)}
+                        — ${escapeHtml(freq)} · ${ocorr} ${escapeHtml(occurrenceLabel(ocorr))} · ${escapeHtml(mesNome)}
                         <span style="color:#aaa;margin-left:0.5rem;">📍 ${escapeHtml(primeiro.local)} · 🕐 ${escapeHtml(primeiro.horario)}</span>
                     </div>
                 </div>`;
@@ -884,17 +920,17 @@
             html += '</div>';
         });
 
-        container.innerHTML = html || '<div class="sem-resultados"><div class="ic">🔍</div><p>Nenhum evento encontrado.</p></div>';
+        container.innerHTML = html || '<div class="sem-resultados"><div class="ic">🔍</div><p>' + escapeHtml(tr('ev-empty-short', 'Nenhum evento encontrado.')) + '</p></div>';
     }
 
     function cardEvento(ev) {
         const d   = new Date(ev.data + 'T12:00:00');
         const dia = d.getDate();
-        const mes = MESES3[d.getMonth()+1];
-        const dow = DIAS[d.getDay()];
+        const mes = monthShort(d.getMonth()+1);
+        const dow = dayShort(d.getDay());
         const badgeExtra = ev.destaque
-            ? '<span class="badge-dest">destaque</span>'
-            : (ev.recorrente ? '<span class="badge-rec">recorrente</span>' : '');
+            ? '<span class="badge-dest">' + escapeHtml(tr('ev-badge-featured', 'destaque')) + '</span>'
+            : (ev.recorrente ? '<span class="badge-rec">' + escapeHtml(tr('ev-badge-recurring', 'recorrente')) + '</span>' : '');
 
         return `<div class="ev-card ${escapeHtml(ev.categoria || '')} ${ev.destaque ? 'destaque' : ''}" onclick="abrirModal(${ev.uid})">
             <div class="ev-data">
@@ -906,10 +942,10 @@
                 <h4>${ev.destaque?'⭐ ':''}${escapeHtml(ev.titulo)}${badgeExtra}</h4>
                 <div class="ev-meta">
                     <span>🕐 ${escapeHtml(ev.horario)}</span>
-                    <span>📍 ${escapeHtml(ev.local)}</span>
+                    <span>📍 ${escapeHtml(getEventLocationDisplay(ev))}</span>
                 </div>
             </div>
-            <button class="btn-ver" onclick="event.stopPropagation();abrirModal(${ev.uid})">Ver mais</button>
+            <button class="btn-ver" onclick="event.stopPropagation();abrirModal(${ev.uid})">${escapeHtml(tr('ev-view-more', 'Ver mais'))}</button>
         </div>`;
     }
 
@@ -927,16 +963,16 @@
         document.getElementById('destaqueGrid').innerHTML = lista.map(ev => {
             const d = new Date(ev.data + 'T12:00:00');
             return `<div class="destaque-card" onclick="abrirModal(${ev.uid})">
-                <div class="dc-data">📅 ${d.getDate()} de ${MESES[d.getMonth()+1]}</div>
+                <div class="dc-data">📅 ${d.getDate()} · ${escapeHtml(monthName(d.getMonth()+1))}</div>
                 <h4>${escapeHtml(ev.titulo)}</h4>
-                <div class="dc-local">📍 ${escapeHtml(ev.local)}</div>
+                <div class="dc-local">📍 ${escapeHtml(getEventLocationDisplay(ev))}</div>
             </div>`;
         }).join('');
     }
 
     // ── Vista calendário ─────────────────────────────────────────────
     function renderCalendario() {
-        document.getElementById('calTitulo').textContent = MESES[calMes] + ' ' + calAno;
+        document.getElementById('calTitulo').textContent = monthName(calMes) + ' ' + calAno;
 
         const primeiro = new Date(calAno, calMes-1, 1);
         const ultimo   = new Date(calAno, calMes, 0);
@@ -986,35 +1022,36 @@
     function abrirModal(uid) {
         const ev = todos.find(e => e.uid === uid);
         if (!ev) return;
+        modalAtualUid = uid;
 
         const d = new Date(ev.data + 'T12:00:00');
-        const dataStr = `${d.getDate()} de ${MESES[d.getMonth()+1]} de ${d.getFullYear()} (${DIAS[d.getDay()]})`;
+        const dataStr = `${d.getDate()} · ${monthName(d.getMonth()+1)} · ${d.getFullYear()} (${dayShort(d.getDay())})`;
         const localConfirmado = getConfirmedEventPlace(ev);
         const imageMarkup = ev.imagem
             ? `<img src="${escapeHtml(ev.imagem)}" alt="${escapeHtml(ev.titulo)}" loading="lazy" decoding="async" width="640" height="360" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:1rem;" onerror="this.style.display='none'">`
             : '';
         const organizadorMarkup = ev.organizador
-            ? `<div class="modal-row"><div class="ic">👤</div><div><div class="label">Organizador</div>${escapeHtml(ev.organizador)}</div></div>`
+            ? `<div class="modal-row"><div class="ic">👤</div><div><div class="label">${escapeHtml(tr('ev-label-organizer', 'Organizador'))}</div>${escapeHtml(ev.organizador)}</div></div>`
             : '';
         const valorMarkup = ev.valor
-            ? `<div class="modal-row"><div class="ic">🎟️</div><div><div class="label">Valor</div>${escapeHtml(ev.valor)}</div></div>`
+            ? `<div class="modal-row"><div class="ic">🎟️</div><div><div class="label">${escapeHtml(tr('ev-label-value', 'Valor'))}</div>${escapeHtml(ev.valor)}</div></div>`
             : '';
         const siteMarkup = ev.site
             ? `<div class="modal-row"><div class="ic">🔗</div><div><div class="label">Site</div><a href="${escapeHtml(ev.site)}" target="_blank" rel="noopener noreferrer">${escapeHtml(ev.site)}</a></div></div>`
             : '';
         const whatsappMarkup = ev.whatsapp
-            ? `<div class="modal-row"><div class="ic">💬</div><div><div class="label">WhatsApp</div><a href="${escapeHtml(ev.whatsapp)}" target="_blank" rel="noopener noreferrer">Abrir contato</a></div></div>`
+            ? `<div class="modal-row"><div class="ic">💬</div><div><div class="label">WhatsApp</div><a href="${escapeHtml(ev.whatsapp)}" target="_blank" rel="noopener noreferrer">${escapeHtml(tr('ev-open-contact', 'Abrir contato'))}</a></div></div>`
             : '';
         const localActionsMarkup = localConfirmado
-            ? `<div class="modal-row"><div class="ic">🗺️</div><div><div class="label">Local vinculado</div><a href="/local?id=${encodeURIComponent(localConfirmado.id)}">Abrir ficha</a></div></div>`
+            ? `<div class="modal-row"><div class="ic">🗺️</div><div><div class="label">${escapeHtml(tr('ev-label-linked-place', 'Local vinculado'))}</div><a href="/local?id=${encodeURIComponent(localConfirmado.id)}">${escapeHtml(tr('ev-open-place', 'Abrir ficha'))}</a></div></div>`
             : '';
 
         document.getElementById('modalTitulo').textContent = (ev.destaque ? '⭐ ' : '') + ev.titulo;
         document.getElementById('modalBody').innerHTML = `
             ${imageMarkup}
-            <div class="modal-row"><div class="ic">📅</div><div><div class="label">Data</div>${escapeHtml(dataStr)}</div></div>
-            <div class="modal-row"><div class="ic">🕐</div><div><div class="label">Horário</div>${escapeHtml(ev.horario)}</div></div>
-            <div class="modal-row"><div class="ic">📍</div><div><div class="label">Local</div>${escapeHtml(getEventLocationDisplay(ev))}</div></div>
+            <div class="modal-row"><div class="ic">📅</div><div><div class="label">${escapeHtml(tr('ev-label-date', 'Data'))}</div>${escapeHtml(dataStr)}</div></div>
+            <div class="modal-row"><div class="ic">🕐</div><div><div class="label">${escapeHtml(tr('ev-label-time', 'Horário'))}</div>${escapeHtml(ev.horario)}</div></div>
+            <div class="modal-row"><div class="ic">📍</div><div><div class="label">${escapeHtml(tr('ev-label-place', 'Local'))}</div>${escapeHtml(getEventLocationDisplay(ev))}</div></div>
             ${localActionsMarkup}
             ${organizadorMarkup}
             ${valorMarkup}
@@ -1029,6 +1066,17 @@
     function fecharModal() {
         document.getElementById('modalOverlay').classList.remove('ativo');
         document.body.style.overflow = '';
+        modalAtualUid = null;
+    }
+
+    function refreshEventLanguage() {
+        atualizarTitulo();
+        renderDestaques();
+        if (vistaAtual === 'lista') renderLista();
+        else renderCalendario();
+        if (modalAtualUid && document.getElementById('modalOverlay').classList.contains('ativo')) {
+            abrirModal(modalAtualUid);
+        }
     }
 
     // ── Alternar vistas ──────────────────────────────────────────────
@@ -1099,6 +1147,8 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') fecharModal();
         });
+
+        document.addEventListener('translationsApplied', refreshEventLanguage);
     });
     </script>
     <script src="translations.js"></script>

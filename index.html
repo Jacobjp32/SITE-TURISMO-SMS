@@ -228,7 +228,7 @@
                 <li><a href="#map-hero" data-lang-key="nav-inicio">Início</a></li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeExploreMenu" aria-label="Abrir menu Explore">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeExploreMenu" aria-label="Abrir menu Explore" data-lang-key-aria-label="nav-open-explore">
                         <span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span>
                     </button>
                     <div class="dropdown-menu" id="homeExploreMenu" role="menu">
@@ -241,7 +241,7 @@
                 <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeAgendaMenu" aria-label="Abrir menu Agenda">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeAgendaMenu" aria-label="Abrir menu Agenda" data-lang-key-aria-label="nav-open-agenda">
                         <span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span>
                     </button>
                     <div class="dropdown-menu" id="homeAgendaMenu" role="menu">
@@ -251,7 +251,7 @@
                 </li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homePlanMenu" aria-label="Abrir menu Planeje sua Visita">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homePlanMenu" aria-label="Abrir menu Planeje sua Visita" data-lang-key-aria-label="nav-open-plan">
                         <span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span>
                     </button>
                     <div class="dropdown-menu" id="homePlanMenu" role="menu">
@@ -264,7 +264,7 @@
                 </li>
 
                 <li>
-                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeSobreMenu" aria-label="Abrir menu Sobre">
+                    <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="homeSobreMenu" aria-label="Abrir menu Sobre" data-lang-key-aria-label="nav-open-about">
                         <span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span>
                     </button>
                     <div class="dropdown-menu" id="homeSobreMenu" role="menu">
@@ -319,12 +319,12 @@
             
         </nav>
 
-    <nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo">
-        <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa">Mapa</a>
-        <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos">Eventos</a>
-        <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas">Rotas</a>
-        <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer">Comer</a>
-        <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar">Ficar</a>
+    <nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo" data-lang-key-aria-label="nav-mobile-shortcuts-label">
+        <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa" data-lang-key-aria-label="nav-shortcut-map-aria">Mapa</a>
+        <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos" data-lang-key-aria-label="nav-shortcut-events-aria">Eventos</a>
+        <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas" data-lang-key-aria-label="nav-shortcut-routes-aria">Rotas</a>
+        <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
+        <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
     </nav>
 
     <!-- Mobile Menu Overlay -->
@@ -1276,7 +1276,7 @@
             <div class="contact-main-grid">
                 <!-- Formulário de Contato -->
                 <div class="contact-form-wrapper">
-                    <h3 class="form-title" data-lang-key="form-titulo" data-lang-key="contato-form-title">Envie sua Mensagem</h3>
+                    <h3 class="form-title" data-lang-key="contato-form-title">Envie sua Mensagem</h3>
                     <form id="contactForm" class="contact-form">
                         <div class="form-row">
                             <div class="form-group">
@@ -1350,7 +1350,7 @@
                         <!-- Localização -->
                         <div class="contact-card">
                             <div class="contact-card-icon">📍</div>
-                            <h3 class="contact-card-title" data-lang-key="contato-localizacao" data-lang-key="contato-localizacao">Localização</h3>
+                            <h3 class="contact-card-title" data-lang-key="contato-localizacao">Localização</h3>
                             <p class="contact-card-subtitle" data-lang-key="contato-chale">Chalé do Produtor</p>
                             <p class="contact-card-subtitle">PRAÇA DO RIO IGUAÇU</p>
                             <p class="contact-card-address">
@@ -2163,6 +2163,13 @@
                 var codeEl = currentLangBtn.querySelector('.lang-code');
                 if (flagEl) flagEl.textContent = flags[lang] || '🇧🇷';
                 if (codeEl) codeEl.textContent = lang.toUpperCase();
+                var activeOption = document.querySelector('.lang-option[data-lang="' + lang + '"]');
+                var labelText = activeOption && activeOption.textContent ? activeOption.textContent.trim() : lang.toUpperCase();
+                var dict = window.translations && (window.translations[lang] || window.translations.pt);
+                var ariaTemplate = dict && dict['lang-select-current'] ? dict['lang-select-current'] : 'Selecionar idioma {language}';
+                var titleTemplate = dict && dict['lang-current-title'] ? dict['lang-current-title'] : 'Idioma atual: {language}';
+                currentLangBtn.setAttribute('aria-label', ariaTemplate.replace('{language}', labelText));
+                currentLangBtn.setAttribute('title', titleTemplate.replace('{language}', labelText));
             }
 
             function aplicarTraducoes(lang) {

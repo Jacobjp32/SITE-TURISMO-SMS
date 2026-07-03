@@ -50,6 +50,43 @@ comando
 
 ---
 
+## 2026-07-03 — Tarefa 6: revisão multilíngue PT-BR / EN / ES / PL
+
+**Ferramenta/modelo:** Codex (implementação) + Claude Code (QA)  
+**Responsável pela aprovação:** Jacob  
+**Status:** validado (QA aprovado, aguardando commit)
+
+### Objetivo
+
+Completar o passe de i18n público (PT-BR/EN/ES/PL) da agenda de eventos, do nav e dos rótulos de acessibilidade, sem deploy, commit, dependências ou mudanças em Firebase/admin/dados.
+
+### Arquivos alterados
+
+- `translations.js` — novas chaves nos 4 idiomas (agenda pública, meses/dias, estados vazios, modal de evento, atalhos mobile, ARIA do nav e seletor de idioma). Paridade 888/888/888/888, sem duplicatas.
+- `eventos.html` — textos estáticos e dinâmicos da agenda ligados ao i18n; **fix do `currentLang()`** (passa a priorizar `document.documentElement.lang`) para o conteúdo dinâmico não ficar um idioma atrasado ao trocar de idioma.
+- `index.html` — `data-lang-key-aria-label` no nav/atalhos mobile; correção de 2 `data-lang-key` duplicados; ARIA/title traduzíveis do botão de idioma.
+- `js/nav-shared.js` — ARIA traduzível de menus, atalhos mobile e estado/título do seletor de idioma.
+
+### Validações
+
+- [x] `node --check` (nav-shared, translations, season-theme, mapa-turistico, locais-data, data/eventos) — OK
+- [x] `git diff --check` — limpo
+- [x] Auditorias (tourism-data / links / assets / project) — OK (reports gerados revertidos)
+- [x] Navegador PT/EN/ES/PL: eventos.html (estático+dinâmico sincronizados, modal abre/re-renderiza/fecha), index.html, local.html (com id, sem id, id inválido), 390px/412px
+- [ ] teste em produção/homologação
+
+### Riscos / observações
+
+- Overflow de 3px no `.featured-carousel-track` em 390/412px é pré-existente e independente de idioma (sem overflow de página) — follow-up opcional, não relacionado a esta tarefa.
+- `aria-label`/`title` do seletor de idioma incluem emoji da bandeira + espaços (padrão já existente em `nav-shared.js`) — follow-up opcional global.
+- Relatórios gerados (`docs/auditoria-dados-turisticos.md`, `docs/auditoria-output/*`) foram revertidos; não incluir no commit.
+
+### Próximo passo
+
+- Commit dos 4 arquivos: `translations.js`, `eventos.html`, `index.html`, `js/nav-shared.js` (mediante autorização).
+
+---
+
 ## 2026-07-03 — Governança de uso do Claude no projeto
 
 **Ferramenta/modelo:** ChatGPT  

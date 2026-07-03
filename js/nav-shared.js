@@ -44,7 +44,7 @@
             <li><a href="/" data-lang-key="nav-inicio">Início</a></li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navExploreMenu" aria-label="Abrir menu Explore"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navExploreMenu" aria-label="Abrir menu Explore" data-lang-key-aria-label="nav-open-explore"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" id="navExploreMenu" role="menu">
                     <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
                     <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-rotas">Rotas</a>
@@ -55,7 +55,7 @@
             <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu Agenda" data-lang-key-aria-label="nav-open-agenda"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
                     <a href="/eventos/" role="menuitem" data-lang-key="nav-eventos">Eventos</a>
                     <a href="/noticias" role="menuitem" data-lang-key="nav-noticias-clean">Notícias</a>
@@ -63,7 +63,7 @@
             </li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu Planeje sua Visita" data-lang-key-aria-label="nav-open-plan"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
                     <a href="/mapa-turistico.html?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
                     <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
@@ -74,7 +74,7 @@
             </li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navSobreMenu" aria-label="Abrir menu Sobre"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navSobreMenu" aria-label="Abrir menu Sobre" data-lang-key-aria-label="nav-open-about"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" id="navSobreMenu" role="menu">
                     <a href="/#sobre" role="menuitem" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
                     <a href="/mapa-turistico.html?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
@@ -115,12 +115,12 @@
         </ul>
     </div>
 </nav>
-<nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo">
-    <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa">Mapa</a>
-    <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos">Eventos</a>
-    <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas">Rotas</a>
-    <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer">Comer</a>
-    <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar">Ficar</a>
+<nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo" data-lang-key-aria-label="nav-mobile-shortcuts-label">
+    <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa" data-lang-key-aria-label="nav-shortcut-map-aria">Mapa</a>
+    <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos" data-lang-key-aria-label="nav-shortcut-events-aria">Eventos</a>
+    <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas" data-lang-key-aria-label="nav-shortcut-routes-aria">Rotas</a>
+    <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
+    <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
 </nav>
 <div class="mobile-menu-overlay" id="menuOverlay"></div>
 <div class="search-modal" id="searchModal" aria-hidden="true">
@@ -625,6 +625,11 @@ body.font-larger{font-size:140%!important;}
         var langBtn  = document.getElementById('currentLang');
         var langDrop = document.getElementById('langDropdown');
         if (langBtn && langDrop) {
+            function getNavTranslation(lang, key, fallback) {
+                var dict = window.translations && (window.translations[lang] || window.translations.pt);
+                return dict && dict[key] ? dict[key] : fallback;
+            }
+
             function updateLanguageAccessibility(activeLang) {
                 var activeOption = null;
                 langDrop.querySelectorAll('.lang-option').forEach(function(opt) {
@@ -637,8 +642,10 @@ body.font-larger{font-size:140%!important;}
                 if (!activeOption) return;
 
                 var labelText = activeOption.textContent ? activeOption.textContent.trim() : activeLang.toUpperCase();
-                langBtn.setAttribute('aria-label', 'Selecionar idioma ' + labelText);
-                langBtn.setAttribute('title', 'Idioma atual: ' + labelText);
+                var ariaTemplate = getNavTranslation(activeLang, 'lang-select-current', 'Selecionar idioma {language}');
+                var titleTemplate = getNavTranslation(activeLang, 'lang-current-title', 'Idioma atual: {language}');
+                langBtn.setAttribute('aria-label', ariaTemplate.replace('{language}', labelText));
+                langBtn.setAttribute('title', titleTemplate.replace('{language}', labelText));
             }
 
             langBtn.addEventListener('click', function(e) {
