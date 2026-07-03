@@ -40,6 +40,7 @@
       listEmptyFiltered: "Nenhum resultado neste filtro. Tente buscar em Todos.",
       listEmptySearch: "Nenhum local corresponde a essa busca no momento.",
       details: "Ver detalhes",
+      localDetail: "Abrir ficha",
       directions: "Como chegar",
       noCoordinates: "Sem localizacao cadastrada",
       noImage: "Sem imagem",
@@ -144,6 +145,7 @@
       listEmptyFiltered: "No results in this filter. Try searching in All.",
       listEmptySearch: "No places match this search right now.",
       details: "View details",
+      localDetail: "Open page",
       directions: "Directions",
       noCoordinates: "Location not registered",
       noImage: "No image",
@@ -248,6 +250,7 @@
       listEmptyFiltered: "No hay resultados en este filtro. Intenta buscar en Todos.",
       listEmptySearch: "Ningun lugar coincide con esta busqueda.",
       details: "Ver detalles",
+      localDetail: "Abrir ficha",
       directions: "Como llegar",
       noCoordinates: "Sin ubicacion registrada",
       noImage: "Sin imagen",
@@ -352,6 +355,7 @@
       listEmptyFiltered: "Brak wynikow w tym filtrze. Sprobuj wyszukac we Wszystkich.",
       listEmptySearch: "Zadne miejsce nie pasuje do tego wyszukiwania.",
       details: "Zobacz szczegoly",
+      localDetail: "Otworz karte",
       directions: "Jak dojechac",
       noCoordinates: "Brak zapisanej lokalizacji",
       noImage: "Brak zdjecia",
@@ -1363,6 +1367,12 @@
     return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '" loading="lazy" decoding="async" width="640" height="360">';
   }
 
+  function getLocalDetailUrl(item) {
+    var raw = String(item && item.url || "").trim();
+    if (!/^\/local(?:\.html)?\?id=[^#&?]+(?:$|[&#])/.test(raw)) return "";
+    return raw;
+  }
+
   function createMarkerIcon(filterId, isSelected) {
     var config = getCategoryConfig(filterId);
     return L.divIcon({
@@ -1467,6 +1477,7 @@
     var bounds = [];
     state.filteredItems.forEach(function (item) {
       if (!item.possuiCoordenadas) return;
+      var localDetailUrl = getLocalDetailUrl(item);
 
       var marker = L.marker([item.coordenadas.lat, item.coordenadas.lng], {
         icon: createMarkerIcon(item.categoriaMapa, item.id === state.selectedItemId),
@@ -1479,6 +1490,7 @@
           + '<span>' + escapeHtml(item.categoriaLabel) + '</span>'
           + '<p>' + escapeHtml(item.descricao || t("noDescription")) + '</p>'
           + '<button type="button" class="map-popup-detail-button" data-map-details-id="' + escapeHtml(item.id) + '">' + t("popupDetails") + '</button>'
+          + (localDetailUrl ? '<a href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
           + (item.possuiCoordenadas ? '<a href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("popupDirections") + "</a>" : "")
           + "</div>"
       );
@@ -1564,6 +1576,7 @@
     var description = item.descricao || t("noDescription");
     var longDescription = item.descricaoLonga && item.descricaoLonga !== item.descricao ? item.descricaoLonga : "";
     var routeLabel = isRouteItem(item) ? t("routeBadge") : item.rota;
+    var localDetailUrl = getLocalDetailUrl(item);
 
     return ''
       + '<div class="map-details-media">'
@@ -1588,6 +1601,7 @@
       + renderDetailsGallery(item)
       + '<div class="map-details-actions">'
       + (item.possuiCoordenadas ? '<a class="map-button primary" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("directions")) + '</a>' : "")
+      + (localDetailUrl ? '<a class="map-button" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
       + (item.whatsappUrl ? '<a class="map-button" href="' + escapeHtml(item.whatsappUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("whatsapp")) + '</a>' : "")
       + (item.contactLink ? '<a class="map-button" href="' + escapeHtml(item.contactLink) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("externalLink")) + '</a>' : "")
       + '</div>'
@@ -1674,6 +1688,7 @@
     state.selectedItemId = item.id;
 
     var meta = [];
+    var localDetailUrl = getLocalDetailUrl(item);
     if (item.localizacao) meta.push('<span class="map-meta-chip">📍 ' + escapeHtml(item.localizacao) + "</span>");
     if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + escapeHtml(item.telefone) + "</span>");
     if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + escapeHtml(item.periodo) + "</span>");
@@ -1697,6 +1712,7 @@
       + renderApprovedEventsSection(item, "panel")
       + '<div class="map-detail-actions">'
       + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
+      + (localDetailUrl ? '<a class="map-button" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</div>";
@@ -1706,6 +1722,7 @@
     var selectedClass = item.id === state.selectedItemId ? " is-selected" : "";
     var config = getCategoryConfig(item.categoriaMapa);
     var tags = [];
+    var localDetailUrl = getLocalDetailUrl(item);
 
     tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + escapeHtml(item.categoriaLabel) + "</span>");
     if (item.panelGroup === "routes" && item.categoriaOriginal) {
@@ -1729,6 +1746,7 @@
       + "</button>"
       + '<div class="map-list-card-actions">'
       + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
+      + (localDetailUrl ? '<a class="map-button" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</article>";

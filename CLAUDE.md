@@ -144,11 +144,11 @@ As páginas abaixo existem, mas devem ser tratadas como legado/futuro/suspenso e
 
 ### Páginas antigas que não existem
 
-Não assumir que estas páginas existem:
+Não assumir que estas páginas existem (nomes de arquivo legados, sem arquivo real no projeto):
 
-- `gastronomia.html`
-- `rotas.html`
-- `cultura.html`
+- gastronomia.html
+- rotas.html
+- cultura.html
 
 Equivalentes/alternativas já identificadas:
 

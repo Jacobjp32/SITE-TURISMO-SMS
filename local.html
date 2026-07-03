@@ -353,11 +353,11 @@
 
 <!-- Lightbox -->
 <div class="lb" id="lb" onclick="lbClose()">
-    <button class="lb-close" onclick="lbClose()">×</button>
+    <button class="lb-close" onclick="lbClose()" aria-label="Fechar imagem ampliada">×</button>
     <img id="lb-img" src="" alt="" loading="lazy">
 </div>
 
-<div id="page-root"></div>
+<main id="page-root" tabindex="-1"></main>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
@@ -386,10 +386,11 @@
             traceRoute: "🧭 Traçar rota", viewOnMap: "🗺️ Ver no mapa turístico",
             backToMap: "← Voltar ao mapa", officialSite: "🌐 Site oficial", back: "← Voltar",
             notFoundTitle: "Local não encontrado",
-            notFoundMsg: "O local solicitado não existe ou ainda não foi cadastrado.",
+            notFoundMsg: "O local solicitado não existe ou ainda não tem ficha pública. Confira o endereço ou volte ao mapa turístico.",
             noIdTitle: "Nenhum local selecionado",
-            noIdMsg: "Escolha um atrativo no mapa turístico para ver os detalhes.",
+            noIdMsg: "Escolha um atrativo no mapa turístico para abrir uma ficha individual.",
             unavailable: "Informação não disponível", photo: "foto",
+            openPhoto: "Abrir foto",
             rights: "© 2026 Secretaria Municipal de Turismo de São Mateus do Sul",
             portal: "← Portal do Turismo", routes: "Rotas Turísticas"
         },
@@ -401,10 +402,11 @@
             traceRoute: "🧭 Get directions", viewOnMap: "🗺️ View on tourist map",
             backToMap: "← Back to the map", officialSite: "🌐 Official website", back: "← Back",
             notFoundTitle: "Place not found",
-            notFoundMsg: "The requested place does not exist or has not been registered yet.",
+            notFoundMsg: "The requested place does not exist or does not have a public detail page yet. Check the address or return to the tourist map.",
             noIdTitle: "No place selected",
-            noIdMsg: "Pick an attraction on the tourist map to see its details.",
+            noIdMsg: "Pick an attraction on the tourist map to open an individual detail page.",
             unavailable: "Information not available", photo: "photo",
+            openPhoto: "Open photo",
             rights: "© 2026 Municipal Tourism Department of São Mateus do Sul",
             portal: "← Tourism Portal", routes: "Tourist Routes"
         },
@@ -416,10 +418,11 @@
             traceRoute: "🧭 Cómo llegar", viewOnMap: "🗺️ Ver en el mapa turístico",
             backToMap: "← Volver al mapa", officialSite: "🌐 Sitio oficial", back: "← Volver",
             notFoundTitle: "Lugar no encontrado",
-            notFoundMsg: "El lugar solicitado no existe o aún no ha sido registrado.",
+            notFoundMsg: "El lugar solicitado no existe o aún no tiene una ficha pública. Revisa la dirección o vuelve al mapa turístico.",
             noIdTitle: "Ningún lugar seleccionado",
-            noIdMsg: "Elige un atractivo en el mapa turístico para ver los detalles.",
+            noIdMsg: "Elige un atractivo en el mapa turístico para abrir una ficha individual.",
             unavailable: "Información no disponible", photo: "foto",
+            openPhoto: "Abrir foto",
             rights: "© 2026 Departamento Municipal de Turismo de São Mateus do Sul",
             portal: "← Portal de Turismo", routes: "Rutas Turísticas"
         },
@@ -431,10 +434,11 @@
             traceRoute: "🧭 Wyznacz trasę", viewOnMap: "🗺️ Zobacz na mapie turystycznej",
             backToMap: "← Powrót do mapy", officialSite: "🌐 Oficjalna strona", back: "← Powrót",
             notFoundTitle: "Nie znaleziono miejsca",
-            notFoundMsg: "Żądane miejsce nie istnieje lub nie zostało jeszcze dodane.",
+            notFoundMsg: "Żądane miejsce nie istnieje albo nie ma jeszcze publicznej karty. Sprawdź adres lub wróć do mapy turystycznej.",
             noIdTitle: "Nie wybrano miejsca",
-            noIdMsg: "Wybierz atrakcję na mapie turystycznej, aby zobaczyć szczegóły.",
+            noIdMsg: "Wybierz atrakcję na mapie turystycznej, aby otworzyć indywidualną kartę miejsca.",
             unavailable: "Informacja niedostępna", photo: "zdjęcie",
+            openPhoto: "Otwórz zdjęcie",
             rights: "© 2026 Wydział Turystyki Miasta São Mateus do Sul",
             portal: "← Portal Turystyczny", routes: "Trasy Turystyczne"
         }
@@ -527,10 +531,12 @@
                 galeria.map(function (src, i) {
                     var safeSrc = SEC.url(src, FALLBACK_IMG) || FALLBACK_IMG;
                     var altTxt = nome + " — " + t("photo") + " " + (i + 1);
+                    var ariaTxt = t("openPhoto") + " " + (i + 1) + ": " + nome;
                     return '<img src="' + safeSrc + '" alt="' + SEC.attr(altTxt) + '" tabindex="0" ' +
+                        'role="button" aria-label="' + SEC.attr(ariaTxt) + '" ' +
                         'onclick="lbOpen(this.src, this.alt)" ' +
                         'onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();lbOpen(this.src,this.alt);}" ' +
-                        'onerror="imgFallback(this)" loading="lazy">';
+                        'onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">';
                 }).join("") +
             '</div></section>'
         : "";
@@ -590,7 +596,7 @@
             var l = window.locaisData[key];
             var relImg = SEC.url(l.imagem, FALLBACK_IMG) || FALLBACK_IMG;
             return '<a href="/local?id=' + encodeURIComponent(l.id || key) + '" class="rel-card">' +
-                '<img src="' + relImg + '" alt="' + SEC.attr(SEC.value(l.nome, "")) + '" onerror="imgFallback(this)" loading="lazy">' +
+                '<img src="' + relImg + '" alt="' + SEC.attr(SEC.value(l.nome, "")) + '" onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">' +
                 '<div class="rel-card-body">' +
                     '<h4>' + SEC.html(l.nome, "") + '</h4>' +
                     '<p>' + SEC.html(l.subtitulo, "") + '</p>' +
@@ -616,7 +622,7 @@
 
     root.innerHTML =
         '<div class="hero">' +
-            '<img src="' + heroImg + '" alt="' + SEC.attr(nome) + '" id="hero-img" onerror="imgFallback(this)" loading="lazy">' +
+            '<img src="' + heroImg + '" alt="' + SEC.attr(nome) + '" id="hero-img" onerror="imgFallback(this)" loading="eager" decoding="async" fetchpriority="high" width="1200" height="675">' +
             '<div class="hero-overlay"></div>' +
             '<a class="btn-voltar" href="/mapa-turistico.html" onclick="voltarAoMapa(event)">' + SEC.html(t("back")) + '</a>' +
             '<div class="hero-content">' +

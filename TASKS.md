@@ -121,11 +121,11 @@ Motivo: existem, mas foram classificados como legado/futuro/suspenso.
 
 ## Páginas antigas que não existem
 
-Não tentar editar/recriar sem autorização:
+Não tentar editar/recriar sem autorização (nomes de arquivo legados, sem arquivo real no projeto):
 
-- `gastronomia.html`
-- `rotas.html`
-- `cultura.html`
+- gastronomia.html
+- rotas.html
+- cultura.html
 
 Equivalentes identificados:
 
