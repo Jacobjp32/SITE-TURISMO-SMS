@@ -18,8 +18,18 @@
     <meta property="og:title" id="og-title" content="Turismo São Mateus do Sul">
     <meta property="og:description" id="og-desc" content="Informações turísticas de São Mateus do Sul — Capital Polonesa do Paraná.">
     <meta property="og:image" id="og-image" content="https://turismo.saomateusdosul.pr.gov.br/images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+    <meta property="og:image:alt" id="og-image-alt" content="Vista geral de São Mateus do Sul">
     <meta property="og:url" id="og-url" content="https://turismo.saomateusdosul.pr.gov.br/local">
+    <meta property="og:locale" content="pt_BR">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" id="twitter-title" content="Turismo São Mateus do Sul">
+    <meta name="twitter:description" id="twitter-desc" content="Informações turísticas de São Mateus do Sul — Capital Polonesa do Paraná.">
+    <meta name="twitter:image" id="twitter-image" content="https://turismo.saomateusdosul.pr.gov.br/images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+    <meta name="twitter:image:alt" id="twitter-image-alt" content="Vista geral de São Mateus do Sul">
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
+    <link rel="apple-touch-icon" href="images/logo_pin_turismo_3d.png">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a3d2e">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css">
@@ -448,6 +458,14 @@
         if (/^https?:\/\//i.test(path)) return path;
         return SITE + "/" + String(path).replace(/^\/+/, "");
     }
+    function truncateMeta(value) {
+        var text = SEC.value(value, "").replace(/\s+/g, " ").trim();
+        if (text.length <= 155) return text;
+        var cut = text.slice(0, 152);
+        var lastSpace = cut.lastIndexOf(" ");
+        if (lastSpace > 90) cut = cut.slice(0, lastSpace);
+        return cut.replace(/[.,;:!?-]+$/, "") + "...";
+    }
 
     var params = new URLSearchParams(window.location.search);
     var rawId = (params.get("id") || "").trim();
@@ -465,6 +483,7 @@
         var errMsg = isMissingId ? t("noIdMsg") : t("notFoundMsg");
         document.title = errTitle + " | Turismo São Mateus do Sul";
         setMeta("og-title", "content", errTitle);
+        setMeta("twitter-title", "content", errTitle);
         root.innerHTML =
             '<div class="not-found">' +
                 '<h2>' + SEC.html(errTitle) + '</h2>' +
@@ -482,7 +501,7 @@
 
     // ── SEO dinâmico por id (canonical/robots/OG). Não colapsa as fichas numa só URL. ──
     var pageUrl = SITE + "/local?id=" + encodeURIComponent(id);
-    var metaDesc = descricao ? descricao.substring(0, 160) : SEC.value(local.subtitulo, nome);
+    var metaDesc = descricao ? truncateMeta(descricao) : SEC.value(local.subtitulo, nome);
     document.title = nome + " | Turismo São Mateus do Sul";
     var descEl = document.querySelector('meta[name="description"]');
     if (descEl) descEl.setAttribute("content", metaDesc);
@@ -491,6 +510,11 @@
     setMeta("og-desc", "content", metaDesc);
     setMeta("og-url", "content", pageUrl);
     setMeta("og-image", "content", absUrl(local.imagem || FALLBACK_IMG));
+    setMeta("og-image-alt", "content", nome + " em São Mateus do Sul");
+    setMeta("twitter-title", "content", nome + " | Turismo São Mateus do Sul");
+    setMeta("twitter-desc", "content", metaDesc);
+    setMeta("twitter-image", "content", absUrl(local.imagem || FALLBACK_IMG));
+    setMeta("twitter-image-alt", "content", nome + " em São Mateus do Sul");
 
     var heroImg = SEC.url(local.imagem, FALLBACK_IMG) || FALLBACK_IMG;
 
