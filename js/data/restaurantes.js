@@ -65,17 +65,5 @@ window.TURISMO_RESTAURANTES = [
     localizacao: "Fluviópolis",
     coordenadas: { lat: -25.9989864, lng: -50.5866816 },
     tags: ["gastronomia", "parada gastronômica", "panificação", "família", "estrada", "fluviópolis"]
-  },
-  {
-    id: "rua-do-mathe",
-    nome: "Rua do Mathe",
-    categoria: "Gastronomia",
-    descricao: "Polo gastronômico e cultural com feiras, erva-mate e experiências ligadas aos produtos locais.",
-    imagem: "images/RUA_DO_MATHE.jpg",
-    url: "/local?id=rua-do-mathe",
-    telefone: "(42) 3532-0000",
-    localizacao: "Centro",
-    coordenadas: { lat: -25.878, lng: -50.385 },
-    tags: ["rua do mathe", "gastronomia", "feiras", "erva-mate", "produtos locais", "cultura"]
   }
 ];
