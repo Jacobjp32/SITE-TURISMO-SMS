@@ -142,6 +142,7 @@
         <nav class="filter-nav" aria-label="Filtrar seção" data-lang-key-aria-label="sab-filtro-aria">
             <button class="fnav-btn fnav-btn--active" type="button" data-filter="" aria-pressed="true" data-lang-key="sab-filtro-tudo">Tudo</button>
             <button class="fnav-btn" type="button" data-filter="polonesa" aria-pressed="false" data-lang-key="sab-filtro-polonesa">🥟 Culinária Polonesa</button>
+            <button class="fnav-btn" type="button" data-filter="erva-mate" aria-pressed="false" data-lang-key="sab-filtro-erva-mate">🧉 Erva-mate</button>
             <button class="fnav-btn" type="button" data-filter="feiras" aria-pressed="false" data-lang-key="sab-filtro-feiras">🛒 Feiras e Produtores</button>
             <button class="fnav-btn" type="button" data-filter="restaurantes" aria-pressed="false" data-lang-key="sab-filtro-restaurantes">🍴 Restaurantes</button>
         </nav>
@@ -564,6 +565,7 @@
     (function() {
         var btns     = document.querySelectorAll('.fnav-btn');
         var sections = ['polonesa', 'feiras', 'restaurantes'];
+        var filterIds = sections.concat(['erva-mate']);
 
         function activateFilter(filterId, scroll) {
             btns.forEach(function(b) {
@@ -581,7 +583,8 @@
                 }
             });
             if (filterId && scroll) {
-                var target = document.getElementById(filterId);
+                var targetId = filterId === 'erva-mate' ? 'erva-mate' : filterId;
+                var target = document.getElementById(targetId);
                 if (target) {
                     setTimeout(function() {
                         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -599,18 +602,10 @@
             });
         });
 
-        function scrollToId(id) {
-            var t = document.getElementById(id);
-            if (t) setTimeout(function() { t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-        }
-
-        // Trata hashes de seções filtráveis e a âncora especial #erva-mate.
+        // Trata hashes de seções filtráveis e o filtro visual #erva-mate.
         function handleHash(h, scroll) {
-            if (h && sections.indexOf(h) !== -1) {
+            if (h && filterIds.indexOf(h) !== -1) {
                 activateFilter(h, scroll);
-            } else if (h === 'erva-mate') {
-                activateFilter('', false); // limpa filtro para manter a página inteira visível
-                if (scroll) scrollToId('erva-mate');
             } else {
                 activateFilter('', false);
             }

@@ -28,6 +28,8 @@
 /* Offset de rolagem para o nav fixo ao pular por âncora */
 #polonesa, #feiras, #restaurantes, #erva-mate { scroll-margin-top: 130px; }
 .sabores-anchor { position: relative; height: 0; visibility: hidden; }
+.main-content .filter-nav { flex-wrap: wrap; border-radius: 24px; }
+.main-content .filter-nav .fnav-btn { white-space: normal; }
 
 /* Section Title */
 .section-header { text-align: center; margin-bottom: 3rem; }
@@ -118,6 +120,8 @@
     .sabores-atalhos-grid { grid-template-columns: repeat(2, 1fr); }
     .sabores-atalho-icon { font-size: 1.9rem; }
     .sabores-atalho-nome { font-size: 0.95rem; }
+    .main-content .filter-nav { flex-wrap: wrap; overflow-x: visible; justify-content: center; }
+    .main-content .filter-nav .fnav-btn { flex-shrink: 1; }
 }
 
 @media (max-width: 480px) {
