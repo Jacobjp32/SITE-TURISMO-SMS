@@ -46,8 +46,8 @@
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navExploreMenu" aria-label="Abrir menu Explore" data-lang-key-aria-label="nav-open-explore"><span data-lang-key="nav-explore">Explore</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" id="navExploreMenu" role="menu">
-                    <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
-                    <a href="/mapa-turistico.html?grupo=roteiros" role="menuitem" data-lang-key="nav-rotas">Rotas</a>
+                    <a href="/mapa-turistico" role="menuitem" data-lang-key="nav-mapa-turistico">Mapa Turístico</a>
+                    <a href="/mapa-turistico?grupo=roteiros" role="menuitem" data-lang-key="nav-rotas">Rotas</a>
                     <a href="/galeria" role="menuitem" data-lang-key="nav-galeria">Galeria</a>
                 </div>
             </li>
@@ -65,8 +65,8 @@
             <li>
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu Planeje sua Visita" data-lang-key-aria-label="nav-open-plan"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-turistico.html?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
-                    <a href="/mapa-turistico.html" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
+                    <a href="/mapa-turistico?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                    <a href="/mapa-turistico" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
                     <a href="/#visitor-guide-title" role="menuitem" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
                     <a href="/#weather-title" role="menuitem" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
                     <a href="/#contato" role="menuitem" data-lang-key="nav-contato">Contato</a>
@@ -77,7 +77,7 @@
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navSobreMenu" aria-label="Abrir menu Sobre" data-lang-key-aria-label="nav-open-about"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" id="navSobreMenu" role="menu">
                     <a href="/#sobre" role="menuitem" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
-                    <a href="/mapa-turistico.html?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
+                    <a href="/mapa-turistico?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
                     <a href="/transparencia" role="menuitem" data-lang-key="nav-institucional">Institucional</a>
                 </div>
             </li>
@@ -116,11 +116,11 @@
     </div>
 </nav>
 <nav class="nav-mobile-shortcuts" aria-label="Atalhos principais do turismo" data-lang-key-aria-label="nav-mobile-shortcuts-label">
-    <a href="/mapa-turistico.html" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa" data-lang-key-aria-label="nav-shortcut-map-aria">Mapa</a>
+    <a href="/mapa-turistico" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa" data-lang-key-aria-label="nav-shortcut-map-aria">Mapa</a>
     <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos" data-lang-key-aria-label="nav-shortcut-events-aria">Eventos</a>
-    <a href="/mapa-turistico.html?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas" data-lang-key-aria-label="nav-shortcut-routes-aria">Rotas</a>
-    <a href="/mapa-turistico.html?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
-    <a href="/mapa-turistico.html?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
+    <a href="/mapa-turistico?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas" data-lang-key-aria-label="nav-shortcut-routes-aria">Rotas</a>
+    <a href="/mapa-turistico?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
+    <a href="/mapa-turistico?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
 </nav>
 <div class="mobile-menu-overlay" id="menuOverlay"></div>
 <div class="search-modal" id="searchModal" aria-hidden="true">

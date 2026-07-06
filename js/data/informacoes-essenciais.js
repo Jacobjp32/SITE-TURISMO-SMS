@@ -5,7 +5,7 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
     categoria: "Serviços",
     descricao: "Visualização interativa de pontos, rotas e referências para organizar a visita.",
     imagem: "",
-    url: "/mapa-turistico.html",
+    url: "/mapa-turistico",
     destaque: "Explorar no mapa",
     coordenadas: { lat: null, lng: null },
     tags: ["mapa turístico", "serviços", "localização", "pontos turísticos", "planejamento", "roteiros"]
@@ -16,7 +16,7 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
     categoria: "Roteiros",
     descricao: "Percursos temáticos com cultura polonesa, erva-mate, Rio Iguaçu, gastronomia e turismo rural.",
     imagem: "",
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     destaque: "Ver rotas",
     coordenadas: { lat: null, lng: null },
     tags: ["roteiros", "rotas", "trajetos", "experiências", "planejamento", "mapa"]
@@ -27,7 +27,7 @@ window.TURISMO_INFORMACOES_ESSENCIAIS = [
     categoria: "Hospedagem",
     descricao: "Hotéis, pousadas e opções de estadia para apoiar a visita ao destino.",
     imagem: "",
-    url: "/mapa-turistico.html?categoria=Hospedagem",
+    url: "/mapa-turistico?categoria=Hospedagem",
     destaque: "Hospedagem",
     coordenadas: { lat: null, lng: null },
     tags: ["hospedagem", "hotel", "pousada", "estadias", "planeje sua visita", "turismo"]

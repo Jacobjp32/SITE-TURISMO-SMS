@@ -6,7 +6,7 @@ window.TURISMO_ROTAS = [
     descricao: "Experiências rurais com cafés coloniais, frutas, queijos e memórias tropeiras.",
     imagem: "images/rotas/rota-sabores-memorias.webp",
     galeria: ["images/rotas/rota-sabores-memorias.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#c0392b",
     icone: "🍓",
     tags: ["sabores", "memorias", "cafe colonial", "queijos"]
@@ -18,7 +18,7 @@ window.TURISMO_ROTAS = [
     descricao: "Vivências ligadas ao cultivo, produção e tradição da erva-mate.",
     imagem: "images/rotas/rota-erva-mate.webp",
     galeria: ["images/rotas/rota-erva-mate.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#27ae60",
     icone: "🌿",
     tags: ["erva-mate", "chimarrao", "ig", "ervateiras", "cultura"]
@@ -30,7 +30,7 @@ window.TURISMO_ROTAS = [
     descricao: "Herança polonesa, igrejas históricas, culinária típica e tradições locais.",
     imagem: "images/rotas/rota-polonesa.webp",
     galeria: ["images/rotas/rota-polonesa.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#2980b9",
     icone: "⛪",
     tags: ["polonesa", "igrejas", "cultura", "imigracao", "gastronomia"]
@@ -42,7 +42,7 @@ window.TURISMO_ROTAS = [
     descricao: "Passeios náuticos, pesca, marinas e paisagens às margens do Rio Iguaçu.",
     imagem: "images/rotas/rota-das-aguas.webp",
     galeria: ["images/rotas/rota-das-aguas.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#0891b2",
     icone: "🌊",
     tags: ["aguas", "rio iguacu", "barco", "pesca", "natureza"]
@@ -54,7 +54,7 @@ window.TURISMO_ROTAS = [
     descricao: "Paradas gastronômicas, hospedagens e empreendimentos rurais em Fluviópolis.",
     imagem: "images/rotas/rota-caminhos-fluviopolis.webp",
     galeria: ["images/rotas/rota-caminhos-fluviopolis.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#d97706",
     icone: "🏘️",
     tags: ["fluviopolis", "estrada", "paradas", "hotel", "restaurante"]
@@ -66,7 +66,7 @@ window.TURISMO_ROTAS = [
     descricao: "Produção local, viveiros, propriedades rurais e conexão com o campo.",
     imagem: "images/rotas/rota-da-terra.webp",
     galeria: ["images/rotas/rota-da-terra.webp"],
-    url: "/mapa-turistico.html?grupo=roteiros",
+    url: "/mapa-turistico?grupo=roteiros",
     cor: "#65a30d",
     icone: "🌱",
     tags: ["terra", "rural", "viveiro", "propriedade", "campo"]

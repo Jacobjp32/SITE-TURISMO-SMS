@@ -1,6 +1,6 @@
 /**
  * locais-data.js — Dados dos locais/estabelecimentos turísticos de São Mateus do Sul
- * Cada local com página dedicada em local.html?id=<slug>
+ * Cada local com página dedicada em /local?id=<slug>
  */
 
 const locaisData = {

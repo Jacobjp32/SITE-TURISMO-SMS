@@ -493,7 +493,7 @@
                 '<h2>' + SEC.html(errTitle) + '</h2>' +
                 '<p>' + SEC.html(errMsg) + '</p>' +
                 '<div class="local-actions">' +
-                    '<a class="btn-acao primary" href="/mapa-turistico.html">' + SEC.html(t("viewOnMap")) + '</a>' +
+                    '<a class="btn-acao primary" href="/mapa-turistico">' + SEC.html(t("viewOnMap")) + '</a>' +
                     '<a class="btn-acao ghost" href="/">' + SEC.html(t("portal")) + '</a>' +
                 '</div>' +
             '</div>';
@@ -563,8 +563,8 @@
     // ── Bloco de ações/CTAs (Traçar rota · Ver no mapa · Voltar ao mapa) ──
     var actionsHTML = '<div class="local-actions">' +
         (directionsUrl ? '<a class="btn-acao primary" href="' + SEC.url(directionsUrl, "#") + '" target="_blank" rel="noopener noreferrer">' + SEC.html(t("traceRoute")) + '</a>' : "") +
-        '<a class="btn-acao ghost" href="/mapa-turistico.html">' + SEC.html(t("viewOnMap")) + '</a>' +
-        '<a class="btn-acao ghost" href="/mapa-turistico.html" onclick="voltarAoMapa(event)">' + SEC.html(t("backToMap")) + '</a>' +
+        '<a class="btn-acao ghost" href="/mapa-turistico">' + SEC.html(t("viewOnMap")) + '</a>' +
+        '<a class="btn-acao ghost" href="/mapa-turistico" onclick="voltarAoMapa(event)">' + SEC.html(t("backToMap")) + '</a>' +
         '</div>';
 
     // ── Redes sociais / contato (só o que existir) ──
@@ -624,7 +624,7 @@
         '<div class="hero">' +
             '<img src="' + heroImg + '" alt="' + SEC.attr(nome) + '" id="hero-img" onerror="imgFallback(this)" loading="eager" decoding="async" fetchpriority="high" width="1200" height="675">' +
             '<div class="hero-overlay"></div>' +
-            '<a class="btn-voltar" href="/mapa-turistico.html" onclick="voltarAoMapa(event)">' + SEC.html(t("back")) + '</a>' +
+            '<a class="btn-voltar" href="/mapa-turistico" onclick="voltarAoMapa(event)">' + SEC.html(t("back")) + '</a>' +
             '<div class="hero-content">' +
                 (badge ? '<div class="hero-badge">' + SEC.html(badge) + '</div>' : "") +
                 '<h1 class="hero-title">' + SEC.html(nome) + '</h1>' +
@@ -667,7 +667,7 @@
 
         '<footer>' +
             '<p>' + SEC.html(t("rights")) + '</p>' +
-            '<p style="margin-top:.5rem"><a href="/">' + SEC.html(t("portal")) + '</a> · <a href="/mapa-turistico.html?grupo=roteiros">' + SEC.html(t("routes")) + '</a></p>' +
+            '<p style="margin-top:.5rem"><a href="/">' + SEC.html(t("portal")) + '</a> · <a href="/mapa-turistico?grupo=roteiros">' + SEC.html(t("routes")) + '</a></p>' +
         '</footer>';
 
     // ── Mapa Leaflet (só com coordenadas válidas) ──
@@ -704,7 +704,7 @@ function voltarAoMapa(e) {
     if (window.history.length > 1 && document.referrer && document.referrer.indexOf(window.location.origin) === 0) {
         window.history.back();
     } else {
-        window.location.href = "/mapa-turistico.html";
+        window.location.href = "/mapa-turistico";
     }
 }
 

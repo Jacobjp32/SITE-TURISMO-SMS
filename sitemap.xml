@@ -96,7 +96,7 @@
 
   <!-- Portal do Usuário removido do sitemap (página autenticada, bloqueada no robots.txt) -->
 
-  <!-- Páginas legadas — redirecionam para /mapa-turistico; mantidas para não quebrar links externos -->
+  <!-- Páginas legadas/compatibilidade — mantidas para não quebrar links externos -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/o-que-fazer</loc>
     <lastmod>2026-06-29</lastmod>
@@ -106,7 +106,7 @@
 
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/rotas-completas</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

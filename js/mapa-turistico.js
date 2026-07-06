@@ -1030,9 +1030,9 @@
       "contato": true
     };
     var structuralUrls = {
-      "/mapa-turistico.html": true,
-      "/mapa-turistico.html?grupo=roteiros": true,
-      "/mapa-turistico.html?categoria=hospedagem": true,
+      "/mapa-turistico": true,
+      "/mapa-turistico?grupo=roteiros": true,
+      "/mapa-turistico?categoria=hospedagem": true,
       "/#weather-title": true,
       "/#contato": true
     };
