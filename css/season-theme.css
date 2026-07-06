@@ -927,3 +927,134 @@ body.home-page #map-hero.home-hero-editorial [data-season-mascot] {
         display: none;
     }
 }
+
+/* ==========================================================================
+   Bloco S14 — Ambientacao leve de clima/estacao na faixa de previsao (home)
+   Reforca estacao (cor/etiqueta) e condicao climatica (acento) sem reativar
+   os ornamentos flutuantes retirados na "Home refinada". Puramente decorativo,
+   respeita tema/contraste e prefers-reduced-motion.
+   ========================================================================== */
+
+:root {
+    --weather-accent: var(--season-accent);
+    --weather-accent-soft: var(--season-outline);
+}
+
+html[data-weather="sunny"] {
+    --weather-accent: #e0a53a;
+    --weather-accent-soft: rgba(224, 165, 58, 0.5);
+}
+
+html[data-weather="cloudy"] {
+    --weather-accent: #8a9bb0;
+    --weather-accent-soft: rgba(138, 155, 176, 0.5);
+}
+
+html[data-weather="rain"] {
+    --weather-accent: #5a86ad;
+    --weather-accent-soft: rgba(90, 134, 173, 0.5);
+}
+
+html[data-weather="storm"] {
+    --weather-accent: #5b6b86;
+    --weather-accent-soft: rgba(91, 107, 134, 0.55);
+}
+
+html[data-weather="snow"] {
+    --weather-accent: #7fb0d6;
+    --weather-accent-soft: rgba(127, 176, 214, 0.5);
+}
+
+/* Frio pronunciado prevalece sobre a categoria para reforcar a sensacao termica. */
+html[data-weather-cold="true"] {
+    --weather-accent: #5f8fb6;
+    --weather-accent-soft: rgba(95, 143, 182, 0.5);
+}
+
+/* Fita de estacao no topo da faixa de clima. */
+html[data-season] .weather-strip {
+    position: relative;
+}
+
+html[data-season] .weather-strip::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--weather-accent), transparent);
+    opacity: 0.65;
+    pointer-events: none;
+    transition: background 0.35s ease, opacity 0.35s ease;
+}
+
+/* Container tingido conforme a estacao (sutil, mantem legibilidade). */
+html[data-season] .weather-container {
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.82)),
+        radial-gradient(circle at top right, var(--season-card-tint), transparent 72%);
+    border-color: var(--season-outline);
+    box-shadow: 0 16px 38px var(--season-shadow);
+    transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Cartoes recebem um acento superior discreto pela condicao do dia. */
+html[data-weather] .weather-card {
+    border-top: 3px solid var(--weather-accent-soft);
+    transition: border-color 0.35s ease;
+}
+
+/* Etiqueta contextual: estacao (texto) + condicao (ponto colorido).
+   Seletor com .weather-heading para vencer a cor herdada de ".weather-heading p". */
+.weather-heading .weather-etiqueta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    width: fit-content;
+    margin: 0.55rem 0 0;
+    padding: 0.28rem 0.72rem;
+    border-radius: 999px;
+    background: var(--season-card-tint, rgba(255, 248, 235, 0.72));
+    border: 1px solid var(--season-outline, rgba(212, 165, 116, 0.18));
+    color: var(--season-accent-deep, #8b5d35);
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+    transition: background 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.weather-heading .weather-etiqueta::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--weather-accent, var(--season-accent));
+    box-shadow: 0 0 0 3px var(--weather-accent-soft, var(--season-outline));
+    transition: background 0.35s ease, box-shadow 0.35s ease;
+}
+
+html.season-reduced-motion .weather-strip::before,
+html.season-reduced-motion .weather-container,
+html.season-reduced-motion .weather-card,
+html.season-reduced-motion .weather-heading .weather-etiqueta,
+html.season-reduced-motion .weather-heading .weather-etiqueta::before {
+    transition: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .weather-strip::before,
+    .weather-container,
+    .weather-card,
+    .weather-heading .weather-etiqueta,
+    .weather-heading .weather-etiqueta::before {
+        transition: none !important;
+    }
+}
+
+@media (max-width: 640px) {
+    .weather-heading .weather-etiqueta {
+        font-size: 0.74rem;
+        padding: 0.24rem 0.62rem;
+    }
+}

@@ -9,6 +9,22 @@
     var ASSET_BASE = "images/seasonal/";
     var WEATHER_STATE = null;
     var WEATHER_FALLBACK = "Clima local";
+    var COLD_TEMP_THRESHOLD = 13;
+    // Agrupamento dos códigos WMO (mesmos usados por js/weather.js) em categorias visuais leves.
+    var WEATHER_CODE_GROUPS = {
+        sunny: [0, 1],
+        cloudy: [2, 3, 45, 48],
+        rain: [51, 53, 55, 61, 63, 65, 80, 81, 82],
+        storm: [95, 96, 99],
+        snow: [71, 73, 75, 77, 85, 86]
+    };
+    // Etiqueta sazonal curta (texto visível). As chaves ficam em translations.js (PT/EN/ES/PL).
+    var SEASON_ETIQUETA = {
+        summer: { key: "season-etiqueta-summer", fallback: "Verão · calor" },
+        autumn: { key: "season-etiqueta-autumn", fallback: "Outono · clima ameno" },
+        winter: { key: "season-etiqueta-winter", fallback: "Inverno · frio" },
+        spring: { key: "season-etiqueta-spring", fallback: "Primavera · clima agradável" }
+    };
     var SEASON_META = {
         auto: { label: "Automático", icon: "↻", context: "São Mateus do Sul" },
         summer: { label: "Verão", icon: "☀", context: "Luz quente" },
@@ -308,6 +324,7 @@
 
         updateControls(selectedMode, season);
         updateSeasonAssets(season);
+        renderSeasonEtiqueta(season);
         safeSetStoredMode(selectedMode);
 
         document.dispatchEvent(new CustomEvent("sms:seasonchange", {
@@ -328,6 +345,68 @@
         var number = Number(value);
         if (!Number.isFinite(number)) return "--°C";
         return Math.round(number) + "°C";
+    }
+
+    function getWeatherCategory(code) {
+        var numeric = Number(code);
+        if (!Number.isFinite(numeric)) return "";
+        var keys = Object.keys(WEATHER_CODE_GROUPS);
+        for (var i = 0; i < keys.length; i++) {
+            if (WEATHER_CODE_GROUPS[keys[i]].indexOf(numeric) !== -1) {
+                return keys[i];
+            }
+        }
+        return "cloudy";
+    }
+
+    function getActiveLang() {
+        var lang = document.documentElement.getAttribute("lang") || "pt";
+        try {
+            lang = window.localStorage.getItem("sms-lang") || lang;
+        } catch (error) {
+            /* localStorage indisponível: mantém idioma do <html>. */
+        }
+        return String(lang).toLowerCase().split("-")[0];
+    }
+
+    function translateKey(key, fallback) {
+        var lang = getActiveLang();
+        var dictionary = window.translations && (window.translations[lang] || window.translations.pt);
+        return (dictionary && dictionary[key]) || fallback;
+    }
+
+    function renderSeasonEtiqueta(season) {
+        var resolvedSeason = isKnownMode(season) && season !== AUTO_MODE ? season : getAutomaticSeason();
+        var meta = SEASON_ETIQUETA[resolvedSeason] || SEASON_ETIQUETA[getAutomaticSeason()];
+        var text = translateKey(meta.key, meta.fallback);
+        document.querySelectorAll("[data-season-etiqueta]").forEach(function (element) {
+            element.textContent = text;
+        });
+    }
+
+    function applyWeatherState() {
+        var root = document.documentElement;
+        var hasWeather = WEATHER_STATE && WEATHER_STATE.available;
+
+        if (!hasWeather) {
+            root.removeAttribute("data-weather");
+            root.removeAttribute("data-weather-cold");
+            return;
+        }
+
+        var category = getWeatherCategory(WEATHER_STATE.code);
+        if (category) {
+            root.dataset.weather = category;
+        } else {
+            root.removeAttribute("data-weather");
+        }
+
+        var temp = Number(WEATHER_STATE.temp);
+        if (Number.isFinite(temp)) {
+            root.dataset.weatherCold = temp <= COLD_TEMP_THRESHOLD ? "true" : "false";
+        } else {
+            root.removeAttribute("data-weather-cold");
+        }
     }
 
     function renderWeatherBadges() {
@@ -537,9 +616,11 @@
         WEATHER_STATE = {
             available: !!detail.available,
             temp: detail.temp,
+            code: detail.code,
             condition: detail.condition || "",
             fetchedAt: detail.fetchedAt || ""
         };
+        applyWeatherState();
         renderWeatherBadges();
         updateControls(document.documentElement.dataset.seasonMode || AUTO_MODE, document.documentElement.dataset.season || getAutomaticSeason());
     }
@@ -585,6 +666,11 @@
         });
 
         document.addEventListener("sms:weatherchange", onWeatherChange);
+
+        // Reaplica a etiqueta sazonal quando o idioma muda (PT/EN/ES/PL).
+        document.addEventListener("translationsApplied", function () {
+            renderSeasonEtiqueta(document.documentElement.dataset.season || getAutomaticSeason());
+        });
     }
 
     window.SMSSeasonTheme = {
