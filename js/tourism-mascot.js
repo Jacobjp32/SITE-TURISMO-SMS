@@ -53,6 +53,15 @@
                 oquefazer: 'Descubra rotas e experiências pela cidade.',
                 local: 'Você pode traçar rota até este ponto.',
                 'default': 'Posso ajudar você a explorar São Mateus do Sul.'
+            },
+            helpLabel: 'Ajuda rápida',
+            helpNote: 'Não encontrou? Fale com o Depto. de Cultura e Turismo.',
+            help: {
+                mapa:    { q: 'Onde encontro o mapa turístico?', a: 'Veja todos os atrativos no mapa, com filtros por categoria e rotas.' },
+                eventos: { q: 'Como vejo os eventos?', a: 'Confira a agenda cultural atualizada da cidade.' },
+                comer:   { q: 'Onde comer?', a: 'Gastronomia polonesa, feiras e restaurantes locais.' },
+                ficar:   { q: 'Onde ficar?', a: 'Hotéis no centro e pousadas rurais para a sua estadia.' },
+                contato: { q: 'Como falar com Cultura e Turismo?', a: 'Ligue para o Departamento de Cultura e Turismo: (42) 3532-4163.' }
             }
         },
         en: {
@@ -78,6 +87,15 @@
                 oquefazer: 'Discover routes and experiences in the city.',
                 local: 'You can get directions to this spot.',
                 'default': 'I can help you explore São Mateus do Sul.'
+            },
+            helpLabel: 'Quick help',
+            helpNote: 'Didn’t find it? Contact the Culture & Tourism Dept.',
+            help: {
+                mapa:    { q: 'Where is the tourist map?', a: 'See all attractions on the map, with filters by category and routes.' },
+                eventos: { q: 'How do I see events?', a: 'Check the city’s updated cultural calendar.' },
+                comer:   { q: 'Where to eat?', a: 'Polish cuisine, markets and local restaurants.' },
+                ficar:   { q: 'Where to stay?', a: 'Downtown hotels and rural inns for your stay.' },
+                contato: { q: 'How to reach Culture & Tourism?', a: 'Call the Culture & Tourism Department: +55 (42) 3532-4163.' }
             }
         },
         es: {
@@ -103,6 +121,15 @@
                 oquefazer: 'Descubre rutas y experiencias por la ciudad.',
                 local: 'Puedes trazar la ruta hasta este punto.',
                 'default': 'Puedo ayudarte a explorar São Mateus do Sul.'
+            },
+            helpLabel: 'Ayuda rápida',
+            helpNote: '¿No lo encontraste? Contacta al Depto. de Cultura y Turismo.',
+            help: {
+                mapa:    { q: '¿Dónde está el mapa turístico?', a: 'Mira todos los atractivos en el mapa, con filtros por categoría y rutas.' },
+                eventos: { q: '¿Cómo veo los eventos?', a: 'Consulta la agenda cultural actualizada de la ciudad.' },
+                comer:   { q: '¿Dónde comer?', a: 'Gastronomía polaca, ferias y restaurantes locales.' },
+                ficar:   { q: '¿Dónde alojarse?', a: 'Hoteles en el centro y posadas rurales para tu estadía.' },
+                contato: { q: '¿Cómo hablar con Cultura y Turismo?', a: 'Llama al Departamento de Cultura y Turismo: +55 (42) 3532-4163.' }
             }
         },
         pl: {
@@ -128,6 +155,15 @@
                 oquefazer: 'Odkryj trasy i doświadczenia w mieście.',
                 local: 'Możesz wyznaczyć trasę do tego miejsca.',
                 'default': 'Mogę pomóc Ci zwiedzić São Mateus do Sul.'
+            },
+            helpLabel: 'Szybka pomoc',
+            helpNote: 'Nie znalazłeś? Skontaktuj się z Departamentem Kultury i Turystyki.',
+            help: {
+                mapa:    { q: 'Gdzie jest mapa turystyczna?', a: 'Zobacz wszystkie atrakcje na mapie, z filtrami według kategorii i tras.' },
+                eventos: { q: 'Jak zobaczyć wydarzenia?', a: 'Sprawdź aktualny kalendarz kulturalny miasta.' },
+                comer:   { q: 'Gdzie zjeść?', a: 'Kuchnia polska, targi i lokalne restauracje.' },
+                ficar:   { q: 'Gdzie się zatrzymać?', a: 'Hotele w centrum i wiejskie pensjonaty na Twój pobyt.' },
+                contato: { q: 'Jak skontaktować się z Kulturą i Turystyką?', a: 'Zadzwoń do Departamentu Kultury i Turystyki: +55 (42) 3532-4163.' }
             }
         }
     };
@@ -220,6 +256,17 @@
                     linkItem('/onde-ficar', '🛏️', 'mascot-link-ondeficar', t.linkOndeFicar) +
                     linkItem('tel:+554235324163', '☎️', 'mascot-link-contato', t.linkContato) +
                 '</ul>' +
+                '<div class="sms-mascot-help">' +
+                    '<span class="sms-mascot-help-label" data-lang-key="mascot-help-label">' + t.helpLabel + '</span>' +
+                    '<ul class="sms-mascot-help-list">' +
+                        helpItem('mapa', t, '/mapa-turistico.html', 'mascot-link-mapa', t.linkMapa) +
+                        helpItem('eventos', t, '/eventos/', 'mascot-link-eventos', t.linkEventos) +
+                        helpItem('comer', t, '/sabores', 'mascot-link-sabores', t.linkSabores) +
+                        helpItem('ficar', t, '/onde-ficar', 'mascot-link-ondeficar', t.linkOndeFicar) +
+                        helpItem('contato', t, 'tel:+554235324163', 'mascot-link-contato', t.linkContato) +
+                    '</ul>' +
+                    '<p class="sms-mascot-help-note" data-lang-key="mascot-help-note">' + t.helpNote + '</p>' +
+                '</div>' +
                 '<div class="sms-mascot-footer">' +
                     '<button type="button" class="sms-mascot-hide-btn" id="sms-mascot-hide" data-lang-key="mascot-hide">' + t.hide + '</button>' +
                 '</div>' +
@@ -237,6 +284,26 @@
             '<span class="sms-link-icon" aria-hidden="true">' + icon + '</span>' +
             '<span data-lang-key="' + key + '">' + label + '</span>' +
         '</a></li>';
+    }
+
+    // Item da "Ajuda rápida": pergunta (botão accordion) + resposta curta + link útil.
+    // Sem chat livre / sem API: resposta estática, texto reaproveita o rótulo do link.
+    function helpItem(id, t, href, linkKey, linkLabel) {
+        var qa = (t.help && t.help[id]) || { q: '', a: '' };
+        var answerId = 'sms-help-a-' + id;
+        return '<li class="sms-help-item">' +
+            '<button type="button" class="sms-help-q" aria-expanded="false" aria-controls="' + answerId + '">' +
+                '<span class="sms-help-q-text" data-lang-key="mascot-help-q-' + id + '">' + qa.q + '</span>' +
+                '<span class="sms-help-chevron" aria-hidden="true"></span>' +
+            '</button>' +
+            '<div class="sms-help-a" id="' + answerId + '" role="region" hidden>' +
+                '<p data-lang-key="mascot-help-a-' + id + '">' + qa.a + '</p>' +
+                '<a class="sms-help-link" href="' + href + '">' +
+                    '<span data-lang-key="' + linkKey + '">' + linkLabel + '</span>' +
+                    '<span aria-hidden="true"> →</span>' +
+                '</a>' +
+            '</div>' +
+        '</li>';
     }
 
     // Aplica traduções do site (se disponíveis) sobre os elementos recém-injetados.
@@ -278,6 +345,36 @@
                 hideTeaser(root);
                 openPanel(root, true);
             });
+        }
+
+        // "Ajuda rápida": accordion estático (sem chat/IA/API).
+        var helpList = root.querySelector('.sms-mascot-help-list');
+        if (helpList) {
+            helpList.addEventListener('click', function (e) {
+                var btn = e.target.closest ? e.target.closest('.sms-help-q') : null;
+                if (!btn || !helpList.contains(btn)) return;
+                toggleHelp(btn);
+            });
+        }
+    }
+
+    function toggleHelp(btn) {
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        var list = btn.closest ? btn.closest('.sms-mascot-help-list') : null;
+        // Abertura única: ao abrir uma pergunta, recolhe as demais (mantém o painel baixo).
+        if (!expanded && list) {
+            list.querySelectorAll('.sms-help-q[aria-expanded="true"]').forEach(function (other) {
+                if (other === btn) return;
+                other.setAttribute('aria-expanded', 'false');
+                var otherAns = document.getElementById(other.getAttribute('aria-controls'));
+                if (otherAns) otherAns.setAttribute('hidden', '');
+            });
+        }
+        var answer = document.getElementById(btn.getAttribute('aria-controls'));
+        btn.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+        if (answer) {
+            if (expanded) answer.setAttribute('hidden', '');
+            else answer.removeAttribute('hidden');
         }
     }
 

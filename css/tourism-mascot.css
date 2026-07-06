@@ -129,7 +129,11 @@
     border: 1px solid rgba(10, 61, 46, 0.12);
     border-radius: 18px;
     box-shadow: 0 18px 50px rgba(10, 61, 46, 0.28);
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - 130px);
+    max-height: calc(100dvh - 130px);
+    -webkit-overflow-scrolling: touch;
     display: none;
     flex-direction: column;
 }
@@ -209,6 +213,86 @@
 .sms-mascot-links a:hover { background: #efe7d8; transform: translateX(2px); }
 .sms-mascot-links a:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; }
 .sms-mascot-links a .sms-link-icon { font-size: 1.1rem; line-height: 1; flex: 0 0 auto; }
+
+/* ── "Ajuda rápida" (accordion estático — sem chat/IA/API) ── */
+.sms-mascot-help {
+    border-top: 1px solid rgba(10, 61, 46, 0.08);
+    padding: 0.5rem 0.6rem 0.2rem;
+}
+.sms-mascot-help-label {
+    display: block;
+    padding: 0.15rem 0.4rem 0.35rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8b6a47;
+    font-weight: 700;
+}
+.sms-mascot-help-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+.sms-help-q {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    text-align: left;
+    padding: 0.55rem 0.7rem;
+    border: none;
+    border-radius: 12px;
+    background: #f8f6f0;
+    color: #0a3d2e;
+    font-family: inherit;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s ease;
+}
+.sms-help-q:hover { background: #efe7d8; }
+.sms-help-q:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; }
+.sms-help-q-text { flex: 1; min-width: 0; }
+.sms-help-chevron {
+    flex: 0 0 auto;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid #8b6a47;
+    border-bottom: 2px solid #8b6a47;
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+    margin-top: -3px;
+}
+.sms-help-q[aria-expanded="true"] .sms-help-chevron { transform: rotate(-135deg); margin-top: 2px; }
+.sms-help-a {
+    padding: 0.5rem 0.7rem 0.4rem;
+    color: #3a4a44;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+.sms-help-a[hidden] { display: none; }
+.sms-help-a p { margin: 0 0 0.4rem; }
+.sms-help-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    color: #0a3d2e;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.82rem;
+}
+.sms-help-link:hover { text-decoration: underline; }
+.sms-help-link:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; border-radius: 4px; }
+.sms-mascot-help-note {
+    margin: 0.4rem 0.4rem 0.2rem;
+    font-size: 0.74rem;
+    line-height: 1.4;
+    color: #8b6a47;
+}
 
 .sms-mascot-footer {
     padding: 0.35rem 1rem 0.8rem;
@@ -306,6 +390,11 @@
 
     body.map-page-body .sms-mascot-panel {
         width: min(270px, calc(100vw - 28px));
+        /* No mapa o mascote fica no alto: painel abre para baixo, sem estourar o topo. */
+        top: 56px;
+        bottom: auto;
+        max-height: calc(100vh - 220px);
+        max-height: calc(100dvh - 220px);
     }
 }
 
@@ -314,6 +403,8 @@
     .sms-mascot-launcher,
     .sms-mascot-bubble,
     .sms-mascot-links a,
+    .sms-help-q,
+    .sms-help-chevron,
     .sms-mascot-reopen { transition: none !important; }
     #sms-mascot.is-open .sms-mascot-panel { animation: none !important; }
     .sms-mascot-launcher:hover { transform: none; }

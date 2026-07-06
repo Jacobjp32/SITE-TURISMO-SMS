@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v19';
+const CACHE_NAME = 'turismo-sms-v20';
 const OFFLINE_URL = 'offline.html';
 
 // Arquivos para cache inicial
@@ -16,7 +16,6 @@ const OFFLINE_URL = 'offline.html';
 const PRECACHE_ASSETS = [
     'offline.html',
     'translations.js',
-    'js/chatbot.js',
     'js/tourism-mascot.js',
     'css/tourism-mascot.css',
     'js/reservas.js',
