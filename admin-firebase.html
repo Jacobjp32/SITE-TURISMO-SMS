@@ -1156,9 +1156,9 @@
                 <li><a data-section="noticias">📰 <span>Notícias</span></a></li>
                 <li><a data-section="midia">🖼️ <span>Mídia</span></a></li>
                 <li><a data-section="banners">📢 <span>Banners / Pop-ups</span></a></li>
+                <li><a data-section="empreendimentos">🏨 <span>Empreendimentos</span></a></li>
                 <!-- Etapa 3A: placeholders de módulos futuros (sem CRUD, sem persistência). -->
                 <li class="sidebar-group-label"><span>Em preparação</span></li>
-                <li><a data-section="empreendimentos">🏨 <span>Empreendimentos</span></a></li>
                 <li><a data-section="rotas">🗺️ <span>Rotas</span></a></li>
                 <li><a data-section="galeria">🖼️ <span>Galeria</span></a></li>
                 <li><a data-section="configuracoes">⚙️ <span>Configurações</span> <em class="sidebar-master-tag">Master</em></a></li>
@@ -1488,6 +1488,8 @@
     <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
     <script src="js/admin/modules/banners.js?v=admin-banners-4e-20260629"></script>
+    <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
+    <script src="js/admin/modules/empreendimentos.js?v=admin-establishments-cms-2b-20260707"></script>
     <!-- Placeholders de módulos futuros (Etapa 3A): sem CRUD, sem persistência. -->
     <script src="js/admin/modules/placeholder.js?v=admin-modular-20260626"></script>
     <script>
@@ -1792,6 +1794,10 @@
             // Bloco 4C: módulo real Banners / Pop-ups (renderiza shell + recarrega lista).
             if (section === 'banners' && window.AdminBannersModule && typeof window.AdminBannersModule.activate === 'function') {
                 window.AdminBannersModule.activate(window.AdminContext || null);
+            }
+            // CMS-2B: CRUD interno de empreendimentos (sem leitura publica e sem migracao).
+            if (section === 'empreendimentos' && window.AdminEstablishmentsModule && typeof window.AdminEstablishmentsModule.activate === 'function') {
+                window.AdminEstablishmentsModule.activate(window.AdminContext || null);
             }
         }
 

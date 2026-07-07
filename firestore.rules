@@ -149,6 +149,215 @@ service cloud.firestore {
         isValidBannerPublished(request.resource.data);
     }
 
+    // --- CMS-2B: Empreendimentos internos ---
+    // CRUD interno do painel admin. Neste bloco NAO ha leitura publica desta
+    // collection, mesmo para status "published"; o site publico ainda nao usa
+    // Firestore para empreendimentos.
+    function isEstablishmentStatus(value) {
+      return value in ['draft', 'published', 'archived'];
+    }
+
+    function establishmentFieldsAllowed(data) {
+      return data.keys().hasOnly([
+        'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
+        'content', 'contact', 'location', 'media', 'relationships',
+        'display', 'seo', 'publishing', 'review', 'source',
+        'createdAt', 'createdBy', 'updatedAt', 'updatedBy'
+      ]);
+    }
+
+    function validNullableTimestamp(value) {
+      return value == null || value is timestamp;
+    }
+
+    function validStringList(value) {
+      return value is list && value.size() <= 50;
+    }
+
+    function validNullableCoordinate(value) {
+      return value == null || value is number;
+    }
+
+    function validEstablishmentImage(data) {
+      return data is map &&
+        data.keys().hasOnly(['url', 'path', 'alt', 'caption', 'credit', 'source']) &&
+        data.url is string &&
+        data.path is string &&
+        data.alt is string &&
+        data.caption is string &&
+        data.credit is string &&
+        data.source is string;
+    }
+
+    function validEstablishmentContent(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'summary', 'description', 'longDescription', 'accessibility',
+          'openingHours', 'tags', 'notesInternal'
+        ]) &&
+        data.summary is string &&
+        data.description is string &&
+        data.longDescription is string &&
+        data.accessibility is string &&
+        data.openingHours is string &&
+        validStringList(data.tags) &&
+        data.notesInternal is string;
+    }
+
+    function validEstablishmentContact(data) {
+      return data is map &&
+        data.keys().hasOnly(['phone', 'whatsapp', 'email', 'website', 'instagram', 'facebook']) &&
+        data.phone is string &&
+        data.whatsapp is string &&
+        data.email is string &&
+        data.website is string &&
+        data.instagram is string &&
+        data.facebook is string;
+    }
+
+    function validEstablishmentLocation(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'address', 'neighborhood', 'city', 'state', 'postalCode',
+          'coordinates', 'mapsUrl', 'coordStatus', 'coordNote'
+        ]) &&
+        data.address is string &&
+        data.neighborhood is string &&
+        data.city is string &&
+        data.state is string &&
+        data.postalCode is string &&
+        data.coordinates is map &&
+        data.coordinates.keys().hasOnly(['lat', 'lng']) &&
+        validNullableCoordinate(data.coordinates.lat) &&
+        validNullableCoordinate(data.coordinates.lng) &&
+        data.mapsUrl is string &&
+        data.coordStatus is string &&
+        data.coordNote is string;
+    }
+
+    function validEstablishmentMedia(data) {
+      return data is map &&
+        data.keys().hasOnly(['mainImage', 'gallery', 'videoUrl', 'sourceCredits']) &&
+        validEstablishmentImage(data.mainImage) &&
+        data.gallery is list &&
+        data.gallery.size() <= 60 &&
+        data.videoUrl is string &&
+        data.sourceCredits is string;
+    }
+
+    function validEstablishmentRelationships(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'routeIds', 'relatedPlaceIds', 'relatedEventIds',
+          'legacyRoute', 'legacyRouteName'
+        ]) &&
+        validStringList(data.routeIds) &&
+        validStringList(data.relatedPlaceIds) &&
+        validStringList(data.relatedEventIds) &&
+        data.legacyRoute is string &&
+        data.legacyRouteName is string;
+    }
+
+    function validEstablishmentDisplay(data) {
+      return data is map &&
+        data.keys().hasOnly(['featured', 'priority', 'mapVisible', 'claimable']) &&
+        data.featured is bool &&
+        data.priority is int &&
+        data.mapVisible is bool &&
+        data.claimable is bool;
+    }
+
+    function validEstablishmentSeo(data) {
+      return data is map &&
+        data.keys().hasOnly(['title', 'description', 'canonicalPath']) &&
+        data.title is string &&
+        data.description is string &&
+        data.canonicalPath is string;
+    }
+
+    function validEstablishmentPublishing(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'publishedAt', 'publishedBy', 'archivedAt', 'archivedBy', 'archiveReason'
+        ]) &&
+        validNullableTimestamp(data.publishedAt) &&
+        data.publishedBy is string &&
+        validNullableTimestamp(data.archivedAt) &&
+        data.archivedBy is string &&
+        data.archiveReason is string;
+    }
+
+    function validEstablishmentReview(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'lastAppliedRequestId', 'lastAppliedAt', 'lastAppliedBy', 'lastReviewNotes'
+        ]) &&
+        data.lastAppliedRequestId is string &&
+        validNullableTimestamp(data.lastAppliedAt) &&
+        data.lastAppliedBy is string &&
+        data.lastReviewNotes is string;
+    }
+
+    function validEstablishmentSource(data) {
+      return data is map &&
+        data.keys().hasOnly([
+          'origin', 'sourceFile', 'originalId', 'originalCategory',
+          'legacyIds', 'seededAt', 'sourceUpdatedAt'
+        ]) &&
+        data.origin is string &&
+        data.sourceFile is string &&
+        data.originalId is string &&
+        data.originalCategory is string &&
+        validStringList(data.legacyIds) &&
+        validNullableTimestamp(data.seededAt) &&
+        validNullableTimestamp(data.sourceUpdatedAt);
+    }
+
+    function validEstablishmentBase(data) {
+      return establishmentFieldsAllowed(data) &&
+        data.id is string &&
+        data.slug is string &&
+        data.name is string &&
+        data.categoryId is string &&
+        data.categoryLabel is string &&
+        isEstablishmentStatus(data.status) &&
+        data.name.size() > 0 &&
+        data.slug.size() > 0 &&
+        data.categoryId.size() > 0 &&
+        data.categoryLabel.size() > 0 &&
+        validEstablishmentContent(data.content) &&
+        validEstablishmentContact(data.contact) &&
+        validEstablishmentLocation(data.location) &&
+        validEstablishmentMedia(data.media) &&
+        validEstablishmentRelationships(data.relationships) &&
+        validEstablishmentDisplay(data.display) &&
+        validEstablishmentSeo(data.seo) &&
+        validEstablishmentPublishing(data.publishing) &&
+        validEstablishmentReview(data.review) &&
+        validEstablishmentSource(data.source) &&
+        data.createdAt is timestamp &&
+        data.createdBy is string &&
+        data.updatedAt is timestamp &&
+        data.updatedBy is string;
+    }
+
+    function isValidEstablishmentCreate(establishmentId) {
+      return isAdmin() &&
+        request.resource.data.id == establishmentId &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        validEstablishmentBase(request.resource.data);
+    }
+
+    function isValidEstablishmentUpdate() {
+      return isAdmin() &&
+        request.resource.data.id == resource.data.id &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        validEstablishmentBase(request.resource.data);
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if isAdmin() || (
@@ -321,6 +530,13 @@ service cloud.firestore {
           'changesRequestedNotes'
         ]);
       allow update, delete: if isModerator();
+    }
+
+    match /cms_establishments/{establishmentId} {
+      allow read: if isAdmin();
+      allow create: if isValidEstablishmentCreate(establishmentId);
+      allow update: if isValidEstablishmentUpdate();
+      allow delete: if false;
     }
 
     match /noticias/{noticiaId} {
