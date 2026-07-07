@@ -182,15 +182,29 @@ service cloud.firestore {
       return value == null || value is number;
     }
 
+    function optionalString(data, field) {
+      return !(field in data.keys()) || data[field] is string;
+    }
+
     function validEstablishmentImage(data) {
       return data is map &&
-        data.keys().hasOnly(['url', 'path', 'alt', 'caption', 'credit', 'source']) &&
+        data.keys().hasOnly([
+          'url', 'path', 'alt', 'caption', 'credit', 'source',
+          'sourceRequestId', 'sourceImagePath', 'uploadedBy', 'uploadedAt',
+          'reviewedBy', 'reviewedAt'
+        ]) &&
         data.url is string &&
         data.path is string &&
         data.alt is string &&
         data.caption is string &&
         data.credit is string &&
-        data.source is string;
+        data.source is string &&
+        optionalString(data, 'sourceRequestId') &&
+        optionalString(data, 'sourceImagePath') &&
+        optionalString(data, 'uploadedBy') &&
+        optionalString(data, 'uploadedAt') &&
+        optionalString(data, 'reviewedBy') &&
+        optionalString(data, 'reviewedAt');
     }
 
     function validEstablishmentContent(data) {

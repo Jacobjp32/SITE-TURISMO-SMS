@@ -72,7 +72,13 @@ Leitura publica futura: somente `published`.
       alt: "",
       caption: "",
       credit: "",
-      source: "static|cms-media|submission|external"
+      source: "static|cms-media|portal_request|submission|external",
+      sourceRequestId: "",
+      sourceImagePath: "",
+      uploadedBy: "",
+      uploadedAt: "",
+      reviewedBy: "",
+      reviewedAt: ""
     },
     gallery: [
       {
@@ -81,8 +87,14 @@ Leitura publica futura: somente `published`.
         alt: "",
         caption: "",
         credit: "",
-        source: "static|cms-media|submission|external",
-        position: 1
+        source: "static|cms-media|portal_request|submission|external",
+        position: 1,
+        sourceRequestId: "",
+        sourceImagePath: "",
+        uploadedBy: "",
+        uploadedAt: "",
+        reviewedBy: "",
+        reviewedAt: ""
       }
     ],
     videoUrl: "",
@@ -177,6 +189,14 @@ Somente apos revisao/admin:
 | `additionalNotes` | `review.lastReviewNotes` ou `content.notesInternal`, conforme decisao editorial |
 
 Imagens anexadas em `submissions/establishment-updates/...` devem virar candidatas de midia. O admin deve selecionar/copiar para `cms-media/{adminUid}/establishments/{establishmentId}/...` antes de publicar como `media.mainImage` ou `media.gallery`.
+
+No CMS-4C, imagens aceitas em `mediaReview` podem ser copiadas/reupadas para:
+
+```text
+cms-media/{adminUid}/establishments/{establishmentId}/reviewed/{requestId}/{timestamp}-{safeFileName}
+```
+
+O catalogo preserva a origem com `source: "portal_request"`, `sourceRequestId` e `sourceImagePath`. O arquivo original em `submissions/establishment-updates/...` continua preservado como evidencia.
 
 ## Campos proibidos para empreendedor
 

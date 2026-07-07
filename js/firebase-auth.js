@@ -311,6 +311,108 @@ function buildSafeMediaReviewMap(items) {
     }, {});
 }
 
+function buildSafeAppliedMedia(items) {
+    return ensureArray(items).map(function(item) {
+        return {
+            sourceRequestId: sanitizeSimpleText(item && item.sourceRequestId, 160),
+            sourceImagePath: sanitizeSimpleText(item && item.sourceImagePath, 512),
+            sourceImageUrl: sanitizeSimpleText(item && item.sourceImageUrl, 2048),
+            destination: sanitizeSimpleText(item && item.destination, 40),
+            url: sanitizeSimpleText(item && item.url, 2048),
+            path: sanitizeSimpleText(item && item.path, 512),
+            appliedAt: sanitizeSimpleText(item && item.appliedAt, 60),
+            appliedBy: sanitizeSimpleText(item && item.appliedBy, 160),
+            establishmentId: sanitizeSimpleText(item && item.establishmentId, 160)
+        };
+    }).filter(function(item) {
+        return (item.sourceImagePath || item.sourceImageUrl) && item.path && item.url;
+    });
+}
+
+function isImageAlreadyApplied(image, appliedItems, catalogImages) {
+    var sourcePath = sanitizeSimpleText(image && image.path, 512);
+    var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
+
+    return ensureArray(appliedItems).concat(ensureArray(catalogImages)).some(function(item) {
+        return (sourcePath && item && item.sourceImagePath === sourcePath) ||
+            (sourceUrl && item && item.sourceImageUrl === sourceUrl);
+    });
+}
+
+function getSafeFileNameFromPath(value) {
+    var raw = String(value || '').split('?')[0].split('#')[0].split('/').pop() || 'imagem';
+    var safe = raw
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9._-]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '')
+        .slice(0, 90);
+
+    return safe || 'imagem.jpg';
+}
+
+function buildReviewedCatalogImage(uploadedImage, sourceImage, requestId, appliedAtIso) {
+    return {
+        url: sanitizeSimpleText(uploadedImage && uploadedImage.url, 2048),
+        path: sanitizeSimpleText(uploadedImage && uploadedImage.path, 512),
+        alt: sanitizeSimpleText(sourceImage && (sourceImage.alt || sourceImage.name), 160),
+        caption: '',
+        credit: '',
+        source: 'portal_request',
+        sourceRequestId: sanitizeSimpleText(requestId, 160),
+        sourceImagePath: sanitizeSimpleText(sourceImage && sourceImage.path, 512),
+        uploadedBy: currentUser && currentUser.uid ? currentUser.uid : '',
+        uploadedAt: appliedAtIso,
+        reviewedBy: currentUser && currentUser.uid ? currentUser.uid : '',
+        reviewedAt: appliedAtIso
+    };
+}
+
+async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishmentId, requestId, index) {
+    var sourcePath = sanitizeSimpleText(image && image.path, 512);
+    var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
+    var sourceName = sanitizeSimpleText(image && image.name, 120) || getSafeFileNameFromPath(sourcePath || sourceUrl);
+    var contentType = sanitizeSimpleText(image && image.contentType, 80) || 'image/jpeg';
+
+    if (!sourceUrl && sourcePath) {
+        sourceUrl = await storage.ref(sourcePath).getDownloadURL();
+    }
+
+    if (!sourceUrl) {
+        throw new Error('Imagem aceita sem URL ou path de origem.');
+    }
+
+    var response = await fetch(sourceUrl);
+    if (!response || !response.ok) {
+        throw new Error('Não foi possível baixar a imagem aceita para reaplicar no CMS.');
+    }
+
+    var blob = await response.blob();
+    var safeFileName = getSafeFileNameFromPath(sourceName);
+    var destinationPath = [
+        'cms-media',
+        adminUid,
+        'establishments',
+        establishmentId,
+        'reviewed',
+        requestId,
+        Date.now() + '-' + String(index + 1) + '-' + safeFileName
+    ].join('/');
+    var destinationRef = storage.ref(destinationPath);
+
+    await destinationRef.put(blob, {
+        contentType: contentType,
+        cacheControl: 'public,max-age=31536000,immutable'
+    });
+
+    return {
+        url: await destinationRef.getDownloadURL(),
+        path: destinationPath
+    };
+}
+
 function normalizeEventReviewStatus(status) {
     var normalized = String(status == null ? '' : status).trim().toLowerCase();
 
@@ -1236,6 +1338,148 @@ const FirebaseSystem = {
         } catch(error) {
             console.error(error);
             return { success: false, message: 'Erro ao salvar revisão editorial das imagens.' };
+        }
+    },
+
+    applyAcceptedEstablishmentUpdateMedia: async function(requestId) {
+        if (!this.isAdmin()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedRequestId = sanitizeSimpleText(requestId, 160);
+
+        if (!normalizedRequestId) {
+            return { success: false, message: 'Solicitação inválida.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var storage = firebase.storage();
+            var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
+            var requestSnap = await requestRef.get();
+
+            if (!requestSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var request = requestSnap.data() || {};
+            if (normalizeUpdateRequestStatus(request.status) !== 'approved') {
+                return { success: false, message: 'Apenas solicitações aprovadas podem aplicar mídia ao catálogo.' };
+            }
+
+            var establishmentId = sanitizeSimpleText(request.establishmentId, 160);
+            if (!establishmentId) {
+                return { success: false, message: 'Solicitação sem establishmentId. Aplicação de mídia abortada.' };
+            }
+
+            var establishmentRef = db.collection('cms_establishments').doc(establishmentId);
+            var establishmentSnap = await establishmentRef.get();
+
+            if (!establishmentSnap.exists) {
+                return { success: false, message: 'Empreendimento não encontrado em cms_establishments: ' + establishmentId };
+            }
+
+            var establishment = establishmentSnap.data() || {};
+            var media = establishment.media || {};
+            var mainImage = media.mainImage || {};
+            var gallery = ensureArray(media.gallery);
+            var appliedMedia = buildSafeAppliedMedia(request.appliedMedia);
+            var catalogImages = [mainImage].concat(gallery);
+            var reviewMap = buildSafeMediaReviewMap(request.mediaReview && request.mediaReview.images);
+            var acceptedImages = buildSafeImageMetadata(request.images).filter(function(image) {
+                var review = reviewMap[buildMediaReviewKey(image)] || {};
+                return normalizeMediaReviewStatus(review.status) === 'accepted' &&
+                    !isImageAlreadyApplied(image, appliedMedia, catalogImages);
+            });
+
+            if (!acceptedImages.length) {
+                return { success: false, message: 'Não há imagens aceitas ainda não aplicadas.' };
+            }
+
+            var hasMainImage = !!sanitizeSimpleText(mainImage && mainImage.url, 2048);
+            var willUseMainImage = !hasMainImage;
+            var galleryAdditions = acceptedImages.length - (willUseMainImage ? 1 : 0);
+
+            if (gallery.length + galleryAdditions > 60) {
+                return { success: false, message: 'A galeria chegaria acima do limite de 60 imagens. Remova ou reorganize imagens antes de aplicar.' };
+            }
+
+            var appliedAtIso = new Date().toISOString();
+            var uploadedCatalogImages = [];
+
+            for (var i = 0; i < acceptedImages.length; i += 1) {
+                var uploaded = await copyReviewedImageToCmsMedia(
+                    storage,
+                    acceptedImages[i],
+                    currentUser.uid,
+                    establishmentId,
+                    normalizedRequestId,
+                    i
+                );
+                uploadedCatalogImages.push(buildReviewedCatalogImage(uploaded, acceptedImages[i], normalizedRequestId, appliedAtIso));
+            }
+
+            var nextGallery = gallery.slice();
+            var newAppliedMedia = appliedMedia.slice();
+            var establishmentUpdate = {};
+            var mainApplied = null;
+
+            uploadedCatalogImages.forEach(function(image, index) {
+                var destination = 'gallery';
+                if (willUseMainImage && index === 0) {
+                    mainApplied = image;
+                    destination = 'mainImage';
+                } else {
+                    image.position = nextGallery.length + 1;
+                    nextGallery.push(image);
+                }
+
+                newAppliedMedia.push({
+                    sourceRequestId: normalizedRequestId,
+                    sourceImagePath: image.sourceImagePath,
+                    sourceImageUrl: sanitizeSimpleText(acceptedImages[index] && acceptedImages[index].url, 2048),
+                    destination: destination,
+                    url: image.url,
+                    path: image.path,
+                    appliedAt: appliedAtIso,
+                    appliedBy: currentUser.uid,
+                    establishmentId: establishmentId
+                });
+            });
+
+            nextGallery = nextGallery.map(function(image, index) {
+                return Object.assign({}, image, { position: index + 1 });
+            });
+
+            var appliedAt = firebase.firestore.FieldValue.serverTimestamp();
+            if (mainApplied) {
+                establishmentUpdate['media.mainImage'] = mainApplied;
+            }
+            establishmentUpdate['media.gallery'] = nextGallery;
+            establishmentUpdate.updatedAt = appliedAt;
+            establishmentUpdate.updatedBy = currentUser.uid;
+            establishmentUpdate['review.lastAppliedRequestId'] = normalizedRequestId;
+            establishmentUpdate['review.lastAppliedAt'] = appliedAt;
+            establishmentUpdate['review.lastAppliedBy'] = currentUser.uid;
+
+            var requestUpdate = {
+                updatedAt: appliedAt,
+                mediaAppliedAt: appliedAt,
+                mediaAppliedBy: currentUser.uid,
+                mediaAppliedTo: establishmentId,
+                appliedMedia: newAppliedMedia
+            };
+
+            var batch = db.batch();
+            batch.update(establishmentRef, establishmentUpdate);
+            batch.update(requestRef, requestUpdate);
+            await batch.commit();
+
+            return {
+                success: true,
+                message: 'Mídia aceita aplicada ao catálogo interno. Os arquivos originais em submissions foram preservados e o site público não mudou.'
+            };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao aplicar mídia aceita ao catálogo interno.' };
         }
     },
 

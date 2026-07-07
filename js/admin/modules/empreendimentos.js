@@ -255,7 +255,13 @@
             alt: limit(raw.alt, 160),
             caption: limit(raw.caption, 240),
             credit: limit(raw.credit, 160),
-            source: limit(raw.source, 40)
+            source: limit(raw.source, 40),
+            sourceRequestId: limit(raw.sourceRequestId, 160),
+            sourceImagePath: limit(raw.sourceImagePath, 512),
+            uploadedBy: limit(raw.uploadedBy, 160),
+            uploadedAt: limit(raw.uploadedAt, 60),
+            reviewedBy: limit(raw.reviewedBy, 160),
+            reviewedAt: limit(raw.reviewedAt, 60)
         };
     }
 

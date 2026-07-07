@@ -765,6 +765,31 @@
             border-color: #f2b8b2;
         }
 
+        .update-request-media-application {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 0.18rem 0.55rem;
+            font-size: 0.76rem;
+            font-weight: 700;
+            border: 1px solid #d6dde0;
+            background: #f6f8f7;
+            color: #4b5563;
+        }
+
+        .update-request-media-application.is-applied {
+            background: #e8f4ff;
+            color: #175a8a;
+            border-color: #b6d6ef;
+        }
+
+        .update-request-media-application.is-ready {
+            background: #eef8e8;
+            color: #336b17;
+            border-color: #c8e4b6;
+        }
+
         .update-request-media-review-controls {
             display: grid;
             gap: 0.4rem;
@@ -2828,6 +2853,28 @@
             }
         }
 
+        async function applyAcceptedEstablishmentUpdateMedia(requestId) {
+            const confirmation = [
+                'Esta ação copia as imagens aceitas para cms-media e atualiza o catálogo interno.',
+                'O site público ainda não muda.',
+                '',
+                'Regra deste bloco:',
+                '- se o catálogo não tiver imagem principal, a primeira aceita vira imagem principal;',
+                '- as demais imagens aceitas entram na galeria;',
+                '- se já houver imagem principal, nenhuma capa será sobrescrita e todas entram na galeria.',
+                '',
+                'Os arquivos originais em submissions serão preservados.'
+            ].join('\n');
+
+            if (!confirm(confirmation)) return;
+
+            const result = await FirebaseSystem.applyAcceptedEstablishmentUpdateMedia(requestId);
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
         async function changeUserRole(userId, newRole) {
             const result = await FirebaseSystem.setUserRole(userId, newRole);
             alert(result.message);
@@ -3063,6 +3110,51 @@
             };
         }
 
+        function getAppliedMediaItems(request) {
+            return request && Array.isArray(request.appliedMedia) ? request.appliedMedia : [];
+        }
+
+        function getAppliedMediaForImage(request, image) {
+            const path = String(image && image.path || '');
+            const url = String(image && image.url || '');
+            return getAppliedMediaItems(request).find(function(item) {
+                return (path && item && item.sourceImagePath === path) || (url && item && item.sourceImageUrl === url);
+            }) || null;
+        }
+
+        function getAcceptedMediaImages(request) {
+            const images = Array.isArray(request && request.images) ? request.images : [];
+            return images.filter(function(image) {
+                return normalizeMediaReviewStatus(getMediaReviewForImage(request, image).status) === 'accepted';
+            });
+        }
+
+        function getAcceptedUnappliedMediaImages(request) {
+            return getAcceptedMediaImages(request).filter(function(image) {
+                return !getAppliedMediaForImage(request, image);
+            });
+        }
+
+        function getMediaDestinationLabel(destination) {
+            return ({
+                mainImage: 'imagem principal',
+                gallery: 'galeria'
+            })[String(destination || '')] || 'catálogo';
+        }
+
+        function renderMediaApplicationBadge(request, image, status) {
+            if (status !== 'accepted') {
+                return '<span class="update-request-media-application">Não aplicável ao catálogo</span>';
+            }
+
+            const applied = getAppliedMediaForImage(request, image);
+            if (applied) {
+                return `<span class="update-request-media-application is-applied">Aplicada como ${SEC.html(getMediaDestinationLabel(applied.destination))}</span>`;
+            }
+
+            return '<span class="update-request-media-application is-ready">Aceita, ainda não aplicada</span>';
+        }
+
         function renderMediaReviewStatusOptions(selectedStatus) {
             const selected = normalizeMediaReviewStatus(selectedStatus);
             return [
@@ -3293,6 +3385,56 @@
             return '<div class="update-request-apply-summary">' + fieldsHtml + imagesHtml + '</div>';
         }
 
+        function renderUpdateRequestMediaApplicationPanel(request) {
+            const accepted = getAcceptedMediaImages(request);
+            const unapplied = getAcceptedUnappliedMediaImages(request);
+            const applied = getAppliedMediaItems(request);
+            const status = normalizeUpdateRequestStatus(request && request.status);
+
+            if (!accepted.length) {
+                return `
+                    <div class="update-request-callout">
+                        Nenhuma imagem aceita para aplicar ao catálogo. Imagens pendentes ou rejeitadas não entram neste fluxo.
+                    </div>
+                `;
+            }
+
+            if (!unapplied.length) {
+                return `
+                    <div class="update-request-callout">
+                        Todas as imagens aceitas desta solicitação já foram registradas em <code>appliedMedia</code>.
+                    </div>
+                    ${applied.length ? `<p class="update-request-field"><strong>Mídias aplicadas:</strong> ${SEC.html(String(applied.length))}</p>` : ''}
+                `;
+            }
+
+            if (status !== 'approved') {
+                return `
+                    <div class="update-request-callout">
+                        Há ${SEC.html(String(unapplied.length))} imagem(ns) aceita(s), mas a aplicação ao catálogo só fica disponível depois que a solicitação estiver aprovada.
+                    </div>
+                `;
+            }
+
+            if (!(FirebaseSystem && typeof FirebaseSystem.isAdmin === 'function' && FirebaseSystem.isAdmin())) {
+                return `
+                    <div class="update-request-callout">
+                        Há ${SEC.html(String(unapplied.length))} imagem(ns) aceita(s) ainda não aplicada(s). Somente administradores podem aplicar mídia ao catálogo interno.
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="update-request-callout">
+                    ${SEC.html(String(unapplied.length))} imagem(ns) aceita(s) ainda não aplicada(s). A ação copia para <code>cms-media</code>, atualiza <code>cms_establishments.media</code> e preserva os arquivos originais em <code>submissions</code>.
+                    Regra deste bloco: primeira aceita vira imagem principal somente se o catálogo ainda não tiver capa; as demais entram na galeria.
+                </div>
+                <div class="page-actions" style="margin-top:0.75rem;">
+                    <button class="btn-sm btn-approve" type="button" onclick="applyAcceptedEstablishmentUpdateMedia('${SEC.js(request.id)}')">Aplicar mídia ao catálogo</button>
+                </div>
+            `;
+        }
+
         function renderUpdateRequestActionPanel(request) {
             const status = normalizeUpdateRequestStatus(request && request.status);
 
@@ -3411,6 +3553,7 @@
                                     <span>${SEC.html(image && image.contentType || 'Tipo não informado')} · ${SEC.html(formatAdminFileSize(image && image.size))}</span>
                                     <span>Posição: ${SEC.html(String(image && image.position || index + 1))}</span>
                                     <span class="update-request-media-status status-${SEC.attr(status)}">Status: ${SEC.html(getMediaReviewStatusLabel(status))}</span>
+                                    ${renderMediaApplicationBadge(request, image, status)}
                                 </div>
                                 <div class="update-request-media-review-controls">
                                     <label for="media-review-status-${SEC.attr(requestId)}-${SEC.attr(String(index))}">${SEC.html(labelPrefix)} — decisão editorial</label>
@@ -3425,11 +3568,12 @@
                     }).join('')}
                 </div>
                 <div class="update-request-callout">
-                    Imagens aceitas nesta etapa ainda precisam de aplicação/publicação de mídia em bloco futuro. Nenhum arquivo será movido, copiado ou apagado agora.
+                    A revisão editorial salva apenas a decisão por imagem. A aplicação ao catálogo é uma ação separada, confirmada e restrita a administradores.
                 </div>
                 <div class="page-actions" style="margin-top:0.75rem;">
                     <button class="btn-sm btn-approve" type="button" onclick="saveEstablishmentUpdateMediaReview('${SEC.js(requestId)}')">Salvar revisão das imagens</button>
                 </div>
+                ${renderUpdateRequestMediaApplicationPanel(request)}
             `;
         }
 
