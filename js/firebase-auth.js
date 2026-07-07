@@ -176,6 +176,17 @@ var ESTABLISHMENT_UPDATE_FIELD_LIMITS = {
     additionalNotes: 1500
 };
 
+var ESTABLISHMENT_UPDATE_APPLY_TARGETS = {
+    description: 'content.description',
+    phone: 'contact.phone',
+    whatsapp: 'contact.whatsapp',
+    instagram: 'contact.instagram',
+    website: 'contact.website',
+    address: 'location.address',
+    openingHours: 'content.openingHours',
+    additionalNotes: 'review.lastReviewNotes'
+};
+
 function sanitizeSimpleText(value, maxLength) {
     var normalized = String(value || '')
         .replace(/<[^>]*>/g, ' ')
@@ -1141,6 +1152,96 @@ const FirebaseSystem = {
         } catch(error) {
             console.error(error);
             return { success: false, message: 'Erro ao revisar solicitação de alteração.' };
+        }
+    },
+
+    applyApprovedEstablishmentUpdateRequest: async function(requestId) {
+        if (!this.isAdmin()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedRequestId = sanitizeSimpleText(requestId, 160);
+
+        if (!normalizedRequestId) {
+            return { success: false, message: 'Solicitação inválida.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
+            var requestSnap = await requestRef.get();
+
+            if (!requestSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var request = requestSnap.data() || {};
+            var currentStatus = normalizeUpdateRequestStatus(request.status);
+
+            if (currentStatus !== 'approved') {
+                return { success: false, message: 'Apenas solicitações aprovadas podem ser aplicadas ao catálogo.' };
+            }
+
+            if (request.appliedAt || request.appliedBy || request.appliedTo) {
+                return { success: false, message: 'Esta solicitação já foi aplicada ao catálogo interno.' };
+            }
+
+            var establishmentId = sanitizeSimpleText(request.establishmentId, 160);
+
+            if (!establishmentId) {
+                return { success: false, message: 'Solicitação sem establishmentId. Aplicação abortada.' };
+            }
+
+            var establishmentRef = db.collection('cms_establishments').doc(establishmentId);
+            var establishmentSnap = await establishmentRef.get();
+
+            if (!establishmentSnap.exists) {
+                return { success: false, message: 'Empreendimento não encontrado em cms_establishments: ' + establishmentId };
+            }
+
+            var requestedChanges = buildSafeRequestedChanges(request.requestedChanges);
+            var appliedFields = [];
+            var establishmentUpdate = {};
+
+            Object.keys(requestedChanges).forEach(function(field) {
+                var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
+                if (!targetPath) return;
+                establishmentUpdate[targetPath] = requestedChanges[field];
+                appliedFields.push(field);
+            });
+
+            if (!appliedFields.length) {
+                return {
+                    success: false,
+                    message: 'Não há campos textuais aplicáveis nesta solicitação. Imagens anexadas exigem revisão manual.'
+                };
+            }
+
+            var appliedAt = firebase.firestore.FieldValue.serverTimestamp();
+            establishmentUpdate.updatedAt = appliedAt;
+            establishmentUpdate.updatedBy = currentUser.uid;
+            establishmentUpdate['review.lastAppliedRequestId'] = normalizedRequestId;
+            establishmentUpdate['review.lastAppliedAt'] = appliedAt;
+            establishmentUpdate['review.lastAppliedBy'] = currentUser.uid;
+
+            var requestUpdate = {
+                updatedAt: appliedAt,
+                appliedAt: appliedAt,
+                appliedBy: currentUser.uid,
+                appliedTo: establishmentId,
+                appliedFields: appliedFields
+            };
+
+            var batch = db.batch();
+            batch.update(establishmentRef, establishmentUpdate);
+            batch.update(requestRef, requestUpdate);
+            await batch.commit();
+
+            return {
+                success: true,
+                message: 'Solicitação aplicada ao catálogo interno. O site público continua usando dados estáticos.'
+            };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao aplicar solicitação ao catálogo interno.' };
         }
     },
 

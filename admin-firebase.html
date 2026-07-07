@@ -739,6 +739,24 @@
             font-size: 0.88rem;
         }
 
+        .update-request-apply-summary {
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .update-request-apply-summary code {
+            font-size: 0.82rem;
+            color: #31543b;
+            background: #eef5ef;
+            padding: 0.1rem 0.25rem;
+            border-radius: 4px;
+        }
+
+        .update-request-applied-state {
+            border-color: #cfe7d4;
+            background: #f4fbf5;
+        }
+
         .table-responsive {
             width: 100%;
             overflow-x: auto;
@@ -2110,10 +2128,10 @@
             const container = document.getElementById('establishment-update-requests-container');
             if (!container) return;
 
-            const requests = await FirebaseSystem.listAllEstablishmentUpdateRequests(['pending']);
+            const requests = await FirebaseSystem.listAllEstablishmentUpdateRequests(['pending', 'approved']);
 
             if (!requests.length) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de alteração pendente.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de alteração pendente ou aprovada aguardando aplicação.</p>';
                 return;
             }
 
@@ -2131,7 +2149,7 @@
                                         <div><strong>Enviado em:</strong> ${SEC.html(formatFirestoreDate(request.createdAt))}</div>
                                     </div>
                                 </div>
-                                <span class="badge ${getUpdateRequestBadgeClass(request.status)}">${SEC.html(getUpdateRequestStatusLabel(request.status))}</span>
+                                <span class="badge ${getUpdateRequestBadgeClass(request.status)}">${SEC.html(getUpdateRequestStatusLabel(request))}</span>
                             </div>
 
                             <div class="update-request-grid">
@@ -2151,20 +2169,7 @@
                                 ${renderUpdateRequestImages(request.images)}
                             </section>
 
-                            <section class="update-request-panel update-request-actions">
-                                <h4>Revisão administrativa</h4>
-                                <textarea class="admin-textarea" id="update-review-note-${SEC.attr(request.id)}" maxlength="1500" placeholder="Observação geral da revisão (opcional)"></textarea>
-                                <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
-                                <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
-                                <div class="page-actions">
-                                    <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar para revisão</button>
-                                    <button class="btn-sm btn-reject" onclick="rejectEstablishmentUpdateRequest('${SEC.js(request.id)}')">❌ Rejeitar</button>
-                                    <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
-                                </div>
-                                <div class="update-request-callout">
-                                    Solicitação aprovada pela equipe e aguardando publicação/atualização controlada. Não existe aplicação automática no site público neste fluxo.
-                                </div>
-                            </section>
+                            ${renderUpdateRequestActionPanel(request)}
                         </article>
                     `).join('')}
                 </div>
@@ -2729,6 +2734,23 @@
             }
         }
 
+        async function applyEstablishmentUpdateRequest(requestId) {
+            const confirmation = [
+                'Aplicar esta solicitação aprovada ao catálogo interno cms_establishments?',
+                '',
+                'Isso atualiza o catálogo interno do CMS. O site público ainda usa dados estáticos.',
+                'Nenhuma publicação pública será feita automaticamente.'
+            ].join('\n');
+
+            if (!confirm(confirmation)) return;
+
+            const result = await FirebaseSystem.applyApprovedEstablishmentUpdateRequest(requestId);
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
         async function changeUserRole(userId, newRole) {
             const result = await FirebaseSystem.setUserRole(userId, newRole);
             alert(result.message);
@@ -3044,10 +3066,36 @@
             return ['pending', 'approved', 'rejected', 'changes_requested'].includes(normalized) ? normalized : 'pending';
         }
 
-        function getUpdateRequestStatusLabel(status) {
+        const UPDATE_REQUEST_APPLY_TARGETS = {
+            description: 'content.description',
+            phone: 'contact.phone',
+            whatsapp: 'contact.whatsapp',
+            instagram: 'contact.instagram',
+            website: 'contact.website',
+            address: 'location.address',
+            openingHours: 'content.openingHours',
+            additionalNotes: 'review.lastReviewNotes'
+        };
+
+        function isUpdateRequestApplied(request) {
+            return Boolean(request && (
+                request.appliedAt ||
+                request.appliedBy ||
+                request.appliedTo ||
+                (Array.isArray(request.appliedFields) && request.appliedFields.length)
+            ));
+        }
+
+        function getUpdateRequestStatusLabel(requestOrStatus) {
+            const request = typeof requestOrStatus === 'object' && requestOrStatus !== null ? requestOrStatus : null;
+            const status = request ? request.status : requestOrStatus;
+            if (request && normalizeUpdateRequestStatus(status) === 'approved' && isUpdateRequestApplied(request)) {
+                return 'Aprovada e aplicada ao catálogo';
+            }
+
             return ({
                 pending: 'Pendente',
-                approved: 'Aprovada, aguardando publicação',
+                approved: 'Aprovada, aguardando aplicação',
                 rejected: 'Rejeitada',
                 changes_requested: 'Ajustes necessários'
             })[normalizeUpdateRequestStatus(status)] || 'Pendente';
@@ -3077,6 +3125,99 @@
                 openingHours: 'Horário de funcionamento',
                 additionalNotes: 'Observações adicionais'
             })[String(field || '')] || 'Campo';
+        }
+
+        function getApplicableUpdateFields(request) {
+            const requestedChanges = request && request.requestedChanges || {};
+            return Object.keys(requestedChanges).filter(function(field) {
+                return Boolean(UPDATE_REQUEST_APPLY_TARGETS[field]);
+            });
+        }
+
+        function renderUpdateRequestApplySummary(request) {
+            const requestedChanges = request && request.requestedChanges || {};
+            const fields = getApplicableUpdateFields(request);
+            const images = Array.isArray(request && request.images) ? request.images : [];
+
+            const fieldsHtml = fields.length
+                ? fields.map(function(field) {
+                    return `
+                        <p class="update-request-field">
+                            <strong>${SEC.html(getUpdateRequestFieldLabel(field))}</strong>
+                            → <code>${SEC.html(UPDATE_REQUEST_APPLY_TARGETS[field])}</code><br>
+                            <span>${SEC.html(requestedChanges[field], '—')}</span>
+                        </p>
+                    `;
+                }).join('')
+                : '<p class="update-request-field">Nenhum campo textual aplicável. Se a solicitação contém apenas imagens, ela exige revisão manual.</p>';
+
+            const imagesHtml = images.length
+                ? '<div class="update-request-callout">Imagens anexadas não serão movidas, apagadas nem aplicadas automaticamente. Revise manualmente antes de usar como mídia do CMS.</div>'
+                : '';
+
+            return '<div class="update-request-apply-summary">' + fieldsHtml + imagesHtml + '</div>';
+        }
+
+        function renderUpdateRequestActionPanel(request) {
+            const status = normalizeUpdateRequestStatus(request && request.status);
+
+            if (status === 'pending') {
+                return `
+                    <section class="update-request-panel update-request-actions">
+                        <h4>Revisão administrativa</h4>
+                        <textarea class="admin-textarea" id="update-review-note-${SEC.attr(request.id)}" maxlength="1500" placeholder="Observação geral da revisão (opcional)"></textarea>
+                        <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
+                        <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
+                        <div class="page-actions">
+                            <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar para revisão</button>
+                            <button class="btn-sm btn-reject" onclick="rejectEstablishmentUpdateRequest('${SEC.js(request.id)}')">❌ Rejeitar</button>
+                            <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
+                        </div>
+                        <div class="update-request-callout">
+                            Aprovar não aplica no catálogo e não publica no site público. A aplicação fica em uma ação separada.
+                        </div>
+                    </section>
+                `;
+            }
+
+            if (status === 'approved' && isUpdateRequestApplied(request)) {
+                return `
+                    <section class="update-request-panel update-request-actions update-request-applied-state">
+                        <h4>Aplicação no catálogo</h4>
+                        <p class="update-request-field"><strong>Já aplicada em:</strong> ${SEC.html(formatFirestoreDate(request.appliedAt))}</p>
+                        <p class="update-request-field"><strong>Aplicada por:</strong> ${SEC.html(request.appliedBy || '—')}</p>
+                        <p class="update-request-field"><strong>Destino:</strong> <code>cms_establishments/${SEC.html(request.appliedTo || request.establishmentId || '—')}</code></p>
+                        <p class="update-request-field"><strong>Campos aplicados:</strong> ${SEC.html((request.appliedFields || []).map(getUpdateRequestFieldLabel).join(', ') || '—')}</p>
+                        <div class="update-request-callout">
+                            O catálogo interno foi atualizado. O site público ainda usa dados estáticos.
+                        </div>
+                    </section>
+                `;
+            }
+
+            if (status === 'approved') {
+                const applicableFields = getApplicableUpdateFields(request);
+                const canApply = FirebaseSystem && typeof FirebaseSystem.isAdmin === 'function' && FirebaseSystem.isAdmin() && applicableFields.length;
+                const actionHtml = applicableFields.length
+                    ? (canApply ? `
+                        <div class="page-actions">
+                            <button class="btn-sm btn-approve" onclick="applyEstablishmentUpdateRequest('${SEC.js(request.id)}')">Aplicar ao catálogo</button>
+                        </div>
+                    ` : '<p class="update-request-field">Somente administradores podem aplicar no catálogo interno.</p>')
+                    : '<p class="update-request-field">Sem campos textuais aplicáveis para aplicar automaticamente. Revise imagens e observações manualmente.</p>';
+                return `
+                    <section class="update-request-panel update-request-actions">
+                        <h4>Aplicar ao catálogo</h4>
+                        ${renderUpdateRequestApplySummary(request)}
+                        <div class="update-request-callout">
+                            Isso atualiza o catálogo interno do CMS. O site público ainda usa dados estáticos.
+                        </div>
+                        ${actionHtml}
+                    </section>
+                `;
+            }
+
+            return '';
         }
 
         function renderUpdateRequestFields(data, fallback) {
