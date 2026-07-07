@@ -9,7 +9,7 @@
  * Escopo deste bloco:
  *  - listar, pesquisar e filtrar;
  *  - criar e editar registros internos;
- *  - arquivar e restaurar;
+ *  - arquivar, restaurar e excluir registros internos controlados;
  *  - visualizar detalhes;
  *  - upload de imagem principal e galeria;
  *  - timestamps e auditoria basica.
@@ -18,7 +18,8 @@
  *  - ligar o site publico ao Firestore;
  *  - migrar dados estaticos;
  *  - aplicar solicitacoes aprovadas;
- *  - publicar no site publico.
+ *  - publicar no site publico;
+ *  - apagar midias do Storage ao excluir o registro.
  */
 (function () {
     "use strict";
@@ -462,6 +463,12 @@
         };
     }
 
+    function toWritePayload(doc) {
+        var payload = Object.assign({}, doc || {});
+        delete payload.__id;
+        return payload;
+    }
+
     function render(container) {
         var target = (container && container.nodeType === 1) ? container : getSection();
         if (!target) return null;
@@ -627,8 +634,16 @@
                 (item.status === "archived"
                     ? '<button class="btn-primary" type="button" onclick="AdminEstablishmentsModule.restore(\'' + jsId + '\')">Restaurar</button>'
                     : '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.archive(\'' + jsId + '\')">Arquivar</button>') +
+                deleteButton(item, jsId) +
             '</div></td>' +
             '</tr>';
+    }
+
+    function deleteButton(item, jsId) {
+        if (item.status === "published") {
+            return '<button class="btn-secondary" type="button" disabled title="Arquive antes de excluir">Excluir</button>';
+        }
+        return '<button class="btn-danger" type="button" onclick="AdminEstablishmentsModule.remove(\'' + jsId + '\')">Excluir</button>';
     }
 
     function statusBadge(status) {
@@ -1053,7 +1068,7 @@
                     image.position = index + 1;
                     return image;
                 });
-                return db.collection(COLLECTION).doc(payload.id).set(payload);
+                return db.collection(COLLECTION).doc(payload.id).set(toWritePayload(payload));
             })
             .then(function () {
                 toast("Empreendimento salvo como registro interno.", "success");
@@ -1088,14 +1103,14 @@
             toast("Firebase ou sessao admin indisponivel.", "error");
             return;
         }
-        var payload = normalizeDoc(item, item.__id);
-        payload.status = "archived";
-        payload.publishing.archivedAt = serverTimestamp();
-        payload.publishing.archivedBy = uid;
-        payload.publishing.archiveReason = limit(reason, 500);
-        payload.updatedAt = serverTimestamp();
-        payload.updatedBy = uid;
-        db.collection(COLLECTION).doc(item.__id).set(payload).then(function () {
+        db.collection(COLLECTION).doc(item.__id).update({
+            status: "archived",
+            "publishing.archivedAt": serverTimestamp(),
+            "publishing.archivedBy": uid,
+            "publishing.archiveReason": limit(reason, 500),
+            updatedAt: serverTimestamp(),
+            updatedBy: uid
+        }).then(function () {
             toast("Empreendimento arquivado.", "success");
             return load();
         }).catch(function (error) {
@@ -1117,18 +1132,51 @@
             toast("Firebase ou sessao admin indisponivel.", "error");
             return;
         }
-        var payload = normalizeDoc(item, item.__id);
-        payload.status = "draft";
-        payload.publishing.archivedAt = null;
-        payload.publishing.archivedBy = "";
-        payload.publishing.archiveReason = "";
-        payload.updatedAt = serverTimestamp();
-        payload.updatedBy = uid;
-        db.collection(COLLECTION).doc(item.__id).set(payload).then(function () {
+        db.collection(COLLECTION).doc(item.__id).update({
+            status: "draft",
+            "publishing.archivedAt": null,
+            "publishing.archivedBy": "",
+            "publishing.archiveReason": "",
+            updatedAt: serverTimestamp(),
+            updatedBy: uid
+        }).then(function () {
             toast("Empreendimento restaurado como rascunho.", "success");
             return load();
         }).catch(function (error) {
             handleWriteError(error, "restaurar empreendimento");
+        });
+    }
+
+    function remove(id) {
+        var item = findItem(id);
+        if (!item) return;
+        if (item.status === "published") {
+            toast("Arquive antes de excluir.", "error");
+            return;
+        }
+        var label = item.slug || item.__id || item.name;
+        var typed = window.prompt(
+            'Esta ação é definitiva e remove o registro interno do CMS. O site público ainda usa dados estáticos neste momento.\n\nDigite "' +
+            label +
+            '" para confirmar a exclusão.'
+        );
+        if (typed === null) return;
+        if (clean(typed) !== clean(label) && clean(typed) !== clean(item.name)) {
+            toast("Exclusao cancelada: confirmacao nao confere com o slug ou nome.", "error");
+            return;
+        }
+        if (!window.confirm('Excluir definitivamente "' + (item.name || item.__id) + '" do CMS interno?')) return;
+        var db = getDb();
+        if (!db) {
+            toast("Firebase indisponivel.", "error");
+            return;
+        }
+        db.collection(COLLECTION).doc(item.__id).delete().then(function () {
+            toast("Empreendimento excluido do CMS interno.", "success");
+            cancelForm();
+            return load();
+        }).catch(function (error) {
+            handleWriteError(error, "excluir empreendimento");
         });
     }
 
@@ -1223,6 +1271,7 @@
         cancelForm: cancelForm,
         archive: archive,
         restore: restore,
+        remove: remove,
         viewDetails: viewDetails,
         refresh: refresh,
         onFilterChange: onFilterChange,

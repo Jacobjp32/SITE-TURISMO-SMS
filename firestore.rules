@@ -157,6 +157,10 @@ service cloud.firestore {
       return value in ['draft', 'published', 'archived'];
     }
 
+    function isDeletableEstablishmentStatus(value) {
+      return value in ['draft', 'archived'];
+    }
+
     function establishmentFieldsAllowed(data) {
       return data.keys().hasOnly([
         'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
@@ -536,7 +540,7 @@ service cloud.firestore {
       allow read: if isAdmin();
       allow create: if isValidEstablishmentCreate(establishmentId);
       allow update: if isValidEstablishmentUpdate();
-      allow delete: if false;
+      allow delete: if isAdmin() && isDeletableEstablishmentStatus(resource.data.status);
     }
 
     match /noticias/{noticiaId} {
