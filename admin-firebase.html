@@ -693,11 +693,20 @@
 
         .update-request-images {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 0.75rem;
         }
 
-        .update-request-images a {
+        .update-request-image-card {
+            border: 1px solid #e2e8e4;
+            border-radius: 10px;
+            padding: 0.7rem;
+            background: #fbfdfb;
+            display: grid;
+            gap: 0.55rem;
+        }
+
+        .update-request-image-card a {
             text-decoration: none;
             color: inherit;
         }
@@ -712,12 +721,63 @@
             background: #f4f6f4;
         }
 
+        .update-request-image-meta {
+            display: grid;
+            gap: 0.2rem;
+            font-size: 0.8rem;
+            color: #555;
+        }
+
         .update-request-image-caption {
             display: block;
             margin-top: 0.4rem;
             font-size: 0.8rem;
             color: #666;
             word-break: break-word;
+        }
+
+        .update-request-media-status {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            border-radius: 999px;
+            padding: 0.18rem 0.55rem;
+            font-size: 0.76rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+        }
+
+        .update-request-media-status.status-pending {
+            background: #fff6db;
+            color: #6b4b00;
+            border-color: #f1d184;
+        }
+
+        .update-request-media-status.status-accepted {
+            background: #e7f7ed;
+            color: #176c35;
+            border-color: #b8dfc5;
+        }
+
+        .update-request-media-status.status-rejected {
+            background: #fdebea;
+            color: #9b2c21;
+            border-color: #f2b8b2;
+        }
+
+        .update-request-media-review-controls {
+            display: grid;
+            gap: 0.4rem;
+        }
+
+        .update-request-media-review-controls label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #31543b;
+        }
+
+        .update-request-media-review-controls textarea {
+            min-height: 62px;
         }
 
         .update-request-actions {
@@ -2166,7 +2226,7 @@
 
                             <section class="update-request-panel">
                                 <h4>Imagens anexadas</h4>
-                                ${renderUpdateRequestImages(request.images)}
+                                ${renderUpdateRequestImages(request)}
                             </section>
 
                             ${renderUpdateRequestActionPanel(request)}
@@ -2751,6 +2811,23 @@
             }
         }
 
+        async function saveEstablishmentUpdateMediaReview(requestId) {
+            const images = collectMediaReviewImages(requestId);
+
+            if (!images.length) {
+                alert('Esta solicitação não possui imagens para revisar.');
+                return;
+            }
+
+            const result = await FirebaseSystem.reviewEstablishmentUpdateMedia(requestId, {
+                images: images
+            });
+            alert(result.message);
+            if (result.success) {
+                loadEstablishmentUpdateRequests();
+            }
+        }
+
         async function changeUserRole(userId, newRole) {
             const result = await FirebaseSystem.setUserRole(userId, newRole);
             alert(result.message);
@@ -2955,6 +3032,64 @@
             if (bytes < 1024) return `${bytes} B`;
             if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1).replace('.', ',')} KB`;
             return `${(bytes / (1024 * 1024)).toFixed(2).replace('.', ',')} MB`;
+        }
+
+        function normalizeMediaReviewStatus(status) {
+            const normalized = String(status || 'pending').toLowerCase();
+            return ['pending', 'accepted', 'rejected'].includes(normalized) ? normalized : 'pending';
+        }
+
+        function getMediaReviewStatusLabel(status) {
+            return ({
+                pending: 'Pendente',
+                accepted: 'Aceita',
+                rejected: 'Rejeitada'
+            })[normalizeMediaReviewStatus(status)] || 'Pendente';
+        }
+
+        function getMediaReviewForImage(request, image) {
+            const reviews = request && request.mediaReview && Array.isArray(request.mediaReview.images)
+                ? request.mediaReview.images
+                : [];
+            const path = String(image && image.path || '');
+            const url = String(image && image.url || '');
+            const review = reviews.find(function(item) {
+                return (path && item && item.path === path) || (url && item && item.url === url);
+            }) || {};
+
+            return {
+                status: normalizeMediaReviewStatus(review.status),
+                note: String(review.note || '')
+            };
+        }
+
+        function renderMediaReviewStatusOptions(selectedStatus) {
+            const selected = normalizeMediaReviewStatus(selectedStatus);
+            return [
+                { value: 'pending', label: 'Pendente' },
+                { value: 'accepted', label: 'Aceita' },
+                { value: 'rejected', label: 'Rejeitada' }
+            ].map(function(option) {
+                return `<option value="${SEC.attr(option.value)}"${option.value === selected ? ' selected' : ''}>${SEC.html(option.label)}</option>`;
+            }).join('');
+        }
+
+        function collectMediaReviewImages(requestId) {
+            const cards = Array.prototype.slice.call(document.querySelectorAll('[data-media-review-request]'))
+                .filter(function(card) {
+                    return card.getAttribute('data-media-review-request') === String(requestId || '');
+                });
+
+            return cards.map(function(card) {
+                const statusInput = card.querySelector('.media-review-status-input');
+                const noteInput = card.querySelector('.media-review-note-input');
+                return {
+                    path: card.getAttribute('data-image-path') || '',
+                    url: card.getAttribute('data-image-url') || '',
+                    status: normalizeMediaReviewStatus(statusInput && statusInput.value),
+                    note: noteInput ? noteInput.value : ''
+                };
+            });
         }
 
         function formatDate(dateStr) {
@@ -3242,19 +3377,58 @@
             return renderedFields + imageInfo;
         }
 
-        function renderUpdateRequestImages(images) {
+        function renderUpdateRequestImages(request) {
+            const images = Array.isArray(request && request.images) ? request.images : [];
             if (!Array.isArray(images) || !images.length) {
                 return '<p class="update-request-field">Sem imagens anexadas.</p>';
             }
 
+            const requestId = String(request && request.id || '');
+            const reviewMeta = request && request.mediaReview || {};
+            const reviewedAt = reviewMeta.reviewedAt ? `
+                <p class="update-request-field"><strong>Última revisão de mídia:</strong> ${SEC.html(formatFirestoreDate(reviewMeta.reviewedAt))} por ${SEC.html(reviewMeta.reviewedBy || '—')}</p>
+            ` : '<p class="update-request-field">Revisão de mídia ainda não salva.</p>';
+
             return `
+                ${reviewedAt}
                 <div class="update-request-images">
-                    ${images.map(image => `
-                        <a href="${SEC.url(image && image.url, '#')}" target="_blank" rel="noopener noreferrer">
-                            <img src="${SEC.url(image && image.url, '')}" alt="Imagem anexada da solicitação">
-                            <span class="update-request-image-caption">${SEC.html(image && (image.name || image.path || 'imagem'))}</span>
-                        </a>
-                    `).join('')}
+                    ${images.map(function(image, index) {
+                        const review = getMediaReviewForImage(request, image);
+                        const status = normalizeMediaReviewStatus(review.status);
+                        const labelPrefix = `Imagem ${index + 1}`;
+                        const name = image && (image.name || image.path || ('imagem-' + (index + 1)));
+                        return `
+                            <div class="update-request-image-card"
+                                data-media-review-request="${SEC.attr(requestId)}"
+                                data-media-review-index="${SEC.attr(String(index))}"
+                                data-image-path="${SEC.attr(image && image.path || '')}"
+                                data-image-url="${SEC.attr(image && image.url || '')}">
+                                <a href="${SEC.url(image && image.url, '#')}" target="_blank" rel="noopener noreferrer">
+                                    <img src="${SEC.url(image && image.url, '')}" alt="${SEC.attr(name ? 'Prévia de ' + name : '')}" onerror="this.closest('.update-request-image-card').classList.add('is-error');this.remove();">
+                                    <span class="update-request-image-caption"><strong>${SEC.html(name)}</strong></span>
+                                </a>
+                                <div class="update-request-image-meta">
+                                    <span>${SEC.html(image && image.contentType || 'Tipo não informado')} · ${SEC.html(formatAdminFileSize(image && image.size))}</span>
+                                    <span>Posição: ${SEC.html(String(image && image.position || index + 1))}</span>
+                                    <span class="update-request-media-status status-${SEC.attr(status)}">Status: ${SEC.html(getMediaReviewStatusLabel(status))}</span>
+                                </div>
+                                <div class="update-request-media-review-controls">
+                                    <label for="media-review-status-${SEC.attr(requestId)}-${SEC.attr(String(index))}">${SEC.html(labelPrefix)} — decisão editorial</label>
+                                    <select class="admin-input media-review-status-input" id="media-review-status-${SEC.attr(requestId)}-${SEC.attr(String(index))}">
+                                        ${renderMediaReviewStatusOptions(status)}
+                                    </select>
+                                    <label for="media-review-note-${SEC.attr(requestId)}-${SEC.attr(String(index))}">${SEC.html(labelPrefix)} — observação curta</label>
+                                    <textarea class="admin-textarea media-review-note-input" id="media-review-note-${SEC.attr(requestId)}-${SEC.attr(String(index))}" maxlength="240" placeholder="Observação editorial opcional">${SEC.html(review.note)}</textarea>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="update-request-callout">
+                    Imagens aceitas nesta etapa ainda precisam de aplicação/publicação de mídia em bloco futuro. Nenhum arquivo será movido, copiado ou apagado agora.
+                </div>
+                <div class="page-actions" style="margin-top:0.75rem;">
+                    <button class="btn-sm btn-approve" type="button" onclick="saveEstablishmentUpdateMediaReview('${SEC.js(requestId)}')">Salvar revisão das imagens</button>
                 </div>
             `;
         }

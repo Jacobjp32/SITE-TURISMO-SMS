@@ -287,6 +287,30 @@ function normalizeUpdateRequestStatus(status) {
     return 'pending';
 }
 
+function normalizeMediaReviewStatus(status) {
+    var normalized = String(status || '').trim().toLowerCase();
+    return ['pending', 'accepted', 'rejected'].indexOf(normalized) !== -1 ? normalized : 'pending';
+}
+
+function buildMediaReviewKey(item) {
+    var path = sanitizeSimpleText(item && item.path, 512);
+    var url = sanitizeSimpleText(item && item.url, 2048);
+    return path || url;
+}
+
+function buildSafeMediaReviewMap(items) {
+    return ensureArray(items).reduce(function(result, item) {
+        var key = buildMediaReviewKey(item);
+        if (!key) return result;
+
+        result[key] = {
+            status: normalizeMediaReviewStatus(item && item.status),
+            note: sanitizeLongText(item && item.note, 240)
+        };
+        return result;
+    }, {});
+}
+
 function normalizeEventReviewStatus(status) {
     var normalized = String(status == null ? '' : status).trim().toLowerCase();
 
@@ -1152,6 +1176,66 @@ const FirebaseSystem = {
         } catch(error) {
             console.error(error);
             return { success: false, message: 'Erro ao revisar solicitação de alteração.' };
+        }
+    },
+
+    reviewEstablishmentUpdateMedia: async function(requestId, reviewData) {
+        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+
+        var normalizedRequestId = sanitizeSimpleText(requestId, 160);
+
+        if (!normalizedRequestId) {
+            return { success: false, message: 'Solicitação inválida.' };
+        }
+
+        try {
+            var db = firebase.firestore();
+            var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
+            var requestSnap = await requestRef.get();
+
+            if (!requestSnap.exists) {
+                return { success: false, message: 'Solicitação não encontrada.' };
+            }
+
+            var request = requestSnap.data() || {};
+            var images = buildSafeImageMetadata(request.images);
+
+            if (!images.length) {
+                return { success: false, message: 'Esta solicitação não possui imagens anexadas.' };
+            }
+
+            var reviewMap = buildSafeMediaReviewMap(reviewData && reviewData.images);
+            var now = firebase.firestore.FieldValue.serverTimestamp();
+            var decidedAt = new Date().toISOString();
+            var reviewedImages = images.map(function(image) {
+                var key = buildMediaReviewKey(image);
+                var review = reviewMap[key] || {};
+                return {
+                    path: image.path,
+                    url: image.url,
+                    status: normalizeMediaReviewStatus(review.status),
+                    note: sanitizeLongText(review.note, 240),
+                    decidedAt: decidedAt,
+                    decidedBy: currentUser.uid
+                };
+            });
+
+            await requestRef.update({
+                mediaReview: {
+                    reviewedAt: now,
+                    reviewedBy: currentUser.uid,
+                    images: reviewedImages
+                },
+                updatedAt: now
+            });
+
+            return {
+                success: true,
+                message: 'Revisão editorial das imagens salva. Nenhuma mídia foi aplicada ao catálogo.'
+            };
+        } catch(error) {
+            console.error(error);
+            return { success: false, message: 'Erro ao salvar revisão editorial das imagens.' };
         }
     },
 
