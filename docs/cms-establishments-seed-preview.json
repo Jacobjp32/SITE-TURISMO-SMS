@@ -1,12 +1,14 @@
 {
   "metadata": {
-    "generatedAt": "2026-07-07T13:47:59.433Z",
+    "generatedAt": "2026-07-07T17:19:06.986Z",
     "script": "scripts/cms-establishments-seed.mjs",
     "targetCollection": "cms_establishments",
     "defaultStatus": "draft",
     "seededBy": "cms-2c-seed-script",
-    "dryRunOnly": true,
-    "applyImplemented": false,
+    "dryRunOnly": false,
+    "liveDiffImplemented": true,
+    "applyImplemented": true,
+    "applyRequiresConfirmation": true,
     "loadedFiles": [
       {
         "file": "js/locais-data.js",
@@ -274,7 +276,9 @@
       "publishing.archivedBy",
       "review.lastAppliedRequestId",
       "review.lastAppliedAt",
-      "review.lastAppliedBy"
+      "review.lastAppliedBy",
+      "createdAt",
+      "createdBy"
     ]
   },
   "records": [
@@ -327,8 +331,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -448,7 +451,7 @@
         "legacyIds": [
           "rotasLegado:all-garden"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -513,8 +516,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -599,7 +601,7 @@
           "restaurantes:ancestral-gastronomia",
           "rotasLegado:ancestral-gastronomia"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -657,8 +659,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -733,7 +734,7 @@
         "legacyIds": [
           "locaisData:arena-cultural"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -790,8 +791,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -838,7 +838,7 @@
         "legacyIds": [
           "rotasLegado:armazem-campestre"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -895,8 +895,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -943,7 +942,7 @@
         "legacyIds": [
           "rotasLegado:artur-biergarten"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1000,8 +999,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -1048,7 +1046,7 @@
         "legacyIds": [
           "rotasLegado:bierherr"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1105,8 +1103,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -1153,7 +1150,7 @@
         "legacyIds": [
           "rotasLegado:cabana-campo-de-telha"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1211,8 +1208,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -1259,7 +1255,7 @@
         "legacyIds": [
           "rotasLegado:canil-sao-jose"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1323,8 +1319,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -1445,7 +1440,7 @@
           "locaisData:casa-da-memoria",
           "pontos:casa-da-memoria"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1509,8 +1504,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -1577,7 +1571,7 @@
           "locaisData:chimarrodromo",
           "pontos:chimarrodromo"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1634,8 +1628,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -1682,7 +1675,7 @@
         "legacyIds": [
           "rotasLegado:churrascaria-dallas"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1740,8 +1733,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -1788,7 +1780,7 @@
         "legacyIds": [
           "rotasLegado:dalety"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -1845,8 +1837,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -1966,7 +1957,7 @@
         "legacyIds": [
           "rotasLegado:delicias-da-bernardina"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2023,8 +2014,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2071,7 +2061,7 @@
         "legacyIds": [
           "rotasLegado:ervateira-baldo"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2128,8 +2118,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "https://youtu.be/SRPn02mIAUg?si=3Hp5P-G_b91OWL4Z",
@@ -2176,7 +2165,7 @@
         "legacyIds": [
           "rotasLegado:ervateira-rei-verde"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2233,8 +2222,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2281,7 +2269,7 @@
         "legacyIds": [
           "rotasLegado:ervateira-taquaral"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2338,8 +2326,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2386,7 +2373,7 @@
         "legacyIds": [
           "rotasLegado:frigorifico-3m"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2444,8 +2431,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -2502,7 +2488,7 @@
         "legacyIds": [
           "locaisData:ginasio-polacao"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2562,8 +2548,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2608,7 +2593,7 @@
         "legacyIds": [
           "hospedagens:hotel-dom-leopoldo"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2674,8 +2659,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2723,7 +2707,7 @@
           "hospedagens:hotel-moro",
           "rotasLegado:hotel-moro"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2783,8 +2767,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -2829,7 +2812,7 @@
         "legacyIds": [
           "hospedagens:hotel-nora"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -2889,8 +2872,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -2999,7 +2981,7 @@
         "legacyIds": [
           "hospedagens:hotel-sao-mateus"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3067,8 +3049,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -3164,7 +3145,7 @@
           "pontos:igreja-agua-branca",
           "rotasLegado:igreja-agua-branca"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3227,8 +3208,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -3304,7 +3284,7 @@
           "locaisData:igreja-matriz",
           "pontos:igreja-matriz"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3361,8 +3341,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -3409,7 +3388,7 @@
         "legacyIds": [
           "rotasLegado:mag-verduras"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3478,8 +3457,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -3600,7 +3578,7 @@
           "restaurantes:marina-barra-iguacu",
           "rotasLegado:marina-barra-iguacu"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3658,8 +3636,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -3716,7 +3693,7 @@
         "legacyIds": [
           "locaisData:miss-sao-mateus"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3774,8 +3751,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -3859,7 +3835,7 @@
         "legacyIds": [
           "locaisData:natal-ouro-verde"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -3916,8 +3892,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -4001,7 +3976,7 @@
         "legacyIds": [
           "rotasLegado:nova-esperanca"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4059,8 +4034,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -4117,7 +4091,7 @@
         "legacyIds": [
           "locaisData:paco-municipal"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4174,8 +4148,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4223,7 +4196,7 @@
         "legacyIds": [
           "rotasLegado:parada-do-chimarrao"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4286,8 +4259,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4335,7 +4307,7 @@
           "restaurantes:parada-pinoli",
           "rotasLegado:parada-pinoli"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4393,8 +4365,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -4460,7 +4431,7 @@
         "legacyIds": [
           "locaisData:parque-exposicoes"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4517,8 +4488,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4566,7 +4536,7 @@
         "legacyIds": [
           "rotasLegado:pesqueiro-da-joana"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4623,8 +4593,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4672,7 +4641,7 @@
         "legacyIds": [
           "rotasLegado:pesqueiro-do-kiko"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4730,8 +4699,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4779,7 +4747,7 @@
         "legacyIds": [
           "rotasLegado:pesqueiro-do-luizao"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4836,8 +4804,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4885,7 +4852,7 @@
         "legacyIds": [
           "rotasLegado:pesqueiro-do-pedrao"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -4942,8 +4909,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -4991,7 +4957,7 @@
         "legacyIds": [
           "rotasLegado:pesqueiro-tio-ivo"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5049,8 +5015,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -5097,7 +5062,7 @@
         "legacyIds": [
           "rotasLegado:pitayas-dragao"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5161,8 +5126,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -5238,7 +5202,7 @@
           "locaisData:ponte-rio-iguacu",
           "pontos:ponte-rio-iguacu"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5295,8 +5259,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -5343,7 +5306,7 @@
         "legacyIds": [
           "rotasLegado:posto-pelanda"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5403,8 +5366,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -5449,7 +5411,7 @@
         "legacyIds": [
           "hospedagens:pousadas-rurais"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5513,8 +5475,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -5581,7 +5542,7 @@
           "locaisData:praca-rio-iguacu",
           "pontos:praca-rio-iguacu"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5639,8 +5600,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -5697,7 +5657,7 @@
         "legacyIds": [
           "locaisData:predio-historico"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5755,8 +5715,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -5813,7 +5772,7 @@
         "legacyIds": [
           "locaisData:prefeitura-municipal"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5870,8 +5829,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -5918,7 +5876,7 @@
         "legacyIds": [
           "rotasLegado:prop-antonia-gabriel"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -5975,8 +5933,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6023,7 +5980,7 @@
         "legacyIds": [
           "rotasLegado:prop-da-sabrina"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6080,8 +6037,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6128,7 +6084,7 @@
         "legacyIds": [
           "rotasLegado:prop-do-beto"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6186,8 +6142,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6234,7 +6189,7 @@
         "legacyIds": [
           "rotasLegado:prop-do-tico"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6291,8 +6246,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6339,7 +6293,7 @@
         "legacyIds": [
           "rotasLegado:prop-eduardo-pachek"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6396,8 +6350,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6444,7 +6397,7 @@
         "legacyIds": [
           "rotasLegado:prop-ines-lucival"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6501,8 +6454,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6549,7 +6501,7 @@
         "legacyIds": [
           "rotasLegado:prop-seu-luiz"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6606,8 +6558,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6654,7 +6605,7 @@
         "legacyIds": [
           "rotasLegado:queijos-cleonice"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6711,8 +6662,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6759,7 +6709,7 @@
         "legacyIds": [
           "rotasLegado:rancho-samas"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6819,8 +6769,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -6865,7 +6814,7 @@
         "legacyIds": [
           "restaurantes:restaurante-dallas"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -6922,8 +6871,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -7043,7 +6991,7 @@
         "legacyIds": [
           "rotasLegado:ribeiro-pesca"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7107,8 +7055,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -7193,7 +7140,7 @@
           "locaisData:rua-do-mathe",
           "pontos:rua-do-mathe"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7250,8 +7197,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -7354,7 +7300,7 @@
         "legacyIds": [
           "rotasLegado:sawe-parque"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7411,8 +7357,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -7459,7 +7404,7 @@
         "legacyIds": [
           "rotasLegado:sitio-ludevico"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7516,8 +7461,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -7564,7 +7508,7 @@
         "legacyIds": [
           "rotasLegado:sitio-pica-pau-vermelho"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7622,8 +7566,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -7670,7 +7613,7 @@
         "legacyIds": [
           "rotasLegado:sitio-sapopema"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7728,8 +7671,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -7777,7 +7719,7 @@
         "legacyIds": [
           "rotasLegado:ulbrich"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7839,8 +7781,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [
           {
@@ -7895,7 +7836,7 @@
         "legacyIds": [
           "pontos:vapor-pery"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -7952,8 +7893,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -8000,7 +7940,7 @@
         "legacyIds": [
           "rotasLegado:viveiro-fluviopolis"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -8058,8 +7998,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -8106,7 +8045,7 @@
         "legacyIds": [
           "rotasLegado:viveiro-mk"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -8163,8 +8102,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -8212,7 +8150,7 @@
         "legacyIds": [
           "rotasLegado:viveiro-santana"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
@@ -8269,8 +8207,7 @@
           "alt": "",
           "caption": "",
           "credit": "",
-          "source": "static",
-          "position": 1
+          "source": "static"
         },
         "gallery": [],
         "videoUrl": "",
@@ -8317,7 +8254,7 @@
         "legacyIds": [
           "rotasLegado:vivenda-do-mate"
         ],
-        "seededAt": "2026-07-07T13:47:59.433Z",
+        "seededAt": "2026-07-07T17:19:06.986Z",
         "sourceUpdatedAt": null
       },
       "createdAt": null,
