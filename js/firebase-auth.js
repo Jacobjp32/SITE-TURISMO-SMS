@@ -374,12 +374,25 @@ function createMediaApplicationError(type, message, cause) {
     var error = new Error(message);
     error.cmsMediaType = type;
     error.cause = cause || null;
+    error.cmsMediaDiagnosis = cause && cause.cmsMediaDiagnosis ? cause.cmsMediaDiagnosis : '';
     return error;
 }
 
 function getMediaApplicationErrorMessage(error) {
     if (error && error.cmsMediaType === 'download') {
-        return 'Falha ao acessar Firebase Storage. Verifique a política de segurança (CSP/connect-src), CORS ou permissões da imagem.';
+        if (error.cmsMediaDiagnosis === 'sdk-unsupported') {
+            return 'Não foi possível baixar a imagem pelo path do Storage: o SDK carregado não expõe getBlob/getBytes compatível. Use cópia server-side ou configure um SDK modular autenticado.';
+        }
+        if (error.cmsMediaDiagnosis === 'ref-invalida') {
+            return 'Não foi possível localizar a imagem original pelo path do Storage. Verifique o campo image.path da solicitação.';
+        }
+        if (error.cmsMediaDiagnosis === 'permission') {
+            return 'Sem permissão para ler a imagem original no Firebase Storage. Verifique sessão admin/moderador e Storage Rules publicadas.';
+        }
+        if (error.cmsMediaDiagnosis === 'cors') {
+            return 'O SDK tentou baixar a imagem pelo path, mas o bucket bloqueou a resposta por CORS. A alternativa recomendada é Cloud Function/Admin SDK ou ajuste operacional de CORS do bucket.';
+        }
+        return 'Falha ao baixar a imagem original pelo path do Firebase Storage. Verifique SDK, permissões ou CORS do bucket.';
     }
 
     if (error && error.cmsMediaType === 'upload') {
@@ -407,111 +420,275 @@ function loadFirebaseStorageModule() {
     return firebaseStorageModulePromise;
 }
 
-async function downloadStorageBlobFromPath(sourcePath) {
-    var storageModule = await loadFirebaseStorageModule();
-    var app = firebase && typeof firebase.app === 'function' && firebase.app()._delegate
-        ? firebase.app()._delegate
-        : undefined;
-    var modularStorage = storageModule.getStorage(app);
-    var sourceRef = storageModule.ref(modularStorage, sourcePath);
+function classifyStorageDownloadError(error) {
+    var code = String(error && error.code || '').toLowerCase();
+    var message = String(error && error.message || '').toLowerCase();
 
-    if (typeof storageModule.getBlob === 'function') {
-        return storageModule.getBlob(sourceRef);
+    if (code.indexOf('permission') !== -1 || code.indexOf('unauthorized') !== -1 ||
+        message.indexOf('permission') !== -1 || message.indexOf('unauthorized') !== -1) {
+        return 'permission';
     }
-
-    if (typeof storageModule.getBytes === 'function') {
-        return new Blob([await storageModule.getBytes(sourceRef)]);
+    if (message.indexOf('cors') !== -1 ||
+        message.indexOf('access-control-allow-origin') !== -1 ||
+        message.indexOf('cross-origin') !== -1) {
+        return 'cors';
     }
-
-    throw new Error('SDK de Storage sem getBlob/getBytes disponível.');
+    if (message.indexOf('_location') !== -1 ||
+        message.indexOf('invalid storage reference') !== -1 ||
+        message.indexOf('expects first argument') !== -1 ||
+        message.indexOf('storage reference') !== -1) {
+        return 'ref-invalida';
+    }
+    if (code === 'storage/object-not-found' || message.indexOf('object') !== -1 && message.indexOf('not found') !== -1) {
+        return 'not-found';
+    }
+    return 'download';
 }
 
-function downloadStorageBlobFromUrl(url) {
-    return new Promise(function(resolve, reject) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url, true);
-        request.responseType = 'blob';
-
-        request.onload = function() {
-            if (request.status >= 200 && request.status < 300 && request.response) {
-                resolve(request.response);
-                return;
-            }
-
-            reject(new Error('Download da imagem original retornou status ' + String(request.status || 0) + '.'));
-        };
-
-        request.onerror = function() {
-            reject(new Error('Falha de rede/CORS ao baixar a imagem original.'));
-        };
-
-        request.ontimeout = function() {
-            reject(new Error('Tempo esgotado ao baixar a imagem original.'));
-        };
-
-        request.timeout = 30000;
-        request.send();
-    });
+function createStorageDownloadError(message, diagnosis, cause) {
+    var error = new Error(message);
+    error.cmsMediaDiagnosis = diagnosis || 'download';
+    error.cause = cause || null;
+    if (cause && cause.code) error.code = cause.code;
+    return error;
 }
 
-async function downloadReviewedImageBlob(storage, sourcePath, sourceUrl) {
-    var sourceRef = null;
-    var downloadErrors = [];
+function getErrorLogDetails(error) {
+    if (!error) return {};
+    return {
+        code: error.code || '',
+        name: error.name || '',
+        message: sanitizeLogMessage(error.message),
+        diagnosis: error.cmsMediaDiagnosis || classifyStorageDownloadError(error)
+    };
+}
 
-    if (sourcePath) {
-        sourceRef = storage.ref(sourcePath);
+function sanitizeLogMessage(value) {
+    return sanitizeSimpleText(value, 240)
+        .replace(/https?:\/\/\S+/gi, '[url-redigida]')
+        .replace(/([?&](?:token|alt)=)[^&\s]+/gi, '$1[redigido]');
+}
 
-        if (typeof sourceRef.getBlob === 'function') {
-            try {
-                return await sourceRef.getBlob();
-            } catch(error) {
-                downloadErrors.push(error);
-            }
-        }
+function logStorageCopyDiagnostic(level, stage, details) {
+    var logger = console[level] || console.info;
+    logger.call(console, '[cms-media-copy] ' + stage, details || {});
+}
 
-        if (typeof sourceRef.getBytes === 'function') {
-            try {
-                var bytes = await sourceRef.getBytes();
-                return new Blob([bytes]);
-            } catch(error) {
-                downloadErrors.push(error);
-            }
-        }
+function safeDecodeStoragePath(value) {
+    var text = String(value || '');
+    try {
+        return decodeURIComponent(text);
+    } catch(error) {
+        return text;
+    }
+}
 
-        try {
-            return await downloadStorageBlobFromPath(sourcePath);
-        } catch(error) {
-            downloadErrors.push(error);
-        }
+function normalizeStorageSourcePath(value) {
+    var raw = sanitizeSimpleText(value, 2048);
+    var bucket = firebaseConfig && firebaseConfig.storageBucket ? String(firebaseConfig.storageBucket) : '';
 
-        try {
-            sourceUrl = await sourceRef.getDownloadURL();
-        } catch(error) {
-            downloadErrors.push(error);
+    if (!raw) return '';
+
+    if (/^https?:\/\//i.test(raw)) {
+        return extractStoragePathFromUrl(raw);
+    }
+
+    if (raw.indexOf('gs://') === 0) {
+        raw = raw.slice(5);
+        if (bucket && raw.indexOf(bucket + '/') === 0) {
+            raw = raw.slice(bucket.length + 1);
+        } else {
+            raw = raw.replace(/^[^/]+\//, '');
         }
     }
 
-    if (!sourceUrl) {
-        throw downloadErrors[0] || new Error('Imagem aceita sem URL ou path de origem.');
+    raw = raw.replace(/^\/+/, '');
+    if (bucket && raw.indexOf(bucket + '/') === 0) {
+        raw = raw.slice(bucket.length + 1);
+    }
+    raw = safeDecodeStoragePath(raw).replace(/^\/+/, '');
+
+    var updatePathIndex = raw.indexOf('submissions/establishment-updates/');
+    if (updatePathIndex === -1) {
+        return '';
+    }
+
+    return raw.slice(updatePathIndex);
+}
+
+function extractStoragePathFromUrl(url) {
+    var raw = sanitizeSimpleText(url, 2048);
+    if (!raw) return '';
+
+    try {
+        var parsed = new URL(raw);
+        var marker = '/' + 'o' + '/';
+        var markerIndex = parsed.pathname.indexOf(marker);
+        if (markerIndex === -1) return '';
+        return normalizeStorageSourcePath(parsed.pathname.slice(markerIndex + marker.length));
+    } catch(error) {
+        return '';
+    }
+}
+
+function getCompatStorageReference(storage, sourcePath) {
+    if (!storage || typeof storage.ref !== 'function') {
+        throw createStorageDownloadError('Firebase Storage compat indisponivel.', 'ref-invalida');
+    }
+    if (!sourcePath) {
+        throw createStorageDownloadError('Imagem aceita sem path valido em submissions/establishment-updates.', 'ref-invalida');
     }
 
     try {
-        return await downloadStorageBlobFromUrl(sourceUrl);
+        return storage.ref(sourcePath);
     } catch(error) {
-        downloadErrors.push(error);
-        throw downloadErrors[0] || error;
+        throw createStorageDownloadError('Falha ao criar referencia compat do Storage pelo path.', 'ref-invalida', error);
     }
 }
 
+function assertModularStorageReference(sourceRef, method) {
+    if (!sourceRef || !sourceRef._location) {
+        throw createStorageDownloadError('Referencia modular do Storage invalida para ' + method + '.', 'ref-invalida');
+    }
+    return sourceRef;
+}
+
+async function downloadWithModularStorageFunction(storageModule, sourceRef, method, contentType) {
+    assertModularStorageReference(sourceRef, method);
+
+    if (method === 'getBlob' && typeof storageModule.getBlob === 'function') {
+        return storageModule.getBlob(sourceRef);
+    }
+
+    if (method === 'getBytes' && typeof storageModule.getBytes === 'function') {
+        return new Blob([await storageModule.getBytes(sourceRef)], { type: contentType || 'application/octet-stream' });
+    }
+
+    throw createStorageDownloadError('SDK de Storage sem ' + method + ' disponivel.', 'sdk-unsupported');
+}
+
+async function downloadStorageBlobFromPath(storage, sourcePath, contentType) {
+    var sourceRef = getCompatStorageReference(storage, sourcePath);
+
+    logStorageCopyDiagnostic('info', 'download:start', {
+        sourcePath: sourcePath,
+        sdk: 'compat',
+        method: 'storage.ref(path)'
+    });
+
+    if (typeof sourceRef.getBlob === 'function') {
+        try {
+            logStorageCopyDiagnostic('info', 'download:method', {
+                sourcePath: sourcePath,
+                sdk: 'compat',
+                method: 'sourceRef.getBlob'
+            });
+            return await sourceRef.getBlob();
+        } catch(error) {
+            logStorageCopyDiagnostic('warn', 'download:error', Object.assign({
+                sourcePath: sourcePath,
+                sdk: 'compat',
+                method: 'sourceRef.getBlob'
+            }, getErrorLogDetails(error)));
+        }
+    }
+
+    if (typeof sourceRef.getBytes === 'function') {
+        try {
+            logStorageCopyDiagnostic('info', 'download:method', {
+                sourcePath: sourcePath,
+                sdk: 'compat',
+                method: 'sourceRef.getBytes'
+            });
+            return new Blob([await sourceRef.getBytes()], { type: contentType || 'application/octet-stream' });
+        } catch(error) {
+            logStorageCopyDiagnostic('warn', 'download:error', Object.assign({
+                sourcePath: sourcePath,
+                sdk: 'compat',
+                method: 'sourceRef.getBytes'
+            }, getErrorLogDetails(error)));
+        }
+    }
+
+    var storageModule = await loadFirebaseStorageModule();
+    var modularRef = sourceRef && sourceRef._delegate ? sourceRef._delegate : null;
+
+    if (!modularRef) {
+        throw createStorageDownloadError('Storage compat nao expos referencia modular autenticada (_delegate).', 'sdk-unsupported');
+    }
+
+    if (typeof storageModule.getBlob === 'function') {
+        try {
+            logStorageCopyDiagnostic('info', 'download:method', {
+                sourcePath: sourcePath,
+                sdk: 'modular-from-compat-delegate',
+                method: 'getBlob'
+            });
+            return await downloadWithModularStorageFunction(storageModule, modularRef, 'getBlob', contentType);
+        } catch(error) {
+            logStorageCopyDiagnostic('warn', 'download:error', Object.assign({
+                sourcePath: sourcePath,
+                sdk: 'modular-from-compat-delegate',
+                method: 'getBlob'
+            }, getErrorLogDetails(error)));
+            if (classifyStorageDownloadError(error) !== 'download') {
+                throw createStorageDownloadError('Falha no download autenticado pelo path do Storage.', classifyStorageDownloadError(error), error);
+            }
+        }
+    }
+
+    if (typeof storageModule.getBytes === 'function') {
+        try {
+            logStorageCopyDiagnostic('info', 'download:method', {
+                sourcePath: sourcePath,
+                sdk: 'modular-from-compat-delegate',
+                method: 'getBytes'
+            });
+            return await downloadWithModularStorageFunction(storageModule, modularRef, 'getBytes', contentType);
+        } catch(error) {
+            logStorageCopyDiagnostic('warn', 'download:error', Object.assign({
+                sourcePath: sourcePath,
+                sdk: 'modular-from-compat-delegate',
+                method: 'getBytes'
+            }, getErrorLogDetails(error)));
+            throw createStorageDownloadError('Falha no download autenticado pelo path do Storage.', classifyStorageDownloadError(error), error);
+        }
+    }
+
+    throw createStorageDownloadError('SDK de Storage sem getBlob/getBytes disponivel.', 'sdk-unsupported');
+}
+
+async function downloadReviewedImageBlob(storage, sourcePath, sourceUrl, contentType) {
+    var normalizedPath = normalizeStorageSourcePath(sourcePath);
+    var pathSource = 'image.path';
+
+    if (!normalizedPath) {
+        normalizedPath = extractStoragePathFromUrl(sourceUrl);
+        pathSource = 'image.url-derived-path';
+    }
+
+    if (!normalizedPath) {
+        throw createStorageDownloadError('Imagem aceita sem path valido em submissions/establishment-updates.', 'ref-invalida');
+    }
+
+    logStorageCopyDiagnostic('info', 'source:path', {
+        sourcePath: normalizedPath,
+        source: pathSource
+    });
+
+    return downloadStorageBlobFromPath(storage, normalizedPath, contentType);
+}
+
 async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishmentId, requestId, index) {
-    var sourcePath = sanitizeSimpleText(image && image.path, 512);
+    var sourcePath = normalizeStorageSourcePath(image && image.path) ||
+        extractStoragePathFromUrl(image && image.url);
     var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
     var sourceName = sanitizeSimpleText(image && image.name, 120) || getSafeFileNameFromPath(sourcePath || sourceUrl);
     var contentType = sanitizeSimpleText(image && image.contentType, 80) || 'image/jpeg';
     var blob = null;
 
     try {
-        blob = await downloadReviewedImageBlob(storage, sourcePath, sourceUrl);
+        blob = await downloadReviewedImageBlob(storage, sourcePath, sourceUrl, contentType);
     } catch(error) {
         throw createMediaApplicationError('download', 'Falha ao baixar imagem original para copiar ao CMS.', error);
     }
@@ -530,12 +707,22 @@ async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishme
     var destinationUrl = '';
 
     try {
+        logStorageCopyDiagnostic('info', 'upload:start', {
+            sourcePath: sourcePath,
+            destinationPath: destinationPath,
+            method: 'compat.put'
+        });
         await destinationRef.put(blob, {
             contentType: contentType,
             cacheControl: 'public,max-age=31536000,immutable'
         });
         destinationUrl = await destinationRef.getDownloadURL();
     } catch(error) {
+        logStorageCopyDiagnostic('warn', 'upload:error', Object.assign({
+            sourcePath: sourcePath,
+            destinationPath: destinationPath,
+            method: 'compat.put'
+        }, getErrorLogDetails(error)));
         throw createMediaApplicationError('upload', 'Falha ao enviar imagem para cms-media.', error);
     }
 
@@ -1606,6 +1793,11 @@ const FirebaseSystem = {
             try {
                 await batch.commit();
             } catch(error) {
+                logStorageCopyDiagnostic('warn', 'batch:error', Object.assign({
+                    requestId: normalizedRequestId,
+                    establishmentId: establishmentId,
+                    uploadedCount: String(uploadedCatalogImages.length)
+                }, getErrorLogDetails(error)));
                 throw createMediaApplicationError('batch', 'Falha ao atualizar catálogo após upload da imagem.', error);
             }
 
