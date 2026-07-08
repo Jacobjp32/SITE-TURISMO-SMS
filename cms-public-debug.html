@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="robots" content="noindex,nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.gstatic.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/; connect-src 'self' https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://firebaseappcheck.googleapis.com https://*.firebaseio.com; frame-src https://www.google.com https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; object-src 'none'; base-uri 'self';">
+  <title>Diagnostico CMS Publico</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7f4;
+      color: #17231f;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 32px 20px 48px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+    }
+
+    p {
+      line-height: 1.55;
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      background: #0a3d2e;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      padding: 12px 18px;
+    }
+
+    button:disabled {
+      cursor: wait;
+      opacity: 0.7;
+    }
+
+    .panel {
+      background: #fff;
+      border: 1px solid #dbe5dd;
+      border-radius: 8px;
+      margin-top: 18px;
+      padding: 18px;
+    }
+
+    .metrics {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      margin-top: 18px;
+    }
+
+    .metric {
+      background: #eef4ef;
+      border-radius: 6px;
+      padding: 14px;
+    }
+
+    .metric span {
+      display: block;
+      font-size: 0.8rem;
+      opacity: 0.74;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 6px;
+      word-break: break-word;
+    }
+
+    pre {
+      background: #111c18;
+      border-radius: 6px;
+      color: #dff6ea;
+      max-height: 360px;
+      overflow: auto;
+      padding: 14px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Diagnostico CMS Publico</h1>
+    <p>Esta pagina testa manualmente o adapter isolado de leitura de <code>cms_establishments</code>. Ela nao e linkada no menu, nao entra no sitemap e nao altera a renderizacao das paginas publicas principais.</p>
+
+    <button id="cmsDebugRun" type="button">Testar leitura CMS</button>
+
+    <section class="metrics" aria-label="Resultado da leitura CMS">
+      <div class="metric">
+        <span>Status</span>
+        <strong id="cmsDebugStatus">Aguardando...</strong>
+      </div>
+      <div class="metric">
+        <span>Fonte</span>
+        <strong id="cmsDebugSource">-</strong>
+      </div>
+      <div class="metric">
+        <span>Total</span>
+        <strong id="cmsDebugCount">0</strong>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Erro sanitizado</h2>
+      <pre id="cmsDebugError">Nenhum teste executado.</pre>
+    </section>
+
+    <section class="panel">
+      <h2>Amostra normalizada</h2>
+      <pre id="cmsDebugSample">[]</pre>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="js/cms-public-establishments-adapter.js"></script>
+  <script src="js/cms-public-debug.js"></script>
+</body>
+</html>
