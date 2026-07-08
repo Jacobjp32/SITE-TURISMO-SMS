@@ -285,12 +285,18 @@
         });
 
         if (!items.length) {
-          lastResult = makeFallback(null, "empty");
-          lastResult.error = {
-            code: "empty",
-            message: "Nenhum cms_establishments publicado foi retornado."
+          lastResult = {
+            items: [],
+            count: 0,
+            source: COLLECTION,
+            collection: COLLECTION,
+            queriedStatus: STATUS,
+            state: "empty-published",
+            message: "Leitura permitida, mas nao ha empreendimentos published.",
+            error: null,
+            generatedAt: new Date().toISOString()
           };
-          log(debug, "fallback vazio", lastResult);
+          log(debug, "leitura permitida sem published", lastResult);
           return lastResult;
         }
 
@@ -300,6 +306,8 @@
           source: COLLECTION,
           collection: COLLECTION,
           queriedStatus: STATUS,
+          state: "success",
+          message: "Leitura concluida.",
           error: null,
           generatedAt: new Date().toISOString()
         };

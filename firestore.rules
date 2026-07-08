@@ -571,7 +571,11 @@ service cloud.firestore {
     }
 
     match /cms_establishments/{establishmentId} {
-      allow read: if isAdmin();
+      // CMS-5C: leitura publica minima apenas para documentos publicados.
+      // Firestore Rules nao filtram resultados; queries publicas precisam usar
+      // where("status", "==", "published").
+      allow get: if isAdmin() || resource.data.status == 'published';
+      allow list: if isAdmin() || resource.data.status == 'published';
       allow create: if isValidEstablishmentCreate(establishmentId);
       allow update: if isValidEstablishmentUpdate();
       allow delete: if isAdmin() && isDeletableEstablishmentStatus(resource.data.status);

@@ -1,17 +1,17 @@
 # Saida da auditoria de links e rotas
 
-Gerado em 2026-07-01T18:45:16.939Z.
+Gerado em 2026-07-08T18:09:43.831Z.
 
 ## Resumo
 
-- Arquivos varridos: 110
-- Links internos/externos coletados: 663
-- Rotas HTML conhecidas: 43
+- Arquivos varridos: 120
+- Links internos/externos coletados: 739
+- Rotas HTML conhecidas: 45
 - Links quebrados: 0
 - Falsos positivos conhecidos: 1
-- Links legados/concorrentes: 20
-- Links redundantes com .html: 21
-- Decisoes humanas: 17
+- Links legados/concorrentes: 33
+- Links redundantes com .html: 36
+- Decisoes humanas: 25
 - Ver detalhes ainda como link: 0
 
 ## Links quebrados
@@ -30,6 +30,13 @@ _Nenhum item encontrado._
 
 | source | url | issue |
 | --- | --- | --- |
+| CHANGELOG_AI.md | mapa-completo.html | rota legada ou concorrente ao mapa |
+| CHANGELOG_AI.md | mapa-3d.html | rota legada ou concorrente ao mapa |
+| CHANGELOG_AI.md | rotas-completas.html | rota legada ou concorrente ao mapa |
+| CLAUDE.md | mapa-completo.html | rota legada ou concorrente ao mapa |
+| CLAUDE.md | mapa-3d.html | rota legada ou concorrente ao mapa |
+| CLAUDE.md | sabores.html | rota legada ou concorrente ao mapa |
+| CLAUDE.md | rotas-completas.html | rota legada ou concorrente ao mapa |
 | index.html | /sabores | rota legada ou concorrente ao mapa |
 | js/admin/modules/banners.js | sabores.html | rota legada ou concorrente ao mapa |
 | js/breadcrumbs.js | /o-que-fazer | rota legada ou concorrente ao mapa |
@@ -40,6 +47,8 @@ _Nenhum item encontrado._
 | js/breadcrumbs.js | /mapa-3d | rota legada ou concorrente ao mapa |
 | js/nav-shared.js | /sabores | rota legada ou concorrente ao mapa |
 | js/public-banners.js | sabores.html | rota legada ou concorrente ao mapa |
+| js/tourism-mascot.js | /sabores | rota legada ou concorrente ao mapa |
+| js/tourism-mascot.js | /onde-ficar | rota legada ou concorrente ao mapa |
 | mapa-3d/index.html | /mapa-3d.html | rota legada ou concorrente ao mapa |
 | mapa-3d.html | /mapa-3d | rota legada ou concorrente ao mapa |
 | mapa-3d.html | /mapa-completo | rota legada ou concorrente ao mapa |
@@ -50,12 +59,25 @@ _Nenhum item encontrado._
 | onde-ficar.html | /onde-ficar | rota legada ou concorrente ao mapa |
 | rotas-completas/index.html | /rotas-completas.html | rota legada ou concorrente ao mapa |
 | sabores.html | /sabores | rota legada ou concorrente ao mapa |
+| TASKS.md | rotas-completas.html | rota legada ou concorrente ao mapa |
+| TASKS.md | mapa-completo.html | rota legada ou concorrente ao mapa |
+| TASKS.md | mapa-3d.html | rota legada ou concorrente ao mapa |
+| TASKS.md | sabores.html | rota legada ou concorrente ao mapa |
 
 
 ## Links redundantes com .html
 
 | source | url | issue |
 | --- | --- | --- |
+| CHANGELOG_AI.md | eventos.html | existe variante sem .html |
+| CHANGELOG_AI.md | mapa-completo.html | existe variante sem .html |
+| CHANGELOG_AI.md | mapa-3d.html | existe variante sem .html |
+| CHANGELOG_AI.md | local.html | existe variante sem .html |
+| CHANGELOG_AI.md | rotas-completas.html | existe variante sem .html |
+| CLAUDE.md | mapa-completo.html | existe variante sem .html |
+| CLAUDE.md | mapa-3d.html | existe variante sem .html |
+| CLAUDE.md | sabores.html | existe variante sem .html |
+| CLAUDE.md | rotas-completas.html | existe variante sem .html |
 | eventos/index.html | /eventos.html | existe variante sem .html |
 | galeria/index.html | /galeria.html | existe variante sem .html |
 | js/admin/modules/banners.js | eventos.html | existe variante sem .html |
@@ -76,6 +98,12 @@ _Nenhum item encontrado._
 | privacidade/index.html | /privacidade.html | existe variante sem .html |
 | rotas-completas/index.html | /rotas-completas.html | existe variante sem .html |
 | sw.js | /portal-usuario.html | existe variante sem .html |
+| TASKS.md | local.html?id=... | existe variante sem .html |
+| TASKS.md | local.html | existe variante sem .html |
+| TASKS.md | rotas-completas.html | existe variante sem .html |
+| TASKS.md | mapa-completo.html | existe variante sem .html |
+| TASKS.md | mapa-3d.html | existe variante sem .html |
+| TASKS.md | sabores.html | existe variante sem .html |
 | transparencia/index.html | /transparencia.html | existe variante sem .html |
 
 
@@ -83,13 +111,19 @@ _Nenhum item encontrado._
 
 | source | url | issue |
 | --- | --- | --- |
+| index.html | /local?id=rua-do-mathe | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| index.html | /local?id=casa-da-memoria | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | index.html | /local?id=igreja-matriz | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | index.html | /local?id=ponte-rio-iguacu | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | index.html | /local?id=praca-rio-iguacu | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | index.html | /local?id=igreja-agua-branca | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | index.html | /local?id=prefeitura-municipal | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
-| index.html | /local?id=rua-do-mathe | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/breadcrumbs.js | /local | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/data/eventos.js | /local?id=parque-exposicoes | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/data/eventos.js | /local?id=natal-ouro-verde | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/data/eventos.js | /local?id=rua-do-mathe | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/data/eventos.js | /local?id=miss-sao-mateus | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/data/eventos.js | /local?id=chimarrodromo | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/pontos-turisticos.js | /local?id=igreja-matriz | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/pontos-turisticos.js | /local?id=igreja-agua-branca | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/pontos-turisticos.js | /local?id=ponte-rio-iguacu | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
@@ -97,9 +131,11 @@ _Nenhum item encontrado._
 | js/data/pontos-turisticos.js | /local?id=rua-do-mathe | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/pontos-turisticos.js | /local?id=casa-da-memoria | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/pontos-turisticos.js | /local?id=chimarrodromo | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
-| js/data/restaurantes.js | /local?id=rua-do-mathe | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | js/data/turismo-data-adapter.js | /local?id= | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| js/mapa-turistico.js | /local?id= | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 | local/index.html | /local.html | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| local.html | /local | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
+| local.html | /local?id= | fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa |
 
 
 ## Ver detalhes ainda como link
@@ -115,6 +151,8 @@ _Nenhum item encontrado._
 | /404.html | 404.html |
 | /admin-firebase | admin-firebase.html |
 | /admin-firebase.html | admin-firebase.html |
+| /cms-public-debug | cms-public-debug.html |
+| /cms-public-debug.html | cms-public-debug.html |
 | /eventos | eventos.html |
 | /eventos.html | eventos.html |
 | /galeria | galeria.html |

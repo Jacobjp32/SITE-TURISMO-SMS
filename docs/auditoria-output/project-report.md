@@ -1,37 +1,37 @@
 # Saida da auditoria geral do projeto
 
-Gerado em 2026-06-26T17:34:40.401Z.
+Gerado em 2026-07-08T18:09:53.044Z.
 
 ## Resumo
 
-- Arquivos mapeados: 391
-- HTMLs: 36
-- CSS: 22
-- JS: 45
+- Arquivos mapeados: 462
+- HTMLs: 37
+- CSS: 24
+- JS: 50
 - Diretórios com index.html: 14
-- HTMLs na raiz: 22
+- HTMLs na raiz: 23
 
 ## Distribuicao por extensao
 
 | ext | files | bytes |
 | --- | --- | --- |
-| .mp4 | 3 | 287052567 |
+| .mp4 | 4 | 320618424 |
 | .jpg | 60 | 54281816 |
 | .png | 31 | 44260688 |
 | .jpeg | 98 | 40608066 |
 | .webp | 33 | 9967152 |
 | .pdf | 6 | 3750140 |
 | .docx | 4 | 3402708 |
-| .js | 45 | 900085 |
-| .html | 36 | 696384 |
-| .md | 30 | 376767 |
-| .css | 22 | 317211 |
-| .json | 3 | 63372 |
-| .mjs | 6 | 38653 |
-| .rules | 2 | 16388 |
+| .js | 50 | 1141923 |
+| .md | 85 | 956920 |
+| .html | 37 | 786050 |
+| .css | 24 | 402410 |
+| .json | 5 | 327792 |
+| .mjs | 11 | 153697 |
+| .rules | 2 | 26101 |
 | .ico | 1 | 6837 |
-| .xml | 1 | 3852 |
-| (sem ext) | 8 | 3122 |
+| .xml | 1 | 4036 |
+| (sem ext) | 8 | 3183 |
 | .txt | 2 | 1368 |
 
 
@@ -42,6 +42,7 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | videos/VIDEO_ABERTURA_4K.mp4 | 98040012 |
 | videos/INSTITUCIONAL_POLONES.mp4 | 97037240 |
 | videos/ROTA_DO_TURISMO.mp4 | 91975315 |
+| videos/ROTA_DO_TURISMO.hero-720p.mp4 | 33565857 |
 | images/EU_AMO_SMS.png | 5161495 |
 | images/CASA_DA_MEMORIA.png | 5020646 |
 | images/empreendimentos/agrosamas/agrosamas-02.jpg | 4811831 |
@@ -118,7 +119,6 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-17.jpeg | 523746 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-07.jpeg | 520824 |
 | images/WEBP/NATAL-_20_.webp | 501040 |
-| images/IGREJA_AGUA_BRANCA_6.jpg | 484862 |
 
 
 ## HTMLs principais na raiz
@@ -126,27 +126,28 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | path | bytes |
 | --- | --- |
 | 404.html | 2893 |
-| admin-firebase.html | 135368 |
-| eventos.html | 50214 |
-| galeria.html | 37756 |
-| index.html | 146580 |
-| local.html | 20737 |
+| admin-firebase.html | 158187 |
+| cms-public-debug.html | 3622 |
+| eventos.html | 58035 |
+| galeria.html | 38687 |
+| index.html | 165445 |
+| local.html | 37405 |
 | mapa-3d.html | 6301 |
 | mapa-completo.html | 10483 |
-| mapa-turistico.html | 11046 |
+| mapa-turistico.html | 13067 |
 | noticia.html | 7364 |
-| noticias.html | 23227 |
-| o-que-fazer.html | 5895 |
+| noticias.html | 24993 |
+| o-que-fazer.html | 6979 |
 | offline.html | 2383 |
-| onde-ficar.html | 17825 |
-| para-o-trade.html | 15061 |
-| portal-usuario.html | 98737 |
-| privacidade.html | 22912 |
-| reservas.html | 5702 |
-| rotas-completas.html | 4224 |
+| onde-ficar.html | 18988 |
+| para-o-trade.html | 16310 |
+| portal-usuario.html | 100722 |
+| privacidade.html | 24392 |
+| reservas.html | 6703 |
+| rotas-completas.html | 5605 |
 | roteiro-ia.html | 3291 |
-| sabores.html | 30332 |
-| transparencia.html | 22733 |
+| sabores.html | 34913 |
+| transparencia.html | 23962 |
 
 
 ## Rotas com index.html
@@ -174,7 +175,7 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | path | bytes |
 | --- | --- |
 | .firebaserc | 58 |
-| admin-firebase.html | 135368 |
+| admin-firebase.html | 158187 |
 | css/mapa-3d.css | 3475 |
 | css/mapa-completo.css | 4962 |
 | css/para-o-trade.css | 2932 |
@@ -183,6 +184,9 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | css/rotas-completas.css | 13962 |
 | css/roteiro-ia.css | 9638 |
 | docs/bloco-1-fundacao-admin-cms.md | 43701 |
+| docs/bloco-cms-1-diagnostico-admin-cms.md | 34350 |
+| docs/bloco-cms-4c-fix2-csp-storage-admin.md | 4974 |
+| docs/bloco-vinculos-admin-portal-usuario.md | 8710 |
 | docs/plano-admin-cms-completo.md | 33643 |
 | firebase.json | 113 |
 | js/admin/admin-context.js | 4021 |
@@ -190,24 +194,25 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | js/admin/admin-router.js | 4241 |
 | js/admin/admin-shell.js | 2914 |
 | js/admin/admin-ui.js | 3577 |
-| js/admin/modules/banners.js | 42634 |
+| js/admin/modules/banners.js | 69269 |
 | js/admin/modules/dashboard.js | 4521 |
+| js/admin/modules/empreendimentos.js | 76902 |
 | js/admin/modules/placeholder.js | 17671 |
 | js/admin-content-cms.js | 71580 |
 | js/firebase-app-check.js | 2394 |
-| js/firebase-auth.js | 70854 |
-| js/reservas.js | 26198 |
+| js/firebase-auth.js | 101422 |
+| js/reservas.js | 26216 |
 | js/roteiro-ia.js | 21189 |
 | mapa-3d/index.html | 721 |
 | mapa-3d.html | 6301 |
 | mapa-completo/index.html | 751 |
 | mapa-completo.html | 10483 |
-| para-o-trade.html | 15061 |
+| para-o-trade.html | 16310 |
 | portal-usuario/index.html | 756 |
-| portal-usuario.html | 98737 |
-| reservas.html | 5702 |
+| portal-usuario.html | 100722 |
+| reservas.html | 6703 |
 | rotas-completas/index.html | 767 |
-| rotas-completas.html | 4224 |
+| rotas-completas.html | 5605 |
 | roteiro-ia.html | 3291 |
 
 
@@ -220,14 +225,16 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | js/nav-shared.js | 17 | eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, mapa-turistico.html, noticia.html, noticias.html |
 | js/cookies.js | 16 | 404.html, eventos.html, galeria.html, local.html, mapa-3d.html, mapa-completo.html, noticia.html, noticias.html |
 | js/loading.js | 9 | eventos.html, galeria.html, index.html, mapa-completo.html, noticia.html, portal-usuario.html, privacidade.html, reservas.html |
-| config.js | 7 | admin-firebase.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
+| config.js | 8 | admin-firebase.html, cms-public-debug.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html |
+| js/tourism-mascot.js | 8 | eventos.html, index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, onde-ficar.html, sabores.html |
 | js/site-meta.js | 7 | index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html |
+| js/public-banners.js | 5 | eventos.html, index.html, mapa-turistico.html, noticias.html, sabores.html |
 | js/scroll-animations.js | 5 | eventos.html, galeria.html, index.html, noticias.html, portal-usuario.html |
 | js/data/hospedagens.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
 | js/data/restaurantes.js | 4 | admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html |
+| js/security-utils.js | 4 | admin-firebase.html, local.html, noticia.html, noticias.html |
 | js/locais-data.js | 3 | index.html, local.html, mapa-turistico.html |
 | js/rotas-data.js | 3 | index.html, mapa-completo.html, mapa-turistico.html |
-| js/security-utils.js | 3 | admin-firebase.html, noticia.html, noticias.html |
 | js/cms.js | 2 | noticia.html, noticias.html |
 | js/data/eventos.js | 2 | index.html, mapa-turistico.html |
 | js/data/informacoes-essenciais.js | 2 | index.html, mapa-turistico.html |
@@ -246,9 +253,11 @@ Gerado em 2026-06-26T17:34:40.401Z.
 | js/admin/admin-ui.js | 1 | admin-firebase.html |
 | js/admin/modules/banners.js | 1 | admin-firebase.html |
 | js/admin/modules/dashboard.js | 1 | admin-firebase.html |
+| js/admin/modules/empreendimentos.js | 1 | admin-firebase.html |
 | js/admin/modules/placeholder.js | 1 | admin-firebase.html |
 | js/avaliacoes.js | 1 | index.html |
-| js/chatbot.js | 1 | index.html |
+| js/cms-public-debug.js | 1 | cms-public-debug.html |
+| js/cms-public-establishments-adapter.js | 1 | cms-public-debug.html |
 | js/mapa-turistico.js | 1 | mapa-turistico.html |
 | js/mapa3d.js | 1 | mapa-3d.html |
 | js/reservas.js | 1 | reservas.html |
@@ -271,10 +280,10 @@ _Nenhum item encontrado._
 | css/404.css | 2306 | 0 | 1 | 18 |
 | css/eventos.css | 16158 | 5 | 2 | 99 |
 | css/galeria.css | 9234 | 0 | 3 | 89 |
-| css/index.css | 133856 | 460 | 40 | 762 |
+| css/index.css | 183227 | 758 | 62 | 1094 |
 | css/mapa-3d.css | 3469 | 0 | 1 | 20 |
 | css/mapa-completo.css | 4771 | 5 | 1 | 29 |
-| css/mapa-turistico.css | 37252 | 13 | 7 | 263 |
+| css/mapa-turistico.css | 43661 | 14 | 11 | 339 |
 | css/noticia.css | 2034 | 0 | 1 | 18 |
 | css/noticias.css | 3926 | 0 | 2 | 40 |
 | css/o-que-fazer.css | 3662 | 1 | 1 | 21 |
@@ -282,12 +291,14 @@ _Nenhum item encontrado._
 | css/onde-ficar.css | 4423 | 0 | 1 | 35 |
 | css/para-o-trade.css | 2926 | 0 | 1 | 22 |
 | css/portal-usuario.css | 20522 | 0 | 1 | 120 |
+| css/public-banners.css | 7839 | 1 | 5 | 41 |
 | css/reservas.css | 770 | 0 | 0 | 2 |
 | css/rotas-completas.css | 13946 | 11 | 4 | 73 |
 | css/roteiro-ia.css | 9636 | 0 | 2 | 56 |
-| css/sabores.css | 7813 | 9 | 2 | 72 |
-| css/season-theme.css | 20544 | 8 | 3 | 106 |
+| css/sabores.css | 9750 | 9 | 2 | 91 |
+| css/season-theme.css | 27988 | 17 | 9 | 140 |
 | css/shared.css | 9793 | 8 | 7 | 51 |
+| css/tourism-mascot.css | 12097 | 3 | 3 | 71 |
 | css/transparencia.css | 6387 | 0 | 1 | 33 |
 | css/variables.css | 1375 | 0 | 0 | 0 |
 
@@ -345,11 +356,13 @@ _Nenhum item encontrado._
 | @keyframes pulse | css/index.css, css/offline.css |
 | @keyframes spin | css/eventos.css, css/mapa-3d.css, css/roteiro-ia.css |
 | @media (max-width: 1024px) | css/index.css, css/mapa-turistico.css |
+| @media (max-width: 420px) | css/index.css, css/season-theme.css |
 | @media (max-width: 480px) | css/index.css, css/noticias.css, css/sabores.css, css/shared.css |
 | @media (max-width: 600px) | css/eventos.css, css/index.css |
 | @media (max-width: 640px) | css/index.css, css/season-theme.css |
-| @media (max-width: 768px) | css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css |
-| @media (prefers-reduced-motion: reduce) | css/season-theme.css, css/shared.css |
+| @media (max-width: 768px) | css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/season-theme.css, css/shared.css |
+| @media (min-width: 1440px) | css/index.css, css/season-theme.css |
+| @media (prefers-reduced-motion: reduce) | css/index.css, css/season-theme.css, css/shared.css |
 | /* ============================================            BOTÃO VOLTAR AO TOPO         ============================================ */         .back-to-top | css/index.css, css/rotas-completas.css |
 | /* Modal */         .modal-overlay | css/eventos.css, css/portal-usuario.css |
 | /* Responsive */         @media (max-width: 768px) | css/portal-usuario.css, css/transparencia.css |
@@ -360,40 +373,53 @@ _Nenhum item encontrado._
 | h1 | css/404.css, css/offline.css |
 | html, body | css/index.css, css/shared.css |
 | p | css/404.css, css/offline.css |
-| to | css/galeria.css, css/index.css, css/portal-usuario.css, css/shared.css |
+| to | css/galeria.css, css/index.css, css/portal-usuario.css, css/public-banners.css, css/shared.css, css/tourism-mascot.css |
 
 
 ## Globais JS compartilhados
 
 | global | files |
 | --- | --- |
-| var SECTION_ID | js/admin/modules/banners.js, js/admin/modules/dashboard.js |
+| var APP_CHECK_MODULE | js/cms-public-establishments-adapter.js, js/public-banners.js |
+| var APP_NAME | js/cms-public-establishments-adapter.js, js/public-banners.js |
+| var COLLECTION | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/cms-public-establishments-adapter.js, js/public-banners.js |
+| var FIREBASE_APP_URL | js/cms-public-establishments-adapter.js, js/public-banners.js |
+| var FIREBASE_FS_URL | js/cms-public-establishments-adapter.js, js/public-banners.js |
+| var HTML_MAP | js/public-banners.js, js/security-utils.js |
+| var IMAGE_TYPE_REGEX | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js |
+| var MAX_IMAGE_BYTES | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js |
+| var SECTION_ID | js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js |
+| var STATUSES | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js |
 | var STORAGE_KEY | js/cookies.js, js/season-theme.js |
 | window.__smsCompatAppCheckInitialized | js/firebase-app-check.js, js/mapa-turistico.js |
-| window.addEventListener | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js |
+| window.addEventListener | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js, js/tourism-mascot.js |
 | window.AdminContentCMS | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js |
-| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
-| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js |
+| window.AdminContext | js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js |
+| window.AdminRegistry | js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js |
 | window.AdminRouter | js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/dashboard.js |
-| window.AdminUI | js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js |
-| window.applyTranslations | js/nav-shared.js, translations.js |
-| window.CONFIG | config.js, js/admin/admin-context.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js |
-| window.currentUser | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js |
-| window.firebase | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/mapa-turistico.js |
-| window.firebaseDB | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/firebase-auth.js |
-| window.FirebaseSystem | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js |
+| window.AdminUI | js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js |
+| window.applyTranslations | js/nav-shared.js, js/tourism-mascot.js, translations.js |
+| window.CMSPublicEstablishmentsAdapter | js/cms-public-debug.js, js/cms-public-establishments-adapter.js |
+| window.CONFIG | config.js, js/admin/admin-context.js, js/cms-public-establishments-adapter.js, js/firebase-app-check.js, js/mapa-turistico.js, js/public-banners.js, js/site-stats.js |
+| window.confirm | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js |
+| window.console | js/cms-public-establishments-adapter.js, js/public-banners.js |
+| window.currentUser | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js |
+| window.firebase | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js, js/mapa-turistico.js |
+| window.firebaseDB | js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js, js/firebase-auth.js |
+| window.FirebaseSystem | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/firebase-auth.js, js/nav-shared.js |
 | window.innerHeight | js/nav-shared.js, js/scroll-animations.js |
-| window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js |
-| window.localStorage | js/admin/admin-shell.js, js/season-theme.js |
-| window.location | js/admin-content-cms.js, js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js |
+| window.locaisAliases | js/locais-data.js, js/mapa-turistico.js |
+| window.locaisData | js/data/turismo-data-adapter.js, js/locais-data.js, js/mapa-turistico.js |
+| window.localStorage | js/admin/admin-shell.js, js/cms-public-establishments-adapter.js, js/public-banners.js, js/season-theme.js |
+| window.location | js/admin-content-cms.js, js/breadcrumbs.js, js/cms-public-establishments-adapter.js, js/mapa-turistico.js, js/nav-shared.js, js/public-banners.js, js/roteiro-ia.js, js/search.js, js/security-utils.js, js/tourism-mascot.js |
 | window.matchMedia | js/scroll-animations.js, js/season-theme.js |
 | window.ROTAS_LEGADO_ESTABLISHMENTS | js/data/turismo-data-adapter.js, js/establishment-catalog.js, js/rotas-data.js |
 | window.ROTAS_LEGADO_ROUTE_INFO | js/data/turismo-data-adapter.js, js/rotas-data.js |
-| window.setTimeout | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js |
+| window.setTimeout | js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/cms-public-establishments-adapter.js, js/mapa-turistico.js, js/nav-shared.js, js/public-banners.js, js/search.js, js/site-meta.js, js/tourism-mascot.js |
 | window.showSection | js/admin/admin-router.js, js/admin/modules/dashboard.js |
 | window.SITE_META | js/admin/admin-context.js, js/admin/admin-shell.js, js/site-meta.js |
-| window.SMSecurity | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/security-utils.js |
-| window.translations | js/nav-shared.js, js/search.js, js/weather.js, translations.js |
+| window.SMSecurity | js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/public-banners.js, js/security-utils.js |
+| window.translations | js/nav-shared.js, js/search.js, js/season-theme.js, js/weather.js, translations.js |
 | window.TURISMO_DATA | js/data/turismo-data.js, js/mapa-turistico.js, js/search-index.js, js/site-stats.js |
 | window.TURISMO_DATA_ADAPTER | js/data/turismo-data-adapter.js, js/data/turismo-data.js, js/site-stats.js |
 | window.TURISMO_DATA_HELPERS | js/data/turismo-data.js, js/site-stats.js |
@@ -405,4 +431,5 @@ _Nenhum item encontrado._
 | window.TURISMO_RESTAURANTES | js/data/restaurantes.js, js/data/turismo-data.js, js/establishment-catalog.js, js/search-index.js |
 | window.TURISMO_ROTAS | js/data/rotas.js, js/data/turismo-data.js, js/search-index.js |
 | window.TURISMO_SEARCH_INDEX | js/search-index.js, js/search.js |
+| window.URL | js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js |
 

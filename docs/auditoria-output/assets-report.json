@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-06-26T17:34:40.177Z",
+  "generatedAt": "2026-07-08T18:09:48.992Z",
   "totals": {
-    "mediaFiles": 225,
-    "referencedMedia": 146,
-    "likelyOrphans": 79,
+    "mediaFiles": 226,
+    "referencedMedia": 150,
+    "likelyOrphans": 76,
     "duplicateGroups": 0,
     "missingReferences": 0,
-    "heavyMedia": 35
+    "heavyMedia": 36
   },
   "assets": [
     {
@@ -19,6 +19,7 @@
       },
       "sha256": "f970b6d4f9b926807e91ed26fb8cef0d7f3e944a5521b6886a8881570d6f6b3c",
       "usedBy": [
+        "index.html",
         "js/data/eventos.js"
       ]
     },
@@ -296,6 +297,7 @@
       },
       "sha256": "bb61a0be613808b665f827f9e5269f3d734875913848db87f77909007d3e6bc6",
       "usedBy": [
+        "index.html",
         "js/data/restaurantes.js",
         "js/rotas-data.js"
       ]
@@ -324,6 +326,7 @@
       },
       "sha256": "3f54b8c08a893a1ddc5a574c670d39b3422614b27da08aba6cf862e468f573af",
       "usedBy": [
+        "index.html",
         "js/data/pontos-turisticos.js",
         "js/locais-data.js"
       ]
@@ -517,6 +520,7 @@
       },
       "sha256": "7832c38ec03cd29e8bb3d4035c057896d0450389215b7921a434ede3c5a5a277",
       "usedBy": [
+        "index.html",
         "js/rotas-data.js"
       ]
     },
@@ -621,6 +625,7 @@
       },
       "sha256": "df06c5e800cc374956fe3884e18d4e7de775a9a394cb086d0c803f169b750563",
       "usedBy": [
+        "index.html",
         "js/data/hospedagens.js"
       ]
     },
@@ -778,6 +783,7 @@
       },
       "sha256": "01eb557317391a7f043bf4455076f99ed0589c603596ca465f3e43238875bed4",
       "usedBy": [
+        "index.html",
         "js/data/restaurantes.js",
         "js/rotas-data.js"
       ]
@@ -1394,6 +1400,7 @@
       },
       "sha256": "f16025203a03475f8b2f77914b03cf8200486eaff81c11fe90bbba6c4e8e4c52",
       "usedBy": [
+        "index.html",
         "js/rotas-data.js"
       ]
     },
@@ -1431,6 +1438,7 @@
       },
       "sha256": "d743f8d1d28a0fb05baac7c8a2cf9951778e63de3eb4588f60cbc9ac85858d2e",
       "usedBy": [
+        "index.html",
         "js/rotas-data.js"
       ]
     },
@@ -1525,6 +1533,7 @@
         "js/admin-content-cms.js",
         "js/cms.js",
         "js/reservas.js",
+        "local.html",
         "manifest.json",
         "noticia.html",
         "noticias.html",
@@ -1730,8 +1739,7 @@
       "usedBy": [
         "galeria.html",
         "index.html",
-        "js/locais-data.js",
-        "sw.js"
+        "js/locais-data.js"
       ]
     },
     {
@@ -2023,6 +2031,7 @@
         "local.html",
         "manifest.json",
         "mapa-3d.html",
+        "mapa-turistico.html",
         "noticia.html",
         "noticias.html",
         "o-que-fazer.html",
@@ -2032,6 +2041,7 @@
         "portal-usuario.html",
         "privacidade.html",
         "reservas.html",
+        "rotas-completas.html",
         "roteiro-ia.html",
         "sabores.html",
         "sw.js",
@@ -2084,7 +2094,6 @@
       "sha256": "535f2cb7587b17b97b6e5d130887b8388f45ee02208d889f6f3436f3ca836d17",
       "usedBy": [
         "galeria.html",
-        "index.html",
         "sw.js"
       ]
     },
@@ -2097,7 +2106,11 @@
         "height": 4997377
       },
       "sha256": "9ff2d0aa4f2dc10de5db7f03c209f7712333ec07556460a0e01f92ecd379e48c",
-      "usedBy": []
+      "usedBy": [
+        "index.html",
+        "js/tourism-mascot.js",
+        "sw.js"
+      ]
     },
     {
       "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
@@ -2136,7 +2149,6 @@
       "sha256": "6ad28042363f0eae406dc0728b849f8eb949e7391a0d3e685e822f9fbc252075",
       "usedBy": [
         "galeria.html",
-        "index.html",
         "sabores.html",
         "sw.js"
       ]
@@ -2150,7 +2162,9 @@
         "height": 4997377
       },
       "sha256": "7e3dbc1a988bdd37472a87da9bd1b778a30d01f7f985805711fda0e4ac4037ee",
-      "usedBy": []
+      "usedBy": [
+        "index.html"
+      ]
     },
     {
       "path": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
@@ -2176,7 +2190,6 @@
       "sha256": "8f2a69f9776f8d4c499b64271403b1095d2fe9737cbf61952718560a0189ae15",
       "usedBy": [
         "galeria.html",
-        "index.html",
         "sw.js"
       ]
     },
@@ -2189,7 +2202,9 @@
         "height": 4997377
       },
       "sha256": "e25ec73f99533d5e811f13c697988534b343bb218512be789d729b319c400e5b",
-      "usedBy": []
+      "usedBy": [
+        "index.html"
+      ]
     },
     {
       "path": "images/MORANGO_1.jpg",
@@ -2604,7 +2619,6 @@
         "index.html",
         "js/cms.js",
         "js/data/pontos-turisticos.js",
-        "js/data/restaurantes.js",
         "js/locais-data.js",
         "js/roteiro-ia.js",
         "noticias.html"
@@ -2760,6 +2774,7 @@
       "sha256": "858f151dc5e5219cf48292a0cffd2cb5f09a36ec55f6b0c0af0fd5468384df86",
       "usedBy": [
         "galeria.html",
+        "index.html",
         "js/locais-data.js"
       ]
     },
@@ -2875,13 +2890,23 @@
       ]
     },
     {
+      "path": "videos/ROTA_DO_TURISMO.hero-720p.mp4",
+      "ext": ".mp4",
+      "bytes": 33565857,
+      "dimensions": null,
+      "sha256": "b160f1de14e8490778b661ce4e83c2de15debca3b9cbb914a031dea8eed0828f",
+      "usedBy": [
+        "index.html"
+      ]
+    },
+    {
       "path": "videos/ROTA_DO_TURISMO.mp4",
       "ext": ".mp4",
       "bytes": 91975315,
       "dimensions": null,
       "sha256": "a01f9d6a059e110b0dc6ca4ee588761c78093bac8cfa11d8aa8455028ddb90f0",
       "usedBy": [
-        "index.html"
+        "scripts/audit-hero-video.mjs"
       ]
     },
     {
@@ -3842,17 +3867,6 @@
       "usedBy": []
     },
     {
-      "path": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp",
-      "ext": ".webp",
-      "bytes": 152444,
-      "dimensions": {
-        "width": 306945,
-        "height": 4997377
-      },
-      "sha256": "9ff2d0aa4f2dc10de5db7f03c209f7712333ec07556460a0e01f92ecd379e48c",
-      "usedBy": []
-    },
-    {
       "path": "images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg",
       "ext": ".jpeg",
       "bytes": 147035,
@@ -3941,17 +3955,6 @@
       "usedBy": []
     },
     {
-      "path": "images/mascotes/MASCOTE_MENINO_POLONES_1.webp",
-      "ext": ".webp",
-      "bytes": 95512,
-      "dimensions": {
-        "width": 306945,
-        "height": 4997377
-      },
-      "sha256": "7e3dbc1a988bdd37472a87da9bd1b778a30d01f7f985805711fda0e4ac4037ee",
-      "usedBy": []
-    },
-    {
       "path": "images/diorama_sao_mateus.webp",
       "ext": ".webp",
       "bytes": 94108,
@@ -3960,17 +3963,6 @@
         "height": 669
       },
       "sha256": "f4bfcc146356ae58b2f33f6db4f59efbc770fc8b9bd173a851585dfc5ae9bda9",
-      "usedBy": []
-    },
-    {
-      "path": "images/mascotes/MASCOTE_PERY.webp",
-      "ext": ".webp",
-      "bytes": 92658,
-      "dimensions": {
-        "width": 306945,
-        "height": 4997377
-      },
-      "sha256": "e25ec73f99533d5e811f13c697988534b343bb218512be789d729b319c400e5b",
       "usedBy": []
     },
     {
@@ -4034,6 +4026,16 @@
       "bytes": 91975315,
       "dimensions": null,
       "sha256": "a01f9d6a059e110b0dc6ca4ee588761c78093bac8cfa11d8aa8455028ddb90f0",
+      "usedBy": [
+        "scripts/audit-hero-video.mjs"
+      ]
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.hero-720p.mp4",
+      "ext": ".mp4",
+      "bytes": 33565857,
+      "dimensions": null,
+      "sha256": "b160f1de14e8490778b661ce4e83c2de15debca3b9cbb914a031dea8eed0828f",
       "usedBy": [
         "index.html"
       ]
@@ -4120,8 +4122,7 @@
       "usedBy": [
         "galeria.html",
         "index.html",
-        "js/locais-data.js",
-        "sw.js"
+        "js/locais-data.js"
       ]
     },
     {
@@ -4212,6 +4213,7 @@
       },
       "sha256": "7832c38ec03cd29e8bb3d4035c057896d0450389215b7921a434ede3c5a5a277",
       "usedBy": [
+        "index.html",
         "js/rotas-data.js"
       ]
     },
@@ -4288,6 +4290,7 @@
       },
       "sha256": "f16025203a03475f8b2f77914b03cf8200486eaff81c11fe90bbba6c4e8e4c52",
       "usedBy": [
+        "index.html",
         "js/rotas-data.js"
       ]
     },
@@ -4433,7 +4436,6 @@
       "sha256": "535f2cb7587b17b97b6e5d130887b8388f45ee02208d889f6f3436f3ca836d17",
       "usedBy": [
         "galeria.html",
-        "index.html",
         "sw.js"
       ]
     },

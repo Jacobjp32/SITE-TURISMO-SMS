@@ -1,14 +1,14 @@
 {
-  "generatedAt": "2026-07-01T18:45:16.939Z",
+  "generatedAt": "2026-07-08T18:09:43.831Z",
   "totals": {
-    "filesScanned": 110,
-    "links": 663,
-    "routes": 43,
+    "filesScanned": 120,
+    "links": 739,
+    "routes": 45,
     "broken": 0,
     "falsePositives": 1,
-    "legacy": 20,
-    "redundant": 21,
-    "humanDecision": 17,
+    "legacy": 33,
+    "redundant": 36,
+    "humanDecision": 25,
     "verDetalhesNavigation": 0
   },
   "routes": [
@@ -27,6 +27,14 @@
     {
       "route": "/admin-firebase.html",
       "file": "admin-firebase.html"
+    },
+    {
+      "route": "/cms-public-debug",
+      "file": "cms-public-debug.html"
+    },
+    {
+      "route": "/cms-public-debug.html",
+      "file": "cms-public-debug.html"
     },
     {
       "route": "/eventos",
@@ -202,6 +210,41 @@
   ],
   "legacy": [
     {
+      "source": "CHANGELOG_AI.md",
+      "url": "mapa-completo.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "mapa-3d.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "rotas-completas.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "mapa-completo.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "mapa-3d.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "sabores.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "rotas-completas.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
       "source": "index.html",
       "url": "/sabores",
       "issue": "rota legada ou concorrente ao mapa"
@@ -249,6 +292,16 @@
     {
       "source": "js/public-banners.js",
       "url": "sabores.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "js/tourism-mascot.js",
+      "url": "/sabores",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "js/tourism-mascot.js",
+      "url": "/onde-ficar",
       "issue": "rota legada ou concorrente ao mapa"
     },
     {
@@ -300,9 +353,74 @@
       "source": "sabores.html",
       "url": "/sabores",
       "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "rotas-completas.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "mapa-completo.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "mapa-3d.html",
+      "issue": "rota legada ou concorrente ao mapa"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "sabores.html",
+      "issue": "rota legada ou concorrente ao mapa"
     }
   ],
   "redundant": [
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "eventos.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "mapa-completo.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "mapa-3d.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "local.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CHANGELOG_AI.md",
+      "url": "rotas-completas.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "mapa-completo.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "mapa-3d.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "sabores.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "CLAUDE.md",
+      "url": "rotas-completas.html",
+      "issue": "existe variante sem .html"
+    },
     {
       "source": "eventos/index.html",
       "url": "/eventos.html",
@@ -404,12 +522,52 @@
       "issue": "existe variante sem .html"
     },
     {
+      "source": "TASKS.md",
+      "url": "local.html?id=...",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "local.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "rotas-completas.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "mapa-completo.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "mapa-3d.html",
+      "issue": "existe variante sem .html"
+    },
+    {
+      "source": "TASKS.md",
+      "url": "sabores.html",
+      "issue": "existe variante sem .html"
+    },
+    {
       "source": "transparencia/index.html",
       "url": "/transparencia.html",
       "issue": "existe variante sem .html"
     }
   ],
   "humanDecision": [
+    {
+      "source": "index.html",
+      "url": "/local?id=rua-do-mathe",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "index.html",
+      "url": "/local?id=casa-da-memoria",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
     {
       "source": "index.html",
       "url": "/local?id=igreja-matriz",
@@ -436,13 +594,33 @@
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
-      "source": "index.html",
+      "source": "js/breadcrumbs.js",
+      "url": "/local",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "js/data/eventos.js",
+      "url": "/local?id=parque-exposicoes",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "js/data/eventos.js",
+      "url": "/local?id=natal-ouro-verde",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "js/data/eventos.js",
       "url": "/local?id=rua-do-mathe",
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
-      "source": "js/breadcrumbs.js",
-      "url": "/local",
+      "source": "js/data/eventos.js",
+      "url": "/local?id=miss-sao-mateus",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "js/data/eventos.js",
+      "url": "/local?id=chimarrodromo",
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
@@ -481,18 +659,28 @@
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
-      "source": "js/data/restaurantes.js",
-      "url": "/local?id=rua-do-mathe",
+      "source": "js/data/turismo-data-adapter.js",
+      "url": "/local?id=",
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
-      "source": "js/data/turismo-data-adapter.js",
+      "source": "js/mapa-turistico.js",
       "url": "/local?id=",
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     },
     {
       "source": "local/index.html",
       "url": "/local.html",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "local.html",
+      "url": "/local",
+      "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
+    },
+    {
+      "source": "local.html",
+      "url": "/local?id=",
       "issue": "fluxo local legado precisa decisao: manter pagina individual ou usar modal/mapa"
     }
   ],

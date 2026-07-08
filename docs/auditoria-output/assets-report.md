@@ -1,15 +1,15 @@
 # Saida da auditoria de assets
 
-Gerado em 2026-06-26T17:34:40.177Z.
+Gerado em 2026-07-08T18:09:48.992Z.
 
 ## Resumo
 
-- Midias encontradas: 225
-- Midias referenciadas: 146
-- Orfas provaveis: 79
+- Midias encontradas: 226
+- Midias referenciadas: 150
+- Orfas provaveis: 76
 - Grupos duplicados por SHA-256: 0
 - Referencias quebradas: 0
-- Midias pesadas: 35
+- Midias pesadas: 36
 
 ## Imagens duplicadas reais
 
@@ -124,7 +124,6 @@ _Nenhum item encontrado._
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-24.jpeg | 181953 | 1600x1066 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-14.jpeg | 170004 | 1200x1600 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-08.jpeg | 163345 | 960x1280 |
-| images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp | 152444 | 306945x4997377 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-04.jpeg | 147035 | 960x1280 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-03.jpeg | 146400 | 720x1280 |
 | images/empreendimentos/doces-e-delicias/doces-e-delicias-07.jpeg | 141023 | 960x1280 |
@@ -133,9 +132,7 @@ _Nenhum item encontrado._
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-02.jpeg | 124381 | 1200x1600 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-35.jpeg | 123123 | 1440x960 |
 | images/empreendimentos/marina-barra-do-iguacu/marina-barra-do-iguacu-30.jpeg | 97679 | 1024x683 |
-| images/mascotes/MASCOTE_MENINO_POLONES_1.webp | 95512 | 306945x4997377 |
 | images/diorama_sao_mateus.webp | 94108 | 1200x669 |
-| images/mascotes/MASCOTE_PERY.webp | 92658 | 306945x4997377 |
 | images/LOGO_PIN_TURISMO_3D_COM_TEXTO.png | 62734 | 400x286 |
 | images/logo_header.png | 40753 | 300x215 |
 | images/logo_pin_turismo.jpg | 14775 | 300x300 |
@@ -147,27 +144,28 @@ _Nenhum item encontrado._
 | --- | --- | --- |
 | videos/VIDEO_ABERTURA_4K.mp4 | 98040012 | galeria.html |
 | videos/INSTITUCIONAL_POLONES.mp4 | 97037240 | galeria.html |
-| videos/ROTA_DO_TURISMO.mp4 | 91975315 | index.html |
+| videos/ROTA_DO_TURISMO.mp4 | 91975315 | scripts/audit-hero-video.mjs |
+| videos/ROTA_DO_TURISMO.hero-720p.mp4 | 33565857 | index.html |
 | images/EU_AMO_SMS.png | 5161495 | sem referencia |
 | images/CASA_DA_MEMORIA.png | 5020646 | sem referencia |
 | images/empreendimentos/agrosamas/agrosamas-02.jpg | 4811831 | js/data/eventos.js |
 | images/CHALE_DO_PRODUTOR_SEC_CULTURA.png | 4410089 | sem referencia |
 | images/empreendimentos/agrosamas/agrosamas-01.jpg | 4275247 | js/data/eventos.js |
 | images/IGREJA_COLONIA_IGUACU.png | 3855743 | sem referencia |
-| images/IGREJA_MATRIZ_1.png | 3614212 | galeria.html, index.html, js/locais-data.js, sw.js |
+| images/IGREJA_MATRIZ_1.png | 3614212 | galeria.html, index.html, js/locais-data.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-01.jpg | 3360949 | js/rotas-data.js |
 | images/IGREJA_MATRIZ_2.png | 3315073 | js/locais-data.js |
 | images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg | 3265322 | js/rotas-data.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-03.jpg | 3169922 | js/rotas-data.js |
 | images/empreendimentos/dona-bernardina/dona-bernardina-02.jpg | 3125516 | js/rotas-data.js |
 | images/empreendimentos/agrosamas/agrosamas-03.jpeg | 3102073 | js/data/eventos.js |
-| images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg | 3078694 | js/rotas-data.js |
+| images/empreendimentos/dona-bernardina/dona-bernardina-01.jpg | 3078694 | index.html, js/rotas-data.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-04.jpg | 2780546 | js/rotas-data.js |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-10.png | 2617603 | js/rotas-data.js |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-11.png | 2337143 | sem referencia |
 | images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg | 2226619 | js/rotas-data.js |
 | images/empreendimentos/dona-bernardina/dona-bernardina-03.jpg | 2218444 | js/rotas-data.js |
-| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png | 2175710 | js/rotas-data.js |
+| images/empreendimentos/ribeiro-pesca/ribeiro-pesca-09.png | 2175710 | index.html, js/rotas-data.js |
 | images/empreendimentos/all-garden/all-garden-02.jpeg | 2118493 | js/rotas-data.js |
 | images/empreendimentos/dona-bernardina/dona-bernardina-04.jpg | 1937259 | js/rotas-data.js |
 | images/empreendimentos/nova-esperanca-equoterapia/nova-esperanca-equoterapia-02.jpg | 1826030 | js/rotas-data.js |
@@ -178,7 +176,7 @@ _Nenhum item encontrado._
 | images/mascotes/MASCOTE_MATE_XISTO_AGUA.png | 1242750 | galeria.html |
 | images/IMIGRANTES_IA_1.png | 1176932 | galeria.html |
 | images/empreendimentos/ribeiro-pesca/ribeiro-pesca-07.jpeg | 1139631 | js/rotas-data.js |
-| images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 | galeria.html, index.html, sw.js |
+| images/mascotes/MASCOTE_CAPIVARA_PINHAO.png | 1136738 | galeria.html, sw.js |
 | images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png | 1077038 | galeria.html |
 
 

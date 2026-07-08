@@ -18,7 +18,13 @@
     result = result || {};
     setText("cmsDebugSource", result.source || "-");
     setText("cmsDebugCount", String(result.count || 0));
-    setText("cmsDebugStatus", result.error ? "Fallback" : "Leitura concluida");
+    if (result.error) {
+      setText("cmsDebugStatus", "Fallback");
+    } else if (result.state === "empty-published") {
+      setText("cmsDebugStatus", "Sem published");
+    } else {
+      setText("cmsDebugStatus", "Leitura concluida");
+    }
     setText("cmsDebugError", result.error ? stringify(result.error) : "Nenhum erro retornado.");
     setText("cmsDebugSample", stringify((result.items || []).slice(0, 5)));
   }

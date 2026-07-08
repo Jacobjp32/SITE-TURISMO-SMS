@@ -1,18 +1,18 @@
 {
-  "generatedAt": "2026-06-26T17:34:40.401Z",
+  "generatedAt": "2026-07-08T18:09:53.044Z",
   "totals": {
-    "files": 391,
-    "html": 36,
-    "css": 22,
-    "js": 45,
+    "files": 462,
+    "html": 37,
+    "css": 24,
+    "js": 50,
     "directoryIndexes": 14,
-    "rootHtml": 22
+    "rootHtml": 23
   },
   "byExt": [
     {
       "ext": ".mp4",
-      "files": 3,
-      "bytes": 287052567
+      "files": 4,
+      "bytes": 320618424
     },
     {
       "ext": ".jpg",
@@ -46,38 +46,38 @@
     },
     {
       "ext": ".js",
-      "files": 45,
-      "bytes": 900085
-    },
-    {
-      "ext": ".html",
-      "files": 36,
-      "bytes": 696384
+      "files": 50,
+      "bytes": 1141923
     },
     {
       "ext": ".md",
-      "files": 30,
-      "bytes": 376767
+      "files": 85,
+      "bytes": 956920
+    },
+    {
+      "ext": ".html",
+      "files": 37,
+      "bytes": 786050
     },
     {
       "ext": ".css",
-      "files": 22,
-      "bytes": 317211
+      "files": 24,
+      "bytes": 402410
     },
     {
       "ext": ".json",
-      "files": 3,
-      "bytes": 63372
+      "files": 5,
+      "bytes": 327792
     },
     {
       "ext": ".mjs",
-      "files": 6,
-      "bytes": 38653
+      "files": 11,
+      "bytes": 153697
     },
     {
       "ext": ".rules",
       "files": 2,
-      "bytes": 16388
+      "bytes": 26101
     },
     {
       "ext": ".ico",
@@ -87,12 +87,12 @@
     {
       "ext": ".xml",
       "files": 1,
-      "bytes": 3852
+      "bytes": 4036
     },
     {
       "ext": "(sem ext)",
       "files": 8,
-      "bytes": 3122
+      "bytes": 3183
     },
     {
       "ext": ".txt",
@@ -103,8 +103,8 @@
   "byDir": [
     {
       "dir": "videos",
-      "files": 3,
-      "bytes": 287052567
+      "files": 4,
+      "bytes": 320618424
     },
     {
       "dir": "images",
@@ -187,9 +187,19 @@
       "bytes": 1323041
     },
     {
+      "dir": "docs",
+      "files": 79,
+      "bytes": 1174614
+    },
+    {
       "dir": ".",
-      "files": 39,
-      "bytes": 994965
+      "files": 44,
+      "bytes": 1152577
+    },
+    {
+      "dir": "js",
+      "files": 29,
+      "bytes": 661340
     },
     {
       "dir": "images/empreendimentos/ancestral-gastronomia",
@@ -197,34 +207,24 @@
       "bytes": 656450
     },
     {
-      "dir": "js",
-      "files": 25,
-      "bytes": 555724
-    },
-    {
-      "dir": "docs",
-      "files": 27,
-      "bytes": 361683
-    },
-    {
       "dir": "css",
-      "files": 22,
-      "bytes": 317211
+      "files": 24,
+      "bytes": 402410
     },
     {
       "dir": "js/admin/modules",
-      "files": 3,
-      "bytes": 64826
+      "files": 4,
+      "bytes": 168363
+    },
+    {
+      "dir": "scripts",
+      "files": 11,
+      "bytes": 153697
     },
     {
       "dir": "js/data",
       "files": 8,
-      "bytes": 41173
-    },
-    {
-      "dir": "scripts",
-      "files": 6,
-      "bytes": 38653
+      "bytes": 41111
     },
     {
       "dir": "js/admin",
@@ -234,7 +234,12 @@
     {
       "dir": "cloudflare-worker",
       "files": 1,
-      "bytes": 14643
+      "bytes": 14647
+    },
+    {
+      "dir": "docs/schemas",
+      "files": 1,
+      "bytes": 6397
     },
     {
       "dir": "sabores",
@@ -350,6 +355,12 @@
       "ext": ".mp4",
       "dir": "videos",
       "bytes": 91975315
+    },
+    {
+      "path": "videos/ROTA_DO_TURISMO.hero-720p.mp4",
+      "ext": ".mp4",
+      "dir": "videos",
+      "bytes": 33565857
     },
     {
       "path": "images/EU_AMO_SMS.png",
@@ -806,12 +817,6 @@
       "ext": ".webp",
       "dir": "images/WEBP",
       "bytes": 501040
-    },
-    {
-      "path": "images/IGREJA_AGUA_BRANCA_6.jpg",
-      "ext": ".jpg",
-      "dir": "images",
-      "bytes": 484862
     }
   ],
   "rootHtml": [
@@ -825,31 +830,37 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 135368
+      "bytes": 158187
+    },
+    {
+      "path": "cms-public-debug.html",
+      "ext": ".html",
+      "dir": ".",
+      "bytes": 3622
     },
     {
       "path": "eventos.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 50214
+      "bytes": 58035
     },
     {
       "path": "galeria.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 37756
+      "bytes": 38687
     },
     {
       "path": "index.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 146580
+      "bytes": 165445
     },
     {
       "path": "local.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 20737
+      "bytes": 37405
     },
     {
       "path": "mapa-3d.html",
@@ -867,7 +878,7 @@
       "path": "mapa-turistico.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 11046
+      "bytes": 13067
     },
     {
       "path": "noticia.html",
@@ -879,13 +890,13 @@
       "path": "noticias.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 23227
+      "bytes": 24993
     },
     {
       "path": "o-que-fazer.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5895
+      "bytes": 6979
     },
     {
       "path": "offline.html",
@@ -897,37 +908,37 @@
       "path": "onde-ficar.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 17825
+      "bytes": 18988
     },
     {
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15061
+      "bytes": 16310
     },
     {
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98737
+      "bytes": 100722
     },
     {
       "path": "privacidade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22912
+      "bytes": 24392
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5702
+      "bytes": 6703
     },
     {
       "path": "rotas-completas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 4224
+      "bytes": 5605
     },
     {
       "path": "roteiro-ia.html",
@@ -939,13 +950,13 @@
       "path": "sabores.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 30332
+      "bytes": 34913
     },
     {
       "path": "transparencia.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 22733
+      "bytes": 23962
     }
   ],
   "directoryIndexes": [
@@ -1045,7 +1056,7 @@
       "path": "admin-firebase.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 135368
+      "bytes": 158187
     },
     {
       "path": "css/mapa-3d.css",
@@ -1096,6 +1107,24 @@
       "bytes": 43701
     },
     {
+      "path": "docs/bloco-cms-1-diagnostico-admin-cms.md",
+      "ext": ".md",
+      "dir": "docs",
+      "bytes": 34350
+    },
+    {
+      "path": "docs/bloco-cms-4c-fix2-csp-storage-admin.md",
+      "ext": ".md",
+      "dir": "docs",
+      "bytes": 4974
+    },
+    {
+      "path": "docs/bloco-vinculos-admin-portal-usuario.md",
+      "ext": ".md",
+      "dir": "docs",
+      "bytes": 8710
+    },
+    {
       "path": "docs/plano-admin-cms-completo.md",
       "ext": ".md",
       "dir": "docs",
@@ -1141,13 +1170,19 @@
       "path": "js/admin/modules/banners.js",
       "ext": ".js",
       "dir": "js/admin/modules",
-      "bytes": 42634
+      "bytes": 69269
     },
     {
       "path": "js/admin/modules/dashboard.js",
       "ext": ".js",
       "dir": "js/admin/modules",
       "bytes": 4521
+    },
+    {
+      "path": "js/admin/modules/empreendimentos.js",
+      "ext": ".js",
+      "dir": "js/admin/modules",
+      "bytes": 76902
     },
     {
       "path": "js/admin/modules/placeholder.js",
@@ -1171,13 +1206,13 @@
       "path": "js/firebase-auth.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 70854
+      "bytes": 101422
     },
     {
       "path": "js/reservas.js",
       "ext": ".js",
       "dir": "js",
-      "bytes": 26198
+      "bytes": 26216
     },
     {
       "path": "js/roteiro-ia.js",
@@ -1213,7 +1248,7 @@
       "path": "para-o-trade.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 15061
+      "bytes": 16310
     },
     {
       "path": "portal-usuario/index.html",
@@ -1225,13 +1260,13 @@
       "path": "portal-usuario.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 98737
+      "bytes": 100722
     },
     {
       "path": "reservas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 5702
+      "bytes": 6703
     },
     {
       "path": "rotas-completas/index.html",
@@ -1243,7 +1278,7 @@
       "path": "rotas-completas.html",
       "ext": ".html",
       "dir": ".",
-      "bytes": 4224
+      "bytes": 5605
     },
     {
       "path": "roteiro-ia.html",
@@ -1290,6 +1325,7 @@
         "js/admin/admin-shell.js",
         "js/admin/modules/dashboard.js",
         "js/admin/modules/banners.js",
+        "js/admin/modules/empreendimentos.js",
         "js/admin/modules/placeholder.js"
       ],
       "styles": [],
@@ -1356,7 +1392,29 @@
         "claim-reason-${SEC.attr(claim.id)}",
         "update-review-note-${SEC.attr(request.id)}",
         "update-rejection-reason-${SEC.attr(request.id)}",
-        "update-changes-requested-${SEC.attr(request.id)}"
+        "update-changes-requested-${SEC.attr(request.id)}",
+        "media-review-status-${SEC.attr(requestId)}-${SEC.attr(String(index))}",
+        "media-review-note-${SEC.attr(requestId)}-${SEC.attr(String(index))}"
+      ]
+    },
+    {
+      "file": "cms-public-debug.html",
+      "scripts": [
+        "config.js",
+        "js/cms-public-establishments-adapter.js",
+        "js/cms-public-debug.js"
+      ],
+      "styles": [],
+      "anchors": [
+        "viewport",
+        "referrer",
+        "robots",
+        "cmsDebugRun",
+        "cmsDebugStatus",
+        "cmsDebugSource",
+        "cmsDebugCount",
+        "cmsDebugError",
+        "cmsDebugSample"
       ]
     },
     {
@@ -1381,16 +1439,26 @@
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js",
         "https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js",
         "translations.js",
-        "js/cookies.js"
+        "js/cookies.js",
+        "js/public-banners.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/shared.css",
-        "css/eventos.css"
+        "css/eventos.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
+        "public-banners-slot",
         "mesNav",
         "cAll",
         "cDest",
@@ -1445,6 +1513,12 @@
         "description",
         "keywords",
         "author",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "patrimonio",
         "natureza",
         "gastronomia-g",
@@ -1486,13 +1560,15 @@
         "js/search.js",
         "https://vlibras.gov.br/app/vlibras-plugin.js",
         "js/scroll-animations.js",
-        "js/chatbot.js",
-        "js/avaliacoes.js"
+        "js/avaliacoes.js",
+        "js/public-banners.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/variables.css",
         "css/index.css",
-        "css/season-theme.css"
+        "css/season-theme.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
@@ -1501,6 +1577,12 @@
         "author",
         "robots",
         "language",
+        "twitter:card",
+        "twitter:url",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
         "theme-color",
         "apple-mobile-web-app-capable",
         "apple-mobile-web-app-status-bar-style",
@@ -1508,6 +1590,10 @@
         "sms-scroll-progress",
         "navToggle",
         "navLinks",
+        "homeExploreMenu",
+        "homeAgendaMenu",
+        "homePlanMenu",
+        "homeSobreMenu",
         "currentLang",
         "langDropdown",
         "mobileOverlay",
@@ -1517,8 +1603,17 @@
         "search",
         "searchResults",
         "agrosamas-banner",
+        "public-banners-slot",
+        "main-content",
         "map-hero",
+        "home-hero-title",
         "map",
+        "featured-experiences-title",
+        "eventos",
+        "home-upcoming-title",
+        "proximosEventosHome",
+        "home-recurring-title",
+        "home-map-preview-title",
         "visitor-guide-title",
         "festas-destaque",
         "sobre",
@@ -1532,8 +1627,6 @@
         "mapModalPhone",
         "mapModalHours",
         "mapModalGoogleLink",
-        "eventos",
-        "proximosEventosHome",
         "onde-ficar",
         "contato",
         "contactForm",
@@ -1570,22 +1663,43 @@
       "file": "local.html",
       "scripts": [
         "https://www.googletagmanager.com/gtag/js",
+        "js/security-utils.js",
         "js/locais-data.js",
         "js/site-meta.js",
         "js/breadcrumbs.js",
         "js/nav-shared.js",
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
         "translations.js",
-        "js/cookies.js"
+        "js/cookies.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/variables.css",
-        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
+        "local-canonical",
+        "robots",
+        "local-robots",
+        "og-title",
+        "og-desc",
+        "og-image",
+        "og-image-alt",
+        "og-url",
+        "twitter:card",
+        "twitter:title",
+        "twitter-title",
+        "twitter:description",
+        "twitter-desc",
+        "twitter:image",
+        "twitter-image",
+        "twitter:image:alt",
+        "twitter-image-alt",
+        "theme-color",
         "lb",
         "lb-img",
         "page-root",
@@ -1685,16 +1799,26 @@
         "js/data/turismo-data.js",
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js",
         "js/mapa-turistico.js",
-        "js/nav-shared.js"
+        "js/nav-shared.js",
+        "js/public-banners.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css",
         "css/variables.css",
-        "css/mapa-turistico.css"
+        "css/mapa-turistico.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "description",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
+        "public-banners-slot",
         "main-content",
         "mapHeroPoints",
         "mapHeroPlaces",
@@ -1776,17 +1900,27 @@
         "js/nav-shared.js",
         "js/security-utils.js",
         "js/cms.js",
-        "js/cookies.js"
+        "js/public-banners.js",
+        "js/cookies.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/shared.css",
-        "css/noticias.css"
+        "css/noticias.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
+        "public-banners-slot",
         "postsGrid"
       ]
     },
@@ -1805,17 +1939,25 @@
         "js/site-meta.js",
         "translations.js",
         "js/breadcrumbs.js",
-        "js/nav-shared.js"
+        "js/nav-shared.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/shared.css",
-        "css/o-que-fazer.css"
+        "css/o-que-fazer.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "main-content",
         "footer"
       ]
@@ -1851,17 +1993,25 @@
         "translations.js",
         "js/breadcrumbs.js",
         "js/nav-shared.js",
-        "js/cookies.js"
+        "js/cookies.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/shared.css",
-        "css/onde-ficar.css"
+        "css/onde-ficar.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "hotelsGrid"
       ]
     },
@@ -1883,6 +2033,12 @@
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "footer"
       ]
     },
@@ -2053,6 +2209,12 @@
         "referrer",
         "description",
         "robots",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "main-content",
         "controlador",
         "dados-coletados",
@@ -2090,6 +2252,12 @@
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "lista-experiencias"
       ]
     },
@@ -2118,6 +2286,12 @@
         "viewport",
         "description",
         "robots",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "main-content",
         "footer"
       ]
@@ -2162,20 +2336,32 @@
         "translations.js",
         "js/breadcrumbs.js",
         "js/nav-shared.js",
-        "js/cookies.js"
+        "js/cookies.js",
+        "js/public-banners.js",
+        "js/tourism-mascot.js"
       ],
       "styles": [
         "css/shared.css",
-        "css/sabores.css"
+        "css/sabores.css",
+        "css/tourism-mascot.css"
       ],
       "anchors": [
         "viewport",
         "referrer",
         "description",
         "keywords",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
+        "public-banners-slot",
+        "sabores-atalhos-titulo",
         "polonesa",
         "feiras",
         "restaurantes",
+        "erva-mate",
         "produtor",
         "produtorDetails"
       ]
@@ -2210,6 +2396,12 @@
         "keywords",
         "author",
         "robots",
+        "twitter:card",
+        "twitter:title",
+        "twitter:description",
+        "twitter:image",
+        "twitter:image:alt",
+        "theme-color",
         "main-content",
         "comtur",
         "fumtur",
@@ -2243,10 +2435,10 @@
     },
     {
       "file": "css/index.css",
-      "bytes": 133856,
-      "important": 460,
-      "media": 40,
-      "selectorCount": 762
+      "bytes": 183227,
+      "important": 758,
+      "media": 62,
+      "selectorCount": 1094
     },
     {
       "file": "css/mapa-3d.css",
@@ -2264,10 +2456,10 @@
     },
     {
       "file": "css/mapa-turistico.css",
-      "bytes": 37252,
-      "important": 13,
-      "media": 7,
-      "selectorCount": 263
+      "bytes": 43661,
+      "important": 14,
+      "media": 11,
+      "selectorCount": 339
     },
     {
       "file": "css/noticia.css",
@@ -2319,6 +2511,13 @@
       "selectorCount": 120
     },
     {
+      "file": "css/public-banners.css",
+      "bytes": 7839,
+      "important": 1,
+      "media": 5,
+      "selectorCount": 41
+    },
+    {
       "file": "css/reservas.css",
       "bytes": 770,
       "important": 0,
@@ -2341,17 +2540,17 @@
     },
     {
       "file": "css/sabores.css",
-      "bytes": 7813,
+      "bytes": 9750,
       "important": 9,
       "media": 2,
-      "selectorCount": 72
+      "selectorCount": 91
     },
     {
       "file": "css/season-theme.css",
-      "bytes": 20544,
-      "important": 8,
-      "media": 3,
-      "selectorCount": 106
+      "bytes": 27988,
+      "important": 17,
+      "media": 9,
+      "selectorCount": 140
     },
     {
       "file": "css/shared.css",
@@ -2359,6 +2558,13 @@
       "important": 8,
       "media": 7,
       "selectorCount": 51
+    },
+    {
+      "file": "css/tourism-mascot.css",
+      "bytes": 12097,
+      "important": 3,
+      "media": 3,
+      "selectorCount": 71
     },
     {
       "file": "css/transparencia.css",
@@ -2573,6 +2779,10 @@
       "files": "css/index.css, css/mapa-turistico.css"
     },
     {
+      "selector": "@media (max-width: 420px)",
+      "files": "css/index.css, css/season-theme.css"
+    },
+    {
       "selector": "@media (max-width: 480px)",
       "files": "css/index.css, css/noticias.css, css/sabores.css, css/shared.css"
     },
@@ -2586,11 +2796,15 @@
     },
     {
       "selector": "@media (max-width: 768px)",
-      "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/shared.css"
+      "files": "css/index.css, css/mapa-turistico.css, css/noticia.css, css/o-que-fazer.css, css/rotas-completas.css, css/season-theme.css, css/shared.css"
+    },
+    {
+      "selector": "@media (min-width: 1440px)",
+      "files": "css/index.css, css/season-theme.css"
     },
     {
       "selector": "@media (prefers-reduced-motion: reduce)",
-      "files": "css/season-theme.css, css/shared.css"
+      "files": "css/index.css, css/season-theme.css, css/shared.css"
     },
     {
       "selector": "/* ============================================\r\n           BOTÃO VOLTAR AO TOPO\r\n        ============================================ */\r\n        .back-to-top",
@@ -2634,13 +2848,13 @@
     },
     {
       "selector": "to",
-      "files": "css/galeria.css, css/index.css, css/portal-usuario.css, css/shared.css"
+      "files": "css/galeria.css, css/index.css, css/portal-usuario.css, css/public-banners.css, css/shared.css, css/tourism-mascot.css"
     }
   ],
   "jsAnalysis": [
     {
       "file": "cloudflare-worker/chat-worker.js",
-      "bytes": 13326,
+      "bytes": 13330,
       "globals": [
         "const ALLOWED_ORIGINS",
         "const MAX_HISTORY_ITEMS",
@@ -2662,7 +2876,7 @@
     },
     {
       "file": "config.js",
-      "bytes": 6635,
+      "bytes": 6634,
       "globals": [
         "const CONFIG",
         "window.CONFIG",
@@ -2772,14 +2986,16 @@
     },
     {
       "file": "js/admin/modules/banners.js",
-      "bytes": 42456,
+      "bytes": 68934,
       "globals": [
         "var COLLECTION",
         "var CTA_TARGETS",
         "var FREQUENCIES",
+        "var IMAGE_TYPE_REGEX",
         "var LIMITS",
         "var MAXWIDTH_MAX",
         "var MAXWIDTH_MIN",
+        "var MAX_IMAGE_BYTES",
         "var PLACEMENTS",
         "var PRIORITY_MAX",
         "var PRIORITY_MIN",
@@ -2794,6 +3010,7 @@
         "window.AdminRegistry",
         "window.AdminUI",
         "window.FirebaseSystem",
+        "window.URL",
         "window.confirm",
         "window.currentUser",
         "window.firebase",
@@ -2801,18 +3018,22 @@
       ],
       "functions": [
         "archive",
-        "buildArchivePayload",
         "buildForm",
+        "buildImageSection",
         "buildPayload",
         "buildSelect",
         "buildShell",
+        "buildTransitionPayload",
         "cancelForm",
         "checked",
         "clampInt",
         "clean",
+        "clearImageSelection",
         "closeModal",
         "ctx",
         "currentUid",
+        "detailsFooterButtons",
+        "doSave",
         "duplicate",
         "escapeAttr",
         "escapeHtml",
@@ -2822,11 +3043,16 @@
         "fieldTextarea",
         "filteredItems",
         "findItem",
+        "formatBytes",
         "formatDateShort",
         "formatDateTime",
         "getDb",
         "getFirebase",
+        "getPublishBlockers",
+        "getPublishWarnings",
         "getSection",
+        "getStorage",
+        "handleUploadError",
         "handleWriteError",
         "inEnum",
         "inputValueToMillis",
@@ -2837,23 +3063,32 @@
         "makeSlug",
         "millisToInputValue",
         "onFilterChange",
+        "onImageFileChange",
         "openForm",
         "openModal",
         "pad",
         "periodText",
         "placementText",
+        "publish",
         "readForm",
         "refresh",
+        "releaseBannerPreviewUrl",
         "render",
         "renderList",
+        "resetBtn",
         "row",
+        "safeFileName",
         "serverTimestamp",
         "statusBadge",
         "submitForm",
         "timestampFromMillis",
         "toMillis",
         "toast",
+        "unpublish",
+        "updateImagePreview",
+        "uploadBannerImage",
         "val",
+        "validateBannerImageFile",
         "viewDetails"
       ],
       "localStorage": 0,
@@ -2884,6 +3119,118 @@
       "localStorage": 0,
       "serviceWorker": 0,
       "addEventListeners": 2
+    },
+    {
+      "file": "js/admin/modules/empreendimentos.js",
+      "bytes": 76882,
+      "globals": [
+        "var CATEGORIES",
+        "var COLLECTION",
+        "var EDITABLE_STATUSES",
+        "var IMAGE_STATUSES",
+        "var IMAGE_TYPE_REGEX",
+        "var MAX_IMAGE_BYTES",
+        "var PUBLIC_STATIC_NOTICE",
+        "var SECTION_ID",
+        "var STATUSES",
+        "window.AdminContext",
+        "window.AdminEstablishmentsModule",
+        "window.AdminRegistry",
+        "window.AdminUI",
+        "window.FirebaseSystem",
+        "window.URL",
+        "window.confirm",
+        "window.currentUser",
+        "window.firebase",
+        "window.firebaseDB",
+        "window.prompt"
+      ],
+      "functions": [
+        "archive",
+        "buildForm",
+        "buildMediaManager",
+        "buildSelect",
+        "buildShell",
+        "cancelForm",
+        "categoryLabel",
+        "checkboxField",
+        "checked",
+        "clean",
+        "currentUid",
+        "defaultDoc",
+        "deleteButton",
+        "deleteUploadedFiles",
+        "editGalleryImage",
+        "emptyImage",
+        "ensureArray",
+        "escapeAttr",
+        "escapeHtml",
+        "escapeJs",
+        "field",
+        "filteredItems",
+        "findItem",
+        "formatDateTime",
+        "galleryCard",
+        "getDb",
+        "getGalleryItem",
+        "getSection",
+        "getStorage",
+        "handleWriteError",
+        "imageForMainImage",
+        "isRemovedImage",
+        "joinList",
+        "limit",
+        "load",
+        "makeSlug",
+        "mediaAuditPayload",
+        "moveGalleryImage",
+        "normalizeDoc",
+        "normalizeGallery",
+        "normalizeGalleryForWrite",
+        "normalizeImage",
+        "normalizeText",
+        "nowIso",
+        "numberOrNull",
+        "onFilterChange",
+        "onGalleryChange",
+        "onMainImageChange",
+        "openForm",
+        "parseList",
+        "readForm",
+        "readonlyStatusField",
+        "refresh",
+        "releasePreviewUrls",
+        "remove",
+        "removeGalleryImage",
+        "render",
+        "renderGalleryPreview",
+        "renderList",
+        "renderRow",
+        "restore",
+        "restoreGalleryImage",
+        "row",
+        "safeFileName",
+        "selectField",
+        "serverTimestamp",
+        "setMainImageFromGallery",
+        "sourceLabel",
+        "statusBadge",
+        "submitForm",
+        "textareaField",
+        "toMillis",
+        "toWritePayload",
+        "toast",
+        "updateMainImagePreview",
+        "uploadImage",
+        "validateDocForSave",
+        "validateImageFile",
+        "value",
+        "viewDetails",
+        "writeMediaUpdate"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 0
     },
     {
       "file": "js/admin/modules/placeholder.js",
@@ -3024,7 +3371,7 @@
     },
     {
       "file": "js/chatbot.js",
-      "bytes": 51545,
+      "bytes": 51529,
       "globals": [
         "var RESPOSTAS",
         "window.Chatbot",
@@ -3037,6 +3384,67 @@
       "localStorage": 3,
       "serviceWorker": 0,
       "addEventListeners": 3
+    },
+    {
+      "file": "js/cms-public-debug.js",
+      "bytes": 2307,
+      "globals": [
+        "window.CMSPublicEstablishmentsAdapter"
+      ],
+      "functions": [
+        "bind",
+        "byId",
+        "renderResult",
+        "runTest",
+        "setBusy",
+        "setText",
+        "stringify"
+      ],
+      "localStorage": 0,
+      "serviceWorker": 0,
+      "addEventListeners": 2
+    },
+    {
+      "file": "js/cms-public-establishments-adapter.js",
+      "bytes": 10838,
+      "globals": [
+        "var APP_CHECK_MODULE",
+        "var APP_NAME",
+        "var COLLECTION",
+        "var DEFAULT_TIMEOUT_MS",
+        "var FIREBASE_APP_URL",
+        "var FIREBASE_FS_URL",
+        "var STATUS",
+        "window.CMSPublicEstablishmentsAdapter",
+        "window.CMSPublicEstablishmentsDebugResult",
+        "window.CONFIG",
+        "window.clearTimeout",
+        "window.console",
+        "window.localStorage",
+        "window.location",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "autoRunIfDebug",
+        "clean",
+        "ensureArray",
+        "ensureFirestore",
+        "getDebugFlag",
+        "isFiniteNumber",
+        "isPublicImage",
+        "log",
+        "makeFallback",
+        "normalizeCoordinates",
+        "normalizeDocument",
+        "normalizeGallery",
+        "normalizeImage",
+        "readPublished",
+        "sanitizeError",
+        "withTimeout"
+      ],
+      "localStorage": 1,
+      "serviceWorker": 0,
+      "addEventListeners": 1
     },
     {
       "file": "js/cms.js",
@@ -3072,7 +3480,7 @@
     },
     {
       "file": "js/data/eventos.js",
-      "bytes": 4210,
+      "bytes": 4719,
       "globals": [
         "window.TURISMO_EVENTOS"
       ],
@@ -3083,7 +3491,7 @@
     },
     {
       "file": "js/data/hospedagens.js",
-      "bytes": 3062,
+      "bytes": 3037,
       "globals": [
         "window.TURISMO_HOSPEDAGENS"
       ],
@@ -3094,7 +3502,7 @@
     },
     {
       "file": "js/data/informacoes-essenciais.js",
-      "bytes": 2068,
+      "bytes": 2053,
       "globals": [
         "window.TURISMO_INFORMACOES_ESSENCIAIS"
       ],
@@ -3116,7 +3524,7 @@
     },
     {
       "file": "js/data/restaurantes.js",
-      "bytes": 4521,
+      "bytes": 4022,
       "globals": [
         "window.TURISMO_RESTAURANTES"
       ],
@@ -3127,7 +3535,7 @@
     },
     {
       "file": "js/data/rotas.js",
-      "bytes": 2703,
+      "bytes": 2673,
       "globals": [
         "window.TURISMO_ROTAS"
       ],
@@ -3262,12 +3670,13 @@
     },
     {
       "file": "js/firebase-auth.js",
-      "bytes": 70567,
+      "bytes": 101042,
       "globals": [
         "const AUTH_OPERATION_TIMEOUT_MS",
         "const PROFILE_LOAD_TIMEOUT_MS",
         "const SDK_LOAD_TIMEOUT_MS",
         "var ESTABLISHMENT_UPDATE_ALLOWED_FIELDS",
+        "var ESTABLISHMENT_UPDATE_APPLY_TARGETS",
         "var ESTABLISHMENT_UPDATE_FIELD_LIMITS",
         "window.FirebaseSystem",
         "window.currentUser",
@@ -3277,26 +3686,50 @@
         "window.initFirebase"
       ],
       "functions": [
+        "assertModularStorageReference",
         "authErrorMessage",
         "basicUserFromAuth",
         "buildEstablishmentManagerDocId",
+        "buildMediaReviewKey",
+        "buildReviewedCatalogImage",
+        "buildSafeAppliedMedia",
         "buildSafeCurrentSnapshot",
         "buildSafeImageMetadata",
+        "buildSafeMediaReviewMap",
         "buildSafeRequestedChanges",
+        "classifyStorageDownloadError",
+        "copyReviewedImageToCmsMedia",
+        "createMediaApplicationError",
+        "createStorageDownloadError",
+        "downloadReviewedImageBlob",
+        "downloadStorageBlobFromPath",
+        "downloadWithModularStorageFunction",
         "ensureArray",
         "establishmentClaimErrorMessage",
+        "extractStoragePathFromUrl",
         "getComparableTimestamp",
+        "getCompatStorageReference",
+        "getErrorLogDetails",
         "getFirebaseAuth",
         "getFirebaseDB",
+        "getMediaApplicationErrorMessage",
+        "getSafeFileNameFromPath",
         "getSortableTimestampValue",
         "initFirebase",
         "isActiveManagerRecord",
+        "isImageAlreadyApplied",
         "isPendingStatus",
+        "loadFirebaseStorageModule",
+        "logStorageCopyDiagnostic",
         "normalizeComparableId",
         "normalizeEventReviewStatus",
         "normalizeManagerRole",
+        "normalizeMediaReviewStatus",
+        "normalizeStorageSourcePath",
         "normalizeUpdateRequestStatus",
         "persistUserSession",
+        "safeDecodeStoragePath",
+        "sanitizeLogMessage",
         "sanitizeLongText",
         "sanitizeSimpleText",
         "sanitizeUpdateFieldValue",
@@ -3323,8 +3756,9 @@
     },
     {
       "file": "js/locais-data.js",
-      "bytes": 21856,
+      "bytes": 22337,
       "globals": [
+        "window.locaisAliases",
         "window.locaisData"
       ],
       "functions": [],
@@ -3334,7 +3768,7 @@
     },
     {
       "file": "js/mapa-turistico.js",
-      "bytes": 80637,
+      "bytes": 82826,
       "globals": [
         "var CATEGORY_CONFIG",
         "var FILTER_ORDER",
@@ -3347,6 +3781,8 @@
         "window.__smsCompatAppCheckInitialized",
         "window.firebase",
         "window.history",
+        "window.locaisAliases",
+        "window.locaisData",
         "window.location",
         "window.setTimeout"
       ],
@@ -3390,6 +3826,7 @@
         "getItemById",
         "getItemMatchScore",
         "getLang",
+        "getLocalDetailUrl",
         "getMissingSummary",
         "getPanelGroup",
         "getPanelGroupCount",
@@ -3468,11 +3905,12 @@
     },
     {
       "file": "js/nav-shared.js",
-      "bytes": 43320,
+      "bytes": 47988,
       "globals": [
         "const NAV_CSS",
         "const NAV_HTML",
         "window.FirebaseSystem",
+        "window.VLibras",
         "window.addEventListener",
         "window.applyTranslations",
         "window.innerHeight",
@@ -3489,6 +3927,7 @@
         "applyAuthState",
         "closeAllDropdowns",
         "closeMobileMenu",
+        "getNavTranslation",
         "handleMobileMenuLink",
         "hasLoadedScript",
         "hasLoadedStylesheet",
@@ -3502,8 +3941,74 @@
       "addEventListeners": 15
     },
     {
+      "file": "js/public-banners.js",
+      "bytes": 27109,
+      "globals": [
+        "var APP_CHECK_MODULE",
+        "var APP_NAME",
+        "var COLLECTION",
+        "var CSS_HREF",
+        "var FILE_TO_PLACEMENT",
+        "var FIREBASE_APP_URL",
+        "var FIREBASE_FS_URL",
+        "var HTML_MAP",
+        "var MAX_BANNERS",
+        "var MAX_DELAY_MS",
+        "var MAX_POPUPS",
+        "var MOUNT_ID",
+        "var POPUP_MAXWIDTH_DEFAULT",
+        "var POPUP_MAXWIDTH_MAX",
+        "var POPUP_MAXWIDTH_MIN",
+        "var STORAGE_PREFIX",
+        "window.CONFIG",
+        "window.PublicBanners",
+        "window.SMSecurity",
+        "window.console",
+        "window.localStorage",
+        "window.location",
+        "window.sessionStorage",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "buildPopupMarkup",
+        "clampDelay",
+        "clampMaxWidth",
+        "clean",
+        "close",
+        "currentFile",
+        "ensureCss",
+        "esc",
+        "escAttr",
+        "focusables",
+        "frequencyAllows",
+        "loadBanners",
+        "markShown",
+        "maybeShowPopup",
+        "normalizeFrequency",
+        "onKeydown",
+        "pageMatches",
+        "popupKey",
+        "renderBanner",
+        "renderInto",
+        "safeStorage",
+        "safeUrl",
+        "schedulePopup",
+        "selectBanners",
+        "selectByType",
+        "selectPopups",
+        "showPopup",
+        "targetMatches",
+        "toMillis",
+        "todayStamp",
+        "withinWindow"
+      ],
+      "localStorage": 3,
+      "serviceWorker": 0,
+      "addEventListeners": 7
+    },
+    {
       "file": "js/reservas.js",
-      "bytes": 26128,
+      "bytes": 26146,
       "globals": [
         "window.Reservas",
         "window.open"
@@ -3568,7 +4073,7 @@
     },
     {
       "file": "js/search-index.js",
-      "bytes": 4787,
+      "bytes": 4737,
       "globals": [
         "window.TURISMO_DATA",
         "window.TURISMO_EVENTOS",
@@ -3620,24 +4125,29 @@
     },
     {
       "file": "js/season-theme.js",
-      "bytes": 22610,
+      "bytes": 26000,
       "globals": [
         "var ASSET_BASE",
         "var ASSET_CACHE",
         "var AUTO_MODE",
+        "var COLD_TEMP_THRESHOLD",
         "var SEASON_ASSETS",
+        "var SEASON_ETIQUETA",
         "var SEASON_META",
         "var STORAGE_KEY",
+        "var WEATHER_CODE_GROUPS",
         "var WEATHER_FALLBACK",
         "var WEATHER_STATE",
         "window.SMSSeasonTheme",
         "window.SMS_SEASON_ASSETS",
         "window.__SMSSeasonThemeInitialized",
         "window.localStorage",
-        "window.matchMedia"
+        "window.matchMedia",
+        "window.translations"
       ],
       "functions": [
         "applySeason",
+        "applyWeatherState",
         "buildMascotSlot",
         "buildSwitcher",
         "buildWeatherBadge",
@@ -3646,6 +4156,7 @@
         "ensureAmbientLayer",
         "ensureSwitcher",
         "formatWeatherTemp",
+        "getActiveLang",
         "getAssetRoleSource",
         "getAssetUrl",
         "getAutomaticSeason",
@@ -3656,6 +4167,7 @@
         "getResolvedSeason",
         "getSeasonAssetManifest",
         "getSeasonOptionAriaLabel",
+        "getWeatherCategory",
         "init",
         "isKnownMode",
         "loadAsset",
@@ -3664,17 +4176,19 @@
         "mountIntoUtilityBar",
         "mountMascotSlot",
         "onWeatherChange",
+        "renderSeasonEtiqueta",
         "renderWeatherBadges",
         "safeGetStoredMode",
         "safeSetStoredMode",
         "setAssetElement",
         "syncReducedMotion",
+        "translateKey",
         "updateControls",
         "updateSeasonAssets"
       ],
-      "localStorage": 3,
+      "localStorage": 5,
       "serviceWorker": 0,
-      "addEventListeners": 8
+      "addEventListeners": 9
     },
     {
       "file": "js/security-utils.js",
@@ -3697,7 +4211,7 @@
     },
     {
       "file": "js/site-meta.js",
-      "bytes": 3917,
+      "bytes": 3913,
       "globals": [
         "window.SITE_META",
         "window.renderSiteMeta",
@@ -3745,6 +4259,49 @@
       "addEventListeners": 2
     },
     {
+      "file": "js/tourism-mascot.js",
+      "bytes": 23723,
+      "globals": [
+        "var CTX",
+        "var MASCOT_FALLBACK",
+        "var MASCOT_IMG",
+        "var MSG_KEY",
+        "var STORAGE_HIDDEN",
+        "var STORAGE_TEASER",
+        "var STR",
+        "window.__smsMascotGlobalBound",
+        "window.__smsMascotLoaded",
+        "window.addEventListener",
+        "window.applyTranslations",
+        "window.location",
+        "window.requestIdleCallback",
+        "window.setTimeout"
+      ],
+      "functions": [
+        "applyI18n",
+        "bindEvents",
+        "buildMascot",
+        "closePanel",
+        "getContextKey",
+        "getLang",
+        "helpItem",
+        "hideMascot",
+        "hideTeaser",
+        "init",
+        "linkItem",
+        "maybeShowTeaser",
+        "openPanel",
+        "readPref",
+        "schedule",
+        "setupGlobalListeners",
+        "toggleHelp",
+        "writePref"
+      ],
+      "localStorage": 4,
+      "serviceWorker": 0,
+      "addEventListeners": 10
+    },
+    {
       "file": "js/weather.js",
       "bytes": 10245,
       "globals": [
@@ -3783,7 +4340,7 @@
     },
     {
       "file": "sw.js",
-      "bytes": 5626,
+      "bytes": 5776,
       "globals": [
         "const CACHE_NAME",
         "const NEVER_CACHE",
@@ -3801,7 +4358,7 @@
     },
     {
       "file": "translations.js",
-      "bytes": 188152,
+      "bytes": 220341,
       "globals": [
         "window.applyTranslations",
         "window.initPageLanguage",
@@ -3845,13 +4402,23 @@
     },
     {
       "script": "config.js",
-      "pages": 7,
-      "examples": "admin-firebase.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
+      "pages": 8,
+      "examples": "admin-firebase.html, cms-public-debug.html, eventos.html, index.html, mapa-turistico.html, noticias.html, portal-usuario.html, reservas.html"
+    },
+    {
+      "script": "js/tourism-mascot.js",
+      "pages": 8,
+      "examples": "eventos.html, index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, onde-ficar.html, sabores.html"
     },
     {
       "script": "js/site-meta.js",
       "pages": 7,
       "examples": "index.html, local.html, mapa-turistico.html, noticias.html, o-que-fazer.html, privacidade.html, rotas-completas.html"
+    },
+    {
+      "script": "js/public-banners.js",
+      "pages": 5,
+      "examples": "eventos.html, index.html, mapa-turistico.html, noticias.html, sabores.html"
     },
     {
       "script": "js/scroll-animations.js",
@@ -3869,6 +4436,11 @@
       "examples": "admin-firebase.html, index.html, mapa-turistico.html, portal-usuario.html"
     },
     {
+      "script": "js/security-utils.js",
+      "pages": 4,
+      "examples": "admin-firebase.html, local.html, noticia.html, noticias.html"
+    },
+    {
       "script": "js/locais-data.js",
       "pages": 3,
       "examples": "index.html, local.html, mapa-turistico.html"
@@ -3877,11 +4449,6 @@
       "script": "js/rotas-data.js",
       "pages": 3,
       "examples": "index.html, mapa-completo.html, mapa-turistico.html"
-    },
-    {
-      "script": "js/security-utils.js",
-      "pages": 3,
-      "examples": "admin-firebase.html, noticia.html, noticias.html"
     },
     {
       "script": "js/cms.js",
@@ -3974,6 +4541,11 @@
       "examples": "admin-firebase.html"
     },
     {
+      "script": "js/admin/modules/empreendimentos.js",
+      "pages": 1,
+      "examples": "admin-firebase.html"
+    },
+    {
       "script": "js/admin/modules/placeholder.js",
       "pages": 1,
       "examples": "admin-firebase.html"
@@ -3984,9 +4556,14 @@
       "examples": "index.html"
     },
     {
-      "script": "js/chatbot.js",
+      "script": "js/cms-public-debug.js",
       "pages": 1,
-      "examples": "index.html"
+      "examples": "cms-public-debug.html"
+    },
+    {
+      "script": "js/cms-public-establishments-adapter.js",
+      "pages": 1,
+      "examples": "cms-public-debug.html"
     },
     {
       "script": "js/mapa-turistico.js",
@@ -4032,8 +4609,44 @@
   "scriptDuplicateLoads": [],
   "sharedGlobals": [
     {
+      "global": "var APP_CHECK_MODULE",
+      "files": "js/cms-public-establishments-adapter.js, js/public-banners.js"
+    },
+    {
+      "global": "var APP_NAME",
+      "files": "js/cms-public-establishments-adapter.js, js/public-banners.js"
+    },
+    {
+      "global": "var COLLECTION",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/cms-public-establishments-adapter.js, js/public-banners.js"
+    },
+    {
+      "global": "var FIREBASE_APP_URL",
+      "files": "js/cms-public-establishments-adapter.js, js/public-banners.js"
+    },
+    {
+      "global": "var FIREBASE_FS_URL",
+      "files": "js/cms-public-establishments-adapter.js, js/public-banners.js"
+    },
+    {
+      "global": "var HTML_MAP",
+      "files": "js/public-banners.js, js/security-utils.js"
+    },
+    {
+      "global": "var IMAGE_TYPE_REGEX",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js"
+    },
+    {
+      "global": "var MAX_IMAGE_BYTES",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js"
+    },
+    {
       "global": "var SECTION_ID",
-      "files": "js/admin/modules/banners.js, js/admin/modules/dashboard.js"
+      "files": "js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js"
+    },
+    {
+      "global": "var STATUSES",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js"
     },
     {
       "global": "var STORAGE_KEY",
@@ -4045,7 +4658,7 @@
     },
     {
       "global": "window.addEventListener",
-      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/chatbot.js, js/nav-shared.js, js/site-stats.js, js/tourism-mascot.js"
     },
     {
       "global": "window.AdminContentCMS",
@@ -4053,11 +4666,11 @@
     },
     {
       "global": "window.AdminContext",
-      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRegistry",
-      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-registry.js, js/admin/admin-router.js, js/admin/admin-shell.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.AdminRouter",
@@ -4065,47 +4678,63 @@
     },
     {
       "global": "window.AdminUI",
-      "files": "js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js"
+      "files": "js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js"
     },
     {
       "global": "window.applyTranslations",
-      "files": "js/nav-shared.js, translations.js"
+      "files": "js/nav-shared.js, js/tourism-mascot.js, translations.js"
+    },
+    {
+      "global": "window.CMSPublicEstablishmentsAdapter",
+      "files": "js/cms-public-debug.js, js/cms-public-establishments-adapter.js"
     },
     {
       "global": "window.CONFIG",
-      "files": "config.js, js/admin/admin-context.js, js/firebase-app-check.js, js/mapa-turistico.js, js/site-stats.js"
+      "files": "config.js, js/admin/admin-context.js, js/cms-public-establishments-adapter.js, js/firebase-app-check.js, js/mapa-turistico.js, js/public-banners.js, js/site-stats.js"
+    },
+    {
+      "global": "window.confirm",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js"
+    },
+    {
+      "global": "window.console",
+      "files": "js/cms-public-establishments-adapter.js, js/public-banners.js"
     },
     {
       "global": "window.currentUser",
-      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin/modules/placeholder.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.firebase",
-      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/mapa-turistico.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js, js/mapa-turistico.js"
     },
     {
       "global": "window.firebaseDB",
-      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin-content-cms.js, js/firebase-auth.js"
+      "files": "js/admin/admin-context.js, js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js, js/firebase-auth.js"
     },
     {
       "global": "window.FirebaseSystem",
-      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/firebase-auth.js, js/nav-shared.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin/modules/banners.js, js/admin/modules/dashboard.js, js/admin/modules/empreendimentos.js, js/firebase-auth.js, js/nav-shared.js"
     },
     {
       "global": "window.innerHeight",
       "files": "js/nav-shared.js, js/scroll-animations.js"
     },
     {
+      "global": "window.locaisAliases",
+      "files": "js/locais-data.js, js/mapa-turistico.js"
+    },
+    {
       "global": "window.locaisData",
-      "files": "js/data/turismo-data-adapter.js, js/locais-data.js"
+      "files": "js/data/turismo-data-adapter.js, js/locais-data.js, js/mapa-turistico.js"
     },
     {
       "global": "window.localStorage",
-      "files": "js/admin/admin-shell.js, js/season-theme.js"
+      "files": "js/admin/admin-shell.js, js/cms-public-establishments-adapter.js, js/public-banners.js, js/season-theme.js"
     },
     {
       "global": "window.location",
-      "files": "js/admin-content-cms.js, js/breadcrumbs.js, js/mapa-turistico.js, js/nav-shared.js, js/roteiro-ia.js, js/search.js, js/security-utils.js"
+      "files": "js/admin-content-cms.js, js/breadcrumbs.js, js/cms-public-establishments-adapter.js, js/mapa-turistico.js, js/nav-shared.js, js/public-banners.js, js/roteiro-ia.js, js/search.js, js/security-utils.js, js/tourism-mascot.js"
     },
     {
       "global": "window.matchMedia",
@@ -4121,7 +4750,7 @@
     },
     {
       "global": "window.setTimeout",
-      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/mapa-turistico.js, js/nav-shared.js, js/search.js, js/site-meta.js"
+      "files": "js/admin/admin-shell.js, js/admin/modules/dashboard.js, js/admin/modules/placeholder.js, js/cms-public-establishments-adapter.js, js/mapa-turistico.js, js/nav-shared.js, js/public-banners.js, js/search.js, js/site-meta.js, js/tourism-mascot.js"
     },
     {
       "global": "window.showSection",
@@ -4133,11 +4762,11 @@
     },
     {
       "global": "window.SMSecurity",
-      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/security-utils.js"
+      "files": "js/admin/admin-context.js, js/admin/admin-ui.js, js/admin-content-cms.js, js/cms.js, js/public-banners.js, js/security-utils.js"
     },
     {
       "global": "window.translations",
-      "files": "js/nav-shared.js, js/search.js, js/weather.js, translations.js"
+      "files": "js/nav-shared.js, js/search.js, js/season-theme.js, js/weather.js, translations.js"
     },
     {
       "global": "window.TURISMO_DATA",
@@ -4182,6 +4811,10 @@
     {
       "global": "window.TURISMO_SEARCH_INDEX",
       "files": "js/search-index.js, js/search.js"
+    },
+    {
+      "global": "window.URL",
+      "files": "js/admin/modules/banners.js, js/admin/modules/empreendimentos.js, js/admin-content-cms.js"
     }
   ]
 }
