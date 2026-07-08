@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Página Principal -->
+  <!-- Página Principal (idiomas são client-side; sem hreflang pois não há URLs distintas por idioma) -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://turismo.saomateusdosul.pr.gov.br/"/>
-    <xhtml:link rel="alternate" hreflang="en"    href="https://turismo.saomateusdosul.pr.gov.br/"/>
-    <xhtml:link rel="alternate" hreflang="es"    href="https://turismo.saomateusdosul.pr.gov.br/"/>
-    <xhtml:link rel="alternate" hreflang="pl"    href="https://turismo.saomateusdosul.pr.gov.br/"/>
   </url>
 
   <!-- Calendário de Eventos -->
@@ -86,47 +81,14 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Página de Local (detalhe individual por ?id=) -->
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/local</loc>
-    <lastmod>2026-06-29</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
   <!-- Portal do Usuário removido do sitemap (página autenticada, bloqueada no robots.txt) -->
+  <!-- /local genérico removido (sem ?id= renderiza fallback, sem valor de indexação) -->
+  <!-- Páginas legadas removidas do sitemap (rotas-completas é noindex/canonical externo;
+       mapa-completo, mapa-3d e roteiro-ia estão suspensas) — arquivos preservados no projeto -->
 
-  <!-- Páginas legadas/compatibilidade — mantidas para não quebrar links externos -->
+  <!-- O que Fazer (legada, mas indexável e com canonical próprio) -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/o-que-fazer</loc>
-    <lastmod>2026-06-29</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/rotas-completas</loc>
-    <lastmod>2026-07-06</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-completo</loc>
-    <lastmod>2026-06-29</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/mapa-3d</loc>
-    <lastmod>2026-06-29</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://turismo.saomateusdosul.pr.gov.br/roteiro-ia</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
