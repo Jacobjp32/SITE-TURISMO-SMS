@@ -379,7 +379,7 @@ function createMediaApplicationError(type, message, cause) {
 
 function getMediaApplicationErrorMessage(error) {
     if (error && error.cmsMediaType === 'download') {
-        return 'Não foi possível baixar a imagem original para cópia. Verifique Storage/CORS/permissões da imagem.';
+        return 'Falha ao acessar Firebase Storage. Verifique a política de segurança (CSP/connect-src), CORS ou permissões da imagem.';
     }
 
     if (error && error.cmsMediaType === 'upload') {
