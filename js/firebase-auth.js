@@ -370,26 +370,152 @@ function buildReviewedCatalogImage(uploadedImage, sourceImage, requestId, applie
     };
 }
 
+function createMediaApplicationError(type, message, cause) {
+    var error = new Error(message);
+    error.cmsMediaType = type;
+    error.cause = cause || null;
+    return error;
+}
+
+function getMediaApplicationErrorMessage(error) {
+    if (error && error.cmsMediaType === 'download') {
+        return 'Não foi possível baixar a imagem original para cópia. Verifique Storage/CORS/permissões da imagem.';
+    }
+
+    if (error && error.cmsMediaType === 'upload') {
+        return 'Não foi possível enviar a imagem para cms-media.';
+    }
+
+    if (error && error.cmsMediaType === 'batch') {
+        return 'Imagem enviada, mas catálogo não foi atualizado. Pode haver mídia órfã.';
+    }
+
+    return 'Erro ao aplicar mídia aceita ao catálogo interno.';
+}
+
+var firebaseStorageModulePromise = null;
+
+function loadFirebaseStorageModule() {
+    if (!firebaseStorageModulePromise) {
+        firebaseStorageModulePromise = import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js')
+            .catch(function(error) {
+                firebaseStorageModulePromise = null;
+                throw error;
+            });
+    }
+
+    return firebaseStorageModulePromise;
+}
+
+async function downloadStorageBlobFromPath(sourcePath) {
+    var storageModule = await loadFirebaseStorageModule();
+    var app = firebase && typeof firebase.app === 'function' && firebase.app()._delegate
+        ? firebase.app()._delegate
+        : undefined;
+    var modularStorage = storageModule.getStorage(app);
+    var sourceRef = storageModule.ref(modularStorage, sourcePath);
+
+    if (typeof storageModule.getBlob === 'function') {
+        return storageModule.getBlob(sourceRef);
+    }
+
+    if (typeof storageModule.getBytes === 'function') {
+        return new Blob([await storageModule.getBytes(sourceRef)]);
+    }
+
+    throw new Error('SDK de Storage sem getBlob/getBytes disponível.');
+}
+
+function downloadStorageBlobFromUrl(url) {
+    return new Promise(function(resolve, reject) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+        request.responseType = 'blob';
+
+        request.onload = function() {
+            if (request.status >= 200 && request.status < 300 && request.response) {
+                resolve(request.response);
+                return;
+            }
+
+            reject(new Error('Download da imagem original retornou status ' + String(request.status || 0) + '.'));
+        };
+
+        request.onerror = function() {
+            reject(new Error('Falha de rede/CORS ao baixar a imagem original.'));
+        };
+
+        request.ontimeout = function() {
+            reject(new Error('Tempo esgotado ao baixar a imagem original.'));
+        };
+
+        request.timeout = 30000;
+        request.send();
+    });
+}
+
+async function downloadReviewedImageBlob(storage, sourcePath, sourceUrl) {
+    var sourceRef = null;
+    var downloadErrors = [];
+
+    if (sourcePath) {
+        sourceRef = storage.ref(sourcePath);
+
+        if (typeof sourceRef.getBlob === 'function') {
+            try {
+                return await sourceRef.getBlob();
+            } catch(error) {
+                downloadErrors.push(error);
+            }
+        }
+
+        if (typeof sourceRef.getBytes === 'function') {
+            try {
+                var bytes = await sourceRef.getBytes();
+                return new Blob([bytes]);
+            } catch(error) {
+                downloadErrors.push(error);
+            }
+        }
+
+        try {
+            return await downloadStorageBlobFromPath(sourcePath);
+        } catch(error) {
+            downloadErrors.push(error);
+        }
+
+        try {
+            sourceUrl = await sourceRef.getDownloadURL();
+        } catch(error) {
+            downloadErrors.push(error);
+        }
+    }
+
+    if (!sourceUrl) {
+        throw downloadErrors[0] || new Error('Imagem aceita sem URL ou path de origem.');
+    }
+
+    try {
+        return await downloadStorageBlobFromUrl(sourceUrl);
+    } catch(error) {
+        downloadErrors.push(error);
+        throw downloadErrors[0] || error;
+    }
+}
+
 async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishmentId, requestId, index) {
     var sourcePath = sanitizeSimpleText(image && image.path, 512);
     var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
     var sourceName = sanitizeSimpleText(image && image.name, 120) || getSafeFileNameFromPath(sourcePath || sourceUrl);
     var contentType = sanitizeSimpleText(image && image.contentType, 80) || 'image/jpeg';
+    var blob = null;
 
-    if (!sourceUrl && sourcePath) {
-        sourceUrl = await storage.ref(sourcePath).getDownloadURL();
+    try {
+        blob = await downloadReviewedImageBlob(storage, sourcePath, sourceUrl);
+    } catch(error) {
+        throw createMediaApplicationError('download', 'Falha ao baixar imagem original para copiar ao CMS.', error);
     }
 
-    if (!sourceUrl) {
-        throw new Error('Imagem aceita sem URL ou path de origem.');
-    }
-
-    var response = await fetch(sourceUrl);
-    if (!response || !response.ok) {
-        throw new Error('Não foi possível baixar a imagem aceita para reaplicar no CMS.');
-    }
-
-    var blob = await response.blob();
     var safeFileName = getSafeFileNameFromPath(sourceName);
     var destinationPath = [
         'cms-media',
@@ -401,14 +527,20 @@ async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishme
         Date.now() + '-' + String(index + 1) + '-' + safeFileName
     ].join('/');
     var destinationRef = storage.ref(destinationPath);
+    var destinationUrl = '';
 
-    await destinationRef.put(blob, {
-        contentType: contentType,
-        cacheControl: 'public,max-age=31536000,immutable'
-    });
+    try {
+        await destinationRef.put(blob, {
+            contentType: contentType,
+            cacheControl: 'public,max-age=31536000,immutable'
+        });
+        destinationUrl = await destinationRef.getDownloadURL();
+    } catch(error) {
+        throw createMediaApplicationError('upload', 'Falha ao enviar imagem para cms-media.', error);
+    }
 
     return {
-        url: await destinationRef.getDownloadURL(),
+        url: destinationUrl,
         path: destinationPath
     };
 }
@@ -1471,7 +1603,11 @@ const FirebaseSystem = {
             var batch = db.batch();
             batch.update(establishmentRef, establishmentUpdate);
             batch.update(requestRef, requestUpdate);
-            await batch.commit();
+            try {
+                await batch.commit();
+            } catch(error) {
+                throw createMediaApplicationError('batch', 'Falha ao atualizar catálogo após upload da imagem.', error);
+            }
 
             return {
                 success: true,
@@ -1479,7 +1615,7 @@ const FirebaseSystem = {
             };
         } catch(error) {
             console.error(error);
-            return { success: false, message: 'Erro ao aplicar mídia aceita ao catálogo interno.' };
+            return { success: false, message: getMediaApplicationErrorMessage(error) };
         }
     },
 
