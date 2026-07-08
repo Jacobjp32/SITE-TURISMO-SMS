@@ -399,13 +399,13 @@ body.font-larger{font-size:140%!important;}
     if (!hasLoadedStylesheet('css/season-theme.css')) {
         var seasonStyles = document.createElement('link');
         seasonStyles.rel = 'stylesheet';
-        seasonStyles.href = 'css/season-theme.css?v=season-home-polish-20260702b';
+        seasonStyles.href = 'css/season-theme.css?v=site-public-b1-20260708';
         document.head.appendChild(seasonStyles);
     }
 
     if (!hasLoadedScript('js/site-meta.js')) {
         var metaScript = document.createElement('script');
-        metaScript.src = 'js/site-meta.js?v=site-meta-20260519';
+        metaScript.src = 'js/site-meta.js?v=site-public-b1-20260708';
         metaScript.defer = true;
         document.body.appendChild(metaScript);
     }
@@ -445,14 +445,14 @@ body.font-larger{font-size:140%!important;}
     if (!document.getElementById('scroll-anim-script')) {
         var animScript = document.createElement('script');
         animScript.id  = 'scroll-anim-script';
-        animScript.src = 'js/scroll-animations.js';
+        animScript.src = 'js/scroll-animations.js?v=site-public-b1-20260708';
         animScript.defer = true;
         document.body.appendChild(animScript);
     }
 
     if (!hasLoadedScript('js/season-theme.js')) {
         var seasonScript = document.createElement('script');
-        seasonScript.src = 'js/season-theme.js?v=season-20260602';
+        seasonScript.src = 'js/season-theme.js?v=site-public-b1-20260708';
         seasonScript.defer = true;
         document.body.appendChild(seasonScript);
     }
@@ -460,7 +460,7 @@ body.font-larger{font-size:140%!important;}
     var isRestrictedPage = /\/(?:admin-firebase|portal-usuario)(?:\.html)?$/.test(window.location.pathname);
     if (!isRestrictedPage && !hasLoadedScript('js/weather.js')) {
         var weatherScript = document.createElement('script');
-        weatherScript.src = 'js/weather.js?v=weather-context-20260608';
+        weatherScript.src = 'js/weather.js?v=site-public-b1-20260708';
         weatherScript.defer = true;
         document.body.appendChild(weatherScript);
     }

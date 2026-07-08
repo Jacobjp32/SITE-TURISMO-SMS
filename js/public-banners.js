@@ -43,7 +43,7 @@
     var MAX_POPUPS = 1;            // no máximo 1 pop-up por carregamento (não invasivo)
     var COLLECTION = "banners";
     var APP_NAME = "public-banners-app";
-    var CSS_HREF = "css/public-banners.css?v=public-banners-4h-20260629";
+    var CSS_HREF = "css/public-banners.css?v=site-public-b1-20260708";
 
     // Limites de segurança do pop-up.
     var MAX_DELAY_MS = 60000;      // teto do showDelayMs (igual ao SHOW_DELAY_MAX do admin)
