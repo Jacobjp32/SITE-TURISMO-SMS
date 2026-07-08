@@ -134,6 +134,13 @@ Ao mexer em SEO/head/metadados:
 
 ## Observações específicas já conhecidas
 
+### Auditoria pública pós-Claude Fable 5
+
+- B1 — cache-busting público concluído em 2026-07-08 com token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e carregadores dinâmicos. Admin/CMS/Firebase não foram tocados.
+- B2 — higiene de `sitemap.xml` concluída em 2026-07-08: sitemap reduzido para 11 URLs, sem páginas legadas/suspensas, sem `/local` genérico, sem bloco `hreflang` client-side e sem namespace `xhtml` sem uso. HTML/CSS/JS/Admin/CMS/Firebase não foram tocados.
+- Próximos caminhos possíveis: follow-up SEO opcional para avaliar `noindex` em páginas legadas/suspensas; B3 mídia/performance primeiro como inventário sem edição; B4 scripts/defer com risco médio; B5 diagnóstico sem edição do Firebase em mapa/eventos.
+- Admin/CMS/Firebase seguem pausados até bloco explícito.
+
 ### Páginas legadas/intocadas
 
 As páginas abaixo existem, mas devem ser tratadas como legado/futuro/suspenso e não devem ser mexidas sem autorização explícita:
