@@ -6,6 +6,52 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-08 — Pausa temporária de Admin/CMS/Firebase
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar nos arquivos de governança que o CMS-5C foi concluído, commitado, enviado por push e que as Firestore Rules foram publicadas, pausando temporariamente a frente Admin/CMS/Firebase para priorizar auditoria e melhoria do site público.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — orientação permanente atualizada para indicar pausa temporária de Admin/CMS/Firebase e foco atual no site público.
+- `TASKS.md` — estado atual atualizado; CMS-5C marcado como concluído; teste esperado de `/cms-public-debug.html` registrado; CMS-5D e CMS-4E-EXEC mantidos como pendências futuras.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+Get-Content -Path 'CLAUDE.md'
+Get-Content -Path 'TASKS.md'
+Get-Content -Path 'CHANGELOG_AI.md'
+git diff --check
+git status --short --branch --untracked-files=all
+```
+
+### Validações
+
+- [x] `git status` inicial limpo
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git status` final
+
+### Riscos / observações
+
+- Nenhum código, HTML, CSS, JS, rules, dados ou artefato de auditoria deve ser alterado nesta tarefa.
+- A próxima frente ativa é o site público; Admin/CMS/Firebase só deve ser retomado por bloco explícito.
+
+### Próximo passo
+
+- Iniciar auditoria e melhoria do site público sem mexer em Admin/CMS/Firebase.
+
+---
+
 ## Como registrar
 
 Cada entrada deve seguir este modelo:

@@ -9,30 +9,47 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 ## Estado atual resumido
 
 **Projeto:** SITE-TURISMO-SMS  
-**Área atual de trabalho:** encerramento do ciclo de UX/SEO/dados; início da Tarefa 4 (fichas individuais de locais).  
-**Status geral:** milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 concluídos, aprovados em QA, commitados e enviados (push).  
-**Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados.
+**Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
+**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados.
+**Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
 
 ---
 
 ## Próximo passo recomendado
 
-**Tarefa 4 — Páginas/fichas individuais de locais.** Ver seção "[ABERTA] Tarefa 4" abaixo. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
 
 ---
 
 ## Ordem futura das tarefas
 
-1. **Tarefa 4 — Fichas/páginas individuais de locais** (atual próximo passo).
-2. Eventos vinculados a locais/experiências, **sem alterar admin ainda**.
-3. Revisão multilíngue PT/EN/ES/PL.
-4. Passe final de acessibilidade.
-5. Manual/resumo para a equipe.
-6. Admin/cadastro (**último**, tarefa futura).
+1. **Auditoria e melhoria do site público** (frente ativa atual).
+2. **Tarefa 4 — Fichas/páginas individuais de locais**.
+3. Eventos vinculados a locais/experiências, **sem alterar admin ainda**.
+4. Revisão multilíngue PT/EN/ES/PL.
+5. Passe final de acessibilidade.
+6. Manual/resumo para a equipe.
+7. CMS-5D — integração controlada do CMS no site público, ainda não iniciada.
+8. CMS-4E-EXEC — inventário remoto de mídias, ainda pendente.
+9. Admin/cadastro (**último**, tarefa futura).
 
 ---
 
 ## Tarefas abertas
+
+### [ABERTA / FRENTE ATIVA] Auditoria e melhoria do site público
+
+**Contexto:** após a conclusão do CMS-5C e a publicação das Firestore Rules, a frente Admin/CMS/Firebase foi pausada temporariamente.
+**Objetivo:** auditar e melhorar o site público preservando rotas, SEO, responsividade, i18n, acessibilidade e funcionamento estático atual.
+
+**Escopo provável:** páginas públicas, navegação, conteúdo visível, acessibilidade, SEO público, performance e dados estáticos públicos, conforme tarefa aprovada.
+**Fora de escopo:** Admin, CMS, Firebase, Firestore Rules, Storage Rules, dados reais do Firestore, seeds, deploys e integrações CMS.
+
+**Critério de aceite:**
+- Nenhuma alteração em Admin/CMS/Firebase sem autorização explícita.
+- Site público segue funcional com dados estáticos.
+- Nenhuma dependência nova de login ou Firestore nas páginas públicas principais.
+- Mudanças pequenas, auditáveis e validadas com os comandos disponíveis.
 
 ### [ABERTA] Tarefa 4 — Fichas/páginas individuais de locais
 
@@ -67,6 +84,25 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Contexto:** área administrativa e fluxos de cadastro são a última etapa planejada.  
 **Regra:** não mexer em admin/Firebase/áreas restritas até esta tarefa ser explicitamente iniciada e aprovada.
+
+### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
+
+**Contexto:** CMS-5C foi concluído, commitado, enviado por push e as Firestore Rules foram publicadas para permitir leitura pública mínima de `cms_establishments` apenas quando `status == "published"`.
+**Status:** ainda não iniciado.
+
+**Teste esperado em `/cms-public-debug.html`:**
+- `Leitura concluida` se houver documentos `published`;
+- `Sem published` se não houver documentos `published`;
+- nunca deve aparecer `permission-denied` após as rules publicadas.
+
+**Regra:** não ligar mapa, `local.html`, busca, sabores, onde-ficar, o-que-fazer ou home ao CMS até o CMS-5D ser explicitamente iniciado.
+
+### [ABERTA / FUTURO] CMS-4E-EXEC — Inventário remoto de mídias
+
+**Contexto:** inventário remoto de mídias do CMS segue pendente.
+**Status:** ainda não iniciado/concluído nesta pausa.
+
+**Regra:** não alterar Storage Rules, arquivos remotos, mídias reais ou dados do CMS sem bloco específico e autorização explícita.
 
 ---
 
@@ -106,6 +142,9 @@ Estabilização do layout de imagem do carrossel. Aprovado em QA e commitado (co
 
 ### [CONCLUÍDA] Auditoria de dados turísticos públicos (S14)
 Auditoria das fontes de dados públicas + remoção do duplicado `rua-do-mathe` de `js/data/restaurantes.js` (já existia como ponto/ficha canônica com dados mais consistentes; o duplicado tinha telefone conflitante/placeholder). Relatório curado `docs/bloco-s14-auditoria-dados-turisticos-publicos.md` commitado. Aprovado em QA (commit `fe18133`).
+
+### [CONCLUÍDA] CMS-5C — Leitura pública segura de published e debug isolado
+CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas. A leitura pública de `cms_establishments` foi limitada a documentos `status == "published"` e a validação esperada ocorre em `/cms-public-debug.html`, sem integração com as páginas públicas principais.
 
 ---
 

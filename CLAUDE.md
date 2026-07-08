@@ -32,7 +32,7 @@ Estas regras complementam as obrigatórias acima e refletem o estado atual do si
 2. **Inspecionar antes de editar.** Ler o arquivo/trecho real e entender consumidores/dependências antes de qualquer alteração; nunca assumir estrutura de memória.
 3. **Não commitar `docs/auditoria-output/*`** (nem outros artefatos gerados por scripts de auditoria) a menos que explicitamente solicitado. São saídas ruidosas e regeneráveis; reverter antes de commit por padrão.
 4. **Não inventar dados de negócios turísticos.** Nunca criar/alterar telefones, endereços, coordenadas, horários, imagens, redes sociais ou nomes de estabelecimentos sem fonte confirmada. Pendências de dados devem ser apenas documentadas para validação humana.
-5. **Admin, Firebase e áreas restritas estão fora de escopo** salvo pedido explícito. Não alterar regras, autenticação, fluxos de aprovação/cadastro ou dados protegidos.
+5. **Admin, CMS, Firebase e áreas restritas estão pausados temporariamente** após o CMS-5C. Não alterar regras, autenticação, fluxos de aprovação/cadastro, dados protegidos ou integrações CMS sem pedido explícito. A frente ativa passa a ser auditoria e melhoria do site público.
 6. **Preservar as ferramentas de acessibilidade e navegação do site:** VLibras, seletor de idiomas (PT/EN/ES/PL), atalhos móveis, mascote/capivara e a funcionalidade do mapa. Nenhum desses deve ser removido ou quebrado por tarefas de outro escopo.
 7. **Não reintroduzir chatbox/cuia.** O antigo widget de chat (cuia) foi retirado e não deve voltar sem decisão explícita do responsável.
 8. **Sempre reportar ao final:** arquivos alterados, verificações/comandos executados, riscos residuais e próximo passo recomendado.
