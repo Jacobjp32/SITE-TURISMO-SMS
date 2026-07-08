@@ -73,12 +73,15 @@ Leitura publica futura: somente `published`.
       caption: "",
       credit: "",
       source: "static|cms-media|portal_request|submission|external",
+      status: "active",
       sourceRequestId: "",
       sourceImagePath: "",
       uploadedBy: "",
       uploadedAt: "",
       reviewedBy: "",
-      reviewedAt: ""
+      reviewedAt: "",
+      updatedAt: "",
+      updatedBy: ""
     },
     gallery: [
       {
@@ -88,13 +91,18 @@ Leitura publica futura: somente `published`.
         caption: "",
         credit: "",
         source: "static|cms-media|portal_request|submission|external",
+        status: "active|removed",
         position: 1,
         sourceRequestId: "",
         sourceImagePath: "",
         uploadedBy: "",
         uploadedAt: "",
         reviewedBy: "",
-        reviewedAt: ""
+        reviewedAt: "",
+        updatedAt: "",
+        updatedBy: "",
+        removedAt: "",
+        removedBy: ""
       }
     ],
     videoUrl: "",
@@ -134,7 +142,10 @@ Leitura publica futura: somente `published`.
     lastAppliedRequestId: "",
     lastAppliedAt: null,
     lastAppliedBy: "",
-    lastReviewNotes: ""
+    lastReviewNotes: "",
+    lastMediaEditedAt: null,
+    lastMediaEditedBy: "",
+    mediaEditReason: ""
   },
 
   source: {
@@ -197,6 +208,15 @@ cms-media/{adminUid}/establishments/{establishmentId}/reviewed/{requestId}/{time
 ```
 
 O catalogo preserva a origem com `source: "portal_request"`, `sourceRequestId` e `sourceImagePath`. O arquivo original em `submissions/establishment-updates/...` continua preservado como evidencia.
+
+No CMS-4D, a gestao editorial da galeria usa remocao logica:
+
+- `media.gallery[].status`: `active` ou `removed`;
+- `media.gallery[].updatedAt` e `media.gallery[].updatedBy`: ultima edicao editorial do item;
+- `media.gallery[].removedAt` e `media.gallery[].removedBy`: preenchidos quando a imagem sai da galeria ativa;
+- `review.lastMediaEditedAt`, `review.lastMediaEditedBy` e `review.mediaEditReason`: resumo da ultima acao de midia no empreendimento.
+
+Remover imagem da galeria nao apaga o arquivo em `cms-media` nem em `submissions`.
 
 ## Campos proibidos para empreendedor
 

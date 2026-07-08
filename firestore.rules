@@ -186,12 +186,22 @@ service cloud.firestore {
       return !(field in data.keys()) || data[field] is string;
     }
 
+    function optionalInt(data, field) {
+      return !(field in data.keys()) || data[field] is int;
+    }
+
+    function optionalEstablishmentImageStatus(data, field) {
+      return !(field in data.keys()) || data[field] in ['active', 'removed'];
+    }
+
     function validEstablishmentImage(data) {
       return data is map &&
         data.keys().hasOnly([
           'url', 'path', 'alt', 'caption', 'credit', 'source',
+          'status', 'position',
           'sourceRequestId', 'sourceImagePath', 'uploadedBy', 'uploadedAt',
-          'reviewedBy', 'reviewedAt'
+          'reviewedBy', 'reviewedAt', 'updatedAt', 'updatedBy',
+          'removedAt', 'removedBy'
         ]) &&
         data.url is string &&
         data.path is string &&
@@ -199,12 +209,18 @@ service cloud.firestore {
         data.caption is string &&
         data.credit is string &&
         data.source is string &&
+        optionalEstablishmentImageStatus(data, 'status') &&
+        optionalInt(data, 'position') &&
         optionalString(data, 'sourceRequestId') &&
         optionalString(data, 'sourceImagePath') &&
         optionalString(data, 'uploadedBy') &&
         optionalString(data, 'uploadedAt') &&
         optionalString(data, 'reviewedBy') &&
-        optionalString(data, 'reviewedAt');
+        optionalString(data, 'reviewedAt') &&
+        optionalString(data, 'updatedAt') &&
+        optionalString(data, 'updatedBy') &&
+        optionalString(data, 'removedAt') &&
+        optionalString(data, 'removedBy');
     }
 
     function validEstablishmentContent(data) {
@@ -308,12 +324,16 @@ service cloud.firestore {
     function validEstablishmentReview(data) {
       return data is map &&
         data.keys().hasOnly([
-          'lastAppliedRequestId', 'lastAppliedAt', 'lastAppliedBy', 'lastReviewNotes'
+          'lastAppliedRequestId', 'lastAppliedAt', 'lastAppliedBy', 'lastReviewNotes',
+          'lastMediaEditedAt', 'lastMediaEditedBy', 'mediaEditReason'
         ]) &&
         data.lastAppliedRequestId is string &&
         validNullableTimestamp(data.lastAppliedAt) &&
         data.lastAppliedBy is string &&
-        data.lastReviewNotes is string;
+        data.lastReviewNotes is string &&
+        validNullableTimestamp(data.lastMediaEditedAt) &&
+        data.lastMediaEditedBy is string &&
+        data.mediaEditReason is string;
     }
 
     function validEstablishmentSource(data) {

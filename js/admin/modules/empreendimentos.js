@@ -32,6 +32,8 @@
     var IMAGE_TYPE_REGEX = /^image\/(jpeg|jpg|png|webp)$/i;
     var STATUSES = ["draft", "published", "archived"];
     var EDITABLE_STATUSES = ["draft", "archived"];
+    var IMAGE_STATUSES = ["active", "removed"];
+    var PUBLIC_STATIC_NOTICE = "Isso altera apenas o catalogo interno do CMS. O site publico ainda usa dados estaticos.";
     var CATEGORIES = [
         { id: "gastronomia", label: "Gastronomia" },
         { id: "hospedagem", label: "Hospedagem" },
@@ -134,6 +136,10 @@
         return millis ? new Date(millis).toLocaleString("pt-BR") : "";
     }
 
+    function nowIso() {
+        return new Date().toISOString();
+    }
+
     function toast(message, type) {
         if (window.AdminUI && typeof window.AdminUI.showToast === "function") {
             return window.AdminUI.showToast(message, type);
@@ -229,7 +235,8 @@
                     alt: "",
                     caption: "",
                     credit: "",
-                    source: "cms-media"
+                    source: "cms-media",
+                    status: "active"
                 };
             });
         });
@@ -244,11 +251,12 @@
     }
 
     function emptyImage() {
-        return { url: "", path: "", alt: "", caption: "", credit: "", source: "" };
+        return { url: "", path: "", alt: "", caption: "", credit: "", source: "", status: "active" };
     }
 
     function normalizeImage(value) {
         var raw = value && typeof value === "object" ? value : {};
+        var status = limit(raw.status, 20);
         return {
             url: limit(raw.url, 2048),
             path: limit(raw.path, 512),
@@ -256,23 +264,63 @@
             caption: limit(raw.caption, 240),
             credit: limit(raw.credit, 160),
             source: limit(raw.source, 40),
+            status: IMAGE_STATUSES.indexOf(status) !== -1 ? status : "active",
+            position: Number(raw.position || 0) || 0,
             sourceRequestId: limit(raw.sourceRequestId, 160),
             sourceImagePath: limit(raw.sourceImagePath, 512),
             uploadedBy: limit(raw.uploadedBy, 160),
             uploadedAt: limit(raw.uploadedAt, 60),
             reviewedBy: limit(raw.reviewedBy, 160),
-            reviewedAt: limit(raw.reviewedAt, 60)
+            reviewedAt: limit(raw.reviewedAt, 60),
+            updatedAt: limit(raw.updatedAt, 60),
+            updatedBy: limit(raw.updatedBy, 160),
+            removedAt: limit(raw.removedAt, 60),
+            removedBy: limit(raw.removedBy, 160)
         };
     }
 
-    function normalizeGallery(value) {
-        return ensureArray(value).map(function (item, index) {
-            var image = normalizeImage(item);
-            image.position = Number(item && item.position || index + 1) || index + 1;
-            return image;
-        }).filter(function (item) {
+    function imageForMainImage(value, uid) {
+        var image = normalizeImage(value);
+        return {
+            url: image.url,
+            path: image.path,
+            alt: image.alt,
+            caption: image.caption,
+            credit: image.credit,
+            source: image.source,
+            status: "active",
+            sourceRequestId: image.sourceRequestId,
+            sourceImagePath: image.sourceImagePath,
+            uploadedBy: image.uploadedBy,
+            uploadedAt: image.uploadedAt,
+            reviewedBy: image.reviewedBy,
+            reviewedAt: image.reviewedAt,
+            updatedAt: nowIso(),
+            updatedBy: uid || currentUid()
+        };
+    }
+
+    function isRemovedImage(image) {
+        return image && image.status === "removed";
+    }
+
+    function normalizeGalleryForWrite(value) {
+        return ensureArray(value).map(normalizeImage).filter(function (item) {
             return !!item.url;
+        }).map(function (item, index) {
+            item.position = index + 1;
+            return item;
         });
+    }
+
+    function normalizeGallery(value) {
+        return normalizeGalleryForWrite(ensureArray(value).map(normalizeImage).filter(function (item) {
+            return !!item.url;
+        }).sort(function (a, b) {
+            var removedDiff = (isRemovedImage(a) ? 1 : 0) - (isRemovedImage(b) ? 1 : 0);
+            if (removedDiff) return removedDiff;
+            return (a.position || 0) - (b.position || 0);
+        }));
     }
 
     function defaultDoc(id, uid) {
@@ -346,7 +394,10 @@
                 lastAppliedRequestId: "",
                 lastAppliedAt: null,
                 lastAppliedBy: "",
-                lastReviewNotes: ""
+                lastReviewNotes: "",
+                lastMediaEditedAt: null,
+                lastMediaEditedBy: "",
+                mediaEditReason: ""
             },
             source: {
                 origin: "admin",
@@ -451,7 +502,10 @@
                 lastAppliedRequestId: clean(review.lastAppliedRequestId),
                 lastAppliedAt: review.lastAppliedAt || null,
                 lastAppliedBy: clean(review.lastAppliedBy),
-                lastReviewNotes: clean(review.lastReviewNotes)
+                lastReviewNotes: clean(review.lastReviewNotes),
+                lastMediaEditedAt: review.lastMediaEditedAt || null,
+                lastMediaEditedBy: clean(review.lastMediaEditedBy),
+                mediaEditReason: clean(review.mediaEditReason)
             },
             source: {
                 origin: clean(source.origin || "admin"),
@@ -675,6 +729,94 @@
         target.scrollIntoView({ behavior: "smooth", block: "start" });
         updateMainImagePreview(item.media.mainImage.url, item.media.mainImage.path || item.media.mainImage.source);
         renderGalleryPreview();
+    }
+
+    function sourceLabel(source) {
+        var value = clean(source);
+        if (value === "portal_request") return "Portal";
+        if (value === "static") return "Dados estaticos";
+        if (value === "cms-media") return "CMS Media";
+        if (value === "external") return "URL externa";
+        if (value === "submission") return "Submissao";
+        return value || "Nao informado";
+    }
+
+    function galleryCard(item, index, id, totalActive) {
+        var image = normalizeImage(item);
+        var removed = isRemovedImage(image);
+        var jsId = escapeJs(id);
+        var positionText = removed ? "Removida" : String(image.position || index + 1);
+        var actions = removed
+            ? '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.restoreGalleryImage(\'' + jsId + '\',' + index + ')">Restaurar</button>'
+            : '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.editGalleryImage(\'' + jsId + '\',' + index + ')">Editar metadados</button>' +
+                '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.setMainImageFromGallery(\'' + jsId + '\',' + index + ')">Definir como imagem principal</button>' +
+                '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.moveGalleryImage(\'' + jsId + '\',' + index + ',-1)"' + (image.position <= 1 ? " disabled" : "") + '>Mover para cima</button>' +
+                '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.moveGalleryImage(\'' + jsId + '\',' + index + ',1)"' + (image.position >= totalActive ? " disabled" : "") + '>Mover para baixo</button>' +
+                '<button class="btn-danger" type="button" onclick="AdminEstablishmentsModule.removeGalleryImage(\'' + jsId + '\',' + index + ')">Remover da galeria</button>';
+
+        return '<article style="border:1px solid #e0e0e0;border-radius:6px;padding:0.85rem;display:grid;grid-template-columns:minmax(96px,140px) 1fr;gap:0.85rem;align-items:start;background:' + (removed ? "#f8f8f8" : "#fff") + ';">' +
+            '<div>' +
+                '<img src="' + escapeAttr(image.url) + '" alt="' + escapeAttr(image.alt || "Previa da imagem da galeria") + '" style="width:100%;aspect-ratio:4/3;object-fit:cover;border:1px solid #ddd;border-radius:4px;background:#f5f5f5;">' +
+            '</div>' +
+            '<div>' +
+                '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:0.5rem;">' +
+                    '<span class="badge badge-info">Origem: ' + escapeHtml(sourceLabel(image.source)) + '</span>' +
+                    '<span class="badge ' + (removed ? "badge-danger" : "badge-success") + '">' + (removed ? "Removida" : "Ativa") + '</span>' +
+                    '<span class="badge badge-secondary">Posicao: ' + escapeHtml(positionText) + '</span>' +
+                '</div>' +
+                '<p style="margin:0 0 0.35rem;"><strong>Alt:</strong> ' + escapeHtml(image.alt || "Sem alt cadastrado") + '</p>' +
+                '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(image.caption || "Sem legenda") + '</p>' +
+                '<p style="margin:0 0 0.35rem;"><strong>Credito:</strong> ' + escapeHtml(image.credit || "Sem credito") + '</p>' +
+                '<p style="margin:0 0 0.35rem;"><strong>Path:</strong> <code>' + escapeHtml(image.path || "sem path") + '</code></p>' +
+                (image.sourceRequestId ? '<p style="margin:0 0 0.35rem;"><strong>Solicitacao:</strong> <code>' + escapeHtml(image.sourceRequestId) + '</code></p>' : '') +
+                '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">' + actions + '</div>' +
+            '</div>' +
+        '</article>';
+    }
+
+    function buildMediaManager(item) {
+        var mainImage = item.media && item.media.mainImage ? normalizeImage(item.media.mainImage) : emptyImage();
+        var gallery = normalizeGallery(item.media && item.media.gallery);
+        var active = gallery.filter(function (image) { return !isRemovedImage(image); });
+        var removed = gallery.filter(isRemovedImage);
+        var mainHtml = mainImage.url
+            ? '<div style="display:grid;grid-template-columns:minmax(140px,260px) 1fr;gap:1rem;align-items:start;">' +
+                '<img src="' + escapeAttr(mainImage.url) + '" alt="' + escapeAttr(mainImage.alt || item.name || "Imagem principal") + '" style="width:100%;max-height:180px;object-fit:contain;border:1px solid #ddd;border-radius:4px;background:#fafafa;">' +
+                '<div>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Origem:</strong> ' + escapeHtml(sourceLabel(mainImage.source)) + '</p>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Alt:</strong> ' + escapeHtml(mainImage.alt || "Sem alt cadastrado") + '</p>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(mainImage.caption || "Sem legenda") + '</p>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Credito:</strong> ' + escapeHtml(mainImage.credit || "Sem credito") + '</p>' +
+                    '<p style="margin:0;"><strong>Path:</strong> <code>' + escapeHtml(mainImage.path || "sem path") + '</code></p>' +
+                '</div>' +
+            '</div>'
+            : '<p><em>Sem imagem principal definida.</em></p>';
+        var galleryHtml = active.length
+            ? active.map(function (image) {
+                var originalIndex = gallery.indexOf(image);
+                return galleryCard(image, originalIndex, item.__id, active.length);
+            }).join("")
+            : '<p><em>Sem imagens ativas na galeria.</em></p>';
+        var removedHtml = removed.length
+            ? '<details style="margin-top:1rem;"><summary style="cursor:pointer;font-weight:700;">Ver imagens removidas (' + removed.length + ')</summary>' +
+                '<div style="display:grid;gap:0.75rem;margin-top:0.75rem;">' +
+                    removed.map(function (image) {
+                        var originalIndex = gallery.indexOf(image);
+                        return galleryCard(image, originalIndex, item.__id, active.length);
+                    }).join("") +
+                '</div>' +
+            '</details>'
+            : '<p class="admin-helper-text">Nao ha imagens removidas para restaurar.</p>';
+
+        return '<div class="card" style="margin-top:1rem;">' +
+            '<div class="card-header"><h2>Gestao editorial da galeria</h2><span class="badge badge-info">Catalogo interno</span></div>' +
+            '<p class="admin-helper-text">' + PUBLIC_STATIC_NOTICE + ' Nenhuma acao desta area apaga arquivos do Storage.</p>' +
+            '<h3 style="margin:1rem 0 0.75rem;font-size:1rem;">Imagem principal atual</h3>' +
+            mainHtml +
+            '<h3 style="margin:1.25rem 0 0.75rem;font-size:1rem;">Galeria ativa</h3>' +
+            '<div style="display:grid;gap:0.75rem;">' + galleryHtml + '</div>' +
+            removedHtml +
+        '</div>';
     }
 
     function buildForm(item, editing) {
@@ -940,14 +1082,14 @@
             coordStatus: limit(value("est_coordStatus"), 80),
             coordNote: limit(value("est_coordNote"), 500)
         };
-        base.media.mainImage = normalizeImage({
+        base.media.mainImage = normalizeImage(Object.assign({}, base.media.mainImage, {
             url: limit(value("est_mainImageUrl"), 2048),
             path: base.media.mainImage.path,
             alt: limit(value("est_mainImageAlt"), 160),
             caption: limit(value("est_mainImageCaption"), 240),
             credit: limit(value("est_mainImageCredit"), 160),
             source: base.media.mainImage.source || (value("est_mainImageUrl") ? "external" : "")
-        });
+        }));
         base.media.gallery = manualGallery.map(function (img, index) {
             img.position = index + 1;
             return img;
@@ -1220,8 +1362,136 @@
                 '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.cancelForm()">Fechar</button>' +
                 '<button class="btn-primary" type="button" onclick="AdminEstablishmentsModule.openForm(\'' + escapeJs(item.__id) + '\')">Editar</button>' +
             '</div>' +
-        '</div>';
+        '</div>' +
+        buildMediaManager(item);
         target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function mediaAuditPayload(fields, uid, reason) {
+        var payload = Object.assign({}, fields || {});
+        payload.updatedAt = serverTimestamp();
+        payload.updatedBy = uid;
+        payload["review.lastMediaEditedAt"] = serverTimestamp();
+        payload["review.lastMediaEditedBy"] = uid;
+        payload["review.mediaEditReason"] = limit(reason, 240);
+        return payload;
+    }
+
+    function writeMediaUpdate(id, fields, successMessage, reason) {
+        var item = findItem(id);
+        var db = getDb();
+        var uid = currentUid();
+        if (!item || !db || !uid) {
+            toast("Firebase ou sessao admin indisponivel.", "error");
+            return;
+        }
+        return db.collection(COLLECTION).doc(item.__id).update(mediaAuditPayload(fields, uid, reason))
+            .then(function () {
+                toast(successMessage, "success");
+                return load().then(function () {
+                    var updated = findItem(id);
+                    if (updated) viewDetails(updated.__id);
+                });
+            })
+            .catch(function (error) {
+                handleWriteError(error, reason || "editar midia");
+            });
+    }
+
+    function getGalleryItem(id, index) {
+        var item = findItem(id);
+        if (!item) return null;
+        var gallery = normalizeGallery(item.media && item.media.gallery);
+        var image = gallery[index];
+        return image ? { item: item, gallery: gallery, image: image } : null;
+    }
+
+    function editGalleryImage(id, index) {
+        var data = getGalleryItem(id, index);
+        if (!data || isRemovedImage(data.image)) return;
+        var alt = window.prompt("Alt recomendado para acessibilidade. Descreva o conteudo relevante da imagem:", data.image.alt || "");
+        if (alt === null) return;
+        if (!clean(alt) && !window.confirm("Salvar sem alt? O alt e recomendado antes de qualquer uso publico futuro.")) return;
+        var caption = window.prompt("Legenda opcional da imagem:", data.image.caption || "");
+        if (caption === null) return;
+        var credit = window.prompt("Credito opcional da imagem:", data.image.credit || "");
+        if (credit === null) return;
+        var uid = currentUid();
+        data.gallery[index] = Object.assign({}, data.image, {
+            alt: limit(alt, 160),
+            caption: limit(caption, 240),
+            credit: limit(credit, 160),
+            updatedAt: nowIso(),
+            updatedBy: uid
+        });
+        writeMediaUpdate(id, {
+            "media.gallery": normalizeGalleryForWrite(data.gallery)
+        }, "Metadados da imagem atualizados.", "editar metadados de imagem da galeria");
+    }
+
+    function setMainImageFromGallery(id, index) {
+        var data = getGalleryItem(id, index);
+        if (!data || isRemovedImage(data.image)) return;
+        if (!window.confirm("Esta imagem sera definida como imagem principal do catalogo interno. O site publico ainda nao sera alterado.")) return;
+        writeMediaUpdate(id, {
+            "media.mainImage": imageForMainImage(data.image, currentUid())
+        }, "Imagem principal atualizada no catalogo interno.", "definir imagem principal pela galeria");
+    }
+
+    function moveGalleryImage(id, index, direction) {
+        var data = getGalleryItem(id, index);
+        if (!data || isRemovedImage(data.image)) return;
+        var active = data.gallery.filter(function (image) { return !isRemovedImage(image); });
+        var removed = data.gallery.filter(isRemovedImage);
+        var activeIndex = active.findIndex(function (image) {
+            return image.url === data.image.url && image.path === data.image.path;
+        });
+        var targetIndex = activeIndex + Number(direction || 0);
+        if (activeIndex < 0 || targetIndex < 0 || targetIndex >= active.length) return;
+        var swap = active[activeIndex];
+        active[activeIndex] = active[targetIndex];
+        active[targetIndex] = swap;
+        writeMediaUpdate(id, {
+            "media.gallery": normalizeGalleryForWrite(active.concat(removed))
+        }, "Ordem da galeria atualizada.", "ordenar galeria");
+    }
+
+    function removeGalleryImage(id, index) {
+        var data = getGalleryItem(id, index);
+        if (!data || isRemovedImage(data.image)) return;
+        if (!window.confirm("Remover esta imagem da galeria ativa? O arquivo no Storage nao sera apagado. " + PUBLIC_STATIC_NOTICE)) return;
+        var uid = currentUid();
+        var removedImage = Object.assign({}, data.image, {
+            status: "removed",
+            removedAt: nowIso(),
+            removedBy: uid,
+            updatedAt: nowIso(),
+            updatedBy: uid
+        });
+        var next = data.gallery.filter(function (_image, currentIndex) { return currentIndex !== index; });
+        next.push(removedImage);
+        writeMediaUpdate(id, {
+            "media.gallery": normalizeGalleryForWrite(next)
+        }, "Imagem removida da galeria ativa sem apagar Storage.", "remover imagem da galeria");
+    }
+
+    function restoreGalleryImage(id, index) {
+        var data = getGalleryItem(id, index);
+        if (!data || !isRemovedImage(data.image)) return;
+        if (!window.confirm("Restaurar esta imagem para a galeria ativa? " + PUBLIC_STATIC_NOTICE)) return;
+        var uid = currentUid();
+        var restoredImage = Object.assign({}, data.image, {
+            status: "active",
+            removedAt: "",
+            removedBy: "",
+            updatedAt: nowIso(),
+            updatedBy: uid
+        });
+        var next = data.gallery.filter(function (_image, currentIndex) { return currentIndex !== index; });
+        next.push(restoredImage);
+        writeMediaUpdate(id, {
+            "media.gallery": normalizeGalleryForWrite(next)
+        }, "Imagem restaurada na galeria ativa.", "restaurar imagem da galeria");
     }
 
     function cancelForm() {
@@ -1279,6 +1549,11 @@
         restore: restore,
         remove: remove,
         viewDetails: viewDetails,
+        editGalleryImage: editGalleryImage,
+        setMainImageFromGallery: setMainImageFromGallery,
+        moveGalleryImage: moveGalleryImage,
+        removeGalleryImage: removeGalleryImage,
+        restoreGalleryImage: restoreGalleryImage,
         refresh: refresh,
         onFilterChange: onFilterChange,
         onMainImageChange: onMainImageChange,
