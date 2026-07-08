@@ -1,0 +1,10 @@
+[
+  {
+    "origin": [
+      "https://turismo.saomateusdosul.pr.gov.br"
+    ],
+    "method": ["GET", "HEAD"],
+    "responseHeader": ["Content-Type", "Access-Control-Allow-Origin"],
+    "maxAgeSeconds": 3600
+  }
+]
