@@ -448,6 +448,10 @@
   var FILTER_ORDER = ["all", "history", "culture", "nature", "gastronomy", "lodging", "events", "services"];
   var PANEL_GROUP_ORDER = ["all", "points", "routes", "gastronomy", "lodging", "events", "services"];
 
+  // Mesmo limite público usado em eventos.html: Firestore/App Check lentos não
+  // podem deixar o merge de eventos aprovados pendente indefinidamente.
+  var FIREBASE_PUBLIC_TIMEOUT_MS = 2500;
+
   var state = {
     map: null,
     markersLayer: null,
@@ -891,6 +895,29 @@
       + "</section>";
   }
 
+  function withTimeout(promise, timeoutMs, label) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      var timeoutId = window.setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        reject(new Error(label + " excedeu " + timeoutMs + "ms."));
+      }, timeoutMs);
+
+      promise.then(function (value) {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeoutId);
+        resolve(value);
+      }).catch(function (error) {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeoutId);
+        reject(error);
+      });
+    });
+  }
+
   async function ensurePublicFirestore() {
     if (!window.CONFIG || !window.CONFIG.firebase) {
       console.warn("[mapa-turistico] CONFIG.firebase ausente. Eventos aprovados não serão carregados.");
@@ -926,14 +953,22 @@
   }
 
   async function loadApprovedEventsForMap() {
-    var db = await ensurePublicFirestore();
-    if (!db) {
-      state.approvedEventsReady = true;
-      return;
-    }
-
     try {
-      var snapshot = await db.collection("eventos_aprovados").get();
+      var snapshot = await withTimeout(
+        (async function () {
+          var db = await ensurePublicFirestore();
+          if (!db) return null;
+          return db.collection("eventos_aprovados").get();
+        })(),
+        FIREBASE_PUBLIC_TIMEOUT_MS,
+        "Carregamento público do Firestore no mapa"
+      );
+
+      if (!snapshot) {
+        state.approvedEventsReady = true;
+        return;
+      }
+
       var approvedEvents = snapshot.docs
         .map(function (doc) { return normalizeApprovedEvent(doc.data(), doc.id); })
         .filter(function (event) { return isPublicApprovedStatus(event.status); });
