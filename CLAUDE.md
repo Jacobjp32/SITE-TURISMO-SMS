@@ -138,7 +138,9 @@ Ao mexer em SEO/head/metadados:
 
 - B1 — cache-busting público concluído em 2026-07-08 com token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e carregadores dinâmicos. Admin/CMS/Firebase não foram tocados.
 - B2 — higiene de `sitemap.xml` concluída em 2026-07-08: sitemap reduzido para 11 URLs, sem páginas legadas/suspensas, sem `/local` genérico, sem bloco `hreflang` client-side e sem namespace `xhtml` sem uso. HTML/CSS/JS/Admin/CMS/Firebase não foram tocados.
-- Próximos caminhos possíveis: follow-up SEO opcional para avaliar `noindex` em páginas legadas/suspensas; B3 mídia/performance primeiro como inventário sem edição; B4 scripts/defer com risco médio; B5 diagnóstico sem edição do Firebase em mapa/eventos.
+- B5 — diagnóstico Firebase público concluído em 2026-07-08, somente leitura e sem arquivos alterados. Confirmou Firebase compat em `mapa-turistico.html` e `eventos.html`, duplicação compat + modular em páginas com `public-banners.js`, Firebase como enriquecimento e fallback estático preservado.
+- B4a — timeout do mapa concluído em 2026-07-08, com alteração restrita a `js/mapa-turistico.js`: timeout de 2,5s na leitura pública de eventos aprovados do Firestore, preservando dados estáticos e empreendimentos. Bloco testado, commitado e enviado por push.
+- Próximos caminhos possíveis: tratar App Check/reCAPTCHA em localhost como ambiente/debug token; investigar Service Worker interceptando tile do OpenStreetMap em bloco separado se persistir em produção; revisar dados do Firestore para eventos aprovados com `establishmentName` sem `establishmentId` seguro; B4b opcional para migrar Firebase compat de mapa/eventos para import modular sob demanda, somente com teste manual dedicado; follow-up SEO opcional para avaliar `noindex` em páginas legadas/suspensas; B3 mídia/performance por último.
 - Admin/CMS/Firebase seguem pausados até bloco explícito.
 
 ### Páginas legadas/intocadas

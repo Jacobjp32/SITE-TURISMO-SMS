@@ -10,14 +10,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Projeto:** SITE-TURISMO-SMS  
 **Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
-**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público e B2 higiene de sitemap foram concluídos, commitados e enviados manualmente em 2026-07-08.
+**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público e B4a timeout no mapa foram concluídos em 2026-07-08.
 **Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
 
 ---
 
 ## Próximo passo recomendado
 
-**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximos caminhos possíveis: follow-up SEO opcional para avaliar `noindex` em páginas legadas/suspensas; B3 mídia/performance primeiro como inventário sem edição; B4 scripts/defer com risco médio; B5 diagnóstico sem edição do Firebase em mapa/eventos. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximos caminhos possíveis: follow-up SEO opcional para avaliar `noindex` em páginas legadas/suspensas; investigação separada de Service Worker/OpenStreetMap se persistir em produção; revisão futura de dados do Firestore para eventos sem `establishmentId` seguro; B4b opcional para migrar Firebase compat de mapa/eventos para import modular sob demanda, somente com teste manual dedicado; B3 mídia/performance por último. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
 
 ---
 
@@ -45,12 +45,16 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 **Blocos concluídos da auditoria pública pós-Claude Fable 5:**
 - B1 — cache-busting público com token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Nenhum Admin/CMS/Firebase tocado.
 - B2 — higiene de `sitemap.xml`: removidos `/rotas-completas`, `/mapa-completo`, `/mapa-3d`, `/roteiro-ia`, `/local` genérico, bloco `hreflang` da home e namespace `xhtml` sem uso. Total final registrado: 11 URLs. Nenhum HTML/CSS/JS/Admin/CMS/Firebase tocado.
+- B5 — diagnóstico Firebase público somente leitura: nenhum arquivo alterado; uso de Firebase compat diagnosticado em `mapa-turistico.html` e `eventos.html`; duplicação compat + modular diagnosticada em páginas com `public-banners.js`; Firebase confirmado como enriquecimento com fallback estático; recomendação de evitar B4 genérico e seguir por microblocos.
+- B4a — timeout no mapa: alteração restrita a `js/mapa-turistico.js`, com timeout de 2,5s na leitura pública de eventos aprovados do Firestore; dados estáticos e empreendimentos preservados; nenhum HTML/CSS/dados/Admin/CMS/Firebase/rules tocado; bloco testado, commitado e enviado por push.
 
 **Próximos caminhos possíveis:**
 - Follow-up SEO opcional: avaliar `noindex` em `mapa-completo.html`, `mapa-3d.html` e `roteiro-ia.html`.
-- B3 — mídia/performance, preferencialmente primeiro como inventário sem edição.
-- B4 — scripts/defer, com risco médio.
-- B5 — diagnóstico sem edição do Firebase em mapa/eventos.
+- App Check/reCAPTCHA em localhost: tratar como ambiente/debug token, não como regressão.
+- Service Worker pode interceptar tile do OpenStreetMap em teste local; investigar em bloco separado se persistir em produção.
+- Eventos aprovados com `establishmentName`, mas sem `establishmentId` seguro, não vinculam ao mapa; revisar dados do Firestore futuramente.
+- B4b opcional: migrar Firebase compat de mapa/eventos para import modular sob demanda, somente com teste manual dedicado.
+- B3 — mídia/performance fica por último, conforme decisão atual.
 - Admin/CMS/Firebase segue pausado.
 
 **Escopo provável:** páginas públicas, navegação, conteúdo visível, acessibilidade, SEO público, performance e dados estáticos públicos, conforme tarefa aprovada.
@@ -162,6 +166,12 @@ Token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/C
 
 ### [CONCLUÍDA] B2 — Higiene de sitemap pós-auditoria
 `sitemap.xml` higienizado em 2026-07-08, com remoção de páginas legadas/suspensas e `/local` genérico, remoção do bloco `hreflang` da home por idiomas client-side via `localStorage`, remoção do namespace `xhtml` sem uso e total final de 11 URLs. Bloco commitado e enviado manualmente. Nenhum HTML/CSS/JS/Admin/CMS/Firebase tocado.
+
+### [CONCLUÍDA] B5 — Diagnóstico Firebase público
+Diagnóstico somente leitura concluído em 2026-07-08. Nenhum arquivo alterado. Uso de Firebase compat diagnosticado em `mapa-turistico.html` e `eventos.html`; duplicação compat + modular diagnosticada em páginas com `public-banners.js`; Firebase confirmado como enriquecimento, com fallback estático preservado. Recomendado evitar B4 genérico e seguir por microblocos.
+
+### [CONCLUÍDA] B4a — Timeout no mapa
+Timeout de 2,5s adicionado na leitura pública de eventos aprovados do Firestore em `js/mapa-turistico.js`. Dados estáticos e empreendimentos preservados; nenhum HTML, CSS, dados, Admin/CMS/Firebase ou rules alterado. Bloco testado, commitado e enviado por push em 2026-07-08.
 
 ---
 

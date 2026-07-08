@@ -6,6 +6,55 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-08 — Registro de B5/B4a e follow-ups da auditoria pública
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que B5 diagnóstico Firebase público e B4a timeout no mapa foram concluídos, e documentar follow-ups aprovados sem alterar código, HTML, CSS, JS, sitemap, robots, rules, Admin/CMS/Firebase ou artefatos de auditoria.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — adicionadas observações permanentes sobre B5/B4a concluídos e próximos caminhos possíveis.
+- `TASKS.md` — estado atual, frente ativa, blocos concluídos, follow-ups e tarefas concluídas atualizados com B5/B4a.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git status --short
+```
+
+### Validações
+
+- [x] `git status` inicial
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git status` final
+
+### Riscos / observações
+
+- Nenhum código, HTML, CSS, JS, sitemap, robots, rules, Admin/CMS/Firebase ou `docs/auditoria-output/*` foi alterado.
+- App Check/reCAPTCHA em localhost deve ser tratado como ambiente/debug token, não regressão.
+- Service Worker/OpenStreetMap, vínculos de eventos sem `establishmentId`, B4b modular e SEO `noindex` ficaram como blocos futuros separados.
+- B3 mídia/performance fica por último, conforme decisão atual.
+
+### Próximo passo
+
+- Escolher um microbloco futuro entre SEO `noindex`, investigação Service Worker/OpenStreetMap, revisão de dados Firestore ou B4b modular com teste manual dedicado.
+
+---
+
 ## 2026-07-08 — Registro de B1/B2 da auditoria pública
 
 **Ferramenta/modelo:** Codex
