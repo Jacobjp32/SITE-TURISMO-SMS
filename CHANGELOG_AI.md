@@ -6,6 +6,56 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-08 — Registro de SEO-F1 na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que SEO-F1 foi concluído, commitado e enviado por push, encerrando o follow-up de `noindex,follow` nas páginas legadas/suspensas removidas do sitemap.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — adicionada observação permanente sobre SEO-F1 concluído e próximos caminhos restantes.
+- `TASKS.md` — estado atual, frente ativa, blocos concluídos e tarefas concluídas atualizados com SEO-F1.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git status --short
+```
+
+### Validações
+
+- [x] `git status` inicial
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git status` final
+
+### Riscos / observações
+
+- Nenhum código, HTML, CSS, JS, sitemap, robots, rules, Admin/CMS/Firebase ou `docs/auditoria-output/*` foi alterado nesta atualização de governança.
+- SEO-F1 concluiu o follow-up de `noindex` das páginas legadas/suspensas removidas do sitemap.
+- B3 mídia/performance continua decidido para o final.
+- B4b migração Firebase modular sob demanda permanece como possível próximo bloco, mas ainda não iniciado.
+- Frente Admin/CMS/Firebase segue pausada.
+
+### Próximo passo
+
+- Escolher futuramente entre B4b modular com teste manual dedicado, investigação Service Worker/OpenStreetMap ou revisão de dados Firestore; manter B3 mídia/performance para o final.
+
+---
+
 ## 2026-07-08 — Registro de B5/B4a e follow-ups da auditoria pública
 
 **Ferramenta/modelo:** Codex
