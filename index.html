@@ -434,8 +434,8 @@
                 <div class="hero-quick-links" aria-label="Atalhos para planejar a visita">
                     <a href="/mapa-turistico?grupo=pontos-turisticos" data-lang-key="hero-chip-atracoes">Atrações</a>
                     <a href="/mapa-turistico?grupo=roteiros" data-lang-key="hero-chip-rotas">Rotas</a>
-                    <a href="/mapa-turistico?categoria=Gastronomia" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
-                    <a href="/mapa-turistico?categoria=Hospedagem" data-lang-key="hero-chip-ficar">Onde Ficar</a>
+                    <a href="/sabores" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
+                    <a href="/onde-ficar" data-lang-key="hero-chip-ficar">Onde Ficar</a>
                     <a href="/mapa-turistico" data-lang-key="hero-chip-chegar">Como Chegar</a>
                 </div>
             </div>
@@ -707,6 +707,8 @@
             <div class="experience-links-summary">
                 <p data-lang-key="experience-summary">O mapa concentra atrações, rotas, gastronomia, hospedagem e eventos.</p>
                 <a href="/mapa-turistico" class="explore-btn experience-summary-btn" data-lang-key="experience-summary-cta">Abrir mapa completo</a>
+                <a href="/sabores" class="home-section-link" data-lang-key="nav-sabores-locais">Sabores locais</a>
+                <a href="/onde-ficar" class="home-section-link" data-lang-key="nav-onde-ficar">Onde Ficar</a>
             </div>
         </div>
     </section>
@@ -1259,6 +1261,11 @@
                     </div>
                 </div>
             </div>
+
+            <!-- CTA hospedagem (V2): acesso à página editorial completa -->
+            <div style="text-align:center; margin-top: 2.5rem;">
+                <a href="/onde-ficar" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="hospedagem-ver-todas">🛏️ Ver todas as opções de hospedagem</a>
+            </div>
         </div>
     </section>
 
@@ -1618,7 +1625,7 @@
             <div class="footer-links">
                 <a href="#map-hero" data-lang-key="nav-inicio">Início</a>
                 <a href="#attractions" data-lang-key="footer-link-atracoes">Atrações</a>
-                <a href="/mapa-turistico?categoria=Gastronomia" data-lang-key="footer-link-gastro">Gastronomia</a>
+                <a href="/sabores" data-lang-key="footer-link-gastro">Gastronomia</a>
                 <a href="/galeria" data-lang-key="footer-link-galeria">Galeria</a>
                 <a href="/noticias">📰 Notícias</a>
                 <a href="/mapa-turistico?grupo=roteiros">Rotas</a>
@@ -2303,13 +2310,13 @@
         const FORMSPREE_ID = 'xpqykpqd'; // Formspree ID configurado
 
         const contactForm = document.getElementById('contactForm');
-        const formMessage = document.getElementById('formMessage');
+        const formMessage = document.getElementById('formStatus');
 
         if (contactForm) {
             contactForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                const submitBtn = contactForm.querySelector('.btn-submit');
+                const submitBtn = contactForm.querySelector('.form-submit');
                 submitBtn.classList.add('loading');
                 if (formMessage) { formMessage.style.display = 'none'; }
 
@@ -2327,7 +2334,7 @@
 
                     if (res.ok) {
                         if (formMessage) {
-                            formMessage.className = 'form-message success';
+                            formMessage.className = 'form-status success';
                             formMessage.textContent = '✅ Mensagem enviada com sucesso! Responderemos em breve.';
                             formMessage.style.display = 'block';
                         }
@@ -2339,7 +2346,7 @@
                 } catch (err) {
                     submitBtn.classList.remove('loading');
                     if (formMessage) {
-                        formMessage.className = 'form-message error';
+                        formMessage.className = 'form-status error';
                         formMessage.textContent = '❌ Não foi possível enviar. Tente ligar: (42) 3532-4163';
                         formMessage.style.display = 'block';
                     }
