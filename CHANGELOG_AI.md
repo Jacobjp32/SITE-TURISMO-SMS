@@ -6,6 +6,61 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-09 — Registro de V5A na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que o V5A foi concluído, validado, commitado e reenviado por push após instabilidade/cancelamento do GitHub Pages, mantendo V5B, V5C e V5D como pendências separadas.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — observações permanentes atualizadas com V5A concluído, publicação/reenvio com check verde, preservações e próximos microblocos V5B/V5C/V5D.
+- `TASKS.md` — estado atual, próximo passo recomendado, blocos concluídos, próximos caminhos, follow-ups e tarefas concluídas atualizados com V5A.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git status --short --branch
+git diff --stat
+```
+
+### Validações
+
+- [x] `git status` inicial
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git status` final
+- [x] `git diff --stat`
+
+### Riscos / observações
+
+- Nenhum código, HTML, CSS, JS, `translations.js`, `config.js`, dados de eventos, `js/public-banners.js`, `js/site-meta.js`, sitemap, robots, rules, Admin/CMS/Firebase ou `docs/auditoria-output/*` foi alterado nesta atualização de governança.
+- V5A removeu da home o banner/section AgroSamas oculto e o script inline exclusivo (`ativarBannerAgrosamas`, `fecharBannerAgrosamas`, `localStorage agrosamas-banner-closed` e autoativação comentada), com aproximadamente 63 linhas removidas de `index.html` no bloco já concluído.
+- O slot moderno `#public-banners-slot` foi preservado como caminho oficial para banners/campanhas; `js/public-banners.js`, `config.js` e `translations.js` foram preservados.
+- A data/hora da última atualização do site foi atualizada antes do commit real de publicação/reenvio do V5A (`chore: atualiza metadata para reenviar deploy do V5A`), e o GitHub Pages build and deployment concluiu novamente com check verde.
+- V5B segue pendente para despriorizar recorrentes na grade "Acontece em breve"; risco baixo-médio; exige teste visual e funcional da home.
+- V5C segue pendente para higiene editorial de Eventos & Notícias; risco médio; exige decisão humana sobre notícias e links reais.
+- V5D segue pendente para revisão anti-envelhecimento de Festas em Destaque; risco médio; depende de mexer em `translations.js`, então só com decisão consciente.
+- Follow-ups mantidos: CSS órfão `.agrosamas-banner`, chaves i18n órfãs `agrosamas-banner-*`, `CONFIG.agrosamas` temporariamente sem efeito na home, B3 mídia/performance para o final e Admin/CMS/Firebase pausado.
+
+### Próximo passo
+
+- Planejar V5B como microbloco separado, com teste visual e funcional da home antes de qualquer conclusão.
+
+---
+
 ## 2026-07-09 — Registro de V4A, V4B e V4C na governança
 
 **Ferramenta/modelo:** Codex
