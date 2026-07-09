@@ -1524,83 +1524,6 @@
 
     <!-- Estilo CSS para galeria -->
 
-    <!-- ONDE FICAR original removido daqui — bloco reposicionado antes dos Depoimentos -->
-    <section class="section-where-stay" id="onde-ficar-placeholder" style="display:none" aria-hidden="true">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label" data-lang-key="hospedagem-label">Hospedagem</span>
-                <h2 class="section-title" data-lang-key="section-onde-ficar">Onde Ficar</h2>
-                <p class="section-description" data-lang-key="hospedagem-desc">Conforto e hospitalidade polonesa para sua estadia</p>
-            </div>
-
-            <div class="hotels-grid">
-                <!-- Hotel São Mateus -->
-                <div class="hotel-card">
-                    <div class="hotel-icon">🏨</div>
-                    <h3 class="hotel-name" data-lang-key="hotel1-nome">Hotel São Mateus</h3>
-                    <p class="hotel-description" data-lang-key="hotel1-desc">Hotel tradicional no centro da cidade com quartos confortáveis e café da manhã colonial.</p>
-                    <div class="hotel-features">
-                        <span class="feature" data-lang-key="hotel1-wifi">✓ Wi-Fi gratuito</span>
-                        <span class="feature" data-lang-key="hotel-cafe">✓ Café colonial</span>
-                        <span class="feature" data-lang-key="hotel1-estac">✓ Estacionamento</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554232822000">📞 (42) 3282-2000</a>
-                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
-                    </div>
-                </div>
-
-                <!-- Hotel Nora -->
-                <div class="hotel-card">
-                    <div class="hotel-icon">🏨</div>
-                    <h3 class="hotel-name" data-lang-key="hotel2-nome">Hotel Nora</h3>
-                    <p class="hotel-description" data-lang-key="hotel2-desc">Acomodações aconchegantes com atendimento familiar e localização privilegiada.</p>
-                    <div class="hotel-features">
-                        <span class="feature" data-lang-key="hotel2-ac">✓ Quartos climatizados</span>
-                        <span class="feature" data-lang-key="hotel2-tv">✓ TV a cabo</span>
-                        <span class="feature" data-lang-key="hotel2-frigobar">✓ Frigobar</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554232821500">📞 (42) 3282-1500</a>
-                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
-                    </div>
-                </div>
-
-                <!-- Hotel Dom Leopoldo -->
-                <div class="hotel-card">
-                    <div class="hotel-icon">🏨</div>
-                    <h3 class="hotel-name" data-lang-key="hotel3-nome">Hotel Dom Leopoldo</h3>
-                    <p class="hotel-description" data-lang-key="hotel3-desc">Hospedagem com charme polonês, restaurante com pratos típicos e ambiente familiar.</p>
-                    <div class="hotel-features">
-                        <span class="feature" data-lang-key="hotel3-rest">✓ Restaurante próprio</span>
-                        <span class="feature" data-lang-key="hotel3-salao">✓ Salão de eventos</span>
-                        <span class="feature" data-lang-key="hotel3-gastro">✓ Gastronomia polonesa</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554232823000">📞 (42) 3282-3000</a>
-                        <p data-lang-key="hotel-loc-centro">📍 Centro</p>
-                    </div>
-                </div>
-
-                <!-- Pousadas Rurais -->
-                <div class="hotel-card">
-                    <div class="hotel-icon">🏡</div>
-                    <h3 class="hotel-name" data-lang-key="hotel4-nome">Pousadas Rurais</h3>
-                    <p class="hotel-description" data-lang-key="hotel4-desc">Experiência autêntica em fazendas e propriedades rurais com contato direto com a natureza.</p>
-                    <div class="hotel-features">
-                        <span class="feature" data-lang-key="hotel-cafe">✓ Café colonial</span>
-                        <span class="feature" data-lang-key="hotel4-ativ">✓ Atividades rurais</span>
-                        <span class="feature" data-lang-key="hotel4-nat">✓ Natureza</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <p data-lang-key="hotel4-tel">📞 Consulte disponibilidade</p>
-                        <p data-lang-key="hotel4-loc">📍 Área Rural</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     </main>
 
     
@@ -2351,39 +2274,6 @@
                         formMessage.style.display = 'block';
                     }
                     console.error('Formspree erro:', err);
-                }
-            });
-        }
-
-        // ============================================
-        // NEWSLETTER — Formspree
-        // ============================================
-        const newsletterForm = document.getElementById('newsletterForm');
-        const newsletterMessage = document.getElementById('newsletterMessage');
-
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                const email = document.getElementById('newsletterEmail').value;
-
-                try {
-                    const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
-                        method: 'POST',
-                        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ _subject: 'Newsletter - Turismo SMS', email, tipo: 'newsletter' })
-                    });
-
-                    if (res.ok) {
-                        if (newsletterMessage) {
-                            newsletterMessage.className = 'newsletter-message success';
-                            newsletterMessage.textContent = '✅ Inscrito! Você receberá novidades por e-mail.';
-                            newsletterMessage.style.display = 'block';
-                        }
-                        newsletterForm.reset();
-                        setTimeout(() => { if (newsletterMessage) newsletterMessage.style.display = 'none'; }, 5000);
-                    }
-                } catch (err) {
-                    console.error('Newsletter erro:', err);
                 }
             });
         }
