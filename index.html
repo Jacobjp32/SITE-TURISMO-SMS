@@ -352,71 +352,8 @@
         </div>
     </div>
 
-    <!-- ============================================================
-         BANNER AGROSAMAS - DESATIVADO POR PADRÃO
-         Para ativar: remova a classe "agrosamas-hidden" da section
-         Para edição 2026: atualize as datas e informações abaixo
-         ============================================================ -->
-    <section class="agrosamas-banner agrosamas-hidden" id="agrosamas-banner">
-        <div class="agrosamas-container">
-            <div class="agrosamas-content">
-                <div class="agrosamas-badge" data-lang-key="banner-evento-especial">🎪 EVENTO ESPECIAL</div>
-                <h2 class="agrosamas-title" data-lang-key="agrosamas-banner-nome">5º AgroSamas 2026</h2>
-                <p class="agrosamas-subtitle" data-lang-key="agrosamas-banner-sub">O maior encontro de música, gastronomia e campo da região!</p>
-                <div class="agrosamas-info">
-                    <span class="agrosamas-date" data-lang-key="agrosamas-data">📅 17 a 21 de Setembro</span>
-                    <span class="agrosamas-location" data-lang-key="agrosamas-local">📍 Rua do Mathe</span>
-                    <span class="agrosamas-price" data-lang-key="agrosamas-entrada">🆓 Entrada Gratuita</span>
-                </div>
-                <div class="agrosamas-highlights">
-                    <span data-lang-key="agrosamas-tag1">🎵 Shows Nacionais</span>
-                    <span data-lang-key="agrosamas-tag2">🍽️ Feira Gastronômica</span>
-                    <span data-lang-key="agrosamas-tag3">🚜 Exposição Agro</span>
-                    <span data-lang-key="agrosamas-tag4">🦕 Parque dos Dinossauros</span>
-                </div>
-                <div class="agrosamas-buttons">
-                    <a href="https://agrosamas.com.br" target="_blank" rel="noopener noreferrer" class="agrosamas-btn primary" data-lang-key="agrosamas-btn">
-                        Acesse o Site Oficial →
-                    </a>
-                    <a href="/eventos/" class="agrosamas-btn secondary" data-lang-key="natal-btn">
-                        Ver Programação
-                    </a>
-                </div>
-            </div>
-            <button class="agrosamas-close" onclick="fecharBannerAgrosamas()" aria-label="Fechar banner">×</button>
-        </div>
-    </section>
-
     <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
     <div id="public-banners-slot" hidden></div>
-
-
-    <script>
-    // Função para ativar/desativar banner do AgroSamas
-    function ativarBannerAgrosamas() {
-        var banner = document.getElementById('agrosamas-banner');
-        if (banner) {
-            banner.classList.remove('agrosamas-hidden');
-        }
-    }
-    
-    function fecharBannerAgrosamas() {
-        var banner = document.getElementById('agrosamas-banner');
-        if (banner) {
-            banner.classList.add('agrosamas-hidden');
-            // Salva preferência do usuário
-            localStorage.setItem('agrosamas-banner-closed', 'true');
-        }
-    }
-    
-    // Para ativar automaticamente o banner, descomente a linha abaixo:
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     var fechouBanner = localStorage.getItem('agrosamas-banner-closed');
-    //     if (!fechouBanner) {
-    //         ativarBannerAgrosamas();
-    //     }
-    // });
-    </script>
 
     <main id="main-content" tabindex="-1">
     <!-- Map Hero -->
