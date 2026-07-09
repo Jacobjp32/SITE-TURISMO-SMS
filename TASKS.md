@@ -10,14 +10,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Projeto:** SITE-TURISMO-SMS  
 **Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
-**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa e SEO-F1 `noindex` em páginas legadas foram concluídos em 2026-07-08.
+**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas e V1+V2 visual/UX da home foram concluídos.
 **Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
 
 ---
 
 ## Próximo passo recomendado
 
-**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximos caminhos possíveis: investigação separada de Service Worker/OpenStreetMap se persistir em produção; revisão futura de dados do Firestore para eventos sem `establishmentId` seguro; B4b opcional para migrar Firebase compat de mapa/eventos para import modular sob demanda, somente com teste manual dedicado; B3 mídia/performance por último. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximo bloco provável: V3 navegação, com paridade entre nav da home e `nav-shared`, ajustes de links para `/sabores` e `/onde-ficar`, atalhos mobile e sem unificar a home com `nav-shared` ainda. Depois: V4 limpeza de peso morto somente com confirmação item a item, V5 consolidação de eventos, V6 reordenação da home e V7 unificação da navegação como alto risco. B3 mídia/performance fica por último. Iniciar apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
 
 ---
 
@@ -48,8 +48,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - B5 — diagnóstico Firebase público somente leitura: nenhum arquivo alterado; uso de Firebase compat diagnosticado em `mapa-turistico.html` e `eventos.html`; duplicação compat + modular diagnosticada em páginas com `public-banners.js`; Firebase confirmado como enriquecimento com fallback estático; recomendação de evitar B4 genérico e seguir por microblocos.
 - B4a — timeout no mapa: alteração restrita a `js/mapa-turistico.js`, com timeout de 2,5s na leitura pública de eventos aprovados do Firestore; dados estáticos e empreendimentos preservados; nenhum HTML/CSS/dados/Admin/CMS/Firebase/rules tocado; bloco testado, commitado e enviado por push.
 - SEO-F1 — follow-up de `noindex,follow` concluído nas páginas legadas/suspensas removidas do sitemap: `mapa-completo.html`, `mapa-3d.html` e `roteiro-ia.html`. As páginas seguem existindo para acesso direto. Nenhum `sitemap.xml`, `robots.txt`, CSS, JS, dado turístico, Admin/CMS/Firebase ou rule tocado.
+- V1+V2 — visual/UX da home concluído, aprovado, commitado e enviado por push. V1 corrigiu o formulário de contato usando os seletores reais `.form-submit` e `#formStatus`, evitando TypeError por seletor inexistente. V2 melhorou CTAs e links editoriais da home para `/sabores` e `/onde-ficar`, ajustou chips relacionados a Gastronomia e Onde Ficar e adicionou a chave i18n `hospedagem-ver-todas` em `translations.js`. CSS, dados turísticos, Admin/CMS/Firebase e rules não foram tocados.
 
 **Próximos caminhos possíveis:**
+- V3 — navegação: paridade entre nav da home e `nav-shared`; ajustes de links para `/sabores` e `/onde-ficar`; atalhos mobile; sem unificar a home com `nav-shared` ainda.
+- V4 — limpeza de peso morto, somente depois e com confirmação item a item.
+- V5 — consolidação de eventos.
+- V6 — reordenação da home.
+- V7 — unificação da navegação, alto risco, deixar para depois.
 - App Check/reCAPTCHA em localhost: tratar como ambiente/debug token, não como regressão.
 - Service Worker pode interceptar tile do OpenStreetMap em teste local; investigar em bloco separado se persistir em produção.
 - Eventos aprovados com `establishmentName`, mas sem `establishmentId` seguro, não vinculam ao mapa; revisar dados do Firestore futuramente.
@@ -175,6 +181,9 @@ Timeout de 2,5s adicionado na leitura pública de eventos aprovados do Firestore
 
 ### [CONCLUÍDA] SEO-F1 — Noindex em páginas legadas/suspensas
 `noindex,follow` adicionado em `mapa-completo.html`, `mapa-3d.html` e `roteiro-ia.html`, concluindo o follow-up das páginas legadas/suspensas já removidas do sitemap. As páginas continuam existindo para acesso direto; `sitemap.xml`, `robots.txt`, CSS, JS, dados turísticos, Admin/CMS/Firebase e rules não foram alterados. Bloco commitado e enviado por push em 2026-07-08.
+
+### [CONCLUÍDA] V1+V2 — Ajustes visuais/UX da home
+Bloco visual/UX concluído, aprovado, commitado e enviado por push. V1 corrigiu o formulário de contato da home para usar `.form-submit` e `#formStatus`, evitando quebra por TypeError de seletor inexistente. V2 melhorou CTAs e links editoriais da home para `/sabores` e `/onde-ficar`, ajustou chips/links relacionados a Gastronomia e Onde Ficar e adicionou a chave i18n `hospedagem-ver-todas` em `translations.js`. Nenhum CSS, dado turístico, Admin/CMS/Firebase ou rule foi alterado.
 
 ---
 
