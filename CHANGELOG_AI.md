@@ -6,6 +6,60 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-09 — Registro de V4A, V4B e V4C na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que os microblocos V4A, V4B e V4C da limpeza de peso morto da home foram concluídos, testados, commitados e enviados por push, deixando V4D como pendência consciente.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — observações permanentes atualizadas com V4A+V4B+V4C concluídos, V4D pendente/risco médio e próximos caminhos V5, V6, V7, B3 e follow-ups futuros.
+- `TASKS.md` — estado atual, próximo passo recomendado, blocos concluídos, próximos caminhos e tarefas concluídas atualizados com V4A+V4B+V4C.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git status --short
+git diff --stat
+```
+
+### Validações
+
+- [x] `git status` inicial
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git status` final
+- [x] `git diff --stat`
+
+### Riscos / observações
+
+- Nenhum código, HTML, CSS, JS, `translations.js`, sitemap, robots, rules, Admin/CMS/Firebase ou `docs/auditoria-output/*` foi alterado nesta atualização de governança.
+- V4A+V4B+V4C removeram aproximadamente 404 linhas de peso morto da home; `index.html` foi o único arquivo alterado nesses microblocos já concluídos.
+- V4D fallback inline de traduções permanece pendente, com risco médio, e só deve ser executado por decisão consciente; alternativa aceitável é manter documentado como dívida técnica.
+- V5 consolidação de eventos/notícias da home, V6 reordenação da metade inferior da home e V7 unificação da navegação seguem como caminhos futuros; V7 é alto risco e deve ficar para depois.
+- B3 mídia/performance continua para o final.
+- Admin/CMS/Firebase segue pausado.
+- Follow-up futuro: CSS órfão `.map-modal-*` pode ser revisado em bloco próprio, e as chaves i18n `modal-endereco`, `modal-telefone` e `modal-horario` podem ser revisadas futuramente sem alterar `translations.js` agora.
+
+### Próximo passo
+
+- Decidir conscientemente se V4D será executado ou mantido como dívida técnica documentada; depois seguir para V5.
+
+---
+
 ## 2026-07-09 — Registro de V3 navegação na governança
 
 **Ferramenta/modelo:** Codex

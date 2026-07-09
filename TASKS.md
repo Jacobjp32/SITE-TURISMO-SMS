@@ -10,14 +10,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Projeto:** SITE-TURISMO-SMS  
 **Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
-**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas, V1+V2 visual/UX da home e V3 navegação foram concluídos.
+**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas, V1+V2 visual/UX da home, V3 navegação e V4A+V4B+V4C limpeza de peso morto da home foram concluídos.
 **Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
 
 ---
 
 ## Próximo passo recomendado
 
-**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximo bloco provável: V4 limpeza de peso morto da home, somente com confirmação item a item e sem iniciar automaticamente. Depois: V5 consolidação de eventos, V6 reordenação da home e V7 unificação da navegação como alto risco, para depois. B3 mídia/performance fica por último. Follow-up separado: investigar Service Worker em localhost se voltar a interceptar Leaflet/OSM, sem tratar como regressão do V3. Iniciar qualquer bloco apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. Próximo caminho possível: V4D fallback inline de traduções, pendente e de risco médio, somente com decisão consciente; alternativa aceitável é manter documentado como dívida técnica. Depois: V5 consolidação de eventos/notícias da home, V6 reordenação da metade inferior da home e V7 unificação da navegação como alto risco, para depois. B3 mídia/performance fica por último. Follow-ups separados: revisar CSS órfão `.map-modal-*`; revisar chaves i18n `modal-endereco`, `modal-telefone` e `modal-horario` futuramente, sem alterar `translations.js` agora; investigar Service Worker em localhost se voltar a interceptar Leaflet/OSM, sem tratar como regressão do V3. Iniciar qualquer bloco apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
 
 ---
 
@@ -50,12 +50,15 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - SEO-F1 — follow-up de `noindex,follow` concluído nas páginas legadas/suspensas removidas do sitemap: `mapa-completo.html`, `mapa-3d.html` e `roteiro-ia.html`. As páginas seguem existindo para acesso direto. Nenhum `sitemap.xml`, `robots.txt`, CSS, JS, dado turístico, Admin/CMS/Firebase ou rule tocado.
 - V1+V2 — visual/UX da home concluído, aprovado, commitado e enviado por push. V1 corrigiu o formulário de contato usando os seletores reais `.form-submit` e `#formStatus`, evitando TypeError por seletor inexistente. V2 melhorou CTAs e links editoriais da home para `/sabores` e `/onde-ficar`, ajustou chips relacionados a Gastronomia e Onde Ficar e adicionou a chave i18n `hospedagem-ver-todas` em `translations.js`. CSS, dados turísticos, Admin/CMS/Firebase e rules não foram tocados.
 - V3 — navegação concluído, testado em produção, commitado e enviado por push. Ajustou paridade de navegação entre home e `nav-shared.js`; `index.html` e `js/nav-shared.js` foram os únicos arquivos alterados. Logo da home ajustada para `href="/"`; skip link corrigido para `#navLinks`; Planeje > Onde Ficar aponta para `/onde-ficar`; atalhos mobile Comer/Ficar apontam para `/sabores` e `/onde-ficar`; `nav-shared.js` recebeu `aria-controls`/`id` nos dropdowns Agenda e Planeje. Nenhum CSS, dado turístico, Admin/CMS/Firebase ou rule foi tocado. Teste em produção confirmou que o mapa carregou corretamente; erros anteriores eram de ambiente local/cache/service worker.
+- V4A+V4B+V4C — limpeza de peso morto da home concluída, testada, commitada e enviada por push. `index.html` foi o único arquivo alterado nesses microblocos. V4A removeu a seção duplicada e oculta `#onde-ficar-placeholder` e o handler órfão de newsletter que referenciava seletores inexistentes, sem alterar a seção visível `#onde-ficar` nem o formulário de contato. V4B removeu a galeria oculta `#galeria`, preservando `galeria.html` e links para `/galeria`. V4C removeu o script órfão "Direto do Produtor", o modal do mini-mapa, funções relacionadas e telefones placeholder `99999-xxxx` do fonte público; `sabores.html` permaneceu intacto. Aproximadamente 404 linhas de peso morto foram removidas. Nenhum CSS, `translations.js`, dados turísticos reais, Admin/CMS/Firebase ou rules foi tocado.
 
 **Próximos caminhos possíveis:**
-- V4 — limpeza de peso morto da home, somente com confirmação item a item.
-- V5 — consolidação de eventos.
-- V6 — reordenação da home.
+- V4D — fallback inline de traduções, pendente, risco médio, somente com decisão consciente; alternativa: manter documentado como dívida técnica.
+- V5 — consolidação de eventos/notícias da home.
+- V6 — reordenação da metade inferior da home.
 - V7 — unificação da navegação, alto risco, deixar para depois.
+- CSS órfão `.map-modal-*` pode ser revisado em bloco próprio, pois o modal do mini-mapa foi removido da home.
+- Chaves i18n `modal-endereco`, `modal-telefone` e `modal-horario` podem ser revisadas futuramente, mas `translations.js` não deve ser alterado agora.
 - App Check/reCAPTCHA em localhost: tratar como ambiente/debug token, não como regressão.
 - Service Worker em localhost: investigar em follow-up separado se voltar a interceptar Leaflet/OSM, sem tratar como regressão do V3.
 - Eventos aprovados com `establishmentName`, mas sem `establishmentId` seguro, não vinculam ao mapa; revisar dados do Firestore futuramente.
@@ -187,6 +190,9 @@ Bloco visual/UX concluído, aprovado, commitado e enviado por push. V1 corrigiu 
 
 ### [CONCLUÍDA] V3 — Paridade de navegação
 Bloco de navegação concluído, testado em produção, commitado e enviado por push. Ajustou paridade entre home e `nav-shared.js`, com correções de logo, skip link, links de Onde Ficar, atalhos mobile Comer/Ficar e `aria-controls`/`id` nos dropdowns Agenda e Planeje. Apenas `index.html` e `js/nav-shared.js` foram alterados no bloco. Nenhum CSS, dado turístico, Admin/CMS/Firebase ou rule foi alterado.
+
+### [CONCLUÍDA] V4A+V4B+V4C — Limpeza de peso morto da home
+Microblocos concluídos, testados, commitados e enviados por push. V4A removeu de `index.html` a seção duplicada e oculta `#onde-ficar-placeholder` e o handler órfão de newsletter; V4B removeu a galeria oculta `#galeria`, preservando `galeria.html`; V4C removeu o script órfão "Direto do Produtor", o modal do mini-mapa, funções relacionadas e telefones placeholder `99999-xxxx` do fonte público. Aproximadamente 404 linhas foram removidas da home. `index.html` foi o único arquivo alterado nesses microblocos; nenhum CSS, `translations.js`, dados turísticos reais, Admin/CMS/Firebase ou rule foi alterado.
 
 ---
 
