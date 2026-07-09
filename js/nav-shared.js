@@ -55,17 +55,17 @@
             <li><a href="/sabores" data-lang-key="nav-sabores-locais">Sabores locais</a></li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu Agenda" data-lang-key-aria-label="nav-open-agenda"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu" role="menu">
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navAgendaMenu" aria-label="Abrir menu Agenda" data-lang-key-aria-label="nav-open-agenda"><span data-lang-key="nav-agenda">Agenda</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" id="navAgendaMenu" role="menu">
                     <a href="/eventos/" role="menuitem" data-lang-key="nav-eventos">Eventos</a>
                     <a href="/noticias" role="menuitem" data-lang-key="nav-noticias-clean">Notícias</a>
                 </div>
             </li>
 
             <li>
-                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-label="Abrir menu Planeje sua Visita" data-lang-key-aria-label="nav-open-plan"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
-                <div class="dropdown-menu" role="menu">
-                    <a href="/mapa-turistico?categoria=Hospedagem" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
+                <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navPlanMenu" aria-label="Abrir menu Planeje sua Visita" data-lang-key-aria-label="nav-open-plan"><span data-lang-key="nav-planeje-visita">Planeje sua Visita</span> <span class="arrow">▼</span></button>
+                <div class="dropdown-menu" id="navPlanMenu" role="menu">
+                    <a href="/onde-ficar" role="menuitem" data-lang-key="nav-onde-ficar">Onde Ficar</a>
                     <a href="/mapa-turistico" role="menuitem" data-lang-key="nav-como-chegar">Como Chegar</a>
                     <a href="/#visitor-guide-title" role="menuitem" data-lang-key="nav-informacoes-essenciais">Informações Essenciais</a>
                     <a href="/#weather-title" role="menuitem" data-lang-key="nav-previsao-tempo">Previsão do Tempo</a>
@@ -119,8 +119,8 @@
     <a href="/mapa-turistico" aria-label="Abrir mapa turístico" data-lang-key="mobile-shortcut-mapa" data-lang-key-aria-label="nav-shortcut-map-aria">Mapa</a>
     <a href="/eventos/" aria-label="Ver eventos" data-lang-key="mobile-shortcut-eventos" data-lang-key-aria-label="nav-shortcut-events-aria">Eventos</a>
     <a href="/mapa-turistico?grupo=roteiros" aria-label="Ver rotas turísticas" data-lang-key="mobile-shortcut-rotas" data-lang-key-aria-label="nav-shortcut-routes-aria">Rotas</a>
-    <a href="/mapa-turistico?categoria=Gastronomia" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
-    <a href="/mapa-turistico?categoria=Hospedagem" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
+    <a href="/sabores" aria-label="Ver gastronomia local" data-lang-key="mobile-shortcut-comer" data-lang-key-aria-label="nav-shortcut-food-aria">Comer</a>
+    <a href="/onde-ficar" aria-label="Ver opções de hospedagem" data-lang-key="mobile-shortcut-ficar" data-lang-key-aria-label="nav-shortcut-stay-aria">Ficar</a>
 </nav>
 <div class="mobile-menu-overlay" id="menuOverlay"></div>
 <div class="search-modal" id="searchModal" aria-hidden="true">
