@@ -6,6 +6,65 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-10 — Registro de V5B na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que o V5B foi concluído, validado, enviado por push e publicado, mantendo V5C e V5D pendentes e sem iniciar outro bloco.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — decisão durável da frente pública atualizada com V5B concluído, preservações, pendências e follow-ups.
+- `TASKS.md` — estado atual, próximo passo, blocos concluídos e tarefas pendentes atualizados com V5B.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --branch
+```
+
+### Validações
+
+- [x] `git status` inicial, sem alteração rastreada pendente
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito a arquivos de governança
+- [x] `git diff --check`
+- [x] `git diff --name-only`
+- [x] `git diff --stat`
+- [x] `git status` final
+
+### Riscos / observações
+
+- V5B prioriza eventos únicos/não recorrentes na grade "Acontece em breve"; eventos recorrentes somente completam vagas quando faltam eventos únicos.
+- A seleção final permanece cronológica, limitada a quatro cards e com o desempate por vínculo a estabelecimento preservado.
+- O fallback estático e o merge com eventos aprovados do Firebase foram preservados; eventos vindos do Firebase continuam mapeados como `recorrente: false`.
+- `eventos-2026.json`, `js/data/eventos.js` e as demais fontes de dados permaneceram intactos.
+- A data/hora da última atualização do site foi atualizada com `node scripts/update-site-meta.mjs` antes do commit de código do V5B; esse script não foi executado nesta atualização de governança.
+- Nenhum código, HTML, CSS, JavaScript de runtime, `index.html`, `js/site-meta.js`, `translations.js`, `config.js`, `js/public-banners.js`, sitemap, robots, rules, Admin/CMS/Firebase ou `docs/auditoria-output/*` foi alterado nesta atualização.
+- V5C permanece pendente para higiene editorial de Eventos & Notícias, confirmação dos links reais das notícias e revisão de conteúdo hard-coded e datas envelhecidas; risco médio e decisão humana item por item.
+- V5D permanece pendente para revisão anti-envelhecimento de Festas em Destaque; risco médio, depende de `translations.js` e exige decisão consciente.
+- V4D permanece pendente como dívida técnica/decisão consciente; B3 mídia/performance permanece para o final; Admin/CMS/Firebase segue pausado.
+- Follow-ups mantidos: CSS órfão `.map-modal-*`, CSS órfão `.agrosamas-banner`, chaves i18n órfãs relacionadas aos blocos removidos, `CONFIG.agrosamas` temporariamente sem efeito na home, virada anual de `eventos-2026.json` e possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS`.
+
+### Próximo passo
+
+- Manter V5C e V5D pendentes até decisão humana explícita; não iniciar outro bloco nesta atualização.
+
+---
+
 ## 2026-07-09 — Registro de V5A na governança
 
 **Ferramenta/modelo:** Codex
