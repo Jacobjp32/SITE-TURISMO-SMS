@@ -2297,15 +2297,23 @@
         }
 
         function renderEventos(eventos) {
-            const filtrados = (eventos || [])
+            const ordenarPorData = (a, b) => {
+                const diff = a._dataObj - b._dataObj;
+                if (diff !== 0) return diff;
+                return Number(eventoComVinculo(b)) - Number(eventoComVinculo(a));
+            };
+
+            const base = (eventos || [])
                 .map(evento => Object.assign({}, evento, { _dataObj: obterDataEvento(evento) }))
                 .filter(evento => evento._dataObj && evento._dataObj >= hoje && statusPublico(evento))
-                .sort((a, b) => {
-                    const diff = a._dataObj - b._dataObj;
-                    if (diff !== 0) return diff;
-                    return Number(eventoComVinculo(b)) - Number(eventoComVinculo(a));
-                })
-                .slice(0, 4);
+                .sort(ordenarPorData);
+
+            // Prioriza eventos únicos; recorrentes só preenchem vagas restantes
+            const unicos = base.filter(evento => evento.recorrente !== true);
+            const recorrentes = base.filter(evento => evento.recorrente === true);
+            const filtrados = [...unicos, ...recorrentes]
+                .slice(0, 4)
+                .sort(ordenarPorData);
 
             if (!filtrados.length) {
                 renderFallback();
