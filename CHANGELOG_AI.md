@@ -6,6 +6,67 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-10 — Registro de V5C1 na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que o V5C1 foi concluído, validado, enviado por push e publicado, mantendo V5C2 e V5C3 pendentes e sem iniciar outro bloco.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — decisão consolidada da frente pública atualizada com V5C1 concluído e próximos caminhos.
+- `TASKS.md` — estado atual, blocos concluídos, pendências V5C2/V5C3 e follow-up arquitetural atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações
+
+- [x] Estado inicial sem alteração rastreada de código ou governança
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito aos três arquivos de governança
+- [x] `git diff --check`
+- [x] `git diff --name-only`
+- [x] `git diff --stat`
+- [x] `git status` final
+
+### Riscos / observações
+
+- V5C1 corrigiu os links dos cards Polskie Smaki, Fanfarras municipais e Estruturação do turismo local para matérias individuais reais do Portal oficial da Prefeitura.
+- Os três links abrem em nova aba com `target="_blank"` e incluem `rel="noopener noreferrer"`.
+- O CTA geral "Ver todas as notícias" continua apontando para `/noticias`.
+- Textos, imagens, datas, categorias, traduções, layout e CSS foram preservados.
+- A data/hora da última atualização do site foi atualizada com `node scripts/update-site-meta.mjs` antes do commit de código; esse script não foi executado nesta atualização de governança.
+- Nenhum código, HTML, CSS, JavaScript de runtime, `index.html`, `js/site-meta.js`, `noticias.html`, `noticia.html`, `js/cms.js`, `translations.js`, `config.js`, dado, sitemap, robots, rule, Admin/CMS/Firebase, `.claude/*` ou `docs/auditoria-output/*` foi alterado nesta atualização.
+- V5C2 permanece pendente para higiene e rotação editorial dos cards, decisão sobre substituir o card mais antigo e definição da política de atualização da home em relação a `noticias.html`; risco médio e decisão humana item por item.
+- V5C3 permanece pendente para avaliar a extração do `style` inline dos CTAs para classe compartilhada; exige CSS, não deve ser executado automaticamente e pode integrar um bloco visual maior.
+- O follow-up arquitetural de fonte única de notícias entre home e `noticias.html` permanece fora do V5C, aguardando decisão entre JSON, CMS ou outra solução futura e possível retomada do CMS.
+- V5D permanece pendente para revisão anti-envelhecimento de Festas em Destaque, com dependência de `translations.js`, risco médio e decisão consciente.
+- V4D permanece como dívida técnica/decisão consciente; B3 mídia/performance permanece para o final; Admin/CMS/Firebase segue pausado.
+
+### Próximo passo
+
+- Manter V5C2, V5C3 e V5D pendentes até decisão humana explícita; não iniciar outro bloco nesta atualização.
+
+---
+
 ## 2026-07-10 — Registro de V5B na governança
 
 **Ferramenta/modelo:** Codex
