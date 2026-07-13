@@ -6,6 +6,82 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-13 — Registro de R2 na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente R2 como o segundo módulo concluído da Fase 1 da refatoração modular progressiva da home.
+
+### Resultado consolidado
+
+- R2 extraiu comportamentalmente 1:1 o carrossel “Experiências em destaque” de `index.html` para `js/home-experiencias.js`, sem mudança visual ou funcional.
+- Aproximadamente 57 linhas de JavaScript inline foram removidas de `index.html`; o novo arquivo tornou-se o segundo módulo da fundação modular.
+- A referência adicionada em `index.html` usa `<script src="js/home-experiencias.js?v=site-public-b1-20260708" defer></script>` e foi posicionada antes de `js/home-eventos.js`.
+- `initFeaturedExperiencesCarousel` permaneceu privada em IIFE, com listener próprio de `DOMContentLoaded`, sem função em `window`, export, `import()`, `fetch`, URL relativa ou nova dependência.
+- Seletores `data-featured-*`, retorno silencioso, botões anterior/próximo, passo pela largura real do card, leitura de gap, fallback `Math.min(track.clientWidth, 320)`, `scrollBy`, `smooth/auto` conforme reduced motion, controles disabled e tolerância de 2px foram preservados.
+- Click, ArrowLeft/ArrowRight com `preventDefault`, scroll passive, resize, atualização inicial, scroll/swipe nativo no mobile, responsividade, scroll-snap, tabindex e aria-labels traduzíveis foram preservados.
+- R2 foi concluído, validado, commitado, enviado por push e publicado. O commit funcional presente no histórico é `6e126cd refactor(home): extrai carrossel de experiencias para modulo dedicado`.
+- A data/hora da última atualização do site foi atualizada com `node scripts/update-site-meta.mjs` antes do commit funcional; o script não foi executado nesta atualização de governança.
+
+### Separação R1/R2 e ordem da Fase 1
+
+- R1 permaneceu intacto: `js/home-eventos.js` continua contendo somente a grade “Acontece em breve”.
+- R2 contém somente o carrossel “Experiências em destaque” em `js/home-experiencias.js`.
+- Acessibilidade e utilitários visuais permanecem inline para o futuro R4.
+- R3, destinado ao formulário, passa a ser o próximo módulo, mas não foi iniciado nesta tarefa.
+- R4 e R5 permanecem posteriores; R5 continua reservado ao i18n/fallback inline por último e com maior sensibilidade.
+
+### Pendências e limites mantidos
+
+- Admin/CMS/Firebase continua pausado.
+- V6 e V7 continuam somente após a fundação modular; B3 permanece em fase própria.
+- V4D, V5C3 e V5D permanecem pendentes.
+- O CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela.
+- A revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente.
+- R3, R4, R5, V6, V7 e B3 não foram executados nesta atualização de governança.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado permanente de R2, separação R1/R2 e próximos módulos atualizados.
+- `TASKS.md` — estado da Fase 1, conclusão de R2, R3 como próximo módulo e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -10
+git diff -- .claude
+Get-ChildItem -Force .claude
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes
+- [x] Commit funcional `6e126cd` presente no histórico
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado
+- [x] Leitura dos três arquivos de governança
+- [x] Escopo restrito a `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, dado, regra, Admin/CMS/Firebase ou artefato de auditoria alterado
+
+### Próximo passo
+
+- Planejar R3 em bloco separado, após escopo explícito; não executar automaticamente nesta atualização.
+
+---
+
 ## 2026-07-13 — Registro de R1 na governança
 
 **Ferramenta/modelo:** Codex
