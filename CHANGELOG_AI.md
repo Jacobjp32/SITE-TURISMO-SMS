@@ -6,6 +6,75 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-13 — Registro de V5C2 e V5C2A na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar em governança que V5C2-EXEC e o microajuste V5C2A foram concluídos, validados, enviados por push e publicados, mantendo os próximos blocos apenas como pendências conscientes.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — decisão consolidada da frente pública atualizada com V5C2+V5C2A concluídos, preservações e follow-ups.
+- `TASKS.md` — estado atual, bloco concluído, roadmap e pendências editoriais/visuais atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações
+
+- [x] Estado inicial sem alteração rastreada pendente
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado
+- [x] Leitura de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`
+- [x] Escopo restrito aos três arquivos de governança
+- [x] `git diff --check`
+- [x] `git diff --name-only`
+- [x] `git diff --stat`
+- [x] `git status` final
+
+### Registros consolidados
+
+- O primeiro card da home foi atualizado para a matéria "Agosto é Polonês em São Mateus do Sul: confira a programação do 32º Mês Polonês", e a mesma matéria foi adicionada ao topo de `noticias.html`, mantendo home e listagem sincronizadas.
+- A matéria nova passou a ser o destaque principal de `noticias.html`, como `article.post-card.featured`, com título `h2` e selo "Destaque · Cultura e Gastronomia".
+- A notícia antiga sobre o regulamento da Polskie Smaki foi preservada como segundo card comum, com título `h3` e categoria Cultura; a hierarquia `h2`/`h3` e o selo foram transferidos de forma coerente.
+- Nenhuma notícia anterior foi removida. Os cards 2 e 3 da home e o CTA geral `/noticias` permaneceram intactos.
+- CSS, JavaScript, `translations.js`, `noticia.html`, `js/cms.js` e a camada opcional do CMS foram preservados.
+- A data/hora da última atualização do site foi atualizada com `node scripts/update-site-meta.mjs` antes do commit funcional; esse script não foi executado nesta atualização de governança.
+
+### Riscos / observações
+
+- Revisar o destaque do 32º Mês Polonês após 30/08/2026, aplicar a política de rotação mensal e remover ou substituir cards de eventos em até aproximadamente sete dias após o encerramento.
+- A notícia nova e a antiga usam atualmente a mesma imagem; eventual troca deve ocorrer somente após conferência visual e em bloco separado.
+- V5C3 permanece pendente para avaliar a extração dos `style` inline dos CTAs para classe compartilhada; exige CSS, pode integrar bloco visual futuro e não deve ser executado automaticamente.
+- V5D permanece pendente para revisão anti-envelhecimento de Festas em Destaque; depende de `translations.js`, tem risco médio e exige decisão consciente.
+- V4D permanece pendente como dívida técnica/decisão consciente.
+- A fonte única de notícias permanece como follow-up arquitetural futuro.
+- B3 mídia/performance permanece para o final.
+- Admin/CMS/Firebase segue pausado.
+- Nenhum código, HTML, CSS, JavaScript de runtime, `index.html`, `noticias.html`, `js/site-meta.js`, `noticia.html`, `js/cms.js`, `translations.js`, `config.js`, mídia, dados de eventos, sitemap, robots, rules, Admin/CMS/Firebase, `.claude/*` ou `docs/auditoria-output/*` foi alterado nesta atualização.
+- V5C3, V5D, V6, V7 e B3 não foram iniciados.
+
+### Próximo passo
+
+- Manter os follow-ups editoriais e visuais registrados e não iniciar outro bloco sem decisão explícita.
+
+---
+
 ## 2026-07-10 — Registro de V5C1 na governança
 
 **Ferramenta/modelo:** Codex
