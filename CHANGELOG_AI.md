@@ -6,6 +6,89 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-13 — Registro de R1 na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente R1 como o primeiro módulo concluído da Fase 1 da refatoração modular progressiva da home.
+
+### Resultado consolidado
+
+- R1 extraiu somente a lógica da grade “Acontece em breve” de `index.html` para `js/home-eventos.js` com comportamento 1:1 e sem mudança funcional ou editorial.
+- Aproximadamente 183 linhas de JavaScript inline foram removidas de `index.html`; `js/home-eventos.js` tornou-se o primeiro módulo da fundação modular.
+- R1 foi concluído, validado, commitado, enviado por push e publicado. O commit funcional presente no histórico é `efe6c11 refactor(home): extrai grade de eventos para modulo dedicado`.
+- `eventos-2026.json` continua fonte primária; fallback estático, regra V5B, priorização de únicos, preenchimento por recorrentes, limite de quatro cards, ordenação, desempate e enriquecimento opcional via Firebase foram preservados.
+- A extração manteve `carregarProximosEventos` privada em IIFE, listener próprio de `DOMContentLoaded`, nenhum export e nenhuma função adicionada a `window`.
+- A metadata do site foi atualizada com `node scripts/update-site-meta.mjs` antes do commit funcional; o script não foi executado nesta atualização de governança.
+
+### Separação R1/R2 e aprendizado técnico
+
+- O carrossel de experiências permaneceu integralmente inline e fora de `js/home-eventos.js`.
+- R2 continua como próximo módulo, destinado somente ao carrossel em `js/home-experiencias.js`; não foi iniciado.
+- Para R2–R5, todo `import()` relativo deve ser reavaliado quando código inline for externalizado: a resolução passa a considerar a localização do novo arquivo. Não copiar caminhos relativos cegamente; testar no Network para evitar duplicações como `/js/js/`.
+
+### Ordem da Fase 1
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel: próximo, não iniciado.
+3. R3 — formulário.
+4. R4 — acessibilidade e utilitários visuais.
+5. R5 — i18n/fallback inline, por último e mais sensível.
+
+### Pendências mantidas
+
+- CSS órfão `.map-modal-*` e `.agrosamas-banner` permanecem para follow-up separado.
+- Revisar editorialmente o destaque do 32º Mês Polonês após 30/08/2026.
+- V4D, V5C3 e V5D permanecem pendentes.
+- V6 e V7 só devem ocorrer após a fundação modular; B3 permanece em fase própria.
+- Admin/CMS/Firebase continua pausado.
+- R2, R3, R4, R5, V6, V7 e B3 não foram executados nesta atualização.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — decisão consolidada de R1 e separação R1/R2.
+- `TASKS.md` — estado, Fase 1, próximo módulo e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -10
+git show --stat --oneline --decorate --no-renames efe6c11
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes
+- [x] Commit funcional `efe6c11` presente no histórico e em `origin/main`
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado
+- [x] Leitura dos três arquivos de governança
+- [x] `git diff --check`
+- [x] `git diff --name-only`
+- [x] `git diff --stat`
+- [x] `git status` final
+- [x] Somente os três arquivos de governança alterados
+- [x] Nenhum runtime, regra, dado, mídia, Admin/CMS/Firebase ou artefato de auditoria alterado
+
+### Próximo passo
+
+- Preparar R2 em bloco separado, após escopo explícito; não executar automaticamente.
+
+---
+
 ## 2026-07-13 — Checkpoint arquitetural pós-V5
 
 **Ferramenta/modelo:** Codex
