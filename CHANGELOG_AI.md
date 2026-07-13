@@ -6,6 +6,84 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-13 — Checkpoint arquitetural pós-V5
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar o checkpoint arquitetural pós-V5, a tag `pos-v5-checkpoint`, a estratégia aprovada e o plano de fases, sem executar R1 ou qualquer alteração de runtime.
+
+### Resultado consolidado
+
+- O diagnóstico foi somente leitura e confirmou que o projeto público está funcional e saudável em várias áreas, com deploy GitHub Pages estável, governança reversível, fallbacks estáticos resilientes, camada `TURISMO_*` + adapters organizada, service worker adequado, cache-busting consistente e SEO público organizado.
+- A dívida técnica está concentrada principalmente em `index.html` (aproximadamente 2.473 linhas, cerca de 975 de JavaScript inline) e `css/index.css` (aproximadamente 7.080 linhas e 743 ocorrências de `!important`). Também foram registrados acoplamento de navegação, fallback i18n inline duplicado, manutenção paralela de notícias, padrões Firebase compat/modular misturados e órfãos de CSS/configuração/i18n.
+- Não há evidência para reescrita completa ou projeto novo. A estratégia aprovada é híbrida: refatoração modular progressiva como espinha dorsal, microblocos para ajustes editoriais e remoção de órfãos, e B3 como frente própria de performance.
+- A tag anotada `pos-v5-checkpoint` foi criada e enviada ao remoto.
+
+### Decisões e separações
+
+- Não reconstruir a home do zero, não criar projeto novo, não iniciar reescrita total e não retomar Admin/CMS/Firebase neste momento.
+- R1 extrairá somente a lógica da grade "Acontece em breve" para `js/home-eventos.js`.
+- R2 será posterior e separado, destinado ao carrossel de experiências em `js/home-experiencias.js`; o carrossel não será colocado em `js/home-eventos.js`.
+- V6 continua válido, mas somente depois da fundação modular da home.
+- V7 ocorrerá no projeto atual depois das extrações, usando `js/nav-shared.js` como base única e removendo a navegação inline duplicada.
+- B3 pode receber auditoria somente leitura antecipada, mas a execução de mídia/performance permanece em fase própria.
+- V4D, V5C3 e V5D continuam pendentes e não serão executados automaticamente.
+- R1 é o próximo microbloco aprovado para preparação, mas não foi executado nesta tarefa.
+
+### Plano aprovado
+
+1. **Fase 0 — checkpoint:** concluído com a tag `pos-v5-checkpoint`.
+2. **Fase 1 — fundação modular da home:** R1 eventos; R2 carrossel; R3 formulário; R4 acessibilidade e utilitários visuais; R5 i18n/fallback inline por último e após análise específica.
+3. **Fase 2 — navegação e estrutura:** V7 com `js/nav-shared.js` como base única; depois V6, se ainda fizer sentido editorialmente.
+4. **Fase 3 — dados editoriais:** fonte única de notícias; contrato entre `eventos-2026.json` e `TURISMO_EVENTOS`; preparação da virada anual de eventos.
+5. **Fase 4 — performance/B3:** vídeos, imagens pesadas, CSS órfão e revisão gradual de `css/index.css`.
+6. **Fase 5 — CMS:** somente quando oficialmente despausado.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — decisão arquitetural durável e separação R1/R2 registradas.
+- `TASKS.md` — checkpoint, fases, próximo microbloco e pendências atualizados.
+- `CHANGELOG_AI.md` — registro deste checkpoint de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git tag --list "pos-v5-checkpoint"
+git show-ref --tags --verify "refs/tags/pos-v5-checkpoint"
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Estado inicial sem alterações rastreadas pendentes
+- [x] Tag local `pos-v5-checkpoint` confirmada por `git show-ref`
+- [x] Leitura dos três arquivos de governança
+- [x] Alteração restrita aos três arquivos permitidos
+- [x] `git diff --check`
+- [x] `git diff --name-only`
+- [x] `git diff --stat`
+- [x] `git status` final
+- [x] R1 não executado
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, dados, rules, Admin/CMS/Firebase, `.claude/*` ou `docs/auditoria-output/*` alterado
+
+### Próximo passo
+
+- Preparar R1 em bloco separado, após novo escopo explícito; não executar R1, R2, V6, V7, B3 ou qualquer fase nesta atualização.
+
+---
+
 ## 2026-07-13 — Registro de V5C2 e V5C2A na governança
 
 **Ferramenta/modelo:** Codex

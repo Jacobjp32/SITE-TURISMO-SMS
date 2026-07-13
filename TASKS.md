@@ -10,7 +10,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Projeto:** SITE-TURISMO-SMS  
 **Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
-**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas, V1+V2 visual/UX da home, V3 navegação, V4A+V4B+V4C limpeza de peso morto da home, V5A remoção do banner AgroSamas oculto, V5B priorização de eventos únicos em "Acontece em breve", V5C1 correção dos links dos cards de "Eventos & Notícias" e V5C2+V5C2A sincronização editorial entre home e notícias foram concluídos.
+**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas, V1+V2 visual/UX da home, V3 navegação, V4A+V4B+V4C limpeza de peso morto da home, V5A remoção do banner AgroSamas oculto, V5B priorização de eventos únicos em "Acontece em breve", V5C1 correção dos links dos cards de "Eventos & Notícias" e V5C2+V5C2A sincronização editorial entre home e notícias foram concluídos. O checkpoint arquitetural pós-V5 foi concluído somente em leitura, com a tag `pos-v5-checkpoint` criada e enviada ao remoto; a estratégia aprovada é de refatoração modular progressiva no projeto atual.
 **Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
 
 ---
@@ -18,6 +18,21 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 ## Próximo passo recomendado
 
 **Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. V5C2 e o microajuste V5C2A foram concluídos, validados, enviados por push e publicados; a data/hora do site foi atualizada antes do commit funcional. Próximos caminhos possíveis: V5C3 avaliação da extração do `style` inline dos CTAs para classe compartilhada (exige CSS, não executar automaticamente, podendo integrar bloco visual maior); V5D revisão anti-envelhecimento de Festas em Destaque (risco médio, depende de `translations.js`, só com decisão consciente). O destaque do 32º Mês Polonês deve ser revisado após 30/08/2026, com rotação mensal dos cards e remoção ou substituição de cards de eventos em até aproximadamente sete dias após o encerramento. A possível troca da imagem hoje compartilhada pelas notícias nova e antiga depende de conferência visual e bloco separado. O follow-up arquitetural de fonte única de notícias entre home e `noticias.html` permanece fora do V5C, aguardando decisão entre JSON, CMS ou outra solução futura e possível retomada do CMS. V4D fallback inline de traduções segue como dívida técnica pendente e de risco médio. Depois: V6 reordenação da metade inferior da home e V7 unificação da navegação como alto risco, para depois. B3 mídia/performance fica por último. Follow-ups separados: revisar CSS órfão `.agrosamas-banner`; revisar chaves i18n órfãs relacionadas aos blocos removidos; registrar que `CONFIG.agrosamas` está temporariamente sem efeito na home; revisar CSS órfão `.map-modal-*`; planejar a virada anual de `eventos-2026.json`; avaliar futuramente a duplicação entre `eventos-2026.json` e `TURISMO_EVENTOS`; investigar Service Worker em localhost se voltar a interceptar Leaflet/OSM, sem tratar como regressão do V3. Iniciar qualquer bloco apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+
+### Checkpoint arquitetural pós-V5 — decisão aprovada
+
+O checkpoint foi somente leitura e confirmou um projeto público funcional, sem evidência para reescrita completa ou projeto novo. A dívida técnica está concentrada principalmente em `index.html` (aproximadamente 2.473 linhas, incluindo cerca de 975 de JavaScript inline) e `css/index.css` (aproximadamente 7.080 linhas e 743 ocorrências de `!important`). A estratégia aprovada é híbrida: refatoração modular progressiva como espinha dorsal, microblocos para ajustes editoriais/órfãos e B3 como frente própria de performance. A tag anotada `pos-v5-checkpoint` foi criada e enviada ao remoto.
+
+**Plano aprovado:**
+
+1. **Fase 0 — checkpoint:** concluído com a tag `pos-v5-checkpoint`.
+2. **Fase 1 — fundação modular da home:** R1 eventos; R2 carrossel de experiências; R3 formulário; R4 acessibilidade/utilitários visuais; R5 i18n/fallback inline por último, após análise específica.
+3. **Fase 2 — navegação e estrutura:** V7 no projeto atual, usando `js/nav-shared.js` como base única; remover duplicação inline; depois executar V6, se ainda fizer sentido editorialmente.
+4. **Fase 3 — dados editoriais:** fonte única de notícias; contrato entre `eventos-2026.json` e `TURISMO_EVENTOS`; preparação da virada anual de eventos.
+5. **Fase 4 — performance/B3:** vídeos, imagens pesadas, CSS órfão e revisão gradual de `css/index.css`.
+6. **Fase 5 — CMS:** somente quando oficialmente despausado.
+
+**Separação aprovada:** R1 extrairá somente a lógica da grade "Acontece em breve" para `js/home-eventos.js`. O carrossel de experiências não pertence a esse módulo e será tratado posteriormente em R2, com `js/home-experiencias.js`. R1 é o próximo microbloco aprovado para preparação, mas não foi executado nesta atualização.
 
 ---
 
