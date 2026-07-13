@@ -6,6 +6,98 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-13 — Registro de R3 na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente a conclusão do R3 da refatoração modular progressiva da home, sem alterar runtime, código funcional ou publicação.
+
+### Resultado consolidado
+
+- R3 foi concluído, validado, commitado, enviado por push e publicado com sucesso. O commit funcional presente no histórico é `9d9a8ef refactor(home): extrai formulario de contato para modulo dedicado`.
+- `js/home-contato.js` foi criado como terceiro módulo da Fase 1 para a extração comportamental 1:1 da lógica do formulário de contato; aproximadamente 58 linhas inline foram removidas de `index.html`, sem mudança funcional ou visual.
+- A referência única adicionada foi `<script src="js/home-contato.js?v=site-public-b1-20260708" defer></script>`, posicionada antes de `js/home-experiencias.js` e `js/home-eventos.js`. A lógica permanece privada em IIFE, sem propriedade em `window`, export ou nova dependência.
+- O endpoint `https://formspree.io/f/xpqykpqd` e o `FORMSPREE_ID` `xpqykpqd` foram preservados, assim como POST, headers Accept/Content-Type, `event.preventDefault()`, `FormData`, `Object.fromEntries()`, `JSON.stringify()`, `response.ok`, loading, mensagens, classes `form-status success/error`, reset somente no sucesso, timeout de 6000 ms, `console.error`, validação nativa e retornos silenciosos.
+- R1 e R2 permaneceram intactos. Markup, CSS, `translations.js` e `config.js` permaneceram intactos.
+- A metadata da última atualização do site foi atualizada antes do commit funcional com `node scripts/update-site-meta.mjs`.
+
+### Validação funcional registrada
+
+- `node --check js/home-contato.js` aprovado.
+- `git diff --check` aprovado.
+- `FORMSPREE_ID` removido de `index.html`; uma única referência a `js/home-contato.js`; módulo carregado uma única vez.
+- Validação HTML nativa `required` bloqueou submissão vazia.
+- Nenhuma requisição POST e nenhum envio real foram realizados durante a validação.
+- Console sem novo `ReferenceError` ou `TypeError`; carrossel de experiências continuou funcionando; grade “Acontece em breve” continuou com quatro cards.
+- R1 e R2 permaneceram intactos; CSS, `translations.js`, `config.js` e markup permaneceram intactos; GitHub Pages foi publicado e validado.
+
+### Pendência externa do Formspree
+
+- O Workflow atual continua temporariamente entregando para `imprensapmsms@gmail.com`.
+- O endereço institucional obrigatório `turismo@saomateusdosul.pr.gov.br` já foi adicionado em Linked Emails, mas o status permanece `PENDING` e depende de confirmação por outro setor.
+- Nenhum envio real deve ocorrer enquanto permanecer `PENDING`.
+- Após o status mudar para `VERIFIED`: abrir Forms > TURISMO > Workflow > Email; selecionar `turismo@saomateusdosul.pr.gov.br`; salvar mantendo a ação Enabled; realizar um único envio institucional controlado; confirmar recebimento no novo endereço; e confirmar que o Gmail antigo deixou de receber.
+- A troca futura ocorrerá somente no painel do Formspree e não exigirá alteração de código, metadata, commit ou deploy.
+
+### Estado da Fase 1 e limites mantidos
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel: concluído.
+3. R3 — formulário: concluído.
+4. R4 — acessibilidade e utilitários visuais: próximo módulo, não iniciado nesta tarefa.
+5. R5 — i18n/fallback inline: posterior e por último.
+
+- Admin/CMS/Firebase continua pausado.
+- V6 e V7 continuam somente após a fundação modular; B3 permanece em fase própria.
+- V4D, V5C3 e V5D continuam pendentes.
+- O CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela.
+- A revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente.
+- R4, R5, V6, V7 e B3 não foram executados nesta atualização de governança.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado permanente de R3, separação dos módulos da Fase 1, pendência do Formspree e próximos caminhos atualizados.
+- `TASKS.md` — estado atual, Fase 1, R3 concluído, R4 como próximo módulo e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -10
+git show --stat --oneline 9d9a8ef
+git show --stat --oneline 6e126cd
+git show --stat --oneline efe6c11
+git diff -- .claude
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes.
+- [x] Commit funcional `9d9a8ef` presente no histórico.
+- [x] Commits funcionais de R1 (`efe6c11`) e R2 (`6e126cd`) presentes no histórico.
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado.
+- [x] Apenas `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` foram alterados nesta atualização.
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, dado, regra, Admin/CMS/Firebase, service worker, sitemap, robots ou artefato de auditoria foi alterado.
+
+### Próximo passo
+
+- Planejar R4 em bloco separado, após escopo explícito; não executar R4, R5, V6, V7 ou B3 nesta atualização.
+
+---
+
 ## 2026-07-13 — Registro de R2 na governança
 
 **Ferramenta/modelo:** Codex
