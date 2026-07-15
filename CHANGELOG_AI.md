@@ -6,6 +6,89 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-15 — Registro de R4B na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente a conclusão do R4B da refatoração modular progressiva da home, sem alterar runtime, código funcional ou publicação.
+
+### Resultado consolidado
+
+- R4B foi concluído, validado, commitado, enviado por push e publicado com sucesso. O commit funcional presente no histórico é `b272330 refactor(home): extrai utilitarios visuais para modulo dedicado`.
+- `js/home-utilitarios.js` foi criado como módulo dedicado para a extração comportamental 1:1 dos utilitários visuais da home: barra de progresso de rolagem e botão “Voltar ao topo”. Aproximadamente 36 linhas inline foram removidas de `index.html`, sem mudança visual ou funcional.
+- A referência adicionada foi `<script src="js/home-utilitarios.js?v=site-public-b1-20260708" defer></script>`, no mesmo ponto do bloco anterior: depois do init do VLibras e antes do menu hamburger. As variáveis ficaram privadas em IIFE, sem export, sem propriedade em `window` e sem nova dependência.
+- Foram preservados busca e null-checks dos elementos, listener de scroll passivo, cálculos de `scrollTop`/`docHeight`, proteção contra divisão por zero, `Math.round`, atualização de `style.width`, segundo listener de scroll, limiar de 300px, classe `visible`, clique e `window.scrollTo({ top: 0, behavior: 'smooth' })`. Não foram introduzidos `requestAnimationFrame`, debounce, throttle ou tratamento novo para `prefers-reduced-motion`.
+- R1, R2 e R3 permaneceram intactos. Menu hamburger, seletor de idiomas, barra eMAG, fonte, contraste, atalhos, i18n e acessibilidade eMAG permaneceram intactos.
+- A metadata da última atualização do site foi atualizada antes do commit funcional com `node scripts/update-site-meta.mjs`.
+
+### Validação funcional registrada
+
+- `node --check js/home-utilitarios.js` aprovado.
+- `git diff --check` aprovado.
+- Uma única referência a `js/home-utilitarios.js`; módulo carregado uma única vez; nenhum 404 novo.
+- Barra de progresso validada em 0% no topo, valor intermediário no meio e aproximadamente 100% no final.
+- Botão validado oculto antes de 300px, visível depois de 300px, retornando ao topo no clique e ocultando novamente no topo.
+- Comportamento validado em desktop e mobile; menu hamburger, seletor de idiomas, barra eMAG, fonte, contraste, atalhos, R1, R2 e R3 permaneceram funcionais.
+- Nenhum POST real foi executado no formulário; GitHub Pages foi publicado e validado.
+
+### Estado da Fase 1 e limites mantidos
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel: concluído.
+3. R3 — formulário: concluído.
+4. R4B — utilitários visuais: concluído.
+5. R4A — acessibilidade eMAG: próximo microbloco, ainda não iniciado.
+6. R5 — i18n/fallback inline: posterior e por último.
+
+- R4A permanece restrito a fonte, contraste, restauração via `localStorage`, `prefers-reduced-motion`/vídeo e atalhos Alt+1..4. Deverá preservar explicitamente `window.changeFontSize` e `window.toggleContrast`, pois quatro atributos `onclick` da home dependem dessas funções globais.
+- Admin/CMS/Firebase continua pausado.
+- V6 e V7 continuam somente após a fundação modular; B3 permanece em fase própria.
+- V4D, V5C3 e V5D continuam pendentes.
+- O CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela.
+- A revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente.
+- A pendência do Formspree permanece: Workflow temporariamente em `imprensapmsms@gmail.com`; `turismo@saomateusdosul.pr.gov.br` continua `PENDING`; nenhum envio real até a troca do Workflow.
+- R4A, R5, V6, V7 e B3 não foram executados nesta atualização de governança.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado permanente de R4B, separação R4A/R5 e próximos caminhos atualizados.
+- `TASKS.md` — estado atual, Fase 1, R4B concluído, R4A como próximo microbloco e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -12
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes.
+- [x] Commit funcional `b272330` presente no histórico.
+- [x] Commits funcionais de R1 (`efe6c11`), R2 (`6e126cd`) e R3 (`9d9a8ef`) presentes no histórico.
+- [x] `.claude/settings.local.json` identificado como não rastreado e mantido intocado.
+- [x] Apenas `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` foram alterados nesta atualização.
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, dado, regra, Admin/CMS/Firebase, service worker, sitemap, robots ou artefato de auditoria foi alterado.
+
+### Próximo passo
+
+- Planejar R4A como microbloco separado, restrito à acessibilidade eMAG, após escopo explícito; não executar R4A, R5, V6, V7 ou B3 automaticamente.
+
+---
+
 ## 2026-07-13 — Registro de R3 na governança
 
 **Ferramenta/modelo:** Codex
