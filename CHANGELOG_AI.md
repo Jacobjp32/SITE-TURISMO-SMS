@@ -6,6 +6,79 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-16 — Conclusão do V7-PREP e aprovação da estratégia do V7
+
+**Ferramenta/modelo:** Claude Fable 5 (Claude Code)
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (governança-only, sem commit nesta atualização)
+
+### Objetivo
+
+Registrar oficialmente a conclusão do V7-PREP — bloco exclusivamente de leitura, diagnóstico, comparação, experimento em memória e planejamento — e as cinco decisões humanas aprovadas para a futura execução do V7. Nenhum arquivo de código, HTML, CSS, JavaScript de runtime, dado, metadata, Service Worker, tag Git, Admin/CMS/Firebase ou artefato de auditoria foi alterado, nem durante o V7-PREP, nem nesta governança.
+
+### Diagnóstico consolidado do V7-PREP
+
+- A navegação da home (`index.html`) permanece mantida separadamente; as 17 páginas internas usam `js/nav-shared.js` (13 ativas com token `?v=site-public-b1-20260708`, 3 legadas e `portal-usuario` com tokens antigos, fora do bloco).
+- A duplicação da navegação é a principal dívida estrutural remanescente após a Fase 1. A execução do V7 possui risco alto.
+- O desktop já tem paridade visual quase total (computed styles da home: nav `top:36px`, logo 70px, padding `1rem 2rem` — iguais aos do shared). As divergências críticas são o offset do body no desktop (shared impõe `padding-top:132px`; a home desenha com 0) e o breakpoint mobile (home 1180px vs shared 968px).
+- O guard `#mainNav` do nav-shared não protege a home atual, pois o `<nav>` da home não tem esse `id`; o trilho da barra de progresso é injetado sem guard.
+
+### Experimento temporário em memória (browser local, desfeito por reload)
+
+Carregar a home atual e injetar `js/nav-shared.js` pelo console produziu: dois headers/navs, dois `#navToggle`, dois `#navLinks`, dois seletores de idioma (`#currentLang`/`#langDropdown`), dois modais de busca (`#searchModal`), duas barras de acessibilidade, duas barras de progresso (`#sms-scroll-*`), duas faixas de atalhos mobile, IDs duplicados em série e aumento indevido de 132px no padding superior do body (hero empurrado). Os guards de VLibras e do `#backToTop` funcionaram (1 instância cada). Conclusão: **a coexistência é inviável; não haverá migração gradual ingênua; o cutover do chrome da home deverá ser atômico, precedido por bloco de compatibilidade isolado.**
+
+### Estratégia aprovada (V7A → V7B → V7C1 → V7C2)
+
+- **V7A — compatibilidade do nav-shared (risco baixo-médio):** preparar `js/nav-shared.js` para uso futuro na home, adicionando exceção de padding para `body.home-page` no desktop no CSS injetado; atualizar o token `?v=` das tags ativas de nav-shared; manter `index.html` completamente intacto; testar as páginas internas.
+- **V7B — cutover atômico da home (risco alto):** substituir a navegação própria pelo nav-shared, removendo no mesmo commit o chrome estático da navegação, o menu hamburger inline, o modal de busca estático, o overlay estático, a barra de progresso estática, o botão voltar ao topo estático, as tags de `js/home-i18n.js` e `js/home-utilitarios.js` e a tag duplicável de `scroll-animations.js` (o guard do shared é por `id`, não por `src`); manter fisicamente os módulos aposentáveis no disco para rollback; manter `js/home-acessibilidade.js` durante o cutover; alinhar o breakpoint mobile da home.
+- **V7C1 — limpeza de runtime (risco baixo):** excluir fisicamente `js/home-i18n.js` e `js/home-utilitarios.js`; reduzir `js/home-acessibilidade.js` a `prefers-reduced-motion`/pausa do vídeo e atalhos Alt+1..4; revisar o registro duplicado do Service Worker.
+- **V7C2 — limpeza de CSS (risco médio, bloco separado):** remover somente CSS comprovadamente órfão após o cutover — regras antigas da navegação, `.language-dropdown.active`, drawers antigos — e avaliar `.map-modal-*` e `.agrosamas-banner`. Separado devido à complexidade de `css/index.css` e seus ~743 `!important`.
+
+Cada microbloco exige metadata, commit próprio, governança própria e deploy com teste em produção antes do microbloco seguinte.
+
+### Decisões humanas aprovadas
+
+1. **Link "Início":** adota o destino `/`; aceita-se que clicar em Início estando na home recarregue a página em vez de rolar até `#map-hero`, priorizando paridade e manutenção única.
+2. **Idioma do primeiro acesso:** prevalece a detecção do idioma preferencial do navegador feita por `translations.js`; PT deixa de ser forçado quando `sms-lang` estiver ausente. PT/EN/ES/PL continuam disponíveis e a seleção manual continua persistida em `sms-lang`.
+3. **Área restrita:** a home adota o comportamento dinâmico do nav-shared — usuário não autenticado vê o acesso normal; usuário com `smsUserSession` vê nome e opção de saída. Somente leitura de `localStorage`; não reativa Admin/CMS/Firebase.
+4. **Breakpoint:** a navegação da home é alinhada aos 968px do shared, eliminando a divergência da faixa 968–1180px; tablets em paisagem passam a usar a navegação desktop.
+5. **Acessibilidade:** `js/home-acessibilidade.js` é mantido durante o V7B e não é aposentado integralmente no cutover — o shared cobre fonte e contraste, mas não cobre a pausa do vídeo com `prefers-reduced-motion` nem os atalhos JS Alt+1..4 (incluindo Alt+3 da busca). No V7C1 o módulo será reduzido às responsabilidades que o shared não possui. Nenhuma regressão de acessibilidade deve ser aceita.
+
+### Módulos e destinos
+
+- Sobrevivem ao V7: `js/home-eventos.js`, `js/home-experiencias.js`, `js/home-contato.js`.
+- Tags removidas no V7B, arquivos preservados até o V7C1: `js/home-i18n.js`, `js/home-utilitarios.js`.
+- Mantido no V7B e reduzido no V7C1: `js/home-acessibilidade.js`.
+- Removido no V7B: bloco inline do menu hamburger.
+- `translations.js` permanece intacto como fonte compartilhada; `window.applyTranslations` e `translationsApplied` permanecem contratos obrigatórios.
+- VLibras: o bloco estático da home permanece no V7B; os guards do shared impedem segunda instância; consolidação eventual fica para o V7C1 ou follow-up.
+- Busca: `search.js` e `search-index.js` intactos; o modal estático da home sai no V7B e o modal injetado pelo shared vira a única instância.
+
+### Cache
+
+`js/nav-shared.js` pertence a `NEVER_CACHE` no Service Worker; HTML e navegações não são cacheados pelo SW; `sw.js` e `CACHE_NAME` não deverão ser alterados em V7A ou V7B. O V7A usará novo token `?v=` nas tags de nav-shared das páginas ativas; páginas legadas e `portal-usuario` ficam fora do bloco. `home-i18n.js`, `home-utilitarios.js` e `home-acessibilidade.js` permanecem fisicamente no disco durante o V7B para facilitar rollback.
+
+### Riscos e follow-ups preservados
+
+- O nav-shared não fecha automaticamente o drawer ao redimensionar para desktop (edge case; follow-up pós-V7).
+- O skip link Alt+3 não existe no shared (coberto pelo `home-acessibilidade.js` mantido).
+- `css/index.css` possui ~743 ocorrências de `!important` — motivo do V7C2 separado.
+- O VLibras estático poderá ser consolidado depois.
+- O bug das duas opções `.lang-option.active` após reload será corrigido naturalmente pelo shared no cutover.
+- Nenhuma dessas melhorias adicionais deve ser misturada ao V7A.
+
+### Estado após esta governança
+
+V7-PREP concluído; estratégia do V7 aprovada; cinco decisões humanas aprovadas; **V7A é o próximo microbloco e ainda não foi iniciado**; V7B, V7C1 e V7C2 não iniciados; V6 e B3 pendentes; V5D pendente e não urgente; correção de `TURISMO_EVENTOS`/AgroSamas fora do V7; Admin/CMS/Firebase pausado. A tag `pos-fase1-modular` segue protegendo o estado anterior ao V7.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — registro do V7-PREP, estratégia V7A→V7B→V7C, contrato `body.home-page`, módulos preservados/aposentáveis e decisões aprovadas.
+- `TASKS.md` — V7-PREP concluído, cinco decisões, V7A como próximo passo, riscos por microbloco e requisitos de deploy/teste entre microblocos.
+- `CHANGELOG_AI.md` — este registro.
+
+---
+
 ## 2026-07-16 — Checkpoint pós-Fase 1
 
 **Ferramenta/modelo:** Codex
