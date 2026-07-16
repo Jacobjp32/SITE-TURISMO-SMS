@@ -6,15 +6,62 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-16 — Checkpoint pós-Fase 1
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (governança-only, sem commit nesta atualização)
+
+### Objetivo
+
+Registrar oficialmente o checkpoint técnico e arquitetural pós-Fase 1, preservando a decisão de não iniciar automaticamente qualquer fase posterior. Nenhum arquivo de runtime, dado, auditoria, Admin/CMS/Firebase, Service Worker, tag ou metadata foi alterado.
+
+### Resultado consolidado
+
+- A Fase 1 modular foi concluída e não há extração a reverter. Os módulos são `js/home-eventos.js`, `js/home-experiencias.js`, `js/home-contato.js`, `js/home-utilitarios.js`, `js/home-acessibilidade.js` e `js/home-i18n.js`.
+- O checkpoint foi concluído somente em leitura. A tag `pos-fase1-modular` está publicada localmente e remotamente e aponta para o commit de governança `3c9caee docs: registrar conclusão do R5B e da Fase 1`.
+- `index.html` está em aproximadamente 1.712 linhas e 99 KB, com cerca de 220 linhas de JavaScript inline, redução aproximada de 31% desde `pos-v5-checkpoint`. O principal bloco inline restante é o menu hamburger, reservado ao V7.
+- A avaliação confirmou responsabilidades coerentes, ausência de fragmentação excessiva e redução objetiva do efeito Frankenstein. O gargalo estrutural principal passou a ser a duplicação da navegação; CSS e mídia permanecem gargalos relevantes.
+
+### Validação e decisão
+
+- Foram consolidados os testes de home em desktop/mobile, PT/EN/ES/PL, acessibilidade, eventos, carrossel, formulário sem POST, clima, busca, tema, mascote, progresso, voltar ao topo e smoke test das páginas públicas.
+- Não foram encontrados `ReferenceError`, `TypeError`, `SyntaxError` ou 404 novos. Os erros de App Check/ReCAPTCHA em localhost permanecem ambientais e conhecidos.
+- O próximo bloco aprovado é `V7-PREP`, somente leitura e planejamento. `V7-EXEC` não foi iniciado nem autorizado; V6 e B3 permanecem pendentes. Após o `V7-PREP`, haverá nova decisão humana sobre os microblocos de execução.
+- Arquivos `js/home-*.js` são atendidos pelo runtime cache e `translations.js` participa do cache/precache. Alterações futuras nesses arquivos exigem avaliar novo token `?v=` ou nova versão de `CACHE_NAME`; o cache não foi alterado nesta tarefa.
+
+### Decisão de conteúdo conhecida
+
+- O local correto do AgroSamas foi confirmado humanamente como `Rua do Mathe`.
+- `TURISMO_EVENTOS/js/data/eventos.js` ainda registra `Parque de Exposições`. Essa referência é uma inconsistência de dados conhecida, não uma dúvida editorial.
+- O alinhamento para `Rua do Mathe` deverá ocorrer futuramente em bloco exclusivo de dados, fora do `V7-PREP`. Nenhum arquivo de dados, `TURISMO_EVENTOS`, `eventos-2026.json` ou `js/data/*` foi alterado nesta atualização.
+
+### Pendências preservadas
+
+- V5C3, V5D, CSS órfão `.map-modal-*` e `.agrosamas-banner`, chaves i18n órfãs, `CONFIG.agrosamas` sem efeito na home, vídeo hero de 32 MB, `translations.js` síncrono, imagens/mídias possivelmente órfãs, `avaliacoes.js` síncrono, notícias hard-coded duplicadas, virada anual de `eventos-2026.json`, possível duplicação entre `eventos-2026.json` e `TURISMO_EVENTOS`, revisão do destaque do 32º Mês Polonês após 30/08/2026 e a pendência externa do Formspree permanecem documentados.
+- Admin/CMS/Firebase continua pausado. Não foram iniciados V6, V7, V7-EXEC ou B3.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — checkpoint pós-Fase 1, decisão `V7-PREP` e nota curta sobre AgroSamas.
+- `TASKS.md` — métricas atuais, próximo bloco, regra de cache e decisão de dados.
+- `CHANGELOG_AI.md` — este registro e correção da nota de status do registro anterior do R5B.
+
+### Nota de correção histórica
+
+O registro anterior do R5B não deve ser interpretado como “aplicado sem commit”: o commit de governança `3c9caee` existe e registra a conclusão do R5B e da Fase 1. O status abaixo foi corrigido para refletir esse fato; a ausência de commit mencionada neste novo registro refere-se somente à atualização documental atual.
+
+---
+
 ## 2026-07-16 — Registro de R5B e encerramento da Fase 1
 
 **Ferramenta/modelo:** Codex
 **Responsável pela aprovação:** Jacob
-**Status:** aplicado (sem commit)
+**Status:** aplicado e commitado no commit de governança `3c9caee`
 
 ### Objetivo
 
-Registrar exclusivamente na governança a conclusão do R5B e o encerramento oficial da Fase 1 da refatoração modular progressiva da home. Nenhum teste de runtime, alteração de código, commit, push ou deploy foi executado nesta atualização.
+Registrar exclusivamente na governança a conclusão do R5B e o encerramento oficial da Fase 1 da refatoração modular progressiva da home. Nenhum teste de runtime, alteração de código, push ou deploy foi executado nesta atualização documental; o registro foi posteriormente preservado no commit de governança `3c9caee`.
 
 ### Resultado consolidado
 
