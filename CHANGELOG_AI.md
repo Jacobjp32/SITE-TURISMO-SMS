@@ -6,6 +6,84 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-16 — Registro de R4A na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente a conclusão do R4A da refatoração modular progressiva da home, sem executar novamente testes de runtime, atualizar metadata, alterar código ou publicar novamente.
+
+### Resultado consolidado
+
+- R4A foi concluído, validado, commitado, enviado por push e publicado com sucesso. O commit funcional confirmado no histórico é `db1b3cb refactor(home): extrai acessibilidade eMAG para modulo dedicado`.
+- `js/home-acessibilidade.js` foi criado como módulo dedicado para a extração comportamental 1:1 da acessibilidade eMAG: tamanho da fonte, alto contraste, restauração das preferências via `localStorage`, `prefers-reduced-motion` nos vídeos e atalhos Alt+1..4.
+- Aproximadamente 97 linhas de JavaScript inline foram removidas de `index.html`; não houve mudança visual ou funcional. A referência usa `defer` e `?v=site-public-b1-20260708`, posicionada imediatamente antes de `js/home-contato.js`, mantendo a ordem R4A, R3, R2 e R1 dos módulos da home.
+- `window.changeFontSize` e `window.toggleContrast` foram preservadas explicitamente para o markup com `onclick`; `currentFontSize` permaneceu privado dentro da IIFE. O contrato `sms-font-size`/`sms-high-contrast`, fonte, contraste, reduced motion, vídeo e atalhos foi preservado.
+- R1, R2, R3 e R4B permaneceram intactos. Markup e CSS permaneceram intactos. R4A e R4B continuam módulos separados por responsabilidade.
+- A metadata da última atualização do site havia sido atualizada antes do commit funcional com `node scripts/update-site-meta.mjs`. GitHub Pages foi publicado e validado na validação funcional anterior ao registro.
+
+### Validação funcional registrada
+
+- Validações previamente concluídas foram apenas registradas nesta atualização: `node --check js/home-acessibilidade.js`, `git diff --check`, preservação do markup e dos atributos `onclick`, funções globais preservadas, `window.currentFontSize` indefinido, carregamento único, ausência de 404 novo, fonte, contraste, atalhos e reduced motion preservados.
+- Nenhum teste de runtime foi executado novamente nesta atualização. Nenhum envio real do Formspree foi realizado.
+
+### Estado da Fase 1 e limites mantidos
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel: concluído.
+3. R3 — formulário: concluído.
+4. R4B — utilitários visuais: concluído.
+5. R4A — acessibilidade eMAG: concluído.
+6. R5 — i18n/fallback inline: próximo bloco, ainda não iniciado e por último.
+
+- Antes de qualquer `R5-EXEC`, deverá existir um `R5-PREP` somente em análise.
+- Admin/CMS/Firebase continua pausado.
+- V6 e V7 continuam somente após a fundação modular; B3 permanece em fase própria.
+- V4D, V5C3 e V5D continuam pendentes.
+- O CSS órfão `.map-modal-*` e `.agrosamas-banner` continua como frente paralela.
+- A revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 continua pendente.
+- A pendência externa do Formspree permanece integralmente: Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING`, nenhum envio real antes de `VERIFIED` e troca posterior somente no painel.
+- R5, V6, V7 e B3 não foram executados nesta atualização de governança.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado permanente de R4A, separação R4A/R4B e R5 como próximo bloco atualizados.
+- `TASKS.md` — estado atual, Fase 1, R4A concluído, `R5-PREP` e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -15
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes; `.claude/settings.local.json` não rastreado foi identificado e permaneceu intocado.
+- [x] Commit funcional `db1b3cb` confirmado no histórico.
+- [x] Commit de governança do R4B `ab94b13` confirmado no histórico.
+- [x] Commits funcionais de R1 (`efe6c11`), R2 (`6e126cd`) e R3 (`9d9a8ef`) confirmados no histórico.
+- [x] Apenas `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` foram alterados nesta atualização.
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, metadata, dado, regra, Admin/CMS/Firebase, service worker, sitemap, robots ou artefato de auditoria foi alterado.
+
+### Próximo passo
+
+- Preparar futuramente o `R5-PREP` somente em análise; não executar `R5-EXEC`, V6, V7 ou B3 automaticamente.
+
+---
+
 ## 2026-07-15 — Registro de R4B na governança
 
 **Ferramenta/modelo:** Codex
