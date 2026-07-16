@@ -6,6 +6,92 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-16 — Registro de R5B e encerramento da Fase 1
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar exclusivamente na governança a conclusão do R5B e o encerramento oficial da Fase 1 da refatoração modular progressiva da home. Nenhum teste de runtime, alteração de código, commit, push ou deploy foi executado nesta atualização.
+
+### Resultado consolidado
+
+- R5B foi concluído, validado, commitado, enviado por push e publicado com sucesso. O commit funcional confirmado no Git é `21564847d5b74697affcbfd68ba99c6fcbdb0340 refactor(home): extrai runtime i18n do seletor de idiomas para modulo dedicado`, presente em `origin/main`.
+- `git show --stat --oneline --decorate --no-renames 2156484` confirmou somente os arquivos esperados: `index.html`, `js/home-i18n.js` e `js/site-meta.js`, com `170 insertions(+)` e `165 deletions(-)`. `js/home-i18n.js` foi criado, o runtime inline foi removido de `index.html` e `js/site-meta.js` foi atualizado antes do commit funcional.
+- A tag registrada em `index.html` é `<script src="js/home-i18n.js?v=site-public-b1-20260708"></script>`. O contrato crítico foi preservado: sem `defer`, sem `async` e sem `type="module"`.
+- A ordem de inicialização permanece histórica: `translations.js` síncrono no head; depois, no body, o menu hamburger inline; `js/home-i18n.js` síncrono; e então `js/home-acessibilidade.js`, `js/home-contato.js`, `js/home-experiencias.js` e `js/home-eventos.js` com `defer`.
+- O primeiro acesso sem `sms-lang` continua terminando em PT, com `🇧🇷 PT` no botão e `document.documentElement.lang` em `pt-BR`. O motivo do carregamento clássico — preservar a ordem entre `translations.js` e o runtime da home — fica registrado como decisão consciente.
+- `translations.js` permaneceu intacto. `sms-lang`, `window.translations`, `window.applyTranslations` e o evento `translationsApplied` foram preservados. PT/EN/ES/PL, ciclo de idiomas, persistência após reload, atributos do seletor, placeholders, aria-labels, conteúdo dinâmico, busca, clima, tema sazonal, mascote e menu mobile foram validados no R5B.
+- R1, R2, R3, R4B, R4A e R5A permaneceram intactos. V4D permanece concluído e absorvido pelo R5A.
+
+### Encerramento oficial da Fase 1
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel de experiências: concluído.
+3. R3 — formulário de contato: concluído.
+4. R4B — utilitários visuais: concluído.
+5. R4A — acessibilidade eMAG: concluído.
+6. R5A — remoção do fallback inline obsoleto: concluído.
+7. R5B — externalização do runtime i18n: concluído.
+8. Fase 1 da refatoração modular: concluída.
+
+A Fase 1 foi concluída sem reescrever a home do zero. A estratégia de refatoração modular progressiva no projeto atual foi preservada, a dívida de JavaScript inline foi significativamente reduzida e cada responsabilidade foi separada em módulo próprio. `js/home-i18n.js` poderá ser aposentado ou absorvido futuramente no V7.
+
+### Próximas decisões e pendências
+
+- Nenhuma etapa da Fase 2 foi iniciada. O próximo passo registrado é somente um checkpoint/decisão pós-Fase 1.
+- V6, V7 e B3 permanecem pendentes; não foram iniciados automaticamente. V7 continua sendo bloco de alto risco para unificação da navegação e deve receber decisão própria; V6 deve ser reavaliado após a fundação modular; B3 mídia/performance continua reservado para depois.
+- V5C3, V5D, CSS órfão `.map-modal-*`, CSS órfão `.agrosamas-banner`, chaves i18n órfãs, `CONFIG.agrosamas` temporariamente sem efeito na home, revisão editorial do destaque do 32º Mês Polonês após 30/08/2026, virada anual de `eventos-2026.json`, possível duplicação entre `eventos-2026.json` e `TURISMO_EVENTOS` e demais follow-ups existentes permanecem documentados.
+- O follow-up de duas opções `.lang-option.active` após reload permanece reservado para V7 e não foi corrigido nesta governança.
+- Admin/CMS/Firebase continua pausado.
+
+### Pendência externa do Formspree
+
+- O endpoint permanece `xpqykpqd`.
+- O Workflow continua temporariamente direcionado para `imprensapmsms@gmail.com`.
+- O endereço institucional obrigatório `turismo@saomateusdosul.pr.gov.br` permanece `PENDING` em Linked Emails e depende de confirmação por outro setor.
+- Nenhum envio real deve ocorrer antes de `VERIFIED`.
+- Após `VERIFIED`, a troca deve ocorrer somente no painel do Formspree: Forms > TURISMO > Workflow > Email; selecionar o endereço institucional; salvar mantendo a ação Enabled; realizar um único envio institucional controlado; confirmar o recebimento institucional; e confirmar que o Gmail antigo deixou de receber. Não serão necessários código, metadata, commit ou deploy.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado do R5B, contrato de carregamento, encerramento da Fase 1 e checkpoint pós-Fase 1 atualizados.
+- `TASKS.md` — estado atual, bloco concluído, Fase 1 encerrada, próximas decisões e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -20
+git rev-parse 2156484
+git show --stat --oneline --decorate --no-renames 2156484
+git show --format= --name-status --no-renames 2156484
+git merge-base --is-ancestor 2156484 origin/main
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes; `.claude/settings.local.json` não rastreado foi identificado e permaneceu intocado.
+- [x] Commit funcional R5B confirmado no histórico e presente em `origin/main`.
+- [x] Commit de governança do R5A (`33be2e1`) e commits funcionais/de governança anteriores da Fase 1 confirmados no histórico recente.
+- [x] `git show` confirmou os três arquivos e as estatísticas reais do R5B, sem mudança inesperada.
+- [x] R5B foi somente registrado nesta governança; as validações funcionais foram concluídas antes desta atualização e não foram executadas novamente.
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, dados, metadata, regras, Admin/CMS/Firebase, service worker, sitemap, robots, `.claude/*` ou `docs/auditoria-output/*` foi alterado nesta atualização.
+- [ ] Commit, push e deploy desta atualização de governança — não executados por escopo.
+
+### Próximo passo
+
+- Fazer somente uma decisão/checkpoint pós-Fase 1. Não iniciar automaticamente Fase 2, V6, V7 ou B3.
+
+---
+
 ## 2026-07-16 — Registro de R5A na governança
 
 **Ferramenta/modelo:** Codex
