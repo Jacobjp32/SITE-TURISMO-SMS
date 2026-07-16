@@ -6,6 +6,95 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-16 — Registro de R5A na governança
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** aplicado (sem commit)
+
+### Objetivo
+
+Registrar oficialmente a conclusão do R5A da refatoração modular progressiva da home, sem executar novamente alterações ou testes de runtime.
+
+### Resultado consolidado
+
+- R5A foi concluído, validado, commitado, enviado por push e publicado com sucesso. O commit funcional confirmado no `git log` é `55615cd0d0c25db647d9ed0d04decca8e0ea7eb9 refactor(home): remove dicionario fallback inline obsoleto de traducoes`, e o commit está presente em `origin/main`.
+- O dicionário fallback inline obsoleto e duplicado pt/en/es/pl foi removido de `index.html`, com aproximadamente 174 linhas do fallback eliminadas. A declaração final foi preservada exatamente como `var translations = window.translations || {};`.
+- `translations.js` permaneceu intacto e preserva cobertura completa das chaves da home em PT, EN, ES e PL, com aproximadamente 906 chaves por idioma e nenhuma chave do markup dependente do fallback removido.
+- O runtime inline do seletor permaneceu intacto, incluindo `sms-lang`, `window.applyTranslations`, `translationsApplied`, IIFE, `'use strict'`, `ready()`, mapas, dropdown, listeners, aplicação inicial e caminhos de degradação.
+- PT/EN/ES/PL, ciclo PT → EN → ES → PL → PT, bandeira/sigla, `aria-label`/`title`, placeholders, aria-labels do carrossel, reações ao evento `translationsApplied`, `document.documentElement.lang` e persistência após reload foram validados.
+- R1, R2, R3, R4A e R4B permaneceram intactos. Nenhuma tag ou módulo novo foi criado neste bloco. A atualização de `js/site-meta.js` ocorreu antes do commit funcional com `node scripts/update-site-meta.mjs`.
+
+### Estado da Fase 1
+
+1. R1 — eventos: concluído.
+2. R2 — carrossel: concluído.
+3. R3 — formulário: concluído.
+4. R4B — utilitários visuais: concluído.
+5. R4A — acessibilidade eMAG: concluído.
+6. R5A — remoção do fallback obsoleto: concluído.
+7. R5B — externalização do runtime i18n para `js/home-i18n.js`: próximo microbloco, ainda não iniciado.
+
+- V4D foi absorvido e concluído pelo R5A; não permanece como pendência ativa duplicada.
+- Antes de qualquer `R5B-EXEC`, usar o escopo definido pelo `R5-PREP` somente em análise.
+- `js/home-i18n.js` deverá ser carregado sem `defer`, na mesma posição atual do bloco inline, depois do menu hamburger e antes de `js/home-acessibilidade.js`.
+- R5B não foi iniciado nesta atualização.
+
+### Validação funcional registrada e limites
+
+- As validações funcionais do R5A foram concluídas previamente e apenas registradas nesta atualização; nenhum teste de runtime foi executado novamente.
+- A degradação com bloqueio direto de `translations.js` não pôde ser reproduzida no ambiente; foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
+- O follow-up de duas opções `.lang-option.active` após reload fica registrado para V7; não foi corrigido no R5A nem nesta governança.
+
+### Pendências preservadas
+
+- Admin/CMS/Firebase continua pausado.
+- V6 e V7 continuam posteriores à Fase 1; B3 permanece em fase própria.
+- V5C3 e V5D continuam pendentes.
+- CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela.
+- A revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente.
+- A pendência externa do Formspree permanece: endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e nenhum envio real antes de `VERIFIED`.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado permanente do R5A, V4D absorvido, R5B como próximo microbloco e regra sem `defer` atualizados.
+- `TASKS.md` — estado atual, Fase 1, R5A concluído, R5B não iniciado e pendências atualizados.
+- `CHANGELOG_AI.md` — registro desta atualização de governança.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -15
+git show -s --format=fuller 55615cd
+git show --stat --oneline 55615cd
+git merge-base --is-ancestor 55615cd origin/main
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git diff -- .claude
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- [x] Working tree inicial sem alterações rastreadas pendentes; `.claude/settings.local.json` não rastreado foi identificado e permaneceu intocado.
+- [x] Commit funcional R5A confirmado no histórico e presente em `origin/main`.
+- [x] Commit de governança do R4A (`f70e1af`) e commits funcionais anteriores da Fase 1 confirmados no histórico.
+- [x] `git diff --check` aprovado.
+- [x] Somente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` foram alterados nesta atualização.
+- [x] Nenhum código, HTML, CSS, JavaScript de runtime, `index.html`, `js/site-meta.js`, `translations.js`, dados, regras, Admin/CMS/Firebase, service worker, sitemap, robots, `.claude/*` ou `docs/auditoria-output/*` foi alterado nesta atualização.
+
+### Próximo passo
+
+- Manter R5B como próximo microbloco, sem iniciá-lo nesta governança; usar primeiro o escopo do R5-PREP e preservar o carregamento sem `defer`.
+
+---
+
 ## 2026-07-16 — Registro de R4A na governança
 
 **Ferramenta/modelo:** Codex
