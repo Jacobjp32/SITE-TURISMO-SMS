@@ -6,6 +6,108 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-17 — Conclusão do V7A de compatibilidade do nav-shared
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** V7A concluído, validado, commitado, enviado por push e publicado; esta atualização é somente de governança, sem novo commit, push ou deploy.
+
+### Objetivo
+
+Registrar oficialmente a conclusão do V7A, primeiro microbloco da estratégia de unificação da navegação pública aprovada no V7-PREP. O V7A preparou a compatibilidade futura do `js/nav-shared.js`, renovou o token das páginas internas ativas e manteve a home completamente intacta. V7B, V7C1, V7C2, V6 e B3 não foram executados nesta atualização.
+
+### Evidência confirmada pelo Git
+
+- Commit funcional: `4cd0616cb9d393571946f90c97a753eae16e69c3`.
+- Mensagem exata: `feat(nav): prepara nav-shared para adocao pela home (V7A)`.
+- O commit está presente em `origin/main`.
+- `git show --stat --oneline --decorate --no-renames` confirmou **15 arquivos modificados, 20 inserções e 14 remoções**.
+- `git show --format= --name-status --no-renames` confirmou somente os arquivos abaixo:
+  - `js/nav-shared.js`;
+  - `js/site-meta.js`;
+  - `eventos.html`;
+  - `galeria.html`;
+  - `local.html`;
+  - `mapa-turistico.html`;
+  - `noticia.html`;
+  - `noticias.html`;
+  - `o-que-fazer.html`;
+  - `onde-ficar.html`;
+  - `para-o-trade.html`;
+  - `reservas.html`;
+  - `rotas-completas.html`;
+  - `sabores.html`;
+  - `transparencia.html`.
+
+### Alterações consolidadas
+
+O `NAV_CSS` de `js/nav-shared.js` recebeu exatamente o contrato de compatibilidade abaixo:
+
+```css
+@media (min-width: 769px) {
+    body.home-page {
+        padding-top: 0;
+    }
+}
+```
+
+A regra é específica para `body.home-page`, atua somente a partir de 769px e define apenas `padding-top: 0`. Ela permanece inerte nas páginas internas atuais e prepara a adoção futura pelo V7B, sem alterar `NAV_HTML`, links, IDs, idioma, busca, autenticação, VLibras, utilitários ou registro do Service Worker.
+
+As 13 páginas públicas ativas passaram a usar o token `?v=site-public-v7a-20260716` na tag clássica e síncrona:
+
+```html
+<script src="js/nav-shared.js?v=site-public-v7a-20260716"></script>
+```
+
+Não foram alterados `index.html`, páginas legadas, `portal-usuario.html`, páginas administrativas, páginas CMS/Firebase ou tokens de outros assets. A metadata foi atualizada antes do commit funcional com `node scripts/update-site-meta.mjs`; o valor confirmado em `js/site-meta.js` é `updatedAt: "2026-07-17T08:56:35-03:00"`.
+
+### Home preservada
+
+- `index.html` permaneceu byte a byte sem alteração no V7A.
+- A home ainda não carrega `js/nav-shared.js` e continua usando sua navegação própria.
+- `body.home-page` continua com `padding-top: 0` no desktop.
+- Os módulos R1–R5 continuam carregando normalmente.
+- Nenhum cutover foi iniciado; V7B continua não executado.
+- Os módulos sobreviventes `js/home-eventos.js`, `js/home-experiencias.js` e `js/home-contato.js` não foram alterados.
+- `js/home-i18n.js`, `js/home-utilitarios.js` e `js/home-acessibilidade.js` permanecem fisicamente disponíveis para o V7B e rollback conforme o escopo aprovado.
+
+### Validações registradas
+
+As validações funcionais foram realizadas antes do registro desta governança e não foram repetidas nesta tarefa. Foram registrados: `node --check js/nav-shared.js`; `git diff --check`; exatamente uma ocorrência de `body.home-page` dentro do `@media (min-width: 769px)` com somente `padding-top: 0`; 13 ocorrências do token novo nas páginas autorizadas; ausência do token novo na home, páginas legadas e `portal-usuario`; remoção do token antigo das 13 páginas ativas; ausência de diff em `index.html`; e ausência de alterações em CSS externo, `translations.js` e `sw.js`.
+
+O smoke detalhado em `noticias.html`, `mapa-turistico.html` e `eventos.html`, além do smoke básico nas demais páginas ativas, confirmou navegação desktop/mobile, padding interno aproximado de 132px, logo, dropdowns, menu mobile, scroll lock, Escape, links, PT/EN, persistência `sms-lang`, opção `.lang-option.active`, busca, autenticação não logada, VLibras, barra eMAG, progresso, voltar ao topo e Leaflet. Network e console não apresentaram 404, ReferenceError, TypeError, SyntaxError ou Promise rejection novos; os erros conhecidos de App Check/ReCAPTCHA e Firestore em localhost permanecem ambientais.
+
+### Publicação, cache e Service Worker
+
+O GitHub Pages foi publicado e validado antes deste registro. A verificação HTTP somente leitura respondeu 200 para a página pública e 200 para `noticias.html`; a página `noticias.html` serviu exatamente `js/nav-shared.js?v=site-public-v7a-20260716`.
+
+`js/nav-shared.js` permanece em `NEVER_CACHE`; HTML e navegações permanecem fora do cache do Service Worker; `sw.js` permaneceu intacto; `CACHE_NAME` permaneceu intacto; não houve bump de `CACHE_NAME`; o V7A usou somente o novo token `?v=`; páginas legadas e `portal-usuario` ficaram fora da renovação.
+
+### Estado após o V7A
+
+- V7-PREP — concluído.
+- V7A — concluído, validado, commitado, enviado por push e publicado.
+- V7B — próximo microbloco, cutover atômico da home, risco alto, não iniciado; depende de autorização humana explícita, escopo aprovado, deploy e validação em produção antes do bloco seguinte.
+- V7C1 — não iniciado.
+- V7C2 — não iniciado.
+- V6 — pendente.
+- B3 — pendente.
+- V5D — pendente.
+- Admin/CMS/Firebase — pausado.
+
+### Pendências preservadas
+
+Permanecem documentados: handler de resize do drawer; skip link Alt+3 ausente no shared; consolidação futura do VLibras; limpeza de CSS no V7C2; V5C3; V5D; CSS órfão `.map-modal-*`; CSS órfão `.agrosamas-banner`; mídia pesada; B3; correção futura de `TURISMO_EVENTOS` para Rua do Mathe; virada anual de eventos; duplicação potencial entre fontes de eventos; revisão editorial do destaque após 30/08/2026; Formspree externo e não bloqueante. O endpoint continua `xpqykpqd`, o Workflow temporário continua em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` permanece `PENDING` e nenhum envio real deve ocorrer antes de `VERIFIED`.
+
+### Escopo desta atualização documental
+
+- Alterados somente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- Não foram executados `node scripts/update-site-meta.mjs`, V7B, V7C1, V7C2, V6, B3, commit, push ou deploy nesta atualização.
+- A sugestão de mensagem para um futuro commit desta governança é: `docs: registrar conclusão do V7A`.
+
+---
+
 ## 2026-07-16 — Conclusão do V7-PREP e aprovação da estratégia do V7
 
 **Ferramenta/modelo:** Claude Fable 5 (Claude Code)
