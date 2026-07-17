@@ -6,6 +6,102 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-17 — Conclusão do V7B: cutover atômico da navegação da home
+
+**Ferramenta/modelo:** Codex
+**Responsável pela aprovação:** Jacob
+**Status:** V7B concluído, corrigido, validado, commitado, enviado por push e publicado; esta atualização é somente de governança, sem novo commit, push ou deploy.
+
+### Objetivo
+
+Registrar oficialmente a conclusão do V7B, que substituiu atomicamente a navegação própria da home pela implementação compartilhada de `js/nav-shared.js`. O bloco manteve rollback simples em um único commit e não iniciou V7C1, V7C2, V6, B3 ou qualquer outra frente.
+
+### Evidência confirmada pelo Git
+
+- Commit funcional: `e80794418524e521ebbaaab85f76d101ffae5717`.
+- Mensagem exata: `feat(home): adota nav-shared como navegacao unica da home (V7B)`.
+- O commit está presente em `HEAD`, `origin/main` e `origin/HEAD`.
+- `git show --stat --oneline --decorate --no-renames e807944` confirmou 3 arquivos alterados, 4 inserções e 409 remoções.
+- `git show --format= --name-status --no-renames e807944` confirmou exatamente:
+  - `index.html`;
+  - `css/index.css`;
+  - `js/site-meta.js`.
+- Nenhum arquivo funcional inesperado entrou no commit.
+- A metadata, atualizada antes do commit funcional com `node scripts/update-site-meta.mjs`, registra em `js/site-meta.js` o valor `updatedAt: "2026-07-17T10:14:49-03:00"`.
+
+### Cutover da navegação
+
+- `index.html` passou a carregar como primeira tag dentro de `body.home-page`:
+
+  ```html
+  <script src="js/nav-shared.js?v=site-public-v7a-20260716"></script>
+  ```
+
+- O contrato foi preservado: script clássico, síncrono, sem `defer`, sem `async` e sem `type="module"`.
+- `js/nav-shared.js` passou a ser a navegação única da home e das páginas internas, assumindo header, dropdowns, menu mobile, overlay, idiomas, área restrita, barra eMAG, progresso, botão voltar ao topo e modal de busca.
+- O chrome estático duplicado da home foi removido: trilho/barra de progresso, skip links antigos, barra eMAG, navegação, logo/links duplicados, dropdowns, hamburger/menu mobile, atalhos mobile, `#mobileOverlay`, idiomas, área restrita, modal de busca, botão voltar ao topo, bloco inline completo do hamburger, VLibras estático, tag estática de `scroll-animations.js`, tag de `js/home-i18n.js` e tag de `js/home-utilitarios.js`.
+- O `nav-shared` manteve a carga única de `scroll-animations.js`, `search.js`, `search-index.js` e demais utilitários compartilhados.
+
+### Módulos da home e contratos preservados
+
+- R1/R2/R3 permanecem preservados e funcionais: `js/home-eventos.js`, `js/home-experiencias.js` e `js/home-contato.js`.
+- `js/home-acessibilidade.js` permaneceu ativo para `prefers-reduced-motion`, pausa/remoção de autoplay do vídeo hero e atalhos Alt+1, Alt+2, Alt+3 e Alt+4. A limitação preexistente do Alt+2, que tenta focar o `ul#navLinks` sem `tabindex`, fica preservada para reavaliação no V7C1 ou em bloco de acessibilidade posterior.
+- `js/home-i18n.js` e `js/home-utilitarios.js` deixaram de ser carregados, mas permanecem fisicamente no repositório para rollback até o V7C1. Eles não foram excluídos no V7B.
+- `translations.js`, `window.translations`, `window.applyTranslations`, `translationsApplied`, `sms-lang`, PT/EN/ES/PL, `document.documentElement.lang`, persistência após reload e tradução de conteúdo dinâmico permanecem contratos preservados.
+- R1, R2 e R3 não foram unificados nem reescritos no V7B.
+
+### Diferenças aprovadas
+
+- O link “Início” aponta para `/`, mantendo as âncoras compartilhadas como `/#sobre` e `/#contato`.
+- O primeiro acesso sem `sms-lang` respeita o idioma preferencial do navegador; a home não força mais PT após a detecção de `translations.js`.
+- A área restrita usa o comportamento dinâmico do shared: estado em `smsUserSession` no `localStorage`, acesso normal para não autenticado e nome/opção Sair para autenticado, sem reativar Admin/CMS/Firebase.
+- Os dois thresholds de navegação em `css/index.css` passaram de 1180px para 968px. A terceira ocorrência de 1180px, relacionada a grades de conteúdo, permaneceu intacta.
+- A busca usa exclusivamente o modal injetado pelo shared, com foco, resultados, Escape, fechamento, atributos ARIA e tradução preservados.
+- Progresso e botão voltar ao topo ficaram unificados sob o shared. Foi validado um único progresso, estado 0% no topo, atualização intermediária, 100% no fim, um único botão após aproximadamente 300px e retorno suave ao topo.
+
+### VLibras: descoberta e correção dentro do V7B
+
+Na primeira validação do V7B foi encontrada uma duplicação real: duas `div[vw]`, duas cargas do plugin e duas inicializações do Widget. A causa foi o carregamento antecipado do shared antes de o parser encontrar o markup estático da home, permitindo que o guard injetasse uma instância e o bloco estático criasse outra.
+
+A correção foi incluída no próprio V7B: o bloco estático, o container, a tag de `vlibras-plugin.js` e o init inline foram removidos de `index.html`; o shared passou a ser a única origem. O resultado validado foi uma única `div[vw]`, um botão de acesso, um wrapper, uma tag do plugin, uma instância funcional, abertura/fechamento corretos, nenhum elemento órfão e nenhum erro de inicialização. A divergência do VLibras está resolvida dentro do V7B e não é pendência do V7C1.
+
+### Service Worker, cache e rollback
+
+- O registro inline do Service Worker foi mantido. O shared também realiza o registro; a duplicidade temporária para o mesmo script/escopo foi observada como idempotente e sem erro e fica explicitamente reservada ao V7C1.
+- `sw.js`, `CACHE_NAME`, estratégia de cache e escopo não foram alterados.
+- `js/nav-shared.js` permanece em `NEVER_CACHE`; HTML permanece fora do cache do Service Worker; o token `?v=site-public-v7a-20260716` foi preservado porque `js/nav-shared.js` não foi alterado no V7B.
+- O rollback continua simples por `git revert` do commit único. `js/home-i18n.js` e `js/home-utilitarios.js` permanecem no disco, e a tag `pos-fase1-modular` segue disponível para consulta.
+
+### Validações registradas antes desta governança
+
+- `git diff --check` foi aprovado após a correção das duas terminações problemáticas de linha em `css/index.css`.
+- A inspeção estática confirmou uma tag nav-shared, zero tags de `home-i18n`, zero tags de `home-utilitarios`, zero tag estática de `scroll-animations.js`, uma carga de `home-acessibilidade`, uma carga de `home-contato`, uma carga de `home-experiencias` e uma carga de `home-eventos`.
+- DOM: um `#mainNav`, `#navToggle`, `#navLinks`, `#currentLang`, `#langDropdown`, `#menuOverlay`, `#searchModal`, `#search`, `#searchResults`, barra de progresso, botão voltar ao topo, barra eMAG, skip links, atalhos mobile e instância de VLibras; zero IDs duplicados e zero segundo header.
+- Desktop validado em 1366px, 1200px, 1000px e 969px; mobile validado em 768px e 375px; padding desktop 0, hero sem deslocamento, menu desktop acima de 968px, drawer, overlay, scroll lock, Escape, links, idioma e busca preservados.
+- PT/EN/ES/PL, persistência, `document.documentElement.lang`, primeiro acesso pelo idioma do navegador, fonte, contraste, reduced motion, Alt+1/3/4, auth por `localStorage`, busca, R1/R2/R3 e páginas internas foram validados.
+- Console e Network não apresentaram `ReferenceError`, `TypeError`, `SyntaxError`, rejection ou 404 novos. Os erros App Check/ReCAPTCHA em localhost permanecem ambientais.
+- A publicação do GitHub Pages foi confirmada na validação funcional consolidada do V7B antes deste registro. Nesta governança, `gh` e a rechecagem HTTP foram tentados apenas em leitura e ficaram bloqueados por permissões/SSL do ambiente; nenhum deploy foi executado novamente.
+
+### Estado do V7 e pendências preservadas
+
+- V7-PREP — concluído.
+- V7A — concluído, validado, commitado, enviado por push e publicado.
+- V7B — concluído, corrigido, validado, commitado, enviado por push e publicado.
+- V7C1 — próximo microbloco, ainda não iniciado. Escopo reservado: excluir fisicamente `js/home-i18n.js` e `js/home-utilitarios.js`, reduzir `js/home-acessibilidade.js` às responsabilidades que ainda não pertencem ao shared, remover o registro inline duplicado do Service Worker e reavaliar Alt+2. Não tratar VLibras como duplicação pendente.
+- V7C2 — limpeza de CSS posterior, ainda não iniciada; inclui somente CSS comprovadamente órfão após preflight próprio.
+- V6, B3, V5C3, V5D, CSS órfão `.map-modal-*`, CSS órfão `.agrosamas-banner`, 743 ocorrências de `!important`, mídia pesada, virada anual de eventos, `TURISMO_EVENTOS`/AgroSamas, Formspree e demais follow-ups permanecem pendentes.
+- Drawer sem fechamento automático ao redimensionar para desktop e ausência de skip link de busca no shared permanecem como pendências. O problema de duas opções `.lang-option.active` foi resolvido pelo cutover.
+- Admin/CMS/Firebase continua pausado.
+
+### Arquivos e escopo desta atualização documental
+
+- Alterados somente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- Não foram executados `node scripts/update-site-meta.mjs`, V7C1, V7C2, V6, B3, commit, push ou deploy nesta atualização.
+- Sugestão de mensagem para um futuro commit desta governança: `docs: registrar conclusão do V7B`.
+
+---
+
 ## 2026-07-17 — Conclusão do V7A de compatibilidade do nav-shared
 
 **Ferramenta/modelo:** Codex
