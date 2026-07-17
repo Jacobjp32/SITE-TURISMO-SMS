@@ -4436,7 +4436,7 @@ body.nav-menu-open .nav-toggle {
     }
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 968px) {
     .nav-toggle {
         display: flex !important;
     }
@@ -5563,7 +5563,7 @@ body.nav-menu-open .nav-toggle {
     border: 0;
 }
 
-@media (max-width: 1180px) {
+@media (max-width: 968px) {
     .nav-links .nav-search-text {
         display: inline;
     }
