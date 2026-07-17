@@ -256,6 +256,12 @@ body.nav-menu-open .nav-toggle { z-index:10022 !important; }
 #chatbot-widget,#chatbot-styles{display:none!important;}
 /* Body offset para nav fixo + barra de acessibilidade fixa */
 body { padding-top: 132px; }
+/* Exceção V7A: a home mantém padding-top 0 no desktop (hero full-bleed); inerte até a home adotar o nav-shared no V7B */
+@media (min-width: 769px) {
+    body.home-page {
+        padding-top: 0;
+    }
+}
 /* Barra de progresso de leitura (scroll) */
 #sms-scroll-track{position:fixed!important;top:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.55);z-index:10001;pointer-events:none;}
 #sms-scroll-progress{position:fixed!important;top:0;left:0;height:4px;width:0%;background:#d4a574;z-index:10002;transition:width .1s linear;pointer-events:none;}
