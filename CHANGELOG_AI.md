@@ -6,6 +6,146 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-20 — Retomada Admin/CMS/Firebase e conclusão do ADMIN-RESTART-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-RESTART-PREP` concluído; `ADMIN-B1-PREP` registrado e não iniciado.
+
+### Objetivo
+
+Registrar oficialmente a mudança de prioridade para a frente administrativa, a conclusão estritamente não mutante do `ADMIN-RESTART-PREP`, o estado real do painel e dos blocos CMS, os bloqueios de segurança e integridade, o roadmap ADMIN-A a ADMIN-J e o próximo bloco único. Esta atualização é exclusivamente documental.
+
+### Mudança de prioridade aprovada
+
+- Frente ativa: Painel Admin, CMS, Firebase Authentication, Firestore, Firebase Storage, moderação, segurança e integridade dos fluxos administrativos.
+- Ferramenta adotada: Codex. O Claude Fable não será usado nesta frente.
+- Frentes pausadas: site público, V7C1, V7C2, V6, B3, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
+- Separação obrigatória: site público, Painel Admin/CMS e Portal do Usuário são sistemas distintos. Não misturar execução ou refatoração entre eles sem bloco e autorização específicos.
+
+### Conclusão e limites do ADMIN-RESTART-PREP
+
+- Concluído somente em leitura, diagnóstico, testes estáticos e smoke sem autenticação.
+- Nenhum arquivo foi alterado, criado ou excluído.
+- Nenhuma escrita em Firestore, Firebase Storage, Firebase Authentication, rules, CORS, dados ou produção.
+- Nenhum commit, push, deploy, seed, migração ou inventário remoto.
+- Working tree encontrado em `main`, com referência local `main` alinhada com `origin/main`, nenhuma alteração rastreada e `.claude/settings.local.json` não rastreado e intocado.
+- A consulta remota independente do `origin` não foi confirmada por falta de credencial no ambiente.
+
+### Estado real do painel
+
+O painel possui runtime administrativo real e não é apenas um protótipo. Estão funcionais ou amplamente implementados: autenticação administrativa, dashboard, aprovações, vínculos, usuários, eventos, notícias, Biblioteca de Mídia, banners, empreendimentos, contratos de mídia, gestão editorial da galeria de empreendimentos, scripts de seed/diff, inventário seguro de mídias e fundação modular em modo passthrough.
+
+A fundação modular real cobre Dashboard, Banners, Empreendimentos, Context, UI, Registry, Router e Shell. A modularização deve continuar progressivamente no futuro, sem reversão e sem reescrita ampla, mas não é a prioridade imediata.
+
+### Estado dos blocos CMS
+
+- CMS-1: diagnóstico concluído.
+- CMS-2A: contrato documentado.
+- CMS-2B: CRUD implementado; validação autenticada atual pendente.
+- CMS-2B-FIX: lifecycle implementado; produção atual não comprovada.
+- CMS-2C: seed/diff e dry-run implementados.
+- CMS-2F: seed manual anteriormente registrado; não revalidado.
+- CMS-3: aplicação textual implementada; teste autenticado atual pendente.
+- CMS-4A: contrato de mídia documentado.
+- CMS-4B: revisão por imagem implementada.
+- CMS-4C: runtime implementado; teste real permaneceu bloqueado por Storage/CORS.
+- CMS-4D: gestão editorial da galeria de empreendimentos implementada.
+- CMS-4E: inventário seguro implementado.
+- CMS-4E-EXEC: não concluído.
+- CMS-5A: diagnóstico concluído.
+- CMS-5B: adapter/debug isolado implementado.
+- CMS-5C: código e rule local concluídos; a governança registra publicação específica.
+- CMS-5D: não iniciado e fora da frente atual.
+
+### Bloqueios antes da conclusão do painel
+
+**P0**
+
+1. Notícias em rascunho potencialmente públicas: `firestore.rules` possui leitura pública ampla em `noticias`; o filtro `publicado` no frontend não protege o acesso.
+2. Estado remoto completo das Firestore Rules e Storage Rules não comprovado; somente a publicação específica do CMS-5C está claramente registrada. O arquivo local atual não deve ser presumido como cópia integral da produção.
+
+**P1**
+
+3. `media_library` publicamente legível pelas Firestore Rules.
+4. `cms-media` publicamente legível pelas Storage Rules, potencialmente incluindo rascunhos, mídias internas e órfãos.
+5. CMS-4C sem conclusão ponta a ponta: `storage-cors.json` preparado, mas aplicação do CORS no bucket não comprovada.
+6. Uploads sem rollback consistente em banners, biblioteca, eventos e aplicação de mídia aceita.
+7. Aprovação de eventos e estabelecimentos não atômica.
+8. Divergência do papel `moderator`: rules concedem operações, enquanto o painel principal aceita somente `admin`.
+9. Ausência de teste autenticado atual.
+
+### Não bloqueadores da primeira versão utilizável
+
+Integração de `cms_establishments` com o site público, CMS-5D, galeria pública, substituição de dados estáticos públicos, Rotas no Admin, Sazonal, Mascote, Configurações, relatórios avançados, master admin e notificações automáticas permanecem futuras/opcionais.
+
+### Próximo bloco único
+
+`ADMIN-B1-PREP` — validação autenticada e anônima do contrato real de acesso.
+
+- PREP somente leitura, sem correção e sem publicação.
+- Confirmará Firebase Authentication, App Check, usuário admin, usuário sem role, usuário inativo, Firestore Rules, Storage Rules, CORS, rascunhos de notícias, `media_library`, `cms-media`, coleções administrativas, dados publicados e dados privados.
+- O login será manual pelo usuário no navegador; senha e token nunca serão fornecidos ao Codex.
+- Preferir domínio publicado/autorizado; localhost somente com debug provider do App Check explicitamente preparado.
+- Não criar, atualizar, excluir, fazer upload, publicar rules, aplicar CORS ou copiar dados pessoais para relatórios.
+- Saída esperada: matriz real ALLOW/DENY, evidência mínima e sanitizada, divergências entre runtime local, rules locais e comportamento remoto, e decisão objetiva para o `ADMIN-B2-EXEC`.
+- O `ADMIN-B1-PREP` foi somente registrado e **não foi iniciado** nesta tarefa.
+
+### Roadmap ADMIN-A a ADMIN-J
+
+- ADMIN-A: checkpoint e retomada — concluído pelo `ADMIN-RESTART-PREP`.
+- ADMIN-B1-PREP: validar Auth, roles, rules, Storage, App Check e CORS reais.
+- ADMIN-B2-EXEC: corrigir contrato de roles e segurança local; proteger rascunhos, `media_library` e `cms-media`; criar testes de rules; somente após B1.
+- ADMIN-B3-EXEC: publicar rules aprovadas e retestar; exige autorização explícita.
+- ADMIN-C: integridade dos uploads, rollback e operações atômicas/idempotentes.
+- ADMIN-D: fechamento de Empreendimentos.
+- ADMIN-E: fechamento de Eventos.
+- ADMIN-F: fechamento de Notícias.
+- ADMIN-G: Biblioteca de Mídia, CMS-4C, galeria editorial, CORS e inventário de órfãos depois da estabilização.
+- ADMIN-H: fechamento de Banners.
+- ADMIN-I: modularização incremental do restante do painel.
+- ADMIN-J: QA autenticada, rules tests, smoke, governança, fechamento e tag final.
+
+### Critério de painel utilizável
+
+Autenticação Admin testada; contrato `admin`/`moderator` definido; usuário inativo bloqueado; rules locais e remotas alinhadas; rascunhos e dados internos protegidos; CORS validado; moderação testada; operações críticas atômicas ou idempotentes; rollback de uploads; CRUD de eventos, estabelecimentos, notícias e banners testado; Biblioteca de Mídia sem quebra de referências; estados de loading, erro e vazio; autoria e timestamps; smoke autenticado; teste anônimo; governança atualizada.
+
+### Tag de checkpoint
+
+- Tag recomendada: `pre-admin-restart-20260720`.
+- Condições: revisar esta governança, fazer o commit documental e concluir o push do commit.
+- A tag não foi criada nesta tarefa.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — prioridade ativa, separação dos três sistemas, limites do PREP, próximo bloco e gate da tag.
+- `TASKS.md` — estado do painel/CMS, bloqueios P0/P1, não bloqueadores, critérios, roadmap e `ADMIN-B1-PREP`.
+- `CHANGELOG_AI.md` — este checkpoint documental.
+
+### Validações e limites
+
+- `git status --short --branch --untracked-files=all` e `git log --oneline -30` executados antes da edição.
+- Leitura integral de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- `git diff --check`, `git diff --name-only`, `git diff --stat` e `git status --short --untracked-files=all` executados após a edição.
+- Nenhum código, HTML, CSS, JavaScript de runtime, metadata, dado, rule, Firebase, CORS, script, site público ou arquivo em `.claude/` foi alterado.
+- Não foram executados `ADMIN-B1-PREP`, qualquer EXEC, login, leitura Firebase real, upload, seed, migração, inventário remoto, publicação de rules, aplicação de CORS, commit, push, deploy ou tag Git.
+
+### Pendências preservadas
+
+- Todos os bloqueios P0/P1 permanecem abertos até validação e execução próprias.
+- CMS-4E-EXEC e CMS-5D permanecem não concluídos/fora da frente imediata.
+- V7C1, V7C2, V6, B3 e todo o backlog público continuam pausados.
+- A modularização incremental permanece futura, sem reversão e sem reescrita ampla.
+
+### Próximo passo
+
+- Revisar e, somente mediante autorização futura, iniciar o `ADMIN-B1-PREP` em modo estritamente somente leitura.
+- Sugestão de commit: `docs: registrar retomada da frente administrativa`.
+
+---
+
 ## 2026-07-17 — Conclusão do V7B: cutover atômico da navegação da home
 
 **Ferramenta/modelo:** Codex

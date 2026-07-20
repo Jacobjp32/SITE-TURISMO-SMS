@@ -9,19 +9,161 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 ## Estado atual resumido
 
 **Projeto:** SITE-TURISMO-SMS  
-**Área atual de trabalho:** auditoria e melhoria do site público, sem mexer em Admin/CMS/Firebase.
-**Status geral:** CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas; Admin/CMS/Firebase pausado temporariamente. Milestones de UX, mapa, performance, SEO/metadados e auditoria de dados S14 também concluídos, aprovados em QA, commitados e enviados. Após a auditoria pública do Claude Fable 5, B1 cache-busting público, B2 higiene de sitemap, B5 diagnóstico Firebase público, B4a timeout no mapa, SEO-F1 `noindex` em páginas legadas, V1+V2 visual/UX da home, V3 navegação, V4A+V4B+V4C limpeza de peso morto da home, V5A remoção do banner AgroSamas oculto, V5B priorização de eventos únicos em "Acontece em breve", V5C1 correção dos links dos cards de "Eventos & Notícias", V5C2+V5C2A sincronização editorial entre home e notícias, R1 extração da grade de eventos, R2 extração do carrossel de experiências, R3 extração do formulário de contato, R4B utilitários visuais, R4A acessibilidade eMAG, R5A remoção do fallback inline obsoleto e R5B externalização do runtime i18n foram concluídos. A Fase 1 da refatoração modular da home está oficialmente encerrada, sem reescrita da home do zero; a estratégia de refatoração modular progressiva no projeto atual foi preservada. O checkpoint arquitetural pós-V5 foi concluído somente em leitura, com a tag `pos-v5-checkpoint` criada e enviada ao remoto.
-**Regra principal:** mudanças técnicas devem ser pequenas, auditáveis e sem impacto visual quando a tarefa for de `<head>`/SEO ou dados. Não alterar Admin/CMS/Firebase enquanto a frente ativa for o site público.
+**Área atual de trabalho:** Painel Admin, CMS e Firebase — Authentication, Firestore, Storage, moderação, segurança e integridade dos fluxos administrativos.
 
-**Estado atual da Fase 1 (2026-07-16) e do V7 (2026-07-17):** R1 eventos, R2 carrossel, R3 formulário, R4B utilitários visuais, R4A acessibilidade eMAG, R5A remoção do fallback inline obsoleto e R5B externalização do runtime i18n estão concluídos, validados, commitados, enviados por push e publicados. R5B usa o commit funcional `21564847d5b74697affcbfd68ba99c6fcbdb0340 refactor(home): extrai runtime i18n do seletor de idiomas`, presente em `origin/main`; `git show` confirmou `index.html`, `js/home-i18n.js` e `js/site-meta.js`, com `170 insertions(+)` e `165 deletions(-)`. V4D foi absorvido e concluído pelo R5A. A Fase 1 está oficialmente concluída. O checkpoint pós-Fase 1 foi concluído somente em leitura; a tag `pos-fase1-modular` está local e remotamente publicada e aponta para o commit de governança `3c9caee`. V7-PREP, V7A e V7B estão concluídos, validados, commitados, presentes em `origin/main`, enviados por push e publicados. O próximo microbloco é somente o `V7C1`; V7C2 permanece posterior e não iniciado.
+**Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
+
+**Status geral:** `ADMIN-RESTART-PREP` concluído somente em leitura, diagnóstico, testes estáticos e smoke sem autenticação. O painel possui runtime administrativo real e amplo, mas ainda depende de validação autenticada/anônima atual e da resolução dos bloqueios P0/P1 antes de ser considerado utilizável.
+
+**Frentes pausadas:** site público, V7C1, V7C2, V6, B3, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
+
+**Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
 
 ---
 
 ## Próximo passo recomendado
 
-**Auditoria e melhoria do site público**, sem mexer em Admin/CMS/Firebase. R1, R2, R3, R4B, R4A, R5A e R5B da fundação modular foram concluídos, validados, commitados, enviados por push e publicados; R4A e R4B permanecem módulos separados por responsabilidade. A Fase 1 está oficialmente concluída. O `V7-PREP`, o `V7A` e o `V7B` foram concluídos, validados, enviados por push e publicados. O próximo bloco aprovado é somente o `V7C1`; V7C2 permanece posterior e não iniciado. V4D foi absorvido e concluído pelo R5A. V5C3 avaliação da extração do `style` inline dos CTAs para classe compartilhada (exige CSS, não executar automaticamente, podendo integrar bloco visual maior) e V5D revisão anti-envelhecimento de Festas em Destaque (risco médio, depende de `translations.js`, só com decisão consciente) continuam pendentes. O destaque do 32º Mês Polonês deve ser revisado após 30/08/2026, com rotação mensal dos cards e remoção ou substituição de cards de eventos em até aproximadamente sete dias após o encerramento. V6 e B3 permanecem pendentes; V6 deve ser reavaliado após a fundação modular e B3 mídia/performance permanece em fase própria. Follow-ups separados: revisar CSS órfão `.agrosamas-banner`; revisar chaves i18n órfãs relacionadas aos blocos removidos; registrar que `CONFIG.agrosamas` está temporariamente sem efeito na home; revisar CSS órfão `.map-modal-*`; planejar a virada anual de `eventos-2026.json`; avaliar futuramente a duplicação entre `eventos-2026.json` e `TURISMO_EVENTOS`; investigar Service Worker em localhost se voltar a interceptar Leaflet/OSM. O problema das duas opções `.lang-option.active` foi resolvido pelo V7B. Iniciar qualquer bloco apenas após leitura de `CLAUDE.md`, deste `TASKS.md` e do `CHANGELOG_AI.md`, e com plano aprovado antes de editar.
+**`ADMIN-B1-PREP` — validação autenticada e anônima do contrato real de acesso.**
 
-R1, R2, R3, R4B, R4A, R5A e R5B foram concluídos, validados, commitados, enviados por push e publicados. R1 extraiu somente a grade “Acontece em breve” para `js/home-eventos.js`; R2 extraiu somente o carrossel de experiências para `js/home-experiencias.js`; R3 extraiu somente a lógica do formulário de contato para `js/home-contato.js`; R4B extraiu somente a barra de progresso e o botão “Voltar ao topo” para `js/home-utilitarios.js`; R4A extraiu somente acessibilidade eMAG para `js/home-acessibilidade.js`; R5A removeu somente o fallback inline obsoleto de traduções de `index.html`; R5B externalizou 1:1 o runtime do seletor para `js/home-i18n.js`. As extrações permaneceram sem mudança funcional ou visual; `translations.js`, `sms-lang`, `window.applyTranslations` e `translationsApplied` foram preservados. A Fase 1 está oficialmente concluída sem reescrever a home do zero. Nenhuma fase seguinte foi iniciada.
+- Tipo: PREP, somente leitura, sem correção e sem publicação.
+- Objetivo: confirmar o comportamento remoto real de Firebase Authentication, App Check, usuário admin, usuário sem role, usuário inativo, Firestore Rules, Storage Rules, CORS, rascunhos de notícias, `media_library`, `cms-media`, coleções administrativas, dados publicados e dados privados.
+- Requisitos: login manual feito pelo usuário no navegador; senha e token nunca fornecidos ao Codex; preferir domínio publicado/autorizado; localhost somente com debug provider do App Check explicitamente preparado.
+- Proibições: nenhuma criação, atualização, exclusão, upload, publicação de rules, aplicação de CORS ou cópia de dados pessoais para relatórios.
+- Saída: matriz real ALLOW/DENY, evidência mínima e sanitizada, divergências entre runtime local, rules locais e comportamento remoto, e decisão objetiva para o `ADMIN-B2-EXEC`.
+- Estado: registrado como próximo bloco único e **não iniciado** nesta governança.
+
+## ADMIN-RESTART-PREP — checkpoint e retomada oficial
+
+### Limites e resultado do PREP
+
+- Concluído somente em leitura, diagnóstico, testes estáticos e smoke sem autenticação.
+- Nenhum arquivo foi alterado, criado ou excluído.
+- Nenhuma escrita foi feita em Firestore, Firebase Storage, Firebase Authentication, rules, CORS, dados ou produção.
+- Nenhum commit, push, deploy, seed, migração ou inventário remoto foi executado.
+- Working tree encontrado: branch `main`; referência local `main` alinhada com `origin/main`; nenhuma alteração rastreada; `.claude/settings.local.json` não rastreado e intocado.
+- A consulta remota independente do `origin` não foi confirmada por falta de credencial no ambiente.
+
+### Sistemas e prioridade
+
+1. Site público — pausado.
+2. Painel Admin/CMS — frente ativa.
+3. Portal do Usuário — separado do painel e do site público.
+
+Não misturar refatoração ou execução entre os três sistemas sem bloco e autorização específicos. A modularização administrativa deve continuar progressivamente no futuro, sem reversão e sem reescrita ampla, mas não é a prioridade imediata.
+
+### Estado real do painel
+
+O painel possui runtime administrativo real e não é apenas um protótipo. Estão funcionais ou amplamente implementados:
+
+- autenticação administrativa;
+- dashboard;
+- aprovações;
+- vínculos;
+- usuários;
+- eventos;
+- notícias;
+- Biblioteca de Mídia;
+- banners;
+- empreendimentos;
+- contratos de mídia;
+- gestão editorial da galeria de empreendimentos;
+- scripts de seed/diff;
+- inventário seguro de mídias;
+- fundação modular em modo passthrough.
+
+Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Registry, Router e Shell.
+
+### Estado dos blocos CMS
+
+- CMS-1: diagnóstico concluído.
+- CMS-2A: contrato documentado.
+- CMS-2B: CRUD implementado; validação autenticada atual pendente.
+- CMS-2B-FIX: lifecycle implementado; produção atual não comprovada.
+- CMS-2C: seed/diff e dry-run implementados.
+- CMS-2F: seed manual anteriormente registrado; não revalidado.
+- CMS-3: aplicação textual implementada; teste autenticado atual pendente.
+- CMS-4A: contrato de mídia documentado.
+- CMS-4B: revisão por imagem implementada.
+- CMS-4C: runtime implementado, mas teste real permaneceu bloqueado por Storage/CORS.
+- CMS-4D: gestão editorial da galeria de empreendimentos implementada.
+- CMS-4E: inventário seguro implementado.
+- CMS-4E-EXEC: não concluído.
+- CMS-5A: diagnóstico concluído.
+- CMS-5B: adapter/debug isolado implementado.
+- CMS-5C: código e rule local concluídos; a governança registra publicação específica.
+- CMS-5D: não iniciado e fora da frente atual.
+
+### Bloqueios prioritários
+
+**P0**
+
+1. Notícias em rascunho potencialmente públicas: `firestore.rules` possui leitura pública ampla em `noticias`; filtro `publicado` no frontend não constitui proteção de acesso.
+2. Estado remoto completo das Firestore Rules e Storage Rules não comprovado: somente a publicação específica do CMS-5C está claramente registrada; não assumir que o arquivo local atual corresponde integralmente à produção.
+
+**P1**
+
+3. `media_library` publicamente legível pelas Firestore Rules.
+4. `cms-media` publicamente legível pelas Storage Rules, incluindo potencialmente rascunhos, mídias internas e órfãos.
+5. CMS-4C sem conclusão ponta a ponta: `storage-cors.json` preparado, mas aplicação do CORS no bucket não comprovada.
+6. Uploads sem rollback consistente em banners, biblioteca, eventos e aplicação de mídia aceita.
+7. Aprovação de eventos e estabelecimentos não atômica.
+8. Divergência do papel `moderator`: rules concedem operações, mas o painel principal aceita somente `admin`.
+9. Ausência de teste autenticado atual.
+
+### Itens que não bloqueiam a primeira versão utilizável
+
+- integração de `cms_establishments` com o site público;
+- CMS-5D;
+- galeria pública;
+- substituição dos dados estáticos públicos;
+- Rotas no Admin;
+- Sazonal;
+- Mascote;
+- Configurações;
+- relatórios avançados;
+- master admin;
+- notificações automáticas.
+
+### Roadmap administrativo
+
+- **ADMIN-A — checkpoint e retomada:** concluído pelo `ADMIN-RESTART-PREP`.
+- **ADMIN-B1-PREP:** validar Auth, roles, rules, Storage, App Check e CORS reais.
+- **ADMIN-B2-EXEC:** corrigir contrato de roles e segurança local; proteger notícias em rascunho, `media_library` e `cms-media`; criar testes de rules; somente após B1.
+- **ADMIN-B3-EXEC:** publicar rules aprovadas e retestar; exige autorização explícita.
+- **ADMIN-C:** integridade dos uploads, rollback e operações atômicas/idempotentes.
+- **ADMIN-D:** fechamento de Empreendimentos.
+- **ADMIN-E:** fechamento de Eventos.
+- **ADMIN-F:** fechamento de Notícias.
+- **ADMIN-G:** Biblioteca de Mídia, CMS-4C, galeria editorial, CORS e inventário de órfãos depois da estabilização.
+- **ADMIN-H:** fechamento de Banners.
+- **ADMIN-I:** modularização incremental do restante do painel.
+- **ADMIN-J:** QA autenticada, rules tests, smoke, governança, fechamento e tag final.
+
+### Critério de Painel Admin utilizável
+
+- [ ] autenticação Admin testada;
+- [ ] contrato `admin`/`moderator` definido;
+- [ ] usuário inativo bloqueado;
+- [ ] rules locais e remotas alinhadas;
+- [ ] rascunhos protegidos;
+- [ ] dados internos protegidos;
+- [ ] CORS validado;
+- [ ] moderação testada;
+- [ ] operações críticas atômicas ou idempotentes;
+- [ ] rollback de uploads;
+- [ ] CRUD de eventos, estabelecimentos, notícias e banners testado;
+- [ ] Biblioteca de Mídia sem quebra de referências;
+- [ ] estados de loading, erro e vazio;
+- [ ] autoria e timestamps;
+- [ ] smoke autenticado;
+- [ ] teste anônimo;
+- [ ] governança atualizada.
+
+### Tag de checkpoint recomendada
+
+`pre-admin-restart-20260720`
+
+Criar somente depois de: (1) esta governança ser revisada; (2) o commit documental ser feito; e (3) o push do commit ser concluído. A tag não foi criada nesta tarefa.
 
 ### Checkpoint arquitetural pós-V5 — decisão aprovada
 
@@ -145,26 +287,23 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 ---
 
-## Ordem futura das tarefas
+## Ordem das frentes após o checkpoint de 2026-07-20
 
-1. **Auditoria e melhoria do site público** (frente ativa atual).
-2. **Tarefa 4 — Fichas/páginas individuais de locais**.
-3. Eventos vinculados a locais/experiências, **sem alterar admin ainda**.
-4. Revisão multilíngue PT/EN/ES/PL.
-5. Passe final de acessibilidade.
-6. Manual/resumo para a equipe.
-7. CMS-5D — integração controlada do CMS no site público, ainda não iniciada.
-8. CMS-4E-EXEC — inventário remoto de mídias, ainda pendente.
-9. Admin/cadastro (**último**, tarefa futura).
+1. **ADMIN-B1-PREP** — próximo bloco único, ainda não iniciado.
+2. **ADMIN-B2-EXEC** — somente após evidência e decisão do B1.
+3. **ADMIN-B3-EXEC a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
+4. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+5. **CMS-5D / integração CMS → site público** — fora da frente atual.
+6. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
 ## Tarefas abertas
 
-### [ABERTA / FRENTE ATIVA] Auditoria e melhoria do site público
+### [PAUSADA] Auditoria e melhoria do site público
 
-**Contexto:** após a conclusão do CMS-5C e a publicação das Firestore Rules, a frente Admin/CMS/Firebase foi pausada temporariamente.
-**Objetivo:** auditar e melhorar o site público preservando rotas, SEO, responsividade, i18n, acessibilidade e funcionamento estático atual.
+**Contexto:** esta frente foi ativa após o CMS-5C e permanece preservada como histórico e backlog. Foi pausada oficialmente pelo checkpoint administrativo de 2026-07-20.
+**Objetivo futuro:** auditar e melhorar o site público preservando rotas, SEO, responsividade, i18n, acessibilidade e funcionamento estático atual, somente após reabertura explícita.
 
 **Blocos concluídos da auditoria pública pós-Claude Fable 5:**
 - B1 — cache-busting público com token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Nenhum Admin/CMS/Firebase tocado.
@@ -249,10 +388,11 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 ---
 
-### [ABERTA / FUTURO — ÚLTIMA] Admin / cadastro
+### [ABERTA / FRENTE ATIVA] Admin / CMS / Firebase
 
-**Contexto:** área administrativa e fluxos de cadastro são a última etapa planejada.  
-**Regra:** não mexer em admin/Firebase/áreas restritas até esta tarefa ser explicitamente iniciada e aprovada.
+**Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
+
+**Regra:** executar somente o bloco autorizado. O próximo bloco é `ADMIN-B1-PREP`, somente leitura, e não foi iniciado nesta governança.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -379,7 +519,7 @@ R1, R2, R3, R4B, R4A, R5A e R5B estão concluídos. A Fase 1 foi encerrada sem r
 
 **Limite de validação:** o bloqueio direto de `translations.js` não foi possível no ambiente; a degradação foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
 
-**Pendências preservadas:** Admin/CMS/Firebase continua pausado; V6, V7 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`; o follow-up das duas opções `.lang-option.active` após reload fica registrado para V7.
+**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao próximo `ADMIN-B1-PREP`.
 
 ---
 
