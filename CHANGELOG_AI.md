@@ -6,6 +6,132 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-22 — Conclusão do ADMIN-B1-PREP e ADMIN-B1B-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B1-PREP` e `ADMIN-B1B-PREP` concluídos; `ADMIN-B2A-PREP` registrado e não iniciado.
+
+### Objetivo
+
+Registrar oficialmente, sem alterar runtime ou configuração, a conclusão dos dois blocos somente leitura, as equivalências local/remota de Rules e CORS, o estado do App Check, os riscos confirmados, os contratos ainda pendentes e a divisão aprovada do ADMIN-B2/ADMIN-B3.
+
+### Estado das frentes
+
+- Frente ativa: Painel Admin, CMS, Firebase Authentication, Firestore, Firebase Storage, segurança administrativa, moderação e integridade dos fluxos.
+- Permanecem pausados: site público, V7C1, V7C2, V6, B3 público, Fable e integração CMS → site público.
+- Checkpoint existente e preservado: `pre-admin-restart-20260720`.
+- Site público, Painel Admin/CMS e Portal do Usuário permanecem sistemas separados.
+
+### ADMIN-B1-PREP — concluído
+
+- Executado exclusivamente em leitura.
+- Login Admin manual e real, dashboard carregado e logout normal confirmados.
+- Leituras administrativas confirmadas para `usuarios`, `eventos_pendentes`, `eventos_aprovados` e `estabelecimentos_pendentes`.
+- Nenhuma escrita, alteração de Auth, publicação de Rule, upload ou aplicação de CORS.
+- No primeiro bloco ficaram inconclusivos: Rules remotas completas, notícias draft anônimas, `media_library` anônima, `cms-media` anônimo, CORS, usuário `moderator` e usuário inativo.
+- A análise estática confirmou que o frontend aceita somente `admin`, enquanto as Rules locais concedem permissões específicas a `moderator`.
+
+### ADMIN-B1B-PREP — concluído
+
+- Recuperou somente por GET/LIST os releases/rulesets implantados de Firestore e Storage, o CORS atual do bucket e o estado do App Check.
+- Nenhuma fonte remota foi persistida em arquivo e nenhuma configuração foi alterada.
+- Projeto: `turismo-sms`; database `(default)`; Firestore em `southamerica-east1`; bucket `turismo-sms.firebasestorage.app` em `US-EAST1`.
+
+### Firestore Rules
+
+- Release implantada: `projects/turismo-sms/releases/cloud.firestore`.
+- Ruleset implantado: `projects/turismo-sms/rulesets/65e9a0eb-bb4a-4578-9e01-42a3c8137cf2`.
+- `firestore.rules` local e Rules remotas: **iguais**, com zero linhas divergentes.
+- SHA-256 normalizado: `24f14a398a289a429b0aaa146451c80e115f37315d1a09dcf4e3a810712438cc`.
+- Origem da verdade: o arquivo local corresponde exatamente à versão implantada.
+
+### Storage Rules
+
+- Release implantada: `projects/turismo-sms/releases/firebase.storage/turismo-sms.firebasestorage.app`.
+- Ruleset implantado: `projects/turismo-sms/rulesets/23c647df-d6bd-4013-a3aa-a4efba2107bc`.
+- `storage.rules` local e Rules remotas: **iguais**, com zero linhas divergentes.
+- SHA-256 normalizado: `867deaf99e9724e00d3da89225e3d94fc2b197a7e8b14198696740e1554649fd`.
+- Origem da verdade: o arquivo local corresponde exatamente à versão implantada.
+
+### CORS
+
+- Bucket: `turismo-sms.firebasestorage.app`.
+- Origem: `https://turismo.saomateusdosul.pr.gov.br`.
+- Métodos: GET e HEAD.
+- Response headers: `Content-Type` e `Access-Control-Allow-Origin`.
+- `maxAgeSeconds`: 3600.
+- CORS remoto e `storage-cors.json` local: **iguais**.
+- Decisão: não reaplicar CORS. O CMS-4C ainda exige reteste funcional; CORS ausente/divergente deixa de ser hipótese principal.
+
+### App Check
+
+- App Web: Cadastros Turismo; provider: reCAPTCHA.
+- Firestore: Monitorando; 81% verificadas e 19% não verificadas; enforcement não aplicado.
+- Storage: Não aplicado; sem enforcement.
+- Authentication: Monitorando; 100% verificadas e 0% não verificadas; enforcement não aplicado.
+- Decisão: não ativar enforcement nesta etapa; investigar `appCheck/fetch-network-error` separadamente e acompanhar métricas.
+
+### Riscos confirmados
+
+- **P0:** `noticias` possui leitura pública ampla nas Firestore Rules implantadas; filtro de status no frontend não protege documentos draft.
+- **P1:** `media_library` possui leitura pública ampla nas Firestore Rules implantadas.
+- **P1:** `cms-media` possui leitura pública ampla e recursiva nas Storage Rules implantadas.
+
+### Contratos e itens inconclusivos
+
+- `isAdmin` e `isModerator` usam `ativo != false`; não exigem explicitamente `ativo == true`.
+- Firestore e Storage concedem permissões limitadas a `moderator`; o frontend do painel aceita somente `admin`.
+- O comportamento real de uma conta `moderator` e de um usuário inativo não foi testado; nenhuma decisão de role deve ser implementada sem aprovação humana.
+- Permanecem inconclusivos: causa exata de `appCheck/fetch-network-error`, conta `moderator` real, usuário inativo real, execução real de `submissions`, teste ponta a ponta do CMS-4C e domínio do registro App Check não exibido na tela consultada.
+
+### ADMIN-B2 e ADMIN-B3
+
+- O ADMIN-B2 está liberado somente para preparação; publicação de Rules não está autorizada.
+- `ADMIN-B2A-PREP`: contrato e testes para Firestore Rules (`noticias`, `media_library`, `ativo`, `moderator`), sem edição.
+- `ADMIN-B2A-EXEC`: alteração local de `firestore.rules` e testes no Emulator Suite, sem publicação.
+- `ADMIN-B2B-PREP`: contrato e testes para Storage Rules (`cms-media`, `submissions`), sem edição.
+- `ADMIN-B2B-EXEC`: alteração local de `storage.rules` e testes no Emulator Suite, sem publicação.
+- `ADMIN-B3`: revisão final, autorização explícita, publicação controlada das Rules e reteste remoto.
+- Prioridade do futuro B2A: proteger notícias draft, proteger `media_library`, definir o contrato de `ativo`, definir o papel `moderator` e criar testes das identidades/operações.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — estado durável dos blocos, equivalências, App Check, riscos, contratos e gate do próximo passo.
+- `TASKS.md` — estado atual, blocos concluídos, critérios, roadmap B2A/B2B/B3 e `ADMIN-B2A-PREP` como próximo bloco.
+- `CHANGELOG_AI.md` — este registro documental.
+
+### Comandos executados
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -15
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -Raw -LiteralPath "TASKS.md"
+Get-Content -Raw -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites
+
+- Leitura integral de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` concluída antes da edição.
+- Escopo restrito a `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- Nenhum código, HTML, CSS, JavaScript, Firebase Rule, CORS, App Check, dado, metadata, tag Git ou arquivo em `.claude/` foi alterado.
+- Não foram executados `ADMIN-B2A-PREP`, `ADMIN-B2A-EXEC`, `ADMIN-B2B-PREP`, `ADMIN-B2B-EXEC`, `ADMIN-B3`, login, teste de runtime, commit, push ou deploy.
+
+### Próximo passo
+
+- `ADMIN-B2A-PREP` permanece registrado como próximo bloco e não foi iniciado.
+- Sugestão de commit: `docs: registrar conclusão do ADMIN-B1 e ADMIN-B1B`.
+
+---
+
 ## 2026-07-20 — Retomada Admin/CMS/Firebase e conclusão do ADMIN-RESTART-PREP
 
 **Ferramenta/modelo:** Codex

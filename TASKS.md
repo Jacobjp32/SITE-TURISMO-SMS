@@ -13,9 +13,9 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-RESTART-PREP` concluído somente em leitura, diagnóstico, testes estáticos e smoke sem autenticação. O painel possui runtime administrativo real e amplo, mas ainda depende de validação autenticada/anônima atual e da resolução dos bloqueios P0/P1 antes de ser considerado utilizável.
+**Status geral:** `ADMIN-B1-PREP` e `ADMIN-B1B-PREP` concluídos exclusivamente em leitura. Login Admin, dashboard, logout e leituras administrativas foram confirmados; Rules locais e implantadas e CORS local/remoto são equivalentes. Os riscos P0/P1 de leitura pública permanecem confirmados e exigem correção local/testes antes de qualquer publicação.
 
-**Frentes pausadas:** site público, V7C1, V7C2, V6, B3, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
+**Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
 
@@ -23,13 +23,12 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B1-PREP` — validação autenticada e anônima do contrato real de acesso.**
+**`ADMIN-B2A-PREP` — contrato e testes planejados para Firestore Rules.**
 
-- Tipo: PREP, somente leitura, sem correção e sem publicação.
-- Objetivo: confirmar o comportamento remoto real de Firebase Authentication, App Check, usuário admin, usuário sem role, usuário inativo, Firestore Rules, Storage Rules, CORS, rascunhos de notícias, `media_library`, `cms-media`, coleções administrativas, dados publicados e dados privados.
-- Requisitos: login manual feito pelo usuário no navegador; senha e token nunca fornecidos ao Codex; preferir domínio publicado/autorizado; localhost somente com debug provider do App Check explicitamente preparado.
-- Proibições: nenhuma criação, atualização, exclusão, upload, publicação de rules, aplicação de CORS ou cópia de dados pessoais para relatórios.
-- Saída: matriz real ALLOW/DENY, evidência mínima e sanitizada, divergências entre runtime local, rules locais e comportamento remoto, e decisão objetiva para o `ADMIN-B2-EXEC`.
+- Tipo: PREP, somente leitura/análise, sem edição e sem publicação.
+- Objetivo: preparar o contrato e a matriz de testes para `noticias`, `media_library`, `ativo` e `moderator`.
+- Prioridade: (1) P0 — proteger notícias draft; (2) P1 — proteger `media_library`; (3) definir `ativo == true` ou `ativo != false`; (4) definir o papel `moderator`; (5) criar testes das identidades e operações.
+- Regra humana: nenhuma decisão de role deve ser implementada sem aprovação humana.
 - Estado: registrado como próximo bloco único e **não iniciado** nesta governança.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
@@ -93,22 +92,84 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - CMS-5C: código e rule local concluídos; a governança registra publicação específica.
 - CMS-5D: não iniciado e fora da frente atual.
 
-### Bloqueios prioritários
+## ADMIN-B1-PREP — concluído
+
+### Confirmações e limites
+
+- Execução exclusivamente em leitura.
+- Login Admin manual e real confirmado; dashboard administrativo carregado; logout normal concluído.
+- Leituras administrativas confirmadas para `usuarios`, `eventos_pendentes`, `eventos_aprovados` e `estabelecimentos_pendentes`.
+- Nenhuma escrita, alteração de Auth, publicação de Rule, upload ou aplicação de CORS.
+- O primeiro bloco deixou inconclusivos: Rules remotas completas, notícias draft anônimas, `media_library` anônima, `cms-media` anônimo, CORS, usuário `moderator` e usuário inativo.
+- Análise estática confirmou a divergência: o frontend do painel aceita somente `admin`, enquanto as Rules locais concedem permissões específicas a `moderator`.
+
+## ADMIN-B1B-PREP — concluído
+
+### Escopo remoto e projeto
+
+- Somente métodos GET/LIST; nenhuma fonte remota persistida em arquivo e nenhuma configuração alterada.
+- Projeto `turismo-sms`; database `(default)`; Firestore em `southamerica-east1`; bucket `turismo-sms.firebasestorage.app` em `US-EAST1`.
+
+### Firestore Rules — origem da verdade confirmada
+
+- Release: `projects/turismo-sms/releases/cloud.firestore`.
+- Ruleset: `projects/turismo-sms/rulesets/65e9a0eb-bb4a-4578-9e01-42a3c8137cf2`.
+- `firestore.rules` local e Rules implantadas: **iguais**, com zero linhas divergentes.
+- SHA-256 normalizado: `24f14a398a289a429b0aaa146451c80e115f37315d1a09dcf4e3a810712438cc`.
+- O arquivo local é a origem da verdade correspondente à versão atualmente implantada.
+
+### Storage Rules — origem da verdade confirmada
+
+- Release: `projects/turismo-sms/releases/firebase.storage/turismo-sms.firebasestorage.app`.
+- Ruleset: `projects/turismo-sms/rulesets/23c647df-d6bd-4013-a3aa-a4efba2107bc`.
+- `storage.rules` local e Rules implantadas: **iguais**, com zero linhas divergentes.
+- SHA-256 normalizado: `867deaf99e9724e00d3da89225e3d94fc2b197a7e8b14198696740e1554649fd`.
+- O arquivo local é a origem da verdade correspondente à versão atualmente implantada.
+
+### CORS — equivalência confirmada
+
+- Bucket: `turismo-sms.firebasestorage.app`.
+- Origem: `https://turismo.saomateusdosul.pr.gov.br`.
+- Métodos: GET e HEAD.
+- Response headers: `Content-Type` e `Access-Control-Allow-Origin`.
+- `maxAgeSeconds`: 3600.
+- CORS remoto e `storage-cors.json` local: **iguais**.
+- Decisão: não reaplicar CORS. O CMS-4C ainda exige reteste funcional, mas CORS ausente/divergente deixa de ser hipótese principal.
+
+### App Check — estado observado
+
+- App Web: Cadastros Turismo; provider: reCAPTCHA.
+- Firestore: Monitorando; 81% verificadas e 19% não verificadas; enforcement não aplicado.
+- Storage: Não aplicado; sem enforcement.
+- Authentication: Monitorando; 100% verificadas e 0% não verificadas; enforcement não aplicado.
+- Decisão: não ativar enforcement nesta etapa; investigar `appCheck/fetch-network-error` separadamente e acompanhar métricas.
+
+### Riscos prioritários confirmados
 
 **P0**
 
-1. Notícias em rascunho potencialmente públicas: `firestore.rules` possui leitura pública ampla em `noticias`; filtro `publicado` no frontend não constitui proteção de acesso.
-2. Estado remoto completo das Firestore Rules e Storage Rules não comprovado: somente a publicação específica do CMS-5C está claramente registrada; não assumir que o arquivo local atual corresponde integralmente à produção.
+1. `noticias` possui leitura pública ampla nas Firestore Rules implantadas; filtragem de status no frontend não protege documentos draft.
 
 **P1**
 
-3. `media_library` publicamente legível pelas Firestore Rules.
-4. `cms-media` publicamente legível pelas Storage Rules, incluindo potencialmente rascunhos, mídias internas e órfãos.
-5. CMS-4C sem conclusão ponta a ponta: `storage-cors.json` preparado, mas aplicação do CORS no bucket não comprovada.
-6. Uploads sem rollback consistente em banners, biblioteca, eventos e aplicação de mídia aceita.
-7. Aprovação de eventos e estabelecimentos não atômica.
-8. Divergência do papel `moderator`: rules concedem operações, mas o painel principal aceita somente `admin`.
-9. Ausência de teste autenticado atual.
+2. `media_library` possui leitura pública ampla nas Firestore Rules implantadas.
+3. `cms-media` possui leitura pública ampla e recursiva nas Storage Rules implantadas.
+
+### Contratos pendentes de decisão humana
+
+- `isAdmin` e `isModerator` usam `ativo != false`; não exigem explicitamente `ativo == true`.
+- Firestore e Storage concedem permissões limitadas a `moderator`; o frontend do painel aceita somente `admin`.
+- O comportamento real de uma conta `moderator` não foi testado.
+- Nenhuma decisão de role deve ser implementada sem aprovação humana.
+
+### Itens ainda inconclusivos
+
+- causa exata de `appCheck/fetch-network-error`;
+- conta `moderator` real;
+- usuário inativo real;
+- execução real de `submissions`;
+- teste ponta a ponta do CMS-4C;
+- domínio do registro App Check não exibido na tela consultada.
 
 ### Itens que não bloqueiam a primeira versão utilizável
 
@@ -127,9 +188,13 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 ### Roadmap administrativo
 
 - **ADMIN-A — checkpoint e retomada:** concluído pelo `ADMIN-RESTART-PREP`.
-- **ADMIN-B1-PREP:** validar Auth, roles, rules, Storage, App Check e CORS reais.
-- **ADMIN-B2-EXEC:** corrigir contrato de roles e segurança local; proteger notícias em rascunho, `media_library` e `cms-media`; criar testes de rules; somente após B1.
-- **ADMIN-B3-EXEC:** publicar rules aprovadas e retestar; exige autorização explícita.
+- **ADMIN-B1-PREP:** concluído exclusivamente em leitura.
+- **ADMIN-B1B-PREP:** concluído exclusivamente por GET/LIST; equivalência de Rules e CORS e estado do App Check registrados.
+- **ADMIN-B2A-PREP:** contrato e testes para Firestore Rules (`noticias`, `media_library`, `ativo`, `moderator`), sem edição.
+- **ADMIN-B2A-EXEC:** alteração local de `firestore.rules` e testes no Emulator Suite, sem publicação.
+- **ADMIN-B2B-PREP:** contrato e testes para Storage Rules (`cms-media`, `submissions`), sem edição.
+- **ADMIN-B2B-EXEC:** alteração local de `storage.rules` e testes no Emulator Suite, sem publicação.
+- **ADMIN-B3:** revisão final, autorização explícita, publicação controlada das Rules e reteste remoto.
 - **ADMIN-C:** integridade dos uploads, rollback e operações atômicas/idempotentes.
 - **ADMIN-D:** fechamento de Empreendimentos.
 - **ADMIN-E:** fechamento de Eventos.
@@ -141,13 +206,14 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 
 ### Critério de Painel Admin utilizável
 
-- [ ] autenticação Admin testada;
+- [x] autenticação Admin testada;
 - [ ] contrato `admin`/`moderator` definido;
 - [ ] usuário inativo bloqueado;
-- [ ] rules locais e remotas alinhadas;
+- [x] rules locais e remotas alinhadas;
 - [ ] rascunhos protegidos;
 - [ ] dados internos protegidos;
-- [ ] CORS validado;
+- [x] CORS local/remoto alinhado;
+- [ ] CMS-4C retestado ponta a ponta;
 - [ ] moderação testada;
 - [ ] operações críticas atômicas ou idempotentes;
 - [ ] rollback de uploads;
@@ -163,7 +229,7 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 
 `pre-admin-restart-20260720`
 
-Criar somente depois de: (1) esta governança ser revisada; (2) o commit documental ser feito; e (3) o push do commit ser concluído. A tag não foi criada nesta tarefa.
+Checkpoint existente e preservado. Nenhuma tag Git foi criada, alterada ou removida nesta tarefa.
 
 ### Checkpoint arquitetural pós-V5 — decisão aprovada
 
@@ -228,7 +294,7 @@ O `NAV_CSS` recebeu somente o contrato de compatibilidade `@media (min-width: 76
 
 `index.html` permaneceu byte a byte intacto: a home ainda não carrega `js/nav-shared.js`, mantém sua navegação própria, continua com `body.home-page` em `padding-top: 0` no desktop e preserva os módulos R1–R5. O V7A não iniciou o cutover. As páginas internas permaneceram visual e funcionalmente equivalentes; os smokes desktop/mobile, idiomas, busca, autenticação não logada, VLibras, eMAG, progresso, voltar ao topo e Leaflet foram registrados como aprovados. `js/nav-shared.js` permanece em `NEVER_CACHE`; HTML/navegações continuam fora do cache do Service Worker; `sw.js` e `CACHE_NAME` permaneceram intactos.
 
-O GitHub Pages foi publicado e validado: a página pública respondeu HTTP 200 e `noticias.html` respondeu HTTP 200 servindo a tag `js/nav-shared.js?v=site-public-v7a-20260716`. Nenhum teste de runtime foi repetido nesta atualização documental. O próximo microbloco é somente o **V7B**, cutover atômico de alto risco, dependente de autorização humana explícita, deploy e validação em produção; V7B, V7C1 e V7C2 não foram iniciados. Os módulos sobreviventes `js/home-eventos.js`, `js/home-experiencias.js` e `js/home-contato.js` permanecem preservados; `js/home-i18n.js`, `js/home-utilitarios.js` e `js/home-acessibilidade.js` seguem fisicamente disponíveis para o V7B/rollback conforme o plano aprovado. V6, B3, V5C3, V5D, CSS órfão, mídia pesada, Formspree e demais pendências permanecem documentados. Admin/CMS/Firebase continua pausado.
+O GitHub Pages foi publicado e validado: a página pública respondeu HTTP 200 e `noticias.html` respondeu HTTP 200 servindo a tag `js/nav-shared.js?v=site-public-v7a-20260716`. Nenhum teste de runtime foi repetido nesta atualização documental. O próximo microbloco era o **V7B**, posteriormente concluído; V7C1 e V7C2 permanecem não iniciados. Os módulos sobreviventes `js/home-eventos.js`, `js/home-experiencias.js` e `js/home-contato.js` permanecem preservados; `js/home-i18n.js`, `js/home-utilitarios.js` e `js/home-acessibilidade.js` seguem fisicamente disponíveis conforme o plano registrado. V6, B3, V5C3, V5D, CSS órfão, mídia pesada, Formspree e demais pendências permanecem documentados. A pausa administrativa aqui descrita é histórica; a frente Admin/CMS/Firebase foi retomada em 2026-07-20.
 
 ---
 
@@ -276,7 +342,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 - V7-PREP, V7A e V7B — concluídos; V7C1 — próximo microbloco, ainda não iniciado; V7C2 — posterior, ainda não iniciado.
 - V6, B3, V5C3, V5D, limpeza CSS, `.map-modal-*`, `.agrosamas-banner`, mídia pesada, virada anual de eventos, `TURISMO_EVENTOS`/AgroSamas, Formspree e demais follow-ups permanecem pendentes.
-- Admin/CMS/Firebase continua pausado.
+- A pausa administrativa registrada no encerramento do V7B é histórica; Admin/CMS/Firebase é a frente ativa desde 2026-07-20.
 
 ### Escopo desta atualização documental
 
@@ -289,12 +355,13 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 ## Ordem das frentes após o checkpoint de 2026-07-20
 
-1. **ADMIN-B1-PREP** — próximo bloco único, ainda não iniciado.
-2. **ADMIN-B2-EXEC** — somente após evidência e decisão do B1.
-3. **ADMIN-B3-EXEC a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
-4. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
-5. **CMS-5D / integração CMS → site público** — fora da frente atual.
-6. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
+1. **ADMIN-B1-PREP e ADMIN-B1B-PREP** — concluídos exclusivamente em leitura.
+2. **ADMIN-B2A-PREP** — próximo bloco único, ainda não iniciado.
+3. **ADMIN-B2A-EXEC e ADMIN-B2B-PREP/EXEC** — somente em blocos próprios; alterações locais e Emulator Suite, sem publicação.
+4. **ADMIN-B3 a ADMIN-J** — seguir o roadmap administrativo e suas autorizações; publicação de Rules somente no B3.
+5. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+6. **CMS-5D / integração CMS → site público** — fora da frente atual.
+7. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
@@ -348,7 +415,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 - Eventos aprovados com `establishmentName`, mas sem `establishmentId` seguro, não vinculam ao mapa; revisar dados do Firestore futuramente.
 - B4b opcional: migrar Firebase compat de mapa/eventos para import modular sob demanda, somente com teste manual dedicado.
 - B3 — mídia/performance fica por último, conforme decisão atual.
-- Admin/CMS/Firebase segue pausado.
+- Admin/CMS/Firebase é a frente ativa; esta lista pública permanece pausada.
 
 **Escopo provável:** páginas públicas, navegação, conteúdo visível, acessibilidade, SEO público, performance e dados estáticos públicos, conforme tarefa aprovada.
 **Fora de escopo:** Admin, CMS, Firebase, Firestore Rules, Storage Rules, dados reais do Firestore, seeds, deploys e integrações CMS.
@@ -392,7 +459,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. O próximo bloco é `ADMIN-B1-PREP`, somente leitura, e não foi iniciado nesta governança.
+**Regra:** executar somente o bloco autorizado. `ADMIN-B1-PREP` e `ADMIN-B1B-PREP` estão concluídos; o próximo bloco é `ADMIN-B2A-PREP`, somente preparação sem edição, e não foi iniciado nesta governança.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -454,6 +521,12 @@ Auditoria das fontes de dados públicas + remoção do duplicado `rua-do-mathe` 
 
 ### [CONCLUÍDA] CMS-5C — Leitura pública segura de published e debug isolado
 CMS-5C concluído, commitado, enviado por push e Firestore Rules publicadas. A leitura pública de `cms_establishments` foi limitada a documentos `status == "published"` e a validação esperada ocorre em `/cms-public-debug.html`, sem integração com as páginas públicas principais.
+
+### [CONCLUÍDA] ADMIN-B1-PREP — Validação Admin somente leitura
+Login Admin manual e real, dashboard, logout e leituras de `usuarios`, `eventos_pendentes`, `eventos_aprovados` e `estabelecimentos_pendentes` confirmados sem escrita, alteração de Auth, publicação de Rules, upload ou aplicação de CORS. A divergência entre frontend somente `admin` e permissões limitadas de `moderator` nas Rules foi confirmada estaticamente.
+
+### [CONCLUÍDA] ADMIN-B1B-PREP — Contrato remoto de Rules, CORS e App Check
+Releases/rulesets implantados, CORS do bucket e App Check foram recuperados somente por GET/LIST, sem persistência de fontes remotas ou mudança de configuração. `firestore.rules` e `storage.rules` locais correspondem exatamente às versões implantadas; `storage-cors.json` corresponde ao CORS remoto. Riscos P0/P1 de leitura pública em `noticias`, `media_library` e `cms-media` foram confirmados.
 
 ### [CONCLUÍDA] B1 — Cache-busting público pós-auditoria
 Token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Bloco commitado e enviado manualmente em 2026-07-08. Nenhum Admin/CMS/Firebase tocado.
@@ -519,7 +592,7 @@ R1, R2, R3, R4B, R4A, R5A e R5B estão concluídos. A Fase 1 foi encerrada sem r
 
 **Limite de validação:** o bloqueio direto de `translations.js` não foi possível no ambiente; a degradação foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
 
-**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao próximo `ADMIN-B1-PREP`.
+**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao próximo `ADMIN-B2A-PREP`.
 
 ---
 
