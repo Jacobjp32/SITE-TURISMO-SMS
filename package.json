@@ -1,0 +1,14 @@
+{
+  "name": "turismo-sms-rules-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:rules:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs",
+    "test:rules": "firebase emulators:exec --only firestore --project demo-turismo-sms-rules-test \"npm run test:rules:node\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.1",
+    "firebase": "12.16.0",
+    "firebase-tools": "15.24.0"
+  }
+}
