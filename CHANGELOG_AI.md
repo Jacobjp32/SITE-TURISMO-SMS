@@ -6,6 +6,228 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-24 — Conclusão do ADMIN-B2A1-EXEC
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B2A1-EXEC` concluído, validado, commitado, enviado por push e presente em `origin/main`; `ADMIN-B2A2-BRIDGE-PREP` registrado e não iniciado.
+
+### Objetivo
+
+Registrar oficialmente a conclusão do `ADMIN-B2A1-EXEC`, que criou a infraestrutura local e isolada e o baseline automatizado das Firestore Rules administrativas antes de qualquer correção ou publicação. Esta atualização é exclusivamente documental e não repete testes, não altera Rules e não inicia outro bloco.
+
+### Estado das frentes
+
+- Frente ativa: Painel Admin, CMS, Firebase Authentication, Firestore, Firebase Storage, segurança administrativa, moderação e integridade dos fluxos.
+- Blocos concluídos: `ADMIN-RESTART-PREP`, `ADMIN-B1-PREP`, `ADMIN-B1B-PREP`, `ADMIN-B2A-PREP` e `ADMIN-B2A1-EXEC`.
+- Permanecem pausados: site público, V7C1, V7C2, V6, B3 público, Fable e integração CMS → site público.
+- Checkpoint existente e preservado: `pre-admin-restart-20260720`.
+
+### Evidência confirmada pelo Git
+
+- Commit funcional completo: `9ccc595d34edb106348936f23ce789329047280c`.
+- Mensagem: `test(rules): adiciona baseline local das Firestore Rules administrativas`.
+- O commit está em `HEAD`, `main`, `origin/main` e `origin/HEAD`.
+- Arquivos reais do commit:
+  - `firebase.json` — modificado;
+  - `package.json` — criado;
+  - `package-lock.json` — criado;
+  - `tests/firestore.rules.test.mjs` — criado.
+- Estatística real: 4 arquivos alterados e 10.129 inserções:
+  - `firebase.json`: 10 inserções;
+  - `package.json`: 14 inserções;
+  - `package-lock.json`: 9.442 inserções;
+  - `tests/firestore.rules.test.mjs`: 663 inserções.
+
+### Infraestrutura local criada
+
+- `package.json`: `private: true`, `type: module`, somente `devDependencies`, runner Node separado, execução pelo Firestore Emulator e concorrência 1.
+- Não foram adicionados scripts de build, deploy ou produção.
+- Dependências diretas exatas:
+  - `firebase@12.16.0`;
+  - `@firebase/rules-unit-testing@5.0.1`;
+  - `firebase-tools@15.24.0`.
+- `package-lock.json`: lockfile version 3, gerado e versionado, com 9.442 linhas e dependências raiz limitadas às três versões autorizadas.
+- `firebase.json` preservou `firestore.rules` e `storage.rules` e adicionou somente:
+  - Firestore Emulator na porta 8080;
+  - Emulator UI na porta 4000;
+  - `singleProjectMode: true`.
+- Não foram adicionados Auth Emulator, Storage Emulator, Functions, Hosting, import/export ou projeto Firebase real.
+
+### Projeto demo e isolamento
+
+- Projeto obrigatório e exclusivo: `demo-turismo-sms-rules-test`.
+- O mesmo ID foi usado no script npm, Firebase CLI, `initializeTestEnvironment` e endpoint local de coverage.
+- O project ID real `turismo-sms` não teve uso operacional.
+- Não houve login Firebase, API key, token, credencial, chamada de produção, dado real, UID real, e-mail real ou URL real.
+
+### Suíte automatizada
+
+- Arquivo: `tests/firestore.rules.test.mjs`.
+- Estrutura:
+  - `node:test`;
+  - `@firebase/rules-unit-testing`;
+  - API modular do Firestore;
+  - leitura de `firestore.rules` diretamente do disco;
+  - uma inicialização de `initializeTestEnvironment`;
+  - `clearFirestore` antes de cada teste;
+  - `cleanup` no final;
+  - `withSecurityRulesDisabled` somente para seeds fictícios;
+  - exclusivamente dados artificiais.
+- Resultado final após reinstalação e limpeza:
+  - testes: 44;
+  - suítes: 5;
+  - aprovados: 44;
+  - falhas: 0;
+  - cancelados: 0;
+  - ignorados: 0;
+  - `todo`: 0;
+  - código de saída: 0.
+
+### Baseline de `noticias`
+
+- Anônimo lê notícia publicada e notícia draft.
+- Anônimo lista toda a coleção e executa query com `publicado == true`.
+- Usuário comum lê draft; `moderator` lê draft devido à leitura pública; admin ativo lê draft.
+- Anônimo, usuário comum e `moderator` não criam notícia.
+- Admin ativo cria notícia; admin inativo não cria.
+- Decisão: o risco **P0** está documentado e reproduzível, sem aceitação institucional. A leitura pública de drafts será alterada somente no `ADMIN-B2A3`; nenhuma alteração foi feita em `firestore.rules` no B2A1.
+
+### Baseline de `media_library`
+
+- Anônimo faz `getDoc` e lista a coleção.
+- Usuário comum, `moderator` e admin ativo leem.
+- Anônimo, usuário comum e `moderator` não criam.
+- Admin ativo cria; admin inativo não cria.
+- Decisão: o risco **P1** está documentado e reproduzível. A proteção será alterada somente no `ADMIN-B2A4`; nenhuma alteração foi feita em `firestore.rules` no B2A1.
+
+### Baseline do campo `ativo`
+
+- `ativo: true` — ALLOW.
+- `ativo: false` — DENY.
+- Campo `ativo` ausente — DENY.
+- `ativo: null`, `ativo: "true"` e `ativo: 1` — ALLOW.
+- Role ausente, role inválida e documento `usuarios` ausente — DENY.
+- Conclusão: o contrato atual `ativo != false` aceita valores não booleanos diferentes de `false`. A decisão e eventual correção permanecem reservadas ao `ADMIN-B2A5`.
+
+### Baseline de `moderator`
+
+- `moderator` ativo lê, atualiza e exclui `eventos_pendentes`; `moderator` inativo recebe DENY.
+- `moderator` não cria `noticias` nem `media_library`.
+- `moderator` não lista `usuarios`, mas lê o próprio documento.
+- `moderator` não administra `cms_establishments` draft.
+- `moderator` escreve `eventos_aprovados` conforme a Rule atual.
+- Conclusão: o contrato real está automatizado; o frontend continua aceitando somente `admin`; a decisão institucional e qualquer alteração permanecem reservadas ao `ADMIN-B2A5`.
+
+### Fallback global deny
+
+- Anônimo não lê coleção desconhecida.
+- Usuário comum não lê coleção desconhecida.
+- Admin não lê coleção desconhecida sem `match` explícito.
+- O fallback global deny permanece válido.
+
+### Coverage
+
+- Endpoint local: `http://127.0.0.1:8080/emulator/v1/projects/demo-turismo-sms-rules-test:ruleCoverage`.
+- Resultado: HTTP 200.
+- Nenhum arquivo de coverage foi persistido.
+
+### Limpeza dos pacotes extraneous
+
+- A primeira instalação relatou `google-logging-utils@1.1.4` e um `picomatch@4.0.5` aninhado como extraneous.
+- `npm prune --no-save` removeu os dois pacotes.
+- `package-lock.json` foi preservado por comparação de SHA-256.
+- Novo `npm prune --dry-run` retornou `remove` vazio.
+- `npm ls --depth=0` mostrou somente as três dependências diretas.
+- `google-logging-utils` permaneceu apenas em versões transitivas legítimas.
+- A suíte 44/44 passou novamente após a limpeza.
+- Os pacotes extraneous não são pendência atual.
+
+### Dívida npm não bloqueante
+
+- Quatro avisos de pacotes depreciados.
+- Sete vulnerabilidades moderadas relatadas pelo npm.
+- Nenhum `npm audit fix` foi executado.
+- Nenhuma atualização automática foi realizada.
+- Os avisos não bloquearam o baseline local e permanecem como dívida das ferramentas de desenvolvimento.
+
+### Rules, runtime e remoto preservados
+
+- `firestore.rules`, `storage.rules`, `storage-cors.json`, `.firebaserc`, `config.js`, `admin-firebase.html`, `js/**`, HTML/CSS, site público, Portal do Usuário e `js/site-meta.js` permaneceram intactos no bloco funcional.
+- Nenhuma Rule foi alterada, criada remotamente, sincronizada, implantada ou publicada.
+- Nenhuma metadata foi atualizada.
+- Não houve acesso remoto, escrita de dados, login, credencial, deploy ou publicação.
+- `ADMIN-B3` continua sendo o único bloco autorizado a publicar Rules, mediante autorização explícita.
+
+### Roadmap preservado
+
+- `ADMIN-B2A1-EXEC`: concluído.
+- `ADMIN-B2A2-BRIDGE-PREP`: próximo bloco, somente leitura/análise e não iniciado.
+- `ADMIN-B2A2-BRIDGE`: adaptação mínima do consumidor público em `js/cms.js`; não iniciado e dependente de autorização explícita.
+- `ADMIN-B2A3`: proteção local de drafts de `noticias` e inversão dos testes inseguros; sem publicação; não iniciado.
+- `ADMIN-B2A4`: proteção local de `media_library` e inversão dos testes públicos; sem publicação; não iniciado.
+- `ADMIN-B2A5`: contrato de `ativo` e `moderator`, dependente de decisões humanas; não iniciado.
+- `ADMIN-B2B`: Storage Rules; não iniciado.
+- `ADMIN-B3`: publicação controlada; não iniciado e continua sendo o único bloco autorizado a publicar Rules.
+
+### Próximo passo
+
+`ADMIN-B2A2-BRIDGE-PREP`, exclusivamente em leitura, para:
+
+- confirmar o consumidor público real de notícias;
+- confirmar o campo canônico de publicação;
+- confirmar a query atual;
+- determinar a alteração mínima necessária antes de restringir as Rules;
+- preservar layout, conteúdo e demais funcionalidades públicas;
+- não executar a bridge;
+- não alterar `firestore.rules`.
+
+### Rollback do bloco funcional
+
+- Se um rollback do `ADMIN-B2A1-EXEC` for futuramente autorizado, o ponto reversível é o commit único `9ccc595d34edb106348936f23ce789329047280c`.
+- O rollback deve ocorrer por novo commit de reversão revisado, sem reescrever histórico e sem publicação de Rules.
+- Nenhum rollback foi executado nesta governança.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável, baseline 44/44, projeto demo, Rules intactas, ordem B2A2→B2A3→B2A4→B2A5 e próximo PREP.
+- `TASKS.md` — evidência funcional, infraestrutura, dependências, testes, baselines, coverage, limpeza, dívida npm e roadmap.
+- `CHANGELOG_AI.md` — este registro detalhado.
+
+### Comandos executados nesta governança
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -20
+git rev-parse 9ccc595
+git show --stat --oneline --decorate --no-renames 9ccc595
+git show --format= --name-status --no-renames 9ccc595
+git rev-parse origin/main
+git merge-base --is-ancestor 9ccc595 origin/main
+git show-ref --tags --verify refs/tags/pre-admin-restart-20260720
+Get-Content -Raw CLAUDE.md
+Get-Content TASKS.md
+Get-Content CHANGELOG_AI.md
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+```
+
+### Validações e limites desta governança
+
+- Leitura integral de `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` concluída antes da edição.
+- Alteração restrita aos três arquivos de governança.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- Nenhum código, teste, dependência, configuração Firebase, Rule, runtime, dado, metadata, tag Git ou arquivo em `.claude/` foi alterado.
+- Não foram executados npm, suíte de Rules, Emulator, `ADMIN-B2A2`, `ADMIN-B2A3`, `ADMIN-B2A4`, `ADMIN-B2A5`, `ADMIN-B2B`, `ADMIN-B3`, commit, push ou deploy nesta atualização documental.
+- Sugestão de commit: `docs: registrar conclusão do ADMIN-B2A1`.
+
+---
+
 ## 2026-07-22 — Conclusão do ADMIN-B1-PREP e ADMIN-B1B-PREP
 
 **Ferramenta/modelo:** Codex
