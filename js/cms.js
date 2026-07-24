@@ -33,7 +33,7 @@ const CMS = {
     carregarPosts: async function() {
         try {
             const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-            const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
             const { initModularAppCheck } = await import('./firebase-app-check.js');
             if (typeof CONFIG === 'undefined' || !CONFIG.firebase) throw new Error('CONFIG.firebase ausente');
             const firebaseConfig = CONFIG.firebase;
@@ -41,31 +41,33 @@ const CMS = {
             const app = existingApp || initializeApp(firebaseConfig, 'cms-app');
             await initModularAppCheck(app);
             const db = getFirestore(app);
-            const snap = await getDocs(collection(db, 'noticias'));
-            if (!snap.empty) {
-                this.posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-                // Garantir campos esperados pelo render
-                this.posts = this.posts.map(p => ({
-                    ...p,
-                    titulo: p.titulo || 'Sem título',
-                    slug: p.slug || this.gerarSlug(p.titulo || ''),
-                    categoria: p.categoria || 'Institucional',
-                    resumo: p.resumo || '',
-                    conteudo: p.conteudo || '',
-                    imagem: p.imagem || 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
-                    galeria: Array.isArray(p.galeria) ? p.galeria : [],
-                    videoUrl: p.videoUrl || p.video || '',
-                    linkOrigem: p.linkOrigem || p.sourceUrl || '',
-                    autor: p.autor || 'Departamento de Turismo',
-                    dataPublicacao: p.publishedAt || p.data || p.dataPublicacao || new Date().toISOString(),
-                    destaque: p.destaque || false,
-                    publicado: p.publicado === true || p.status === 'publicado'
-                }))
-                    .filter(p => p.publicado)
-                    .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
-                this.source = 'firebase';
-                return this.posts;
-            }
+            const publicNewsQuery = query(
+                collection(db, 'noticias'),
+                where('publicado', '==', true)
+            );
+            const snap = await getDocs(publicNewsQuery);
+            this.posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+            // Garantir campos esperados pelo render
+            this.posts = this.posts.map(p => ({
+                ...p,
+                titulo: p.titulo || 'Sem título',
+                slug: p.slug || this.gerarSlug(p.titulo || ''),
+                categoria: p.categoria || 'Institucional',
+                resumo: p.resumo || '',
+                conteudo: p.conteudo || '',
+                imagem: p.imagem || 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg',
+                galeria: Array.isArray(p.galeria) ? p.galeria : [],
+                videoUrl: p.videoUrl || p.video || '',
+                linkOrigem: p.linkOrigem || p.sourceUrl || '',
+                autor: p.autor || 'Departamento de Turismo',
+                dataPublicacao: p.publishedAt || p.data || p.dataPublicacao || new Date().toISOString(),
+                destaque: p.destaque || false,
+                publicado: p.publicado === true || p.status === 'publicado'
+            }))
+                .filter(p => p.publicado)
+                .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+            this.source = 'firebase';
+            return this.posts;
         } catch (err) {
             console.warn('Firebase CMS indisponível, usando localStorage:', err.message);
         }
