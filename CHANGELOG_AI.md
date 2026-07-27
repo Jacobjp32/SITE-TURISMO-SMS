@@ -6,6 +6,80 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-27 — Encerramento do ADMIN-B2A2-NETWORK-DIAG-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B2A2-NETWORK-DIAG-PREP` concluído com defeito CSP/reCAPTCHA confirmado e causa única do timeout do Firestore ainda inconclusiva.
+
+### Objetivo
+
+Registrar o parecer final do diagnóstico de rede posterior ao bridge público de notícias, sem alterar runtime, Rules, CSP ou produção, e deixar `ADMIN-B2A2-CSP-FIX-PREP` apenas como próximo bloco recomendado.
+
+### Estado funcional anterior preservado
+
+- `ADMIN-B2A2-BRIDGE-PREP` e `ADMIN-B2A2-BRIDGE` estão concluídos.
+- Commit funcional: `4b1b783398fa659ebbff7302cdf1038e6bdd184a fix: filtrar notícias públicas no Firestore`, presente em `HEAD` e `origin/main`.
+- O commit alterou `js/cms.js`, `noticias.html`, `noticia.html` e a metadata em `js/site-meta.js`.
+- A consulta pública usa `where('publicado', '==', true)`.
+- Resultado vazio do Firestore permanece sucesso com `CMS.posts = []` e `CMS.source = 'firebase'`; fallback local ocorre somente em falha.
+
+### Matriz confirmada
+
+- Firefox normal / rede residencial: timeout.
+- Firefox normal / rede institucional: timeout.
+- Firefox normal / hotspot móvel: timeout.
+- Chrome / hotspot móvel: timeout.
+- CSP/reCAPTCHA bloqueada em todas as combinações testadas.
+- Sem `permission-denied`.
+- Sem `CONFIG.firebase` ausente.
+
+### Parecer
+
+- Recurso crítico bloqueado: `https://www.google.com/recaptcha/api.js`.
+- Origem observada: `firebase-app-check.js`.
+- Status: bloqueado por `script-src-elem`.
+- A CSP não define `script-src-elem` separadamente; o navegador utiliza `script-src` como fallback, e o endereço do reCAPTCHA não está autorizado.
+- A incompatibilidade CSP/reCAPTCHA é um defeito confirmado.
+- Não há evidência suficiente para afirmar que ela seja a única causa do timeout do Firestore.
+- `firebase-app.js.map`, `firebase-firestore.js.map` e `firebase-app-check.js.map` também foram bloqueados por `connect-src`, mas são recursos de depuração do DevTools e não constituem, isoladamente, falha de execução dos módulos Firebase.
+
+### Decisões e limites
+
+- Não alterar `js/cms.js`.
+- Não alterar Firestore Rules.
+- Não iniciar `ADMIN-B2A3`.
+- Não testar long polling ainda.
+- Não aplicar correção de CSP nesta governança.
+- Não executar commit, push ou deploy.
+
+### Próximo bloco recomendado — não iniciado
+
+`ADMIN-B2A2-CSP-FIX-PREP`, exclusivamente para:
+
+- localizar a fonte exata da meta CSP;
+- propor a alteração mínima;
+- revisar `script-src`/`script-src-elem`, `frame-src` e `connect-src` conforme os requisitos oficiais do reCAPTCHA;
+- preservar todas as demais diretivas;
+- não aplicar a correção sem autorização de EXEC própria.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável, parecer do diagnóstico, limites e próximo PREP.
+- `TASKS.md` — estado atual, matriz, roadmap e próximo bloco recomendado.
+- `CHANGELOG_AI.md` — este registro.
+
+### Validações e preservações
+
+- Escopo restrito aos três arquivos de governança.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- Nenhum HTML, CSS, JavaScript de runtime, Rule, configuração Firebase, CSP, dado, metadata ou arquivo em `.claude/` foi alterado.
+- Nenhum teste de runtime, Rules, rede ou long polling foi repetido nesta atualização documental.
+
+---
+
 ## 2026-07-24 — Conclusão do ADMIN-B2A1-EXEC
 
 **Ferramenta/modelo:** Codex
