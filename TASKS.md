@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-B1-PREP`, `ADMIN-B1B-PREP`, `ADMIN-B2A-PREP`, `ADMIN-B2A1-EXEC`, `ADMIN-B2A2-BRIDGE-PREP`, `ADMIN-B2A2-BRIDGE` e `ADMIN-B2A2-NETWORK-DIAG-PREP` concluídos. O consumidor público já filtra `noticias` por `publicado == true`; o diagnóstico de rede confirmou incompatibilidade da CSP com o reCAPTCHA do App Check, sem comprovar que ela seja a única causa do timeout do Firestore. Rules permanecem inalteradas e não publicadas.
+**Status geral:** blocos até `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` concluídos. O `ADMIN-B2A2-BRIDGE` está publicado, validado contra o servidor real e aprovado; a correção CSP/reCAPTCHA está publicada e aprovada em Chrome e Firefox. Rules permanecem inalteradas e não publicadas. O gate para iniciar futuramente o `ADMIN-B2A3-PREP` está liberado, mas o bloco ainda não foi iniciado.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,14 +23,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A2-CSP-FIX-PREP` — preparação da correção mínima da CSP para reCAPTCHA.**
+**`ADMIN-B2A3-PREP` — preparação da proteção de drafts em Firestore Rules.**
 
-- Tipo: PREP, somente localização, leitura, análise e proposta; sem aplicar correção.
-- Objetivo: localizar a fonte exata da meta CSP e propor a menor alteração compatível com os requisitos oficiais do reCAPTCHA.
-- Revisão obrigatória: `script-src`/`script-src-elem`, `frame-src` e `connect-src`, preservando todas as demais diretivas.
-- Preservações: não alterar `js/cms.js`, `firestore.rules`, outras Rules, runtime, dados ou produção nesta etapa.
-- Regra humana: o PREP não autoriza correção da CSP, long polling, `ADMIN-B2A3`, `ADMIN-B2A4`, `ADMIN-B2A5`, `ADMIN-B2B` ou `ADMIN-B3`.
-- Estado: registrado como próximo bloco único e **não iniciado** nesta governança.
+- Tipo: PREP, exclusivamente leitura, análise e planejamento.
+- Objetivo: definir a Rule mínima para leitura pública somente quando `publicado == true`, preservar leitura administrativa de drafts, planejar a inversão dos testes inseguros e verificar contratos de `get`, `list` e query.
+- Compatibilidade obrigatória: preservar a query pública já publicada e aprovada contra o servidor real.
+- Preservações: não alterar `firestore.rules`, testes, Emulator, dados, runtime ou produção nesta etapa.
+- Regra humana: o gate está liberado, mas este registro não inicia o PREP, não autoriza `ADMIN-B2A3-EXEC` e não autoriza publicação de Rules.
+- Estado: próximo bloco único recomendado e **não iniciado** nesta governança.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
 
@@ -191,7 +191,7 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - O contrato e a estratégia de testes das Firestore Rules foram preparados sem edição ou publicação.
 - A execução foi dividida em microblocos para separar baseline, compatibilidade do consumidor público, correções de segurança e decisões humanas.
 - Ordem aprovada: `ADMIN-B2A1-EXEC` → `ADMIN-B2A2-BRIDGE` → `ADMIN-B2A3` → `ADMIN-B2A4` → `ADMIN-B2A5`.
-- A disciplina PREP/EXEC permanece obrigatória. O bridge foi concluído; o próximo gate recomendado é `ADMIN-B2A2-CSP-FIX-PREP`, não `ADMIN-B2A3`.
+- A disciplina PREP/EXEC permanece obrigatória. O bridge e o CSP-FIX foram concluídos e aprovados; o gate para o futuro `ADMIN-B2A3-PREP` está liberado, sem iniciar o bloco.
 
 ## ADMIN-B2A1-EXEC — concluído
 
@@ -267,14 +267,31 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - Nenhuma Rule foi alterada, criada remotamente, sincronizada, implantada ou publicada.
 - `ADMIN-B3` continua sendo o único bloco autorizado a publicar Rules.
 
-## ADMIN-B2A2-BRIDGE — concluído
+## ADMIN-B2A2-BRIDGE — concluído, publicado e aprovado
 
-- `ADMIN-B2A2-BRIDGE-PREP` e a execução mínima do bridge foram concluídos.
-- Commit funcional: `4b1b783398fa659ebbff7302cdf1038e6bdd184a fix: filtrar notícias públicas no Firestore`, presente em `HEAD` e `origin/main`.
-- Arquivos do commit: `js/cms.js`, `noticias.html`, `noticia.html` e atualização de metadata em `js/site-meta.js`.
-- A consulta pública usa `where('publicado', '==', true)`.
-- Resultado vazio do Firestore é sucesso: `CMS.posts = []` e `CMS.source = 'firebase'`; fallback local ocorre somente em falha.
+### Evidência do commit
+
+- Commit funcional: `4b1b783398fa659ebbff7302cdf1038e6bdd184a`.
+- Mensagem: `fix: filtrar notícias públicas no Firestore`.
+- Presença: confirmado como ancestral de `origin/main`.
+- Arquivos: `js/cms.js`, `noticias.html`, `noticia.html` e `js/site-meta.js`.
+- Estatística real: 4 arquivos alterados, 32 inserções e 29 remoções.
+
+### Contrato implementado
+
+- A consulta pública usa `where('publicado', '==', true)` e mantém filtro posterior como defesa adicional.
+- Resultado vazio do Firestore é sucesso: `CMS.posts = []` e `CMS.source = 'firebase'`; fallback local ocorre somente em falha real.
+- `noticia.html` carrega `config.js` antes de `js/cms.js`.
+- Token do CMS preservado: `admin-b2a2-20260724`.
 - `firestore.rules`, long polling, Service Worker, paginação, `orderBy`, `limit` e leitura direta por slug permaneceram fora do bloco.
+
+### Validação funcional final contra o servidor
+
+- `getDocsFromServer`: `ok: true`, `source: server`, `count: 8` e `allPublished: true`.
+- Runtime CMS: binding `object`, `CMS.source = 'firebase'`, `count: 8` e `allPublished: true`.
+- `noticias.html`: página íntegra, grid visível, 8 cards presentes e visíveis, uma carga de `config.js`, uma carga de `js/cms.js`, nenhum fallback por configuração ausente, nenhum `permission-denied`, timeout ou `unavailable`.
+- Conclusão: bridge aprovado e compatível com a futura proteção das Rules.
+- `ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP` não é necessário no estado atual; reabrir somente se timeout reaparecer após CSP válida.
 
 ## ADMIN-B2A2-NETWORK-DIAG-PREP — concluído
 
@@ -296,6 +313,57 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - Conclusão conservadora: a incompatibilidade CSP/reCAPTCHA é um defeito objetivo e corrigível, mas ainda não está comprovada como causa única do timeout do Firestore.
 - Preservações: `js/cms.js` e Firestore Rules não foram alterados; `ADMIN-B2A3` não foi iniciado; long polling não foi testado.
 
+## ADMIN-B2A2-CSP-FIX — concluído, publicado e aprovado
+
+### Evidência do commit
+
+- `ADMIN-B2A2-CSP-FIX-PREP`, `ADMIN-B2A2-CSP-FIX-EXEC` e `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` concluídos.
+- Commit funcional: `e2c82494c438f7f722fcf82fa47c1705f8854feb`.
+- Mensagem: `fix: permitir reCAPTCHA nas páginas Firebase públicas`.
+- Presença: `HEAD`, `main`, `origin/main` e `origin/HEAD`; confirmado como ancestral de `origin/main`.
+- Arquivos: `noticias.html`, `noticia.html`, `reservas.html`, `sabores.html` e `js/site-meta.js`.
+- Estatística real: 5 arquivos alterados, 5 inserções e 5 remoções.
+- Metadata funcional confirmada em `js/site-meta.js`: `2026-07-27T13:07:40-03:00`.
+
+### Delta CSP mínimo
+
+- `script-src`: adicionado `https://www.google.com/recaptcha/`.
+- `frame-src`: adicionado `https://recaptcha.google.com/recaptcha/`.
+- `connect-src`: adicionados `https://firebaseinstallations.googleapis.com`, `https://content-firebaseappcheck.googleapis.com`, `https://firebaseappcheck.googleapis.com` e `https://www.google.com/recaptcha/`.
+- Preservados: diretivas e origens anteriores, `unsafe-inline`, `unsafe-eval`, wildcards existentes, posição da meta, UTF-8 sem BOM, LF, Service Worker, `CACHE_NAME` e tokens dos scripts.
+- Não adicionados: `script-src-elem`, `script-src-attr`, nonce, `strict-dynamic`, wildcard novo, endpoints de source map, `securetoken` ou `*.googleapis.com`.
+
+### Publicação
+
+- Domínio oficial: HTTP 200 para `noticias.html`, `noticia.html`, `reservas.html`, `sabores.html` e `js/site-meta.js`.
+- Cada uma das quatro páginas serve exatamente uma meta CSP.
+- Headers observados: `Cache-Control: max-age=600`, `Server: GitHub.com` e `Via: 1.1 varnish`.
+- CSP por header e CSP Report-Only: ausentes. A política ativa continua vindo somente da meta HTML.
+- `_headers` local não é aplicado pelo hosting atual e permaneceu intacto.
+
+### Chrome, Firefox, reCAPTCHA e App Check
+
+- Chrome: hard reload; `api.js`, iframe e endpoints do App Check sem bloqueio; `getDocsFromServer` e CMS Firebase aprovados.
+- Firefox: hard reload; `grecaptcha` disponível como objeto; `api.js`, iframes e anchors carregados; CMS Firebase com 8 itens e sem diferença funcional relevante.
+- Source maps bloqueados permanecem recursos de depuração sem impacto funcional.
+- Avisos de cookies/armazenamento particionado do Firefox permanecem informativos e sem falha funcional comprovada.
+
+### Páginas validadas e limitação residual
+
+- `noticias.html`: aprovada com Firestore real, 8 cards e nenhum draft no resultado normalizado.
+- `noticia.html` com slug inexistente: aprovada com “Notícia não encontrada”, sem conteúdo de outro documento, scripts únicos e CMS mantido em Firebase.
+- `reservas.html`: smoke somente de leitura aprovado, 6 cards, formulário fechado e nenhuma escrita.
+- `sabores.html`: smoke somente de leitura aprovado, conteúdo estrutural íntegro, banners sem bloqueio e nenhuma escrita.
+- Detalhe de notícia publicada: **NÃO TESTADO**. A listagem apresentou `internalDetailLinkCount: 0`; nenhum link interno seguro estava disponível e nenhum slug foi inventado ou extraído manualmente.
+- A limitação do detalhe é follow-up funcional separado e não bloqueia a aprovação da CSP, do bridge ou o gate do `ADMIN-B2A3-PREP`.
+
+### Preservações e gate
+
+- Permaneceram intactos: `firestore.rules`, `storage.rules`, `tests/firestore.rules.test.mjs`, `admin-firebase.html`, `portal-usuario.html`, `js/cms.js` após o bridge, `js/firebase-app-check.js`, `config.js`, `sw.js`, dados, Firebase remoto, App Check remoto, enforcement, Admin e Portal.
+- Nenhuma Rule foi publicada; publicação continua exclusiva do `ADMIN-B3`.
+- Gate do `ADMIN-B2A3-PREP` liberado porque a query pública já filtra `publicado == true`, foi aceita pelo servidor, retornou `allPublished: true`, manteve `CMS.source = 'firebase'` e não apresentou incompatibilidade com as Rules atuais.
+- O gate não autoriza editar `firestore.rules`, iniciar `ADMIN-B2A3-EXEC`, publicar Rules ou alterar dados.
+
 ### Roadmap administrativo
 
 - **ADMIN-A — checkpoint e retomada:** concluído pelo `ADMIN-RESTART-PREP`.
@@ -303,10 +371,12 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - **ADMIN-B1B-PREP:** concluído exclusivamente por GET/LIST; equivalência de Rules e CORS e estado do App Check registrados.
 - **ADMIN-B2A-PREP:** concluído; contrato, matriz e divisão dos microblocos Firestore registrados.
 - **ADMIN-B2A1-EXEC:** concluído; infraestrutura local e baseline atual automatizado em 44/44, sem alteração de Rules.
-- **ADMIN-B2A2-BRIDGE-PREP e ADMIN-B2A2-BRIDGE:** concluídos; consulta pública filtrada e fallback preservado no commit `4b1b783`.
-- **ADMIN-B2A2-NETWORK-DIAG-PREP:** concluído; incompatibilidade CSP/reCAPTCHA confirmada, timeout ainda sem causa única comprovada.
-- **ADMIN-B2A2-CSP-FIX-PREP:** próximo bloco recomendado; localizar a meta CSP e preparar proposta mínima, sem executar a correção.
-- **ADMIN-B2A3:** proteger drafts de `noticias` em `firestore.rules` local e inverter os testes inseguros; sem publicação; não iniciado.
+- **ADMIN-B2A2-BRIDGE-PREP e ADMIN-B2A2-BRIDGE:** concluídos, publicados, validados contra o servidor e aprovados no commit `4b1b783`.
+- **ADMIN-B2A2-NETWORK-DIAG-PREP:** concluído; confirmou CSP/reCAPTCHA como defeito real sem declarar causalidade única antecipadamente.
+- **ADMIN-B2A2-CSP-FIX-PREP, EXEC e PROD-VALIDATION:** concluídos; correção mínima publicada, validada e aprovada no commit `e2c8249`.
+- **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP:** não necessário no estado atual; reabrir somente se timeout reaparecer após CSP válida.
+- **ADMIN-B2A3-PREP:** próximo bloco recomendado, somente leitura e planejamento da proteção de drafts; gate liberado e bloco não iniciado.
+- **ADMIN-B2A3-EXEC:** posterior; alteração local de Rules, inversão/ampliação dos testes e Emulator, sem publicação; não iniciado.
 - **ADMIN-B2A4:** proteger `media_library` em `firestore.rules` local e inverter os testes de leitura pública; sem publicação; não iniciado.
 - **ADMIN-B2A5:** decidir e ajustar os contratos de `ativo` e `moderator`; depende de decisões humanas; não iniciado.
 - **ADMIN-B2B:** Storage Rules; não iniciado.
@@ -473,14 +543,16 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 1. **ADMIN-B1-PREP, ADMIN-B1B-PREP e ADMIN-B2A-PREP** — concluídos.
 2. **ADMIN-B2A1-EXEC** — infraestrutura local e baseline automatizado concluídos em 44/44, sem alteração ou publicação de Rules.
-3. **ADMIN-B2A2-BRIDGE-PREP e ADMIN-B2A2-BRIDGE** — concluídos; commit funcional `4b1b783`.
-4. **ADMIN-B2A2-NETWORK-DIAG-PREP** — concluído com defeito CSP/reCAPTCHA confirmado e timeout ainda inconclusivo quanto à causa única.
-5. **ADMIN-B2A2-CSP-FIX-PREP** — próximo bloco único recomendado, somente preparação e ainda não iniciado.
-6. **ADMIN-B2A3, ADMIN-B2A4, ADMIN-B2A5 e ADMIN-B2B** — somente em blocos próprios; nenhum iniciado.
-7. **ADMIN-B3 a ADMIN-J** — seguir o roadmap administrativo e suas autorizações; publicação de Rules somente no B3.
-8. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
-9. **CMS-5D / integração CMS → site público** — fora da frente atual.
-10. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
+3. **ADMIN-B2A2-BRIDGE-PREP e ADMIN-B2A2-BRIDGE** — concluídos, publicados e aprovados; commit funcional `4b1b783`.
+4. **ADMIN-B2A2-NETWORK-DIAG-PREP** — concluído; confirmou o defeito CSP/reCAPTCHA.
+5. **ADMIN-B2A2-CSP-FIX-PREP, EXEC e PROD-VALIDATION** — concluídos, publicados e aprovados; commit funcional `e2c8249`.
+6. **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP** — não necessário no estado atual; condicional ao reaparecimento de timeout com CSP válida.
+7. **ADMIN-B2A3-PREP** — próximo bloco único recomendado, somente leitura e planejamento; gate liberado e bloco ainda não iniciado.
+8. **ADMIN-B2A3-EXEC, ADMIN-B2A4, ADMIN-B2A5 e ADMIN-B2B** — somente em blocos próprios; nenhum iniciado.
+9. **ADMIN-B3 a ADMIN-J** — seguir o roadmap administrativo e suas autorizações; publicação de Rules somente no B3.
+10. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+11. **CMS-5D / integração CMS → site público** — fora da frente atual.
+12. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
@@ -578,7 +650,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. Os blocos até `ADMIN-B2A2-NETWORK-DIAG-PREP` estão concluídos; o próximo bloco recomendado é `ADMIN-B2A2-CSP-FIX-PREP`, somente preparação, sem aplicar correção, e não foi iniciado nesta governança. `ADMIN-B2A3` e long polling permanecem bloqueados.
+**Regra:** executar somente o bloco autorizado. Os blocos até `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` estão concluídos e aprovados. O próximo bloco recomendado é `ADMIN-B2A3-PREP`, somente leitura e planejamento; o gate está liberado, mas o PREP não foi iniciado nesta governança. `ADMIN-B2A3-EXEC`, alterações de Rules e publicação permanecem bloqueados.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -714,7 +786,7 @@ R1, R2, R3, R4B, R4A, R5A e R5B estão concluídos. A Fase 1 foi encerrada sem r
 
 **Limite de validação:** o bloqueio direto de `translations.js` não foi possível no ambiente; a degradação foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
 
-**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao próximo `ADMIN-B2A2-CSP-FIX-PREP`.
+**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao futuro `ADMIN-B2A3-PREP`, cujo gate está liberado e que ainda não foi iniciado.
 
 ---
 

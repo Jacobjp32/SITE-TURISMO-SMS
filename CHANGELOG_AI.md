@@ -6,6 +6,196 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-27 — Aprovação do bridge público e da correção CSP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B2A2-CSP-FIX-EXEC` concluído e publicado; `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` aprovado; `ADMIN-B2A2-BRIDGE` aprovado funcionalmente; gate do futuro `ADMIN-B2A3-PREP` liberado.
+
+### Objetivo
+
+Registrar oficialmente o encerramento funcional do bridge público de notícias e da correção mínima da CSP para reCAPTCHA/App Check, consolidar a publicação e a validação em produção e liberar somente o gate do próximo PREP, sem alterar runtime, Rules, testes, dados ou produção nesta atualização documental.
+
+### Contexto e diagnóstico
+
+- O `ADMIN-B2A2-BRIDGE` já havia sido publicado, mas sua validação funcional permaneceu bloqueada porque a meta CSP impedia o carregamento do reCAPTCHA usado pelo App Check.
+- O `ADMIN-B2A2-NETWORK-DIAG-PREP` confirmou a incompatibilidade CSP/reCAPTCHA como defeito real sem declarar antecipadamente que ela fosse a única causa do timeout.
+- Depois do `ADMIN-B2A2-CSP-FIX-EXEC`, reCAPTCHA, App Check, Firestore e o runtime CMS foram validados no domínio oficial.
+- `ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP` não é necessário no estado atual; somente deve ser reaberto se timeout reaparecer com CSP válida.
+
+### Commits funcionais confirmados pelo Git
+
+#### Bridge público de notícias
+
+- Commit: `4b1b783398fa659ebbff7302cdf1038e6bdd184a`.
+- Mensagem: `fix: filtrar notícias públicas no Firestore`.
+- Presença: confirmado como ancestral de `origin/main`.
+- Arquivos: `js/cms.js`, `js/site-meta.js`, `noticia.html` e `noticias.html`.
+- Estatística: 4 arquivos alterados, 32 inserções e 29 remoções.
+
+#### Correção CSP
+
+- Commit: `e2c82494c438f7f722fcf82fa47c1705f8854feb`.
+- Mensagem: `fix: permitir reCAPTCHA nas páginas Firebase públicas`.
+- Presença: `HEAD`, `main`, `origin/main` e `origin/HEAD`; confirmado como ancestral de `origin/main`.
+- Arquivos: `js/site-meta.js`, `noticia.html`, `noticias.html`, `reservas.html` e `sabores.html`.
+- Estatística: 5 arquivos alterados, 5 inserções e 5 remoções.
+- Metadata funcional confirmada em `js/site-meta.js`: `updatedAt: "2026-07-27T13:07:40-03:00"`.
+- Horário do commit Git: `2026-07-27T13:10:06-03:00`.
+
+### Contrato final do bridge
+
+- A consulta pública usa `where('publicado', '==', true)`.
+- O filtro posterior permanece como defesa adicional.
+- Consulta Firestore vazia é sucesso: `CMS.posts = []` e `CMS.source = 'firebase'`.
+- Fallback local é usado somente em falha real.
+- `noticia.html` carrega `config.js` antes de `js/cms.js`.
+- Token do CMS preservado: `admin-b2a2-20260724`.
+- Firestore Rules permaneceram intactas.
+
+### Delta CSP publicado
+
+- `script-src` recebeu `https://www.google.com/recaptcha/`.
+- `frame-src` recebeu `https://recaptcha.google.com/recaptcha/`.
+- `connect-src` recebeu:
+  - `https://firebaseinstallations.googleapis.com`;
+  - `https://content-firebaseappcheck.googleapis.com`;
+  - `https://firebaseappcheck.googleapis.com`;
+  - `https://www.google.com/recaptcha/`.
+- Foram preservados todas as diretivas e origens anteriores, `unsafe-inline`, `unsafe-eval`, wildcards existentes, posição da meta, UTF-8 sem BOM, LF, Service Worker, `CACHE_NAME` e tokens dos scripts.
+- Não foram adicionados `script-src-elem`, `script-src-attr`, nonce, `strict-dynamic`, wildcard novo, endpoints de source map, `securetoken` ou `*.googleapis.com`.
+
+### Publicação confirmada
+
+- HTTP 200 no domínio oficial para `noticias.html`, `noticia.html`, `reservas.html`, `sabores.html` e `js/site-meta.js`.
+- As quatro páginas servem exatamente uma meta CSP.
+- Headers observados: `Cache-Control: max-age=600`, `Server: GitHub.com` e `Via: 1.1 varnish`.
+- CSP por header: ausente.
+- CSP Report-Only: ausente.
+- A política ativa continua vindo somente da meta HTML.
+- `_headers` local não é aplicado pelo hosting atual e permaneceu intacto.
+
+### Validação Chrome e Firefox
+
+- Chrome: hard reload concluído; `api.js`, iframe e endpoints App Check não foram bloqueados; `getDocsFromServer` e CMS Firebase foram aprovados.
+- Firefox: hard reload concluído; `grecaptcha` disponível como objeto; `api.js`, iframes e anchors carregados; CMS Firebase com 8 itens e sem diferença funcional relevante.
+- Os bloqueios de `firebase-app.js.map`, `firebase-firestore.js.map` e `firebase-app-check.js.map` permanecem classificados como recursos de depuração, sem impacto funcional.
+- Avisos de cookies e armazenamento particionado no Firefox permanecem informativos, sem falha funcional comprovada.
+
+### Resultado Firestore e runtime CMS
+
+- `getDocsFromServer`:
+  - `ok: true`;
+  - `source: server`;
+  - `count: 8`;
+  - `allPublished: true`.
+- Runtime CMS:
+  - binding: `object`;
+  - `CMS.source: firebase`;
+  - `count: 8`;
+  - `allPublished: true`.
+- Não houve `permission-denied`, timeout, `unavailable` ou fallback por `CONFIG.firebase` ausente.
+- Conclusão: o `ADMIN-B2A2-BRIDGE` está aprovado e a consulta pública é compatível com a futura proteção de drafts nas Rules.
+
+### Páginas validadas
+
+- `noticias.html`: página íntegra, grid visível, 8 cards presentes e visíveis, nenhum draft no resultado normalizado, `config.js` e `js/cms.js` carregados uma vez cada.
+- `noticia.html` com slug inexistente: “Notícia não encontrada”, nenhum conteúdo de outro documento, scripts únicos e CMS mantido em Firebase.
+- `reservas.html`: smoke somente de leitura aprovado, 6 cards, formulário fechado e nenhuma escrita.
+- `sabores.html`: smoke somente de leitura aprovado, conteúdo estrutural íntegro, banners sem bloqueio e nenhuma escrita.
+
+### Limitação residual e follow-up
+
+- O detalhe de uma notícia publicada permanece **NÃO TESTADO**.
+- A listagem apresentou `internalDetailLinkCount: 0`; nenhum link interno seguro para `noticia.html?slug=...` estava disponível.
+- Nenhum slug foi inventado ou extraído manualmente.
+- Tratar a navegação de detalhes como follow-up funcional separado.
+- A limitação não bloqueia a aprovação da CSP, do bridge ou o início futuro do `ADMIN-B2A3-PREP`.
+
+### Ausência de escrita e preservações
+
+- Permaneceram intactos: `firestore.rules`, `storage.rules`, `tests/firestore.rules.test.mjs`, `admin-firebase.html`, `portal-usuario.html`, `js/cms.js` após o commit do bridge, `js/firebase-app-check.js`, `config.js`, `sw.js`, dados, Firebase remoto, App Check remoto, enforcement, Admin e Portal.
+- Nenhuma Rule foi publicada.
+- Não houve escrita, criação ou alteração de dados.
+- A publicação das Rules continua exclusiva do `ADMIN-B3`.
+
+### Rollback
+
+- O bridge permanece isolado no commit `4b1b783398fa659ebbff7302cdf1038e6bdd184a`.
+- A correção CSP permanece isolada no commit `e2c82494c438f7f722fcf82fa47c1705f8854feb`.
+- Se rollback futuro for autorizado, cada bloco deve ser revertido por novo commit revisado, sem reescrever histórico e sem misturar publicação de Rules.
+- Nenhum rollback foi executado nesta governança.
+
+### Roadmap e gate
+
+- `ADMIN-B2A1-EXEC`: concluído; baseline 44/44.
+- `ADMIN-B2A2-BRIDGE`: concluído, publicado, validado contra o servidor e aprovado.
+- `ADMIN-B2A2-NETWORK-DIAG-PREP`: concluído; diagnóstico conservador correto.
+- `ADMIN-B2A2-CSP-FIX-PREP`, `EXEC` e `PROD-VALIDATION`: concluídos, publicados e aprovados.
+- `ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP`: não necessário no estado atual.
+- `ADMIN-B2A3-PREP`: próximo bloco recomendado, exclusivamente leitura e planejamento; gate liberado e bloco ainda não iniciado.
+- `ADMIN-B2A3-EXEC`: posterior, local e reversível; alteração de Rules, inversão/ampliação dos testes e Emulator, sem publicação.
+- `ADMIN-B2A4`: proteção de `media_library`, posterior.
+- `ADMIN-B2A5`: contratos de `ativo` e `moderator`, posterior e dependente de decisões humanas.
+- `ADMIN-B2B`: Storage Rules, posterior.
+- `ADMIN-B3`: única etapa autorizada a publicar Rules.
+
+O gate do `ADMIN-B2A3-PREP` foi liberado porque o consumidor público já filtra `publicado == true`, a query real foi aceita pelo servidor, `allPublished` foi `true`, `CMS.source` foi `firebase`, CSP/App Check não bloquearam a leitura e nenhuma incompatibilidade entre query e Rules foi observada.
+
+O gate não autoriza editar `firestore.rules` nesta tarefa, iniciar `ADMIN-B2A3-EXEC`, publicar Rules ou alterar dados.
+
+### Próximo bloco — registrado e não iniciado
+
+`ADMIN-B2A3-PREP`, somente leitura e planejamento, para:
+
+- definir a Rule mínima de leitura pública quando `publicado == true`;
+- manter leitura administrativa de drafts;
+- planejar a inversão dos testes inseguros do baseline;
+- verificar `get`, `list` e query;
+- preservar compatibilidade com a query já publicada;
+- preparar um futuro `ADMIN-B2A3-EXEC` local e reversível.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável do bridge, CSP, limitação residual, gate e exclusividade do `ADMIN-B3`.
+- `TASKS.md` — evidências, commits, publicação, validações, riscos, roadmap e próximo PREP.
+- `CHANGELOG_AI.md` — este registro detalhado.
+
+### Comandos executados nesta governança
+
+```powershell
+cd "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -20
+git rev-parse 4b1b783
+git rev-parse e2c8249
+git show --stat --oneline --decorate --no-renames 4b1b783
+git show --format= --name-status --no-renames 4b1b783
+git show --stat --oneline --decorate --no-renames e2c8249
+git show --format= --name-status --no-renames e2c8249
+git merge-base --is-ancestor 4b1b783 origin/main
+git merge-base --is-ancestor e2c8249 origin/main
+Get-Content -LiteralPath "CLAUDE.md"
+Get-Content -LiteralPath "TASKS.md"
+Get-Content -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git status --short --untracked-files=all
+git diff -- .claude
+```
+
+### Limites desta governança
+
+- Atualização exclusivamente documental.
+- Nenhum teste funcional, npm, Emulator, login, Firebase CLI, metadata, deploy, publicação de Rules, commit, push, tag ou outro bloco foi executado.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- Sugestão de commit: `docs: registrar aprovação do bridge e da correção CSP`.
+
+---
+
 ## 2026-07-27 — Encerramento do ADMIN-B2A2-NETWORK-DIAG-PREP
 
 **Ferramenta/modelo:** Codex
