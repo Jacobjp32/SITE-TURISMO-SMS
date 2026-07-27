@@ -6,6 +6,135 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-27 — Aprovação do ADMIN-B2A3-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B2A3-PREP` concluído e aprovado; `ADMIN-B2A3-EXEC` pendente e não iniciado.
+
+### Objetivo
+
+Registrar exclusivamente a conclusão e a aprovação do `ADMIN-B2A3-PREP`, o contrato escolhido para leitura de `noticias`, o escopo do futuro `ADMIN-B2A3-EXEC` e os gates de publicação, sem iniciar execução funcional.
+
+### Limites do PREP
+
+- Análise realizada somente por leitura.
+- Nenhum arquivo funcional foi alterado.
+- Nenhum teste ou Firebase Emulator foi executado.
+- Nenhum Firebase remoto foi acessado.
+- Nenhuma publicação, deploy, commit ou push foi realizado.
+- Nenhuma mudança de dados, migração ou inventário remoto ocorreu.
+- `ADMIN-B2A3-EXEC` não foi iniciado.
+
+### Contrato aprovado de leitura de `noticias`
+
+- Admin autorizado pode ler todos os documentos, incluindo publicados, drafts, documentos sem `publicado` e registros legados, por `isAdmin()`.
+- Público anônimo, usuário comum autenticado e `moderator` podem ler somente documentos cujo campo `publicado` seja o booleano `true`.
+- `publicado` é o único campo canônico de autorização pública.
+- `status` não autoriza nem revoga leitura.
+- São negados ao público: `publicado: false`, campo ausente, `null`, `"true"`, `1`, `[]`, `{}` e `status: "publicado"` sem `publicado: true`.
+- `publicado: true` com `status: "rascunho"` continua público, pois `publicado` controla a Rule.
+- `moderator` não recebe acesso administrativo a drafts neste bloco; seu contrato definitivo permanece reservado ao `ADMIN-B2A5`.
+- A escrita continua exclusiva de Admin.
+
+Rule escolhida para o futuro EXEC:
+
+```text
+match /noticias/{noticiaId} {
+  allow read: if isAdmin() || (resource.data.publicado == true);
+  allow write: if isAdmin();
+}
+```
+
+### Alternativas analisadas
+
+1. **Admin ou `publicado == true`: escolhida.** Produz diff funcional mínimo de uma linha, preserva escrita e leitura administrativa, mantém compatibilidade com a query pública e falha de forma fechada para ausência e tipos inválidos.
+2. **Separar `allow get` e `allow list`: válida, porém desnecessária no contrato atual.** O mesmo critério aprovado vale para ambos.
+3. **Criar helper `isNoticiaPublicada()`: descartada.** Excesso de abstração para uma única ocorrência.
+4. **Incluir `isModerator()`: descartada.** Ampliaria privilégios antes da decisão humana reservada ao `ADMIN-B2A5`.
+5. **Autorizar `status == "publicado"`: descartada.** Criaria contrato ambíguo e possibilidade de exposição inconsistente.
+6. **Manter `allow read: if true` e confiar na query: descartada.** Firestore Rules não funcionam como filtro de segurança; a query não substitui a autorização.
+
+### Compatibilidade e segurança
+
+- A query pública atual já usa `where("publicado", "==", true)`.
+- O Admin atualmente lista toda a coleção e precisa continuar compatível.
+- Não há dependência comprovada de `moderator` para leitura de drafts.
+- Ausência e tipos inválidos de `publicado` devem negar leitura pública.
+- Não existe `match` sobreposto que conceda acesso alternativo.
+- O fallback recursivo continua deny.
+- Índices não precisam ser alterados.
+- App Check e CSP estão fora do escopo.
+- A publicação das Firestore Rules permanece bloqueada até o `ADMIN-B3`.
+- Registros legados poderão exigir inventário sanitizado antes da publicação, mas nenhum inventário remoto foi realizado nesta sessão.
+
+### Escopo futuro do ADMIN-B2A3-EXEC
+
+- Estado: pendente e não iniciado.
+- Depende de nova autorização humana explícita.
+- Arquivos funcionais autorizados futuramente:
+  - `firestore.rules`;
+  - `tests/firestore.rules.test.mjs`.
+- Qualquer terceiro arquivo exigirá nova autorização.
+- Estado atual da suíte: 44 testes, 5 suítes e 12 testes atuais de `noticias`.
+- Estratégia futura:
+  - renomear os 12 testes atuais de `noticias`;
+  - inverter exatamente quatro resultados inseguros: anônimo lendo draft, anônimo listando toda a coleção, usuário comum lendo draft e `moderator` lendo draft;
+  - adicionar exatamente 25 testes;
+  - remover zero testes.
+- Resultado esperado futuro: 69 testes, 5 suítes, 69 pass, 0 fail, 0 skipped, 0 cancelled e 0 todo.
+- Usará somente o projeto demo `demo-turismo-sms-rules-test` e somente o Firestore Emulator local.
+- Não acessará produção, não publicará Rules, não alterará índices, não instalará dependências, não alterará runtime e não alterará dados.
+- Site público, Admin, Portal, App Check e CSP permanecerão fora do escopo.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável do PREP aprovado, contrato de leitura, escopo futuro e gates do EXEC/B3.
+- `TASKS.md` — estado atual, contrato, estratégia de testes, contagens futuras e ordem do roadmap.
+- `CHANGELOG_AI.md` — este registro cronológico.
+
+### Comandos executados nesta governança
+
+```powershell
+Set-Location "D:\PROJETOS CODEX\SITE-TURISMO-SMS-mainv2"
+git status --short --branch --untracked-files=all
+git log --oneline -15
+git rev-parse HEAD
+git rev-parse main
+git rev-parse origin/main
+git show-ref --tags --verify "refs/tags/pre-admin-restart-20260720"
+Get-Content -Raw -LiteralPath "CLAUDE.md"
+Get-Content -LiteralPath "TASKS.md"
+Get-Content -LiteralPath "CHANGELOG_AI.md"
+git diff --check
+git diff --name-only
+git diff --stat
+git diff -- CLAUDE.md
+git diff -- TASKS.md
+git diff -- CHANGELOG_AI.md
+git status --short --branch --untracked-files=all
+```
+
+### Validações e preservações
+
+- Escopo restrito a `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- `firestore.rules` e `tests/firestore.rules.test.mjs` permaneceram intactos.
+- Nenhum arquivo funcional, HTML, Admin, Portal, dado, asset, metadata, App Check, CSP ou arquivo de produção foi alterado.
+- `js/site-meta.js` permaneceu intacto; a data/hora pública do site não foi atualizada.
+- `.claude/settings.local.json` permaneceu não rastreado, sem leitura, edição, adição ou remoção.
+- Nenhum `firestore-debug.log` foi criado.
+- Não houve teste, Emulator, acesso remoto, publicação, commit, push ou deploy.
+
+### Próximo passo
+
+- `ADMIN-B2A3-EXEC` permanece não iniciado.
+- O próximo passo depende de nova autorização humana explícita.
+- A ordem posterior permanece `ADMIN-B2A3-EXEC` → `ADMIN-B2A4` → `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
+
+---
+
 ## 2026-07-27 — Aprovação do bridge público e da correção CSP
 
 **Ferramenta/modelo:** Codex

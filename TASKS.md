@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** blocos até `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` concluídos. O `ADMIN-B2A2-BRIDGE` está publicado, validado contra o servidor real e aprovado; a correção CSP/reCAPTCHA está publicada e aprovada em Chrome e Firefox. Rules permanecem inalteradas e não publicadas. O gate para iniciar futuramente o `ADMIN-B2A3-PREP` está liberado, mas o bloco ainda não foi iniciado.
+**Status geral:** blocos até `ADMIN-B2A3-PREP` concluídos e aprovados. O PREP foi somente análise de leitura, com zero alteração funcional, teste, Emulator, acesso remoto ou publicação. Rules permanecem inalteradas e não publicadas. O `ADMIN-B2A3-EXEC` está pendente, não iniciado e depende de autorização explícita posterior.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,14 +23,15 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A3-PREP` — preparação da proteção de drafts em Firestore Rules.**
+**`ADMIN-B2A3-EXEC` — proteção local de drafts em Firestore Rules.**
 
-- Tipo: PREP, exclusivamente leitura, análise e planejamento.
-- Objetivo: definir a Rule mínima para leitura pública somente quando `publicado == true`, preservar leitura administrativa de drafts, planejar a inversão dos testes inseguros e verificar contratos de `get`, `list` e query.
-- Compatibilidade obrigatória: preservar a query pública já publicada e aprovada contra o servidor real.
-- Preservações: não alterar `firestore.rules`, testes, Emulator, dados, runtime ou produção nesta etapa.
-- Regra humana: o gate está liberado, mas este registro não inicia o PREP, não autoriza `ADMIN-B2A3-EXEC` e não autoriza publicação de Rules.
-- Estado: próximo bloco único recomendado e **não iniciado** nesta governança.
+- Estado: pendente e **não iniciado**.
+- Gate: depende de autorização humana explícita posterior; este registro não inicia o EXEC.
+- Escopo futuro exclusivo: `firestore.rules` e `tests/firestore.rules.test.mjs`; qualquer terceiro arquivo exigirá nova autorização.
+- Objetivo: aplicar o contrato aprovado de leitura pública somente quando `publicado == true` booleano, preservar leitura integral do Admin por `isAdmin()` e manter escrita exclusiva de Admin.
+- Validação futura: somente Firestore Emulator local com o projeto demo `demo-turismo-sms-rules-test`.
+- Preservações: nenhuma produção, publicação de Rules, índice, dependência, runtime ou dado será alterado.
+- Publicação: continua bloqueada e reservada exclusivamente ao `ADMIN-B3`.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
 
@@ -191,7 +192,7 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - O contrato e a estratégia de testes das Firestore Rules foram preparados sem edição ou publicação.
 - A execução foi dividida em microblocos para separar baseline, compatibilidade do consumidor público, correções de segurança e decisões humanas.
 - Ordem aprovada: `ADMIN-B2A1-EXEC` → `ADMIN-B2A2-BRIDGE` → `ADMIN-B2A3` → `ADMIN-B2A4` → `ADMIN-B2A5`.
-- A disciplina PREP/EXEC permanece obrigatória. O bridge e o CSP-FIX foram concluídos e aprovados; o gate para o futuro `ADMIN-B2A3-PREP` está liberado, sem iniciar o bloco.
+- A disciplina PREP/EXEC permanece obrigatória. O bridge, o CSP-FIX e o `ADMIN-B2A3-PREP` foram concluídos e aprovados; o `ADMIN-B2A3-EXEC` permanece não iniciado e depende de autorização explícita posterior.
 
 ## ADMIN-B2A1-EXEC — concluído
 
@@ -361,8 +362,58 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 
 - Permaneceram intactos: `firestore.rules`, `storage.rules`, `tests/firestore.rules.test.mjs`, `admin-firebase.html`, `portal-usuario.html`, `js/cms.js` após o bridge, `js/firebase-app-check.js`, `config.js`, `sw.js`, dados, Firebase remoto, App Check remoto, enforcement, Admin e Portal.
 - Nenhuma Rule foi publicada; publicação continua exclusiva do `ADMIN-B3`.
-- Gate do `ADMIN-B2A3-PREP` liberado porque a query pública já filtra `publicado == true`, foi aceita pelo servidor, retornou `allPublished: true`, manteve `CMS.source = 'firebase'` e não apresentou incompatibilidade com as Rules atuais.
-- O gate não autoriza editar `firestore.rules`, iniciar `ADMIN-B2A3-EXEC`, publicar Rules ou alterar dados.
+- O gate que permitiu o `ADMIN-B2A3-PREP` foi liberado porque a query pública já filtra `publicado == true`, foi aceita pelo servidor, retornou `allPublished: true`, manteve `CMS.source = 'firebase'` e não apresentou incompatibilidade com as Rules atuais.
+- O `ADMIN-B2A3-PREP` foi concluído e aprovado somente por leitura; esse gate não autoriza editar `firestore.rules`, iniciar `ADMIN-B2A3-EXEC`, publicar Rules ou alterar dados.
+
+## ADMIN-B2A3-PREP — concluído e aprovado
+
+- Status: concluído e aprovado.
+- Natureza: somente análise de leitura.
+- Alteração funcional: zero.
+- Acesso remoto: zero.
+- Publicação: zero.
+- Não houve teste, Emulator, commit, push, deploy, alteração de dados ou início do `ADMIN-B2A3-EXEC`.
+
+### Contrato aprovado de leitura de `noticias`
+
+- Admin autorizado: lê todos os documentos, incluindo publicados, drafts, documentos sem `publicado` e registros legados, por `isAdmin()`.
+- Público anônimo, usuário comum autenticado e `moderator`: leem somente documentos cujo campo `publicado` seja o booleano `true`.
+- `publicado` é o único campo canônico para autorização pública; `status` não participa da autorização.
+- Valores públicos negados: `publicado: false`, campo ausente, `null`, `"true"`, `1`, `[]`, `{}` e `status: "publicado"` sem `publicado: true`.
+- Precedência: `publicado: true` com `status: "rascunho"` continua público, pois `publicado` controla a Rule.
+- `moderator` não recebe acesso administrativo a drafts neste bloco; seu contrato definitivo continua reservado ao `ADMIN-B2A5`.
+- A escrita permanece exclusiva de Admin.
+
+Rule escolhida para o futuro EXEC:
+
+```text
+match /noticias/{noticiaId} {
+  allow read: if isAdmin() || (resource.data.publicado == true);
+  allow write: if isAdmin();
+}
+```
+
+Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua lendo toda a coleção; público permanece compatível com `where("publicado", "==", true)`; nenhum helper novo; nenhum uso de `isModerator()` ou `status`; nenhuma alteração na validação de escrita; ausência e tipos inválidos falham de forma fechada; não existe `match` sobreposto que conceda acesso alternativo; fallback recursivo continua deny.
+
+### ADMIN-B2A3-EXEC — pendente e não iniciado
+
+- Depende de autorização humana explícita posterior.
+- Alterará somente `firestore.rules` e `tests/firestore.rules.test.mjs`; qualquer terceiro arquivo exigirá nova autorização.
+- Estado atual da suíte: 44 testes, 5 suítes e 12 testes atuais de `noticias`.
+- Estratégia futura:
+  - renomear os 12 testes atuais de `noticias`;
+  - inverter exatamente quatro resultados inseguros:
+    1. anônimo lendo draft;
+    2. anônimo listando toda a coleção;
+    3. usuário comum lendo draft;
+    4. `moderator` lendo draft;
+  - adicionar exatamente 25 testes;
+  - remover zero testes.
+- Contagem esperada futura: 69 testes, 5 suítes, 69 pass, 0 fail, 0 skipped, 0 cancelled e 0 todo.
+- Usará somente o projeto demo `demo-turismo-sms-rules-test` e executará somente o Firestore Emulator local.
+- Não acessará produção, não publicará Rules, não alterará índices, não instalará dependências, não alterará runtime e não alterará dados.
+- Site público, Admin, Portal, App Check e CSP permanecerão fora do escopo.
+- A publicação das Firestore Rules continua bloqueada até o `ADMIN-B3`.
 
 ### Roadmap administrativo
 
@@ -375,8 +426,8 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - **ADMIN-B2A2-NETWORK-DIAG-PREP:** concluído; confirmou CSP/reCAPTCHA como defeito real sem declarar causalidade única antecipadamente.
 - **ADMIN-B2A2-CSP-FIX-PREP, EXEC e PROD-VALIDATION:** concluídos; correção mínima publicada, validada e aprovada no commit `e2c8249`.
 - **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP:** não necessário no estado atual; reabrir somente se timeout reaparecer após CSP válida.
-- **ADMIN-B2A3-PREP:** próximo bloco recomendado, somente leitura e planejamento da proteção de drafts; gate liberado e bloco não iniciado.
-- **ADMIN-B2A3-EXEC:** posterior; alteração local de Rules, inversão/ampliação dos testes e Emulator, sem publicação; não iniciado.
+- **ADMIN-B2A3-PREP:** concluído e aprovado somente como análise de leitura, sem alteração funcional, teste, Emulator, acesso remoto ou publicação.
+- **ADMIN-B2A3-EXEC:** próximo bloco possível; alteração local somente de `firestore.rules` e `tests/firestore.rules.test.mjs`, com Firestore Emulator local e sem publicação; pendente, não iniciado e dependente de autorização explícita posterior.
 - **ADMIN-B2A4:** proteger `media_library` em `firestore.rules` local e inverter os testes de leitura pública; sem publicação; não iniciado.
 - **ADMIN-B2A5:** decidir e ajustar os contratos de `ativo` e `moderator`; depende de decisões humanas; não iniciado.
 - **ADMIN-B2B:** Storage Rules; não iniciado.
@@ -547,12 +598,16 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 4. **ADMIN-B2A2-NETWORK-DIAG-PREP** — concluído; confirmou o defeito CSP/reCAPTCHA.
 5. **ADMIN-B2A2-CSP-FIX-PREP, EXEC e PROD-VALIDATION** — concluídos, publicados e aprovados; commit funcional `e2c8249`.
 6. **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP** — não necessário no estado atual; condicional ao reaparecimento de timeout com CSP válida.
-7. **ADMIN-B2A3-PREP** — próximo bloco único recomendado, somente leitura e planejamento; gate liberado e bloco ainda não iniciado.
-8. **ADMIN-B2A3-EXEC, ADMIN-B2A4, ADMIN-B2A5 e ADMIN-B2B** — somente em blocos próprios; nenhum iniciado.
-9. **ADMIN-B3 a ADMIN-J** — seguir o roadmap administrativo e suas autorizações; publicação de Rules somente no B3.
-10. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
-11. **CMS-5D / integração CMS → site público** — fora da frente atual.
-12. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
+7. **ADMIN-B2A3-PREP** — concluído e aprovado somente como análise de leitura, sem alteração funcional, acesso remoto ou publicação.
+8. **ADMIN-B2A3-EXEC** — próximo bloco possível, pendente e não iniciado; depende de autorização explícita posterior e ficará restrito a `firestore.rules` e `tests/firestore.rules.test.mjs`.
+9. **ADMIN-B2A4** — posterior ao `ADMIN-B2A3-EXEC`; não iniciado.
+10. **ADMIN-B2A5** — posterior ao `ADMIN-B2A4`; não iniciado e dependente das decisões humanas de `ativo` e `moderator`.
+11. **ADMIN-B2B** — posterior ao `ADMIN-B2A5`; não iniciado.
+12. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
+13. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
+14. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+15. **CMS-5D / integração CMS → site público** — fora da frente atual.
+16. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
@@ -650,7 +705,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. Os blocos até `ADMIN-B2A2-CSP-FIX-PROD-VALIDATION` estão concluídos e aprovados. O próximo bloco recomendado é `ADMIN-B2A3-PREP`, somente leitura e planejamento; o gate está liberado, mas o PREP não foi iniciado nesta governança. `ADMIN-B2A3-EXEC`, alterações de Rules e publicação permanecem bloqueados.
+**Regra:** executar somente o bloco autorizado. Os blocos até `ADMIN-B2A3-PREP` estão concluídos e aprovados. O PREP foi somente análise de leitura, sem alteração funcional, acesso remoto ou publicação. O `ADMIN-B2A3-EXEC` permanece pendente e não iniciado; depende de autorização explícita posterior, ficará restrito a `firestore.rules` e `tests/firestore.rules.test.mjs` e não publicará Rules. A publicação continua bloqueada até o `ADMIN-B3`.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -786,7 +841,7 @@ R1, R2, R3, R4B, R4A, R5A e R5B estão concluídos. A Fase 1 foi encerrada sem r
 
 **Limite de validação:** o bloqueio direto de `translations.js` não foi possível no ambiente; a degradação foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
 
-**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa, limitada ao futuro `ADMIN-B2A3-PREP`, cujo gate está liberado e que ainda não foi iniciado.
+**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa; o `ADMIN-B2A3-PREP` está concluído e aprovado, e o futuro `ADMIN-B2A3-EXEC` permanece não iniciado e depende de autorização explícita.
 
 ---
 
