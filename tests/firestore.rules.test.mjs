@@ -600,31 +600,39 @@ describe("Contrato de leitura e escrita de noticias", () => {
   });
 });
 
-describe("Baseline atual de media_library", () => {
-  test("BASELINE ATUAL: anônimo lê media_library — risco P1 confirmado e comportamento será alterado somente no B2A4", async () => {
+describe("Contrato de leitura e escrita de media_library", () => {
+  const MEDIA_RUNTIME = {
+    title: "Synthetic runtime media",
+    url: "https://example.com/media/synthetic-image.jpg",
+    storagePath: "cms-media/test-user/synthetic-image.jpg",
+    contentType: "image/jpeg",
+    size: 1024,
+    category: "synthetic",
+    alt: "Synthetic runtime media",
+  };
+
+  test("anônimo não lê media_library", async () => {
     await seedMedia();
-    const snapshot = await assertSucceeds(
+    await assertFails(
       getDoc(
         doc(anonymousDb(), "media_library", "media-public-baseline"),
       ),
     );
-    assert.equal(snapshot.exists(), true);
   });
 
-  test("BASELINE ATUAL: anônimo lista media_library — risco P1 confirmado e comportamento será alterado somente no B2A4", async () => {
+  test("anônimo não lista integralmente media_library", async () => {
     await seedMedia();
-    const snapshot = await assertSucceeds(
+    await assertFails(
       getDocs(collection(anonymousDb(), "media_library")),
     );
-    assert.equal(snapshot.size, 1);
   });
 
-  test("BASELINE ATUAL: usuário comum lê media_library — risco P1 confirmado e comportamento será alterado somente no B2A4", async () => {
+  test("usuário comum não lê media_library", async () => {
     await seedDocuments([
       userEntry("user-active", "user", true),
       ["media_library/media-public-baseline", MEDIA_BASELINE],
     ]);
-    await assertSucceeds(
+    await assertFails(
       getDoc(
         doc(
           authenticatedDb("user-active"),
@@ -635,12 +643,12 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator lê media_library — risco P1 confirmado e comportamento será alterado somente no B2A4", async () => {
+  test("moderator não lê media_library", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       ["media_library/media-public-baseline", MEDIA_BASELINE],
     ]);
-    await assertSucceeds(
+    await assertFails(
       getDoc(
         doc(
           authenticatedDb("moderator-active"),
@@ -651,7 +659,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: admin ativo lê media_library — leitura administrativa preservada no B2A4", async () => {
+  test("admin ativo lê media_library", async () => {
     await seedDocuments([
       userEntry("admin-active", "admin", true),
       ["media_library/media-public-baseline", MEDIA_BASELINE],
@@ -667,7 +675,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: anônimo não cria media_library — escrita permanece administrativa no B2A4", async () => {
+  test("anônimo não cria media_library", async () => {
     await assertFails(
       setDoc(
         doc(anonymousDb(), "media_library", "media-public-baseline"),
@@ -676,7 +684,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: usuário comum não cria media_library — escrita permanece administrativa no B2A4", async () => {
+  test("usuário comum não cria media_library", async () => {
     await seedDocuments([userEntry("user-active", "user", true)]);
     await assertFails(
       setDoc(
@@ -690,7 +698,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator não cria media_library — escrita permanece exclusiva de admin no B2A4", async () => {
+  test("moderator não cria media_library", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
     ]);
@@ -706,7 +714,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: admin ativo cria media_library — escrita administrativa preservada no B2A4", async () => {
+  test("admin ativo cria media_library", async () => {
     await seedDocuments([userEntry("admin-active", "admin", true)]);
     await assertSucceeds(
       setDoc(
@@ -720,7 +728,7 @@ describe("Baseline atual de media_library", () => {
     );
   });
 
-  test("BASELINE ATUAL: admin inativo não cria media_library — contrato ativo deverá ser reavaliado somente no B2A5", async () => {
+  test("admin inativo não cria media_library", async () => {
     await seedDocuments([userEntry("admin-inactive", "admin", false)]);
     await assertFails(
       setDoc(
@@ -730,6 +738,280 @@ describe("Baseline atual de media_library", () => {
           "media-public-baseline",
         ),
         MEDIA_BASELINE,
+      ),
+    );
+  });
+
+  test("usuário comum não lista media_library", async () => {
+    await seedDocuments([
+      userEntry("user-active", "user", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        collection(authenticatedDb("user-active"), "media_library"),
+      ),
+    );
+  });
+
+  test("usuário autenticado sem perfil não lê media_library", async () => {
+    await seedDocuments([
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDoc(
+        doc(
+          authenticatedDb("profileless-user"),
+          "media_library",
+          "media-test-runtime",
+        ),
+      ),
+    );
+  });
+
+  test("usuário autenticado sem perfil não lista media_library", async () => {
+    await seedDocuments([
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        collection(
+          authenticatedDb("profileless-user"),
+          "media_library",
+        ),
+      ),
+    );
+  });
+
+  test("moderator não lista media_library", async () => {
+    await seedDocuments([
+      userEntry("moderator-active", "moderator", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        collection(authenticatedDb("moderator-active"), "media_library"),
+      ),
+    );
+  });
+
+  test("admin inativo não lê media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-inactive", "admin", false),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDoc(
+        doc(
+          authenticatedDb("admin-inactive"),
+          "media_library",
+          "media-test-runtime",
+        ),
+      ),
+    );
+  });
+
+  test("admin inativo não lista media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-inactive", "admin", false),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        collection(authenticatedDb("admin-inactive"), "media_library"),
+      ),
+    );
+  });
+
+  test("admin ativo lista integralmente media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["media_library/media-test-legacy", MEDIA_BASELINE],
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    const snapshot = await assertSucceeds(
+      getDocs(
+        collection(authenticatedDb("admin-active"), "media_library"),
+      ),
+    );
+    assert.equal(snapshot.size, 2);
+  });
+
+  test("admin ativo lê registro legado e esparso de media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["media_library/media-test-legacy", MEDIA_BASELINE],
+    ]);
+    const snapshot = await assertSucceeds(
+      getDoc(
+        doc(
+          authenticatedDb("admin-active"),
+          "media_library",
+          "media-test-legacy",
+        ),
+      ),
+    );
+    assert.equal(snapshot.exists(), true);
+  });
+
+  test("admin ativo consulta documento inexistente de media_library", async () => {
+    await seedDocuments([userEntry("admin-active", "admin", true)]);
+    const snapshot = await assertSucceeds(
+      getDoc(
+        doc(
+          authenticatedDb("admin-active"),
+          "media_library",
+          "media-test-missing",
+        ),
+      ),
+    );
+    assert.equal(snapshot.exists(), false);
+  });
+
+  test("anônimo não consulta media_library por url", async () => {
+    await seedDocuments([
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        query(
+          collection(anonymousDb(), "media_library"),
+          where(
+            "url",
+            "==",
+            "https://example.com/media/synthetic-image.jpg",
+          ),
+        ),
+      ),
+    );
+  });
+
+  test("anônimo não consulta media_library por storagePath", async () => {
+    await seedDocuments([
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      getDocs(
+        query(
+          collection(anonymousDb(), "media_library"),
+          where(
+            "storagePath",
+            "==",
+            "cms-media/test-user/synthetic-image.jpg",
+          ),
+        ),
+      ),
+    );
+  });
+
+  test("usuário autenticado sem perfil não cria media_library", async () => {
+    await assertFails(
+      setDoc(
+        doc(
+          authenticatedDb("profileless-user"),
+          "media_library",
+          "media-test-runtime",
+        ),
+        MEDIA_RUNTIME,
+      ),
+    );
+  });
+
+  test("admin ativo atualiza documento existente de media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertSucceeds(
+      updateDoc(
+        doc(
+          authenticatedDb("admin-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
+        { title: "Synthetic updated runtime media" },
+      ),
+    );
+  });
+
+  test("admin ativo exclui documento existente de media_library", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertSucceeds(
+      deleteDoc(
+        doc(
+          authenticatedDb("admin-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
+      ),
+    );
+  });
+
+  test("usuário comum não atualiza media_library", async () => {
+    await seedDocuments([
+      userEntry("user-active", "user", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      updateDoc(
+        doc(
+          authenticatedDb("user-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
+        { title: "Synthetic unauthorized user update" },
+      ),
+    );
+  });
+
+  test("usuário comum não exclui media_library", async () => {
+    await seedDocuments([
+      userEntry("user-active", "user", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      deleteDoc(
+        doc(
+          authenticatedDb("user-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
+      ),
+    );
+  });
+
+  test("moderator não atualiza media_library", async () => {
+    await seedDocuments([
+      userEntry("moderator-active", "moderator", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      updateDoc(
+        doc(
+          authenticatedDb("moderator-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
+        { title: "Synthetic unauthorized moderator update" },
+      ),
+    );
+  });
+
+  test("moderator não exclui media_library", async () => {
+    await seedDocuments([
+      userEntry("moderator-active", "moderator", true),
+      ["media_library/media-test-runtime", MEDIA_RUNTIME],
+    ]);
+    await assertFails(
+      deleteDoc(
+        doc(
+          authenticatedDb("moderator-active"),
+          "media_library",
+          "media-test-runtime",
+        ),
       ),
     );
   });

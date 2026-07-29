@@ -587,7 +587,7 @@ service cloud.firestore {
     }
 
     match /media_library/{mediaId} {
-      allow read: if true;
+      allow read: if isAdmin();
       allow write: if isAdmin();
     }
 
