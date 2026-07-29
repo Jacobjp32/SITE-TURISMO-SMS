@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-B2A3-PREP` e `ADMIN-B2A3-EXEC` concluídos. O PREP foi aprovado e registrado no commit `01ee3a9e667679a79ac4310d49a3f0f6c163450a`. O EXEC foi implementado localmente, auditado, validado em 69/69 no Firestore Emulator, commitado em `4f25d8b0385efa760ba21c77a5211293eb84ea0f` e enviado para `origin/main`. A Rule nova está versionada, mas não foi publicada; produção permanece com a Rule anterior.
+**Status geral:** `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC`, `ADMIN-B2A4-PREP` e `ADMIN-B2A4-EXEC` concluídos. O B2A4-PREP foi aprovado e registrado no commit `f9067e332a078ace7f840fecbe6f457bda324d34`. O B2A4-EXEC foi classificado como **A. VALIDADO FUNCIONALMENTE**, concluiu 87/87 no Firestore Emulator local, foi commitado em `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` e enviado para `origin/main`. As Rules novas estão versionadas, mas não foram publicadas; produção permanece com o último ruleset publicado.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,11 +23,12 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A4` — próximo bloco possível da frente Firestore.**
+**`ADMIN-B2A5` — próximo bloco possível da frente Firestore.**
 
 - Estado: **não iniciado**.
-- Gate: exige autorização humana explícita e PREP próprio conforme a governança existente; este registro não inicia o bloco.
-- Sequência preservada: `ADMIN-B2A4` → `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
+- Gate: exige PREP próprio e autorização humana explícita; este registro não inicia o bloco.
+- Objeto: tratar separadamente as decisões institucionais dos contratos de `ativo` e `moderator`.
+- Sequência preservada: `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
 - Publicação: continua bloqueada e reservada exclusivamente ao `ADMIN-B3`.
 - Preservações: nenhuma etapa posterior, publicação de Rules, deploy ou acesso remoto está autorizada por este registro.
 
@@ -190,7 +191,7 @@ Fundação modular real: Dashboard, Banners, Empreendimentos, Context, UI, Regis
 - O contrato e a estratégia de testes das Firestore Rules foram preparados sem edição ou publicação.
 - A execução foi dividida em microblocos para separar baseline, compatibilidade do consumidor público, correções de segurança e decisões humanas.
 - Ordem aprovada: `ADMIN-B2A1-EXEC` → `ADMIN-B2A2-BRIDGE` → `ADMIN-B2A3` → `ADMIN-B2A4` → `ADMIN-B2A5`.
-- A disciplina PREP/EXEC permanece obrigatória. O bridge, o CSP-FIX, o `ADMIN-B2A3-PREP` e o `ADMIN-B2A3-EXEC` foram concluídos; o `ADMIN-B2A4` permanece posterior, não iniciado e dependente de PREP e autorização explícita próprios.
+- A disciplina PREP/EXEC permanece obrigatória. O bridge, o CSP-FIX, o `ADMIN-B2A3-PREP`, o `ADMIN-B2A3-EXEC`, o `ADMIN-B2A4-PREP` e o `ADMIN-B2A4-EXEC` foram concluídos; o `ADMIN-B2A5` é o próximo bloco possível, permanece não iniciado e depende de PREP e autorização explícita próprios.
 
 ## ADMIN-B2A1-EXEC — concluído
 
@@ -452,12 +453,13 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 
 - Status: concluído e aprovado exclusivamente como análise somente de leitura.
 - Parecer: **A. pronto para ADMIN-B2A4-EXEC**.
+- Governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34` (`docs: aprovar prep da proteção de media_library`).
 - Hipótese principal confirmada: `media_library` é uma coleção operacional do CMS/Admin e não possui consumidor público direto.
 - Alteração funcional: zero.
 - Teste ou Emulator: zero.
 - Acesso ao Firebase remoto ou a dados reais: zero.
 - Commit, push, deploy ou publicação: zero.
-- `ADMIN-B2A4-EXEC`, `ADMIN-B2A5`, `ADMIN-B2B` e `ADMIN-B3`: não iniciados.
+- No encerramento do PREP, `ADMIN-B2A4-EXEC`, `ADMIN-B2A5`, `ADMIN-B2B` e `ADMIN-B3` não haviam sido iniciados.
 
 ### Contrato comprovado de `media_library`
 
@@ -501,35 +503,65 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - A escrita será preservada exatamente como `allow write: if isAdmin();`.
 - Não incluir helper novo, `isModerator()`, campo de publicação/status, schema, autoria, timestamps, transições editoriais, mudança de `ativo` ou alteração de Storage.
 
-### ADMIN-B2A4-EXEC — pendente e não iniciado
+## ADMIN-B2A4-EXEC — concluído
 
-- Depende de autorização humana explícita posterior.
-- Arquivos funcionais exclusivos:
+- Status: concluído, revisado integralmente, validado funcionalmente, commitado e enviado para `origin/main`.
+- Classificação final: **A. VALIDADO FUNCIONALMENTE**.
+- Commit funcional: `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` (`fix: restringir media_library a administradores`).
+- Arquivos funcionais exclusivos do commit:
   - `firestore.rules`;
   - `tests/firestore.rules.test.mjs`.
-- Qualquer terceiro arquivo exigirá nova autorização.
-- Não haverá alteração de runtime, Storage, índice, App Check, CSP, metadata ou dados.
-- Não haverá publicação; Firestore Rules continuam exclusivas do `ADMIN-B3`.
+- Estatística: 2 arquivos, 300 inserções e 18 remoções textuais; as remoções correspondem a renomeações e inversões de testes, não à exclusão de casos.
+- Push concluído: `HEAD`, `main` e `origin/main` alinhados em `13245dcf6dcc2e5704ee3d019ed3c05233a057b3`, com divergência `0 0`.
 
-#### Plano exato de testes
+### Rule e contrato final versionado
 
-- Baseline atual: 69 testes em 5 suítes.
-- `media_library`: 10 testes dedicados; o teste adicional de `moderator/create` em outra suíte permanecerá intacto.
-- Renomear a suíte `Baseline atual de media_library` para `Contrato de leitura e escrita de media_library`.
-- Renomear os 10 testes dedicados, retirando referências a “BASELINE ATUAL” e a comportamento futuro.
-- Inverter exatamente quatro resultados:
+- Rule anterior:
+
+  ```text
+  match /media_library/{mediaId} {
+    allow read: if true;
+    allow write: if isAdmin();
+  }
+  ```
+
+- Rule nova versionada:
+
+  ```text
+  match /media_library/{mediaId} {
+    allow read: if isAdmin();
+    allow write: if isAdmin();
+  }
+  ```
+
+- A leitura pública ampla foi removida; a leitura passou a ser exclusiva de Admin autorizado.
+- A escrita foi preservada byte a byte sob `isAdmin()`.
+- Nenhum helper, outro `match`, schema, campo de publicação/status, contrato de `ativo`/`moderator`, runtime, Storage, índice, App Check, CSP, metadata ou dado foi alterado.
+- Admin ativo: get, list integral, leitura de registro legado/esparso, get inexistente autorizado com `exists() == false`, create, update e delete permitidos.
+- Anônimo: get, list, queries por `url` e `storagePath`, create, update e delete negados.
+- Usuário comum: get, list, create, update e delete negados.
+- Usuário autenticado sem perfil: get, list e create negados; ausência de `usuarios/{uid}` não concede acesso.
+- `moderator`: get, list, create, update e delete negados; o contrato institucional definitivo permanece reservado ao `ADMIN-B2A5`.
+- Admin inativo: get, list e create negados conforme o contrato atual de ativo, que permanece reservado ao `ADMIN-B2A5`.
+
+### Alterações e composição final dos testes
+
+- Baseline anterior: 69 testes em 5 suítes, com 10 testes dedicados de `media_library`.
+- A suíte foi renomeada de `Baseline atual de media_library` para `Contrato de leitura e escrita de media_library`.
+- Os 10 testes dedicados existentes foram renomeados.
+- Exatamente quatro resultados foram invertidos:
   1. anônimo get: ALLOW → DENY;
   2. anônimo list: ALLOW → DENY;
   3. usuário comum get: ALLOW → DENY;
   4. `moderator` get: ALLOW → DENY.
-- Preservar seis resultados:
+- Seis resultados foram preservados:
   1. Admin ativo get: ALLOW;
   2. anônimo create: DENY;
   3. usuário comum create: DENY;
   4. `moderator` create: DENY;
   5. Admin ativo create: ALLOW;
   6. Admin inativo create: DENY.
-- Adicionar exatamente 18 testes:
+- Exatamente 18 testes foram adicionados:
   1. usuário comum list DENY;
   2. usuário autenticado sem perfil get DENY;
   3. usuário autenticado sem perfil list DENY;
@@ -548,27 +580,38 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
   16. usuário comum delete DENY;
   17. `moderator` update DENY;
   18. `moderator` delete DENY.
-- Remover zero testes e não alterar semanticamente as outras quatro suítes.
-- Contagem futura exata:
+- Zero testes foram removidos; zero subtests foram adicionados; o teste adicional `moderator/create` da suíte `moderator` foi preservado; as outras quatro suítes permaneceram intactas.
+- Composição final:
   - `noticias`: 37;
   - `media_library`: 28;
   - `ativo`/`isAdmin`: 9;
   - `moderator`: 10;
   - fallback deny: 3;
   - total: 87 testes em 5 suítes.
-- Resultado futuro obrigatório: 87 pass; 0 fail; 0 skipped; 0 cancelled; 0 todo; exit code 0; coverage local HTTP 200.
+- Fixtures exclusivamente sintéticas, URLs em `example.com` e projeto `demo-turismo-sms-rules-test` preservados.
 
-#### Fixtures e harness futuros
+### Validação funcional local
 
-- Usar somente fixtures sintéticas: registro legado/esparso; registro compatível com o runtime com `title`, `url`, `storagePath`, `contentType`, `size`, `category` e `alt` quando necessário; Admin ativo; Admin inativo; `moderator`; usuário comum; usuário autenticado sem documento de perfil.
-- Nenhum dado, URL, UID ou metadado real.
-- Preservar `withSecurityRulesDisabled()` somente para seeds, `clearFirestore()`, cleanup, `node:test`, `assertSucceeds`, `assertFails`, concorrência 1 e o projeto obrigatório `demo-turismo-sms-rules-test`.
+- Comando validado no bloco funcional: `npm run test:rules`.
+- Ambiente: somente Firestore Emulator local, `firestore.rules` local, porta Firestore 8080, UI local 4000, concorrência Node 1, nenhuma credencial e nenhum projeto real.
+- Resultado: 5 suítes, 87 testes, 87 pass, 0 fail, 0 skipped, 0 cancelled, 0 todo e exit code 0.
+- Coverage: endpoint local de rule coverage respondeu HTTP 200; o ramo `isAdmin()` de `media_library`, get, list, create, update e delete administrativos, negativas por identidade, documento existente/inexistente, registro legado, queries por `url`/`storagePath` e fallback deny foram exercitados.
+- Emulator encerrado automaticamente; portas 8080 e 4000 sem listeners; nenhum processo encerrado manualmente.
+- `firestore-debug.log` foi gerado e removido após a suíte; nenhum relatório HTML ou JSON foi persistido.
+- Uma primeira tentativa terminou antes do Emulator por `EPERM` no configstore local do Firebase CLI. Nenhuma Rule, teste, configuração ou dependência foi alterada; o mesmo comando foi repetido no ambiente autorizado e concluiu em 87/87. O evento ambiental não representa falha funcional.
+
+### Git, produção e não ações
+
+- A nova Rule está versionada no Git e foi enviada para `origin/main`, mas não foi publicada no Firebase.
+- Nenhum deploy, acesso ao Firebase real, leitura ou alteração de dados reais, inventário, migração ou alteração de Storage foi executado.
+- O commit no GitHub não altera automaticamente o ruleset ativo. Produção permanece com o último ruleset publicado até autorização específica do `ADMIN-B3`.
+- O `ADMIN-B2A5`, o `ADMIN-B2B` e o `ADMIN-B3` não foram iniciados.
 
 ### Limite entre Firestore e Cloud Storage
 
 - `media_library`: coleção Firestore de catálogo e metadados; objeto exclusivo do `ADMIN-B2A4`.
 - `cms-media`: caminho de Cloud Storage com arquivos físicos e URLs de download; fora do B2A4 e reservado ao `ADMIN-B2B` ou bloco posterior autorizado.
-- Proteger `media_library` impedirá leitura e enumeração dos documentos, mas não revogará URLs existentes, não tornará privados os arquivos públicos no Storage, não alterará imagens copiadas para notícias/eventos/banners e não modificará `storage.rules`.
+- A proteção versionada de `media_library` impede leitura e enumeração pública dos documentos, mas não revoga URLs existentes, não torna privados os arquivos públicos no Storage, não altera imagens copiadas para notícias/eventos/banners e não modifica `storage.rules`.
 
 ### Roadmap administrativo
 
@@ -583,9 +626,9 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP:** não necessário no estado atual; reabrir somente se timeout reaparecer após CSP válida.
 - **ADMIN-B2A3-PREP:** concluído e aprovado somente como análise de leitura; governança registrada no commit `01ee3a9e667679a79ac4310d49a3f0f6c163450a`.
 - **ADMIN-B2A3-EXEC:** concluído; implementação local, auditoria **A**, validação funcional **A** em 69/69, commit `4f25d8b0385efa760ba21c77a5211293eb84ea0f` e push para `origin/main`, sem publicação de Rules.
-- **ADMIN-B2A4-PREP:** concluído e aprovado somente como análise de leitura; parecer **A. pronto para ADMIN-B2A4-EXEC**; zero alteração funcional, Emulator, acesso remoto ou publicação.
-- **ADMIN-B2A4-EXEC:** próximo bloco possível; pendente e não iniciado; depende de autorização humana explícita; restrito a `firestore.rules` e `tests/firestore.rules.test.mjs`; meta de 87 testes em 5 suítes; sem publicação.
-- **ADMIN-B2A5:** decidir e ajustar os contratos de `ativo` e `moderator`; depende de decisões humanas; não iniciado.
+- **ADMIN-B2A4-PREP:** concluído e aprovado somente como análise de leitura; parecer **A. pronto para ADMIN-B2A4-EXEC**; governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34`.
+- **ADMIN-B2A4-EXEC:** concluído e classificado como **A. VALIDADO FUNCIONALMENTE**; Rule Admin-only implementada; 87/87 em 5 suítes; coverage HTTP 200; commit `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` e push para `origin/main`; sem publicação.
+- **ADMIN-B2A5:** próximo bloco possível; decidir e ajustar separadamente os contratos de `ativo` e `moderator`; exige PREP e autorização humana próprios; não iniciado.
 - **ADMIN-B2B:** Storage Rules; não iniciado.
 - **ADMIN-B3:** não iniciado; revisão final, autorização explícita, única publicação controlada das Rules e reteste remoto.
 - **ADMIN-C:** integridade dos uploads, rollback e operações atômicas/idempotentes.
@@ -756,9 +799,9 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 6. **ADMIN-B2A2-FIRESTORE-TRANSPORT-PREP** — não necessário no estado atual; condicional ao reaparecimento de timeout com CSP válida.
 7. **ADMIN-B2A3-PREP** — concluído e aprovado somente como análise de leitura; governança registrada no commit `01ee3a9e667679a79ac4310d49a3f0f6c163450a`.
 8. **ADMIN-B2A3-EXEC** — concluído, auditado e validado localmente em 69/69; commit funcional `4f25d8b0385efa760ba21c77a5211293eb84ea0f` enviado para `origin/main`; sem publicação.
-9. **ADMIN-B2A4-PREP** — concluído e aprovado somente por leitura, com parecer **A. pronto para ADMIN-B2A4-EXEC**.
-10. **ADMIN-B2A4-EXEC** — próximo bloco possível; pendente, não iniciado, restrito a `firestore.rules` e `tests/firestore.rules.test.mjs`, sem publicação e dependente de autorização humana explícita.
-11. **ADMIN-B2A5** — posterior ao `ADMIN-B2A4-EXEC`; não iniciado e dependente das decisões humanas de `ativo` e `moderator`.
+9. **ADMIN-B2A4-PREP** — concluído e aprovado somente por leitura, com parecer **A. pronto para ADMIN-B2A4-EXEC** e governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34`.
+10. **ADMIN-B2A4-EXEC** — concluído e validado funcionalmente em 87/87; commit funcional `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` enviado para `origin/main`; sem publicação.
+11. **ADMIN-B2A5** — próximo bloco possível; não iniciado, exige PREP e autorização humana próprios e trata separadamente as decisões de `ativo` e `moderator`.
 12. **ADMIN-B2B** — posterior ao `ADMIN-B2A5`; não iniciado.
 13. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
 14. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
@@ -862,7 +905,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC` e `ADMIN-B2A4-PREP` estão concluídos; o B2A4-PREP foi aprovado somente por leitura com parecer **A. pronto para ADMIN-B2A4-EXEC**. O próximo bloco possível é exclusivamente `ADMIN-B2A4-EXEC`, permanece não iniciado, exige autorização humana explícita, fica restrito futuramente a `firestore.rules` e `tests/firestore.rules.test.mjs` e não publica Rules. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
+**Regra:** executar somente o bloco autorizado. `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC`, `ADMIN-B2A4-PREP` e `ADMIN-B2A4-EXEC` estão concluídos; o B2A4-EXEC foi validado funcionalmente em 87/87, commitado e enviado para `origin/main`, sem publicação. O próximo bloco possível é exclusivamente `ADMIN-B2A5`, permanece não iniciado e exige PREP e autorização humana próprios para as decisões de `ativo` e `moderator`. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -941,7 +984,10 @@ PREP concluído e aprovado somente como análise de leitura, com governança com
 Implementação local concluída em `firestore.rules` e `tests/firestore.rules.test.mjs`, com auditoria **A. implementação completa e compatível** e validação **A. validado funcionalmente**. O projeto demo `demo-turismo-sms-rules-test` executou 69 testes em 5 suítes, com 69 pass e zero falhas ou ignorados; coverage local HTTP 200. O commit funcional `4f25d8b0385efa760ba21c77a5211293eb84ea0f` foi enviado para `origin/main`. A Rule está versionada, mas não publicada; produção permanece inalterada até o `ADMIN-B3`.
 
 ### [CONCLUÍDA] ADMIN-B2A4-PREP — Contrato Admin-only de `media_library`
-PREP concluído e aprovado exclusivamente como análise somente de leitura, com parecer **A. pronto para ADMIN-B2A4-EXEC**. O contrato futuro aprovado troca somente a leitura de `media_library` para `isAdmin()`, preserva a escrita Admin-only, não exige runtime e mantém `cms-media`/Storage reservado ao `ADMIN-B2B`. O EXEC permanece pendente, não iniciado, restrito futuramente a `firestore.rules` e `tests/firestore.rules.test.mjs`, com meta exata de 87 testes em 5 suítes e sem publicação.
+PREP concluído e aprovado exclusivamente como análise somente de leitura, com parecer **A. pronto para ADMIN-B2A4-EXEC** e governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34`. O contrato aprovado trocou somente a leitura de `media_library` para `isAdmin()`, preservou a escrita Admin-only, dispensou runtime e manteve `cms-media`/Storage reservado ao `ADMIN-B2B`.
+
+### [CONCLUÍDA] ADMIN-B2A4-EXEC — Proteção local Admin-only de `media_library`
+Implementação local concluída em `firestore.rules` e `tests/firestore.rules.test.mjs`, com classificação **A. VALIDADO FUNCIONALMENTE**. O projeto demo `demo-turismo-sms-rules-test` executou 87 testes em 5 suítes, com 87 pass, zero fail/skipped/cancelled/todo e coverage local HTTP 200. O commit funcional `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` (`fix: restringir media_library a administradores`) foi enviado para `origin/main`, com `HEAD`, `main` e `origin/main` alinhados. A Rule está versionada, mas não publicada; produção permanece com o último ruleset publicado até o `ADMIN-B3`.
 
 ### [CONCLUÍDA] B1 — Cache-busting público pós-auditoria
 Token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Bloco commitado e enviado manualmente em 2026-07-08. Nenhum Admin/CMS/Firebase tocado.
@@ -1007,7 +1053,7 @@ R1, R2, R3, R4B, R4A, R5A e R5B estão concluídos. A Fase 1 foi encerrada sem r
 
 **Limite de validação:** o bloqueio direto de `translations.js` não foi possível no ambiente; a degradação foi validada por simulação equivalente, com retorno silencioso, markup original em PT, sem tela vazia e sem TypeError.
 
-**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa; `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC` e `ADMIN-B2A4-PREP` estão concluídos. `ADMIN-B2A4-EXEC` é o próximo bloco possível, permanece não iniciado e depende de autorização humana explícita.
+**Pendências preservadas:** a frente pública está pausada; V6, V7C1, V7C2 e B3 permanecem pendentes; V5C3 e V5D continuam pendentes; CSS órfão `.map-modal-*` e `.agrosamas-banner` permanece como frente paralela; chaves i18n órfãs e `CONFIG.agrosamas` temporariamente sem efeito na home permanecem documentados; a revisão editorial do destaque do 32º Mês Polonês após 30/08/2026 permanece pendente; a possível duplicação futura entre `eventos-2026.json` e `TURISMO_EVENTOS` e a virada anual de `eventos-2026.json` permanecem pendentes; a pendência externa do Formspree permanece com endpoint `xpqykpqd`, Workflow em `imprensapmsms@gmail.com`, `turismo@saomateusdosul.pr.gov.br` em `PENDING` e sem envio real antes de `VERIFIED`. Admin/CMS/Firebase é a frente ativa; `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC`, `ADMIN-B2A4-PREP` e `ADMIN-B2A4-EXEC` estão concluídos. `ADMIN-B2A5` é o próximo bloco possível, permanece não iniciado e exige PREP e autorização humana próprios.
 
 ---
 
