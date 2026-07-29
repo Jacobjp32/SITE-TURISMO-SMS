@@ -6,6 +6,152 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-29 — Aprovação do ADMIN-B2A4-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** governança atualizada; `ADMIN-B2A4-PREP` concluído e aprovado somente por leitura; parecer **A. pronto para ADMIN-B2A4-EXEC**; EXEC pendente e não iniciado.
+
+### Objetivo e limites
+
+- Registrar exclusivamente a aprovação do `ADMIN-B2A4-PREP`, o contrato futuro Admin-only de `media_library`, o plano exato do futuro EXEC e os limites Firestore/Storage, sem alteração funcional.
+- O PREP não alterou arquivo, Rule, teste, runtime ou dado.
+- Não executou npm, Firebase Emulator, acesso remoto, inventário, migração, deploy, publicação, commit ou push.
+- Não iniciou `ADMIN-B2A4-EXEC`, `ADMIN-B2A5`, `ADMIN-B2B` ou `ADMIN-B3`.
+
+### Hipótese principal e referências de runtime
+
+- Hipótese confirmada: `media_library` é uma coleção operacional do CMS/Admin.
+- `AdminContentCMS.ensureMediaLoaded()` executa listagem integral da coleção.
+- `AdminContentCMS.saveMedia()` cria ou atualiza documentos.
+- `AdminContentCMS.deleteMedia()` exclui documentos.
+- Editores e seletores usam a biblioteca já carregada em memória.
+- O painel administrativo aceita somente role `admin`.
+- Não existe consulta direta comprovada nas páginas públicas, no Portal ou no service worker.
+- Importadores não possuem referência direta comprovada.
+- Não existe consumidor real dependente de role `moderator`.
+- Páginas públicas consomem URLs já copiadas para notícias, eventos, banners e outras entidades; portanto nenhuma alteração de runtime é necessária.
+
+### Contrato atual, risco e alternativa aprovada
+
+- Match atual:
+
+  ```text
+  match /media_library/{mediaId} {
+    allow read: if true;
+    allow write: if isAdmin();
+  }
+  ```
+
+- Risco confirmado: get, list e queries públicas permitem enumerar URLs, nomes, paths e metadados administrativos. O frontend não constitui proteção.
+- A escrita já é Admin-only e permanecerá exatamente como `allow write: if isAdmin();`.
+- As alternativas A–F foram analisadas. A alternativa **A — leitura e escrita exclusivamente por Admin** foi escolhida por menor privilégio, diff mínimo, ausência de consumidor público, inexistência de campo canônico de publicação/visibilidade, inexistência de dependência real de `moderator`, compatibilidade com registros legados e ausência de dependência de runtime.
+- Rule futura recomendada:
+
+  ```text
+  match /media_library/{mediaId} {
+    allow read: if isAdmin();
+    allow write: if isAdmin();
+  }
+  ```
+
+- Admin ativo manterá get, list integral, leitura de registro legado/esparso, get inexistente autorizado com `exists() == false`, create, update e delete.
+- Anônimo, usuário comum, usuário autenticado sem perfil, `moderator` e Admin inativo terão leitura negada; as escritas continuarão submetidas ao contrato Admin-only.
+- Ausência de `usuarios/{uid}` não concede permissão.
+- O contrato institucional definitivo de `moderator` e de `ativo` permanece reservado ao `ADMIN-B2A5`.
+- Não incluir helper novo, `isModerator()`, campo de publicação/status, validação de schema, autoria, timestamps, transições editoriais ou mudança do contrato de ativo.
+
+### Separação entre Firestore e Cloud Storage
+
+- `media_library` é coleção Firestore de catálogo e metadados e constitui o objeto exclusivo do `ADMIN-B2A4`.
+- `cms-media` é caminho de Cloud Storage para arquivos físicos e URLs de download e permanece fora do B2A4, reservado ao `ADMIN-B2B` ou bloco posterior autorizado.
+- Proteger `media_library` impedirá leitura e enumeração dos documentos, mas não revogará URLs existentes, não tornará privados arquivos públicos no Storage, não alterará imagens copiadas para notícias/eventos/banners e não modificará `storage.rules`.
+- Índices, App Check, CSP, metadata e runtime não precisam mudar.
+
+### Plano do futuro ADMIN-B2A4-EXEC
+
+- Estado: pendente, não iniciado e dependente de autorização humana explícita.
+- Arquivos funcionais exclusivos:
+  - `firestore.rules`;
+  - `tests/firestore.rules.test.mjs`.
+- Qualquer terceiro arquivo exigirá nova autorização.
+- Baseline atual: 69 testes em 5 suítes; 10 testes dedicados de `media_library`; um teste adicional de `moderator/create` em outra suíte deve permanecer intacto.
+- Renomear a suíte `Baseline atual de media_library` para `Contrato de leitura e escrita de media_library`.
+- Renomear os 10 testes dedicados, retirando “BASELINE ATUAL” e referências a comportamento futuro.
+- Inverter exatamente quatro resultados:
+  1. anônimo get: ALLOW → DENY;
+  2. anônimo list: ALLOW → DENY;
+  3. usuário comum get: ALLOW → DENY;
+  4. `moderator` get: ALLOW → DENY.
+- Preservar exatamente seis resultados:
+  1. Admin ativo get: ALLOW;
+  2. anônimo create: DENY;
+  3. usuário comum create: DENY;
+  4. `moderator` create: DENY;
+  5. Admin ativo create: ALLOW;
+  6. Admin inativo create: DENY.
+- Adicionar exatamente 18 testes:
+  1. usuário comum list DENY;
+  2. usuário autenticado sem perfil get DENY;
+  3. usuário autenticado sem perfil list DENY;
+  4. `moderator` list DENY;
+  5. Admin inativo get DENY;
+  6. Admin inativo list DENY;
+  7. Admin ativo list integral ALLOW;
+  8. Admin ativo lê registro legado/esparso;
+  9. Admin ativo get inexistente ALLOW e `exists()` false;
+  10. anônimo query por `url` DENY;
+  11. anônimo query por `storagePath` DENY;
+  12. usuário sem perfil create DENY;
+  13. Admin ativo update ALLOW;
+  14. Admin ativo delete ALLOW;
+  15. usuário comum update DENY;
+  16. usuário comum delete DENY;
+  17. `moderator` update DENY;
+  18. `moderator` delete DENY.
+- Remover zero testes e não alterar semanticamente as outras quatro suítes.
+- Contagem futura exata:
+  - `noticias`: 37;
+  - `media_library`: 28;
+  - `ativo`/`isAdmin`: 9;
+  - `moderator`: 10;
+  - fallback deny: 3;
+  - total: 87 testes em 5 suítes.
+- Resultado futuro obrigatório: 87 pass; 0 fail; 0 skipped; 0 cancelled; 0 todo; exit code 0; coverage local HTTP 200.
+
+### Fixtures, harness, riscos e rollback futuros
+
+- Usar somente fixtures sintéticas: registro legado/esparso; registro compatível com runtime com `title`, `url`, `storagePath`, `contentType`, `size`, `category` e `alt` quando necessário; Admin ativo; Admin inativo; `moderator`; usuário comum; usuário autenticado sem perfil.
+- Nenhum dado, URL, UID ou metadado real.
+- Preservar `withSecurityRulesDisabled()` somente para seeds, `clearFirestore()`, cleanup, `node:test`, `assertSucceeds`, `assertFails`, concorrência 1 e o projeto obrigatório `demo-turismo-sms-rules-test`.
+- Riscos futuros controlados: regressão de leitura do Admin, alteração acidental das outras suítes, confusão entre documento Firestore e arquivo Storage e interpretação incorreta de código local como Rule publicada.
+- Rollback planejado do futuro EXEC: restaurar somente o match atual de `media_library` e o baseline correspondente nos dois arquivos funcionais antes de qualquer commit; como o EXEC não publicará Rules, produção permanecerá inalterada.
+
+### Produção, publicação e roadmap
+
+- O futuro EXEC não publicará Firestore Rules e não fará deploy.
+- A publicação continua exclusiva do `ADMIN-B3`, após revisão final e autorização explícita próprias.
+- A ordem permanece `ADMIN-B2A4-EXEC` → `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
+- Nenhuma etapa posterior foi iniciada.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável do PREP aprovado, contrato Admin-only, separação Firestore/Storage, plano de testes e gate do roadmap.
+- `TASKS.md` — PREP concluído, EXEC pendente, matriz futura, fixtures, contagem 87/5, escopo de dois arquivos e proibição de publicação.
+- `CHANGELOG_AI.md` — este registro cronológico.
+
+### Limites desta atualização documental
+
+- Alteração restrita aos três arquivos de governança.
+- `firestore.rules`, `tests/firestore.rules.test.mjs`, `storage.rules`, runtime, Admin, Portal, CMS, HTML, App Check, CSP, dados, assets, índices e metadata permaneceram intactos.
+- A data/hora pública do site e `js/site-meta.js` não foram atualizadas.
+- Nenhum teste, Emulator, acesso remoto, deploy, publicação, commit ou push foi executado nesta atualização documental.
+- `.claude/settings.local.json` permaneceu não rastreado, não lido e intocado.
+
+---
+
 ## 2026-07-29 — Conclusão funcional do ADMIN-B2A3-EXEC
 
 **Ferramenta/modelo:** Codex
