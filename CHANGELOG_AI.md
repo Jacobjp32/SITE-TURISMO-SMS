@@ -6,6 +6,142 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-29 — Conclusão funcional do ADMIN-B2A3-EXEC
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** `ADMIN-B2A3-EXEC` concluído, auditado, validado localmente, commitado e enviado para `origin/main`; Rule versionada e ainda não publicada.
+
+### Objetivo
+
+Registrar exclusivamente a conclusão funcional do `ADMIN-B2A3-EXEC`, o contrato final de leitura de `noticias`, a validação local de 69/69, o commit e o push funcionais e a distinção entre código versionado e Rule ativa em produção, sem iniciar bloco posterior.
+
+### 1. Implementação funcional
+
+- Rule anterior:
+
+  ```text
+  allow read: if true;
+  ```
+
+- Rule nova versionada:
+
+  ```text
+  allow read: if isAdmin() || (resource.data.publicado == true);
+  ```
+
+- Escrita preservada exatamente como:
+
+  ```text
+  allow write: if isAdmin();
+  ```
+
+- Arquivos funcionais exclusivos:
+  - `firestore.rules`;
+  - `tests/firestore.rules.test.mjs`.
+- Admin autorizado continua lendo notícias publicadas, drafts, documentos legados, documentos sem `publicado` e tipos históricos ou inválidos; também lista integralmente a coleção.
+- Público anônimo lê somente `publicado == true` booleano; campo ausente, `false`, `null`, string, número, lista, mapa ou apenas `status: "publicado"` permanecem privados.
+- Usuário comum autenticado e `moderator` seguem o ramo público e não ganham acesso a drafts. O contrato definitivo de `moderator` continua reservado ao `ADMIN-B2A5`.
+- `status` não participa da autorização, não substitui `publicado` e não revoga `publicado: true`.
+- Precedência registrada: `publicado: true` com `status: "rascunho"` permanece público; `status: "publicado"` sem `publicado: true` permanece privado.
+- Create, update e delete continuam sob `isAdmin()`.
+- Nenhuma validação adicional de schema, autoria, timestamps ou transição editorial foi incluída.
+
+### 2. Auditoria estática
+
+- Parecer: **A. implementação completa e compatível**.
+- Os 12 testes existentes de `noticias` foram renomeados.
+- Exatamente quatro resultados inseguros foram invertidos:
+  1. anônimo lendo draft;
+  2. anônimo listando toda a coleção;
+  3. usuário comum lendo draft;
+  4. `moderator` lendo draft.
+- Foram adicionados 25 testes e removidos zero testes.
+- Composição final:
+  - `noticias`: 37 testes;
+  - `media_library`: 10 testes;
+  - `ativo`/`isAdmin`: 9 testes;
+  - `moderator`: 10 testes;
+  - fallback deny: 3 testes;
+  - total: 69 testes em 5 suítes.
+- Nenhum outro `match`, helper, índice, Storage Rule, configuração ou dependência foi alterado.
+
+### 3. Validação funcional local
+
+- Classificação: **A. validado funcionalmente**.
+- Comando: `npm run test:rules`.
+- Projeto: `demo-turismo-sms-rules-test`.
+- Ambiente: somente Firestore Emulator local, usando `firestore.rules` local.
+- Resultado:
+  - 69 testes;
+  - 5 suítes;
+  - 69 pass;
+  - 0 fail;
+  - 0 skipped;
+  - 0 cancelled;
+  - 0 todo;
+  - exit code 0.
+- Coverage: endpoint local respondeu HTTP 200.
+- Emulator encerrado automaticamente.
+- Portas 8080 e 4000 sem listeners após a suíte.
+- `firestore-debug.log` foi gerado pelo Emulator e removido após a validação.
+- Os hashes de `firestore.rules` e `tests/firestore.rules.test.mjs` permaneceram preservados antes e depois da suíte.
+
+#### Tentativa ambiental anterior
+
+- Uma primeira execução terminou antes do Emulator por erro ambiental `EPERM` relacionado ao configstore local do Firebase CLI.
+- Nenhuma Rule, teste, configuração ou dependência foi alterada em decorrência do erro.
+- A segunda execução autorizada concluiu com sucesso em 69/69.
+- A tentativa ambiental não é classificada como falha funcional da implementação.
+
+### 4. Commit funcional
+
+- Hash completo: `4f25d8b0385efa760ba21c77a5211293eb84ea0f`.
+- Hash curto: `4f25d8b`.
+- Mensagem: `fix: restringir leitura pública de notícias`.
+- Escopo confirmado no commit:
+  - `firestore.rules`;
+  - `tests/firestore.rules.test.mjs`.
+
+### 5. Push
+
+- A branch `main` foi enviada para `origin/main`.
+- Estado confirmado após o push:
+  - `HEAD`: `4f25d8b0385efa760ba21c77a5211293eb84ea0f`;
+  - `main`: `4f25d8b0385efa760ba21c77a5211293eb84ea0f`;
+  - `origin/main`: `4f25d8b0385efa760ba21c77a5211293eb84ea0f`.
+
+### 6. Limites, produção e roadmap
+
+- Nenhum acesso ao Firebase real.
+- Nenhuma leitura ou alteração de dados reais.
+- Nenhum deploy.
+- Nenhuma publicação de Firestore Rules.
+- Nenhuma alteração de Admin, Portal, CMS, HTML, App Check, CSP, índices, Storage, assets, metadata ou `js/site-meta.js`.
+- Código versionado no Git não publica Security Rules.
+- Produção continua com a Rule anteriormente publicada e permanece inalterada.
+- A publicação continua exclusiva do `ADMIN-B3`, que permanece não iniciado e exige autorização humana separada.
+- `ADMIN-B2A4` permanece o próximo bloco possível, posterior e não iniciado; exige PREP e autorização humana próprios.
+- A ordem posterior permanece `ADMIN-B2A4` → `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
+- Nenhuma etapa posterior foi iniciada nesta governança.
+
+### Arquivos alterados nesta governança
+
+- `CLAUDE.md` — estado durável do EXEC, contrato final, validação, commit/push, distinção Git/produção e gate do roadmap.
+- `TASKS.md` — conclusão do PREP/EXEC, evidências 69/69, composição das suítes, commit, push e `ADMIN-B2A4` como próximo bloco possível.
+- `CHANGELOG_AI.md` — este registro cronológico.
+
+### Limites desta atualização documental
+
+- Alteração restrita aos três arquivos de governança.
+- Nenhum teste, Emulator, acesso remoto, deploy, publicação, commit ou push foi executado nesta atualização documental.
+- `.claude/settings.local.json` permaneceu não rastreado e intocado.
+- `firestore.rules` e `tests/firestore.rules.test.mjs` foram somente lidos e permaneceram intactos em relação ao commit funcional.
+
+---
+
 ## 2026-07-27 — Aprovação do ADMIN-B2A3-PREP
 
 **Ferramenta/modelo:** Codex
