@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC`, `ADMIN-B2A4-PREP` e `ADMIN-B2A4-EXEC` concluídos. O B2A4-PREP foi aprovado e registrado no commit `f9067e332a078ace7f840fecbe6f457bda324d34`. O B2A4-EXEC foi classificado como **A. VALIDADO FUNCIONALMENTE**, concluiu 87/87 no Firestore Emulator local, foi commitado em `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` e enviado para `origin/main`. As Rules novas estão versionadas, mas não foram publicadas; produção permanece com o último ruleset publicado.
+**Status geral:** `ADMIN-B2A3-PREP/EXEC`, `ADMIN-B2A4-PREP/EXEC` e `ADMIN-B2A5-PREP` concluídos. O B2A5-PREP foi exclusivamente de leitura, com parecer original **B. Pronto com decisão humana pendente**; as decisões humanas posteriores foram recebidas e concluíram os contratos institucionais de `ativo`, alcance da desativação e `moderator`. O EXEC monolítico foi classificado como **C. Bloqueado por dependências técnicas** e não está autorizado. As Rules novas dos blocos anteriores estão versionadas, mas não foram publicadas; produção permanece com o último ruleset publicado.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,14 +23,13 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A5` — próximo bloco possível da frente Firestore.**
+**`ADMIN-B2A5-INVENTORY-PREP` — primeiro bloco futuro da decomposição obrigatória.**
 
 - Estado: **não iniciado**.
-- Gate: exige PREP próprio e autorização humana explícita; este registro não inicia o bloco.
-- Objeto: tratar separadamente as decisões institucionais dos contratos de `ativo` e `moderator`.
-- Sequência preservada: `ADMIN-B2A5` → `ADMIN-B2B` → `ADMIN-B3`.
+- Natureza futura: planejamento somente leitura para definir campos, anonimização, limites e relatório sanitizado; sem acesso remoto durante o PREP.
+- Gate: exige autorização humana própria; este registro não inicia inventário, migração, Firestore, runtime, Storage ou publicação.
+- Sequência: `ADMIN-B2A5-INVENTORY-PREP/EXEC` → `ADMIN-B2A5-MIGRATION-PREP/EXEC` somente se necessário → `ADMIN-B2A5-FIRESTORE-PREP/EXEC` → `ADMIN-B2A5-RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
 - Publicação: continua bloqueada e reservada exclusivamente ao `ADMIN-B3`.
-- Preservações: nenhuma etapa posterior, publicação de Rules, deploy ou acesso remoto está autorizada por este registro.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
 
@@ -613,6 +612,50 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - `cms-media`: caminho de Cloud Storage com arquivos físicos e URLs de download; fora do B2A4 e reservado ao `ADMIN-B2B` ou bloco posterior autorizado.
 - A proteção versionada de `media_library` impede leitura e enumeração pública dos documentos, mas não revoga URLs existentes, não torna privados os arquivos públicos no Storage, não altera imagens copiadas para notícias/eventos/banners e não modifica `storage.rules`.
 
+## ADMIN-B2A5-PREP — concluído com decisões humanas posteriores
+
+### Conclusão do PREP e evolução do parecer
+
+- Status: concluído exclusivamente como análise somente de leitura.
+- Parecer original: **B. Pronto com decisão humana pendente**.
+- As decisões humanas pendentes foram recebidas e concluídas após o PREP.
+- Alteração funcional, acesso remoto, Emulator e publicação: zero.
+- O PREP não executou inventário, migração, commit, push ou deploy.
+- O histórico do parecer B permanece preservado.
+
+### Decisões humanas confirmadas
+
+- Contrato futuro: gates baseados em papel exigirão `usuarios.ativo == true`.
+- Somente o booleano `true` autoriza. Negam: `false`, campo ausente, `null`, `"true"`, `"false"`, `1`, `0`, `[]`, `{}`, qualquer outro tipo/valor diferente do booleano `true` e documento `usuarios/{uid}` inexistente.
+- Não haverá compatibilidade temporária para ausência, `null`, strings, números, listas ou mapas; `ativo != false` não será preservado como contrato final.
+- A desativação controlará acessos administrativos e de equipe protegidos por role. Admin ou eventual membro de equipe com `ativo` diferente de `true` não poderá executar operações institucionais baseadas em papel; Firestore deverá negar essas operações imediatamente após a alteração do perfil.
+- O Portal fica fora do bloqueio automático: fluxos baseados somente em `signedIn()`, autoria, propriedade, `establishment_managers` ou outros contratos próprios não serão ampliados silenciosamente. Suspensão total de conta de cidadão exige política e autorização separadas.
+- `moderator` não é função institucional ativa. Novos privilégios são proibidos, `moderator` não será tratado como Admin e os grants administrativos específicos atuais serão removidos futuramente.
+- Admin será preservado nos mesmos fluxos administrativos.
+- `moderator` não receberá acesso administrativo a `usuarios`, drafts de `noticias`, `media_library`, CMS integral, `reservas`, `banners` ou administração genérica.
+- Runtime terá bloco separado para gate de `ativo`, revalidação de perfil, comportamento de sessão, bloqueio/logout visual, mensagens e remoção/desativação da opção `moderator`.
+- Storage permanece separado e será alinhado exclusivamente no `ADMIN-B2B`, incluindo `isStaff()` e grants atuais de Admin/moderator.
+
+### Bloqueio do EXEC monolítico
+
+- `ADMIN-B2A5-EXEC` não será iniciado como bloco monolítico.
+- Classificação consolidada: **C. Bloqueado por dependências técnicas**.
+- Dependências: inventário sanitizado antes da publicação; possível migração de perfis; divergência entre painel Admin e Firestore Rules; revalidação/logout visual; opção `moderator` no runtime; grants de `moderator` no Firestore; grants de staff no Storage; separação obrigatória entre Firestore, runtime e Storage.
+- A classificação C não cancela o `ADMIN-B2A5`; determina sua decomposição em blocos independentes e autorizados.
+
+### Ordem futura obrigatória
+
+1. **ADMIN-B2A5-DECISIONS-GOVERNANCE** — esta sessão; somente documentação; sem commit.
+2. **ADMIN-B2A5-INVENTORY-PREP** — não iniciado; planejamento somente leitura, sem acesso remoto; depende de autorização própria.
+3. **ADMIN-B2A5-INVENTORY-EXEC** — não iniciado; leitura remota mínima e sanitizada, sem nome, e-mail, telefone, UID completo, dado pessoal, alteração ou migração; relatório limitado a contagens e categorias de `ativo: true`, `ativo: false`, campo ausente, `null`, tipo inválido, roles comprovadas e documentos potencialmente administrativos que precisem de correção; depende de autorização própria.
+4. **ADMIN-B2A5-MIGRATION-PREP/EXEC** — não iniciados e condicionais ao inventário; exigirão critérios, backup lógico, dry-run, rollback e autorização própria; não alterar roles sem decisão específica nem executar junto com publicação.
+5. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados; PREP definirá o diff de `ativo != false` para `ativo == true`, a remoção dos grants administrativos de `moderator`, a preservação de Admin e a contagem exata de testes; provável EXEC limitado a `firestore.rules` e `tests/firestore.rules.test.mjs`, somente no projeto demo e sem publicação; depende de autorização própria.
+6. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados; tratarão gate de ativo no Admin, revalidação de perfil, sessão, bloqueio/logout visual, mensagens, opção `moderator` e compatibilidade com o Portal, em arquivos definidos pelo PREP e sem alteração silenciosa de Firestore ou Storage; dependem de autorização própria.
+7. **ADMIN-B2B** — não iniciado; alinhará Storage, `ativo == true`, grants de moderator/staff, `cms-media`, arquivos físicos e testes próprios; depende de autorização própria.
+8. **ADMIN-B3** — não iniciado; somente após inventário/eventual migração, Firestore, Storage, runtime e testes locais alinhados; revisão consolidada, autorização explícita, única publicação controlada das Rules e reteste remoto sanitizado posterior.
+
+Nenhum bloco posterior foi iniciado por esta atualização de governança.
+
 ### Roadmap administrativo
 
 - **ADMIN-A — checkpoint e retomada:** concluído pelo `ADMIN-RESTART-PREP`.
@@ -628,9 +671,14 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - **ADMIN-B2A3-EXEC:** concluído; implementação local, auditoria **A**, validação funcional **A** em 69/69, commit `4f25d8b0385efa760ba21c77a5211293eb84ea0f` e push para `origin/main`, sem publicação de Rules.
 - **ADMIN-B2A4-PREP:** concluído e aprovado somente como análise de leitura; parecer **A. pronto para ADMIN-B2A4-EXEC**; governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34`.
 - **ADMIN-B2A4-EXEC:** concluído e classificado como **A. VALIDADO FUNCIONALMENTE**; Rule Admin-only implementada; 87/87 em 5 suítes; coverage HTTP 200; commit `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` e push para `origin/main`; sem publicação.
-- **ADMIN-B2A5:** próximo bloco possível; decidir e ajustar separadamente os contratos de `ativo` e `moderator`; exige PREP e autorização humana próprios; não iniciado.
-- **ADMIN-B2B:** Storage Rules; não iniciado.
-- **ADMIN-B3:** não iniciado; revisão final, autorização explícita, única publicação controlada das Rules e reteste remoto.
+- **ADMIN-B2A5-PREP:** concluído somente por leitura; parecer original **B**; decisões humanas posteriores concluídas.
+- **ADMIN-B2A5-DECISIONS-GOVERNANCE:** atualização documental atual; sem commit nesta sessão.
+- **ADMIN-B2A5-INVENTORY-PREP/EXEC:** não iniciados; dependem de autorizações próprias.
+- **ADMIN-B2A5-MIGRATION-PREP/EXEC:** não iniciados; condicionais ao inventário e dependentes de autorizações próprias.
+- **ADMIN-B2A5-FIRESTORE-PREP/EXEC:** não iniciados; dependem de autorizações próprias e não publicarão Rules.
+- **ADMIN-B2A5-RUNTIME-PREP/EXEC:** não iniciados; dependem de autorizações próprias.
+- **ADMIN-B2B:** Storage Rules; não iniciado e dependente de autorização própria.
+- **ADMIN-B3:** não iniciado; revisão final, autorização explícita, única publicação controlada das Rules e reteste remoto sanitizado.
 - **ADMIN-C:** integridade dos uploads, rollback e operações atômicas/idempotentes.
 - **ADMIN-D:** fechamento de Empreendimentos.
 - **ADMIN-E:** fechamento de Eventos.
@@ -801,13 +849,17 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 8. **ADMIN-B2A3-EXEC** — concluído, auditado e validado localmente em 69/69; commit funcional `4f25d8b0385efa760ba21c77a5211293eb84ea0f` enviado para `origin/main`; sem publicação.
 9. **ADMIN-B2A4-PREP** — concluído e aprovado somente por leitura, com parecer **A. pronto para ADMIN-B2A4-EXEC** e governança registrada no commit `f9067e332a078ace7f840fecbe6f457bda324d34`.
 10. **ADMIN-B2A4-EXEC** — concluído e validado funcionalmente em 87/87; commit funcional `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` enviado para `origin/main`; sem publicação.
-11. **ADMIN-B2A5** — próximo bloco possível; não iniciado, exige PREP e autorização humana próprios e trata separadamente as decisões de `ativo` e `moderator`.
-12. **ADMIN-B2B** — posterior ao `ADMIN-B2A5`; não iniciado.
-13. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
-14. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
-15. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
-16. **CMS-5D / integração CMS → site público** — fora da frente atual.
-17. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
+11. **ADMIN-B2A5-PREP** — concluído somente por leitura; parecer original **B**; decisões humanas posteriores concluídas.
+12. **ADMIN-B2A5-INVENTORY-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
+13. **ADMIN-B2A5-MIGRATION-PREP/EXEC** — não iniciados; executar somente se o inventário comprovar necessidade e com autorizações próprias.
+14. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados e dependentes de autorizações próprias; nenhuma publicação.
+15. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
+16. **ADMIN-B2B** — Storage separado; não iniciado e dependente de autorização própria.
+17. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
+18. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
+19. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+20. **CMS-5D / integração CMS → site público** — fora da frente atual.
+21. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
@@ -905,7 +957,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. `ADMIN-B2A3-PREP`, `ADMIN-B2A3-EXEC`, `ADMIN-B2A4-PREP` e `ADMIN-B2A4-EXEC` estão concluídos; o B2A4-EXEC foi validado funcionalmente em 87/87, commitado e enviado para `origin/main`, sem publicação. O próximo bloco possível é exclusivamente `ADMIN-B2A5`, permanece não iniciado e exige PREP e autorização humana próprios para as decisões de `ativo` e `moderator`. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
+**Regra:** executar somente o bloco autorizado. `ADMIN-B2A5-PREP` está concluído somente por leitura, suas decisões humanas posteriores estão registradas e o EXEC monolítico está bloqueado com classificação **C**. O próximo bloco futuro recomendado é `ADMIN-B2A5-INVENTORY-PREP`, ainda não iniciado e dependente de autorização própria. Inventário real, eventual migração, Firestore, runtime, `ADMIN-B2B` e `ADMIN-B3` também não foram iniciados. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -988,6 +1040,9 @@ PREP concluído e aprovado exclusivamente como análise somente de leitura, com 
 
 ### [CONCLUÍDA] ADMIN-B2A4-EXEC — Proteção local Admin-only de `media_library`
 Implementação local concluída em `firestore.rules` e `tests/firestore.rules.test.mjs`, com classificação **A. VALIDADO FUNCIONALMENTE**. O projeto demo `demo-turismo-sms-rules-test` executou 87 testes em 5 suítes, com 87 pass, zero fail/skipped/cancelled/todo e coverage local HTTP 200. O commit funcional `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` (`fix: restringir media_library a administradores`) foi enviado para `origin/main`, com `HEAD`, `main` e `origin/main` alinhados. A Rule está versionada, mas não publicada; produção permanece com o último ruleset publicado até o `ADMIN-B3`.
+
+### [CONCLUÍDA] ADMIN-B2A5-PREP — Contratos de `ativo` e `moderator`
+PREP concluído exclusivamente por leitura, com parecer original **B. Pronto com decisão humana pendente**, zero alteração funcional, acesso remoto, Emulator ou publicação. As decisões humanas posteriores definiram `ativo == true` fail-closed, desativação administrativa/equipe sem bloqueio automático do Portal e `moderator` sem função institucional ativa. O EXEC monolítico foi classificado como **C** e decomposto; todos os blocos posteriores permanecem não iniciados e dependentes de autorização própria.
 
 ### [CONCLUÍDA] B1 — Cache-busting público pós-auditoria
 Token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Bloco commitado e enviado manualmente em 2026-07-08. Nenhum Admin/CMS/Firebase tocado.

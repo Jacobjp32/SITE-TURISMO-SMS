@@ -6,6 +6,61 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-29 — Decisões humanas e decomposição do ADMIN-B2A5
+
+**Ferramenta/modelo:** Codex
+
+**Responsável pela aprovação:** Jacob
+
+**Status:** `ADMIN-B2A5-PREP` concluído; decisões humanas posteriores registradas; EXEC monolítico classificado como **C. Bloqueado por dependências técnicas**; nenhum bloco posterior iniciado.
+
+### Conclusão do PREP e parecer
+
+- O `ADMIN-B2A5-PREP` foi concluído exclusivamente como análise somente de leitura.
+- Parecer original preservado: **B. Pronto com decisão humana pendente**.
+- O diagnóstico confirmou o contrato atual `ativo != false`, a divergência entre Admin e Rules, a ausência de função operacional própria para `moderator` e a separação entre Firestore e Storage.
+- O PREP teve zero alteração funcional, acesso remoto, Emulator, inventário, migração, publicação, commit ou push.
+
+### Decisões humanas
+
+- Contrato futuro: gates baseados em papel exigirão `usuarios.ativo == true`.
+- Somente o booleano `true` autoriza. Serão negados `false`, campo ausente, `null`, strings, números, listas, mapas, qualquer outro tipo/valor diferente do booleano `true` e documento `usuarios/{uid}` inexistente.
+- Não haverá compatibilidade temporária para ausência ou tipos inválidos; `ativo != false` não será preservado como contrato final.
+- A desativação alcançará acessos administrativos e de equipe protegidos por role. Admin ou eventual membro de equipe com `ativo` diferente de `true` perderá essas operações.
+- O Portal não receberá bloqueio global automático: `signedIn()`, autoria, propriedade, `establishment_managers` e demais contratos próprios continuam fora dessa ampliação. Suspensão total de cidadão exige política e autorização separadas.
+- `moderator` não é função institucional ativa, não será tratado como Admin e não receberá novos privilégios.
+- Grants administrativos específicos atuais de `moderator` serão removidos futuramente; os fluxos de Admin serão preservados.
+- `moderator` não deverá receber administração de `usuarios`, drafts de `noticias`, `media_library`, CMS integral, `reservas`, `banners` ou administração genérica.
+
+### Separação de escopo e classificação
+
+- Runtime será tratado em bloco próprio: gate de `ativo`, revalidação do perfil, sessão, bloqueio/logout visual, mensagens e remoção/desativação da opção `moderator`.
+- Storage permanece exclusivamente no `ADMIN-B2B`, incluindo alinhamento de `isStaff()` e grants atuais de Admin/moderator.
+- Inventário remoto mínimo e sanitizado deverá preceder qualquer publicação; nenhum nome, e-mail, telefone, UID completo ou dado pessoal deverá constar do relatório.
+- Migração terá PREP/EXEC próprios somente se o inventário comprovar necessidade, com backup lógico, dry-run, rollback e autorização específica.
+- O EXEC monolítico foi classificado como **C. Bloqueado por dependências técnicas**. A classificação não cancela o `ADMIN-B2A5`; impõe decomposição.
+
+### Roadmap decomposto
+
+1. `ADMIN-B2A5-INVENTORY-PREP/EXEC` — não iniciados; autorizações próprias.
+2. `ADMIN-B2A5-MIGRATION-PREP/EXEC` — não iniciados e condicionais ao inventário; autorizações próprias.
+3. `ADMIN-B2A5-FIRESTORE-PREP/EXEC` — não iniciados; provável limite a `firestore.rules` e `tests/firestore.rules.test.mjs`, projeto demo e nenhuma publicação.
+4. `ADMIN-B2A5-RUNTIME-PREP/EXEC` — não iniciados; arquivos e comportamento serão definidos no PREP.
+5. `ADMIN-B2B` — não iniciado; Storage, `ativo == true`, moderator/staff, `cms-media`, arquivos físicos e testes próprios.
+6. `ADMIN-B3` — não iniciado; revisão consolidada, autorização explícita, única publicação autorizada e reteste remoto sanitizado.
+
+### Riscos e limites desta governança
+
+- Permanecem como dependências: perfis potencialmente incompatíveis com `ativo == true`, possível migração, divergência Admin/Rules, sessão sem revalidação contínua, opção `moderator` no runtime e grants atuais em Firestore/Storage.
+- Alteração restrita a `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- Nenhum arquivo funcional, Rule, teste, Storage, runtime, pacote, configuração Firebase, dado, asset ou metadata foi alterado.
+- A data/hora pública do site não foi atualizada.
+- Nenhum teste, build, lint, npm, Emulator, acesso remoto, inventário, migração, deploy, publicação, commit ou push foi executado.
+- `.claude/settings.local.json` permaneceu não rastreado, não lido e intocado.
+- Nenhum bloco posterior foi iniciado.
+
+---
+
 ## 2026-07-29 — Conclusão funcional do ADMIN-B2A4-EXEC
 
 **Ferramenta/modelo:** Codex
