@@ -6,6 +6,50 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-29 — Conclusão do ADMIN-B2A5-INVENTORY-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Status:** `ADMIN-B2A5-INVENTORY-PREP` concluído exclusivamente por análise local e somente leitura; parecer **C. Requer ferramenta local separada antes do INVENTORY-EXEC**; progressão esperada **C → B → A**; nenhum bloco posterior iniciado.
+
+### Conclusão e evidências locais
+
+- O PREP partiu do commit-base `1bd7377d25e540819e8fb67248568e38ba1b8601` (`docs: registrar decisões do ADMIN-B2A5`), com `HEAD`, `main` e `origin/main` alinhados, divergência `0 0`, tag `pre-admin-restart-20260720` preservada e somente `.claude/settings.local.json` não rastreado e intocado.
+- Não existe ferramenta adequada para o inventário de `usuarios`. `scripts/cms-media-inventory.mjs` e `scripts/cms-establishments-seed.mjs` têm outros alvos e contratos, podem ler dados mais amplos, usam token manual ou possuem caminhos de escrita e não devem ser reutilizados.
+- Não existem dependências diretas `firebase-admin` ou `@google-cloud/firestore`. A dependência futura recomendada é `@google-cloud/firestore`; versão exata, compatibilidade com Node e impacto no lockfile deverão ser definidos no `ADMIN-B2A5-INVENTORY-TOOL-PREP`.
+- A classificação C exige ferramenta local rastreada e validada. Depois disso, a etapa B exigirá identidade IAM read-only e autenticação temporária aprovadas; somente após ambas a etapa A poderá liberar o INVENTORY-EXEC.
+
+### Método futuro e minimização
+
+- Método recomendado: ferramenta Node rastreada com `count()` inicial apenas como gate de volume, consulta única de `usuarios` com `select("ativo", "role")` e `limit(T + 1)`, classificação em memória e saída exclusivamente agregada.
+- Coleção exclusiva: `usuarios`. Campos exclusivos: `ativo` e `role`. Não acessar logicamente nome, e-mail, telefone, organização, foto, CPF, endereço, tokens, Auth ou qualquer outro dado pessoal.
+- O document ID poderá existir tecnicamente no snapshot, mas a ferramenta será proibida de acessar `.id`, `.ref` e `.path`, imprimir, persistir, pseudonimizar ou incluir identificadores em logs e erros.
+- Categorias de `ativo`: `booleanTrue`, `booleanFalse`, `absent`, `null`, `string`, `number`, `array`, `map`, `timestamp`, `reference`, `geopoint` e `other`. Categorias de `role`: `admin`, `moderator`, `user`, `otherString`, `absent`, `null` e `nonString`. A matriz terá linhas `admin`, `moderator`, `user` e `invalidOrAbsent`, cada uma com todas as categorias de `ativo`.
+- Invariantes: somas de `ativo`, `role` e matriz iguais ao total; Admin e moderator integralmente distribuídos; contagens inteiras e não negativas; nenhuma categoria silenciosamente descartada; classificação derivada de uma única consulta projetada.
+
+### Ajustes de precisão aprovados
+
+- Count e scan são operações distintas. Diferença deverá encerrar a execução com erro sanitizado e `countMismatchDetected`; igualdade não comprova ausência de alteração concorrente. `classificationDerivedFromSingleQuerySnapshot` indicará somente que as categorias foram calculadas a partir da mesma consulta projetada.
+- As métricas serão separadas em `administrativeProfilesRequiringEvaluation` e `dataQualityDocumentsRequiringReview`. Usuário comum com `ativo` falso ou ausente não será automaticamente classificado como candidato a migração administrativa. Moderator será contabilizado separadamente para a futura remoção de grants, sem correção automática ou promoção.
+- `T = 10.000` é teto técnico recomendado, ainda pendente de confirmação humana no TOOL-PREP ou antes do INVENTORY-EXEC. Nenhum scan ilimitado será permitido e qualquer aumento exigirá autorização explícita.
+- `roles/datastore.viewer` é apenas a referência read-only. O escopo tecnicamente suportado deverá ser comprovado no AUTH-PREP e não será descrito como restrito à coleção ou aos campos. A minimização dependerá cumulativamente de IAM sem escrita, ferramenta auditada, alvo e projeção fixos, saída agregada, logs sanitizados e gates de projeto/banco.
+
+### Ferramenta, testes e ordem futura
+
+- Arquivos prováveis do TOOL-EXEC: `scripts/admin-b2a5-inventory.mjs`, `tests/admin-b2a5-inventory.test.mjs`, `package.json` e `package-lock.json`; nenhum está autorizado para alteração nesta governança.
+- O TOOL-PREP deverá separar classificador puro do adaptador Firestore, definir CLI/gates/saída, verificar suporte de `count()` e `select()` no Emulator, revisar o lockfile, definir busca estática por escrita e fixar a contagem final de testes. A referência de 44 testes e 77 fixtures é planejamento inicial, a confirmar ou ajustar sem redução indevida de cobertura.
+- Ordem futura: INVENTORY-TOOL-PREP → INVENTORY-TOOL-EXEC → governança/commit da ferramenta quando aprovados → INVENTORY-AUTH-PREP → INVENTORY-AUTH-EXEC → INVENTORY-EXEC → INVENTORY-GOVERNANCE → MIGRATION-PREP somente se necessário → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3.
+
+### Limites desta governança
+
+- Alteração exclusivamente documental e restrita a `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- Nenhuma Rule, teste funcional, Storage, script, pacote, configuração Firebase, Admin, Portal, CMS, Auth, HTML, App Check, CSP, runtime, metadata ou dado foi alterado.
+- Nenhum npm, dependência, ferramenta, Emulator, autenticação, acesso remoto, IAM, service account, chave, token, inventário, migração, deploy, publicação, commit ou push foi executado.
+- `.claude/settings.local.json` permaneceu não rastreado, não lido e intocado; `firestore-debug.log` permaneceu ausente.
+- `INVENTORY-TOOL-PREP`, TOOL-EXEC, AUTH-PREP/EXEC, INVENTORY-EXEC e todos os blocos posteriores permanecem não iniciados e dependem de autorização humana própria.
+
+---
+
 ## 2026-07-29 — Decisões humanas e decomposição do ADMIN-B2A5
 
 **Ferramenta/modelo:** Codex
