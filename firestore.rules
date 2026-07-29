@@ -582,7 +582,7 @@ service cloud.firestore {
     }
 
     match /noticias/{noticiaId} {
-      allow read: if true;
+      allow read: if isAdmin() || (resource.data.publicado == true);
       allow write: if isAdmin();
     }
 
