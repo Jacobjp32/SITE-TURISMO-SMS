@@ -6,6 +6,59 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-30 — Conclusão do ADMIN-B2A5-INVENTORY-TOOL-PREP
+
+**Ferramenta/modelo:** Codex
+
+**Status:** `ADMIN-B2A5-INVENTORY-TOOL-PREP` concluído exclusivamente por análise local e somente leitura; parecer **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-EXEC**; nenhum bloco posterior iniciado.
+
+### Conclusão, Git e limites
+
+- O TOOL-PREP partiu do commit-base `7059aa8973566acde24096a62ff99eb6a50696d5` (`docs: registrar prep do inventário do ADMIN-B2A5`), com `HEAD`, `main`, `origin/main` e `origin/HEAD` alinhados, divergência `0 0`, tag `pre-admin-restart-20260720` preservada, somente `.claude/settings.local.json` não rastreado e `firestore-debug.log` ausente.
+- O parecer A fecha versão, arquitetura, quatro arquivos, funções, CLI, gates, adaptador, taxonomias, métricas, invariantes, schema, erros, exit codes, testes, fixtures, validações, integridade e rollback. Isso não autoriza automaticamente implementação, autenticação, IAM, inventário, migração, commit, push, deploy ou publicação.
+- Esta governança altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Nenhum arquivo funcional, ferramenta, teste, pacote, lockfile, configuração Firebase, Rule, runtime, dado ou produção foi alterado.
+
+### Dependência, arquivos e compatibilidade
+
+- Dependência futura definida: `@google-cloud/firestore@8.7.0`, exata, sem `^` ou `~`, em `devDependencies`, com comando planejado `npm install --save-dev --save-exact --ignore-scripts @google-cloud/firestore@8.7.0`.
+- A metadata pública consultada declarou `engines.node >=18`; o Node local `v24.13.0` satisfaz o gate de engine. A dependência não foi instalada, portanto import, APIs e execução real no Node 24 não foram comprovados e deverão ser validados somente no TOOL-EXEC.
+- APIs planejadas: `Firestore`, `Query.select()`, `Query.count()`, `Query.limit()`, `Timestamp`, `GeoPoint`, `DocumentReference`, `databaseId` e `FIRESTORE_EMULATOR_HOST`.
+- Os quatro arquivos suficientes para o futuro EXEC são `scripts/admin-b2a5-inventory.mjs`, `tests/admin-b2a5-inventory.test.mjs`, `package.json` e `package-lock.json`. Qualquer necessidade de quinto arquivo deverá interromper o EXEC, ser tecnicamente justificada e receber autorização própria.
+
+### Arquitetura, adaptador e CLI
+
+- A ferramenta será Node ESM, rastreada, auditável, importável sem executar main e estritamente read-only. O plano separa constantes/schema, erro seguro, parser, max-docs, target, SHA-256, import dinâmico, classificadores, inventário, agregação, invariantes, allowlist, sanitização, adaptador, orquestrador, main e guard por `import.meta.url`.
+- Contrato funcional: `parseCliArgs`, `validateMaxDocuments`, `validateTarget`, `sha256Utf8`, `classifyAtivo`, `classifyRole`, `createEmptyInventory`, `accumulateDocument`, `validateInventory`, `formatInventorySummary`, `assertSanitizedOutput`, `sanitizeErrorCategory`, `serializeSuccess`, `serializeError`, `loadFirestoreModule`, `createFirestoreReadAdapter`, `runInventory` e `main`. Ajustes mínimos de nome são aceitáveis apenas se responsabilidades, cobertura, quatro arquivos e sanitização permanecerem.
+- O adaptador exporá somente `countDocuments()` e `scanProjected(maxDocuments)`. As duas operações serão `collection("usuarios").count().get()` e `collection("usuarios").select("ativo", "role").limit(maxDocuments + 1).get()`.
+- Permanecem proibidos mutadores, batch/bulk writer/transaction, import/export, Auth, Storage, IAM, fetch arbitrário, retry, campos arbitrários e acesso a ID/ref/path/name/snapshot/objeto Firestore em logs ou saída.
+- A CLI exigirá `--database-id`, `--collection`, `--max-docs` e `--expected-project-sha256`; `--emulator` será explícito. Database fixo `(default)`, coleção fixa `usuarios`, max positivo obrigatório e sem default, sem project ID por argumento, posicionais, opções desconhecidas/duplicadas ou scan ilimitado.
+- Remoto: project ID somente por `ADMIN_B2A5_PROJECT_ID`, nunca impresso ou herdado de gcloud/ADC/`.firebaserc`, comparado antes do cliente à fingerprint `68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60`.
+- Emulator: projeto `demo-turismo-sms-rules-test`, fingerprint `b2d2fda672cd3134c50b1afd30579947fb89c8aace85bb35852f6ed4c935e7b9`, `FIRESTORE_EMULATOR_HOST` obrigatório e restrito a loopback, sem credencial ou fallback remoto. Modo remoto com a variável do Emulator presente deverá abortar.
+
+### Classificação, métricas e consistência
+
+- `ativo`: `booleanTrue`, `booleanFalse`, `absent`, `null`, `string`, `number`, `array`, `map`, `timestamp`, `reference`, `geopoint` e `other`; ordem de detecção por ausência, null, booleanos, string, número, array, tipos Firestore especiais, mapa simples e other. Sem coerção; Buffer/bytes deverá validar `other` no Emulator ou o EXEC deverá parar.
+- `role`: `admin`, `moderator`, `user`, `otherString`, `absent`, `null` e `nonString`, por comparação exata, sem trim/lowercase e sem guardar/imprimir strings desconhecidas.
+- `roleByAtivo` terá quatro linhas, 12 colunas e 48 células. `administrativeProfilesRequiringEvaluation` agrega Admin não ativo, todos os moderator e roles inválidas/ausentes, sem tratar usuário comum apenas por ativo diferente de true como candidato administrativo. `invalidTypeDocuments` e `dataQualityDocumentsRequiringReview` serão uniões deduplicadas e não autorizarão migração ou alteração.
+- Count será apenas gate; scan usará `max-docs + 1`. Excesso gera `volume-limit`; divergência dentro do limite gera `count-mismatch`, sem retry, sem `concurrentChangeDetected` e sem alegação de concorrência comprovada. Mismatch não emitirá resumo ou totais parciais.
+- Invariantes: somas de ativo/role/matriz, linhas da matriz, inteiros, não negativos, categorias conhecidas, nenhum documento perdido, acumulações iguais ao scan e `classificationDerivedFromSingleQuerySnapshot` somente para a consulta projetada única.
+
+### Saída, erros, testes e rollback
+
+- Sucesso: JSON compacto determinístico, `schemaVersion: 1`, uma linha em stdout, sem persistência. Falha: stdout vazio e somente categoria fechada em stderr. São proibidos project ID real, identificadores, paths, snapshots, valores reais, role desconhecida, erro bruto, stack, URL, token, request, response e headers.
+- Exit codes: `0` sucesso; `2` argumentos inválidos; `3` alvo; `4` Emulator; `5` auth denied; `6` dependência; `7` volume; `8` count mismatch; `9` query; `10` invariante; `11` sanitização; `12` inesperado.
+- Plano final: **102 testes**, sendo 16 de ativo, 10 de role, 25 de CLI/gates, 10 de agregação/métricas, 13 de invariantes, 10 de saída/sanitização/erros, 8 de adaptador/orquestração fake e 10 de Emulator. Nenhuma biblioteca adicional de teste.
+- Fixtures finais: **84** (`7 roles × 12 ativos`), substituindo a referência provisória de 77. A matriz completa deverá produzir total 84, 12 por role, uma ocorrência por célula, 48 em `invalidOrAbsent`, splits Admin/moderator `1/11`, `administrativeProfilesRequiringEvaluation = 71`, `invalidTypeDocuments = 60` e `dataQualityDocumentsRequiringReview = 78`.
+- Validação futura: instalação exata com scripts ignorados, revisão integral do lockfile, `node --check`, testes unitários, Emulator demo, suíte de Rules, busca estática por operações mutadoras, diff integral, `git diff --check` e SHA-256 do script/teste antes e depois.
+- Rollback pré-commit: restaurar apenas `package.json` e `package-lock.json`; arquivos `.mjs` novos somente por paths exatos e autorização, sem `git clean`. Depois de commit, `git revert HASH_DO_TOOL_EXEC`.
+
+### Não ações e próximo gate
+
+- Nenhum npm, instalação, ferramenta, teste, Emulator, autenticação, acesso Firebase/Google Cloud, IAM, inventário, migração, commit, push, deploy ou publicação foi executado no TOOL-PREP ou nesta governança.
+- O próximo bloco possível é `ADMIN-B2A5-INVENTORY-TOOL-EXEC`, ainda não iniciado e dependente de autorização humana própria. AUTH, inventário, governança do inventário, eventual migração, Firestore, runtime, `ADMIN-B2B` e `ADMIN-B3` permanecem posteriores e separados.
+
+---
+
 ## 2026-07-29 — Conclusão do ADMIN-B2A5-INVENTORY-PREP
 
 **Ferramenta/modelo:** Codex
