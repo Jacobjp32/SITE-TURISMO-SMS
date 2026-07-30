@@ -46,6 +46,7 @@
 .public-banner__media {
     width: 100%;
     line-height: 0;
+    overflow: hidden;
     background: var(--cream-light, #f8f6f0);
 }
 
@@ -53,8 +54,10 @@
     display: block;
     width: 100%;
     height: auto;
-    max-height: 320px;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: none;
+    object-fit: contain;
+    object-position: center;
 }
 
 .public-banner__body {
@@ -153,9 +156,12 @@
 
 .public-popup__card {
     position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     max-width: 520px;
     max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
     overflow: auto;
     box-sizing: border-box;
     border-radius: 14px;
@@ -202,7 +208,11 @@
 }
 
 .public-popup__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    min-height: 0;
     line-height: 0;
     background: var(--cream-light, #f8f6f0);
     border-radius: 14px 14px 0 0;
@@ -211,10 +221,14 @@
 
 .public-popup__img {
     display: block;
-    width: 100%;
+    width: auto;
     height: auto;
-    max-height: 320px;
-    object-fit: cover;
+    max-width: 100%;
+    max-height: clamp(8rem, calc(100vh - 12rem), 70vh);
+    max-height: clamp(8rem, calc(100dvh - 12rem), 70dvh);
+    margin-inline: auto;
+    object-fit: contain;
+    object-position: center;
 }
 
 .public-popup__body {
@@ -280,6 +294,7 @@
     .public-popup__card {
         max-width: 100%;
         max-height: calc(100vh - 1rem);
+        max-height: calc(100dvh - 1rem);
     }
     .public-popup__body {
         padding: 1rem 1.1rem 1.25rem;
