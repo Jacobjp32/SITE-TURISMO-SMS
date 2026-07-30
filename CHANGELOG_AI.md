@@ -6,6 +6,55 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-30 — Governança da recuperação npm raiz e do isolamento da ferramenta ADMIN-B2A5
+
+**Ferramenta/modelo:** Codex
+
+**Status:** `ADMIN-B2A5-INVENTORY-TOOL-ISOLATION-PREP-GOVERNANCE` concluído exclusivamente como atualização documental; parecer preservado em **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**; nenhum bloco posterior iniciado.
+
+### Recuperação do pacote raiz
+
+- O registro parte do commit `6b7923f2c551d7489ed3fbb960139f39e8e6ac67` (`fix: exibir banners e pop-ups sem cortes`), já publicado e validado no domínio público. `HEAD`, `main`, `origin/main` e `origin/HEAD` permaneceram nesse hash, divergência `0 0`, tag `pre-admin-restart-20260720` preservada, somente `.claude/settings.local.json` não rastreado e `firestore-debug.log` ausente.
+- A tentativa de instalar `@google-cloud/firestore@8.7.0` na raiz foi abandonada após `ELSPROBLEMS` físico e virtual na cadeia `firebase-tools@15.24.0` → `tinyglobby@0.2.17`/`fdir@6.5.0` → `picomatch@2.3.2`/`4.0.5`. O override restrito não reparou a árvore, e a solução integrada foi rejeitada.
+- `package.json` e `package-lock.json` raiz foram restaurados ao `HEAD`; objetos Git filtrados `e5548f71f21def5234b8825ab0d8cfa461b44be2` e `431ee44032731c8624e392a4cc51fb2abb066061`. Uma única execução de `npm ci --ignore-scripts --no-audit --no-fund` recuperou o baseline: árvores física/virtual válidas, Firebase CLI `15.24.0`, Firestore e overrides ausentes da raiz.
+- Hashes limpos: `package.json` `8CA1CC95ABD8598852C08BE7E2E4D308FC0394498C167ECB2762C6DCDD50E95B`; `package-lock.json` `011CCA2C7FF45FABE80D5737070E2F56AE94D8CBCFE6ED94748BF83D56B60E0F`.
+
+### Arquitetura isolada aprovada
+
+- A ferramenta não será instalada ou executada no pacote npm raiz. A arquitetura definitiva é `tools/admin-b2a5-inventory/`, pacote Node independente, sem workspace e sem dependências integradas à árvore do site.
+- Quatro arquivos futuros exclusivos: `package.json`, `package-lock.json`, `admin-b2a5-inventory.mjs` e `admin-b2a5-inventory.test.mjs` dentro do diretório isolado. Nenhum quinto arquivo funcional; a regra `node_modules/` existente cobre o `node_modules` aninhado e `.gitignore` permanecerá intacto.
+- O package aprovado é privado, versão `0.0.0`, ESM, `engines.node >=18`, sem workspace/publishConfig/publicação/inventário remoto. Scripts locais: `test`, `test:unit`, `test:emulator` e `check`. `@google-cloud/firestore@8.7.0` será `dependency` exata de runtime, sem range, override, picomatch direto ou `firebase-tools`.
+- Node local `v24.13.0` satisfaz apenas o gate declarado de engine; import, APIs e funcionamento real permanecem pendentes de comprovação no ISOLATED-TOOL-EXEC.
+- O lockfile será próprio, `lockfileVersion 3`, gerado apenas no pacote isolado com scripts, audit e funding desabilitados, revisado integralmente e reproduzido por `npm ci`; não poderá modificar os manifests raiz.
+- Padrão único: `npm --prefix "tools/admin-b2a5-inventory" <comando>` para install exato, `ls --all`, `ci`, `run check`, `run test:unit` e teste integral. Não usar workspace, instalação raiz ou alternância arbitrária de diretório.
+- O import dinâmico deverá resolver Firestore em `tools/admin-b2a5-inventory/node_modules/`; o teste importará `./admin-b2a5-inventory.mjs` no mesmo package scope. O `node_modules` raiz servirá apenas à Firebase CLI.
+
+### Emulator, contrato e validações futuras
+
+- Comando futuro aprovado, executado da raiz: `& ".\node_modules\.bin\firebase.cmd" emulators:exec --only firestore --project demo-turismo-sms-rules-test "npm --prefix tools/admin-b2a5-inventory test"`. Somente Firestore Emulator e projeto demo, host obrigatório, sem credencial, acesso remoto ou fallback, com encerramento automático.
+- O contrato funcional anterior permanece: ESM importável, database `(default)`, coleção `usuarios`, projeção `ativo`/`role`, count como gate, scan único `max + 1`, zero IDs/escrita/persistência/valores reais/retry, fingerprints, JSON determinístico, erros sanitizados, exit codes `0` e `2`–`12`, `countMismatchDetected` e `classificationDerivedFromSingleQuerySnapshot`.
+- Testes: 102 — 16 ativo, 10 role, 25 CLI/alvo/fingerprint/gates, 10 agregação/métricas, 13 invariantes, 10 saída/sanitização/erros, 8 adaptador/orquestração fake e 10 `EMULATOR:`. Resultado obrigatório: 102 pass e zero fail/skipped/cancelled/todo.
+- Fixtures: 84 (`7 × 12`), com total 84, `administrativeProfilesRequiringEvaluation = 71`, `invalidTypeDocuments = 60` e `dataQualityDocumentsRequiringReview = 78`. Buffer/bytes deverá ser `other`; divergência encerra o EXEC sem improvisação.
+- Regressão raiz obrigatória: `npm run test:rules`, 87/87 em cinco suítes, coverage local HTTP 200, zero fail/skipped/cancelled/todo, Emulator encerrado, portas 8080/4000 livres e log ausente. Nenhuma Rule será alterada.
+- Zero escrita: módulo de produção sem mutadores, transaction, `recursiveDelete` ou import/export; adaptador somente `countDocuments()`/`scanProjected(maxDocuments)`; writes apenas no teste para fixtures locais; fakes validam um count, no máximo um scan e zero retry.
+- Integridade futura: hashes e objetos filtrados da raiz antes/depois de install, `npm ci` e testes; hashes dos quatro arquivos isolados após criação e validações; nenhum teste poderá alterar arquivos.
+
+### Rollback, riscos e ordem
+
+- Rollback pré-commit por remoção autorizada somente dos quatro paths novos e do `node_modules` isolado após conferência absoluta; nunca `git clean`. Depois de commit, `git revert HASH_DO_ISOLATED_TOOL_EXEC`. Nenhum rollback toca dados, IAM, Rules, produção ou o hotfix visual.
+- Riscos não bloqueantes: import/APIs reais do Firestore 8.7.0 no Node 24.13.0, árvore isolada, round-trip Buffer/bytes, `firestore-debug.log`, portas e caminho de resolução. Autenticação, IAM e valor real de `max-docs` permanecem fora do TOOL-EXEC.
+- Ordem: revisão/commit/push desta governança → ISOLATED-TOOL-EXEC → revisão/governança/commit funcional próprios → AUTH-PREP/EXEC → INVENTORY-EXEC/GOVERNANCE → MIGRATION-PREP se necessária → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3.
+
+### Limites desta atualização documental
+
+- Arquivos alterados exclusivamente: `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`.
+- Nenhum arquivo funcional, package, lockfile, Rule, Storage, runtime, metadata, hotfix visual, dado ou produção foi alterado. A data/hora pública não foi atualizada.
+- Não houve `npm install`, `npm ci`, dependência, pacote, ferramenta, teste, Emulator, autenticação, Firebase/Google Cloud remoto, inventário, migração, deploy, publicação, staging, commit ou push nesta governança. As únicas chamadas npm foram os `npm pkg get` de leitura exigidos no preflight.
+- `.claude/settings.local.json` permaneceu não rastreado, não lido, não pesquisado e intocado. `tools/admin-b2a5-inventory/` e `firestore-debug.log` permaneceram inexistentes.
+- `ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` e todos os blocos posteriores permanecem não iniciados e dependem de autorização própria.
+
+---
+
 ## 2026-07-30 — Conclusão do ADMIN-B2A5-INVENTORY-TOOL-PREP
 
 **Ferramenta/modelo:** Codex
