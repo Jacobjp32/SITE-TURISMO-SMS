@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-B2A3-PREP/EXEC`, `ADMIN-B2A4-PREP/EXEC`, `ADMIN-B2A5-PREP`, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP` e `ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP` concluídos. O pacote npm raiz foi recuperado, Firestore/overrides ficaram ausentes da raiz e a arquitetura integrada foi substituída pelo pacote independente `tools/admin-b2a5-inventory/`. O parecer atual é **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**. Nenhuma ferramenta, pacote isolado, dependência, AUTH, leitura remota, inventário, migração ou publicação foi iniciada. As Rules novas dos blocos anteriores estão versionadas, mas não foram publicadas; produção permanece com o último ruleset publicado.
+**Status geral:** `ADMIN-B2A3-PREP/EXEC`, `ADMIN-B2A4-PREP/EXEC`, `ADMIN-B2A5-PREP`, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP` e `ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` concluídos. A ferramenta isolada foi classificada como **A. VALIDADO LOCALMENTE**, recebeu 102/102 testes, preservou a regressão das Rules em 87/87 e foi enviada para `origin/main` no commit `1102741201d4858b55a7145570568856f6859573`. O pacote npm raiz permanece intacto e sem Firestore. AUTH, acesso remoto, inventário real, migração e publicação não foram iniciados; produção permanece com o último ruleset publicado.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,12 +23,12 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` — próximo bloco futuro da decomposição obrigatória.**
+**`ADMIN-B2A5-INVENTORY-AUTH-PREP` — próximo bloco possível da decomposição obrigatória.**
 
 - Estado: **não iniciado**.
-- Natureza futura: implementação e validação exclusivamente local da ferramenta Node ESM read-only no pacote independente `tools/admin-b2a5-inventory/`, limitada aos quatro arquivos `package.json`, `package-lock.json`, `admin-b2a5-inventory.mjs` e `admin-b2a5-inventory.test.mjs` dentro desse diretório.
-- Gate: exige autorização humana própria; esta governança não cria ferramenta, instala dependência, executa npm/Emulator, autentica, acessa dados, inicia AUTH, inventário, migração, Firestore, runtime, Storage ou publicação.
-- Sequência: revisão/commit documental próprios → `INVENTORY-TOOL-ISOLATED-EXEC` → revisão/governança/commit da ferramenta quando aprovados → `INVENTORY-AUTH-PREP` → `INVENTORY-AUTH-EXEC` → `INVENTORY-EXEC` → `INVENTORY-GOVERNANCE` → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
+- Natureza futura: planejar identidade temporária estritamente read-only, comprovar o menor escopo IAM, impedir escrita e acesso além do necessário, definir autenticação temporária, expiração/revogação, logs sanitizados e rollback.
+- Gate: exige autorização humana própria; esta governança não autentica, configura IAM, acessa dados, executa inventário, migração, Firestore, runtime, Storage ou publicação.
+- Sequência: revisão humana e commit/push documental próprios desta governança → `INVENTORY-AUTH-PREP` → `INVENTORY-AUTH-EXEC` → `INVENTORY-EXEC` → `INVENTORY-GOVERNANCE` → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
 - Publicação: continua bloqueada e reservada exclusivamente ao `ADMIN-B3`.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
@@ -675,7 +675,7 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - Invariantes: somas de ativo/role/matriz, linhas da matriz, inteiros, não negativos, categorias conhecidas, nenhum documento perdido, chamadas de acumulação iguais ao scan e classificação derivada da consulta projetada única.
 - Testes futuros: **102** com `node:test`/`assert/strict`, sem nova biblioteca de teste: 16 ativo, 10 role, 25 CLI/gates, 10 agregação/métricas, 13 invariantes, 10 saída/sanitização/erros, 8 adapter/orquestração fake e 10 Emulator. Fixtures finais: **84** (`7 × 12`), substituindo a referência provisória de 77.
 - Validação futura: instalação exata com scripts ignorados, revisão do lockfile, `node --check`, unitários, Emulator demo, suíte de Rules existente, busca estática de mutadores, diff integral, `git diff --check` e SHA-256 antes/depois. Rollback sem `git clean`: restaurar os dois arquivos de pacote e remover novos `.mjs` somente por paths exatos e autorização; após commit, `git revert`.
-- Limites: nenhuma ferramenta, teste, dependência, npm, Emulator, autenticação, acesso remoto, IAM, inventário, migração, commit, push, deploy ou publicação foi executado. O TOOL-EXEC e todos os blocos posteriores permanecem não iniciados.
+- Limites daquele PREP: nenhuma ferramenta, teste, dependência, npm, Emulator, autenticação, acesso remoto, IAM, inventário, migração, commit, push, deploy ou publicação foi executado; naquele checkpoint, o TOOL-EXEC e os blocos posteriores ainda não haviam sido iniciados.
 
 ### ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP — concluído
 
@@ -696,26 +696,41 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - Integridade: registrar SHA-256 e objetos filtrados dos manifests raiz antes/depois de install, `npm ci` e testes; registrar hashes dos quatro arquivos isolados após criação e validações. Baseline atual: `package.json` `8CA1CC95ABD8598852C08BE7E2E4D308FC0394498C167ECB2762C6DCDD50E95B`; `package-lock.json` `011CCA2C7FF45FABE80D5737070E2F56AE94D8CBCFE6ED94748BF83D56B60E0F`.
 - Rollback: antes de commit, remover somente os quatro arquivos por paths explícitos e, mediante autorização/conferência absoluta, o `node_modules` isolado; nunca `git clean`. Depois de commit, `git revert HASH_DO_ISOLATED_TOOL_EXEC`. O rollback não toca dados, IAM, Rules, produção ou o hotfix visual.
 - Riscos não bloqueantes: import/APIs de Firestore 8.7.0 no Node local `v24.13.0`, árvore isolada, Buffer/bytes, `firestore-debug.log`, portas e caminho resolvido. Node 24.13.0 satisfaz somente o gate `>=18`; compatibilidade executável será comprovada no EXEC. Autenticação, IAM e valor real de `max-docs` permanecem fora do TOOL-EXEC.
-- Parecer: **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**. O pacote isolado, seus testes, AUTH, inventário, migração e todos os blocos posteriores permanecem não iniciados.
+- Parecer histórico deste PREP: **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**. O pacote isolado e seus testes foram posteriormente concluídos no EXEC; AUTH, inventário, migração e os demais blocos posteriores permanecem não iniciados.
+
+### ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC — concluído
+
+- Status: concluído em 2026-07-30 e classificado como **A. VALIDADO LOCALMENTE**. O pacote independente `tools/admin-b2a5-inventory/` foi implementado, integralmente revisado, validado e versionado sem alterar os manifests raiz.
+- Artefatos exclusivos: `package.json`, `package-lock.json`, `admin-b2a5-inventory.mjs` e `admin-b2a5-inventory.test.mjs`. `node_modules/` próprio permanece ignorado; não houve quinto arquivo.
+- Package/lock: privado, ESM, Node `>=18`, quatro scripts, `@google-cloud/firestore@8.7.0` exato, sem workspace, override, `firebase-tools` ou cadeia `tinyglobby`/`fdir`/`picomatch`; lockfile próprio `lockfileVersion 3`; padrão `npm --prefix`; resolução comprovada no `node_modules` isolado.
+- Reprodutibilidade: 122 pacotes instalados; `npm ls` aprovado sem `invalid`, `missing` ou `ELSPROBLEMS`; `npm ci` aprovado; package e lock byte a byte estáveis. Hashes SHA-256: package `B05ACB53F4D5DD480E436A7A3BB1C71C78E456959B9DC39AC84285C9A744B9EF`; lock `EAC09322DE633EAA33AD901F18C6D4F2FD31355E6D304F9A93EEE858B6DB3897`; módulo `A877FE4CA8266F8ED20B7106F8FE5C4633F686170902C980A496D682ED59EC13`; teste `45A91BFB2CA302D61D3CE018C2278D48201563C019AA275E13E47B99F60614AA`.
+- Arquitetura: 29 contratos exportados, entry point protegido, import dinâmico, CLI restrita, `(default)`, coleção `usuarios`, `max-docs` obrigatório, fingerprints e gates de alvo, modo Emulator explícito e modo remoto não executado. Sem descoberta implícita, projeto remoto em texto claro, credencial ou retry automático.
+- Metadata: a primeira execução integral produziu `MetadataLookupWarning` da detecção automática da biblioteca Google, sem autenticação ou acesso a dados. O hardening define `METADATA_SERVER_DETECTION=none` somente no modo Emulator; as execuções finais não emitiram o aviso.
+- Read-only: adaptador apenas `countDocuments()` e `scanProjected(maxDocuments)`; operações limitadas a count e à consulta projetada `ativo`/`role` com `limit(maxDocuments + 1)`. Sem mutadores, transaction, `recursiveDelete`, import ou export; buscas estáticas retornaram somente `seen.add(token)` e `createHash(...).update(...)`. Sem ID/ref/path, exploração por `Object.keys`, log bruto, mensagem ou stack de erro.
+- Modelo agregado: 12 categorias de ativo, sete de role e matriz `admin`/`moderator`/`user`/`invalidOrAbsent`; métricas `administrativeProfilesRequiringEvaluation`, `invalidTypeDocuments` e `dataQualityDocumentsRequiringReview`; deduplicação por flags, invariantes de somas/tipos/categorias e nenhum ID ou valor desconhecido preservado.
+- Saída: JSON compacto, de uma linha, determinístico e allowlisted; stdout somente no sucesso, stderr somente no erro; categorias sanitizadas e exit codes `0` e `2`–`12`; sem stack, conteúdo bruto, ID, UID, path, valor real, projeto real, token, URL, persistência ou resumo parcial.
+- Testes: 102 totais — 16 ativo, 10 role, 25 CLI/alvo/fingerprint/gates, 10 agregação/métricas, 13 invariantes, 10 saída/sanitização/erros, 8 adaptador/orquestração fake e 10 integração Emulator. Resultado integral: 102 pass e zero fail/skipped/cancelled/todo; 92 casos não Emulator e dez `EMULATOR:`, sem remoção de testes para ocultar skips do filtro unitário.
+- Fixtures: 84 sintéticas (`7 × 12`), sem produção. Totais: cada role 12, cada ativo 7, admin 12, moderator 12, user 12, `invalidOrAbsent` 48, admin e moderator true/not true `1/11`, métricas `71`, `60` e `78`; Buffer/bytes validado como `other`.
+- Emulator: somente Firestore, projeto `demo-turismo-sms-rules-test`, host local, sem credencial ou remoto, encerramento automático e portas 8080/4000 livres. Log de 939 bytes removido após cada execução e ausente ao final.
+- Regressão: `npm run test:rules` executado no bloco funcional, cinco suítes, 87/87 pass, zero fail/skipped/cancelled/todo, coverage HTTP 200, Emulator encerrado e log de 84.209 bytes removido. Nenhuma Rule ou teste de Rules foi alterado ou publicado.
+- Commit funcional: `1102741201d4858b55a7145570568856f6859573` (`1102741`), mensagem `feat: adicionar ferramenta isolada de inventário do ADMIN-B2A5`, exatamente quatro arquivos e 3.535 inserções. Staging nominal, um único commit, push `d6fe820..1102741 main -> main` e alinhamento final `0 0`.
+- Supply chain: avisos deprecated para `node-domexception@1.0.0` e `glob@10.5.0`; `npm audit` proibido e não executado; nenhuma vulnerabilidade inferida. Análise futura exige bloco próprio.
+- Limites: modo remoto, autenticação, IAM, valor institucional de `max-docs`, inventário real e migração não foram executados; Rules não foram publicadas; Storage, runtime e produção não foram alterados.
 
 ### Ordem futura obrigatória
 
-1. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATION-PREP-GOVERNANCE** — atualização documental atual; revisão humana e commit/push permanecem separados e não iniciados nesta sessão.
+1. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC-GOVERNANCE** — atualização documental atual; revisão humana e commit/push documental permanecem separados e não iniciados nesta sessão.
 2. **Revisão humana e commit/push documental** — somente após aprovação integral dos três diffs.
-3. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC** — não iniciado; implementação e validação local do pacote isolado; depende de autorização própria.
-4. **Revisão humana dos quatro arquivos** — não iniciada.
-5. **Governança da ferramenta** — não iniciada.
-6. **Commit e push funcional** — não iniciados; somente após autorização específica.
-7. **ADMIN-B2A5-INVENTORY-AUTH-PREP** — não iniciado; definição de identidade, papel, escopo, impersonação e limpeza.
-8. **ADMIN-B2A5-INVENTORY-AUTH-EXEC** — não iniciado; criação/configuração autorizada de identidade e autenticação temporária, se necessária.
-9. **ADMIN-B2A5-INVENTORY-EXEC** — não iniciado; leitura remota mínima e sanitizada somente após ferramenta e IAM aprovados.
-10. **ADMIN-B2A5-INVENTORY-GOVERNANCE** — não iniciado; registro das contagens agregadas e evidências sanitizadas.
-11. **ADMIN-B2A5-MIGRATION-PREP** — não iniciado e condicional ao inventário.
-12. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados; nenhuma publicação.
-13. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados.
-14. **ADMIN-B2B** — não iniciado; Storage separado.
-15. **ADMIN-B3** — não iniciado; única etapa autorizada a publicar Rules e executar reteste remoto sanitizado.
-16. **Demais fases administrativas** — seguir o roadmap e suas autorizações próprias.
+3. **ADMIN-B2A5-INVENTORY-AUTH-PREP** — próximo bloco possível, não iniciado; identidade temporária read-only, IAM mínimo, autenticação, expiração/revogação, logs sanitizados e rollback.
+4. **ADMIN-B2A5-INVENTORY-AUTH-EXEC** — não iniciado; criação/configuração autorizada de identidade e autenticação temporária, se necessária.
+5. **ADMIN-B2A5-INVENTORY-EXEC** — não iniciado; leitura remota mínima e sanitizada somente após ferramenta e IAM aprovados.
+6. **ADMIN-B2A5-INVENTORY-GOVERNANCE** — não iniciado; registro das contagens agregadas e evidências sanitizadas.
+7. **ADMIN-B2A5-MIGRATION-PREP** — não iniciado e condicional ao inventário.
+8. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados; nenhuma publicação.
+9. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados.
+10. **ADMIN-B2B** — não iniciado; Storage separado.
+11. **ADMIN-B3** — não iniciado; única etapa autorizada a publicar Rules e executar reteste remoto sanitizado.
+12. **Demais fases administrativas** — seguir o roadmap e suas autorizações próprias.
 
 Nenhum bloco posterior foi iniciado por esta atualização de governança.
 
@@ -739,7 +754,7 @@ Nenhum bloco posterior foi iniciado por esta atualização de governança.
 - **ADMIN-B2A5-INVENTORY-PREP:** concluído somente por análise local; parecer **C**, progressão **C → B → A** e zero acesso remoto.
 - **ADMIN-B2A5-INVENTORY-TOOL-PREP:** concluído somente por análise local; parecer **A** e zero alteração funcional/remota.
 - **ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP:** concluído; baseline raiz recuperado e arquitetura isolada aprovada com parecer **A**.
-- **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC:** não iniciado; depende de autorização própria.
+- **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC:** concluído e classificado como **A. VALIDADO LOCALMENTE**; 102/102, regressão 87/87 e commit funcional `1102741201d4858b55a7145570568856f6859573` em `origin/main`.
 - **ADMIN-B2A5-INVENTORY-AUTH-PREP/EXEC:** não iniciados; dependem de autorizações próprias.
 - **ADMIN-B2A5-INVENTORY-EXEC/GOVERNANCE:** não iniciados; dependem da ferramenta e do IAM aprovados.
 - **ADMIN-B2A5-MIGRATION-PREP/EXEC:** não iniciados; condicionais ao inventário e dependentes de autorizações próprias.
@@ -921,19 +936,20 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 12. **ADMIN-B2A5-INVENTORY-PREP** — concluído somente por análise local; parecer **C** e progressão **C → B → A**.
 13. **ADMIN-B2A5-INVENTORY-TOOL-PREP** — concluído somente por análise local; parecer **A** histórico.
 14. **ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP** — concluído; raiz recuperada e pacote isolado aprovado.
-15. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATION-PREP-GOVERNANCE** — atualização documental atual; revisão/commit/push separados.
-16. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC** — não iniciado e dependente de autorização própria.
-17. **ADMIN-B2A5-INVENTORY-AUTH-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
-18. **ADMIN-B2A5-INVENTORY-EXEC/GOVERNANCE** — não iniciados; somente após ferramenta e IAM aprovados.
-19. **ADMIN-B2A5-MIGRATION-PREP/EXEC** — não iniciados; executar somente se o inventário comprovar necessidade e com autorizações próprias.
-20. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados e dependentes de autorizações próprias; nenhuma publicação.
-21. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
-22. **ADMIN-B2B** — Storage separado; não iniciado e dependente de autorização própria.
-23. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
-24. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
-25. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
-26. **CMS-5D / integração CMS → site público** — fora da frente atual.
-27. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
+15. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATION-PREP-GOVERNANCE** — concluído e versionado no commit `d6fe820fad692e64553961a1d8ea061429d41cfd`.
+16. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC** — concluído, validado localmente e publicado no Git no commit `1102741201d4858b55a7145570568856f6859573`.
+17. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC-GOVERNANCE** — atualização documental atual; revisão/commit/push separados.
+18. **ADMIN-B2A5-INVENTORY-AUTH-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
+19. **ADMIN-B2A5-INVENTORY-EXEC/GOVERNANCE** — não iniciados; somente após ferramenta e IAM aprovados.
+20. **ADMIN-B2A5-MIGRATION-PREP/EXEC** — não iniciados; executar somente se o inventário comprovar necessidade e com autorizações próprias.
+21. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados e dependentes de autorizações próprias; nenhuma publicação.
+22. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados e dependentes de autorizações próprias.
+23. **ADMIN-B2B** — Storage separado; não iniciado e dependente de autorização própria.
+24. **ADMIN-B3** — revisão final e única etapa autorizada a publicar Rules; não iniciado.
+25. **ADMIN-C a ADMIN-J** — seguir o roadmap administrativo e suas autorizações.
+26. **Site público e backlog anterior** — pausados, sem perda das pendências já registradas.
+27. **CMS-5D / integração CMS → site público** — fora da frente atual.
+28. **CMS-4E-EXEC** — não concluído; executar somente no momento previsto pelo ADMIN-G e com autorização própria.
 
 ---
 
@@ -1031,7 +1047,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Contexto:** frente retomada oficialmente em 2026-07-20 pelo `ADMIN-RESTART-PREP`; o detalhamento atual está no início deste arquivo.
 
-**Regra:** executar somente o bloco autorizado. `ADMIN-B2A5-PREP`, suas decisões humanas, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP` e o ROOT-RECOVERY-AND-ISOLATION-PREP estão concluídos; o parecer atual é **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**. O pacote isolado ainda não existe e o EXEC depende de autorização própria. Ferramenta, dependência, AUTH, inventário real, eventual migração, Firestore, runtime, `ADMIN-B2B` e `ADMIN-B3` não foram executados. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
+**Regra:** executar somente o bloco autorizado. `ADMIN-B2A5-PREP`, suas decisões humanas, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP`, o ROOT-RECOVERY-AND-ISOLATION-PREP e o ISOLATED-TOOL-EXEC estão concluídos. A ferramenta isolada foi classificada como **A. VALIDADO LOCALMENTE** e publicada no Git no commit `1102741201d4858b55a7145570568856f6859573`. `ADMIN-B2A5-INVENTORY-AUTH-PREP` é o próximo bloco possível e permanece não iniciado; autenticação, inventário real, eventual migração, Firestore, runtime, `ADMIN-B2B` e `ADMIN-B3` não foram executados. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
 
 ### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
 
@@ -1116,10 +1132,13 @@ PREP concluído e aprovado exclusivamente como análise somente de leitura, com 
 Implementação local concluída em `firestore.rules` e `tests/firestore.rules.test.mjs`, com classificação **A. VALIDADO FUNCIONALMENTE**. O projeto demo `demo-turismo-sms-rules-test` executou 87 testes em 5 suítes, com 87 pass, zero fail/skipped/cancelled/todo e coverage local HTTP 200. O commit funcional `13245dcf6dcc2e5704ee3d019ed3c05233a057b3` (`fix: restringir media_library a administradores`) foi enviado para `origin/main`, com `HEAD`, `main` e `origin/main` alinhados. A Rule está versionada, mas não publicada; produção permanece com o último ruleset publicado até o `ADMIN-B3`.
 
 ### [CONCLUÍDA] ADMIN-B2A5-PREP — Contratos de `ativo` e `moderator`
-PREP concluído exclusivamente por leitura, com parecer original **B. Pronto com decisão humana pendente**, zero alteração funcional, acesso remoto, Emulator ou publicação. As decisões humanas posteriores definiram `ativo == true` fail-closed, desativação administrativa/equipe sem bloqueio automático do Portal e `moderator` sem função institucional ativa. O EXEC monolítico foi classificado como **C** e decomposto; todos os blocos posteriores permanecem não iniciados e dependentes de autorização própria.
+PREP concluído exclusivamente por leitura, com parecer original **B. Pronto com decisão humana pendente**, zero alteração funcional, acesso remoto, Emulator ou publicação. As decisões humanas posteriores definiram `ativo == true` fail-closed, desativação administrativa/equipe sem bloqueio automático do Portal e `moderator` sem função institucional ativa. O EXEC monolítico foi classificado como **C** e decomposto; naquele checkpoint, todos os blocos posteriores ainda dependiam de autorização própria.
 
 ### [CONCLUÍDA] ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP
-Baseline npm raiz recuperado e validado no commit-base `6b7923f2c551d7489ed3fbb960139f39e8e6ac67`, com Firestore e overrides ausentes da raiz. A instalação integrada foi abandonada após `ELSPROBLEMS` e falha do override restrito; o pacote independente `tools/admin-b2a5-inventory/` foi aprovado com quatro arquivos, dependency exata `@google-cloud/firestore@8.7.0`, lockfile próprio, padrão `npm --prefix`, 102 testes, 84 fixtures, regressão 87/87, zero escrita e rollback explícito. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**; o EXEC permanece não iniciado.
+Baseline npm raiz recuperado e validado no commit-base `6b7923f2c551d7489ed3fbb960139f39e8e6ac67`, com Firestore e overrides ausentes da raiz. A instalação integrada foi abandonada após `ELSPROBLEMS` e falha do override restrito; o pacote independente `tools/admin-b2a5-inventory/` foi aprovado com quatro arquivos, dependency exata `@google-cloud/firestore@8.7.0`, lockfile próprio, padrão `npm --prefix`, 102 testes, 84 fixtures, regressão 87/87, zero escrita e rollback explícito. Parecer histórico **A. Pronto para ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC**; o EXEC foi posteriormente concluído no commit `1102741`.
+
+### [CONCLUÍDA] ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC
+Ferramenta isolada criada em quatro arquivos, validada localmente em 102/102, com 84 fixtures sintéticas, regressão das Rules em 87/87 e contrato estritamente read-only/sanitizado. Commit funcional `1102741201d4858b55a7145570568856f6859573` enviado para `origin/main`, com exatamente 3.535 inserções e alinhamento final `0 0`. Modo remoto, AUTH/IAM, inventário real, migração e publicação não foram executados. Próximo bloco possível: `ADMIN-B2A5-INVENTORY-AUTH-PREP`, não iniciado.
 
 ### [CONCLUÍDA] B1 — Cache-busting público pós-auditoria
 Token `?v=site-public-b1-20260708` padronizado em referências públicas de JS/CSS/dados e strings de carregadores dinâmicos. Bloco commitado e enviado manualmente em 2026-07-08. Nenhum Admin/CMS/Firebase tocado.

@@ -6,6 +6,67 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-30 — Conclusão funcional da ferramenta isolada de inventário ADMIN-B2A5
+
+**Ferramenta/modelo:** Codex
+
+**Status:** `ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` concluído e classificado como **A. VALIDADO LOCALMENTE**; implementação, validação, commit funcional e push registrados. `ADMIN-B2A5-INVENTORY-AUTH-PREP` permanece como próximo bloco possível e não iniciado.
+
+### Pacote isolado, integridade e reprodutibilidade
+
+- A arquitetura aprovada no commit documental `d6fe820fad692e64553961a1d8ea061429d41cfd` foi implementada em `tools/admin-b2a5-inventory/`, pacote Node independente, sem workspace e sem alteração dos manifests raiz.
+- Foram criados exatamente quatro arquivos: `package.json`, `package-lock.json`, `admin-b2a5-inventory.mjs` e `admin-b2a5-inventory.test.mjs`. O `node_modules/` próprio permanece ignorado e fora do Git; nenhum quinto arquivo funcional foi criado.
+- O package é privado, ESM, requer Node `>=18`, contém quatro scripts locais e fixa `@google-cloud/firestore@8.7.0`. Não contém workspace, override, dependência direta de `picomatch`, script remoto ou `firebase-tools`.
+- O lockfile próprio usa `lockfileVersion 3`. Instalação e execução seguem `npm --prefix`; a árvore isolada não contém a cadeia `firebase-tools`/`tinyglobby`/`fdir`/`picomatch`, e a resolução de Firestore foi comprovada dentro de `tools/admin-b2a5-inventory/node_modules/`.
+- A instalação isolada concluiu com 122 pacotes. `npm ls` passou sem `invalid`, `missing` ou `ELSPROBLEMS`; `npm ci` isolado passou, e `package.json`/`package-lock.json` permaneceram byte a byte estáveis antes e depois.
+- SHA-256 aprovados: package `B05ACB53F4D5DD480E436A7A3BB1C71C78E456959B9DC39AC84285C9A744B9EF`; lock `EAC09322DE633EAA33AD901F18C6D4F2FD31355E6D304F9A93EEE858B6DB3897`; módulo `A877FE4CA8266F8ED20B7106F8FE5C4633F686170902C980A496D682ED59EC13`; teste `45A91BFB2CA302D61D3CE018C2278D48201563C019AA275E13E47B99F60614AA`. Os manifests raiz permaneceram intactos e sem Firestore.
+
+### Arquitetura, gates e metadata
+
+- O módulo ESM possui 29 contratos exportados, pode ser importado sem executar `main`, protege o entry point e carrega `@google-cloud/firestore` por import dinâmico.
+- A CLI é restrita: database fixa `(default)`, coleção fixa `usuarios`, `max-docs` obrigatório e sem quantidade institucional como default. Fingerprints, gates de alvo e modo Emulator explícito impedem descoberta implícita; não há `projectId` remoto em texto claro, credencial ou retry automático.
+- O modo remoto foi implementado somente nos gates e não foi executado, validado operacionalmente ou autorizado. Nenhuma autenticação, IAM, descoberta de projeto ou conexão remota ocorreu.
+- Uma primeira execução integral produziu `MetadataLookupWarning` pela detecção automática da biblioteca Google, sem autenticação ou acesso a dados. O módulo foi endurecido para definir `METADATA_SERVER_DETECTION=none` somente no modo Emulator; as execuções integrais finais ocorreram sem o aviso.
+
+### Contrato read-only, classificações e saída
+
+- O adaptador expõe somente `countDocuments()` e `scanProjected(maxDocuments)`. As operações Firestore permitidas são `collection("usuarios").count().get()` e uma única consulta `collection("usuarios").select("ativo", "role").limit(maxDocuments + 1).get()`.
+- O módulo de produção não contém `set`, `create`, `add`, `update`, `delete`, `batch`, `bulkWriter`, transaction, `recursiveDelete`, import ou export. A busca estática encontrou somente os falsos positivos locais aprovados `seen.add(token)` e `createHash(...).update(...)`.
+- Também não há `doc.id`, `doc.ref`, `doc.path`, `Object.keys` para explorar documentos, `console.log`, `console.error`, `error.message` ou `error.stack`.
+- Ativo possui 12 categorias: `booleanTrue`, `booleanFalse`, `absent`, `null`, `string`, `number`, `array`, `map`, `timestamp`, `reference`, `geopoint` e `other`. Role possui sete: `admin`, `moderator`, `user`, `otherString`, `absent`, `null` e `nonString`.
+- A matriz cruza `admin`, `moderator`, `user` e `invalidOrAbsent` com as 12 categorias de ativo. As métricas são `administrativeProfilesRequiringEvaluation`, `invalidTypeDocuments` e `dataQualityDocumentsRequiringReview`.
+- A agregação deduplica por flags temporárias, não armazena IDs nem Set de IDs e não preserva strings desconhecidas. As invariantes validam somas, linhas da matriz, inteiros não negativos, categorias conhecidas, nenhum documento perdido e classificação derivada de uma única consulta projetada.
+- A saída é JSON compacto de uma linha, determinístico e protegido por allowlist estrutural; `stdout` somente no sucesso e `stderr` somente no erro. Erros são emitidos apenas por categoria, com exit codes `0` e `2`–`12`, sem stack, mensagem bruta, ID, UID, path, valor real, projeto real, token, URL, persistência ou resumo parcial em falha.
+- Testes de sanitização negaram output contendo `projectId`, `/documents/`, `projects/`, `usuarios/`, `Bearer` ou `Authorization`.
+
+### Testes, fixtures e Emulator
+
+- A suíte possui 102 testes: 16 de ativo, 10 de role, 25 de CLI/alvo/fingerprint/gates, 10 de agregação/métricas, 13 de invariantes, 10 de saída/sanitização/erros, 8 de adaptador/orquestração fake e 10 de integração Emulator.
+- Resultado integral: 102 tests, 102 pass, zero fail, skipped, cancelled ou todo. Há 92 casos não Emulator e dez nomes iniciados por `EMULATOR:`; no subconjunto unitário, os casos Emulator aparecem como skipped pelo filtro do Node, enquanto o gate integral dentro do Emulator teve zero skipped. Nenhum teste foi removido para ocultar skips.
+- As 84 fixtures sintéticas cobrem uma combinação por célula do cartesiano de sete roles por 12 ativos, sem dados de produção. Totais: 84 documentos; cada role 12; cada ativo 7; admin 12; moderator 12; user 12; `invalidOrAbsent` 48; admin e moderator true/not true em `1/11`; métricas finais `71`, `60` e `78`.
+- Buffer/bytes foi validado pela categoria `other` no round-trip final do Emulator.
+- O gate utilizou somente Firestore Emulator, projeto `demo-turismo-sms-rules-test`, `FIRESTORE_EMULATOR_HOST` local, nenhuma credencial ou conexão remota, encerramento automático e portas 8080/4000 sem listeners finais. Nenhum processo foi encerrado manualmente.
+- `firestore-debug.log` foi gerado localmente com 939 bytes nas execuções da ferramenta, removido após cada execução e confirmado ausente ao final.
+
+### Regressão, commit e push
+
+- A regressão raiz `npm run test:rules` passou em cinco suítes: 87 tests, 87 pass, zero fail/skipped/cancelled/todo e coverage local HTTP 200. O Emulator encerrou; o `firestore-debug.log` de 84.209 bytes foi removido e ficou ausente.
+- Nenhuma Firestore Rule, teste existente de Rules ou Storage Rule foi alterado. Nenhuma Rule foi publicada.
+- Após revisão integral, hashes aprovados e staging nominal dos quatro paths, foi criado exatamente um commit funcional: `1102741201d4858b55a7145570568856f6859573` (`1102741`), mensagem `feat: adicionar ferramenta isolada de inventário do ADMIN-B2A5`.
+- O commit contém exclusivamente os quatro artefatos isolados, com 3.535 inserções: módulo 902, teste 1.238, lockfile 1.377 e package 18. `.claude/settings.local.json` permaneceu fora do staging.
+- Push concluído: `d6fe820..1102741 main -> main`. `HEAD`, `main`, `origin/main` e `origin/HEAD` ficaram alinhados, com divergência `0 0`.
+
+### Supply chain, limites e próximos gates
+
+- Avisos não bloqueantes: `node-domexception@1.0.0` e `glob@10.5.0` foram reportados como deprecated. `npm audit` estava proibido e não foi executado; nenhuma vulnerabilidade é inferida somente dos avisos, nenhuma atualização automática foi feita e eventual análise de supply chain exige bloco próprio.
+- A ferramenta foi criada e validada localmente, mas não foi executada contra dados reais. O modo remoto não foi executado; autenticação e IAM não foram configurados; o valor institucional de `max-docs` não foi definido; inventário e migração não começaram.
+- Rules não foram publicadas; Storage, runtime, metadata, hotfix visual, data/hora pública e produção não foram alterados pela ferramenta.
+- Próximo bloco possível: `ADMIN-B2A5-INVENTORY-AUTH-PREP`, **não iniciado**, para planejar identidade temporária estritamente read-only, IAM mínimo, impedimento de escrita e acesso excedente, autenticação temporária, expiração/revogação, logs sanitizados e rollback, ainda sem inventário.
+- Ordem futura preservada: revisão e commit/push documental desta governança → AUTH-PREP → AUTH-EXEC → INVENTORY-EXEC → INVENTORY-GOVERNANCE → MIGRATION-PREP somente se necessária → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Nesta governança não houve npm, teste, Emulator, autenticação, Firebase/Google Cloud remoto, inventário, migração, deploy, publicação, staging, commit ou push; nenhum bloco posterior foi iniciado.
+
+---
+
 ## 2026-07-30 — Governança da recuperação npm raiz e do isolamento da ferramenta ADMIN-B2A5
 
 **Ferramenta/modelo:** Codex
