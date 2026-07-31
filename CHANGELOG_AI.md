@@ -6,6 +6,55 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-31 — Ajuste de sequência do ADMIN-B2A5-INVENTORY-AUTH
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-SEQUENCING-ADJUSTMENT` concluído exclusivamente como análise de segurança e atualização documental, a partir do commit-base `95c13039712d8794e80a446144a9873f60f455b4` (`docs: registrar decisões de autenticação do ADMIN-B2A5`). Parecer: **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP**. O parecer **A** do AUTH-PREP permanece correto para a arquitetura então planejada, mas foi superado quanto à sequência operacional.
+
+### Defeito de sequência identificado
+
+- A ordem registrada era, em essência, `AUTH-EXEC` → governança do AUTH-EXEC → `INVENTORY-EXEC` → `AUTH-REVOKE`. O `AUTH-EXEC` planejado criaria, de uma só vez, binding Firestore válida por 2 horas, binding de Token Creator e ADC temporário.
+- A revisão humana e o commit documental posicionados entre `AUTH-EXEC` e `INVENTORY-EXEC` poderiam consumir parte relevante da janela, deixá-la expirar, manter permissões temporárias ativas enquanto nenhuma operação é executada, incentivar aumento posterior da duração e criar pressão para pular gates humanos.
+- Princípio adotado: **a governança documental não deve manter uma binding ativa aguardando commit.**
+- Alternativas rejeitadas: aumentar a janela; remover a revisão humana; deixar acesso ativo indefinidamente; criar binding sem expiração; executar o inventário silenciosamente dentro do `AUTH-EXEC`.
+
+### Base técnica da separação
+
+- A documentação oficial determina conceder papéis **depois** de criar a conta de serviço, para que ela possa agir; a concessão é etapa separada e explícita.
+- Uma conta de serviço sem nenhuma binding não possui acesso, e um custom role que existe mas não está vinculado a nenhum principal não concede permissão alguma.
+- Portanto o provisionamento de identidade é comprovadamente livre de acesso e pode ser revisado, registrado e commitado sem nenhuma janela correndo. Não há impedimento técnico à separação entre provisionamento e ativação, o que afasta a classificação C.
+
+### Decomposição adotada
+
+- **PROVISION-PREP:** planeja custom role, conta de serviço, verificação da Service Account Credentials API, ausência de chaves, ausência de papéis herdados inesperados e rollback; nenhum acesso a Firestore.
+- **PROVISION-EXEC:** cria somente o custom role mínimo e a conta de serviço dedicada; não cria binding Firestore, binding de Token Creator, ADC, token ou acesso a dados.
+- **PROVISION-GOVERNANCE:** registra e commita a infraestrutura sem acesso, com a janela ainda não iniciada.
+- **ACTIVATION-PREP:** define a janela UTC real de 2 horas e o operador em memória; confirma sintaxe da condição, estado da API, isolamento do ADC, comandos exatos, rollback e a sequência imediatamente posterior. Só começa quando `INVENTORY-EXEC` e `AUTH-REVOKE` estiverem prontos para execução imediata.
+- **ACTIVATION-EXEC:** no início da janela, cria a binding Firestore condicionada ao database e ao tempo, a binding de Token Creator condicionada ao tempo no recurso da conta, o ADC isolado por impersonação e as verificações negativas sem leitura de documentos.
+- **INVENTORY-EXEC:** imediatamente após a ativação, dentro da mesma janela operacional, permanecendo bloco separado com autorização própria.
+- **AUTH-REVOKE:** imediatamente após o inventário e independentemente do resultado — revogar ADC, remover arquivo temporário, limpar variáveis, remover a binding de Token Creator, remover a binding Firestore, desabilitar a conta e comprovar ausência de acesso residual.
+- **Governança:** provisionamento, ativação, inventário e revogação passam a ser registrados separadamente.
+
+### Condição temporal com intervalo
+
+- Condição lógica planejada: `resource.name == "projects/PROJECT_PLACEHOLDER/databases/(default)" && request.time >= timestamp("START_UTC") && request.time < timestamp("END_UTC")`.
+- O limite superior isolado já estava confirmado verbatim para bindings Firestore. A documentação oficial também registra intervalo com início e fim, no padrão `request.time > timestamp(...) && request.time < timestamp(...)`, e que `request.time` pode ser comparado a outro timestamp.
+- O operador exato do limite inferior — `>` no exemplo oficial contra `>=` planejado — deverá ser confirmado no ACTIVATION-PREP, sem inventar sintaxe. `START_UTC` e `END_UTC` serão definidos somente ali, separados por 2 horas, sempre em UTC e nunca inventados; nenhum projectId real será persistido.
+- Para o Token Creator, avaliar condição temporal equivalente apenas com `request.time`, no recurso da conta de serviço. `resource.type` continua proibido sem confirmação oficial.
+- O limite inferior é **defesa adicional, não requisito da arquitetura**: a correção de sequência é o que torna a janela segura, porque a ativação passa a ocorrer no início da janela por construção. Se o limite inferior não se confirmar, a arquitetura permanece válida apenas com o limite superior aprovado.
+
+### Gates, falhas e preservações
+
+- O PROVISION-EXEC pode ser revisado sem acesso a dados. O ACTIVATION-EXEC só começa com `INVENTORY-EXEC` e `AUTH-REVOKE` prontos para execução imediata. Se o inventário não puder começar, executar `AUTH-REVOKE` sem aguardar. Qualquer falha após a ativação aciona revogação.
+- A expiração continua sendo defesa adicional, nunca rollback. Nenhuma etapa aumentará automaticamente as 2 horas e nenhum bloco deixará ADC ou binding ativa para “continuar depois”.
+- Nenhuma decisão humana foi reaberta: risco database-wide aceito com os sete controles conjuntos, `adminB2A5InventoryRead` com exclusivamente `datastore.entities.get` e `datastore.entities.list`, `roles/datastore.viewer` descartado, `admin-b2a5-inventory-reader`, nenhuma chave JSON, Token Creator somente na conta específica, token de aproximadamente 1 hora, janela de 2 horas, `--max-docs 10000`, Data Access audit logs mantidos como estão, conta desabilitada e preservada 7 dias, exclusão somente com nova autorização, `AUTH-REVOKE` obrigatório, condição pelo database `(default)`, ferramenta auditada read-only e coleção/campos impostos pelo código. Nenhuma permissão ampliada e nenhuma extensão de janela.
+- Benefício operacional registrado: como a conta desabilitada e o custom role sobrevivem 7 dias após o `AUTH-REVOKE`, uma repetição autorizada do inventário exigirá apenas nova ACTIVATION, não novo PROVISION.
+- Ordem futura vigente: `AUTH-PROVISION-PREP` → `AUTH-PROVISION-EXEC` → `AUTH-PROVISION-GOVERNANCE` → `AUTH-ACTIVATION-PREP` → `AUTH-ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE` → governança separada de cada etapa → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso a Google Cloud ou Firebase, conta de serviço, custom role, binding, ADC, token, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit, push ou início de qualquer EXEC.
+
+---
+
 ## 2026-07-31 — Conclusão do ADMIN-B2A5-INVENTORY-AUTH-PREP
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
@@ -82,7 +131,7 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 - **7. Ciclo de vida da conta:** após o inventário, revogar o ADC temporário, remover o arquivo ADC, limpar as variáveis do processo, remover a binding de Token Creator, remover a binding do custom role, desabilitar imediatamente a conta de serviço e preservá-la desabilitada por 7 dias para conferência; exclusão apenas depois e mediante autorização humana específica. Nenhuma chave JSON será criada.
 - **Ajuste da condição IAM:** nenhum literal de `resource.type` será fixado sem confirmação oficial. Condição-base planejada: `resource.name == "projects/PROJECT_PLACEHOLDER/databases/(default)" && request.time < timestamp("EXPIRATION_UTC")`. No AUTH-EXEC: confirmar a sintaxe final, confirmar se `resource.type` é necessário ou útil, não inventar o literal e parar em caso de incompatibilidade.
 - **Quatro gates remanescentes, todos com parada explícita e nenhum bloqueante para iniciar:** sintaxe/necessidade de `resource.type`; isolamento real do ADC via `CLOUDSDK_CONFIG`, classificado **B** e com parada antes do login se o ADC padrão puder ser sobrescrito; estado de `iamcredentials.googleapis.com`, a verificar sem habilitar; e condição temporal na binding de Token Creator, cuja eventual indisponibilidade não quebra a segurança porque a binding de leitura de dados permanece condicionada ao database e expira em 2 horas.
-- Ordem futura: revisão humana deste AUTH-PREP → commit documental separado → AUTH-EXEC → governança do AUTH-EXEC → INVENTORY-EXEC → AUTH-REVOKE → comprovação de ausência de acesso residual → INVENTORY-GOVERNANCE → MIGRATION-PREP somente se necessário → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3.
+- Ordem futura registrada neste bloco: revisão humana deste AUTH-PREP → commit documental separado → AUTH-EXEC → governança do AUTH-EXEC → INVENTORY-EXEC → AUTH-REVOKE → comprovação de ausência de acesso residual → INVENTORY-GOVERNANCE → MIGRATION-PREP somente se necessário → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3. **Esta ordem foi posteriormente superada pelo `ADMIN-B2A5-INVENTORY-AUTH-SEQUENCING-ADJUSTMENT`, que separou o AUTH-EXEC em PROVISION e ACTIVATION; ver a entrada do ajuste de sequência.**
 - Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, login, credencial, chave, conta de serviço, papel, binding, política, API habilitada, Firebase/Google Cloud remoto, consulta a dados, execução da ferramenta, inventário, migração, alteração de runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
 
 ---
