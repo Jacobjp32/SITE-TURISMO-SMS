@@ -6,6 +6,87 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-07-31 — Conclusão do ADMIN-B2A5-INVENTORY-AUTH-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PREP` concluído exclusivamente como análise técnica, pesquisa em documentação oficial e atualização documental, a partir do commit-base `0335ce741ef56ab1c20800519f8b18b00e94ba60`. Parecer intermediário: **B. Pronto com decisões humanas pendentes**. As sete decisões humanas foram recebidas na mesma data e incorporadas, elevando o parecer final a **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-EXEC** — ver a seção *Decisões humanas recebidas e parecer final* ao fim desta entrada. `ADMIN-B2A5-INVENTORY-AUTH-EXEC` passa a ser o próximo bloco e permanece não iniciado.
+
+### Pesquisa oficial consultada
+
+- *Security for server client libraries* e *Identity and Access Management (IAM)* — Firestore in Native mode, Google Cloud Documentation, consultadas em 2026-07-31.
+- *Firestore audit logging information* — Firestore in Native mode, Google Cloud Documentation.
+- *Identity and Access Management (IAM)* — Datastore, Google Cloud Documentation, para a lista de permissões `datastore.*` e do papel Viewer.
+- *Firestore roles and permissions* — IAM, Google Cloud Documentation.
+- *Resource attributes for IAM Conditions*, *Configure resource-based access*, *Overview of IAM Conditions* e *Manage conditional role bindings* — IAM, Google Cloud Documentation.
+- *Creating and managing custom roles* e *Access change propagation* — IAM, Google Cloud Documentation.
+- *Service account impersonation*, *Create short-lived credentials for a service account* e *Best practices for using service accounts* — IAM, Google Cloud Documentation.
+- *Application Default Credentials*, *Set up ADC for a local development environment* e *gcloud CLI configurations* — Autenticação e Google Cloud SDK, Google Cloud Documentation.
+- *Configure Data Access audit logs* — Cloud Logging, Google Cloud Documentation.
+- *Test permissions for custom user interfaces* — IAM, Google Cloud Documentation.
+- Nenhum blog, fórum, Stack Overflow, Reddit, tutorial de terceiros ou snippet não oficial foi usado. URLs brutas não foram inseridas nesta governança.
+
+### Fato de segurança central e permissões mínimas
+
+- Confirmado que `@google-cloud/firestore` é biblioteca de servidor, autorizada por IAM e não por Firestore Security Rules. As Rules locais e publicadas não restringirão a ferramenta, o App Check não será barreira de autorização nesta execução e o perímetro remoto efetivo é a identidade IAM. Nenhuma permissão de escrita poderá ser concedida.
+- Confirmado que `RunQuery` e `RunAggregationQuery` exigem exatamente `datastore.entities.get` e `datastore.entities.list`, ambas do tipo `DATA_READ`. O contrato candidato mínimo foi validado sem necessidade documental de permissão adicional para inicialização ou execução; `datastore.databases.get` cobre início/rollback de transação e commit vazio e não é requerida pela ferramenta.
+- Registrado que o AUTH-EXEC deverá testar primeiro somente get/list, que qualquer `PERMISSION_DENIED` interromperá o bloco e que o papel não será ampliado automaticamente. A ferramenta já traduz gRPC `7`/`16` em `auth-denied` com exit code `5`, sem dado e sem resumo parcial.
+
+### Papel predefinido versus custom role
+
+- `roles/datastore.viewer` contém 15 permissões: `appengine.applications.get`, `datastore.databases.get`, `datastore.databases.getMetadata`, `datastore.databases.list`, `datastore.entities.get`, `datastore.entities.list`, `datastore.schemas.get`, `datastore.schemas.list`, `datastore.namespaces.get`, `datastore.namespaces.list`, `datastore.statistics.get`, `datastore.statistics.list`, `resourcemanager.projects.get`, `resourcemanager.projects.list` e `datastore.insights.get`. Treze são excedentes para esta ferramenta.
+- Recomendado custom role com exclusivamente `datastore.entities.get` e `datastore.entities.list`, role ID sanitizado provisório `adminB2A5InventoryRead`, mantendo `roles/datastore.viewer` apenas como fallback dependente de decisão humana explícita. Nenhum papel foi criado nesta sessão.
+
+### Escopo IAM, condições e risco residual
+
+- Confirmado que o IAM do Firestore opera em nível de projeto e de database e que condições baseadas em recurso com `resource.name` são oficialmente suportadas, no formato `projects/PROJECT_PLACEHOLDER/databases/(default)`. Sem condição, o principal alcança todos os databases do projeto.
+- Confirmado que **não existe suporte oficial a restrição IAM por coleção, por documento ou por campo**. A projeção `select("ativo", "role")` não é barreira IAM; coleção e campos serão impostos apenas pelo código auditado da ferramenta. Risco residual registrado sem minimização: uma identidade comprometida poderia tentar outras leituras dentro do database durante a vigência da permissão.
+- O modelo temporal oficial confirmado é `request.time < timestamp('AAAA-MM-DDTHH:MM:SS.sssZ')`. O literal exato de `resource.type` do database **não foi confirmado verbatim**: a orientação do Firestore cita o serviço `firestore.googleapis.com`, enquanto a forma canônica de IAM é `serviço/Tipo`. O AUTH-EXEC deverá confirmar o token no editor de condições/CLI antes de gravar a binding. Nenhum projectId real foi registrado.
+- Registrada a possibilidade de o Console não refletir corretamente a experiência condicionada por database, enquanto APIs e bibliotecas cliente aplicam a condição.
+
+### Expiração, propagação e identidade
+
+- Dois limites independentes: token de impersonação com máximo padrão de 1 hora (3.600 s), extensível a 12 horas somente por política de organização, e binding condicional com expiração própria por `request.time`.
+- Propagação de IAM é eventualmente consistente, tipicamente 2 minutos e potencialmente 7 minutos ou mais, exigindo margem antes de testar e proibindo tratar expiração como substituto de rollback.
+- Identidade dedicada de propósito único `admin-b2a5-inventory-reader`, sem chave, senha, login interativo ou papéis herdados, e sem Editor, Owner, Firebase Admin, `roles/datastore.user`, Storage, Auth, Logging, alteração de IAM ou criação de tokens para terceiros. A prática oficial recomendada é desabilitar quando não for mais necessária e excluir somente após um período, para não perder bindings inadvertidamente.
+- Impersonação sem chave JSON, com `roles/iam.serviceAccountTokenCreator` concedido somente no recurso da própria conta de serviço, nunca no projeto ou pasta, porque a concessão ampla permitiria representar qualquer conta de serviço do projeto. Impersonar com credenciais de usuário preserva no log o principal que agiu. A aplicação de condição temporal a essa binding específica ficou como pendência de verificação do AUTH-EXEC, sem afirmação de suporte.
+- A impersonação depende de `iamcredentials.googleapis.com`. O AUTH-EXEC deverá verificar se já está habilitada e, se não estiver, parar e pedir autorização específica; habilitar API é alteração remota de projeto e não equivale a permissão concedida.
+
+### ADC, isolamento e variáveis
+
+- Ordem de descoberta oficial do ADC: `GOOGLE_APPLICATION_CREDENTIALS`, depois o arquivo criado por `gcloud auth application-default login`, depois a conta de serviço anexada via metadata server. No Windows o arquivo padrão é `%APPDATA%\gcloud\application_default_credentials.json`; a revogação é `gcloud auth application-default revoke`. Nada foi executado.
+- Isolamento classificado como **B. provável, mas requer teste controlado no AUTH-EXEC**: a documentação confirma que `CLOUDSDK_CONFIG` altera o diretório de configuração do gcloud, cujo padrão no Windows é `%APPDATA%\gcloud`, e que o arquivo ADC reside nesse diretório, mas não há afirmação oficial única de que a variável relocalize o próprio ADC.
+- Se o ADC padrão do usuário puder ser sobrescrito, o AUTH-EXEC deverá parar antes do login e exigir decisão humana, sem ler o conteúdo do ADC e sem copiar segredo para o repositório.
+- Variáveis somente no processo: `ADMIN_B2A5_PROJECT_ID`, mais `CLOUDSDK_CONFIG` e `GOOGLE_APPLICATION_CREDENTIALS` apenas se a arquitetura aprovada exigir; nenhuma `FIRESTORE_EMULATOR_HOST` no modo remoto e nenhuma variável persistente de sistema. O projectId permanecerá só em memória, validado por fingerprint, sem impressão nem persistência.
+
+### Auditoria e prova de ausência de escrita
+
+- A rastreabilidade normal de IAM/impersonação cobre operador, identidade representada, horário, concessão, uso e revogação, sem identidades reais no repositório.
+- Data Access audit logs estão desabilitados por padrão, podem gerar volume e custo, exigem `setIamPolicy` para alterar e `getIamPolicy` para inspecionar, podem ser herdados de organização/pasta com configuração resultante em união, e sua leitura exige `roles/logging.privateLogViewer`. Habilitar DATA_READ do Firestore é decisão humana separada e bloco próprio; nada foi habilitado e a ferramenta não recebe acesso a Logs.
+- Prova de ausência de escrita sem escrever: sem tentativa real e sem documento de teste. A comprovação usará inspeção da definição do custom role e das bindings e, para bindings condicionais, o Policy Troubleshooter. `testIamPermissions` é oficialmente destinado a interfaces gráficas de terceiros, e a documentação orienta usar o Policy Troubleshooter para diagnosticar acesso, portanto vale apenas como verificação suplementar.
+
+### Decisões pendentes, ordem futura e limites
+
+- Sete decisões humanas submetidas à aprovação: aceitação do limite por database sem garantia de coleção/campos; aprovação do custom role mínimo em lugar de `roles/datastore.viewer`; principal humano autorizado a impersonar, sem e-mail no repositório; janela UTC de expiração das bindings; valor institucional de `--max-docs`; tratamento dos Data Access audit logs; e destino da conta de serviço após o inventário.
+- `AUTH-REVOKE` confirmado como bloco obrigatório separado, com rollback de ADC, variáveis, bindings de custom role e de Token Creator, desabilitação da conta, decisão posterior de exclusão, confirmação de ausência de chaves e tokens persistentes, remoção do diretório temporário e confirmação de configuração normal intacta e dados inalterados.
+
+### Decisões humanas recebidas e parecer final
+
+- As sete decisões foram recebidas e incorporadas em 2026-07-31, elevando o parecer a **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-EXEC**. O parecer A autoriza **iniciar** o AUTH-EXEC mediante autorização de execução própria; não pré-valida os gates de verificação remota.
+- **1. Escopo IAM:** aceito que o IAM limite temporariamente a identidade ao database `(default)` sem garantir tecnicamente acesso exclusivo à coleção `usuarios` ou somente aos campos `ativo`/`role`. Aceitação condicionada ao uso conjunto de conta de serviço exclusiva, custom role mínimo, condição pelo database, expiração temporal, token temporário, ferramenta auditada com coleção e campos fixos e revogação explícita; a ausência de qualquer controle invalida a aceitação. Permanece proibido declarar que `select("ativo", "role")` é barreira IAM.
+- **2. Papel:** aprovado o custom role mínimo com exclusivamente `datastore.entities.get` e `datastore.entities.list`, role ID lógico provisório `adminB2A5InventoryRead`. `roles/datastore.viewer` **não será utilizado** e deixa de ser fallback. Nenhuma permissão de criação, atualização, exclusão, IDs, importação, exportação, índices, operações, Storage, Auth, Logging, IAM ou administração. Papel não criado nesta sessão.
+- **3. Principal humano:** o operador será o principal já autorizado e responsável pelo projeto; o e-mail ou identificador real não será registrado no repositório nem nos documentos e será informado somente em memória no AUTH-EXEC. `roles/iam.serviceAccountTokenCreator` vinculado somente à conta de serviço específica, nunca no projeto inteiro.
+- **4. Janela temporal:** token de impersonação de aproximadamente 1 hora, dentro do máximo padrão de 3.600 s e sem extensão por política de organização; binding IAM com validade total de 2 horas; timestamps UTC reais definidos no AUTH-EXEC; margem para propagação; revogação explícita imediatamente após o inventário. A expiração não substitui o `AUTH-REVOKE`.
+- **5. `--max-docs`:** aprovado `--max-docs 10000` como **teto operacional de segurança**, explicitamente não como estimativa do total existente. Se count ou scan exceder 10.000: interromper, não emitir resumo parcial, não aumentar automaticamente e solicitar nova decisão humana.
+- **6. Data Access logs:** manter a configuração atual; não habilitar nem alterar Data Access audit logs neste fluxo. Ampliar auditoria de `DATA_READ` exigirá bloco específico e autorizado, com análise de custo, volume, herança e permissões.
+- **7. Ciclo de vida da conta:** após o inventário, revogar o ADC temporário, remover o arquivo ADC, limpar as variáveis do processo, remover a binding de Token Creator, remover a binding do custom role, desabilitar imediatamente a conta de serviço e preservá-la desabilitada por 7 dias para conferência; exclusão apenas depois e mediante autorização humana específica. Nenhuma chave JSON será criada.
+- **Ajuste da condição IAM:** nenhum literal de `resource.type` será fixado sem confirmação oficial. Condição-base planejada: `resource.name == "projects/PROJECT_PLACEHOLDER/databases/(default)" && request.time < timestamp("EXPIRATION_UTC")`. No AUTH-EXEC: confirmar a sintaxe final, confirmar se `resource.type` é necessário ou útil, não inventar o literal e parar em caso de incompatibilidade.
+- **Quatro gates remanescentes, todos com parada explícita e nenhum bloqueante para iniciar:** sintaxe/necessidade de `resource.type`; isolamento real do ADC via `CLOUDSDK_CONFIG`, classificado **B** e com parada antes do login se o ADC padrão puder ser sobrescrito; estado de `iamcredentials.googleapis.com`, a verificar sem habilitar; e condição temporal na binding de Token Creator, cuja eventual indisponibilidade não quebra a segurança porque a binding de leitura de dados permanece condicionada ao database e expira em 2 horas.
+- Ordem futura: revisão humana deste AUTH-PREP → commit documental separado → AUTH-EXEC → governança do AUTH-EXEC → INVENTORY-EXEC → AUTH-REVOKE → comprovação de ausência de acesso residual → INVENTORY-GOVERNANCE → MIGRATION-PREP somente se necessário → FIRESTORE-PREP/EXEC → RUNTIME-PREP/EXEC → ADMIN-B2B → ADMIN-B3.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, login, credencial, chave, conta de serviço, papel, binding, política, API habilitada, Firebase/Google Cloud remoto, consulta a dados, execução da ferramenta, inventário, migração, alteração de runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
 ## 2026-07-30 — Conclusão funcional da ferramenta isolada de inventário ADMIN-B2A5
 
 **Ferramenta/modelo:** Codex

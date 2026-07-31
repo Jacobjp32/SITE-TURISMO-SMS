@@ -13,7 +13,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Ferramenta adotada:** Codex. O Claude Fable não será usado nesta frente.
 
-**Status geral:** `ADMIN-B2A3-PREP/EXEC`, `ADMIN-B2A4-PREP/EXEC`, `ADMIN-B2A5-PREP`, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP` e `ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` concluídos. A ferramenta isolada foi classificada como **A. VALIDADO LOCALMENTE**, recebeu 102/102 testes, preservou a regressão das Rules em 87/87 e foi enviada para `origin/main` no commit `1102741201d4858b55a7145570568856f6859573`. O pacote npm raiz permanece intacto e sem Firestore. AUTH, acesso remoto, inventário real, migração e publicação não foram iniciados; produção permanece com o último ruleset publicado.
+**Status geral:** `ADMIN-B2A3-PREP/EXEC`, `ADMIN-B2A4-PREP/EXEC`, `ADMIN-B2A5-PREP`, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC` e `ADMIN-B2A5-INVENTORY-AUTH-PREP` concluídos. A ferramenta isolada foi classificada como **A. VALIDADO LOCALMENTE**, recebeu 102/102 testes, preservou a regressão das Rules em 87/87 e foi enviada para `origin/main` no commit `1102741201d4858b55a7145570568856f6859573`. O `ADMIN-B2A5-INVENTORY-AUTH-PREP` foi concluído em 2026-07-31 apenas como análise e pesquisa documental oficial; as sete decisões humanas foram recebidas na mesma data e o parecer final é **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-EXEC**. O pacote npm raiz permanece intacto e sem Firestore. Autenticação, IAM, acesso remoto, inventário real, migração e publicação não foram iniciados; produção permanece com o último ruleset publicado.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -23,12 +23,14 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A5-INVENTORY-AUTH-PREP` — próximo bloco possível da decomposição obrigatória.**
+**`ADMIN-B2A5-INVENTORY-AUTH-EXEC` — próximo bloco possível da decomposição obrigatória.**
 
-- Estado: **não iniciado**.
-- Natureza futura: planejar identidade temporária estritamente read-only, comprovar o menor escopo IAM, impedir escrita e acesso além do necessário, definir autenticação temporária, expiração/revogação, logs sanitizados e rollback.
-- Gate: exige autorização humana própria; esta governança não autentica, configura IAM, acessa dados, executa inventário, migração, Firestore, runtime, Storage ou publicação.
-- Sequência: revisão humana e commit/push documental próprios desta governança → `INVENTORY-AUTH-PREP` → `INVENTORY-AUTH-EXEC` → `INVENTORY-EXEC` → `INVENTORY-GOVERNANCE` → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
+- Estado: **não iniciado**. O AUTH-PREP recebeu parecer final **A** e as sete decisões humanas estão resolvidas; falta apenas a autorização de execução própria.
+- Natureza: criar a conta de serviço dedicada `admin-b2a5-inventory-reader`, o custom role `adminB2A5InventoryRead` com exclusivamente `datastore.entities.get` e `datastore.entities.list`, e as bindings condicionais aprovadas; configurar impersonação sem chave e ADC isolado; executar somente testes negativos que não leiam documentos.
+- Parâmetros aprovados: condição-base `resource.name == "projects/PROJECT_PLACEHOLDER/databases/(default)" && request.time < timestamp("EXPIRATION_UTC")`; token de aproximadamente 1 hora; binding com validade total de 2 horas; `--max-docs 10000` como teto de segurança; Data Access audit logs mantidos como estão; conta desabilitada e preservada por 7 dias após o inventário; nenhuma chave JSON.
+- Quatro gates de verificação com parada obrigatória: confirmar a sintaxe final da condição e se `resource.type` é necessário ou útil, sem inventar literal; comprovar de forma não destrutiva se `CLOUDSDK_CONFIG` relocaliza o arquivo ADC e parar antes do login se o ADC padrão puder ser sobrescrito; verificar se `iamcredentials.googleapis.com` já está habilitada e parar em vez de habilitá-la; verificar se a binding de Token Creator aceita condição temporal.
+- Gate: exige autorização humana própria; o AUTH-EXEC não executa inventário, migração, Firestore, runtime, Storage ou publicação.
+- Sequência: revisão humana e commit/push documental próprios desta governança → `INVENTORY-AUTH-EXEC` → governança do AUTH-EXEC → `INVENTORY-EXEC` → `INVENTORY-AUTH-REVOKE` → comprovação de ausência de acesso residual → `INVENTORY-GOVERNANCE` → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`.
 - Publicação: continua bloqueada e reservada exclusivamente ao `ADMIN-B3`.
 
 ## ADMIN-RESTART-PREP — checkpoint e retomada oficial
@@ -717,20 +719,41 @@ Motivos: diff funcional mínimo de uma linha; escrita intacta; Admin continua le
 - Supply chain: avisos deprecated para `node-domexception@1.0.0` e `glob@10.5.0`; `npm audit` proibido e não executado; nenhuma vulnerabilidade inferida. Análise futura exige bloco próprio.
 - Limites: modo remoto, autenticação, IAM, valor institucional de `max-docs`, inventário real e migração não foram executados; Rules não foram publicadas; Storage, runtime e produção não foram alterados.
 
+### ADMIN-B2A5-INVENTORY-AUTH-PREP — concluído
+
+- Status: concluído em 2026-07-31, no commit-base `0335ce741ef56ab1c20800519f8b18b00e94ba60`, exclusivamente como análise técnica, pesquisa em documentação oficial do Google Cloud/Firebase e atualização documental.
+- Parecer final: **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-EXEC**. As sete decisões humanas foram recebidas e incorporadas em 2026-07-31 e não restou bloqueio técnico; o parecer intermediário **B** permanece preservado como histórico. O parecer A autoriza iniciar o AUTH-EXEC mediante autorização de execução própria, mas não pré-valida os quatro gates de verificação remota.
+- Zero execução: nenhuma autenticação, login, credencial, chave, conta de serviço, papel IAM, binding, política, API habilitada, acesso a Firebase/Google Cloud real, consulta a dados, execução da ferramenta, inventário, migração, alteração de runtime, staging, commit, push, deploy ou publicação.
+- Fato central: `@google-cloud/firestore` é biblioteca de servidor e não é autorizada por Security Rules; o IAM é o perímetro remoto efetivo. As Rules locais e publicadas não restringirão a ferramenta e o App Check não será barreira de autorização nesta execução.
+- Permissões mínimas confirmadas: `RunQuery` e `RunAggregationQuery` exigem exatamente `datastore.entities.get` e `datastore.entities.list`, ambas `DATA_READ`. Nenhuma permissão adicional está documentada como necessária; `datastore.databases.get` cobre transações e não é requerida. O AUTH-EXEC testará apenas get/list e qualquer `PERMISSION_DENIED` interrompe o bloco, sem ampliação automática.
+- Custom role aprovado (decisão 2): `roles/datastore.viewer` traz 15 permissões, 13 delas excedentes (App Engine, listagem de databases, metadata, schemas, namespaces, statistics, insights, projetos e transações) e **não será utilizado**. O papel `adminB2A5InventoryRead` conterá apenas as duas permissões necessárias, sem criação, atualização, exclusão, IDs, importação, exportação, índices, operações, Storage, Auth, Logging, IAM ou administração.
+- Escopo IAM: projeto e database. Condição por `resource.name` no formato `projects/PROJECT_PLACEHOLDER/databases/(default)` é oficialmente suportada; **não há suporte oficial a restrição por coleção, documento ou campo**. Coleção `usuarios` e campos `ativo`/`role` serão impostos apenas pelo código auditado, e a projeção não é barreira IAM.
+- Risco residual aceito (decisão 1): acesso database-wide durante a vigência da binding, aceito somente pelo uso conjunto de conta exclusiva, custom role mínimo, condição pelo database, expiração temporal, token temporário, ferramenta auditada com coleção e campos fixos e revogação explícita. A ausência de qualquer controle invalida a aceitação.
+- Quatro gates de verificação do AUTH-EXEC, todos com parada: sintaxe final da condição e necessidade de `resource.type`, sem inventar literal; comprovação não destrutiva de que `CLOUDSDK_CONFIG` relocaliza o ADC (classificação **B**, provável), com parada antes do login se o ADC padrão puder ser sobrescrito; verificação prévia de `iamcredentials.googleapis.com` sem habilitá-la; e condição temporal na binding de Token Creator, cuja indisponibilidade não quebra a segurança porque a binding de leitura expira em 2 horas.
+- Tempo aprovado (decisão 4): token de aproximadamente 1 hora — máximo padrão de 3.600 s, sem extensão por política de organização — e binding com validade total de 2 horas, com timestamps UTC definidos no AUTH-EXEC. Propagação IAM é eventualmente consistente, tipicamente 2 minutos e potencialmente 7 minutos ou mais, absorvida com folga pela janela; expiração não substitui revogação explícita.
+- `--max-docs` aprovado (decisão 5): `10000` como teto operacional de segurança, não como estimativa do total. Exceder interrompe, sem resumo parcial, sem aumento automático e com nova decisão humana obrigatória.
+- Identidade e impersonação (decisão 3): conta dedicada de propósito único `admin-b2a5-inventory-reader`, sem chave, senha, login interativo ou papéis herdados; `roles/iam.serviceAccountTokenCreator` somente no recurso da própria conta de serviço, nunca no projeto inteiro. O operador será o principal humano já autorizado e responsável pelo projeto, com identificador real fora do repositório e informado somente em memória no AUTH-EXEC. ADC futuro por `gcloud auth application-default login --impersonate-service-account`, com revogação por `gcloud auth application-default revoke`; no Windows o arquivo padrão é `%APPDATA%\gcloud\application_default_credentials.json`.
+- Auditoria (decisão 6): a rastreabilidade normal de IAM/impersonação é suficiente para operador, identidade representada, horário, concessão, uso e revogação. Data Access audit logs ficam **como estão** e não serão habilitados ou alterados neste fluxo; estão desabilitados por padrão, geram volume e custo, dependem de `setIamPolicy`/`getIamPolicy`, podem ser herdados de organização/pasta e sua leitura exige `roles/logging.privateLogViewer`. Ampliar `DATA_READ` exige bloco específico e autorizado.
+- Prova de ausência de escrita: sem tentativa de escrita real e sem documento de teste. Comprovação por inspeção do custom role e das bindings, com Policy Troubleshooter para bindings condicionais; `testIamPermissions` é destinado a GUIs de terceiros e serve apenas como verificação suplementar.
+- Ciclo de vida aprovado (decisão 7): após o inventário, revogar o ADC temporário, remover o arquivo ADC, limpar variáveis do processo, remover a binding de Token Creator, remover a binding do custom role, desabilitar imediatamente a conta de serviço e preservá-la desabilitada por 7 dias para conferência; exclusão apenas depois e mediante autorização humana específica. Nenhuma chave JSON em nenhuma etapa.
+- `AUTH-REVOKE` confirmado como bloco obrigatório separado, com rollback completo de ADC, variáveis, bindings, conta de serviço, papel, diretório temporário e confirmação de configuração normal intacta.
+
 ### Ordem futura obrigatória
 
-1. **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC-GOVERNANCE** — atualização documental atual; revisão humana e commit/push documental permanecem separados e não iniciados nesta sessão.
+1. **ADMIN-B2A5-INVENTORY-AUTH-PREP-GOVERNANCE** — atualização documental atual; revisão humana e commit/push documental permanecem separados e não iniciados nesta sessão.
 2. **Revisão humana e commit/push documental** — somente após aprovação integral dos três diffs.
-3. **ADMIN-B2A5-INVENTORY-AUTH-PREP** — próximo bloco possível, não iniciado; identidade temporária read-only, IAM mínimo, autenticação, expiração/revogação, logs sanitizados e rollback.
-4. **ADMIN-B2A5-INVENTORY-AUTH-EXEC** — não iniciado; criação/configuração autorizada de identidade e autenticação temporária, se necessária.
-5. **ADMIN-B2A5-INVENTORY-EXEC** — não iniciado; leitura remota mínima e sanitizada somente após ferramenta e IAM aprovados.
-6. **ADMIN-B2A5-INVENTORY-GOVERNANCE** — não iniciado; registro das contagens agregadas e evidências sanitizadas.
-7. **ADMIN-B2A5-MIGRATION-PREP** — não iniciado e condicional ao inventário.
-8. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados; nenhuma publicação.
-9. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados.
-10. **ADMIN-B2B** — não iniciado; Storage separado.
-11. **ADMIN-B3** — não iniciado; única etapa autorizada a publicar Rules e executar reteste remoto sanitizado.
-12. **Demais fases administrativas** — seguir o roadmap e suas autorizações próprias.
+3. **Decisões humanas do AUTH-PREP** — concluídas em 2026-07-31; as sete decisões estão registradas e incorporadas.
+4. **ADMIN-B2A5-INVENTORY-AUTH-EXEC** — próximo bloco, não iniciado; criação da conta de serviço dedicada, custom role mínimo, bindings condicionais, impersonação sem chave, ADC isolado e testes negativos que não leem documentos.
+5. **Governança do AUTH-EXEC** — não iniciada; registro sanitizado das evidências de identidade, papel, bindings e isolamento.
+6. **ADMIN-B2A5-INVENTORY-EXEC** — não iniciado; leitura remota mínima e sanitizada somente após ferramenta, IAM e `--max-docs` aprovados.
+7. **ADMIN-B2A5-INVENTORY-AUTH-REVOKE** — bloco obrigatório separado, não iniciado; revogação de ADC, bindings, conta de serviço e papel, com comprovação de ausência de acesso residual.
+8. **ADMIN-B2A5-INVENTORY-GOVERNANCE** — não iniciado; registro das contagens agregadas e evidências sanitizadas.
+9. **ADMIN-B2A5-MIGRATION-PREP** — não iniciado e condicional ao inventário.
+10. **ADMIN-B2A5-FIRESTORE-PREP/EXEC** — não iniciados; nenhuma publicação.
+11. **ADMIN-B2A5-RUNTIME-PREP/EXEC** — não iniciados.
+12. **ADMIN-B2B** — não iniciado; Storage separado.
+13. **ADMIN-B3** — não iniciado; única etapa autorizada a publicar Rules e executar reteste remoto sanitizado.
+14. **Demais fases administrativas** — seguir o roadmap e suas autorizações próprias.
 
 Nenhum bloco posterior foi iniciado por esta atualização de governança.
 
@@ -755,7 +778,9 @@ Nenhum bloco posterior foi iniciado por esta atualização de governança.
 - **ADMIN-B2A5-INVENTORY-TOOL-PREP:** concluído somente por análise local; parecer **A** e zero alteração funcional/remota.
 - **ADMIN-B2A5-INVENTORY-TOOL-ROOT-RECOVERY-AND-ISOLATION-PREP:** concluído; baseline raiz recuperado e arquitetura isolada aprovada com parecer **A**.
 - **ADMIN-B2A5-INVENTORY-TOOL-ISOLATED-EXEC:** concluído e classificado como **A. VALIDADO LOCALMENTE**; 102/102, regressão 87/87 e commit funcional `1102741201d4858b55a7145570568856f6859573` em `origin/main`.
-- **ADMIN-B2A5-INVENTORY-AUTH-PREP/EXEC:** não iniciados; dependem de autorizações próprias.
+- **ADMIN-B2A5-INVENTORY-AUTH-PREP:** concluído em 2026-07-31 somente por análise e pesquisa documental oficial; parecer final **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-EXEC** após as sete decisões humanas, com o parecer intermediário **B** preservado; zero autenticação, IAM, acesso remoto ou inventário.
+- **ADMIN-B2A5-INVENTORY-AUTH-EXEC:** não iniciado; decisões humanas resolvidas, depende apenas de autorização de execução própria.
+- **ADMIN-B2A5-INVENTORY-AUTH-REVOKE:** não iniciado; bloco obrigatório separado após o inventário.
 - **ADMIN-B2A5-INVENTORY-EXEC/GOVERNANCE:** não iniciados; dependem da ferramenta e do IAM aprovados.
 - **ADMIN-B2A5-MIGRATION-PREP/EXEC:** não iniciados; condicionais ao inventário e dependentes de autorizações próprias.
 - **ADMIN-B2A5-FIRESTORE-PREP/EXEC:** não iniciados; dependem de autorizações próprias e não publicarão Rules.
