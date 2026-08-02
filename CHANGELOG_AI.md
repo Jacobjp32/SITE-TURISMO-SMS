@@ -6,6 +6,363 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-02 — Transporte REST dos gates do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-REST-TRANSPORT-FINALIZATION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Define o mecanismo executável dos quatro `testIamPermissions`, separa o access token OAuth temporário do operador humano dos tokens permanentemente proibidos e fecha o último detalhe operacional antes do commit documental. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC** **mantido**.
+
+### Lacuna corrigida — método exigido sem mecanismo
+
+- O contrato já exigia `projects.testIamPermissions`, `folders.testIamPermissions`, `organizations.testIamPermissions` e `projects.serviceAccounts.testIamPermissions`, mas **não dizia como executá-los**. A referência estável da gcloud CLI não apresenta comandos correspondentes em `gcloud projects`, `gcloud resource-manager folders` ou `gcloud iam service-accounts`, e a busca na documentação oficial não retornou nenhum. Fica proibido inventar `gcloud projects test-iam-permissions`, `gcloud resource-manager folders test-iam-permissions` ou `gcloud iam service-accounts test-iam-permissions` sem confirmação simultânea na versão local instalada e na documentação estável.
+- **Contrato principal adotado: endpoints REST oficiais**, confirmados verbatim em 2026-08-02 — projeto `POST https://cloudresourcemanager.googleapis.com/v3/{resource=projects/*}:testIamPermissions`; pasta `.../v3/{resource=folders/*}:testIamPermissions`; organização `.../v3/{resource=organizations/*}:testIamPermissions`; conta de serviço, só após a criação, `POST https://iam.googleapis.com/v1/{resource=projects/*/serviceAccounts/*}:testIamPermissions`. Corpo sempre `{"permissions": ["PERMISSION_1", "PERMISSION_2"]}`; a resposta devolve **apenas o subconjunto que o chamador possui**; wildcards são oficialmente proibidos.
+- O recurso da conta aceita **e-mail ou `uniqueId`**; usar o identificador numérico devolvido pela criação quando isso aumentar a confiabilidade. **Proibido `projects/-/serviceAccounts/...`:** a documentação oficial orienta evitar o wildcard `-` porque ele "pode causar mensagens de resposta com códigos de erro enganosos". URLs concretas, IDs, project numbers e resource names reais não são impressos nem persistidos.
+
+### Token do operador humano — proibição absoluta substituída por distinção precisa
+
+- A formulação "nenhum token" tornava o gate inexecutável e confundia dois objetos distintos. **Continua proibido:** ADC, `gcloud auth application-default login`, `gcloud auth application-default print-access-token`, token obtido por ADC, `--impersonate-service-account`, impersonação de qualquer conta, access token ou ID token **da futura conta de serviço**, refresh token novo, chave JSON e qualquer credencial persistida.
+- **Exceção técnica limitada, só no futuro PROVISION-EXEC:** um único access token OAuth **temporário do operador humano já autenticado na gcloud**, obtido exclusivamente para transportar as chamadas REST do gate. Comando contratual `gcloud auth print-access-token OPERATOR_IN_MEMORY --quiet` — a documentação confirma o posicional `[ACCOUNT]` e restringe `--lifetime` à impersonação, que não será usada. Ele materializa a credencial que a gcloud já usaria nos comandos remotos aprovados: **não é ADC, não é impersonação, não é token da conta de serviço, não concede acesso novo e não inicia a janela de ACTIVATION.**
+- **Ciclo de vida:** somente em variável do processo; nunca impresso, persistido, logado, transcrito, relatado, copiado para arquivo, variável de ambiente persistente, configuração gcloud ou clipboard; não reutilizado fora do bloco; limpo obrigatoriamente em `finally`, junto com headers e bodies, inclusive em falha. Proibidos `Write-Host`, `Write-Output`, `echo`, `Start-Transcript`, serialização de headers, captura de output bruto e exibição de exceptions com headers. `Remove-Variable` fica como limpeza adicional a avaliar; **não se alega apagamento criptográfico da memória**, apenas remoção das referências.
+
+### Projeto de quota e bootstrap fail-closed
+
+- A documentação oficial confirma que o projeto de quota pode ser indicado em REST pelo cabeçalho `x-goog-user-project` e que o principal precisa de **`serviceusage.services.use`** sobre ele — permissão do papel Service Usage Consumer. Ela passa a integrar o gate pré-mutação do projeto, ao lado de `serviceusage.services.list`, que continua necessária ao estado das APIs. Conjunto pré-mutação do projeto: `iam.roles.create`, `iam.roles.list`, `iam.serviceAccounts.create`, `iam.serviceAccounts.list`, `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, `serviceusage.services.list` e `serviceusage.services.use`.
+- **Dependência circular resolvida fail-closed:** o gate testa `serviceusage.services.use` por uma chamada que pode exigir essa mesma permissão. Contrato — obter o token só em memória; executar a primeira `projects.testIamPermissions` **com** o cabeçalho; incluir `serviceusage.services.use` entre as permissões pedidas; se falhar por quota project, service usage ou permissão relacionada ao cabeçalho, classificar **`operatorQuotaProjectPermissionMissing`**, limpar token e headers e **parar antes de qualquer mutação**; se responder com sucesso mas **omitir** a permissão, aplicar a mesma categoria e a mesma parada; prosseguir só quando a resposta trouxer integralmente todas as permissões pré-mutação exigidas.
+- Proibido repetir sem autorização, remover silenciosamente o cabeçalho, tentar outro projeto de quota, conceder permissão, tratar falha da primeira chamada como ausência de recurso ou usar fallback para leitura dos papéis do operador.
+
+### Execução, erros e campos sanitizados
+
+- `Invoke-RestMethod`/`Invoke-WebRequest` apenas com POST, `Content-Type: application/json; charset=utf-8`, Bearer em memória, `X-Goog-User-Project`, corpo compacto gerado em memória, timeout finito, nenhum arquivo temporário e nenhuma saída bruta. Processar exclusivamente `$Response.permissions`; nunca imprimir resposta integral, headers, request, endpoint concreto, IDs, token ou erro bruto.
+- Categorias acrescentadas: `operatorAccessTokenUnavailable`, `operatorRestAuthenticationFailed`, `operatorQuotaProjectPermissionMissing`, `testIamPermissionsRequestFailed`, `testIamPermissionsResponseMalformed`, `operatorFolderPermissionMissing` e `operatorOrganizationPermissionMissing`, somadas às já vigentes `operatorProjectPermissionMissing` e `operatorServiceAccountPermissionMismatch`. Cada uma interrompe conforme sua fase, sem mensagem HTTP bruta, response body, token, URL concreta ou identificador real.
+- Campos acrescentados à allowlist: `humanOperatorAccessTokenUsedForRest`, `humanOperatorAccessTokenPersisted`, `humanOperatorAccessTokenCleared`, `quotaProjectHeaderUsed`, `quotaProjectPermissionConfirmed`, `testIamPermissionsTransport` e `restTransportCompleted`. Em sucesso: `true`, `false`, `true`, `true`, `true`, `"official-rest"` e `true`. **Nunca registrar o token nem fingerprint do token.**
+- **Formulação precisa das proibições:** onde se lê "zero token", entenda-se zero token da conta de serviço, zero impersonação, zero ID token, zero ADC, zero chave e zero token persistido — com o access token temporário do operador humano como única exceção. Preservados zero token emitido em nome da futura conta, zero binding criada pelo fluxo e zero janela de ACTIVATION iniciada. A classificação operacional específica foi ajustada na mesma direção, sem ampliar escopo.
+
+### Preservações e limites
+
+- Preservados sem alteração: escopo de recurso do `testIamPermissions`; permissões pré-mutação; verificações após o custom role; `projects.serviceAccounts.testIamPermissions` só após a criação da conta; ancestralidade; policies hierárquicas; `group:` e `domain:` sob fail-closed; principal sets; expansão dos papéis; atributos completos na criação; stage `GA`; ordem custom role → service account; polling somente leitura; escopo comprovável Firestore/Datastore; escopo global entre serviços não avaliado; zero bindings; zero ADC, impersonação e chave; rollback sem exclusão automática; classificação operacional específica; e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- **Nenhum novo bloqueio e nenhuma decisão humana aberta.** A exceção do token humano não conflita com nenhuma decisão anterior: as sete decisões de autenticação tratam de credenciais **da conta de serviço** — sem chave JSON, sem ADC de serviço, impersonação apenas na ACTIVATION —, e nenhuma delas proíbe o operador humano de usar a própria credencial já autorizada, que é exatamente o que os comandos gcloud aprovados deste bloco já fariam.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, obtenção de access token, acesso remoto a Google Cloud ou Firebase, comando gcloud remoto, custom role, conta de serviço, binding, ADC, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-08-02 — Escopo de recurso das permissões do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-RESOURCE-PERMISSIONS-FINALIZATION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Corrige o escopo de recurso usado em `testIamPermissions` e impede que o EXEC declare, antes da criação, permissões específicas de recursos que ainda não existem. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC** **mantido**.
+
+### Correção factual central — escopo de recurso
+
+- `testIamPermissions` testa as permissões que o chamador possui **sobre o recurso fornecido à operação**. Logo: `projects.testIamPermissions` testa sobre o projeto; `folders.testIamPermissions` sobre a pasta; `organizations.testIamPermissions` sobre a organização; `projects.serviceAccounts.testIamPermissions` sobre uma conta de serviço específica.
+- **Não se pode assumir** que uma permissão cujo método é autorizado sobre um recurso filho será validada corretamente por `projects.testIamPermissions` apenas porque o papel do operador foi concedido no projeto. A herança de policy e o escopo de teste do método são coisas distintas, e a segunda não está documentada como equivalente à primeira.
+- **Afirmação anterior retirada.** A entrada precedente declarava que `iam.serviceAccounts.getIamPolicy` poderia ser testada no projeto por a conta ainda não existir. Isso era uma inferência minha, não um fato documentado, e foi removida. Ficam igualmente proibidas as afirmações de que `iam.serviceAccountKeys.list`, `iam.serviceAccounts.get` e `iam.roles.get` seriam integralmente comprováveis antes de o recurso correspondente existir.
+
+### Gate pré-mutação — somente o aplicável ao projeto e aos ancestrais
+
+- **Projeto:** `iam.roles.create`, `iam.roles.list`, `iam.serviceAccounts.create`, `iam.serviceAccounts.list`, `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy` e `serviceusage.services.list`.
+- **Pasta ancestral, no recurso pasta:** `resourcemanager.folders.getIamPolicy`. **Organização, no recurso organização:** `resourcemanager.organizations.getIamPolicy`.
+- Sem wildcard; sem inferir permissões pelo nome do papel; resposta parcial não equivale a aprovação integral. Ausência produz **`operatorProjectPermissionMissing`** e interrompe antes da criação do custom role. Demais gates aprovados permanecem inalterados.
+
+### Permissões dependentes de recurso
+
+- **`iam.roles.get`** é autorizada sobre o recurso **do papel específico**, inexistente antes da primeira mutação. Portanto: não declarar comprovada antecipadamente pelo gate do projeto; **não inventar método `roles.testIamPermissions`**; criar o papel após todos os gates pré-mutação possíveis; e validá-lo imediatamente pela descrição somente leitura, sem repetir a criação. Falha por `PERMISSION_DENIED` → **`operatorCustomRolePermissionMismatch`**: preservar o papel, não excluir, não repetir, **não criar a service account** e aguardar decisão humana.
+- **`iam.serviceAccounts.get`, `iam.serviceAccounts.getIamPolicy` e `iam.serviceAccountKeys.list`** passam a ser testadas por `projects.serviceAccounts.testIamPermissions` **no recurso exato da conta**, após sua criação e visibilidade, usando o identificador numérico devolvido pela criação quando isso aumentar a confiabilidade da identificação imediatamente posterior. **Somente depois desse teste** a conta é descrita, a policy anexada é lida e as chaves `USER_MANAGED` são listadas. Permissão ausente → **`operatorServiceAccountPermissionMismatch`**: preservar a conta, não excluir, não conceder acesso adicional, não repetir, não prosseguir e aguardar decisão humana. `PERMISSION_DENIED` nunca é tratado como inexistência.
+
+### Três estados distintos, nunca colapsados
+
+- **(A)** permissões pré-mutação de projeto e ancestrais — `operatorPreMutationPermissionsComplete`. **(B)** verificação do custom role criado — `operatorCustomRoleVerificationPermissionConfirmed`. **(C)** permissões sobre a service account criada — `operatorServiceAccountResourcePermissionsComplete`.
+- `operatorPermissionsComplete` deixa de significar "tudo comprovado antes da primeira mutação" e sobrevive **apenas como resultado agregado final**: `true` somente após gates pré-mutação aprovados, papel descrito e validado, permissões testadas no recurso da própria conta e todas as verificações posteriores concluídas. **Nunca pode ser `true` antes da criação dos dois recursos.**
+- **Risco de falha parcial explicitamente registrado e aceito:** como as permissões específicas de recurso só podem ser testadas depois que o recurso existe, é possível criar o papel — ou o papel e a conta — e só então descobrir que falta permissão de verificação. O contrato responde preservando o recurso, interrompendo e escalando; jamais excluindo, concedendo permissão ou repetindo a mutação.
+
+### Relatório sanitizado e limites
+
+- Allowlist do operador atualizada para `operatorPreMutationRequiredPermissionsCount`, `operatorPreMutationGrantedPermissionsCount`, `operatorPreMutationPermissionsComplete`, `operatorProjectPermissionMissing`, `operatorCustomRoleVerificationPermissionConfirmed`, `operatorCustomRolePermissionMismatch`, `operatorServiceAccountRequiredPermissionsCount`, `operatorServiceAccountGrantedPermissionsCount`, `operatorServiceAccountResourcePermissionsComplete`, `operatorServiceAccountPermissionMismatch`, `operatorPermissionsComplete`, `preMutationGatesCompleted`, `customRolePostCreateVerificationCompleted` e `serviceAccountPostCreateVerificationCompleted`. Nunca imprimir e-mail, projectId, nome completo de recurso, permissões extras, papéis integrais, policies, tokens, chave ou ADC: somente contagens, booleanos e categorias sanitizadas.
+- Preservados sem alteração: permissões de criação; tratamento fail-closed; ancestralidade; policies hierárquicas; `group:` e `domain:`; principal sets; expansão dos papéis; atributos completos dos dois recursos; stage `GA`; ordem custom role → service account; escopo comprovável Firestore/Datastore; escopo global entre serviços não avaliado; gates anteriores à mutação; verificações posteriores; polling somente leitura; zero bindings; zero ADC, token e chave; rollback sem exclusão automática; classificação operacional específica; e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- **Nenhum novo bloqueio e nenhuma decisão humana aberta.** A impossibilidade de comprovar antecipadamente permissões de recursos inexistentes não conflita com nenhuma decisão institucional anterior: nenhuma delas exigiu comprovação prévia integral, e o desfecho de uma falha tardia é sempre parada segura com recurso preservado.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso remoto a Google Cloud ou Firebase, comando gcloud remoto, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-08-02 — Permissões do operador do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-OPERATOR-PERMISSIONS-FINALIZATION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Incorpora as permissões de criação e leitura ausentes do contrato do operador e corrige a distinção entre gates pré-mutação e verificações só possíveis após a criação. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC** **mantido**.
+
+### Correção 1 — permissões de criação e leitura ausentes
+
+- O contrato consolidado do operador **omitia as duas permissões sem as quais o EXEC não pode sequer executar**: `iam.roles.create` e `iam.serviceAccounts.create`. Um bloco cuja única finalidade é criar dois recursos não pode ter as permissões de criação fora da lista fechada.
+- Lista fechada agora registrada — **criação:** `iam.roles.create`, `iam.serviceAccounts.create`; **leitura do papel:** `iam.roles.get`, `iam.roles.list`; **leitura da conta:** `iam.serviceAccounts.get`, `iam.serviceAccounts.list`; **auditoria de chaves:** `iam.serviceAccountKeys.list`; **policy da conta:** `iam.serviceAccounts.getIamPolicy`; **APIs:** `serviceusage.services.list`; **Resource Manager:** `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, mais `resourcemanager.folders.getIamPolicy` quando houver pasta ancestral e `resourcemanager.organizations.getIamPolicy` quando houver organização.
+- Registrado explicitamente que **permissões de leitura não autorizam criação**: `iam.roles.get`/`list` não substituem `iam.roles.create`, e `iam.serviceAccounts.get`/`list` não substituem `iam.serviceAccounts.create`. Não presumir Owner, Editor ou papel básico; nenhuma permissão é concedida neste fluxo.
+
+### Correção 2 — gate pré-mutação de permissões do operador
+
+- Antes da primeira mutação, o EXEC deverá comprovar **todas** as permissões necessárias **nos recursos aplicáveis**, por `projects.testIamPermissions`, `folders.testIamPermissions`, `organizations.testIamPermissions` ou método `testIamPermissions` específico do recurso.
+- A documentação oficial confirma que o método "retorna as permissões que um chamador tem sobre o projeto especificado" e que **wildcards não são permitidos** na requisição — coerente com a proibição de wildcard já adotada.
+- **Reconciliação com a ressalva anterior do PREP.** O registro anterior classificava `testIamPermissions` como verificação apenas suplementar, por ser oficialmente destinado a GUIs de terceiros. Essa ressalva vale para tentar comprovar o acesso de **outro** principal — a futura conta de serviço —, e permanece íntegra. Aqui o uso é diferente e restrito: as permissões **do próprio chamador**, que é exatamente o que o método retorna. Ele não substitui, e não é usado para, a análise das allow policies quanto à conta futura.
+- Gate do projeto com ao menos `iam.roles.create`, `iam.roles.get`, `iam.roles.list`, `iam.serviceAccounts.create`, `iam.serviceAccounts.get`, `iam.serviceAccounts.list`, `iam.serviceAccountKeys.list`, `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy` e `serviceusage.services.list`. Pasta e organização comprovadas **nos recursos corretos**.
+- Esta entrada afirmou que **`iam.serviceAccounts.getIamPolicy` seria verificada no nível do projeto** por a conta ainda não existir. **Isso foi corrigido no mesmo dia pelo `PROVISION-PREP-RESOURCE-PERMISSIONS-FINALIZATION`:** `testIamPermissions` testa as permissões do chamador **sobre o recurso fornecido à operação**, e não se pode presumir que uma permissão de recurso filho seja validada corretamente no projeto apenas por o papel ter sido concedido nesse nível. Essa permissão — e também `iam.serviceAccounts.get`, `iam.serviceAccountKeys.list` e `iam.roles.get` — saiu do gate pré-mutação; ver a entrada seguinte.
+- Sem wildcard; sem inferir permissão pelo nome do papel do operador; sem tratar resposta parcial como aprovação integral. Ausência de qualquer permissão obrigatória produz **`operatorPermissionMissing` e interrompe antes da criação do custom role**, sem conceder permissão automaticamente, sem solicitar Owner ou Editor e **sem mutação exploratória para descobrir se o operador tem permissão**.
+- Direção de falha registrada honestamente: o gate é fail-closed no sentido seguro — resultado insuficiente interrompe. Se o resultado for otimista e a criação ainda assim falhar na API, o desfecho é falha limpa tratada pelo caminho pós-criação, nunca ação insegura silenciosa.
+
+### Correção 3 — gates pré-mutação × verificações pós-criação
+
+- Removida a formulação absoluta de que **todas** as verificações remotas ocorreriam antes da primeira mutação. Ela é falsa: descrever o papel criado, ler a policy anexada à conta e listar as chaves da conta **exigem que o recurso exista**.
+- Contrato preciso: todas as verificações de operador, APIs, ancestralidade, policies, permissões, expansão de papéis e colisões **tecnicamente possíveis** ocorrem antes da primeira mutação; as demais ocorrem **imediatamente após a criação correspondente, sem repetir a mutação**.
+- **(A) Gates pré-mutação:** identidade ativa do operador; fingerprint do projeto; permissões do operador; estado das APIs; ancestralidade; leitura integral das policies; bindings condicionais; expansão dos papéis; `group:`; `domain:`; principal sets; colisão do custom role; colisão da conta; e suporte das duas permissões em custom roles.
+- **(B) Após o custom role:** descrever o papel; confirmar ID, title, description, stage e exatamente as duas permissões; confirmar que o comando não criou binding; nunca repetir a criação. **A conta só é criada depois de o papel ser integralmente validado.**
+- **(C) Após a conta e o polling somente leitura:** descrever a conta; confirmar account ID, display name, description e enabled/disabled; ler a IAM policy anexada e confirmar zero binding; listar somente chaves `USER_MANAGED` e confirmar `userManagedKeyCount == 0`; nunca repetir a criação.
+- **Falha de permissão pós-criação:** não repetir a criação; classificar falha parcial; preservar o recurso; não excluir; não conceder permissão adicional; não prosseguir ao recurso seguinte com a validação do primeiro incompleta; relatar `operatorPermissionMismatch`; aguardar decisão humana. `PERMISSION_DENIED` **nunca** será reclassificado como recurso inexistente.
+
+### Relatório sanitizado e limites
+
+- Acrescentados à allowlist desta etapa: `operatorRequiredPermissionsCount`, `operatorGrantedPermissionsCount`, `operatorPermissionsComplete`, `operatorPermissionMissing`, `operatorPermissionMismatch`, `preMutationGatesCompleted`, `customRolePostCreateVerificationCompleted` e `serviceAccountPostCreateVerificationCompleted`. **Os cinco primeiros nomes foram substituídos no mesmo dia pelo `PROVISION-PREP-RESOURCE-PERMISSIONS-FINALIZATION`, que separou pré-mutação, custom role e service account em campos próprios; a allowlist vigente é a da entrada seguinte.** Emitem apenas contagens, booleanos e categorias sanitizadas — nunca permissões extras não relacionadas, papéis completos do operador, e-mail, projectId, policies ou principal real.
+- Preservados sem alteração: atributos completos e descrições aprovadas dos dois recursos; stage `GA`; as duas permissões do papel; fail-closed de `group:` e `domain:`; ancestralidade e policies hierárquicas; principal sets; expansão dos papéis; escopo comprovável Firestore/Datastore; escopo global entre serviços não avaliado; `noApplicableFirestoreDatastoreGrantDetected`; `noApplicableImpersonationGrantDetected`; zero bindings; zero ADC, token e chave; ordem custom role → service account; colisões; polling somente leitura; rollback sem exclusão automática; classificação operacional específica; e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- **Nenhum novo bloqueio e nenhuma decisão humana aberta.** As permissões exigidas são comprováveis antecipadamente pelo gate, e a única incerteza remanescente — um resultado otimista do gate — resolve-se por falha limpa da API, sem ação insegura.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso remoto a Google Cloud ou Firebase, comando gcloud remoto, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-08-02 — Finalização do prompt do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-PROMPT-FINALIZATION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Corrige três inconsistências do prompt-ready do futuro EXEC: atributos incompletos na criação, classificação de sucesso ampla demais e nomes de campos que sugeriam testes remotos de negação. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC** **mantido**.
+
+### Correção 1 — atributos completos no ato da criação
+
+- O prompt-ready anterior citava os identificadores mas **omitia as descrições aprovadas** no momento da criação, o que produziria recursos incompletos e divergentes do contrato já validado quanto a limites UTF-8.
+- **Custom role:** role ID `adminB2A5InventoryRead`; title `ADMIN B2A5 Inventory Read`; description `Read-only Firestore entity permissions reserved for the approved ADMIN-B2A5 inventory activation window. Do not bind outside the authorized workflow.`; stage `GA`; permissões exclusivamente `datastore.entities.get` e `datastore.entities.list`.
+- **Service account:** account ID `admin-b2a5-inventory-reader`; display name `ADMIN B2A5 Inventory Reader`; description `Dedicated keyless identity for the approved ADMIN-B2A5 Firestore inventory. Access bindings are applied only during an authorized activation window.`.
+- Confirmado: nenhuma descrição contém projectId, operador, data real ou informação pessoal, e os limites já documentados permanecem respeitados — role title 25 bytes de 100, role description 149 de 300, display name 27 de 100 e description da conta 148 de 256.
+- Os atributos passam a ser **exigidos por flags estáveis nos próprios comandos** — `--title`, `--description`, `--permissions`, `--stage` no papel; `--display-name` e `--description` na conta —, sem arquivo YAML ou JSON temporário quando as flags diretas bastarem. `--project` e `--account` sempre explícitos, com valores só em memória, nunca impressos, sem configuração persistente e sem repetir criação de resultado ambíguo.
+
+### Correção 2 — classificação operacional específica
+
+- Removida a classificação ampla **"A. PROVISIONAMENTO CONCLUÍDO SEM ACESSO"**, incompatível com o escopo delimitado horas antes pelo `SCOPE-CORRECTION`.
+- Substituída por **"A. PROVISIONAMENTO CONCLUÍDO SEM ACESSO FIRESTORE/DATASTORE, SEM CAPACIDADE DE IMPERSONAÇÃO E SEM BINDINGS CRIADAS"**, exigindo cumulativamente: ausência de grants Firestore/Datastore aplicáveis nas policies examinadas; ausência de grants aplicáveis de impersonação, Token Creator, Service Account User e gerenciamento de chaves; zero user-managed keys; zero ADC; zero token; zero binding criada pelo bloco; e limites de escopo registrados.
+- Continua proibido afirmar zero acesso global, ausência total de acesso Storage, ausência de acesso em todo recurso descendente ou ausência de acesso a todos os serviços do projeto. Preservados `globalCrossServiceAccessNotEvaluated`, `descendantPoliciesNotInventoried` e `storageAclsNotEvaluated`.
+
+### Correção 3 — campos de resultado renomeados
+
+- `firestoreDatastoreAccessDenied` → **`noApplicableFirestoreDatastoreGrantDetected`**; `impersonationCapabilityDenied` → **`noApplicableImpersonationGrantDetected`**.
+- Motivo material: o sufixo `Denied` sugere tentativa real contra o serviço e resposta de negação. **Isso não ocorrerá.** O fluxo não executa chamada Firestore, não gera token, não impersona e não tenta usar a conta; a conclusão deriva **exclusivamente** da análise das allow policies e das bindings da conta.
+- `noApplicableFirestoreDatastoreGrantDetected` é `true` somente quando a análise fail-closed de **todas** as policies hierárquicas legíveis e aplicáveis não encontrar grant Firestore/Datastore relevante para a futura identidade, principal sets, `group:`, `domain:`, `allUsers` ou `allAuthenticatedUsers`.
+- `noApplicableImpersonationGrantDetected` é `true` somente quando a mesma análise não encontrar grant aplicável de `iam.serviceAccounts.getAccessToken`, `iam.serviceAccounts.getOpenIdToken`, `iam.serviceAccounts.signBlob`, `iam.serviceAccounts.signJwt`, Service Account Token Creator, Service Account User, gerenciamento ou criação de chaves, ou outra permissão de representação prevista no contrato.
+- Nenhum dos dois pode ser descrito como resultado de teste remoto de negação. Os nomes antigos ficam proibidos em documentos, relatório e prompt.
+
+### Allowlist final e limites
+
+- Allowlist do relatório sanitizado: `ancestryClass`, `ancestorPoliciesReadCount`, `conditionalBindingsVerified`, `groupBindingsCount`, `domainBindingsCount`, `relevantGroupBindingsCount`, `relevantDomainBindingsCount`, `indirectMembershipRisk`, `rolePermissionsResolved`, `noApplicableFirestoreDatastoreGrantDetected`, `noApplicableImpersonationGrantDetected`, `bindingsCreatedByThisBlock`, `userManagedKeyCount`, `customRoleCreated`, `serviceAccountCreated`, `iamApiEnabled`, `serviceAccountCredentialsApiState`, `globalCrossServiceAccessNotEvaluated`, `descendantPoliciesNotInventoried` e `storageAclsNotEvaluated`. Nenhum campo poderá declarar `accessDenied` por teste remoto, zero acesso global, ausência global de Storage ou ausência de acesso em todo recurso descendente.
+- Preservados sem alteração: tratamento fail-closed de `group:` e `domain:`; distinção entre Workspace e principal IAM; limites da análise hierárquica; zero acesso Firestore/Datastore; zero capacidade de impersonação; zero binding criada pelo fluxo; escopo global entre serviços explicitamente não avaliado; principal sets; ancestralidade; expansão de papéis; `conditionalBindingsUnverified`; `indirectMembershipRisk`; `rolePermissionsUnresolved`; stage `GA`; ordem custom role → service account; colisões; polling somente leitura; zero user-managed keys; rollback sem exclusão automática; e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- **Nenhum novo bloqueio identificado e nenhuma decisão humana aberta**; os três ajustes são de precisão contratual e semântica, e nenhum deles reabre decisão anterior, amplia permissão, estende janela ou altera escopo aprovado. `PROVISION-GOVERNANCE` permanece bloco posterior separado.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso remoto a Google Cloud ou Firebase, comando gcloud remoto, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-08-02 — Correção de escopo do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-SCOPE-CORRECTION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Corrige o tratamento de `domain:` e delimita a prova de ausência de acesso ao escopo tecnicamente comprovável. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC** **mantido**.
+
+### Correção 1 — `domain:` não pode ser declarado inofensivo
+
+- A entrada anterior afirmava, com base na documentação de contas de serviço, que `domain:` seria varredura apenas de defesa em profundidade porque "contas de serviço não pertencem ao domínio do Workspace". **Essa formulação categórica foi removida: ela transportava para a avaliação de allow policies do IAM uma regra que pertence a outro contexto.**
+- Distinção agora registrada: (1) a documentação de contas de serviço trata do **compartilhamento de recursos do Google Workspace** — ativos compartilhados com todo o domínio não alcançam contas de serviço; (2) a documentação de principais do IAM descreve o principal de domínio como o conjunto de **"todas as identidades em todos os domínios, incluindo subdomínios, associados ao customer ID"**, avaliado pelo customer ID e não pelo nome do domínio, **sem excluir explicitamente contas de serviço**. As duas afirmações não são intercambiáveis, e a regra do Workspace **não prova** o comportamento do IAM.
+- Contrato conservador adotado para allow policies: `domain:` **pode** representar risco de acesso indireto; recebe o **mesmo fail-closed de `group:`**; não se infere ausência de associação; qualquer `domain:` com papel relevante ou perigoso **interrompe antes da criação**. Proibido resolver a discrepância criando a conta, habilitar Cloud Identity ou outra API para dirimi-la e aceitar o risco silenciosamente. A governança **não** afirma que `domain:` alcança contas de serviço, e também **não** afirma o contrário.
+
+### Correção 2 — limite da análise hierárquica
+
+- Policies de organização, pasta e projeto **não incluem necessariamente** policies anexadas diretamente a recursos descendentes. O Cloud Storage, por exemplo, admite IAM policy em bucket, IAM policy em managed folder e ACLs de bucket ou objeto conforme a configuração; nenhuma dessas concessões aparece integralmente na leitura da policy do projeto.
+- Sem Policy Analyzer, Cloud Asset API, inventário dos recursos e policies descendentes e análise das ACLs aplicáveis — **nenhum deles habilitado ou iniciado neste fluxo** — não é possível comprovar ausência global de acesso ao Storage ou a todos os serviços. A afirmação anterior, de escopo amplo, era tecnicamente insustentável.
+
+### Escopo comprovável obrigatório do PROVISION-EXEC
+
+- **A. Zero acesso Firestore/Datastore.** Comprovar, pelas allow policies de organização, pastas e projeto, a ausência de `datastore.entities.get`, `list`, `create`, `update`, `delete`, `allocateIds` e de qualquer outro grant Firestore/Datastore capaz de conceder acesso aos dados, considerando identidade individual, principal sets, `allUsers`, `allAuthenticatedUsers`, `group:`, `domain:`, bindings condicionais, papéis predefinidos e custom roles de projeto e de organização. Integralmente comprovável porque o Firestore concede esses papéis **no nível do projeto**, com acesso por database delimitado por IAM Conditions na própria policy do projeto.
+- **B. Zero capacidade de representação ou credencial.** Nenhuma chave `USER_MANAGED`; nenhuma binding Token Creator na própria conta; nenhuma binding Service Account User na própria conta; nenhuma binding aplicável em organização, pastas ou projeto que conceda criação de tokens, impersonação ou gerenciamento de chaves; nenhum ADC criado; nenhum token gerado; nenhuma chave criada.
+- **C. Zero binding criada pelo fluxo.** Custom role sem binding criada pelo bloco; conta sem papel criado pelo bloco; nenhuma allow policy alterada; nenhum `setIamPolicy`; nenhum `add-iam-policy-binding`; nenhuma policy de recurso modificada.
+
+### Escopo explicitamente não comprovado
+
+- O PROVISION-EXEC **não** comprova ausência global de acesso a todos os buckets, managed folders, objetos e ACLs do Storage, a todos os recursos com allow policies próprias, a todos os serviços do Google Cloud, nem a policies anexadas a recursos descendentes não inventariados.
+- O relatório poderá declarar somente que **nenhum grant Storage/Auth/IAM perigoso foi identificado nas policies hierárquicas examinadas**, registrando que isso **não é prova global**, que nenhuma policy descendente foi inventariada, que nenhuma ACL foi consultada e que nenhuma chamada de serviço foi usada para testar acesso.
+- Removidas as expressões "zero acesso global", "ausência de qualquer acesso Storage", "prova completa para todos os serviços" e "nenhuma capacidade em qualquer recurso do projeto". A etapa foi renomeada de "ZERO ACESSO EFETIVO" para **"ZERO ACESSO FIRESTORE/DATASTORE E ZERO CAPACIDADE DE IMPERSONAÇÃO"**.
+
+### Decisão de escopo, risco residual e Policy Analyzer
+
+- Decisão adotada: o provisionamento exige prova fail-closed **apenas** de (A), (B) e (C). Prova global não é necessária ao inventário Firestore e exigiria infraestrutura e permissões adicionais. A análise de papéis perigosos nas policies hierárquicas permanece **gate conservador e observação**, jamais prova global.
+- **Sem conflito com decisão humana anterior.** As sete decisões do AUTH-PREP tratam de permissões do papel, identidade, operador, janela, `--max-docs`, audit logs e ciclo de vida da conta; **nenhuma** exigiu prova de zero acesso global. A decisão humana 1 aceitou formalmente o risco **database-wide** com sete controles compensatórios, o que é compatível com esta delimitação. A expressão ampla anterior era formulação própria do PREP, não requisito institucional — por isso a classificação permanece **A** e nenhuma nova decisão humana é aberta.
+- **Risco residual registrado:** uma policy ou ACL anexada diretamente a um recurso descendente de outro serviço poderia abranger a conta por grupo, domínio ou principal set sem aparecer na análise hierárquica atual. **Mitigações:** conta criada exclusivamente para o inventário; nenhuma credencial; nenhuma impersonação; nenhuma binding Token Creator; nenhuma chave; nenhuma aplicação usa a conta; nenhuma operação de outro serviço será executada; conta desabilitada após o inventário; qualquer ampliação da prova exigirá bloco próprio.
+- **Policy Analyzer:** é a ferramenta apropriada para analisar quais principais possuem quais acessos em recursos descendentes, tratando também expansão de grupos e papéis, mas usa a Cloud Asset API, que **não será habilitada neste fluxo**; portanto **não será utilizado no PROVISION-EXEC**. Uma análise global futura exige PREP e autorização próprios e **não** é dependência do inventário Firestore atual.
+
+### Preservado e limites
+
+- Preservados sem alteração: permissões condicionais de projeto, pasta e organização; estratégia e comandos de ancestralidade; leitura separada por nível; `conditionalBindingsUnverified`; tratamento fail-closed de `group:`; principal sets; expansão obrigatória dos papéis; `indirectMembershipRisk`; `rolePermissionsUnresolved`; stage `GA`; ordem custom role → conta de serviço; política de colisão; polling somente leitura; zero user-managed keys; rollback sem exclusão automática; as sete decisões humanas anteriores; e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- Campos sanitizados do relatório atualizados para incluir `globalCrossServiceAccessNotEvaluated`, `descendantPoliciesNotInventoried` e `storageAclsNotEvaluated`, com remoção de qualquer campo que afirme zero acesso global. Esta entrada propôs também `firestoreDatastoreAccessDenied` e `impersonationCapabilityDenied`, **ambos substituídos no mesmo dia pelo `PROVISION-PREP-PROMPT-FINALIZATION`** por `noApplicableFirestoreDatastoreGrantDetected` e `noApplicableImpersonationGrantDetected`, porque o sufixo `Denied` sugeria um teste remoto de negação que não ocorrerá; ver a entrada seguinte. `PROVISION-GOVERNANCE` permanece bloco posterior separado.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso remoto a Google Cloud ou Firebase, comando gcloud remoto, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-07-31 — Correções finais do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-FINAL-CORRECTIONS` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Fecha duas lacunas bloqueantes do contrato fail-closed e **mantém** o parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC**.
+
+### Correção bloqueante 1 — permissões das policies ancestrais
+
+- O contrato fail-closed exige ler as allow policies do projeto, de todas as pastas ancestrais e da organização, mas a lista de permissões do operador continha apenas `resourcemanager.projects.getIamPolicy`. **`resourcemanager.projects.getIamPolicy` não autoriza ler as policies das pastas nem da organização** — a lacuna tornaria o contrato inexequível justamente no caso que ele existe para cobrir.
+- Passam a constar, condicionadas à existência do nível e **obrigatórias quando o nível existir**: `resourcemanager.folders.getIamPolicy` para cada pasta ancestral e `resourcemanager.organizations.getIamPolicy` para a organização. No projeto permanecem `resourcemanager.projects.get` e `resourcemanager.projects.getIamPolicy`, além de `iam.serviceAccounts.getIamPolicy` para a policy da própria conta.
+- O EXEC deverá resolver a ancestralidade antes da primeira mutação, determinar quais permissões condicionais são necessárias conforme os níveis encontrados, comprová-las nos recursos corretos e interromper antes da criação se qualquer uma faltar. Não conceder novas permissões ao operador, não presumir Owner, Editor ou administrador da organização e não tratar `PERMISSION_DENIED` como policy ausente.
+
+### Estratégia de ancestralidade e comandos escolhidos
+
+- `gcloud projects get-ancestors` (estável) resolve a hierarquia e fornece a **lista autoritativa dos níveis que obrigatoriamente deverão ser lidos**, servindo de referência contra a qual a completude é conferida.
+- A leitura das policies será feita por **comandos separados e por nível** — `gcloud projects get-iam-policy`, `gcloud resource-manager folders get-iam-policy` e `gcloud organizations get-iam-policy` —, porque só assim cada leitura é individualmente comprovável.
+- `gcloud projects get-ancestors-iam-policy` é comando **estável** e retorna as policies do projeto e de seus ancestrais, mas a documentação **não** define seu comportamento em sucesso parcial, **não** lista as permissões exigidas e **não** expõe flag de policy version. Por isso é adotado apenas como **conferência cruzada**, nunca como fonte única da prova. Não usar variantes `alpha` ou `beta` havendo comando estável equivalente.
+- Requisitos da leitura: capturar em memória, não imprimir saída bruta, não persistir policy em arquivo. **Bindings condicionais não podem ser omitidas** — como `gcloud projects get-iam-policy` não documenta flag de policy version, o EXEC deverá confirmar o mecanismo no `--help` da CLI instalada, **sem inventar flag**, e verificar que a estrutura retornada expõe o campo `condition`; não sendo comprovável, parar sob `conditionalBindingsUnverified`.
+- Sucesso parcial nunca representa leitura integral: ancestral ausente da resposta esperada é `ancestryIncomplete`; erro de permissão é `ancestorPolicyUnreadable`. Ambos interrompem antes da primeira mutação.
+
+### Correção bloqueante 2 — grupos e domínios
+
+- O registro anterior afirmava que bindings `group:` e `domain:` não alcançariam uma conta nova. **Isso estava incorreto quanto a grupos.** Contas de serviço **podem ser membros de Google Groups**, e a documentação oficial confirma a prática ao recomendar principal sets de contas de serviço "em vez de usar grupos personalizados" para conceder papéis a todas as contas de um projeto, pasta ou organização. Logo, uma binding `group:` **pode** produzir acesso indireto, e a ausência do e-mail individual — ou de principal set — **não** exclui acesso.
+- Quanto a `domain:`, esta entrada registrou que a documentação afirmaria o oposto — "contas de serviço não pertencem ao seu domínio do Google Workspace" e ativos compartilhados com todo o domínio "não são compartilhados com contas de serviço" —, mantendo `domain:` na varredura apenas como defesa em profundidade. **Esta formulação foi superada em 2026-08-02 pelo `PROVISION-PREP-SCOPE-CORRECTION`:** aquela regra pertence ao contexto de compartilhamento do Workspace e não descreve a avaliação de allow policies do IAM, cuja documentação define o principal de domínio como "todas as identidades" associadas ao customer ID, sem excluir contas de serviço. `domain:` passou a receber o mesmo fail-closed de `group:`; ver a entrada de 2026-08-02.
+- Principais adicionados à análise: `group:GROUP_PLACEHOLDER` e `domain:DOMAIN_PLACEHOLDER`, sem persistir ou imprimir grupos e domínios reais.
+
+### Contrato fail-closed para associação indireta
+
+- Em cada allow policy aplicável: localizar bindings cujo membro seja `group:` ou `domain:`; resolver o papel de cada uma — predefinido, custom role de projeto ou custom role de organização; determinar se contém qualquer permissão relevante ou perigosa, incluindo ao menos `datastore.entities.get`, `datastore.entities.list`, qualquer escrita Firestore/Datastore, Storage, Firebase Auth, alteração de IAM, geração ou gerenciamento de chaves, geração de tokens, impersonação, Service Account User e administração do projeto.
+- Havendo qualquer uma: **interromper antes da criação de qualquer recurso** e classificar como `indirectMembershipRisk`. Proibido descobrir a associação criando a conta, aceitar o risco, encaminhar a verificação ao `ACTIVATION-PREP`, considerar grupo ou domínio seguro só porque o nome parece não ter relação com o projeto, habilitar Policy Troubleshooter ou Cloud Identity para resolver a dúvida e ampliar permissões do operador.
+- Métricas sanitizadas emitidas: `groupBindingsCount`, `domainBindingsCount`, `relevantGroupBindingsCount`, `relevantDomainBindingsCount` e `indirectMembershipRisk`, mais hashes apenas quando estritamente necessário. Nunca nome de grupo, domínio, membros, policy integral ou resource names reais.
+
+### Expansão obrigatória dos papéis
+
+- O EXEC deverá, somente por leitura, descrever os papéis predefinidos relevantes, os custom roles de projeto e os custom roles de organização que aparecerem nas policies, capturando em memória apenas a lista de permissões necessária, sem imprimir descrições integrais e sem persistir resultado.
+- **Não inferir permissões pelo nome do papel.** Papel inacessível, inexistente, `deleted`, `disabled`, ambíguo, não descritível ou com permissões não resolvidas produz parada antes da criação, sob `rolePermissionsUnresolved`.
+
+### Prova de acesso e novas categorias de parada
+
+- A prova passa a abranger conjuntamente, **nas policies hierárquicas de organização, pastas e projeto**: identidade individual futura; principal sets de contas de serviço do projeto, das pastas e da organização; `allUsers`; `allAuthenticatedUsers`; grupos; domínios; bindings condicionais; políticas diretas e herdadas; e as permissões efetivas dos papéis. **O alcance desta prova foi delimitado em 2026-08-02 pelo `PROVISION-PREP-SCOPE-CORRECTION` a zero acesso Firestore/Datastore, zero capacidade de impersonação/token/chave e zero binding criada pelo fluxo; não há prova global de ausência de acesso a Storage, ACLs ou recursos descendentes.**
+- Somente allow policies concedem acesso; deny e PAB não substituem essa análise; ausência de binding direta não é prova suficiente; principal sets associam automaticamente; `group:` pode causar associação indireta; qualquer prova incompleta interrompe antes da criação; nenhuma chamada Firestore será usada para testar a negativa.
+- Categorias de parada novas: `indirectMembershipRisk`, `rolePermissionsUnresolved` e `conditionalBindingsUnverified`, somadas às já existentes `PERMISSION_DENIED`, `inaccessible`, `ambiguous`, `ancestorPolicyUnreadable` e `ancestryIncomplete`.
+
+### Classificação e risco operacional registrado
+
+- Classificação mantida: **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC**. As permissões de projeto, pasta e organização estão incorporadas; a leitura integral das policies ancestrais está definida; `group:` e `domain:` estão abrangidos por fail-closed; a expansão dos papéis está definida; associação indireta não resolvida interrompe antes da criação; nenhuma API ou permissão adicional precisa ser habilitada ou concedida; e não resta decisão humana pendente.
+- **Risco operacional honesto, não bloqueante da classificação:** o contrato é deliberadamente severo e é plausível que uma binding `group:` legítima e comum — por exemplo um grupo administrativo com papel amplo no projeto ou na organização — dispare `indirectMembershipRisk` e impeça o provisionamento. Isso é o comportamento desejado de uma política fail-closed, e o desfecho é uma **parada segura antes de qualquer mutação**, não uma falha. Se isso ocorrer, a saída não é relaxar a regra no EXEC, mas um novo bloco humano de análise dirigido àquela binding específica.
+- Preservados sem alteração: correção dos limites de `displayName` e `description`, descrição corrigida do Policy Troubleshooter, decisão fail-closed, consulta integral da ancestralidade, parecer **B** histórico, stage `GA`, ordem papel-primeiro/conta-depois, 44 dias do role ID, 30 dias de recuperação da conta, bindings `deleted:` por até 60 dias, polling somente leitura, zero keys, zero bindings, rollback sem exclusão automática, as sete decisões humanas anteriores e a arquitetura PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso remoto a Google Cloud ou Firebase, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-07-31 — Decisão fail-closed do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-DECISION` concluído exclusivamente como atualização documental, a partir do mesmo commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7`. Incorpora a decisão humana final, corrige duas imprecisões factuais do PREP e eleva o parecer de **B** para **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC**. O parecer **B** permanece preservado como histórico na entrada seguinte.
+
+### Correção factual 1 — limites dos campos da conta de serviço
+
+- O PREP registrou que `displayName` e `description` da service account não tinham limite documentado. **Isso estava errado.** Os limites oficiais são `displayName` com no máximo **100 bytes UTF-8** e `description` com no máximo **256 bytes UTF-8**.
+- Contagem real verificada dos quatro textos aprovados: role title 25 bytes de 100; role description 149 de 300; service account display name 27 de 100; service account description 148 de 256. Todos folgados, **nenhum texto precisou ser alterado**.
+- Confirmado também que o account ID satisfaz a regex oficial `[a-z]([-a-z0-9]*[a-z0-9])`, além do intervalo de 6 a 30 caracteres já registrado.
+
+### Correção factual 2 — descrição do Policy Troubleshooter
+
+- Substituída a formulação absoluta "Policy Troubleshooter resolveria tudo" por descrição precisa: ele poderia avaliar, **para uma permissão e um recurso determinados**, as allow policies, deny policies e Principal Access Boundary policies relevantes àquela decisão IAM, inclusive herdadas e condicionais, e para um principal diferente do chamador.
+- Registrado que é **adequado à prova IAM deste escopo Firestore**, mas **não deve ser descrito como ferramenta universal** e **não cobre mecanismos externos ao IAM**. Sua API `policytroubleshooter.googleapis.com` precisaria estar habilitada; nenhuma API será habilitada neste fluxo sem bloco próprio; e ele **não será usado no PROVISION-EXEC atual**.
+
+### Decisão humana final — fail-closed
+
+- Adotada a alternativa mais conservadora: **parar antes de criar qualquer recurso quando a ancestralidade IAM não puder ser integralmente verificada.** Foram descartadas as alternativas de conceder ao operador leitura nos níveis superiores e de aceitar formalmente o residual.
+- O PROVISION-EXEC consultará a ancestralidade do projeto **somente por leitura e antes de qualquer mutação**, classificando-a em `project-only`, `project-and-folder`, `project-and-organization`, `project-folder-and-organization`, `inaccessible` ou `ambiguous`.
+- Em `project-only`: analisar a allow policy do projeto, analisar a policy da própria conta depois da criação e aplicar os demais gates já aprovados.
+- Havendo pasta ou organização: exigir leitura **bem-sucedida** das allow policies de **todos** os níveis — projeto, todas as pastas ancestrais e organização. Não considerar apenas a policy do projeto.
+- Qualquer resultado `PERMISSION_DENIED`, `inaccessible`, `ambiguous`, `ancestorPolicyUnreadable` ou `ancestryIncomplete` **interrompe o PROVISION-EXEC antes da criação do custom role e da conta de serviço**.
+- Proibições explícitas: não conceder ao operador novos acessos em pasta ou organização; não criar bloco automático para ampliar permissões do operador; não habilitar Policy Troubleshooter ou Cloud Asset API; não aceitar formalmente o risco de políticas ancestrais não verificadas; não escalar uma verificação incompleta ao `ACTIVATION-PREP`; não tratar ausência de permissão como ausência de policy; não usar tentativa de criação como mecanismo de descoberta.
+- Consequência prática: como a parada ocorre **antes da primeira mutação**, o custo de um bloqueio é zero — nada foi criado, não há rollback a executar e nenhum identificador é consumido, preservando os 44 dias do role ID e os 30 dias de recuperação da conta.
+
+### Análise das allow policies e prova de zero acesso
+
+- Contrato preservado: analisar identidade exata da conta, principal sets de contas de serviço do projeto, das pastas ancestrais e da organização, `allUsers`, `allAuthenticatedUsers`, bindings diretas e herdadas e condições existentes. Qualquer binding aplicável encontrada interrompe o fluxo.
+- Somente allow policies concedem acesso; deny policies somente restringem; PAB policies não concedem acesso isoladamente. A prova de ausência de concessão **depende da verificação integral das allow policies aplicáveis** — a ausência de uma binding direta não é prova suficiente. Um custom role não vinculado não concede acesso, mas uma conta nova **pode ser abrangida automaticamente por principal sets**. Nenhuma chamada Firestore será usada para testar a negativa.
+- A verificação de deny e PAB permanece relevante no `ACTIVATION-PREP`, para identificar bloqueios que impeçam o inventário, mas **não substitui** a análise das allow policies neste provisionamento.
+- Saída inalterada: somente categorias, contagens, hashes e booleanos sanitizados. Nunca projectId, project number, folder number, organization number, membros reais, policies integrais, e-mails ou principal sets completos.
+
+### Classificação e limites
+
+- Classificação final: **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC**. A política fail-closed elimina a única decisão humana pendente; nenhuma outra incerteza bloqueia o contrato; o EXEC pode parar antes da primeira criação quando a ancestralidade não for integralmente legível; nenhuma ampliação de permissão é necessária; e rollback, colisões, polling e sanitização permanecem definidos.
+- Preservados sem alteração: os 44 dias de bloqueio do role ID, os 30 dias de recuperação da conta, as bindings `deleted:` por até 60 dias, o polling de 60 segundos ou mais com backoff, o stage `GA`, a ordem papel-primeiro/conta-depois, a política de colisão, zero user-managed keys, zero bindings, a saída sanitizada, o tratamento de falha parcial, o rollback sem exclusão automática, as sete decisões humanas anteriores e a ordem PROVISION/ACTIVATION/INVENTORY/REVOKE.
+- O parecer **A** autoriza iniciar o PROVISION-EXEC mediante autorização de execução própria; não pré-valida nenhuma verificação remota, todas com parada definida.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, acesso a Google Cloud ou Firebase, gcloud remoto, custom role, conta de serviço, binding, ADC, token, chave, API habilitada, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
+## 2026-07-31 — Conclusão do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP` concluído exclusivamente como pesquisa em documentação oficial do Google Cloud, análise de segurança e atualização documental, a partir do commit-base `b58541d21ba70424870fe16650a50ea9b8e09fe7` (`docs: separar provisionamento e ativação do ADMIN-B2A5`). Parecer intermediário: **B. Pronto com decisão humana pendente** — o contrato operacional do provisionamento está completo e restava uma única decisão, descrita ao fim desta entrada. **Essa decisão foi resolvida na mesma data pelo `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP-DECISION`, que adotou a política fail-closed, corrigiu duas imprecisões factuais desta entrada — os limites de `displayName`/`description` da conta e a descrição do Policy Troubleshooter — e elevou o parecer final a A; ver a entrada do bloco de decisão.** O parecer **B** permanece preservado aqui como histórico.
+
+### Pesquisa oficial consultada
+
+- *Create service accounts* — IAM, Google Cloud Documentation, consultada em 2026-07-31.
+- *Delete, disable, and undelete service accounts* e *List and edit service accounts* — IAM, Google Cloud Documentation.
+- *Create and manage custom roles* e *Understanding IAM custom roles* — IAM, Google Cloud Documentation.
+- *List and get service account keys* — IAM, Google Cloud Documentation.
+- *Troubleshoot access* (Policy Troubleshooter) — IAM, Google Cloud Documentation.
+- *Principal identifiers* e *Principals overview* — IAM, Google Cloud Documentation.
+- *Deny policies overview* e *Deny access to principals* — IAM, Google Cloud Documentation.
+- *Principal access boundary policies* — IAM, Google Cloud Documentation.
+- *Identity and Access Management (IAM)* — Datastore, Google Cloud Documentation, para as permissões `datastore.entities.*`.
+- *List services* — Service Usage, e a referência da CLI `gcloud iam service-accounts keys list`.
+- Nenhum blog, fórum, Stack Overflow, Reddit, tutorial de terceiros ou snippet não oficial foi usado. URLs brutas não foram inseridas nesta governança.
+
+### Identificadores, textos e stage
+
+- `admin-b2a5-inventory-reader`: 27 caracteres, dentro do intervalo obrigatório de 6 a 30, somente minúsculas alfanuméricas e hífens. O nome da conta **não pode ser alterado após a criação**.
+- `adminB2A5InventoryRead`: 22 bytes, dentro do limite de 64, somente alfanuméricos. Custom role IDs aceitam maiúsculas, minúsculas, sublinhados e pontos, mas **não hífens** — o que confirma a escolha camelCase e mostra que a convenção da conta de serviço não poderia ter sido reaproveitada. O role ID é imutável e não reutilizável no projeto.
+- Textos aprovados dentro dos limites oficiais de 100 bytes para o title e 300 bytes para a description do papel; display name e description da conta não têm limite documentado e permanecem folgados. Nenhum texto contém projectId, operador, data real, identificador pessoal ou segredo.
+- Stage decidido: **`GA`**. A documentação classifica os launch stages como informativos, sem efeito sobre a autorização, com a única exceção de `DISABLED`, cujos papéis continuam podendo ser concedidos mas não têm efeito. As permissões são de serviço GA e o papel é mínimo e estável. `DISABLED` fica reservado como alavanca de neutralização não destrutiva, nunca como estado inicial.
+- Permissões inalteradas: `datastore.entities.get` ("Read an entity") e `datastore.entities.list` (lista chaves e exige `get` para acessar dados), nenhuma marcada como não suportada em custom roles. Verificação definitiva por `gcloud iam list-testable-permissions` com filtro `customRolesSupportLevel!=NOT_SUPPORTED`.
+
+### Ordem de criação e consistência eventual
+
+- Ordem decidida: **custom role primeiro, conta de serviço depois**, por razão de segurança e não de conveniência. Um custom role não vinculado **não é um principal** e não pode ser alcançado por nenhuma binding preexistente; uma conta de serviço órfã **é uma identidade** e pode ser capturada automaticamente por um principal set já existente. Criar primeiro o recurso inerte concentra todo o risco na última etapa, imediatamente antes da verificação de acesso efetivo.
+- Assimetria confirmada de consistência eventual: a documentação adverte que, após criar uma conta de serviço, pode ser necessário **aguardar 60 segundos ou mais** antes de usá-la, e recomenda **retry com backoff exponencial**. Para custom roles não há atraso equivalente documentado; o único caso citado, de até 24 horas, envolve alterações em `resourcemanager.*.get`, permissões ausentes deste papel.
+- O polling será somente leitura, limitado em tempo e tentativas, e **nunca repetirá o comando de criação**. Esgotado o limite, o resultado é `timeout` sanitizado — jamais uma segunda mutação.
+
+### Colisões e por que nada será excluído automaticamente
+
+- Política: qualquer estado diferente de `absent` interrompe o EXEC. Categorias sanitizadas: `absent`, `exists-exact`, `exists-divergent`, `deleted`, `inaccessible`, `ambiguous`. `PERMISSION_DENIED` é `inaccessible` e nunca prova de inexistência; "criar e ver se falha" não será mecanismo de descoberta.
+- Base factual severa: excluir um custom role impede criar outro com o mesmo ID no projeto **até o fim do processo de exclusão de 44 dias**. Contas de serviço admitem undelete por **até 30 dias**, suas bindings só são purgadas **em até 60 dias** e aparecem com prefixo `deleted:` e sufixo `?uid=`, e recriar o mesmo nome produz **identidade separada, que não herda os papéis da conta excluída**.
+- Consequência direta no rollback: **preservar, nunca excluir automaticamente**. Ambos os órfãos são inertes — papel não vinculado não concede nada, conta sem binding não tem acesso —, de modo que a exclusão automática apenas para "deixar limpo" seria o pior desfecho possível. As alavancas não destrutivas são `--stage=DISABLED` e `gcloud iam service-accounts disable`, ambas reversíveis e ambas dependentes de autorização humana explícita.
+
+### Prova de ausência de acesso efetivo
+
+- Fundamento lógico fechado: **somente allow policies concedem acesso**. Deny policies apenas impedem o uso de permissões e são avaliadas antes das allow; principal access boundary policies "sozinhas não dão acesso a recursos" e podem apenas tornar um principal inelegível. Portanto, para provar **ausência** de acesso, deny e PAB são irrelevantes — nenhuma delas pode criar permissão. Elas voltam a importar no `ACTIVATION-PREP`, onde um deny inesperado poderia quebrar o inventário.
+- A prova reduz-se à auditoria das allow policies quanto a tudo que possa alcançar uma conta recém-criada: o próprio e-mail da conta; os principal sets de contas de serviço; e `allUsers`/`allAuthenticatedUsers`, este último incluindo contas de serviço por definição oficial. **A afirmação seguinte desta entrada — de que bindings `group:` e `domain:` não alcançariam uma conta nova — foi corrigida ainda em 2026-07-31 quanto a `group:` e em 2026-08-02 quanto a `domain:`; ambos passaram ao contrato fail-closed.**
+- Formato oficial confirmado dos principal sets: `principalSet://cloudresourcemanager.googleapis.com/projects/PROJECT_NUMBER/type/ServiceAccount`, com variantes `/folders/` e `/organizations/`, e associação **automática e dinâmica** — uma conta criada agora passa a pertencer ao conjunto sem nenhuma binding individual. Este é o vetor principal pelo qual o provisionamento poderia produzir, involuntariamente, uma identidade já com acesso.
+- A varredura no nível do projeto é obrigatória e bloqueante: encontrar principal set de contas de serviço, `allUsers` ou `allAuthenticatedUsers` com papel de dados interrompe e escala.
+- Policy Troubleshooter avalia allow, deny e PAB, inclusive herdadas e condicionais, e para outro principal além do chamador — mas **exige habilitar `policytroubleshooter.googleapis.com`**, alteração remota de projeto que permanece proibida sem bloco próprio. Por isso não é o método adotado, e a prova estrutural acima o dispensa.
+- Chaves: listagem restrita a `USER_MANAGED`, com resultado obrigatório zero. Chaves Google-managed existem por padrão e são usadas pela Service Account Credentials API — não devem ser confundidas com chaves criadas pelo projeto. A listagem nunca expõe material privado. Valor maior que zero interrompe, sem exclusão automática.
+
+### APIs, operador e saída
+
+- Verificação somente leitura de `iam.googleapis.com` e `iamcredentials.googleapis.com`, sem habilitar nenhuma. IAM API desabilitada **para** o bloco antes de criar qualquer recurso, porque a criação depende dela. Service Account Credentials API desabilitada **não impede** o PROVISION, que não usa impersonação: registra-se `disabled` e o gate é herdado pelo `ACTIVATION-PREP`. API habilitada nunca equivale a permissão concedida.
+- Operador: somente autenticação gcloud humana já existente e previamente autorizada; proibidos `gcloud auth login`, `gcloud init`, `gcloud auth application-default login`, geração de ADC, impersonação e chave de conta de serviço. O operador esperado será recebido em memória e comparado sem impressão; `--account` e `--project` sempre explícitos, sem `gcloud config set project` e sem alteração persistente de configuração.
+- Permissões mínimas do operador, separadas por finalidade: `iam.roles.create` para criar o papel; `iam.roles.get`/`iam.roles.list` para lê-lo; `iam.serviceAccounts.create` para criar a conta; leitura de contas e chaves; `resourcemanager.projects.getIamPolicy` e `iam.serviceAccounts.getIamPolicy` para as políticas; `serviceusage.services.list` para as APIs. **Explicitamente não necessárias e a não conceder:** qualquer `setIamPolicy`, criação de chaves, Token Creator, Service Account User, papéis básicos Owner/Editor/Viewer, Firebase Admin, Storage, Authentication, Logging e habilitação de APIs. Nenhum papel foi concedido nesta sessão.
+- Saída por allowlist, sem projectId, project number, e-mails, unique ID bruto, resource name completo, política integral, membros, grupos, domains, principal sets reais, token, chave, ADC, caminho de credencial ou output bruto da gcloud. Sem persistência automática em arquivo; o EXEC não criará arquivo no repositório nem exportará política.
+
+### Decisão humana pendente e limites
+
+- **Única decisão em aberto:** se o projeto tiver pai organizacional e o operador **não** puder ler as allow policies de pasta e organização, a herança por principal set de contas de serviço nesses níveis não poderá ser descartada. Opções: **(a)** parar antes de criar qualquer recurso — recomendada, porque nada foi criado e o rollback é gratuito; **(b)** conceder previamente ao operador leitura de políticas nos níveis superiores, o que é mutação de IAM e exige bloco próprio; **(c)** aceitar formalmente o residual e escalá-lo ao `ACTIVATION-PREP`. Se o projeto **não** estiver sob organização, a questão se resolve sozinha e o parecer converte-se a **A** sem nova análise. Por ser esta a única pendência, o prompt-ready do PROVISION-EXEC **não** foi emitido.
+- Nenhuma decisão anterior foi reaberta: as duas permissões, o descarte de `roles/datastore.viewer`, a ausência de chave JSON, o Token Creator apenas na conta específica e apenas na ACTIVATION, o token de aproximadamente 1 hora, a janela de 2 horas, `--max-docs 10000`, os Data Access audit logs como estão, a conta desabilitada e preservada 7 dias, a exclusão apenas com autorização posterior, o `AUTH-REVOKE` obrigatório, a condição pelo database `(default)` e a imposição de coleção e campos pelo código auditado permanecem íntegros. Nenhuma permissão ampliada e nenhuma janela estendida.
+- Esta entrada altera exclusivamente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Não houve autenticação, login, credencial, chave, conta de serviço, custom role, binding, política, API habilitada, acesso a Google Cloud ou Firebase, consulta a dados, execução da ferramenta, inventário, migração, alteração de ferramenta, runtime ou metadata, atualização da data/hora pública, deploy, publicação, staging, commit ou push. Nenhum bloco posterior foi iniciado.
+
+---
+
 ## 2026-07-31 — Ajuste de sequência do ADMIN-B2A5-INVENTORY-AUTH
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
