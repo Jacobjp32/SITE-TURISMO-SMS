@@ -6,6 +6,60 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-03 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-PREP` concluído exclusivamente como pesquisa em documentação oficial do Google Cloud, verificação local somente leitura e atualização documental, a partir do commit-base `66c5f36665029456a208aa8209b13dbfbbfa182d`. Parecer **A. Pronto para ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-EXEC**. Zero download, instalador, instalação, PATH alterado, execução de `gcloud`, login, fluxo OAuth, access token, ADC, configuração gcloud, credencial, acesso a Google Cloud/Firebase, recurso IAM, API habilitada, inventário, alteração funcional, staging, commit, push ou EXEC iniciado.
+
+### Motivo — pré-requisito operacional inexistente
+
+- O parecer **A** do `AUTH-PROVISION-PREP` permanece correto, mas o preflight local do PROVISION-EXEC comprovou que nada podia ser executado: sem CLI instalada e sem operador autenticado, nenhum gate remoto é possível. Instalar software e autenticar uma identidade humana são mutações de ambiente de natureza distinta da criação de recursos IAM, portanto ganham bloco, preflight e autorização próprios em vez de virem embutidas no PROVISION-EXEC.
+- **Ausência comprovada por leitura, sem executar o binário:** `gcloud`, `gcloud.cmd`, `gsutil` e `bq` não resolvem por `Get-Command`; nenhuma entrada de PATH contém `Google`, `Cloud SDK` ou `CloudSDK`; `gcloud.cmd` inexistente sob o perfil até profundidade 4; ausentes `%LOCALAPPDATA%\Google\Cloud SDK`, `%APPDATA%\gcloud`, `%ProgramFiles%\Google\Cloud SDK`, `%ProgramFiles(x86)%\Google\Cloud SDK`, `C:\Google\Cloud SDK` e `%LOCALAPPDATA%\Google\CloudSDK`.
+- **Estado local:** `%APPDATA%\gcloud` ausente; `application_default_credentials.json` ausente; `CLOUDSDK_CONFIG` e `GOOGLE_APPLICATION_CREDENTIALS` não definidas; diretório isolado pretendido ausente; sessão **não** administrativa; Windows 11 Pro AMD64; PowerShell 7.6.3; Python do sistema `Python314`.
+- **Ganho de segurança verificável:** como não existe configuração gcloud nem ADC preexistente, o bloco não pode sobrescrever nada do usuário, e o isolamento passa a ser comprovável por observação — `%APPDATA%\gcloud` e o ADC devem permanecer ausentes após instalação e login. Essa prova é obrigatória no EXEC.
+
+### Decisão 1 — instalação silenciosa, com limite honesto das flags
+
+- Flags oficiais confirmadas verbatim e **case sensitive**: `/S`, `/D`, `/allusers`, `/singleuser` (default), `/screenreader`, `/reporting`, `/noreporting` (default), `/nostartmenu`, `/nodesktop`. Escolhida a instalação **silenciosa** por produzir linha de comando exata, reproduzível e auditável, sem cliques humanos inconsistentes. Não misturar interativa e silenciosa.
+- **Limite registrado sem eufemismo:** a documentação **não** expõe flag para Python empacotado, alteração de PATH, execução de `gcloud init` ou abertura da shell. Esses quatro efeitos **não são preveníveis por flag** e serão tratados por **observação antes/depois**, nunca por promessa. Proibido inventar flag ou tratar comportamento não documentado como garantido.
+- **Restrição derivada e sutil:** `/D` deve ser o último parâmetro, "não pode conter aspas, mesmo que o caminho contenha espaços", e só aceita caminho absoluto. Como o PowerShell cita automaticamente argumentos com espaço, o diretório de instalação **não poderá conter espaço** — o que descarta `%LOCALAPPDATA%\Google\Cloud SDK` como destino explícito. Adotado `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-cli`, com asserção prévia de ausência de espaço sob pena de `installDirectoryPathUnsafeForInstallerFlag`.
+- Escopo por usuário com `/singleuser` explícito. Sessão não administrativa torna a alteração do **PATH do sistema tecnicamente inviável**; alteração inesperada dele interrompe. O diretório padrão não é documentado como caminho fixo e o instalador cria o subdiretório `google-cloud-sdk`, portanto `gcloud.cmd` é **localizado**, nunca presumido.
+
+### Decisão 2 — instalador, assinatura e integridade
+
+- Origem única `https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe`, só HTTPS, sem espelho, gerenciador de pacote ou terceiro. `Get-AuthenticodeSignature` exigindo `Status` `Valid`, certificado presente, cadeia válida e publisher coerente com **Google LLC**; qualquer divergência produz `installerSignatureInvalid` e parada antes de qualquer execução, sem ignorar warnings.
+- SHA-256 calculado e registrado **somente como hash**, como evidência da cópia baixada. **Nenhum hash permanente é fixado**, porque o canal `rapid` muda de versão — allowlist histórica seria falsa segurança.
+
+### Decisão 3 — configuração isolada e diferença CLI/ADC
+
+- O diretório de configuração é `%APPDATA%\gcloud` no Windows e "pode ser alterado definindo a variável de ambiente `CLOUDSDK_CONFIG`"; a CLI "armazena os arquivos de credencial que usa no diretório de configuração". Logo, relocalizar o diretório relocaliza as credenciais da CLI. Adotado `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config`, definido **apenas no processo**.
+- Isolamento por **diretório**, não por configuração nomeada, porque as credenciais residem no diretório e não em cada configuração. Colisão classificada em `absent`, `exists-empty`, `exists-nonempty`, `inaccessible` e `ambiguous`: **somente `absent` autoriza criação**; qualquer outro estado para, sem reutilizar, apagar, renomear, mesclar ou sobrescrever.
+- **Diferença durável registrada:** credenciais da CLI vêm de `gcloud auth login` e ficam no diretório de configuração; o ADC é conjunto **distinto**, para bibliotecas, normalmente criado por `gcloud auth application-default login`, gravado em `%APPDATA%\gcloud\application_default_credentials.json`, com ordem de busca `GOOGLE_APPLICATION_CREDENTIALS` → arquivo bem conhecido → conta de serviço via metadata server. A documentação afirma que a própria CLI **não usa ADC**. **Nenhum ADC será criado**, e a ausência será comprovada por caminho.
+
+### Decisão 4 — autenticação, navegador, projeto e componentes
+
+- Somente `auth login --brief`, porque o comando "obtém credenciais de acesso da conta de usuário por fluxo de autorização web" e "define a conta ativa na configuração atual" — exatamente o necessário. **`gcloud init` descartado** por configurar propriedades comuns, podendo selecionar projeto, região e zona e alterar a configuração ativa, gerando efeitos persistentes desnecessários.
+- Proibidos `application-default login`, `--update-adc`, `--cred-file`, conta de serviço, chave JSON, impersonação, workload identity, `--access-token-file`, `--enable-gdrive-access`, projeto padrão e qualquer `gcloud config set`. Blocos posteriores seguem passando `--project` e `--account` explicitamente.
+- Navegador: fluxo padrão local, já que o ambiente é desktop com navegador. `--no-browser` exige segundo dispositivo confiável com gcloud 372.0.0+ e navegador; o fluxo manual de copiar e colar código tem histórico de descontinuação no ecossistema OAuth. Nenhum dos dois será usado sem autorização, e falha de navegador interrompe sem fallback silencioso.
+- Componentes: registrar versão da CLI, versão do Python e presença de `gcloud`, `bq`, `gsutil` e `core`. **Proibido** `components update`, instalar componente, reverter versão ou agir sobre aviso de atualização, que é informativo. A propriedade oficial `component_manager/disable_update_check` fica registrada; a variável equivalente segue o padrão `CLOUDSDK_SECTION_PROPERTY` demonstrado por `CLOUDSDK_CORE_DISABLE_PROMPTS`, **sem regra geral citada verbatim** — se usada, apenas em processo e como conveniência, com nome incorreto tendo como única consequência um aviso informativo.
+
+### Decisão 5 — persistência, rollback e falhas parciais
+
+- **Persistência: preservar** a autenticação isolada até o `AUTH-REVOKE`, porque PROVISION, ACTIVATION, INVENTORY e o próprio REVOKE dependem do operador autenticado; revogar ao fim do SETUP forçaria novos logins interativos sem ganho de segurança. Risco residual registrado: credencial humana permanece local, em diretório isolado, por todo o workflow. Mitigada por diretório dedicado, zero ADC, zero chave, zero projeto padrão, zero impersonação, zero papel concedido ao operador e obrigação de revogação no REVOKE.
+- **Rollback em quatro planos:** instalação por `uninstaller.exe` oficial; diretório isolado removido **somente** se comprovadamente criado pelo bloco, por caminho absoluto conferido e nunca com `git clean`; login por `gcloud auth revoke`, que revoga o token no servidor e remove a credencial local; e cleanup final ao término do workflow. Reversão de PATH somente se alterado pelo bloco. Nunca apagar configuração padrão, credencial preexistente, diretório preexistente ou instalação preexistente.
+- **Catorze falhas parciais previstas** — de assinatura inválida a ADC criado indevidamente, conta divergente, mais de uma conta ativa e PATH alterado inesperadamente — todas com parada, evidência sanitizada, sem repetir login automaticamente, sem apagar credencial de origem não comprovada e com escalonamento humano na ambiguidade.
+- **Saída sanitizada por allowlist** de 26 campos; proibido imprimir operador, e-mail, projectId, caminhos completos, token, refresh token, código OAuth, URL de autorização, conteúdo de configuração, certificado, logs brutos e output integral do instalador. Rede/proxy/TLS têm seis categorias de parada e proibição expressa de alterar proxy, desativar TLS, instalar certificado ou executar bypass.
+
+### Preservações e limites
+
+- Nenhuma decisão anterior do ADMIN-B2A5 foi reaberta ou ampliada: as duas permissões, o descarte de `roles/datastore.viewer`, zero chave JSON, Token Creator só na conta específica e só na ACTIVATION, token de ~1 hora, janela de 2 horas, `--max-docs 10000`, Data Access audit logs como estão, conta desabilitada e preservada 7 dias, `AUTH-REVOKE` obrigatório, condição pelo database `(default)` e coleção/campos impostos pelo código auditado.
+- **Arquivos alterados:** `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md`. Ferramenta isolada, testes, manifests, Rules, Storage, runtime, `js/site-meta.js`, metadata e data/hora pública **intactos**.
+- **Ordem vigente:** `AUTH-CLI-SETUP-PREP` → commit documental → `AUTH-CLI-SETUP-EXEC` → `AUTH-CLI-SETUP-GOVERNANCE` → `AUTH-PROVISION-EXEC` → `AUTH-PROVISION-GOVERNANCE` → `AUTH-ACTIVATION-PREP` → `AUTH-ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE` → governanças → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`. Publicação de Rules segue exclusiva do `ADMIN-B3`.
+- **Fontes oficiais consultadas (2026-08-03):** *Install the Google Cloud CLI* (atualizado 2026-07-28); *Using the Google Cloud CLI installer* (2026-07-31); *Managing gcloud CLI configurations*; *Initializing the gcloud CLI* (2026-07-28); *Authorize the gcloud CLI* (2026-07-28); *gcloud auth login* (2026-05-27); *gcloud auth list*; *gcloud auth revoke*; *gcloud version*; *How Application Default Credentials works*; *Set up ADC for a local development environment* (2026-07-21); *Managing gcloud CLI components*; *gcloud topic configurations*; *gcloud config set*; *Uninstalling the gcloud CLI* (2026-07-28); *gcloud CLI proxy settings* (2026-07-28).
+
+---
+
 ## 2026-08-02 — Transporte REST dos gates do ADMIN-B2A5-INVENTORY-AUTH-PROVISION-PREP
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
