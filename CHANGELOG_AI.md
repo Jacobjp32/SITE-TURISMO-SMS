@@ -6,6 +6,65 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP` **concluído** com parecer **B. PRONTO COM DECISÃO HUMANA PENDENTE**. Bloco exclusivamente de pesquisa em documentação oficial do Google Cloud, análise de segurança, verificação local somente leitura e atualização documental, a partir do commit-base `2278f79f14f07235badd55b577e393d85ec7e72c` (`docs: registrar reparo do isolamento da CLI do ADMIN-B2A5`). **Nenhum `gcloud` foi executado nesta sessão.** Não houve login, navegador OAuth, autenticação, access token, refresh token, ADC, acesso a Google Cloud/Firebase, custom role, conta de serviço, binding, policy, API habilitada, inventário, alteração funcional, staging, commit ou push.
+
+### Pesquisa oficial consultada
+
+Somente documentação oficial do Google Cloud, sem blogs, fóruns ou tutoriais de terceiros. Consultadas em 2026-08-04: referência de `gcloud auth login`; referência de `gcloud auth revoke`; referência de `gcloud auth list`; referência de `gcloud config list`; referência de `gcloud config configurations list`; guia de configurações do gcloud CLI; guia de autorização do gcloud CLI; guia de Application Default Credentials; e guia de fornecimento de credenciais ao ADC.
+
+### Comportamento oficial confirmado do login
+
+- `gcloud auth login` "Obtains access credentials for your user account via a web-based authorization flow" e "When this command completes successfully, it sets the active account in the current configuration to the account specified".
+- Argumento `ACCOUNT`: "When the account specified has valid credentials in the local credential store these credentials will be re-used, otherwise a new credential will be fetched". Havendo credenciais válidas, "the account is set to active without rerunning the flow"; inexistindo configuração, é criada uma chamada `default`.
+- `--activate` é "Enabled by default"; `--brief` é "Minimal user output".
+- Consequência contratual: como o baseline pré-login exige zero contas credentialed, o caminho de reutilização silenciosa não pode ocorrer. Login sem abertura de navegador com baseline zero é **anomalia**, não sucesso — e `--force` fica proibido justamente por mascarar essa anomalia.
+- A criação/atualização da configuração `default` **dentro do diretório isolado** é esperada e não é falha; o diretório já contém `configurations/config_default` vazio e `active_config` criados pelo próprio SDK no reparo. Somente configuração **adicional** inesperada produz `unexpectedConfigurationDetected`.
+
+### Decisões registradas
+
+- **Comando único:** `auth login OPERATOR_IN_MEMORY --brief`, por caminho absoluto de `gcloud.cmd`, sob `CLOUDSDK_CONFIG` isolado somente no processo.
+- **Flags proibidas, com razão:** `--no-activate` (a ativação é o padrão e é necessária); `--update-adc`, que "Write[s] the obtained credentials to the well-known location for Application Default Credentials (ADC)"; `--force`; `--cred-file`, que é caminho de external account ou chave JSON de service account; `--enable-gdrive-access`; `--login-config` (workforce identity federation); `--no-browser` e `--no-launch-browser`; `--impersonate-service-account`; `--access-token-file`; `--project`; `--billing-project`. Também `gcloud init` e qualquer `gcloud config set`.
+- **Fallback sem navegador proibido sem autorização separada:** `--no-browser` exige "a different, trusted device that has both a web browser and the gcloud CLI version 372.0.0 or later installed"; `--no-launch-browser` depende de copiar URL e colar código obtido em outro dispositivo. Falha do navegador produz `oauthBrowserUnavailable` e para.
+- **Operador humano só em memória:** e-mail exato mais a autorização literal `AUTORIZO O ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC`, nunca em documento, script, Git, relatório ou log; representado só por hash e booleanos. Normalização limitada a trim externo e comparação case-insensitive. Proibido aceitar service account, `iam.gserviceaccount.com`, workload/workforce identity, arquivo de credencial ou chave JSON.
+- **Dois wrappers separados:** `Invoke-IsolatedLocalGcloud`, com prompts desativados, output só em memória e allowlist fechada — `info`, `auth list`, `config list`, `config configurations list` e `version`; e `Invoke-IsolatedHumanLogin`, permitido **uma única vez** e só para o login, com navegador padrão, zero automação de browser, zero captura de senha ou MFA, zero fallback e zero repetição automática. Nenhuma chamada `gcloud` fora dos dois wrappers.
+- **Exceção controlada de prompts:** o login é interativo por natureza; remover temporariamente **apenas** o `CLOUDSDK_CORE_DISABLE_PROMPTS` criado pelo próprio bloco, executar só o login e restaurá-lo em seguida. Nunca remover variável preexistente do usuário.
+- **Fluxo do navegador sob controle humano:** avisar antes, iniciar uma única vez, devolver o controle ao humano e aguardar. Proibido interagir com janela, seletor de conta, senha, MFA, consentimento, códigos ou cookies; proibido screenshot, registro de URL OAuth ou de códigos; proibido segundo fluxo automático.
+- **ADC estritamente separado:** ordem oficial `GOOGLE_APPLICATION_CREDENTIALS` → arquivo de `gcloud auth application-default login` → conta de serviço via metadata server; no Windows, `%APPDATA%\gcloud\application_default_credentials.json`; "The credentials you provide to ADC by using the gcloud CLI are distinct from your gcloud credentials" e "The gcloud CLI itself doesn't use ADC to access Google Cloud resources". Verificar só existência, nunca conteúdo.
+- **Rollback por revogação real:** `gcloud auth revoke CONTA_EM_MEMÓRIA --quiet` sob o mesmo `CLOUDSDK_CONFIG`. Para contas de usuário, "This command revokes the user account token on the server. If the revocation is successful, or if the token has already been revoked, this command removes the credential from the local machine" — portanto atinge servidor **e** máquina local, e não depende de excluir o diretório. `--all` só com baseline zero comprovado e origem integralmente atribuída ao bloco; caso contrário, parar e escalar.
+
+### Verificação local somente leitura
+
+- Instalação preservada, com `gcloud.cmd` presente no diretório isolado de instalação.
+- `%APPDATA%\gcloud` **ausente**; ADC **ausente**; `CLOUDSDK_CONFIG` e `GOOGLE_APPLICATION_CREDENTIALS` ausentes em processo e em escopo de usuário.
+- Diretório isolado existente, sem reparse point, com proprietário esperado e contendo apenas cinco arquivos de metadata do SDK — `.last_survey_prompt.yaml`, `active_config`, `gce`, `configurations/config_default` vazio e um log de `2026-08-04` — e **zero** artefatos de credencial (`credentials.db`, `access_tokens.db`, `legacy_credentials`, `application_default_credentials.json`).
+- Essa leitura sustenta a expectativa do baseline, mas **não substitui** a reverificação obrigatória imediatamente antes do login no EXEC.
+
+### Riscos residuais
+
+- **Persistência da credencial.** A documentação oficial adverte: "Any user with access to your file system can use the stored access credentials created by `gcloud auth login`". A credencial é refresh token de conta humana, utilizável sem nova senha e sem novo MFA, e o operador detém no contrato do `PROVISION-PREP` permissões de mutação IAM, incluindo `iam.roles.create` e `iam.serviceAccounts.create`.
+- Mitigações vigentes: diretório isolado e dedicado protegido pelo perfil do usuário; zero ADC; zero chave; zero projeto padrão; zero impersonação; nenhum papel concedido ao operador por este bloco; e `gcloud auth revoke` obrigatório no `AUTH-REVOKE`, que não poderá depender apenas da exclusão do diretório.
+- **Rede — formulação precisa:** o login **necessariamente** faz comunicação remota com os serviços de autenticação do Google. O bloco afirma `intentionalAuthenticationRemoteFlowExecuted = true`, `intentionalRemoteResourceCommandExecuted = false` e `networkAbsenceForensicallyProven = false`, este intencional e sem alegação de captura de tráfego ou prova forense absoluta.
+
+### Decisão humana pendente — motivo do parecer B
+
+Todas as demais credenciais e permissões do `ADMIN-B2A5` têm limite explícito: token de impersonação de aproximadamente 1 hora, binding IAM de 2 horas, conta de serviço desabilitada e preservada 7 dias. A credencial da CLI é a **única** vinculada apenas ao evento `AUTH-REVOKE`, sem limite temporal, e a sequência ainda intercala `LOGIN-GOVERNANCE` e `PROVISION-GOVERNANCE` entre o login e o inventário. Sem prazo declarado, a cláusula "qualquer pausa ou abandono do workflow exige revogação explícita" fica inaplicável, porque "pausa" não está definida. **Nenhum prazo foi inventado.** A decisão deverá fixar: o prazo máximo de persistência sem progresso do workflow; se ele dispara revogação obrigatória ou apenas reavaliação; e quem executa a revogação em caso de pausa ou abandono. Por isso o parecer é **B**, o `LOGIN-EXEC` **não** foi autorizado e **nenhum prompt-ready foi produzido** — este é reservado à classificação **A**.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — nova seção com o contrato durável do `LOGIN-PREP`; supersessão marcada nos dois bullets do `ISOLATION-REPAIR-EXEC` que apontavam o LOGIN-PREP como próximo gate; atualização dos dois parágrafos de estado consolidado.
+- `TASKS.md` — decisão humana pendente como próximo gate; `LOGIN-PREP` marcado como concluído com o contrato do futuro EXEC; sequência e status geral atualizados; `LOGIN-EXEC` mantido como não iniciado.
+- `CHANGELOG_AI.md` — esta entrada.
+
+### Próximo gate
+
+Commit documental deste PREP → **decisão humana sobre o limite temporal da persistência da credencial** → `CLI-SETUP-LOGIN-EXEC` → `LOGIN-GOVERNANCE` → `AUTH-PROVISION-EXEC` → `PROVISION-GOVERNANCE` → `ACTIVATION-PREP` → `ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE` → governanças correspondentes → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`. Nenhuma etapa inicia automaticamente; a publicação de Rules permanece exclusiva do `ADMIN-B3`.
+
+---
+
 ## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-ISOLATION-REPAIR-GOVERNANCE
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
