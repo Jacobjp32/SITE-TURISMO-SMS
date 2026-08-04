@@ -6,6 +6,64 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-ISOLATION-REPAIR-GOVERNANCE
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-ISOLATION-REPAIR-EXEC` **concluído**, com classificação funcional **A. STORES LOCAIS ATRIBUÍDOS AO SDK E COMPROVADAMENTE VAZIOS; ISOLAMENTO DA GOOGLE CLOUD CLI REPARADO SEM LOGIN**. Esta entrada é atualização **exclusivamente documental** da conclusão, a partir do commit-base `4042c309bb523b7864a25efd2fb031e792f2a147` (`docs: preparar reparo do isolamento da CLI do ADMIN-B2A5`). Nenhum `gcloud` foi executado nesta governança, e não houve login, navegador OAuth, acesso a Google Cloud/Firebase, ADC, token, chave, custom role, conta de serviço, binding, API habilitada, inventário, alteração funcional, staging, commit ou push.
+
+### Duas paradas C históricas, preservadas como corretas
+
+- **`CLI-SETUP-EXEC` (2026-08-03):** PARADA FAIL-CLOSED ANTES DO LOGIN — CLI instalada, isolamento não comprovado, operador não autenticado, sob `isolatedConfigUnverified`, porque `%APPDATA%\gcloud` passou a existir após estar comprovadamente ausente no preflight.
+- **`ISOLATION-REPAIR-EXEC` anterior:** parada **C** enquanto a origem dos artefatos e o conteúdo dos stores locais não estavam comprovados, conforme os critérios cumulativos de remoção segura.
+- **Ambas permanecem registradas como histórico correto.** A classificação **A** decorre exclusivamente das evidências adicionais obtidas depois, **não** de flexibilização de critério: enquanto a atribuição e o conteúdo eram desconhecidos, parar era o comportamento certo.
+
+### Atribuição final dos artefatos locais
+
+- **Janela reconciliada:** `2026-08-03T18:13:46Z` a `2026-08-03T18:13:57Z` pertence ao anterior `ISOLATION-REPAIR-EXEC`, o que dá atribuição temporal comprovada, dentro de execução conhecida do workflow, aos artefatos antes tratados como de origem indeterminada.
+- **Banco de metadata antes ambíguo:** atribuído ao SDK como `sdkManagedLocalMetadataNoCredentials` — metadata local gerenciada pelo próprio SDK, sem credencial.
+- **Credential stores dos diretórios padrão e isolado:** atribuídos inequivocamente ao SDK, esquema reconhecido, **zero linhas**, hashes antes/depois idênticos e **zero sidecars** — `sdkManagedEmptyCredentialStore`.
+- **Access-token caches dos dois diretórios:** atribuídos inequivocamente ao SDK, esquema reconhecido, **zero linhas**, hashes antes/depois idênticos e **zero sidecars** — `sdkManagedEmptyAccessTokenCache`.
+- **Artefatos desconhecidos:** `unknownWorkflowArtifactCount = 0`.
+- **Estado autenticado antes do reparo:** zero contas credentialed, zero contas ativas, zero projeto, zero impersonação, zero access-token file e zero ADC.
+
+### Método de inspeção — leitura estrita, sem escrita
+
+- Python empacotado da própria CLI, invocado por caminho absoluto, com código mantido **somente em memória**.
+- SQLite aberto em `mode=ro`, com `immutable=1` e `PRAGMA query_only=ON`.
+- Leitura restrita a cabeçalho, schema, integrity check e `COUNT(*)`; **zero leitura de valores** e **zero escrita**.
+- A igualdade dos hashes antes e depois é a prova observacional de que a inspeção não alterou os arquivos. Nenhum valor, e-mail, token, projectId ou conteúdo de configuração foi lido, impresso ou persistido.
+
+### Remoções, recriação e prova de isolamento
+
+- **Diretório padrão:** removido por caminho absoluto validado e **não reapareceu** após as chamadas posteriores.
+- **Diretório isolado anterior:** removido por caminho absoluto validado.
+- **Diretório isolado novo:** recriado vazio, fora do repositório, com proprietário esperado e sem ponto de reparse; caminho comprovado pelo campo oficial `gcloud info --format="value(config.paths.global_config_dir)"`.
+- **Instalação da CLI:** preservada, não reinstalada, não desinstalada e sem alteração de PATH nesta execução.
+- **Resultado sanitizado:** `isolatedConfigPathVerifiedAfterRepair = true`, `defaultConfigReappeared = false`, `loginExecuted = false`, `adcDetected = false`, `rollbackRequired = false` e `failureCategory = null`.
+
+### Limites e não ações
+
+- Zero login, navegador OAuth, conta Google autenticada, ADC, access token, ID token, chave, impersonação, recurso IAM, API habilitada, Firestore, Storage, inventário, migração, deploy e publicação.
+- Nenhuma alteração no repositório durante o EXEC e nenhum bloco posterior iniciado.
+- **Rede:** nenhum comando destinado a recurso Google Cloud remoto; o único acesso remoto intencional foi `git fetch origin`; `networkAbsenceForensicallyProven = false` permanece **intencional e não é falha**, e **nenhuma alegação absoluta de ausência de tráfego de rede** é feita.
+
+### Próximo bloco
+
+`ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP`, ainda **não iniciado** e dependente de autorização própria. O LOGIN-PREP precede o LOGIN-EXEC porque a autenticação humana grava credenciais no diretório isolado, torna uma conta ativa, abre fluxo OAuth no navegador, cria estado local sensível e exige contrato próprio de operador, sanitização, rollback e revogação. O projeto **não** deve ser classificado como pronto diretamente para o `PROVISION-EXEC`.
+
+Sequência futura: `ISOLATION-REPAIR-GOVERNANCE` → commit documental separado → `CLI-SETUP-LOGIN-PREP` → commit documental do LOGIN-PREP → `CLI-SETUP-LOGIN-EXEC` → `LOGIN-GOVERNANCE` → `AUTH-PROVISION-EXEC` → `PROVISION-GOVERNANCE` → `ACTIVATION-PREP` → `ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE` → governanças correspondentes → demais blocos do roadmap. Publicação de Rules permanece exclusiva do `ADMIN-B3`.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — nova seção do resultado do `ISOLATION-REPAIR-EXEC`, ordem futura da seção do PREP marcada como superada e dois bullets de status atualizados.
+- `TASKS.md` — status geral, novo próximo passo `CLI-SETUP-LOGIN-PREP`, registro da conclusão do reparo, contrato do PREP preservado como referência, pré-requisito do PROVISION e sequência vigente.
+- `CHANGELOG_AI.md` — este registro.
+
+Nenhum arquivo funcional, script, Rule, teste, dependência, configuração, runtime, metadata ou asset foi alterado. A data/hora pública não foi atualizada.
+
+---
+
 ## 2026-08-03 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-EXEC (parcial) e ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-ISOLATION-REPAIR-PREP
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
