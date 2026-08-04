@@ -6,6 +6,58 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP-DECISION
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** decisão humana recebida e incorporada; o `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP` passa de **B. PRONTO COM DECISÃO HUMANA PENDENTE** para **A. PRONTO PARA ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC**. Bloco exclusivamente documental, a partir do commit-base `03a974b926cbf55fe9d279be5c8a8b98d090cd8f` (`fix: atualizar logos e mascotes do portal`). Não houve execução de `gcloud`, login, OAuth, autenticação, token, ADC, chave, IAM, Firestore, Storage, inventário, alteração funcional, staging, commit ou push. O parecer **B** permanece preservado como histórico correto do período em que a política de persistência não existia.
+
+### Registro de método
+
+O `LOGIN-PREP` encerrou em **B** deliberadamente, sem propor números, e registrou "Nenhum prazo foi inventado". Uma primeira mensagem de aprovação chegou **sem parâmetros**; como não havia valores a aprovar, nada foi registrado e os valores foram solicitados. Os sete parâmetros abaixo vieram integralmente do operador humano nesta data. Nenhum prazo, responsável ou efeito foi inferido, arredondado ou completado pela análise.
+
+### Os sete parâmetros vinculantes aprovados
+
+1. **60 minutos** de persistência máxima sem **progresso material**. Progresso material é exclusivamente a conclusão comprovada de um gate ou bloco previsto na sequência vigente. **Não** contam: leitura, espera, pesquisa, preparação de comandos, revisão documental sem conclusão e ausência de resposta.
+2. **8 horas** absolutas após a conclusão bem-sucedida do `LOGIN-EXEC`, independentemente de haver progresso. **Nenhuma extensão automática.**
+3. Atingir **qualquer** um dos dois limites exige **revogação imediata**, e não apenas reavaliação. Os limites são independentes e cumulativos; prevalece o mais próximo.
+4. Pausa planejada que possa ultrapassar 60 minutos, encerramento de sessão, abandono do workflow ou impossibilidade de prosseguir exigem `AUTH-REVOKE` **antes** da pausa ou do encerramento.
+5. **Codex** é o responsável primário pela execução do `AUTH-REVOKE` enquanto a tarefa estiver ativa e o ambiente disponível.
+6. Encerrados tarefa ou ambiente, o **operador humano responsável** executa manualmente o `AUTH-REVOKE`; na indisponibilidade dele, um proprietário ou administrador humano autorizado do projeto.
+7. Após a revogação, qualquer retomada exige **novo `LOGIN-EXEC`**, com preflight, operador informado e autorização humana próprios.
+
+**Natureza dos prazos:** governança específica deste projeto. Não são limites impostos pelo Google, não derivam de expiração de refresh token e não podem ser descritos como comportamento da plataforma.
+
+### Três consequências derivadas — aritmética da política, não decisões novas
+
+- **Prontidão obrigatória da cadeia.** Com 8 horas absolutas, o `LOGIN-EXEC` não deve começar enquanto `LOGIN-GOVERNANCE`, `AUTH-PROVISION-EXEC`, `PROVISION-GOVERNANCE`, `ACTIVATION-PREP`, `ACTIVATION-EXEC`, `INVENTORY-EXEC` e `AUTH-REVOKE` não estiverem prontos para execução praticamente contínua. É a mesma correção estrutural que o `AUTH-SEQUENCING-ADJUSTMENT` aplicou às bindings: governança documental não deve consumir janela de credencial viva.
+- **`AUTH-REVOKE` dentro da janela, nunca depois.** Remover bindings, desabilitar a conta de serviço e revogar o ADC dependem do operador autenticado. Logo, `ACTIVATION-EXEC`, `INVENTORY-EXEC` e `AUTH-REVOKE` devem terminar antes de `loginCompletedAtUtc + 8h`, e o `ACTIVATION-PREP` deverá posicionar a janela IAM de 2 horas em conformidade. Deixar a credencial expirar com binding viva é resultado proibido.
+- **Escopo proporcional do `AUTH-REVOKE`.** Vencimento antes do `PROVISION-EXEC` ou do `ACTIVATION-EXEC` reduz o bloco à revogação da credencial da CLI, limpeza das variáveis de processo e comprovação de estado zero. Não inventar recurso para revogar; não declarar removido o que nunca existiu.
+
+### Ajuste mínimo no contrato do LOGIN-EXEC
+
+A saída sanitizada recebe quatro campos, necessários para tornar a política verificável: `loginCompletedAtUtc`, `credentialAbsoluteDeadlineUtc` (`+8h`), `credentialIdleDeadlineUtc` (`+60min`) e `persistencePolicyAcknowledged`. São timestamps UTC do próprio fluxo, sem identificador pessoal, sujeitos às mesmas proibições de impressão de operador, e-mail, token, caminho e output bruto. Nenhum outro item do contrato do `LOGIN-PREP` foi alterado.
+
+### Nenhuma decisão anterior reaberta
+
+Permanecem íntegros: as duas permissões do custom role; o descarte de `roles/datastore.viewer`; a ausência de chave JSON; o Token Creator apenas na conta específica e apenas na ACTIVATION; o token de impersonação de ~1 hora; a janela IAM de 2 horas; `--max-docs 10000`; os Data Access audit logs como estão; a conta de serviço desabilitada e preservada 7 dias; a condição pelo database `(default)`; e a imposição de coleção e campos pelo código auditado. A política de 60 minutos e 8 horas aplica-se **exclusivamente** à credencial da CLI do operador humano.
+
+### Classificação e produto
+
+Parecer final **A. PRONTO PARA ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC**. O prompt-ready integral do `LOGIN-EXEC` foi produzido e entregue no relatório deste bloco, direcionado a GPT-5.6 Codex com reasoning effort High. O `LOGIN-EXEC` **não** foi iniciado.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — nova seção `LOGIN-PREP-DECISION` com os sete parâmetros, as três consequências derivadas e os campos temporais; bullet da decisão pendente marcado como histórico superado; sequência e dois parágrafos de estado atualizados.
+- `TASKS.md` — `LOGIN-EXEC` como próximo bloco com gate de prontidão; política de persistência registrada como vinculante; parecer do PREP elevado a **A**; sequência e status geral atualizados.
+- `CHANGELOG_AI.md` — esta entrada.
+
+### Próximo gate
+
+Commit documental desta DECISION → confirmação de prontidão da cadeia → `CLI-SETUP-LOGIN-EXEC` (exige e-mail do operador e a autorização literal) → `LOGIN-GOVERNANCE` → `AUTH-PROVISION-EXEC` → `PROVISION-GOVERNANCE` → `ACTIVATION-PREP` → `ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE` → governanças correspondentes → `MIGRATION-PREP` somente se necessário → `FIRESTORE-PREP/EXEC` → `RUNTIME-PREP/EXEC` → `ADMIN-B2B` → `ADMIN-B3`. Nenhuma etapa inicia automaticamente; a publicação de Rules permanece exclusiva do `ADMIN-B3`.
+
+---
+
 ## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
