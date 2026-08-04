@@ -2,8 +2,8 @@
   "use strict";
 
   window.SITE_META = window.SITE_META || {
-    version: "Turismo SMS 1.0.1",
-    updatedAt: "2026-07-30T11:06:56-03:00",
+    version: "Turismo SMS 1.0.2",
+    updatedAt: "2026-08-04T14:25:18-03:00",
     environment: "production"
   };
 

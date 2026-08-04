@@ -147,14 +147,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/variables.css?v=site-public-b1-20260708">
-    <link rel="stylesheet" href="css/index.css?v=site-public-b1-20260708">
+    <link rel="stylesheet" href="css/index.css?v=site-logo-mascotes-20260804-1421">
     <link rel="stylesheet" href="css/season-theme.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
 
     <!-- Sistema de Traduções -->
     <script src="translations.js?v=site-public-b1-20260708"></script>
     <script src="config.js?v=site-public-b1-20260708"></script>
-    <script src="js/site-meta.js?v=site-public-b1-20260708" defer></script>
+    <script src="js/site-meta.js?v=site-logo-mascotes-20260804-1421" defer></script>
     <script src="js/season-theme.js?v=site-public-b1-20260708" defer></script>
     <script src="js/locais-data.js?v=site-public-b1-20260708" defer></script>
     <script src="js/rotas-data.js?v=site-public-b1-20260708" defer></script>
@@ -173,7 +173,7 @@
 
 </head>
 <body class="home-page">
-    <script src="js/nav-shared.js?v=site-public-v7a-20260716"></script>
+    <script src="js/nav-shared.js?v=site-logo-mascotes-20260804-1421"></script>
 
     <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
     <div id="public-banners-slot" hidden></div>
@@ -663,9 +663,20 @@
                 <small class="mascotes-disclaimer">Versões provisórias — nomes e designs em definição</small>
             </div>
             <div class="mascotes-teaser-figures">
-                <img src="images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp" alt="Capivara Pinhão" class="mascote-fig mascote-fig--main" loading="lazy" decoding="async" width="1200" height="1200">
-                <img src="images/mascotes/MASCOTE_MENINO_POLONES_1.webp" alt="Menino Polonês" class="mascote-fig mascote-fig--side mascote-fig--left" loading="lazy" decoding="async" width="1200" height="1200">
-                <img src="images/mascotes/MASCOTE_PERY.webp" alt="Pery" class="mascote-fig mascote-fig--side mascote-fig--right" loading="lazy" decoding="async" width="1200" height="1200">
+                <picture class="mascotes-teaser-picture">
+                    <source
+                        type="image/webp"
+                        srcset="images/mascotes/mascotes-sao-mateus-do-sul-1200.webp 1200w, images/mascotes/mascotes-sao-mateus-do-sul-1600.webp 1600w"
+                        sizes="(max-width: 1024px) 92vw, 56vw">
+                    <img
+                        src="images/mascotes/mascotes-sao-mateus-do-sul.png"
+                        alt="Conjunto de mascotes de São Mateus do Sul representando a cultura polonesa, a erva-mate, o xisto, o Rio Iguaçu e a fauna local"
+                        class="mascotes-teaser-group"
+                        loading="lazy"
+                        decoding="async"
+                        width="2048"
+                        height="1365">
+                </picture>
             </div>
         </div>
     </section>
@@ -1172,7 +1183,7 @@
     <footer class="footer" id="footer">
         <!-- Seção Principal do Footer -->
         <div class="footer-main">
-            <img src="images/LOGO_PIN_TURISMO_3D_COM_TEXTO_BRANCA.png" alt="São Mateus do Sul" loading="lazy" decoding="async" width="400" height="286" style="height: 120px; width: auto; margin-bottom: 0.75rem; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));">
+            <img src="images/branding/logo-visite-sao-mateus-do-sul-com-fundo.png" alt="Visite São Mateus do Sul — riqueza que se cultiva, tradição que se vive" class="footer-brand-logo" loading="lazy" decoding="async" width="393" height="318">
             <p style="font-size: 1.1rem;" data-lang-key="footer-subtitulo">Capital Polonesa do Paraná • Terra da Erva-Mate • Terra do Xisto</p>
             <p style="opacity: 0.8; margin-top: 0.5rem;" data-lang-key="footer-slogan">Experiências autênticas no coração do Paraná</p>
             
