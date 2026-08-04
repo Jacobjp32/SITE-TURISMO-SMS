@@ -6,6 +6,120 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-EXECUTABLE-RECOVERY-PREP-DECISION
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** decisão humana recebida e incorporada; o `ADMIN-B2A5-INVENTORY-AUTH-CLI-EXECUTABLE-RECOVERY-PREP` passa de **B. PRONTO COM DECISÃO HUMANA PENDENTE** para **A. PRONTO PARA NOVO ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC**. Bloco exclusivamente documental, sobre o mesmo commit-base `4d0c726619d6eff0181663fc6a52ca2eb8828982`. Não houve `gcloud`, login, OAuth, autenticação, download, instalação, reinstalação, alteração de PATH, ADC, token, chave, IAM, Firestore, Storage, inventário, alteração funcional, staging, commit ou push. O parecer **B** permanece preservado como histórico correto do período anterior à decisão.
+
+### Opção A aprovada — recuperação cancelada
+
+O `ADMIN-B2A5-INVENTORY-AUTH-CLI-EXECUTABLE-RECOVERY-EXEC` está **cancelado por desnecessidade comprovada**: a instalação foi verificada como presente, completa, íntegra e atribuível ao workflow. Ficam proibidos, sem bloco e autorização novos: download, reinstalação, reparo, substituição, extração, desinstalação, atualização da CLI e alteração de PATH. O contrato contingente registrado no PREP fica **sem efeito operacional**, preservado apenas como histórico da hipótese B.
+
+### Instalação a preservar
+
+Google Cloud CLI **578.0.0**; Python empacotado **3.14.6**; instalação single-user; diretório isolado já reparado; diretório padrão ausente; PATH atual. **A instalação não deverá ser substituída pela versão corrente do canal `rapid`** — hoje 579.0.0.
+
+### Classificação definitiva do diagnóstico local
+
+**`present-and-complete`.** Registrado que: `gcloud.cmd` existe no caminho absoluto planejado; a árvore e os manifests estão completos; o registro `HKCU` corresponde à instalação; o PATH de usuário possui uma entrada coerente; não existe segunda instalação concorrente; a falha anterior foi de **detecção**; e a causa específica **permanece indeterminada**. As hipóteses levantadas no PREP **não** devem ser registradas nem tratadas como fatos.
+
+### Contrato corretivo de detecção — vinculante
+
+Construir **no próprio processo** `$InstallRoot = Join-Path $env:LOCALAPPDATA "Google\CloudSDK\admin-b2a5-cli"` e `$GcloudPath = Join-Path $InstallRoot "google-cloud-sdk\bin\gcloud.cmd"`. A detecção usa **exclusivamente** o caminho absoluto e **não** pode depender do PATH, de `Get-Command`, do diretório atual, de estado de shell anterior ou de variável de outra sessão, nem pesquisar variantes com espaço no nome. Antes de executar, confirmar: arquivo existente; arquivo regular; proprietário esperado; sem ponto de reparse; dentro da raiz esperada; fora do repositório; versão e instalação coerentes. Se o arquivo absoluto não existir: **parar fail-closed**, sem busca ilimitada por instalação alternativa e sem instalar ou reparar automaticamente.
+
+### Provas obrigatórias antes do login
+
+Depois da validação física e **antes** do login, pelo `gcloud.cmd` absoluto e sob `CLOUDSDK_CONFIG` isolado, confirmar `gcloud info --format="value(installation.sdk_root)"` e `gcloud info --format="value(config.paths.global_config_dir)"`, com `installationSdkRootVerified = true` e `isolatedConfigPathVerifiedBeforeLogin = true` comprovados **separadamente**, mais diretório padrão ausente, zero contas, zero ADC, zero projeto, zero impersonação e zero access-token file.
+
+### Nova execução, não repetição
+
+O `LOGIN-EXEC` anterior permanece registrado como interrompido antes do OAuth: `loginStarted = false`, `loginCompleted = false`, `browserFlowUsed = false`, nenhuma credencial criada, nenhum prazo iniciado, nenhum `AUTH-REVOKE` necessário. A nova tentativa é um **novo** `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` e exigirá novamente operador em memória, confirmação de prontidão da cadeia e autorização humana literal própria. **A autorização anterior não pode ser reutilizada.**
+
+### Classificação e produto
+
+**A. PRONTO PARA NOVO ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC.** Prompt-ready integral e corrigido produzido e entregue no relatório do bloco, direcionado ao GPT-5.6 Codex com Reasoning effort High. Nenhuma decisão anterior do ADMIN-B2A5 foi reaberta; a política de persistência de 60 minutos e 8 horas permanece íntegra e só passará a correr quando um `LOGIN-EXEC` concluir com sucesso. O novo bloco **não** foi iniciado automaticamente.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — seção da DECISION, cancelamento do `RECOVERY-EXEC`, instalação a preservar, classificação definitiva, contrato corretivo de detecção, provas pré-login, regra de nova autorização e sequência vigente.
+- `TASKS.md` — novo `LOGIN-EXEC` como próximo bloco, `RECOVERY-EXEC` marcado como cancelado, contrato corretivo de detecção e atualização da sequência.
+- `CHANGELOG_AI.md` — esta entrada.
+
+---
+
+## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-EXECUTABLE-RECOVERY-PREP
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** **B. PRONTO COM DECISÃO HUMANA PENDENTE.** Bloco de diagnóstico local somente leitura, pesquisa em documentação oficial do Google Cloud e atualização exclusivamente documental, a partir do commit-base `4d0c726619d6eff0181663fc6a52ca2eb8828982` (`docs: definir persistência do login do ADMIN-B2A5`). Não houve download, instalador, instalação, reinstalação, extração, execução de `gcloud`, login, OAuth, alteração de PATH, alteração de diretórios da CLI, remoção de instalação, ADC, token, chave, recurso IAM, acesso a Firestore/Storage/dados, inventário, staging, commit ou push.
+
+### Registro da parada do LOGIN-EXEC
+
+O `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` foi autorizado e **interrompido fail-closed antes do OAuth**, com `failureCategory = gcloudExecutableNotLocated`. Concluídos: autorização literal recebida, operador recebido somente em memória, política de persistência reconhecida, diretório isolado existente e sem reparse point, diretório padrão ausente, zero indicadores de credencial e `GOOGLE_APPLICATION_CREDENTIALS` ausente. Não ocorreram: login, navegador OAuth, access token, refresh token, ADC, conta autenticada, IAM, acesso a dados, inventário ou alteração do repositório. `loginStarted = false`, `loginCompleted = false`, `browserFlowUsed = false`, `rollbackRequired = false`.
+
+**Nenhum prazo de credencial foi iniciado.** Sem conclusão do login não existe `loginCompletedAtUtc`, logo os limites de 60 minutos e 8 horas não começaram a correr, e **nenhum `AUTH-REVOKE` é necessário** — não há credencial, binding, conta de serviço ou ADC a revogar.
+
+### Achado central — a premissa do bloco não se confirmou
+
+O bloco foi aberto para diagnosticar e recuperar uma instalação presumidamente ausente. A inspeção comprovou o contrário: **a instalação da Google Cloud CLI está presente, completa e íntegra no caminho exato anteriormente planejado.** A falha foi de **detecção pelo bloco**, não de ausência do executável, e **nenhuma recuperação de instalação é necessária**.
+
+### Classificação do estado local — sexta categoria
+
+Nenhuma das cinco categorias previstas descreve o estado real: `absent` exigiria ausência do executável, `partial` exigiria componentes faltantes, `moved` exigiria caminho diferente, `inaccessible` exigiria falha de permissão e `ambiguous` exigiria múltiplas instalações ou origem não comprovada. Adotou-se **`present-and-complete`**, ampliando a taxonomia em vez de classificar por aproximação e sem elevar inferência a fato.
+
+### Evidências, todas por metadados e somente leitura
+
+- `google-cloud-sdk\bin\gcloud.cmd` sob a raiz esperada: 11.048 bytes, proprietário igual ao usuário atual, atributo `Archive`, sem ponto de reparse, `CreationTimeUtc` em `2026-08-03T13:28:47Z` — dentro da janela documentada do `CLI-SETUP-EXEC`.
+- `VERSION` = **578.0.0**, exatamente a versão registrada naquele bloco.
+- Árvore com **49.054 arquivos**, 9.911 diretórios, ~749 MB e **zero pontos de reparse**; presentes `bin`, `lib`, `data`, `platform`, `deb`, `rpm`, `.install`, `install.bat`, `properties`, `LICENSE`, `RELEASE_NOTES` e `path.*.inc`.
+- Manifests completos em `.install`: `core`, `core-win`, `gcloud`, `gcloud-windows-x86_64`, `gcloud-deps`, `gcloud-deps-windows-x86_64`, `gcloud-crc32c`, `gcloud-crc32c-windows-x86_64`, `bq`, `bq-win`, `bundled-python3` e `bundled-python3-windows-x86_64`. Nenhum componente esperado ausente, portanto nenhum estado parcial.
+- Python empacotado presente, **3.14.6**, dentro da faixa oficial; `CLOUDSDK_PYTHON` ausente nos três escopos, de modo que o launcher segue elegendo o Python empacotado.
+- Escopo single-user: `install_mode = 0`, `uninstaller.exe` na raiz, **uma** entrada de desinstalação em `HKCU` com publisher "Google LLC", `NoModify = 1`, `NoRepair = 1`, `InstallLocation` resolvendo para caminho existente do workflow e `UninstallString` terminando em `uninstaller.exe`; zero entradas em `HKLM` e `WOW6432Node`; ausentes `HKCU\SOFTWARE\Google\Cloud SDK` e `HKLM\SOFTWARE\Google\Cloud SDK`.
+- Zero atalhos correspondentes no Menu Iniciar do usuário e de máquina e nos Desktops do usuário e público — coerente com `/nostartmenu` e `/nodesktop`.
+- PATH: **uma** entrada da CLI no escopo de **usuário** sob a raiz esperada e **zero** no de **máquina**. Nesta sessão o PATH de **processo** também a contém, por ter sido iniciado após a escrita — o que reconfirma a correção do `ISOLATION-REPAIR-PREP` sobre por que o `CLI-SETUP-EXEC` registrou PATH inalterado.
+- Varredura **limitada** (`%LOCALAPPDATA%\Google` até 6, `%ProgramFiles%` e `%ProgramFiles(x86)%` até 3, `C:\` até 2, `%APPDATA%` até 4): exatamente **um** diretório `google-cloud-sdk`, o esperado, e **zero** inesperados; ausentes os quatro locais convencionais. Comprova ausência **nos escopos varridos**, não ausência global em todos os discos.
+
+### Isolamento preservado, comprovado sem executar gcloud
+
+Diretório isolado existente, criado em `2026-08-04T12:50:53Z`, do usuário esperado, sem ponto de reparse, fora do repositório, com **8 entradas** — `configurations\config_default` vazio, `active_config`, `gce`, `.last_survey_prompt.yaml` e um único log — e **zero** artefatos de credencial (`credentials.db`, `access_tokens.db`, `legacy_credentials` e `application_default_credentials.json` todos ausentes). `%APPDATA%\gcloud` **ausente**; ADC bem-conhecido **ausente**; `CLOUDSDK_CONFIG`, `GOOGLE_APPLICATION_CREDENTIALS`, `CLOUDSDK_PYTHON` e `CLOUDSDK_ROOT_DIR` indefinidas em processo, usuário e máquina. O **log único**, com horário coincidente com a verificação que encerrou o `ISOLATION-REPAIR-EXEC`, corrobora que o `LOGIN-EXEC` parou **antes** de invocar `gcloud`.
+
+### Causa da falha de detecção — indeterminada
+
+O diagnóstico local não inspeciona execução alheia. Hipóteses compatíveis e **explicitamente não comprovadas**: estado de shell não persistir entre invocações, tornando `$null` uma variável de caminho derivada em bloco anterior; sonda dependente do PATH de processo em shell iniciado antes da escrita no PATH de usuário; divergência de literal entre `CloudSDK` e `Cloud SDK`. Nenhuma é elevada a fato.
+
+### Pesquisa oficial (Google Cloud SDK documentation, consultada em 2026-08-04)
+
+- **Instalador:** `GoogleCloudSDKInstaller.exe`, canal `rapid`, host `dl.google.com`. Flags case-sensitive: `/S` — "install silently. No installer pages are displayed."; `/D` — "It must be the last parameter used in the command line and must not contain any quotes, even if the path contains spaces. Only absolute paths are supported"; `/singleuser` — "install for current user (default)"; `/noreporting`; `/nostartmenu`; `/nodesktop`; `/allusers`; `/reporting`; `/screenreader`.
+- **Python:** "Python 3.10 to 3.14"; a versão Windows empacota Python 3 por padrão.
+- **Arquivos versionados:** padrão `.../channels/rapid/downloads/[arquivo]`; nomes Windows incluem `google-cloud-cli-windows-x86_64.zip` e `google-cloud-sdk-579.0.0-windows-x86_64-bundled-python.zip`; **checksums SHA256 publicados**; instalação por `.\google-cloud-sdk\install.bat`, com `install.bat --help` para flags não interativas.
+- **Localização e desinstalação:** no Windows, "execute the `uninstaller.exe` file in your gcloud CLI directory"; localizar por `gcloud info --format='value(installation.sdk_root)'` e `value(config.paths.global_config_dir)`, e "Delete both of these directories". **`installation.sdk_root` é o campo oficial de localização da instalação**, contrapartida do `config.paths.global_config_dir` já adotado.
+- **Limite honesto:** a página de arquivos versionados publica a versão **corrente**, hoje **579.0.0**. A disponibilidade oficial do arquivo exato de **578.0.0** **não foi comprovada** e não pode ser afirmada.
+
+### Entrega técnica — contrato corretivo de detecção do executável
+
+Qualquer bloco futuro que invoque a CLI deverá, na própria execução e sem depender de estado de sessão anterior: derivar a raiz esperada de `%LOCALAPPDATA%` no próprio processo, nunca de variável herdada; testar `google-cloud-sdk\bin\gcloud.cmd` por caminho absoluto literal; **não** depender do PATH, mantendo a invocação por caminho absoluto; validar ausência de ponto de reparse, proprietário esperado e localização fora do repositório; só então, sob `CLOUDSDK_CONFIG` isolado, confirmar pelo campo oficial `installation.sdk_root`, comparando pela semântica case-insensitive do Windows; e tratar divergência como categoria própria de falha, sem reinstalar, sem alterar PATH e sem remover artefato. `gcloudExecutableNotLocated` só é emitível após falha do teste por caminho absoluto derivado no próprio processo.
+
+### Por que o RECOVERY-EXEC é contraindicado
+
+Reinstalar sobre instalação completa e validada violaria a própria regra de não sobrescrever instalação existente; substituiria a 578.0.0 validada pela versão corrente do canal `rapid`, hoje 579.0.0; reintroduziria efeitos sobre PATH, atalhos e configuração padrão; e consumiria download e tempo sem benefício técnico. O contrato contingente do `RECOVERY-EXEC` fica registrado no `CLAUDE.md` e **suspenso**, aplicável somente se a decisão humana for pela hipótese B.
+
+### Decisão humana pendente — única
+
+**(A, recomendada)** cancelar o `RECOVERY-EXEC` por desnecessidade comprovada e autorizar novo `CLI-SETUP-LOGIN-EXEC` com o contrato corretivo de detecção, preservando a instalação 578.0.0 e o diretório isolado; ou **(B)** insistir em recuperação, decidindo entre instalador `rapid` (579.0.0) e arquivo versionado (578.0.0 não comprovado) e definindo tratamento explícito de sobrescrita. Enquanto não houver decisão, nenhum dos dois blocos inicia.
+
+### Rede e limites
+
+Nenhuma chamada `gcloud` e nenhum comando destinado a recurso Google Cloud remoto. Os únicos acessos remotos intencionais foram `git fetch origin` e a consulta à documentação oficial. `networkAbsenceForensicallyProven = false` permanece intencional, sem captura de tráfego e sem alegação forense absoluta. Nenhuma decisão anterior do ADMIN-B2A5 foi reaberta.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — registro da parada do `LOGIN-EXEC`, do diagnóstico `present-and-complete`, das evidências, da pesquisa oficial, do contrato corretivo de detecção, do contrato contingente e do rollback, da decisão pendente e da sequência vigente.
+- `TASKS.md` — `LOGIN-EXEC` marcado como interrompido e pendente de nova autorização, inserção do `EXECUTABLE-RECOVERY-PREP`, registro de que nenhum prazo de credencial está em curso e atualização da sequência.
+- `CHANGELOG_AI.md` — esta entrada.
+
+---
+
 ## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-PREP-DECISION
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
