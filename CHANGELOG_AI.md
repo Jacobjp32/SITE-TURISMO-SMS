@@ -6,6 +6,70 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-05 — ADMIN-B2A5-INVENTORY-AUTH-LOGIN-AND-EXPIRED-REVOKE-GOVERNANCE
+
+**Ferramenta/modelo:** Claude Opus 5 (Claude Code)
+
+**Status:** governança documental consolidada do ciclo de login. Classificação: **A. CICLO DE LOGIN ENCERRADO COM REVOGAÇÃO OBRIGATÓRIA E ESTADO ZERO COMPROVADO.** Bloco exclusivamente documental, sobre o commit-base `700e03b384d0404ef92c115ffe529673fa30f662`. Nesta governança não houve `gcloud`, login, OAuth, revoke, consulta de conta, token, ADC, IAM, Firestore, Storage, dados, inventário, alteração funcional, staging, commit ou push.
+
+**Registro conjunto e obrigatório.** O login concluído, o vencimento da política e a revogação são registrados no mesmo bloco. Registrar apenas o login descreveria incorretamente o estado atual — **não existe credencial ativa**.
+
+### 1. Novo LOGIN-EXEC — concluído com sucesso em 2026-08-04
+
+O `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` foi concluído em **uma única chamada humana**, classificação **A. LOGIN ISOLADO CONCLUÍDO, OPERADOR AUTENTICADO E ESTADO COMPROVADO**. O contrato corretivo de detecção do executável funcionou e a falha `gcloudExecutableNotLocated` da tentativa anterior não se repetiu.
+
+`ok = true`; `failureCategory = null`; `operatorSha256 = 61e41d5c9654769b486e1adca0f886951864234f0fcbee5d20e5d104f6f96f37`; `authorizationLiteralReceived = true`; `operatorReceived = true`; `persistencePolicyAcknowledged = true`; `gcloudVersion = 578.0.0`; `installationSdkRootVerified = true`; `isolatedConfigPathVerifiedBeforeLogin = true`; `defaultConfigAbsentBeforeLogin = true`; `credentialedAccountCountBeforeLogin = 0`; `activeAccountCountBeforeLogin = 0`; `loginStarted = true`; `loginCompleted = true`; `browserFlowUsed = true`; `loginExitCode = 0`; `credentialedAccountCountAfterLogin = 1`; `activeAccountCountAfterLogin = 1`; `credentialedAccountMatchesExpected = true`; `activeAccountMatchesExpected = true`; `isolatedConfigPathVerifiedAfterLogin = true`; `defaultConfigAbsentAfterLogin = true`; `defaultProjectConfigured = false`; `impersonationConfigured = false`; `accessTokenFileConfigured = false`; `adcCreatedByThisBlock = false`; `googleApplicationCredentialsConfigured = false`; `credentialsPreservedForWorkflow = true`; `rollbackExecuted = false`; `rollbackSucceeded = false`; `intentionalAuthenticationRemoteFlowExecuted = true`; `intentionalRemoteResourceCommandExecuted = false`; `networkAbsenceForensicallyProven = false`; `repositoryMutationDetected = false`.
+
+`rollbackSucceeded = false` **não representou falha**: nenhum rollback era necessário e a credencial foi preservada deliberadamente para a cadeia. Nenhum IAM, Firestore ou inventário foi executado.
+
+### 2. Prazos que passaram a correr
+
+`loginCompletedAtUtc = 2026-08-04T19:07:39.0732231Z`; `credentialIdleDeadlineUtc = 2026-08-04T20:07:39.0732231Z`; `credentialAbsoluteDeadlineUtc = 2026-08-05T03:07:39.0732231Z`. Regras: 60 minutos sem progresso material; 8 horas absolutas; limites independentes, prevalecendo o primeiro atingido; nenhuma extensão automática; vencimento exige revogação imediata; pausa ou abandono exige revogação; retomada exige novo `LOGIN-EXEC`.
+
+### 3. Vencimento e parada do LOGIN-GOVERNANCE
+
+O `LOGIN-GOVERNANCE` só foi iniciado em **2026-08-05** e, antes de qualquer edição documental, constatou `nowUtc = 2026-08-05T13:14:51.2277906Z` — ≈**18,12 horas** após o login, com o limite de ociosidade vencido há ≈17h07 e o absoluto há ≈10h07. Conforme o contrato: a edição foi interrompida; nenhuma governança parcial foi criada; **nenhum arquivo foi alterado**; `loginGovernanceCompletedAtUtc` não foi registrado; `nextCredentialIdleDeadlineUtc` não foi derivado; e a classificação passou a ser revogação obrigatória. **Parada correta e fail-closed.**
+
+### 4. AUTH-REVOKE-EXPIRED-LOGIN — concluído em 2026-08-05
+
+Classificação **A. CREDENCIAL HUMANA EXPIRADA REVOGADA NO SERVIDOR E REMOVIDA DA CONFIGURAÇÃO ISOLADA; ESTADO ZERO COMPROVADO.**
+
+`ok = true`; `schemaVersion = 1`; `persistencePolicyExpired = true`; `credentialIdleDeadlineExpired = true`; `credentialAbsoluteDeadlineExpired = true`; `proportionalRevokeApplied = true`; `installationSdkRootVerified = true`; `isolatedConfigPathVerifiedBeforeRevoke = true`; `defaultConfigAbsentBeforeRevoke = true`; `credentialedAccountCountBeforeRevoke = 1`; `activeAccountCountBeforeRevoke = 1`; `credentialedAccountMatchesExpected = true`; `activeAccountMatchesExpected = true`; `adcDetectedBeforeRevoke = false`; `revokeExecuted = true`; `revokeExitCode = 0`; `credentialAlreadyAbsentBeforeRevoke = false`; `credentialedAccountCountAfterRevoke = 0`; `activeAccountCountAfterRevoke = 0`; `adcDetectedAfterRevoke = false`; `defaultProjectConfiguredAfterRevoke = false`; `impersonationConfiguredAfterRevoke = false`; `accessTokenFileConfiguredAfterRevoke = false`; `isolatedConfigPathVerifiedAfterRevoke = true`; `defaultConfigAbsentAfterRevoke = true`; `cliInstallationPreserved = true`; `isolatedConfigPreserved = true`; `intentionalCredentialRevocationRemoteFlowExecuted = true`; `intentionalRemoteResourceCommandExecuted = false`; `networkAbsenceForensicallyProven = false`; `repositoryMutationDetected = false`; `processVariablesCleaned = true`; `rollbackRequired = false`; `failureCategory = null`; `startedAtUtc = 2026-08-05T13:33:46.3722194Z`; `endedAtUtc = 2026-08-05T13:33:58.4829737Z`.
+
+O `operatorSha256` coincidiu com o do login, comprovando que a identidade revogada é a mesma autenticada.
+
+**Revogação:** executada exatamente uma vez, como `auth revoke OPERATOR_IN_MEMORY --quiet`, sob `gcloud.cmd` absoluto, `CLOUDSDK_CONFIG` isolado, wrapper com allowlist e operador somente em memória. Sem segunda tentativa, sem `--all`, sem novo login, sem `application-default revoke`, sem exclusão manual de banco e sem remoção da instalação ou do diretório isolado. Constituiu comunicação remota intencional com o serviço de autenticação; **nenhum comando destinado a recurso Google Cloud foi executado**.
+
+### 5. Escopo proporcional — ausência de recursos
+
+`AUTH-PROVISION-EXEC`, `PROVISION-EXEC`, `ACTIVATION-EXEC` e `INVENTORY-EXEC` **nunca foram executados**. Não existiam custom role, service account, IAM binding, policy, ADC, chave, access-token file, projeto padrão ou recurso Firestore criado por esta cadeia — e nada disso é registrado como criado ou removido. O bloco atuou apenas sobre a credencial humana da CLI, a conta ativa da configuração isolada, as variáveis processuais e a comprovação do estado zero.
+
+### 6. Estado zero e limites honestos
+
+Zero contas credentialed; zero ativas; zero ADC; `GOOGLE_APPLICATION_CREDENTIALS` ausente nos três escopos; zero projeto padrão, impersonação e access-token file; diretório padrão ausente; diretório isolado preservado; instalação **578.0.0** e Python empacotado **3.14.6** preservados; PATH não alterado; repositório intacto.
+
+Os arquivos locais de armazenamento do SDK **podem permanecer fisicamente**, sem conta lógica registrada pela CLI. **Não se afirma que os arquivos SQLite foram apagados** e **não se afirma inspeção de valores ou linhas** — ela não ocorreu; a prova autoritativa é a listagem da CLI retornando zero.
+
+Ocorrência ambiental não bloqueante: a primeira redação do script foi bloqueada pelo guard por conter `Remove-Item` em `Env:`; o comando não chegou a executar, nenhum `gcloud` foi chamado, nenhuma variável foi criada e nenhum estado mudou; o cleanup foi refeito com `SetEnvironmentVariable(..., $null, "Process")`. O timeout foi aplicado no nível da invocação da ferramenta, **não** como timeout individual do processo `gcloud`.
+
+### 7. Estado atual e retomada
+
+Não existe credencial humana ativa; nenhum prazo está correndo; o `AUTH-REVOKE` está concluído; não existe IAM ou infraestrutura ADMIN-B2A5 criada; não existe inventário executado. O `LOGIN-GOVERNANCE` anterior não deve ser retomado como se a credencial ainda existisse.
+
+Qualquer retomada exige: novo `LOGIN-EXEC`; novo operador em memória; nova autorização literal; nova confirmação de prontidão contínua da cadeia; baseline pré-login de zero contas; novos prazos de 60 minutos e 8 horas. **A autorização e a credencial anteriores não podem ser reutilizadas.** Instalação e diretório isolado permanecem disponíveis — **não é necessária reinstalação**.
+
+**Próximo bloco possível:** `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC`, não iniciado, não autorizado e dependente de planejamento operacional que evite novo vencimento. Não apontar para o `AUTH-PROVISION-EXEC`, pois não existe credencial ativa.
+
+### Arquivos alterados
+
+- `CLAUDE.md` — nova seção do ciclo de login concluído, vencido e revogado; atualização dos dois parágrafos de estado que ainda descreviam o login como não iniciado.
+- `TASKS.md` — status geral, próximo passo, registro do ciclo e estado da política temporal.
+- `CHANGELOG_AI.md` — esta entrada.
+
+Nenhum arquivo funcional, manifesto, Rule, Storage, ferramenta, runtime, asset ou metadata foi alterado; a data/hora pública permanece em `2026-08-04T14:25:18-03:00`.
+
+---
+
 ## 2026-08-04 — ADMIN-B2A5-INVENTORY-AUTH-CLI-EXECUTABLE-RECOVERY-PREP-DECISION
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
