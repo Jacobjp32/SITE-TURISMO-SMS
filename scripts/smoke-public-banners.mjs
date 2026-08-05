@@ -134,6 +134,26 @@ check("_selectPopups exposto", PB && typeof PB._selectPopups === "function");
 check("_renderBanner exposto", PB && typeof PB._renderBanner === "function");
 check("_showPopup exposto", PB && typeof PB._showPopup === "function");
 
+const publicCss = read("css/public-banners.css");
+const bannerImageRule = publicCss.match(/\.public-banner__img\s*\{([^}]*)\}/)?.[1] || "";
+const popupMediaRule = publicCss.match(/\.public-popup__media\s*\{([^}]*)\}/)?.[1] || "";
+const popupImageRule = publicCss.match(/\.public-popup__img\s*\{([^}]*)\}/)?.[1] || "";
+const popupCloseRule = publicCss.match(/\.public-popup__close\s*\{([^}]*)\}/)?.[1] || "";
+check("banner preserva a arte inteira sem altura fixa",
+    /object-fit:\s*contain/.test(bannerImageRule) &&
+    /height:\s*auto/.test(bannerImageRule) &&
+    /max-height:\s*none/.test(bannerImageRule) &&
+    !/object-fit:\s*cover/.test(bannerImageRule));
+check("mídia do pop-up não encolhe nem recorta dentro do card flex",
+    /flex:\s*0\s+0\s+auto/.test(popupMediaRule) &&
+    !/min-height:\s*0/.test(popupMediaRule));
+check("imagem do pop-up usa contain e limites de viewport",
+    /object-fit:\s*contain/.test(popupImageRule) &&
+    /max-width:\s*100%/.test(popupImageRule) &&
+    /100dvh/.test(popupImageRule));
+check("botão de fechar do pop-up permanece visível durante rolagem interna",
+    /position:\s*sticky/.test(popupCloseRule));
+
 // ---- Fixtures ----
 const ts = (ms) => ({ toMillis: () => ms, seconds: Math.floor(ms / 1000) });
 const NOW = Date.now();

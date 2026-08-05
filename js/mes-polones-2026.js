@@ -51,12 +51,13 @@
   }
 
   function setupLightbox() {
-    var lightbox = document.querySelector("[data-program-lightbox]");
-    var triggers = document.querySelectorAll("[data-program-poster-trigger]");
+    var lightbox = document.querySelector("[data-media-lightbox]");
+    var triggers = document.querySelectorAll("[data-media-lightbox-trigger]");
     if (!lightbox || !triggers.length) return;
 
-    var closeButton = lightbox.querySelector("[data-program-lightbox-close]");
-    var lightboxImage = lightbox.querySelector("[data-program-lightbox-image]");
+    var closeButton = lightbox.querySelector("[data-media-lightbox-close]");
+    var lightboxImage = lightbox.querySelector("[data-media-lightbox-image]");
+    var lightboxTitle = lightbox.querySelector("[data-media-lightbox-title]");
     var previousFocus = null;
 
     function focusableElements() {
@@ -66,9 +67,30 @@
     function openLightbox(event) {
       event.preventDefault();
       previousFocus = event.currentTarget;
-      if (lightboxImage && !lightboxImage.getAttribute("src")) {
-        lightboxImage.setAttribute("src", lightboxImage.getAttribute("data-src"));
+      var preview = previousFocus.querySelector("img");
+      var src = previousFocus.getAttribute("data-lightbox-src") ||
+        (preview && preview.getAttribute("src")) || previousFocus.getAttribute("href");
+      var alt = previousFocus.getAttribute("data-lightbox-alt") ||
+        (preview && preview.getAttribute("alt")) || "";
+      var groupTitle = previousFocus.closest(".mp-gallery-group");
+      var title = previousFocus.getAttribute("data-lightbox-title") ||
+        (groupTitle && groupTitle.querySelector("h3") && groupTitle.querySelector("h3").textContent) ||
+        "Fotografia ampliada";
+
+      if (!src || !lightboxImage) return;
+      lightboxImage.setAttribute("src", src);
+      lightboxImage.setAttribute("alt", alt);
+      if (preview && preview.getAttribute("width")) {
+        lightboxImage.setAttribute("width", preview.getAttribute("width"));
+      } else {
+        lightboxImage.removeAttribute("width");
       }
+      if (preview && preview.getAttribute("height")) {
+        lightboxImage.setAttribute("height", preview.getAttribute("height"));
+      } else {
+        lightboxImage.removeAttribute("height");
+      }
+      if (lightboxTitle) lightboxTitle.textContent = title;
       lightbox.hidden = false;
       document.body.classList.add("no-scroll");
       if (closeButton) closeButton.focus();

@@ -93,6 +93,28 @@ body.mes-polones-page.no-scroll { overflow: hidden; }
 .mp-intro-copy { border-left: 4px solid var(--mp-red); padding-left: clamp(1.2rem, 3vw, 2.5rem); }
 .mp-intro-copy p + p { margin-top: 1.25rem; }
 
+.mp-gallery { background: #f7f2e9; padding: clamp(4rem, 8vw, 7rem) max(1rem, calc((100vw - 1180px) / 2)); }
+.mp-gallery .mp-section-heading > p:last-child { color: #4e5c58; }
+.mp-gallery-group + .mp-gallery-group { margin-top: clamp(2.75rem, 6vw, 4.5rem); }
+.mp-gallery-group h3 { color: var(--mp-red-dark); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1.25rem; }
+.mp-gallery-grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr)); }
+.mp-gallery-card {
+    aspect-ratio: 4 / 3;
+    background: #e9e0d2;
+    border: 0;
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(30, 25, 18, 0.12);
+    cursor: zoom-in;
+    display: block;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 100%;
+}
+.mp-gallery-card img { display: block; height: 100%; object-fit: cover; object-position: center; transition: transform 0.25s ease; width: 100%; }
+.mp-gallery-card:hover img { transform: scale(1.025); }
+.mp-gallery-card:focus-visible { outline: 4px solid var(--mp-blue); outline-offset: 4px; }
+
 .mp-program { max-width: none; background: #f7f2e9; }
 .mp-program > * { max-width: 1100px; margin-left: auto; margin-right: auto; }
 .mp-status-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.7rem 1rem; margin-top: 1.4rem; }
@@ -184,8 +206,8 @@ body.mes-polones-page.no-scroll { overflow: hidden; }
 .mp-lightbox-header h2 { color: var(--mp-green); font-size: 1.5rem; }
 .mp-lightbox-close { background: var(--mp-red); border: 0; border-radius: 10px; color: #fff; cursor: pointer; font: 700 0.85rem "Raleway", sans-serif; min-height: 44px; padding: 0.55rem 0.8rem; }
 .mp-lightbox-close span { font-size: 1.35rem; margin-left: 0.25rem; }
-.mp-lightbox-scroll { overflow: auto; padding: 1rem; }
-.mp-lightbox-scroll img { display: block; height: auto; margin: 0 auto; max-width: 100%; }
+.mp-lightbox-scroll { align-items: center; display: flex; justify-content: center; overflow: auto; padding: 1rem; }
+.mp-lightbox-scroll img { display: block; height: auto; margin: 0 auto; max-height: calc(100vh - 8rem); max-height: calc(100dvh - 8rem); max-width: 100%; object-fit: contain; width: auto; }
 
 @media (max-width: 820px) {
     .mp-intro,
@@ -228,15 +250,21 @@ body.mes-polones-page.no-scroll { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .mp-button { transition: none; }
-    .mp-button:hover { transform: none; }
+    .mp-button,
+    .mp-gallery-card img { transition: none; }
+    .mp-button:hover,
+    .mp-gallery-card:hover img { transform: none; }
 }
 
 body.high-contrast .mp-hero,
 body.high-contrast .mp-event-body,
 body.high-contrast .mp-poster-thumb,
-body.high-contrast .mp-action-cards article { background: #000 !important; border-color: #ff0 !important; color: #fff !important; }
+body.high-contrast .mp-action-cards article,
+body.high-contrast .mp-gallery,
+body.high-contrast .mp-gallery-card { background: #000 !important; border-color: #ff0 !important; color: #fff !important; }
 body.high-contrast .mp-hero h1,
 body.high-contrast .mp-section h2,
 body.high-contrast .mp-event h3,
-body.high-contrast .mp-action-cards h3 { color: #ff0 !important; }
+body.high-contrast .mp-action-cards h3,
+body.high-contrast .mp-gallery h2,
+body.high-contrast .mp-gallery h3 { color: #ff0 !important; }

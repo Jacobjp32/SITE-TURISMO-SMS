@@ -44,13 +44,18 @@
 }
 
 .public-banner__media {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    min-width: 0;
     line-height: 0;
     overflow: hidden;
     background: var(--cream-light, #f8f6f0);
 }
 
 .public-banner__img {
+    flex: 0 1 auto;
     display: block;
     width: 100%;
     height: auto;
@@ -176,12 +181,14 @@
 }
 
 .public-popup__close {
-    position: absolute;
+    position: sticky;
     top: 0.5rem;
-    right: 0.5rem;
+    align-self: flex-end;
+    flex: 0 0 auto;
     z-index: 2;
     width: 36px;
     height: 36px;
+    margin: 0.5rem 0.5rem -3rem 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -209,10 +216,11 @@
 
 .public-popup__media {
     display: flex;
+    flex: 0 0 auto;
     align-items: center;
     justify-content: center;
     width: 100%;
-    min-height: 0;
+    max-width: 100%;
     line-height: 0;
     background: var(--cream-light, #f8f6f0);
     border-radius: 14px 14px 0 0;
@@ -232,6 +240,7 @@
 }
 
 .public-popup__body {
+    flex: 0 0 auto;
     padding: 1.25rem 1.5rem 1.5rem;
     display: flex;
     flex-direction: column;
