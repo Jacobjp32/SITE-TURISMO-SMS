@@ -414,7 +414,7 @@ body.font-larger{font-size:140%!important;}
 
     if (!hasLoadedScript('js/site-meta.js')) {
         var metaScript = document.createElement('script');
-        metaScript.src = 'js/site-meta.js?v=site-public-b1-20260708';
+        metaScript.src = 'js/site-meta.js?v=site-mes-polones-20260805-1417';
         metaScript.defer = true;
         document.body.appendChild(metaScript);
     }
@@ -490,7 +490,9 @@ body.font-larger{font-size:140%!important;}
     ].forEach(function(src) {
         if (!hasLoadedScript(src)) {
             var script = document.createElement('script');
-            script.src = src;
+            script.src = src === 'js/search-index.js'
+                ? src + '?v=site-mes-polones-20260805-1417'
+                : src;
             script.async = false;
             document.body.appendChild(script);
         }

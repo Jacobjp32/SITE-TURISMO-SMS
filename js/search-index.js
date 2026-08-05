@@ -32,6 +32,7 @@
   }
 
   var fixedEntries = [
+    makeEntry("32º Mês Polonês 2026", "Agenda", "Programação do 32º Mês Polonês — Tradycje Polskie, de 18 de julho a 30 de agosto em São Mateus do Sul.", "/mes-polones-2026", ["mes polones", "mês polonês", "tradycje polskie", "polskie smaki", "cultura polonesa", "agosto", "braspol"]),
     makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-turistico", ["mapa", "turistico", "rotas", "pontos", "guia"]),
     makeEntry("Roteiros", "Explore", "As rotas e experiencias agora estao reunidas no mapa turistico interativo.", "/mapa-turistico?grupo=roteiros", ["roteiros", "rotas", "experiencias", "trajeto", "mapa"]),
     makeEntry("Galeria", "Explore", "Fotos e registros visuais das paisagens, cultura e eventos.", "/galeria", ["galeria", "fotos", "midias", "imagens"]),

@@ -9,6 +9,14 @@
     <priority>1.0</priority>
   </url>
 
+  <!-- Programação temática do 32º Mês Polonês -->
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/mes-polones-2026</loc>
+    <lastmod>2026-08-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
   <!-- Calendário de Eventos -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/eventos</loc>

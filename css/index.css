@@ -6497,6 +6497,158 @@ body.nav-menu-open .nav-toggle {
     }
 }
 
+/* Destaque temporário do 32º Mês Polonês */
+.mes-polones-home-feature {
+    background: linear-gradient(135deg, #fff9ee 0%, #fff 62%, #f5e6e8 100%);
+    padding: clamp(3.5rem, 7vw, 6rem) 1.5rem;
+}
+
+.mes-polones-home-inner {
+    background: #fff;
+    border: 1px solid rgba(185, 15, 46, 0.18);
+    border-radius: 28px;
+    box-shadow: 0 18px 52px rgba(73, 27, 24, 0.12);
+    margin: 0 auto;
+    max-width: 1180px;
+    overflow: hidden;
+}
+
+.mes-polones-home-banner,
+.mes-polones-home-banner img {
+    display: block;
+    width: 100%;
+}
+
+.mes-polones-home-banner img {
+    height: auto;
+    object-fit: contain;
+}
+
+.mes-polones-home-content {
+    align-items: end;
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: clamp(1.5rem, 4vw, 3.25rem);
+}
+
+.mes-polones-home-label {
+    color: #b90f2e;
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    margin-bottom: 0.35rem;
+    text-transform: uppercase;
+}
+
+.mes-polones-home-content h2 {
+    color: #7c0b22;
+    font-family: "Cormorant Garamond", serif;
+    font-size: clamp(2.6rem, 6vw, 4.8rem);
+    line-height: 1;
+    margin: 0;
+}
+
+.mes-polones-home-period {
+    color: #075b87;
+    font-weight: 800;
+    margin: 0.65rem 0;
+}
+
+.mes-polones-home-content p:not(.mes-polones-home-period) {
+    line-height: 1.65;
+    max-width: 720px;
+}
+
+.mes-polones-home-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+}
+
+.mes-polones-home-chips li {
+    background: #fff5f6;
+    border: 1px solid rgba(185, 15, 46, 0.2);
+    border-radius: 99px;
+    color: #7c0b22;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.4rem 0.68rem;
+}
+
+.mes-polones-home-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    min-width: 230px;
+}
+
+.mes-polones-home-actions a {
+    align-items: center;
+    border-radius: 12px;
+    display: inline-flex;
+    font-size: 0.84rem;
+    font-weight: 800;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    text-align: center;
+    text-decoration: none;
+}
+
+.mes-polones-home-primary {
+    background: #b90f2e;
+    color: #fff;
+}
+
+.mes-polones-home-secondary {
+    border: 2px solid rgba(7, 91, 135, 0.28);
+    color: #075b87;
+}
+
+body.high-contrast .mes-polones-home-feature,
+body.high-contrast .mes-polones-home-inner {
+    background: #000 !important;
+    border-color: #ff0 !important;
+    color: #fff !important;
+}
+
+body.high-contrast .mes-polones-home-content h2,
+body.high-contrast .mes-polones-home-label,
+body.high-contrast .mes-polones-home-period {
+    color: #ff0 !important;
+}
+
+@media (max-width: 760px) {
+    .mes-polones-home-feature {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .mes-polones-home-inner {
+        border-radius: 20px;
+    }
+
+    .mes-polones-home-content {
+        align-items: stretch;
+        grid-template-columns: 1fr;
+    }
+
+    .mes-polones-home-actions {
+        min-width: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .mes-polones-home-actions a {
+        transition: none;
+    }
+}
+
 /* S17: densidade final mobile e leitura da janela de midia do hero */
 #map-hero.home-hero-editorial #map::after {
     content: "";
