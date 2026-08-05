@@ -4,19 +4,9 @@
   var MAP_TEXT = {
     pt: {
       pageTitle: "Mapa Turístico Interativo",
-      pageSubtitle: "Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.",
-      pageSupport: "Navegue pelos principais atrativos de São Mateus do Sul, descubra experiencias por categoria e use o mapa como ponto de partida para montar sua visita.",
-      pageKicker: "Explorar o Destino",
-      heroPanelKicker: "Visao rapida",
-      heroPanelText: "Uma leitura organizada para explorar o destino com mapa, filtros e atalhos de consulta.",
-      heroPointsLabel: "pontos no mapa",
-      heroPlacesLabel: "locais cadastrados",
-      heroCategoriesLabel: "categorias",
-      heroNote: "Itens reais sem coordenadas ficam sinalizados como pendencia de dados. Rotas tematicas sem ponto unico aparecem em secao propria.",
-      actionHome: "Voltar a HOME",
+      pageSubtitle: "Encontre atrativos, gastronomia, hospedagem, rotas e serviços de São Mateus do Sul.",
+      pageKicker: "Explore o destino",
       actionGuide: "Voltar ao guia do visitante",
-      actionPlan: "Planejar visita",
-      actionRoutes: "Explorar roteiros",
       searchPlaceholder: "Busque por igreja, hotel, erva-mate...",
       searchHint: "Busque por igreja, hotel, erva-mate, praca, evento ou servico.",
       clearSearch: "Limpar",
@@ -109,19 +99,9 @@
     },
     en: {
       pageTitle: "Interactive Tourism Map",
-      pageSubtitle: "Explore attractions, routes, food, lodging and services in an initial destination map.",
-      pageSupport: "Browse the main attractions of Sao Mateus do Sul, discover experiences by category and use the map as a starting point for planning your visit.",
+      pageSubtitle: "Find attractions, food, lodging, routes and services in Sao Mateus do Sul.",
       pageKicker: "Explore the Destination",
-      heroPanelKicker: "Quick view",
-      heroPanelText: "A clearer way to explore the destination with map, filters and shortcut actions.",
-      heroPointsLabel: "map points",
-      heroPlacesLabel: "listed places",
-      heroCategoriesLabel: "categories",
-      heroNote: "Real items without coordinates are flagged as data pending. Themed routes without a single point appear in their own section.",
-      actionHome: "Back to Home",
       actionGuide: "Back to visitor guide",
-      actionPlan: "Plan visit",
-      actionRoutes: "Explore routes",
       searchPlaceholder: "Search for church, hotel, yerba mate...",
       searchHint: "Search for church, hotel, yerba mate, square, event or service.",
       clearSearch: "Clear",
@@ -214,19 +194,9 @@
     },
     es: {
       pageTitle: "Mapa Turistico Interactivo",
-      pageSubtitle: "Explora atractivos, rutas, gastronomia, hospedaje y servicios en una primera vision del destino.",
-      pageSupport: "Recorre los principales atractivos de Sao Mateus do Sul, descubre experiencias por categoria y usa el mapa como punto de partida para planificar tu visita.",
+      pageSubtitle: "Encuentra atractivos, gastronomia, hospedaje, rutas y servicios de Sao Mateus do Sul.",
       pageKicker: "Explorar el Destino",
-      heroPanelKicker: "Vista rapida",
-      heroPanelText: "Una lectura organizada para explorar el destino con mapa, filtros y accesos rapidos.",
-      heroPointsLabel: "puntos en el mapa",
-      heroPlacesLabel: "lugares registrados",
-      heroCategoriesLabel: "categorias",
-      heroNote: "Los elementos reales sin coordenadas se senalan como datos pendientes. Las rutas tematicas sin punto unico aparecen en una seccion propia.",
-      actionHome: "Volver al inicio",
       actionGuide: "Volver a la guia del visitante",
-      actionPlan: "Planificar visita",
-      actionRoutes: "Explorar rutas",
       searchPlaceholder: "Busca iglesia, hotel, yerba mate...",
       searchHint: "Busca iglesia, hotel, yerba mate, plaza, evento o servicio.",
       clearSearch: "Limpiar",
@@ -319,19 +289,9 @@
     },
     pl: {
       pageTitle: "Interaktywna Mapa Turystyczna",
-      pageSubtitle: "Odkrywaj atrakcje, trasy, gastronomie, noclegi i uslugi w pierwszej wersji mapy destynacji.",
-      pageSupport: "Przegladaj glowne atrakcje Sao Mateus do Sul, odkrywaj miejsca wedlug kategorii i wykorzystaj mape jako punkt startowy do planowania wizyty.",
+      pageSubtitle: "Znajdz atrakcje, gastronomie, noclegi, trasy i uslugi w Sao Mateus do Sul.",
       pageKicker: "Odkryj Kierunek",
-      heroPanelKicker: "Szybki podglad",
-      heroPanelText: "Uporzadkowany sposob na eksploracje miejsca z mapa, filtrami i szybkimi akcjami.",
-      heroPointsLabel: "punkty na mapie",
-      heroPlacesLabel: "zarejestrowane miejsca",
-      heroCategoriesLabel: "kategorie",
-      heroNote: "Realne elementy bez wspolrzednych sa oznaczone jako oczekujace dane. Trasy tematyczne bez jednego punktu maja osobna sekcje.",
-      actionHome: "Powrot do strony glownej",
       actionGuide: "Powrot do przewodnika",
-      actionPlan: "Zaplanuj wizyte",
-      actionRoutes: "Odkryj trasy",
       searchPlaceholder: "Szukaj kosciola, hotelu, yerba mate...",
       searchHint: "Szukaj kosciola, hotelu, yerba mate, placu, wydarzenia lub uslugi.",
       clearSearch: "Wyczysc",
@@ -1313,12 +1273,6 @@
     return state.items.filter(function (item) { return item.categoriaMapa === filterId; }).length;
   }
 
-  function getAvailableCategoryCount() {
-    return FILTER_ORDER.filter(function (filterId) {
-      return filterId !== "all" && getFilterCount(filterId) > 0;
-    }).length;
-  }
-
   function getCategoryConfig(filterId) {
     return CATEGORY_CONFIG[filterId] || CATEGORY_CONFIG.all;
   }
@@ -1485,9 +1439,6 @@
     var total = document.getElementById("mapTotalItems");
     var located = document.getElementById("mapLocatedItems");
     var visible = document.getElementById("mapVisibleItems");
-    var heroPoints = document.getElementById("mapHeroPoints");
-    var heroPlaces = document.getElementById("mapHeroPlaces");
-    var heroCategories = document.getElementById("mapHeroCategories");
     var sidebarVisible = document.getElementById("mapSidebarVisible");
     var sidebarMarkers = document.getElementById("mapSidebarMarkers");
     var sidebarGroups = document.getElementById("mapSidebarGroups");
@@ -1501,9 +1452,6 @@
     if (total) total.textContent = state.items.length;
     if (located) located.textContent = locatedCount;
     if (visible) visible.textContent = state.filteredItems.length;
-    if (heroPoints) heroPoints.textContent = locatedCount;
-    if (heroPlaces) heroPlaces.textContent = state.items.length;
-    if (heroCategories) heroCategories.textContent = getAvailableCategoryCount();
     if (sidebarVisible) sidebarVisible.textContent = state.filteredItems.length;
     if (sidebarMarkers) sidebarMarkers.textContent = visibleMarkersCount;
     if (sidebarGroups) sidebarGroups.textContent = activeGroupCount;

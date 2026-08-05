@@ -31,14 +31,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <link rel="stylesheet" href="css/variables.css?v=site-public-b1-20260708">
-    <link rel="stylesheet" href="css/mapa-turistico.css?v=site-public-b1-20260708">
+    <link rel="stylesheet" href="css/mapa-turistico.css?v=site-map-compact-20260805-1501">
 
     <script src="translations.js?v=site-public-b1-20260708"></script>
     <script src="config.js?v=site-public-b1-20260708"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js" defer></script>
-    <script src="js/site-meta.js?v=site-mes-polones-20260805-1417" defer></script>
+    <script src="js/site-meta.js?v=site-map-compact-20260805-1501" defer></script>
     <script src="js/locais-data.js?v=site-public-b1-20260708" defer></script>
     <script src="js/rotas-data.js?v=site-public-b1-20260708" defer></script>
     <script src="js/data/pontos-turisticos.js?v=site-public-b1-20260708" defer></script>
@@ -50,7 +50,7 @@
     <script src="js/data/turismo-data-adapter.js?v=site-public-b1-20260708" defer></script>
     <script src="js/data/turismo-data.js?v=site-public-b1-20260708" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
-    <script src="js/mapa-turistico.js?v=site-public-b1-20260708" defer></script>
+    <script src="js/mapa-turistico.js?v=site-map-compact-20260805-1501" defer></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
 </head>
 <body>
@@ -61,41 +61,10 @@
 
     <main class="map-page" id="main-content">
         <div class="map-page-shell">
-            <section class="map-hero">
-                <div class="map-hero-grid">
-                    <div class="map-hero-content">
-                        <span class="map-kicker" data-map-i18n="pageKicker">Explorar o Destino</span>
-                        <h1 data-map-i18n="pageTitle">Mapa Turístico Interativo</h1>
-                        <p class="map-hero-subtitle" data-map-i18n="pageSubtitle">Explore pontos turísticos, rotas, gastronomia, hospedagem e serviços em uma visão inicial do destino.</p>
-                        <p class="map-hero-support" data-map-i18n="pageSupport">Navegue pelos principais atrativos de São Mateus do Sul, descubra experiências por categoria e use o mapa como ponto de partida para montar sua visita.</p>
-                        <div class="map-actions">
-                            <a class="map-action-link primary" href="/mapa-turistico?grupo=roteiros" data-map-i18n="actionRoutes">Explorar roteiros</a>
-                            <a class="map-action-link" href="/mapa-turistico?categoria=Hospedagem" data-map-i18n="actionPlan">Planejar visita</a>
-                            <a class="map-action-link subtle" href="/" data-map-i18n="actionHome">Voltar à HOME</a>
-                        </div>
-                    </div>
-                    <div class="map-hero-panel" aria-label="Resumo do mapa">
-                        <div class="map-hero-panel-head">
-                            <span class="map-hero-panel-kicker" data-map-i18n="heroPanelKicker">Visão rápida</span>
-                            <p data-map-i18n="heroPanelText">Uma leitura organizada para explorar o destino com mapa, filtros e atalhos de consulta.</p>
-                        </div>
-                        <div class="map-hero-stats" aria-live="polite">
-                            <article class="map-hero-stat-card">
-                                <strong id="mapHeroPoints">0</strong>
-                                <span data-map-i18n="heroPointsLabel">pontos no mapa</span>
-                            </article>
-                            <article class="map-hero-stat-card">
-                                <strong id="mapHeroPlaces">0</strong>
-                                <span data-map-i18n="heroPlacesLabel">locais cadastrados</span>
-                            </article>
-                            <article class="map-hero-stat-card">
-                                <strong id="mapHeroCategories">0</strong>
-                                <span data-map-i18n="heroCategoriesLabel">categorias</span>
-                            </article>
-                        </div>
-                        <div class="map-hero-note" data-map-i18n="heroNote">Itens sem coordenadas continuam disponíveis no painel para consulta e futura geolocalização.</div>
-                    </div>
-                </div>
+            <section class="map-intro" aria-labelledby="map-page-title">
+                <span class="map-kicker" data-map-i18n="pageKicker">Explore o destino</span>
+                <h1 id="map-page-title" data-map-i18n="pageTitle">Mapa Turístico Interativo</h1>
+                <p class="map-intro-description" data-map-i18n="pageSubtitle">Encontre atrativos, gastronomia, hospedagem, rotas e serviços de São Mateus do Sul.</p>
             </section>
 
             <section class="map-toolbar" aria-label="Controles do mapa">
