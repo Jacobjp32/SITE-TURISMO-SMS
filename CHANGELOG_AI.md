@@ -6,6 +6,30 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-06 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-GOVERNANCE
+
+**Status:** **A. LOGIN-GOVERNANCE CONCLUÍDO, COMMIT E PUSH VALIDADOS — CREDENCIAL ATIVA E AUTH-PROVISION-EXEC HABILITADO.** Atualização exclusivamente documental sobre o baseline `1b0235db3a17fe685760ef73cfe5449402b9f8f9`. Nenhum recurso Google Cloud foi criado ou alterado.
+
+### Login governado
+
+O `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` foi concluído em 2026-08-06 com classificação **A. LOGIN ISOLADO CONCLUÍDO, OPERADOR AUTENTICADO E ESTADO COMPROVADO**. Houve uma única chamada de login pelo navegador sob controle humano. O operador foi informado somente em memória; a conta credentialed e a conta ativa corresponderam ao operador, sem registrar o endereço completo.
+
+Estado sanitizado: Google Cloud CLI **578.0.0**; SDK root e diretório isolado validados; diretório padrão ausente; uma conta credentialed e uma ativa; zero ADC, projeto padrão, impersonação e access-token file; uma única configuração ativa; zero comando destinado a recurso remoto; zero custom role, conta de serviço, binding IAM, Firestore, Storage ou inventário.
+
+### Política temporal
+
+`loginCompletedAtUtc = 2026-08-06T11:59:12.8051248+00:00`; primeiro deadline de inatividade `2026-08-06T12:59:12.8051248+00:00`; deadline absoluto invariável `2026-08-06T19:59:12.8051248+00:00`. A política permanece em 60 minutos sem progresso material e 8 horas absolutas, sem extensão automática do limite absoluto. Somente conclusão comprovada de gate ou bloco renova a inatividade. O Codex é responsável primário pela revogação, obrigatória em pausa, bloqueio, impossibilidade de continuidade ou vencimento.
+
+O gate temporal da governança começou em `2026-08-06T12:05:42.9705814+00:00`, 390.1654566 segundos após o login, com 3209.8345434 segundos restantes no primeiro limite de inatividade e 28409.8345434 segundos no limite absoluto. Ambos estavam válidos.
+
+### Governança e próximo gate
+
+Somente `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` foram atualizados, revisados, sanitizados, incluídos em um único commit documental e enviados por push normal. Nenhum código, Rule, configuração, runtime, site público ou arquivo local foi alterado.
+
+A credencial humana permanece ativa somente na configuração isolada e a janela temporal continua em andamento. O próximo bloco é `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC`, ainda não iniciado e dependente de preflight, parâmetros somente em memória e autorização humana literal próprios. A sequência permanece `AUTH-PROVISION-EXEC` → `PROVISION-GOVERNANCE` → `ACTIVATION-PREP` → `ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE`; não apontar diretamente para ACTIVATION ou INVENTORY.
+
+---
+
 ## 2026-08-05 — ADMIN-B2A5-INVENTORY-AUTH-LOGIN-AND-EXPIRED-REVOKE-GOVERNANCE
 
 **Ferramenta/modelo:** Claude Opus 5 (Claude Code)
