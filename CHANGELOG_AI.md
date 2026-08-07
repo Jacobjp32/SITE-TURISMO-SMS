@@ -6,6 +6,54 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-POST-PAUSE-STATE-ZERO-AND-PARSER-CORRECTION-EXEC
+
+**Status:** **B. ESTADO ZERO COMPROVADO E CONTRATO CORRIGIDO — NÃO EXISTE PARSER PERSISTIDO.** Fechamento pós-pausa e correção exclusivamente local/documental da classe de falso positivo na leitura da policy própria da service account. Nenhum login foi feito e nenhum recurso Google Cloud foi consultado ou alterado neste bloco.
+
+### Estado zero pós-pausa
+
+O baseline Git iniciou no commit `5c7704ead4ca996a1a0ca622c145f07f7b6d7a41`, branch `main`, índice vazio, zero alteração rastreada e alinhamento `origin/main...main = 0/0`; os três itens locais protegidos permaneceram não rastreados, fechados e intocados.
+
+Sob o `gcloud.cmd` absoluto 578.0.0 e `CLOUDSDK_CONFIG` isolado, as consultas locais permitidas comprovaram antes da decisão: `credentialedAccountCountBefore = 0`, `activeAccountCountBefore = 0`, operador ausente e nenhuma conta inesperada; `adcDetectedBefore`, `projectConfiguredBefore`, `impersonationConfiguredBefore`, `accessTokenFileConfiguredBefore` e `GOOGLE_APPLICATION_CREDENTIALS` falsos; diretório padrão ausente. A credencial da sessão anterior já não estava registrada pela CLI: `revokeRequired = false`, `revokeExecuted = false`, `alreadyStateZero = true`; nenhuma chamada `auth revoke` ocorreu neste bloco. Uma segunda leitura local confirmou `stateZeroProven = true` com todas as contagens e indicadores em zero/ausentes. Nenhum novo deadline foi derivado.
+
+### Cronologia e conclusão da anomalia
+
+1. O PROVISION criou com sucesso o custom role e a service account aprovados, sem binding.
+2. A primeira leitura da policy própria foi problemática; uma leitura corretiva retornou zero.
+3. A PROVISION-GOVERNANCE voltou a derivar aparentemente uma binding e interrompeu a cadeia fail-closed.
+4. A credencial daquela etapa foi revogada; seguiram-se `ANOMALY-PREP`, novo `LOGIN-EXEC` e `ANOMALY-INVESTIGATION`.
+5. REST oficial e Google Cloud CLI fizeram leituras independentes: HTTP/exit code de sucesso, `bindingsPropertyPresent = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false` em ambas.
+6. A comparação produziu `policyReadSemanticMatch = true` e `policyReadSemanticMismatch = false`. Conclusão: `actualBindingExists = false`, `falsePositiveConfirmed = true`, `originClassification = FALSE_POSITIVE_PARSER`, `riskClassification = NONE_FROM_SERVICE_ACCOUNT_RESOURCE_POLICY` e `remediationRequired = false`.
+
+A classe de falso positivo foi reproduzida e confirmada pela leitura real. A regressão local também comprovou a semântica: PowerShell 7.6.3 e Windows PowerShell 5.1 retornaram `@($null).Count = 1` e `@($policy.bindings).Count = 1` para `{ "etag": "x" }` com `bindings` ausente. Sem validação estrutural anterior, esse elemento nulo pode ser confundido com uma binding. O comando efêmero histórico exato não foi preservado e não é afirmado como fato.
+
+### Localização da falha e regra canônica
+
+A pesquisa nos arquivos rastreados, incluindo `TASKS.md`, `CHANGELOG_AI.md`, `CLAUDE.md`, `tools/admin-b2a5-inventory/` e `scripts/`, não encontrou `@($policy.bindings).Count`, equivalente sobre `.bindings`, `bindingCount`, `materialBindingCount`, `bindingsPropertyPresent` ou implementação persistida que interprete a policy IAM. A ferramenta B2A5 persistida trata exclusivamente do inventário Firestore. Classificação: `PROMPT_CONTRACT_ONLY`. Nenhum parser ou teste artificial foi criado.
+
+Passa a ser vinculante para todo script efêmero ou implementação futura:
+
+- proibido usar `@($policy.bindings).Count` ou equivalente sobre propriedade possivelmente ausente/`null`;
+- usar tokens JSON estruturais, preferencialmente `System.Text.Json.JsonDocument`, sem truthiness do PowerShell;
+- distinguir e retornar somente metadados sanitizados: `policyVersion`, `etagPresent`, `bindingsPropertyPresent`, `bindingsIsNull`, `bindingsArrayCount`, `materialBindingCount`, `policyShapeUnexpected`, `roleNames`, `memberTypeCounts` e `conditionCount`;
+- `bindings` ausente, `null` ou array vazio, e policy contendo somente `etag`/`version`, devem produzir `materialBindingCount = 0`;
+- uma binding só é material quando o elemento é objeto, `role` é string não vazia e `members` é array presente, não vazio e composto integralmente por strings não vazias;
+- `bindings` escalar, elemento não objeto, `role` ausente/vazia, `members` ausente/não array/vazio ou member não string/vazio deve marcar `policyShapeUnexpected = true`, sem filtragem silenciosa.
+
+Regressão contratual explícita: o shape real observado, `{ "etag": "x" }` com `bindings` ausente, retorna `bindingsPropertyPresent = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false`; nunca `1`.
+
+### Estado administrativo corrigido e próximo gate
+
+- Custom role `adminB2A5InventoryRead`: criada, íntegra, duas permissões exatas e sem binding.
+- Service account `admin-b2a5-inventory-reader`: criada, íntegra, `disabled = false`, zero chave gerenciada pelo usuário e policy própria comprovadamente sem binding material.
+- Projeto, último estado comprovado: zero binding para a service account e zero binding usando o custom role.
+- Remediation IAM desnecessária; recursos IAM alterados neste fechamento = `false`; bindings alteradas = `0`; Firestore, Storage e inventário não acessados.
+- Credencial humana em estado zero; nenhum prazo ativo.
+
+Próximo fluxo: **novo `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` → retomada da `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-GOVERNANCE`**. A governança deverá usar o contrato corrigido, revalidar os dois recursos, comprovar a policy própria com zero binding material e documentar o PROVISION; somente depois poderá habilitar `ACTIVATION-PREP`. Nenhum desses blocos foi iniciado ou autorizado por este fechamento.
+
+---
+
 ## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-IAM-API-ENABLEMENT-GOVERNANCE
 
 **Status:** **A. IAM-API-ENABLEMENT-GOVERNANCE CONCLUÍDO, DOCUMENTAÇÃO PUBLICADA, CREDENCIAL ATIVA E AUTH-PROVISION-EXEC HABILITADO.** Governança exclusivamente documental do `ADMIN-B2A5-INVENTORY-AUTH-IAM-API-ENABLEMENT-EXEC`; nenhum recurso IAM foi criado e o PROVISION não foi iniciado.
