@@ -6,6 +6,28 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-IAM-API-ENABLEMENT-GOVERNANCE
+
+**Status:** **A. IAM-API-ENABLEMENT-GOVERNANCE CONCLUÍDO, DOCUMENTAÇÃO PUBLICADA, CREDENCIAL ATIVA E AUTH-PROVISION-EXEC HABILITADO.** Governança exclusivamente documental do `ADMIN-B2A5-INVENTORY-AUTH-IAM-API-ENABLEMENT-EXEC`; nenhum recurso IAM foi criado e o PROVISION não foi iniciado.
+
+### Enablement governado
+
+O EXEC concluiu com classificação **A. IAM API HABILITADA E VALIDADA; IAM CREDENTIALS API HABILITADA COMO EFEITO DOCUMENTADO; CREDENCIAL ISOLADA ATIVA E GOVERNANÇA HABILITADA**. No projeto `turismo-sms`, lifecycle `ACTIVE` e fingerprint `68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60`, `iam.googleapis.com` e `iamcredentials.googleapis.com` foram observadas inicialmente `DISABLED` e finalmente `ENABLED`. Os gates `serviceusage.services.enable` e `serviceusage.services.use` foram aprovados. Somente `iam.googleapis.com` foi explicitamente solicitada, uma única vez, com exit code `0`; a IAM Service Account Credentials API foi observada habilitada como efeito documentado, sem terceira API explicitamente solicitada.
+
+### Estado de credencial e recursos
+
+A sessão atual tem exatamente uma conta credentialed e uma ativa correspondentes ao operador mantido somente em memória, sob a configuração isolada; o diretório padrão permanece ausente. Permanecem zero ADC, projeto persistido, impersonação, access-token file, custom role, conta de serviço, binding e chave. Firestore/Datastore e Storage não foram acessados, e o inventário não foi executado.
+
+O gate temporal desta governança começou em `2026-08-07T13:27:05.6395156Z` (`2026-08-07T10:27:05.6395156-03:00`), 1189 segundos após o último progresso material, com 2410 segundos restantes no deadline de inatividade e 27255 segundos no deadline absoluto. O deadline de inatividade então vigente era `2026-08-07T14:07:16.3697759Z`; o absoluto permanece invariável em `2026-08-07T21:01:20.8006634Z`. Pausa, bloqueio, impossibilidade de continuidade ou vencimento exigem revogação nominal.
+
+### Correção cronológica e próximo gate
+
+O estado de 2026-08-06 que descrevia aquela credencial como ativa e apontava diretamente para o PROVISION permanece histórico, mas foi superado por: `LOGIN-GOVERNANCE` → tentativa de `AUTH-PROVISION-EXEC` → `iamApiDisabled` → zero recurso criado → revogação nominal e estado zero → `IAM-API-ENABLEMENT-PREP` → novo login → `IAM-API-ENABLEMENT-EXEC` → esta governança.
+
+O próximo bloco exclusivo é `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-EXEC`, ainda não iniciado. Ele exige autorização humana literal própria, gate temporal, credencial ainda válida, confirmação das duas APIs e todos os gates do contrato aprovado. Poderá criar somente o custom role e a conta de serviço aprovados; não autoriza binding, ADC, impersonação, chave, Firestore, Storage ou inventário. Sequência: `AUTH-PROVISION-EXEC` → `PROVISION-GOVERNANCE` → `ACTIVATION-PREP` → `ACTIVATION-EXEC` → `INVENTORY-EXEC` → `AUTH-REVOKE`.
+
+---
+
 ## 2026-08-06 — ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-GOVERNANCE
 
 **Status:** **A. LOGIN-GOVERNANCE CONCLUÍDO, COMMIT E PUSH VALIDADOS — CREDENCIAL ATIVA E AUTH-PROVISION-EXEC HABILITADO.** Atualização exclusivamente documental sobre o baseline `1b0235db3a17fe685760ef73cfe5449402b9f8f9`. Nenhum recurso Google Cloud foi criado ou alterado.
