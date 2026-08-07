@@ -17,6 +17,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional de 2026-08-07 — estado atual:** o `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-GOVERNANCE-RESUME` foi retomado e concluído. O projeto `turismo-sms` permaneceu `ACTIVE`, com fingerprint exato e `serviceusage.googleapis.com`, `iam.googleapis.com` e `iamcredentials.googleapis.com` habilitadas. O custom role `adminB2A5InventoryRead` foi revalidado como existente, `GA`, não excluído, com title/description exatos e somente `datastore.entities.get` e `datastore.entities.list`; hash semântico `1eddae03e588fbee46821c518c2f74b25530e2a81d627570cb942bed46a221f7`. A service account `admin-b2a5-inventory-reader` foi revalidada com metadata exata, habilitada e com zero chave `USER_MANAGED`. A leitura oficial da CLI, analisada por `System.Text.Json.JsonDocument`, confirmou na policy própria: `bindingsPropertyPresent = false`, `bindingsIsNull = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false`. A prova delimitada da policy de projeto confirmou zero binding para a service account alvo e zero binding usando o custom role; isso não afirma zero bindings globais. O falso positivo anterior permanece classificado como `FALSE_POSITIVE_PARSER`, sem remediation IAM. O provisionamento está agora formalmente governado e continua distinto de ativação: nenhuma binding foi concedida ou removida, nenhum papel foi atribuído e Firestore, Storage e inventário não foram acessados. A credencial humana permanece ativa somente na configuração isolada para continuidade imediata, com zero ADC, projeto persistido, impersonação e access-token file; o diretório padrão permanece ausente.
 
+**Atualização operacional posterior de 2026-08-07 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE` foi concluído local e documentalmente com classificação **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN**. A sessão humana anterior foi revogada antes deste bloco; o preflight e o encerramento confirmaram zero contas credentialed/ativas, zero ADC, projeto, impersonação e access-token file, diretório padrão ausente e nenhum deadline ativo. Não houve login, OAuth, chamada remota Google Cloud, mutação IAM, acesso a Firestore/Storage/Logging ou inventário. O gate local da ferramenta passou em 102/102, zero skipped, somente no Firestore Emulator.
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -25,11 +27,12 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP` — próximo bloco exclusivo, ainda não iniciado.**
+**`ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` — próximo bloco exclusivo.**
 
-- O `ACTIVATION-PREP` será separado, sem mutação, e deverá definir member, custom role, target, tipo/escopo/condições da binding, duração, gates, prova de ausência, rollback e as sequências de ativação, inventário, remoção e `AUTH-REVOKE`.
-- Nenhuma binding pode ser criada durante o PREP. Não apontar diretamente para `ACTIVATION-EXEC` e não iniciar automaticamente qualquer etapa posterior.
-- A credencial isolada está preservada apenas para continuidade imediata sob os prazos vigentes; pausa, bloqueio, encerramento ou vencimento exigem revogação nominal e estado zero.
+- Finalidade explícita: abrir uma nova sessão humana para a cadeia contínua já preparada; exige operador novo somente em memória e autorização literal própria.
+- Depois do login, executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e predominantemente somente leitura. Não repetir pesquisa, reconstruir prompts ou fazer governança pesada nessa janela.
+- `START_UTC`, `END_UTC` e `ACTIVATION_MUST_START_BY_UTC` continuam `NOT_DEFINED`; somente o FINALIZATION poderá materializá-los após todos os gates.
+- Não iniciar automaticamente LOGIN, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
 
 ### PROVISION-GOVERNANCE retomada e concluída — 2026-08-07
 
@@ -38,6 +41,252 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - **Parsing corrigido aplicado:** leitura oficial da CLI sob configuração isolada; `System.Text.Json.JsonDocument`; `bindings` ausente tratado estruturalmente como zero grants, sem array-subexpression ou truthiness.
 - **Escopo negativo:** bindings criadas = `0`; bindings removidas = `0`; mutações IAM = `0`; Firestore acessado = `false`; Storage acessado = `false`; inventário executado = `false`.
 - **Separação obrigatória:** provisionamento não é ativação. O único próximo bloco habilitado é `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP`, sem mutação e dependente de autorização própria.
+
+### ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE — concluído em 2026-08-07
+
+#### Escopo, estado e fontes oficiais
+
+- Natureza: preparação completa, local, documental e sem autenticação. IAM mutations = `0`; Firestore accessed = `false`; Storage accessed = `false`; inventory executed = `false`; deadlines ativos = nenhum.
+- O `ACTIVATION-PREP` online anterior não chegou a iniciar: foi classificado **E. PRAZO DE CREDENCIAL INSUFICIENTE — ZERO MUTAÇÃO IAM E CREDENCIAL REVOGADA**, quando restavam 38 min 42 s até o deadline de inatividade. A revogação nominal foi concluída e o estado zero foi comprovado. A estratégia foi alterada para concluir pesquisa, documentação, validação local e prompts antes de qualquer novo login.
+- Git inicial: `main`, HEAD `31bd6083fb790761bea971a9174b7eed726b4c92`, índice vazio, zero alteração rastreada e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram fechados e intocados.
+- Estado zero inicial: `credentialedAccountCount = 0`, `activeAccountCount = 0`, `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false`, `defaultConfigAbsent = true` e `GOOGLE_APPLICATION_CREDENTIALS` ausente.
+- Fontes oficiais consultadas em 2026-08-07: [project add binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding), [project remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/remove-iam-policy-binding), [Firestore databases e IAM por database](https://docs.cloud.google.com/firestore/native/docs/manage-databases), [IAM Conditions attributes](https://docs.cloud.google.com/iam/docs/conditions-attribute-reference), [service-account add binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/add-iam-policy-binding), [service-account remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/remove-iam-policy-binding), [Token Creator](https://docs.cloud.google.com/iam/docs/roles-permissions/iam), [impersonação com ADC](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation), [ordem do ADC](https://docs.cloud.google.com/docs/authentication/application-default-credentials), [configurações da CLI](https://docs.cloud.google.com/sdk/docs/configurations), [ADC login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login), [ADC revoke](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/revoke), [permissões para conditions](https://docs.cloud.google.com/iam/docs/managing-conditional-role-bindings), [permissões sobre service accounts](https://docs.cloud.google.com/iam/docs/manage-access-service-accounts), [propagação IAM](https://docs.cloud.google.com/iam/docs/access-change-propagation) e [cache IAM do Firestore](https://docs.cloud.google.com/firestore/native/docs/security/iam).
+
+#### Conditions canônicas e armazenamento
+
+- O projeto aceita `serviceAccount:` como principal, custom role de projeto e condition com `expression`, `title` e `description`. O database `(default)` é ID oficial válido e seu resource name é `projects/turismo-sms/databases/(default)`.
+- `request.time >= timestamp(...)`, `request.time < timestamp(...)` e a conjunção `&&` são oficialmente suportados. Os timestamps reais continuam proibidos neste PREP.
+- Mecanismo escolhido: dois arquivos JSON em `--condition-from-file`, criados somente no `ACTIVATION-EXEC`, fora do repositório. Cada arquivo terá SHA-256 registrado, será reutilizado sem alteração no rollback e removido no encerramento. `--all` é proibido no rollback normal.
+- Diretório futuro: `$ActivationRoot = Join-Path $env:LOCALAPPDATA "Google\CloudSDK\admin-b2a5-activation"`; conditions em `$ActivationRoot\conditions`.
+
+Project condition template:
+
+```json
+{
+  "title": "admin_b2a5_inventory_database_window",
+  "description": "Temporary read-only access to the approved ADMIN-B2A5 Firestore database during the authorized inventory window.",
+  "expression": "resource.name == \"projects/turismo-sms/databases/(default)\" && request.time >= timestamp(\"START_UTC\") && request.time < timestamp(\"END_UTC\")"
+}
+```
+
+Token Creator condition template:
+
+```json
+{
+  "title": "admin_b2a5_inventory_impersonation_window",
+  "description": "Temporary service account impersonation for the approved ADMIN-B2A5 inventory window.",
+  "expression": "request.time >= timestamp(\"START_UTC\") && request.time < timestamp(\"END_UTC\")"
+}
+```
+
+#### ADC no Windows — decisão vinculante
+
+- A busca oficial do ADC ocorre em: (1) `GOOGLE_APPLICATION_CREDENTIALS`; (2) arquivo local de `application-default login`; (3) metadata server. No Windows, o well-known path padrão é `%APPDATA%\gcloud\application_default_credentials.json`.
+- A documentação oficial confirma que `CLOUDSDK_CONFIG` muda o diretório global da CLI. A inspeção local da CLI 578.0.0 confirmou que `config.ADCFilePath()` usa a biblioteca `google.auth._cloud_sdk`, cuja função consulta `CLOUDSDK_CONFIG` antes de `%APPDATA%`; a prova local sem autenticação confirmou `cloudSdkConfigPathMatches = true`, `cloudSdkConfigPrecedesAppData = true` e nenhum arquivo criado.
+- A alternativa de alterar somente `APPDATA` mantendo `CLOUDSDK_CONFIG` apontado para a CLI humana foi rejeitada: `CLOUDSDK_CONFIG` prevalece e impediria o caminho esperado em `$ActivationAppData\gcloud`.
+- Estratégia escolhida: o processo filho exclusivo do ADC usará `$ActivationConfig = Join-Path $ActivationRoot "gcloud-config"` como `CLOUDSDK_CONFIG`, separado tanto da configuração humana `$IsolatedConfig` quanto do perfil padrão. `APPDATA` não será alterado. O caminho esperado será `$ExpectedAdcPath = Join-Path $ActivationConfig "application_default_credentials.json"`.
+- A criação futura será somente por `gcloud auth application-default login OPERATOR_IN_MEMORY --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY`, com navegador integralmente sob controle humano. Não existe `--credential-output-file` nesse comando; chave JSON permanece proibida.
+- Node.js é oficialmente suportado para ADC local por impersonação. O processo do inventário receberá `GOOGLE_APPLICATION_CREDENTIALS=$ExpectedAdcPath` somente em sua própria tabela de ambiente; o processo pai continuará sem a variável. Assim, o Node usa o arquivo exato e não depende do well-known path.
+- Prova estrutural pós-criação, sem imprimir conteúdo: arquivo regular, fora do repositório, sem reparse point, JSON válido, `type = impersonated_service_account`, `service_account_impersonation_url` correspondente ao target mantido em memória, `source_credentials.type = authorized_user`; qualquer divergência aciona rollback.
+- Revogação: executar `gcloud auth application-default revoke` sob o mesmo `$ActivationConfig`, confirmar remoção do arquivo e então remover somente o diretório temporário exato. O comando oficial revoga ADC criado por `application-default login` e exclui o arquivo local; não afeta outras credenciais.
+
+#### Comandos canônicos futuros — não executar neste PREP
+
+Project binding:
+
+```powershell
+& $GcloudPath projects add-iam-policy-binding turismo-sms `
+  --member="serviceAccount:$TARGET_SA_EMAIL_IN_MEMORY" `
+  --role="projects/turismo-sms/roles/adminB2A5InventoryRead" `
+  --condition-from-file=$ProjectConditionPath `
+  --account=$OPERATOR_IN_MEMORY `
+  --quiet
+```
+
+Token Creator sobre a service account como recurso:
+
+```powershell
+& $GcloudPath iam service-accounts add-iam-policy-binding $TARGET_SA_EMAIL_IN_MEMORY `
+  --member="user:$OPERATOR_IN_MEMORY" `
+  --role="roles/iam.serviceAccountTokenCreator" `
+  --condition-from-file=$TokenConditionPath `
+  --project=turismo-sms `
+  --account=$OPERATOR_IN_MEMORY `
+  --quiet
+```
+
+Rollback project — condition exata:
+
+```powershell
+& $GcloudPath projects remove-iam-policy-binding turismo-sms `
+  --member="serviceAccount:$TARGET_SA_EMAIL_IN_MEMORY" `
+  --role="projects/turismo-sms/roles/adminB2A5InventoryRead" `
+  --condition-from-file=$ProjectConditionPath `
+  --account=$OPERATOR_IN_MEMORY `
+  --quiet
+```
+
+Rollback Token Creator — condition exata:
+
+```powershell
+& $GcloudPath iam service-accounts remove-iam-policy-binding $TARGET_SA_EMAIL_IN_MEMORY `
+  --member="user:$OPERATOR_IN_MEMORY" `
+  --role="roles/iam.serviceAccountTokenCreator" `
+  --condition-from-file=$TokenConditionPath `
+  --project=turismo-sms `
+  --account=$OPERATOR_IN_MEMORY `
+  --quiet
+```
+
+#### FINALIZATION curto, permissões e janela
+
+- Gates do `ACTIVATION-PREP-FINALIZATION`: prazo; Git `0/0`; credencial isolada; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; isolamento ADC; três prompts íntegros; cálculo da janela; relatório authorization-ready.
+- Permissões mínimas futuras: projeto `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, `resourcemanager.projects.setIamPolicy`, `serviceusage.services.list` e `serviceusage.services.use`; service account `iam.serviceAccounts.get`, `iam.serviceAccounts.getIamPolicy`, `iam.serviceAccounts.setIamPolicy` e `iam.serviceAccountKeys.list`; custom role `iam.roles.get`. Não conceder nada no FINALIZATION.
+- Usar `projects.testIamPermissions` para as permissões de projeto e `projects.serviceAccounts.testIamPermissions` no recurso exato da conta para as permissões aplicáveis. `iam.roles.get`, listagem de APIs e chaves permanecem provas read-only diretas. Qualquer ausência para antes da primeira binding.
+- `windowDurationSeconds = 7200`; `preStartLeadSeconds = 120`; `activationStartToleranceSeconds = 300`; `idleSafetyMarginSeconds = 300`; `postWindowRevokeReserveSeconds = 1800`.
+- Após todos os gates: `START_UTC = ceilToNextMinute(nowUtc + 120s)`; `END_UTC = START_UTC + 7200s`; `ACTIVATION_MUST_START_BY_UTC = START_UTC + 300s`. Exigir `ACTIVATION_MUST_START_BY_UTC <= LOGIN_INACTIVITY_DEADLINE - 300s` e `END_UTC <= LOGIN_ABSOLUTE_DEADLINE - 1800s`; caso contrário, FINALIZATION falha, revoga e exige novo login. `START_UTC` e `END_UTC` reais permanecem `NOT_DEFINED` neste PREP.
+
+#### Propagação e comando da ferramenta
+
+- IAM policy changes são eventualmente consistentes: tipicamente 2 minutos e potencialmente 7 minutos ou mais. O Firestore pode manter cache IAM por até 5 minutos.
+- Não existe readiness probe aprovado sem leitura de documento; `ACTIVATION-EXEC` não usará documentos reais como health check. O `INVENTORY-EXEC`, único bloco autorizado a ler, poderá repetir somente `auth-denied` em três tentativas máximas nos marcos `t+0s`, `t+120s` e `t+300s`, usando esperas de no máximo 30 segundos com rechecagem temporal. Nenhuma outra categoria recebe retry.
+- Comando remoto preparado, não executado; `ADMIN_B2A5_PROJECT_ID` e `GOOGLE_APPLICATION_CREDENTIALS` existirão somente no processo filho, e `FIRESTORE_EMULATOR_HOST` deverá estar ausente:
+
+```powershell
+node ".\tools\admin-b2a5-inventory\admin-b2a5-inventory.mjs" `
+  --database-id "(default)" `
+  --collection "usuarios" `
+  --max-docs "10000" `
+  --expected-project-sha256 "68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60"
+```
+
+- Tool readiness: `npm --prefix "tools/admin-b2a5-inventory" run check` passou; unitários passaram em 92/92; gate integral com Firestore Emulator passou em 102/102, zero falhas e zero skipped. Nenhuma instalação/atualização foi executada.
+
+#### Matriz de falhas vinculante
+
+- Falha pré-activation: zero binding; revogar login se a continuidade parar.
+- Project binding create falha: não criar Token Creator.
+- Project binding validation falha: remover a project binding exata.
+- Token Creator create falha: remover a project binding exata.
+- Token Creator validation falha: remover Token Creator se material e remover project binding.
+- ADC create/validation falha: remover ADC parcial e ambas as bindings exatas.
+- Inventory não inicia, falha ou conclui: executar AUTH-REVOKE completo imediatamente.
+- AUTH-REVOKE parcial: continuar best-effort nos passos independentes seguros, registrar estado sanitizado exato e escalar intervenção humana. Expiração nunca equivale a rollback concluído.
+
+#### Prompt pronto — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC
+
+```text
+Bloco exclusivo: ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC.
+Exigir autorização literal: AUTORIZO O ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC.
+Entradas obrigatórias materializadas pelo FINALIZATION e mantidas somente em memória:
+LOGIN_COMPLETED_AT, LOGIN_INACTIVITY_DEADLINE, LOGIN_ABSOLUTE_DEADLINE,
+START_UTC, END_UTC, ACTIVATION_MUST_START_BY_UTC, OPERATOR_IN_MEMORY,
+TARGET_SA_EMAIL_IN_MEMORY, CONDITION_PROJECT_CANONICAL,
+CONDITION_TOKEN_CANONICAL e ADC_TEMP_ROOT.
+
+Não fazer login novo da CLI, não definir ou ampliar timestamps, não usar chave JSON,
+não conceder Service Account User ou qualquer papel adicional, não ler documentos,
+não acessar Storage/Logging, não executar inventário e não alterar o repositório.
+
+1. Primeiro gate: nowUtc antes dos dois deadlines e de ACTIVATION_MUST_START_BY_UTC;
+   END_UTC estritamente antes do absoluto com a reserva aprovada. Falha => revoke
+   proporcional e parada.
+2. Confirmar main, origin/main...main=0/0, índice/tracked tree limpos e itens
+   protegidos fechados. Confirmar uma conta credentialed/ativa igual ao operador,
+   CLOUDSDK_CONFIG humano exato, zero ADC/projeto/impersonação/access-token file e
+   diretório padrão ausente.
+3. Revalidar somente por leitura projeto/fingerprint/lifecycle, APIs, custom role,
+   service account, zero USER_MANAGED keys e ausência exata das duas bindings.
+   Usar parsing JSON estrutural; nunca @($policy.bindings).Count.
+4. Confirmar permissões mínimas do operador. Qualquer ausência para antes da binding.
+5. Criar ADC_TEMP_ROOT fora do repo somente se ausente, regular, owned, sem reparse.
+   Materializar os dois JSON canônicos com START_UTC/END_UTC, registrar SHA-256 e
+   impedir qualquer alteração posterior.
+6. Criar project binding pelo arquivo canônico e validar exatamente member, role,
+   title, description e expression. Capturar stdout/stderr separadamente, sem bruto.
+7. Criar Token Creator na service account como recurso pelo segundo arquivo e validar
+   exatamente. Não conceder Service Account User.
+8. No processo filho exclusivo do ADC, usar CLOUDSDK_CONFIG=ADC_TEMP_ROOT\gcloud-config,
+   APPDATA inalterado e GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
+   gcloud auth application-default login OPERATOR_IN_MEMORY
+   --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY. O navegador, conta,
+   senha, MFA e consentimento ficam integralmente sob controle humano.
+9. Confirmar ExpectedAdcPath=ADC_TEMP_ROOT\gcloud-config\application_default_credentials.json,
+   fora do repo, e validar somente shape: impersonated_service_account, target exato
+   e source authorized_user. Não imprimir, transcrever ou hashear conteúdo sensível.
+10. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Entregar relatório sanitizado
+    ready-for-INVENTORY com hashes das conditions, bindings exatas e ADC pronto.
+
+Qualquer falha após a primeira binding executa rollback imediato com os mesmos JSON:
+revoke ADC no config temporário, remover ADC/root exatos, remover Token Creator exata,
+remover project binding exata e validar ausência. Nunca usar --all e nunca esperar
+expiração. Encerrar sem INVENTORY.
+```
+
+#### Prompt pronto — ADMIN-B2A5-INVENTORY-EXEC
+
+```text
+Bloco exclusivo: ADMIN-B2A5-INVENTORY-EXEC.
+Exigir autorização literal: AUTORIZO O ADMIN-B2A5-INVENTORY-EXEC.
+Exigir AUTH-REVOKE já autorizado/pronto antes da primeira leitura.
+Entradas em memória: START_UTC, END_UTC, OPERATOR_IN_MEMORY,
+TARGET_SA_EMAIL_IN_MEMORY, ExpectedAdcPath, hashes das duas conditions,
+fingerprint 68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60.
+
+1. Gate temporal e de continuidade; confirmar bindings canônicas ainda exatas,
+   ADC estruturalmente válido, arquivo fora do repo e nenhuma credencial alternativa.
+2. Criar processo filho com GOOGLE_APPLICATION_CREDENTIALS=ExpectedAdcPath e
+   ADMIN_B2A5_PROJECT_ID=turismo-sms; remover FIRESTORE_EMULATOR_HOST do ambiente.
+   Não definir METADATA_SERVER_DETECTION no modo remoto e não alterar o pai.
+3. Executar somente:
+   node .\tools\admin-b2a5-inventory\admin-b2a5-inventory.mjs
+     --database-id "(default)" --collection "usuarios" --max-docs "10000"
+     --expected-project-sha256 "68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60"
+4. Capturar stdout/stderr separadamente. Aceitar somente o JSON agregado allowlisted;
+   nunca emitir IDs, UIDs, paths, snapshots, campos pessoais ou erro bruto.
+5. Se e somente se a categoria sanitizada for auth-denied, permitir no máximo três
+   tentativas em t+0s, t+120s e t+300s, com esperas segmentadas de até 30s e gate
+   temporal antes de cada tentativa. Não retry para qualquer outra categoria.
+6. Volume acima de 10000, mismatch, falha de query/invariante/sanitização ou qualquer
+   outra categoria encerra sem resumo parcial e sem elevar limites.
+7. Em finally operacional, remover variáveis do processo filho e executar imediatamente
+   o prompt ADMIN-B2A5-INVENTORY-AUTH-REVOKE, independentemente de sucesso ou falha.
+
+Não escrever documento, não migrar, não alterar Rules, não acessar Storage/Logging,
+não manter ADC/binding para continuação e não iniciar governança antes do revoke.
+```
+
+#### Prompt pronto — ADMIN-B2A5-INVENTORY-AUTH-REVOKE
+
+```text
+Bloco obrigatório: ADMIN-B2A5-INVENTORY-AUTH-REVOKE.
+Executar imediatamente após INVENTORY ou qualquer falha pós-activation.
+Entradas em memória: OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY,
+ProjectConditionPath/sha256, TokenConditionPath/sha256, ActivationRoot,
+ActivationConfig e ExpectedAdcPath.
+
+1. Impedir nova execução inventory e aguardar/encerrar somente o processo filho exato.
+2. Sob CLOUDSDK_CONFIG=ActivationConfig, executar gcloud auth application-default revoke;
+   confirmar ExpectedAdcPath ausente. Remover somente ADC/root temporários exatos.
+3. Limpar GOOGLE_APPLICATION_CREDENTIALS e ADMIN_B2A5_PROJECT_ID de qualquer processo
+   criado pela cadeia; comprovar ausentes no pai.
+4. Validar SHA-256 dos JSON canônicos e remover a Token Creator binding exata com
+   --condition-from-file. Validar ausência por policy estrutural.
+5. Remover a project binding exata com --condition-from-file. Validar ausência por
+   policy estrutural. Nunca usar --all.
+6. Confirmar zero USER_MANAGED keys; desabilitar a service account e confirmar
+   disabled=true. Preservar a conta desabilitada e o custom role por 7 dias;
+   não excluir ou desabilitar o custom role sem nova autorização.
+7. Revogar nominalmente a credencial humana da CLI isolada uma única vez e comprovar:
+   zero contas credentialed/ativas, zero ADC, projeto, impersonação e access-token file,
+   diretório padrão ausente e nenhuma variável residual.
+8. Relatar somente booleanos, contagens, categorias e hashes de conditions. Não imprimir
+   operador, SA e-mail integral, policies, ADC, tokens, chaves, IDs ou erros brutos.
+
+Em falha parcial, continuar best-effort nos passos independentes seguros, registrar
+quais estados ficaram confirmados/inconclusivos e escalar intervenção humana. A
+expiração temporal não encerra rollback e não autoriza --all.
+```
 
 ### Fechamento pós-pausa e correção do contrato de policy — 2026-08-07
 

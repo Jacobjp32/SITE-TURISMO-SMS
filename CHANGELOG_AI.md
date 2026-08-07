@@ -6,6 +6,55 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE
+
+**Status:** **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN.** Bloco estritamente local, documental e sem autenticação. Não houve login, OAuth, chamada destinada a recurso Google Cloud, mutação IAM, leitura de Firestore/Storage/Logging, inventário real, migração ou deploy.
+
+### Preflight e estado zero
+
+O preflight confirmou branch `main`, HEAD `31bd6083fb790761bea971a9174b7eed726b4c92`, índice vazio, zero alteração rastreada e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram não rastreados, fechados, intocados e fora do stage.
+
+A Google Cloud CLI 578.0.0 foi consultada somente localmente, por caminho absoluto e sob o `CLOUDSDK_CONFIG` isolado já aprovado. O início e o encerramento comprovaram `credentialedAccountCount = 0`, `activeAccountCount = 0`, `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false`, `defaultConfigAbsent = true` e `GOOGLE_APPLICATION_CREDENTIALS` ausente. Não havia operador, credencial nem deadline ativo; nenhuma revogação era necessária.
+
+O `ACTIVATION-PREP` online anterior não chegou a iniciar e foi classificado **E. PRAZO DE CREDENCIAL INSUFICIENTE — ZERO MUTAÇÃO IAM E CREDENCIAL REVOGADA**, pois restavam somente 38 min 42 s até o deadline de inatividade. A credencial foi nominalmente revogada e o estado zero comprovado antes deste bloco. Para evitar consumir outra sessão humana com pesquisa e documentação, a estratégia passou a concluir offline toda a preparação e deixar o futuro FINALIZATION curto.
+
+### Pesquisa oficial e decisões canônicas
+
+- A binding de projeto futura usará o principal `serviceAccount:` da conta dedicada, o custom role `projects/turismo-sms/roles/adminB2A5InventoryRead` e condition que restringe simultaneamente o resource name exato `projects/turismo-sms/databases/(default)` e a janela temporal.
+- A binding futura de `roles/iam.serviceAccountTokenCreator` será criada na service account como recurso, para o operador humano mantido somente em memória, com condition exclusivamente temporal. `roles/iam.serviceAccountUser`, chaves JSON e qualquer papel adicional permanecem proibidos.
+- As duas conditions serão JSON canônico em arquivos fora do repositório, criados somente no `ACTIVATION-EXEC`, com SHA-256 registrado e reutilização dos mesmos arquivos no rollback. Remoção normal por `--all` é proibida.
+- A pesquisa confirmou `request.time >= timestamp(...)`, `request.time < timestamp(...)`, `&&`, o database ID `(default)`, remoção por condition exata, suporte de Node.js a ADC por impersonação, ordem de busca do ADC, revogação do ADC e os limites de propagação IAM/Firestore.
+
+### Isolamento do ADC no Windows
+
+A documentação oficial e a inspeção local da CLI comprovaram que `CLOUDSDK_CONFIG` precede `%APPDATA%` na resolução do arquivo ADC. Por isso, foi rejeitada a alternativa de alterar somente `APPDATA` enquanto a configuração humana continuasse ativa.
+
+O contrato futuro separa os dois contextos: comandos humanos continuam no `$IsolatedConfig`; o processo filho exclusivo de `gcloud auth application-default login --impersonate-service-account` usa `$ActivationRoot\gcloud-config` como `CLOUDSDK_CONFIG`, com `APPDATA` inalterado. O caminho esperado é `$ActivationRoot\gcloud-config\application_default_credentials.json`. Somente o processo filho do inventário receberá `GOOGLE_APPLICATION_CREDENTIALS` apontando para esse caminho; o pai permanece sem a variável.
+
+A validação pós-criação será apenas estrutural e sanitizada: arquivo regular, fora do repositório, sem reparse point, JSON válido, `type = impersonated_service_account`, target correspondente ao valor em memória e `source_credentials.type = authorized_user`. Conteúdo, tokens, credenciais e operador não poderão ser impressos, transcritos ou persistidos.
+
+### FINALIZATION, janela e propagação
+
+O próximo login não deverá repetir pesquisa ou reconstruir prompts. Após o novo `LOGIN-EXEC`, um `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION` curto revalidará Git, prazos, credencial isolada, projeto, APIs, custom role, service account, zero chaves, zero bindings, permissões do operador, isolamento do ADC e integridade dos três prompts.
+
+Somente após todos os gates, o FINALIZATION calculará `START_UTC = ceilToNextMinute(nowUtc + 120s)`, `END_UTC = START_UTC + 7200s` e `ACTIVATION_MUST_START_BY_UTC = START_UTC + 300s`, preservando 300 segundos antes do deadline de inatividade e 1800 segundos antes do deadline absoluto. Neste PREP, os três valores permaneceram `NOT_DEFINED`.
+
+Não existe readiness probe aprovado sem leitura de documento. O `ACTIVATION-EXEC` não fará leitura de dados. Apenas o `INVENTORY-EXEC`, já autorizado a ler, poderá repetir a categoria sanitizada `auth-denied`, em no máximo três tentativas nos marcos `t+0s`, `t+120s` e `t+300s`, com esperas segmentadas de até 30 segundos. Nenhuma outra categoria recebe retry.
+
+### Ferramenta e artefatos preparados
+
+O comando remoto futuro foi reconciliado com a implementação real: `--database-id "(default)"`, `--collection "usuarios"`, `--max-docs "10000"` e `--expected-project-sha256 "68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60"`; `ADMIN_B2A5_PROJECT_ID` e `GOOGLE_APPLICATION_CREDENTIALS` existirão somente no processo filho, e `FIRESTORE_EMULATOR_HOST` deverá estar ausente.
+
+Sem instalar ou atualizar dependências, `npm --prefix "tools/admin-b2a5-inventory" run check` passou; os unitários passaram em 92/92; o gate integral isolado com Firestore Emulator passou em **102/102**, zero falhas e zero skipped. Tentativas intermediárias bloqueadas por configuração local do Firebase e por variável vazia herdada foram corrigidas no wrapper do teste; nenhuma delas autenticou ou acessou recurso remoto.
+
+Foram preparados integralmente em `TASKS.md` os três prompts separados e fail-closed: `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC`, `ADMIN-B2A5-INVENTORY-EXEC` e `ADMIN-B2A5-INVENTORY-AUTH-REVOKE`, incluindo gates, comandos, captura sanitizada, rollback exato, desabilitação posterior da service account, preservação por sete dias e revogação nominal da credencial humana.
+
+### Próximo bloco
+
+O próximo bloco exclusivo é um novo `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC`, com operador somente em memória e autorização literal própria. Depois dele vem o `ACTIVATION-PREP-FINALIZATION`; `ACTIVATION-EXEC`, `INVENTORY-EXEC` e `AUTH-REVOKE` continuam não iniciados e exigem seus próprios gates e autorizações. Nenhuma etapa foi iniciada automaticamente por esta preparação.
+
+---
+
 ## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-PROVISION-GOVERNANCE-RESUME
 
 **Status:** **A. PROVISION-GOVERNANCE RETOMADA E CONCLUÍDA — RECURSOS REVALIDADOS, POLICY PRÓPRIA SEM BINDING MATERIAL, DOCUMENTAÇÃO PUBLICADA, CREDENCIAL ATIVA E ACTIVATION-PREP HABILITADO.** Retomada controlada e somente leitura do estado provisionado, seguida exclusivamente de atualização documental. Nenhuma binding, chave, concessão, remoção ou outra mutação IAM ocorreu.
