@@ -6,6 +6,62 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-PROVISION-GOVERNANCE-RESUME
+
+**Status:** **A. PROVISION-GOVERNANCE RETOMADA E CONCLUÍDA — RECURSOS REVALIDADOS, POLICY PRÓPRIA SEM BINDING MATERIAL, DOCUMENTAÇÃO PUBLICADA, CREDENCIAL ATIVA E ACTIVATION-PREP HABILITADO.** Retomada controlada e somente leitura do estado provisionado, seguida exclusivamente de atualização documental. Nenhuma binding, chave, concessão, remoção ou outra mutação IAM ocorreu.
+
+### Gate temporal, Git e credencial
+
+O gate temporal começou em `2026-08-07T18:01:26.3990474Z` (`2026-08-07T15:01:26.3990474-03:00`), 207 segundos após o login concluído. Restavam 3392 segundos até o deadline de inatividade `2026-08-07T18:57:58.8988997Z` e 28592 segundos até o deadline absoluto `2026-08-08T01:57:58.8988997Z`; ambos estavam válidos.
+
+O preflight Git confirmou branch `main`, HEAD `be5e31c877248127bc3f27614563a8fd6a68c541`, índice vazio, zero alteração rastreada, nenhuma operação Git ativa e alinhamento `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram não rastreados, fechados e intocados. O primeiro `git fetch origin` foi bloqueado apenas pela permissão local de `FETCH_HEAD`; a repetição do mesmo comando no contexto autorizado concluiu normalmente, sem pull, merge, rebase ou reset.
+
+A Google Cloud CLI 578.0.0, o SDK root e `CLOUDSDK_CONFIG` isolado foram validados por caminho absoluto, sem PATH. A sessão manteve uma conta credentialed e uma ativa correspondentes ao operador preservado somente em memória. Permaneceram `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false` e `defaultConfigAbsent = true`.
+
+### Cronologia governada
+
+1. A IAM API foi habilitada e governada em bloco anterior; a IAM Credentials API também ficou habilitada como efeito já documentado.
+2. O PROVISION criou o custom role mínimo e a service account dedicada, sem binding.
+3. A primeira leitura da policy própria foi interpretada como binding por um falso positivo.
+4. A primeira GOVERNANCE parou fail-closed e não alterou IAM.
+5. A credencial daquela etapa foi nominalmente revogada e o estado zero foi comprovado.
+6. O `ANOMALY-PREP` definiu a investigação separada.
+7. REST oficial e Google Cloud CLI fizeram leituras independentes da policy própria.
+8. A investigação concluiu `falsePositiveConfirmed = true`.
+9. A mesma investigação concluiu `actualBindingExists = false`.
+10. O contrato foi corrigido para parsing JSON estrutural, sem atribuir ao histórico um comando efêmero exato que não foi preservado.
+11. O fechamento pós-pausa comprovou estado zero e ausência de parser persistido.
+12. Um novo login humano isolado foi concluído com autorização própria e novos prazos.
+13. Esta `PROVISION-GOVERNANCE-RESUME` retomou a governança sob o contrato corrigido.
+14. Projeto, APIs, custom role e service account foram revalidados somente por leitura.
+15. A policy própria retornou zero binding material e shape esperado.
+16. A service account permaneceu com zero chave `USER_MANAGED`.
+17. A policy de projeto permaneceu com zero binding para a conta alvo e zero binding usando o custom role.
+18. O PROVISION passou a estar formalmente governado, sem iniciar ativação.
+
+### Recursos revalidados
+
+- Projeto `turismo-sms`: correspondência exata; fingerprint `68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60`; lifecycle `ACTIVE`.
+- APIs: `serviceusage.googleapis.com = ENABLED`, `iam.googleapis.com = ENABLED` e `iamcredentials.googleapis.com = ENABLED`.
+- Custom role `adminB2A5InventoryRead`: existente, `deleted = false`, title `ADMIN B2A5 Inventory Read`, description `Read-only Firestore entity permissions reserved for the approved ADMIN-B2A5 inventory activation window. Do not bind outside the authorized workflow.`, stage `GA`, permissões exclusivamente `datastore.entities.get` e `datastore.entities.list`, quantidade `2` e hash semântico `1eddae03e588fbee46821c518c2f74b25530e2a81d627570cb942bed46a221f7`.
+- Service account `admin-b2a5-inventory-reader`: existente, project/account ID/display name/description correspondentes ao contrato, `disabled = false`; unique numeric ID obtido somente em memória, sem registro do valor; `userManagedKeyCount = 0`.
+
+### Policies e provas negativas
+
+A leitura corrente da policy própria usou exclusivamente `gcloud iam service-accounts get-iam-policy` e foi suficiente segundo o contrato corrigido; não foi emitido token humano para repetir a leitura REST já usada na investigação independente. O JSON foi analisado com `System.Text.Json.JsonDocument`, sem `@($policy.bindings).Count`, sem array-subexpression e sem truthiness como prova única.
+
+Resultado sanitizado: `bindingsPropertyPresent = false`, `bindingsIsNull = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false`. O shape com `bindings` ausente representa zero grants.
+
+A leitura delimitada da policy de projeto produziu `projectBindingForTargetServiceAccountCount = 0` e `projectBindingUsingCustomRoleCount = 0`, sem afirmar zero bindings globais e sem acessar recursos descendentes. Nenhuma binding foi criada ou removida.
+
+### Estado final e próximo bloco
+
+O estado provisionado final é íntegro e sem acesso concedido pelo fluxo: custom role criada, validada, `GA`, com duas permissões e sem binding; service account criada, validada, habilitada, sem chave `USER_MANAGED`, sem binding material na policy própria e sem papel de projeto concedido; APIs IAM habilitadas. `FirestoreAccessed = false`, `StorageAccessed = false`, `InventoryExecuted = false`, bindings criadas = `0`, bindings removidas = `0` e mutações IAM = `0`.
+
+Provisionamento não equivale a ativação. O único próximo bloco habilitado é `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP`, separado, sem mutação e ainda não iniciado. Ele deverá definir member, custom role, target, binding, escopo, condições, duração, gates, prova de ausência, rollback e a sequência completa até `AUTH-REVOKE`; não poderá criar binding nem apontar diretamente para `ACTIVATION-EXEC`.
+
+---
+
 ## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-POST-PAUSE-STATE-ZERO-AND-PARSER-CORRECTION-EXEC
 
 **Status:** **B. ESTADO ZERO COMPROVADO E CONTRATO CORRIGIDO — NÃO EXISTE PARSER PERSISTIDO.** Fechamento pós-pausa e correção exclusivamente local/documental da classe de falso positivo na leitura da policy própria da service account. Nenhum login foi feito e nenhum recurso Google Cloud foi consultado ou alterado neste bloco.
