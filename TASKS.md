@@ -17,7 +17,9 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional de 2026-08-07 — estado atual:** o `ADMIN-B2A5-INVENTORY-AUTH-PROVISION-GOVERNANCE-RESUME` foi retomado e concluído. O projeto `turismo-sms` permaneceu `ACTIVE`, com fingerprint exato e `serviceusage.googleapis.com`, `iam.googleapis.com` e `iamcredentials.googleapis.com` habilitadas. O custom role `adminB2A5InventoryRead` foi revalidado como existente, `GA`, não excluído, com title/description exatos e somente `datastore.entities.get` e `datastore.entities.list`; hash semântico `1eddae03e588fbee46821c518c2f74b25530e2a81d627570cb942bed46a221f7`. A service account `admin-b2a5-inventory-reader` foi revalidada com metadata exata, habilitada e com zero chave `USER_MANAGED`. A leitura oficial da CLI, analisada por `System.Text.Json.JsonDocument`, confirmou na policy própria: `bindingsPropertyPresent = false`, `bindingsIsNull = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false`. A prova delimitada da policy de projeto confirmou zero binding para a service account alvo e zero binding usando o custom role; isso não afirma zero bindings globais. O falso positivo anterior permanece classificado como `FALSE_POSITIVE_PARSER`, sem remediation IAM. O provisionamento está agora formalmente governado e continua distinto de ativação: nenhuma binding foi concedida ou removida, nenhum papel foi atribuído e Firestore, Storage e inventário não foram acessados. A credencial humana permanece ativa somente na configuração isolada para continuidade imediata, com zero ADC, projeto persistido, impersonação e access-token file; o diretório padrão permanece ausente.
 
-**Atualização operacional posterior de 2026-08-07 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE` foi concluído local e documentalmente com classificação **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN**. A sessão humana anterior foi revogada antes deste bloco; o preflight e o encerramento confirmaram zero contas credentialed/ativas, zero ADC, projeto, impersonação e access-token file, diretório padrão ausente e nenhum deadline ativo. Não houve login, OAuth, chamada remota Google Cloud, mutação IAM, acesso a Firestore/Storage/Logging ou inventário. O gate local da ferramenta passou em 102/102, zero skipped, somente no Firestore Emulator.
+**Atualização operacional posterior de 2026-08-07 — registro histórico superado pelo resequencing abaixo:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE` foi concluído local e documentalmente com classificação **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN**. A sessão humana anterior foi revogada antes deste bloco; o preflight e o encerramento confirmaram zero contas credentialed/ativas, zero ADC, projeto, impersonação e access-token file, diretório padrão ausente e nenhum deadline ativo. Não houve login, OAuth, chamada remota Google Cloud, mutação IAM, acesso a Firestore/Storage/Logging ou inventário. O gate local da ferramenta passou em 102/102, zero skipped, somente no Firestore Emulator.
+
+**Atualização operacional final de 2026-08-07 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-WINDOW-RESEQUENCING-PREP` corrigiu exclusivamente em documentação a corrida `TIMESTAMP_HANDOFF_RACE`. A tentativa anterior de `ACTIVATION-EXEC` começou aproximadamente 85 segundos depois do prazo transferido e terminou antes da primeira mutação: zero binding de projeto, zero Token Creator, zero ADC, zero impersonação, zero Firestore, zero Storage, zero inventário e zero mutação IAM. A janela `2026-08-08T02:18:00Z` → `2026-08-08T04:18:00Z` e o prazo `2026-08-08T02:23:00Z` estão definitivamente invalidados e não podem ser reutilizados. A janela de 7200 segundos passa a ser materializada somente dentro do futuro `ACTIVATION-EXEC`, após autorização humana literal, depois dos gates read-only e imediatamente antes da primeira mutação. O estado local permanece zero; a revogação local anterior removeu a credencial, mas retornou exit code 1, portanto `serverSideRevocationStatus = INCONCLUSIVE` e o próximo login fica bloqueado até prova humana/oficial separada de revogação server-side.
 
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
@@ -29,9 +31,10 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **`ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` — próximo bloco exclusivo.**
 
-- Finalidade explícita: abrir uma nova sessão humana para a cadeia contínua já preparada; exige operador novo somente em memória e autorização literal própria.
-- Depois do login, executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e predominantemente somente leitura. Não repetir pesquisa, reconstruir prompts ou fazer governança pesada nessa janela.
-- `START_UTC`, `END_UTC` e `ACTIVATION_MUST_START_BY_UTC` continuam `NOT_DEFINED`; somente o FINALIZATION poderá materializá-los após todos os gates.
+- Gate anterior obrigatório: `serverSideRevocationStatus = INCONCLUSIVE` deve ser resolvido por confirmação humana de remoção de todas as conexões “Google Cloud SDK” na Conta Google ou por outra prova oficial e confiável de revogação server-side. Não tentar validar token antigo, pois ele não existe localmente.
+- Finalidade explícita do novo login: abrir uma sessão humana nova para `ACTIVATION-PREP-FINALIZATION` curto e, após autorização própria posterior, para `ACTIVATION-EXEC`; exige operador novo somente em memória e autorização literal própria. O LOGIN não materializa timestamps IAM.
+- Depois do login, executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
+- `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`. Não existem mais `leadSeconds`, `startToleranceSeconds` ou `ACTIVATION_MUST_START_BY_UTC` transferidos entre turnos.
 - Não iniciar automaticamente LOGIN, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
 
 ### PROVISION-GOVERNANCE retomada e concluída — 2026-08-07
@@ -40,23 +43,26 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - **Estado provisionado:** projeto exato e `ACTIVE`; três APIs habilitadas; custom role íntegro e sem binding; service account íntegra, habilitada, sem chave `USER_MANAGED`, sem binding material na policy própria e sem papel de projeto concedido pelo fluxo.
 - **Parsing corrigido aplicado:** leitura oficial da CLI sob configuração isolada; `System.Text.Json.JsonDocument`; `bindings` ausente tratado estruturalmente como zero grants, sem array-subexpression ou truthiness.
 - **Escopo negativo:** bindings criadas = `0`; bindings removidas = `0`; mutações IAM = `0`; Firestore acessado = `false`; Storage acessado = `false`; inventário executado = `false`.
-- **Separação obrigatória:** provisionamento não é ativação. O único próximo bloco habilitado é `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP`, sem mutação e dependente de autorização própria.
+- **Separação obrigatória — registro histórico:** provisionamento não é ativação. Naquele checkpoint, o próximo bloco era `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP`; o próximo gate corrente é o de revogação server-side descrito acima.
 
-### ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE — concluído em 2026-08-07
+### ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-WINDOW-RESEQUENCING-PREP — concluído em 2026-08-07
 
 #### Escopo, estado e fontes oficiais
 
-- Natureza: preparação completa, local, documental e sem autenticação. IAM mutations = `0`; Firestore accessed = `false`; Storage accessed = `false`; inventory executed = `false`; deadlines ativos = nenhum.
-- O `ACTIVATION-PREP` online anterior não chegou a iniciar: foi classificado **E. PRAZO DE CREDENCIAL INSUFICIENTE — ZERO MUTAÇÃO IAM E CREDENCIAL REVOGADA**, quando restavam 38 min 42 s até o deadline de inatividade. A revogação nominal foi concluída e o estado zero foi comprovado. A estratégia foi alterada para concluir pesquisa, documentação, validação local e prompts antes de qualquer novo login.
-- Git inicial: `main`, HEAD `31bd6083fb790761bea971a9174b7eed726b4c92`, índice vazio, zero alteração rastreada e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram fechados e intocados.
-- Estado zero inicial: `credentialedAccountCount = 0`, `activeAccountCount = 0`, `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false`, `defaultConfigAbsent = true` e `GOOGLE_APPLICATION_CREDENTIALS` ausente.
-- Fontes oficiais consultadas em 2026-08-07: [project add binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding), [project remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/remove-iam-policy-binding), [Firestore databases e IAM por database](https://docs.cloud.google.com/firestore/native/docs/manage-databases), [IAM Conditions attributes](https://docs.cloud.google.com/iam/docs/conditions-attribute-reference), [service-account add binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/add-iam-policy-binding), [service-account remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/remove-iam-policy-binding), [Token Creator](https://docs.cloud.google.com/iam/docs/roles-permissions/iam), [impersonação com ADC](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation), [ordem do ADC](https://docs.cloud.google.com/docs/authentication/application-default-credentials), [configurações da CLI](https://docs.cloud.google.com/sdk/docs/configurations), [ADC login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login), [ADC revoke](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/revoke), [permissões para conditions](https://docs.cloud.google.com/iam/docs/managing-conditional-role-bindings), [permissões sobre service accounts](https://docs.cloud.google.com/iam/docs/manage-access-service-accounts), [propagação IAM](https://docs.cloud.google.com/iam/docs/access-change-propagation) e [cache IAM do Firestore](https://docs.cloud.google.com/firestore/native/docs/security/iam).
+- Natureza: correção offline, exclusivamente documental e sem autenticação. IAM mutations = `0`; Firestore accessed = `false`; Storage accessed = `false`; inventory executed = `false`; deadlines ativos = nenhum.
+- Git inicial: `main`, HEAD `9403cba0a3029522a2a4d1094d4e6ba70273917e`, índice vazio, zero alteração rastreada, nenhuma operação Git ativa e `origin/main...main = 0/0` após `git fetch origin`. Os três itens locais protegidos permaneceram fechados, intocados e fora do stage.
+- Estado zero inicial: `credentialedAccountCount = 0`, `activeAccountCount = 0`, `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false` e `GOOGLE_APPLICATION_CREDENTIALS` ausente.
+- A última tentativa de `ACTIVATION-EXEC` recebeu `START_UTC = 2026-08-08T02:18:00Z`, `END_UTC = 2026-08-08T04:18:00Z` e `ACTIVATION_MUST_START_BY_UTC = 2026-08-08T02:23:00Z`, mas iniciou em `2026-08-08T02:24:25.317Z`, aproximadamente 85 segundos tarde. Resultado: **B. JANELA EXPIROU ANTES DA PRIMEIRA MUTAÇÃO — ZERO IAM MUTATION**. Os três timestamps estão definitivamente invalidados e não podem ser reutilizados.
+- Diagnóstico: o desenho `LOGIN → FINALIZATION → materializar START/END → handoff humano → autorização ACTIVATION → outro turno` introduziu latência entre a materialização e a primeira mutação. `TIMESTAMP_HANDOFF_RACE = true`; não foi falha IAM, OAuth, permissão ou ADC.
+- Revogação: a credencial local foi removida e o estado `0/0` foi comprovado, mas `gcloud auth revoke` retornou exit code 1. Portanto `localCredentialStateZero = true`, `serverSideRevocationConfirmed = false` e `serverSideRevocationStatus = INCONCLUSIVE`. Este PREP não tenta resolver a incerteza.
+- Fontes oficiais reconfirmadas: [project add binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding), [project remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/remove-iam-policy-binding), [Firestore IAM por database](https://docs.cloud.google.com/firestore/native/docs/manage-databases), [IAM Conditions attributes](https://docs.cloud.google.com/iam/docs/conditions-attribute-reference), [service-account add binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/add-iam-policy-binding) e [service-account remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/remove-iam-policy-binding). Elas confirmam `request.time >= timestamp(...)`, `request.time < timestamp(...)`, composição por `&&`, `resource.name` por database e condition/`--condition-from-file` nos quatro comandos add/remove.
 
 #### Conditions canônicas e armazenamento
 
 - O projeto aceita `serviceAccount:` como principal, custom role de projeto e condition com `expression`, `title` e `description`. O database `(default)` é ID oficial válido e seu resource name é `projects/turismo-sms/databases/(default)`.
 - `request.time >= timestamp(...)`, `request.time < timestamp(...)` e a conjunção `&&` são oficialmente suportados. Os timestamps reais continuam proibidos neste PREP.
 - Mecanismo escolhido: dois arquivos JSON em `--condition-from-file`, criados somente no `ACTIVATION-EXEC`, fora do repositório. Cada arquivo terá SHA-256 registrado, será reutilizado sem alteração no rollback e removido no encerramento. `--all` é proibido no rollback normal.
+- Os hashes históricos prefixados por `eeb171b1...` e `235f963...` pertenciam às conditions com timestamps invalidados e estão proibidos para reuso. O `ACTIVATION-EXEC` calcula novos `projectConditionSha256` e `tokenConditionSha256` depois de materializar START/END e antes da primeira mutação.
 - Diretório futuro: `$ActivationRoot = Join-Path $env:LOCALAPPDATA "Google\CloudSDK\admin-b2a5-activation"`; conditions em `$ActivationRoot\conditions`.
 
 Project condition template:
@@ -140,11 +146,49 @@ Rollback Token Creator — condition exata:
 
 #### FINALIZATION curto, permissões e janela
 
-- Gates do `ACTIVATION-PREP-FINALIZATION`: prazo; Git `0/0`; credencial isolada; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; isolamento ADC; três prompts íntegros; cálculo da janela; relatório authorization-ready.
+- Gates do `ACTIVATION-PREP-FINALIZATION`: login válido; Git `0/0`; credencial isolada; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; isolamento ADC; prompts de ACTIVATION, INVENTORY e AUTH-REVOKE íntegros; algoritmo da janela validado; relatório authorization-ready.
 - Permissões mínimas futuras: projeto `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, `resourcemanager.projects.setIamPolicy`, `serviceusage.services.list` e `serviceusage.services.use`; service account `iam.serviceAccounts.get`, `iam.serviceAccounts.getIamPolicy`, `iam.serviceAccounts.setIamPolicy` e `iam.serviceAccountKeys.list`; custom role `iam.roles.get`. Não conceder nada no FINALIZATION.
 - Usar `projects.testIamPermissions` para as permissões de projeto e `projects.serviceAccounts.testIamPermissions` no recurso exato da conta para as permissões aplicáveis. `iam.roles.get`, listagem de APIs e chaves permanecem provas read-only diretas. Qualquer ausência para antes da primeira binding.
-- `windowDurationSeconds = 7200`; `preStartLeadSeconds = 120`; `activationStartToleranceSeconds = 300`; `idleSafetyMarginSeconds = 300`; `postWindowRevokeReserveSeconds = 1800`.
-- Após todos os gates: `START_UTC = ceilToNextMinute(nowUtc + 120s)`; `END_UTC = START_UTC + 7200s`; `ACTIVATION_MUST_START_BY_UTC = START_UTC + 300s`. Exigir `ACTIVATION_MUST_START_BY_UTC <= LOGIN_INACTIVITY_DEADLINE - 300s` e `END_UTC <= LOGIN_ABSOLUTE_DEADLINE - 1800s`; caso contrário, FINALIZATION falha, revoga e exige novo login. `START_UTC` e `END_UTC` reais permanecem `NOT_DEFINED` neste PREP.
+- Resultado obrigatório: `windowAlgorithmValidated = true`, `windowDurationSeconds = 7200`, `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `humanAuthorizationBeforeMutation = true`, `timestampsUnknownAtAuthorization = true` e `windowAlgorithmKnownAtAuthorization = true`.
+- Foram removidos `ceilToNextMinute`, lead, tolerância de início e `ACTIVATION_MUST_START_BY_UTC`. Nenhum timestamp real atravessa o handoff humano e nenhuma janela IAM começa no FINALIZATION.
+- A credencial humana conserva seus limites operacionais próprios. Se estiver próxima do limite antes da primeira mutação, não ativar: revogar e exigir novo login. Não é necessário que sobreviva às duas horas completas, pois o `AUTH-REVOKE` deve ocorrer muito antes; após qualquer binding material, rollback permanece obrigatório mesmo sob problema da credencial.
+
+#### Prompt pronto — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION
+
+```text
+Bloco exclusivo: ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION.
+Exigir autorização literal própria e login humano vigente. Exigir prova prévia de que
+o gate server-side da sessão anterior foi resolvido; serverSideRevocationStatus ainda
+INCONCLUSIVE bloqueia o LOGIN anterior e não pode ser reparado neste FINALIZATION.
+
+Não criar ou remover binding, não criar ADC, não impersonar, não ler Firestore/Storage,
+não executar inventário e não materializar START_UTC ou END_UTC.
+
+1. Confirmar login, deadlines operacionais da credencial, main, Git 0/0, índice e
+   tracked tree limpos e itens protegidos fechados.
+2. Confirmar configuração isolada e uma conta humana credentialed/ativa igual ao
+   operador em memória; zero ADC/projeto/impersonação/access-token file.
+3. Revalidar somente por leitura projeto turismo-sms, fingerprint
+   68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60,
+   lifecycle ACTIVE e as três APIs exigidas.
+4. Revalidar custom role exato, somente datastore.entities.get/list, e service account
+   exata, enabled, com zero USER_MANAGED keys.
+5. Confirmar zero project binding para a service account alvo, zero project binding
+   usando o custom role e zero material binding na own policy, com JSON estrutural.
+6. Confirmar permissões mínimas do operador por provas read-only aprovadas.
+7. Confirmar isolamento ADC, rollback readiness, INVENTORY prompt ready e
+   AUTH-REVOKE prompt ready.
+8. Validar somente o algoritmo autorizado: após todos os gates do ACTIVATION-EXEC e
+   imediatamente antes da primeira mutação, START_UTC = UTC corrente normalizado para
+   segundo inteiro e END_UTC = START_UTC + exatamente 7200 segundos.
+9. Emitir somente: ACTIVATION_READY=true, windowAlgorithmValidated=true,
+   windowDurationSeconds=7200, START_UTC=DEFERRED_TO_ACTIVATION_EXEC,
+   END_UTC=DEFERRED_TO_ACTIVATION_EXEC, windowMaterialized=false,
+   humanAuthorizationBeforeMutation=true, timestampsUnknownAtAuthorization=true e
+   windowAlgorithmKnownAtAuthorization=true; parar.
+
+Qualquer falha para sem mutação. O FINALIZATION não autoriza ACTIVATION-EXEC.
+```
 
 #### Propagação e comando da ferramenta
 
@@ -160,15 +204,15 @@ node ".\tools\admin-b2a5-inventory\admin-b2a5-inventory.mjs" `
   --expected-project-sha256 "68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60"
 ```
 
-- Tool readiness: `npm --prefix "tools/admin-b2a5-inventory" run check` passou; unitários passaram em 92/92; gate integral com Firestore Emulator passou em 102/102, zero falhas e zero skipped. Nenhuma instalação/atualização foi executada.
+- Tool readiness herdada do PREP-OFFLINE e não rerodada neste bloco: `npm --prefix "tools/admin-b2a5-inventory" run check` passou; unitários passaram em 92/92; gate integral com Firestore Emulator passou em 102/102, zero falhas e zero skipped. Nenhuma instalação/atualização foi executada.
 
 #### Matriz de falhas vinculante
 
-- Falha pré-activation: zero binding; revogar login se a continuidade parar.
-- Project binding create falha: não criar Token Creator.
+- Antes de materializar a janela: qualquer falha produz zero mutação IAM; revogar login se a continuidade parar.
+- Depois de materializar e antes da primeira mutação: se não puder continuar imediatamente, descartar START/END, não reutilizar timestamps e encerrar com zero mutação. Qualquer nova tentativa reinicia os gates críticos.
+- Project binding create falha: validar se houve materialização parcial; se ausente, zero rollback; se presente, remover a binding exata.
 - Project binding validation falha: remover a project binding exata.
-- Token Creator create falha: remover a project binding exata.
-- Token Creator validation falha: remover Token Creator se material e remover project binding.
+- Token Creator create/validation falha: remover Token Creator se material e remover project binding exata.
 - ADC create/validation falha: remover ADC parcial e ambas as bindings exatas.
 - Inventory não inicia, falha ou conclui: executar AUTH-REVOKE completo imediatamente.
 - AUTH-REVOKE parcial: continuar best-effort nos passos independentes seguros, registrar estado sanitizado exato e escalar intervenção humana. Expiração nunca equivale a rollback concluído.
@@ -177,50 +221,60 @@ node ".\tools\admin-b2a5-inventory\admin-b2a5-inventory.mjs" `
 
 ```text
 Bloco exclusivo: ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC.
-Exigir autorização literal: AUTORIZO O ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC.
-Entradas obrigatórias materializadas pelo FINALIZATION e mantidas somente em memória:
+Exigir autorização literal: AUTORIZO O ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC,
+acompanhada da autorização explícita do algoritmo: “Após todos os gates read-only
+passarem e imediatamente antes da primeira mutação IAM, calcular START_UTC a partir
+do UTC corrente e END_UTC como START_UTC + exatamente 7200 segundos.”
+Entradas obrigatórias do FINALIZATION e mantidas somente em memória:
 LOGIN_COMPLETED_AT, LOGIN_INACTIVITY_DEADLINE, LOGIN_ABSOLUTE_DEADLINE,
-START_UTC, END_UTC, ACTIVATION_MUST_START_BY_UTC, OPERATOR_IN_MEMORY,
-TARGET_SA_EMAIL_IN_MEMORY, CONDITION_PROJECT_CANONICAL,
-CONDITION_TOKEN_CANONICAL e ADC_TEMP_ROOT.
+OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, project/token condition templates,
+ADC_TEMP_ROOT, windowAlgorithmValidated=true, windowDurationSeconds=7200,
+START_UTC=DEFERRED_TO_ACTIVATION_EXEC e END_UTC=DEFERRED_TO_ACTIVATION_EXEC.
 
-Não fazer login novo da CLI, não definir ou ampliar timestamps, não usar chave JSON,
+Não fazer login novo da CLI, não alterar duração/targets/textos, não usar chave JSON,
 não conceder Service Account User ou qualquer papel adicional, não ler documentos,
 não acessar Storage/Logging, não executar inventário e não alterar o repositório.
 
-1. Primeiro gate: nowUtc antes dos dois deadlines e de ACTIVATION_MUST_START_BY_UTC;
-   END_UTC estritamente antes do absoluto com a reserva aprovada. Falha => revoke
-   proporcional e parada.
-2. Confirmar main, origin/main...main=0/0, índice/tracked tree limpos e itens
-   protegidos fechados. Confirmar uma conta credentialed/ativa igual ao operador,
-   CLOUDSDK_CONFIG humano exato, zero ADC/projeto/impersonação/access-token file e
-   diretório padrão ausente.
-3. Revalidar somente por leitura projeto/fingerprint/lifecycle, APIs, custom role,
-   service account, zero USER_MANAGED keys e ausência exata das duas bindings.
-   Usar parsing JSON estrutural; nunca @($policy.bindings).Count.
-4. Confirmar permissões mínimas do operador. Qualquer ausência para antes da binding.
-5. Criar ADC_TEMP_ROOT fora do repo somente se ausente, regular, owned, sem reparse.
-   Materializar os dois JSON canônicos com START_UTC/END_UTC, registrar SHA-256 e
-   impedir qualquer alteração posterior.
-6. Criar project binding pelo arquivo canônico e validar exatamente member, role,
-   title, description e expression. Capturar stdout/stderr separadamente, sem bruto.
-7. Criar Token Creator na service account como recurso pelo segundo arquivo e validar
-   exatamente. Não conceder Service Account User.
-8. No processo filho exclusivo do ADC, usar CLOUDSDK_CONFIG=ADC_TEMP_ROOT\gcloud-config,
+A. Confirmar que a autorização literal acima já foi recebida antes de qualquer mutação.
+B. Executar os gates críticos: Git/local; configuração isolada; conta humana ativa;
+   projeto/fingerprint/lifecycle; APIs; custom role; service account; zero USER_MANAGED
+   keys; zero project binding alvo; zero binding do custom role; zero material binding
+   na own policy; permissões do operador; ADC isolation; rollback readiness;
+   INVENTORY prompt ready; AUTH-REVOKE prompt ready. Usar JSON estrutural.
+C. Confirmar windowMaterialized=false. Se a credencial humana estiver próxima do
+   limite operacional, não ativar: revogar e exigir novo login.
+D. Fazer a última leitura do clock em UTC.
+E. Imediatamente antes da primeira mutação, normalizar o UTC corrente para RFC3339
+   com precisão de segundos: windowMaterializedAtUtc=START_UTC; definir
+   END_UTC=START_UTC+7200s. Não usar ceilToNextMinute, lead, startTolerance ou
+   ACTIVATION_MUST_START_BY_UTC.
+F. Criar fora do repo os dois JSON canônicos substituindo somente START_UTC/END_UTC;
+   title, description e restante da expression permanecem byte/semanticamente exatos.
+G. Calcular projectConditionSha256 e tokenConditionSha256 antes da primeira mutação;
+   tornar conteúdo, paths e hashes imutáveis para validação, handoff e rollback.
+H. Criar a project binding IMEDIATAMENTE pelo arquivo canônico. Se houver pausa humana
+   entre E e H, abortar, descartar timestamps, não mutar e não recalcular sem reiniciar
+   os gates críticos.
+I. Validar exatamente member, role, title, description, expression e hash da project binding.
+J. Criar Token Creator na service account como recurso pelo segundo arquivo.
+K. Validar exatamente member, role, title, description, expression e hash.
+L. No processo filho exclusivo do ADC, usar CLOUDSDK_CONFIG=ADC_TEMP_ROOT\gcloud-config,
    APPDATA inalterado e GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
    gcloud auth application-default login OPERATOR_IN_MEMORY
    --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY. O navegador, conta,
    senha, MFA e consentimento ficam integralmente sob controle humano.
-9. Confirmar ExpectedAdcPath=ADC_TEMP_ROOT\gcloud-config\application_default_credentials.json,
+M. Confirmar ExpectedAdcPath=ADC_TEMP_ROOT\gcloud-config\application_default_credentials.json,
    fora do repo, e validar somente shape: impersonated_service_account, target exato
    e source authorized_user. Não imprimir, transcrever ou hashear conteúdo sensível.
-10. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Entregar relatório sanitizado
-    ready-for-INVENTORY com hashes das conditions, bindings exatas e ADC pronto.
+N. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Parar para autorização do INVENTORY
+   e entregar windowMaterializedAtUtc, START_UTC, END_UTC, canonical objects/paths/hashes,
+   bindings exatas, ExpectedAdcPath e ADC pronto. Não executar inventário automaticamente.
 
-Qualquer falha após a primeira binding executa rollback imediato com os mesmos JSON:
-revoke ADC no config temporário, remover ADC/root exatos, remover Token Creator exata,
-remover project binding exata e validar ausência. Nunca usar --all e nunca esperar
-expiração. Encerrar sem INVENTORY.
+Falha entre E e H sem mutação descarta a janela. Qualquer falha após binding material
+executa imediatamente o prompt AUTH-REVOKE completo com os mesmos JSON e hashes:
+revoke/remover ADC, limpar env, remover Token Creator exata, validar, remover project
+binding exata, validar e concluir o restante do rollback. Nunca usar --all e nunca
+esperar expiração. Encerrar sem INVENTORY.
 ```
 
 #### Prompt pronto — ADMIN-B2A5-INVENTORY-EXEC
@@ -229,8 +283,10 @@ expiração. Encerrar sem INVENTORY.
 Bloco exclusivo: ADMIN-B2A5-INVENTORY-EXEC.
 Exigir autorização literal: AUTORIZO O ADMIN-B2A5-INVENTORY-EXEC.
 Exigir AUTH-REVOKE já autorizado/pronto antes da primeira leitura.
-Entradas em memória: START_UTC, END_UTC, OPERATOR_IN_MEMORY,
-TARGET_SA_EMAIL_IN_MEMORY, ExpectedAdcPath, hashes das duas conditions,
+Entradas dinâmicas produzidas pelo ACTIVATION-EXEC e mantidas em memória:
+START_UTC, END_UTC, projectConditionCanonical, tokenConditionCanonical,
+ProjectConditionPath/sha256, TokenConditionPath/sha256, OPERATOR_IN_MEMORY,
+TARGET_SA_EMAIL_IN_MEMORY, ExpectedAdcPath,
 fingerprint 68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60.
 
 1. Gate temporal e de continuidade; confirmar bindings canônicas ainda exatas,
@@ -261,32 +317,51 @@ não manter ADC/binding para continuação e não iniciar governança antes do r
 ```text
 Bloco obrigatório: ADMIN-B2A5-INVENTORY-AUTH-REVOKE.
 Executar imediatamente após INVENTORY ou qualquer falha pós-activation.
-Entradas em memória: OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY,
-ProjectConditionPath/sha256, TokenConditionPath/sha256, ActivationRoot,
-ActivationConfig e ExpectedAdcPath.
+Entradas dinâmicas recebidas somente do ACTIVATION-EXEC: START_UTC, END_UTC,
+projectConditionCanonical, tokenConditionCanonical, projectConditionSha256,
+tokenConditionSha256, ProjectConditionPath e TokenConditionPath com hashes de arquivo,
+OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, ActivationRoot, ActivationConfig e
+ExpectedAdcPath. Não aceitar timestamps ou hashes produzidos pelo FINALIZATION.
 
 1. Impedir nova execução inventory e aguardar/encerrar somente o processo filho exato.
-2. Sob CLOUDSDK_CONFIG=ActivationConfig, executar gcloud auth application-default revoke;
-   confirmar ExpectedAdcPath ausente. Remover somente ADC/root temporários exatos.
-3. Limpar GOOGLE_APPLICATION_CREDENTIALS e ADMIN_B2A5_PROJECT_ID de qualquer processo
+2. Sob CLOUDSDK_CONFIG=ActivationConfig, executar gcloud auth application-default revoke.
+3. Confirmar ExpectedAdcPath ausente; se restar arquivo parcial exato, removê-lo pelo
+   path validado. Preservar os arquivos de condition até terminar as duas remoções IAM.
+4. Limpar GOOGLE_APPLICATION_CREDENTIALS e ADMIN_B2A5_PROJECT_ID de qualquer processo
    criado pela cadeia; comprovar ausentes no pai.
-4. Validar SHA-256 dos JSON canônicos e remover a Token Creator binding exata com
-   --condition-from-file. Validar ausência por policy estrutural.
-5. Remover a project binding exata com --condition-from-file. Validar ausência por
-   policy estrutural. Nunca usar --all.
-6. Confirmar zero USER_MANAGED keys; desabilitar a service account e confirmar
-   disabled=true. Preservar a conta desabilitada e o custom role por 7 dias;
-   não excluir ou desabilitar o custom role sem nova autorização.
-7. Revogar nominalmente a credencial humana da CLI isolada uma única vez e comprovar:
-   zero contas credentialed/ativas, zero ADC, projeto, impersonação e access-token file,
-   diretório padrão ausente e nenhuma variável residual.
-8. Relatar somente booleanos, contagens, categorias e hashes de conditions. Não imprimir
-   operador, SA e-mail integral, policies, ADC, tokens, chaves, IDs ou erros brutos.
+5. Validar equivalência byte a byte e SHA-256 do TokenConditionPath e remover a Token
+   Creator binding exata com --condition-from-file.
+6. Validar ausência da Token Creator binding por policy estrutural.
+7. Validar equivalência byte a byte e SHA-256 do ProjectConditionPath e remover a
+   project binding exata com --condition-from-file. Nunca usar --all.
+8. Validar ausência da project binding por policy estrutural; só então remover os dois
+   arquivos canônicos e o ActivationRoot exato, se vazio e integralmente atribuível.
+9. Confirmar zero USER_MANAGED keys.
+10. Desabilitar a service account.
+11. Confirmar disabled=true; preservar a conta desabilitada e o custom role por 7 dias,
+    sem excluir ou desabilitar o custom role sem nova autorização.
+12. Revogar nominalmente a credencial humana da CLI isolada uma única vez.
+13. Comprovar zero contas credentialed/ativas, zero ADC, projeto, impersonação e
+    access-token file, diretório padrão ausente e nenhuma variável residual. Relatar
+    somente booleanos, contagens, categorias e hashes de conditions. Não imprimir
+    operador, SA e-mail integral, policies, ADC, tokens, chaves, IDs ou erros brutos.
 
 Em falha parcial, continuar best-effort nos passos independentes seguros, registrar
 quais estados ficaram confirmados/inconclusivos e escalar intervenção humana. A
 expiração temporal não encerra rollback e não autoriza --all.
 ```
+
+#### Teste lógico local do algoritmo da janela
+
+- Teste efêmero em PowerShell com `DateTimeOffset`/UTC, sem login, rede ou arquivo persistido: quatro casos, incluindo valor arbitrário com fração, `23:59:59Z` com virada de dia, fim de mês e fim de ano.
+- Resultado: 4/4 com `START` truncado ao segundo inteiro sem avançar ao próximo minuto, `END > START`, diferença exata de 7200 segundos e transições de calendário corretas.
+- `activationMustStartByRequired = false`; nenhum utilitário artificial foi adicionado ao repositório.
+
+#### Gate pré-login de revogação server-side
+
+- Estado atual: `localCredentialStateZero = true`, `serverSideRevocationConfirmed = false`, `serverSideRevocationStatus = INCONCLUSIVE`.
+- Antes de novo `LOGIN-EXEC`, exigir: (A) confirmação humana de remoção de todas as conexões “Google Cloud SDK” na Conta Google; ou (B) outra prova oficial e confiável de revogação server-side.
+- Não tentar verificar token antigo e não iniciar login enquanto o gate permanecer pendente. A classificação corrente é **B. RESEQUENCING CONCLUÍDO, MAS GATE PRÉ-LOGIN EXIGE DECISÃO HUMANA SOBRE REVOGAÇÃO SERVER-SIDE**.
 
 ### Fechamento pós-pausa e correção do contrato de policy — 2026-08-07
 

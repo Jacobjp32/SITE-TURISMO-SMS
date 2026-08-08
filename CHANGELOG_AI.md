@@ -6,9 +6,53 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-WINDOW-RESEQUENCING-PREP
+
+**Status:** **B. RESEQUENCING CONCLUÍDO, MAS GATE PRÉ-LOGIN EXIGE DECISÃO HUMANA SOBRE REVOGAÇÃO SERVER-SIDE.** Correção offline e exclusivamente documental. Não houve login, OAuth, chamada a recurso Google Cloud, binding criada/removida, ADC, impersonação, Firestore, Storage, Logging, inventário, migração ou deploy.
+
+### Preflight e estado local
+
+O preflight confirmou branch `main`, HEAD `9403cba0a3029522a2a4d1094d4e6ba70273917e`, índice vazio, zero alteração rastreada, nenhuma operação Git ativa e `origin/main...main = 0/0` após `git fetch origin`. Os três itens locais protegidos permaneceram não rastreados, fechados, intocados e fora do stage.
+
+A consulta exclusivamente local e sanitizada da Google Cloud CLI, sob o `CLOUDSDK_CONFIG` isolado, comprovou `credentialedAccountCount = 0`, `activeAccountCount = 0`, `adcDetected = false`, `projectConfigured = false`, `impersonationConfigured = false`, `accessTokenFileConfigured = false` e `GOOGLE_APPLICATION_CREDENTIALS` ausente.
+
+A revogação anterior removeu a credencial local, mas `gcloud auth revoke` retornou exit code 1. O estado governado passa a ser `localCredentialStateZero = true`, `serverSideRevocationConfirmed = false` e `serverSideRevocationStatus = INCONCLUSIVE`. Não houve tentativa de corrigir ou consultar token antigo neste bloco.
+
+### Falha anterior e causa raiz
+
+O `ACTIVATION-EXEC` anterior recebeu `START_UTC = 2026-08-08T02:18:00Z`, `END_UTC = 2026-08-08T04:18:00Z` e `ACTIVATION_MUST_START_BY_UTC = 2026-08-08T02:23:00Z`, mas começou em `2026-08-08T02:24:25.317Z`, aproximadamente 85 segundos após o prazo. Resultado: **B. JANELA EXPIROU ANTES DA PRIMEIRA MUTAÇÃO — ZERO IAM MUTATION**. Os três timestamps estão definitivamente invalidados e seu reuso é proibido.
+
+O desenho anterior era `LOGIN → FINALIZATION → materializar START/END → handoff humano → autorização ACTIVATION → outro turno`. A latência de turn-taking ocorreu entre `window materialization` e `first IAM mutation`, ultrapassando a tolerância de 300 segundos. Diagnóstico: `TIMESTAMP_HANDOFF_RACE = true`; não foi falha IAM, OAuth, permissão ou ADC.
+
+### Sequenciamento vinculante da janela
+
+- O `ACTIVATION-PREP-FINALIZATION` não materializa mais timestamps. Seu resultado é `windowAlgorithmValidated = true`, `windowDurationSeconds = 7200`, `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowMaterialized = false`.
+- Foram removidos `ceilToNextMinute`, lead, `startToleranceSeconds` e `ACTIVATION_MUST_START_BY_UTC` como valor transferido entre turnos.
+- A autorização humana literal permanece anterior a qualquer mutação e cobre o algoritmo conhecido: após todos os gates read-only e imediatamente antes da primeira mutação, `START_UTC` é o UTC corrente normalizado para segundo inteiro e `END_UTC = START_UTC + 7200s`. Os timestamps são desconhecidos na autorização; duração, database, role, principals, targets, titles, descriptions e rollback permanecem imutáveis.
+- O `ACTIVATION-EXEC` executa: autorização → gates críticos → `windowMaterialized=false` → último clock read → START/END → conditions canônicas → hashes → project binding imediata → validação → Token Creator → validação → ADC → validação → parada para autorização do inventário.
+- Qualquer pausa humana entre a materialização e a primeira mutação descarta a janela e aborta com zero mutação; os timestamps não são recalculados nem reutilizados sem reiniciar os gates críticos.
+
+### Conditions, hashes e handoffs
+
+Os titles, descriptions e expressions aprovados foram preservados. Somente `START_UTC` e `END_UTC` são substituídos no `ACTIVATION-EXEC`. Os dois objetos canônicos continuam em JSON fora do repositório e são usados com `--condition-from-file` para ADD e REMOVE. `projectConditionSha256` e `tokenConditionSha256` são calculados antes da primeira mutação e vinculam validação pós-create, INVENTORY, AUTH-REVOKE e rollback.
+
+O `INVENTORY-EXEC` mantém `(default)`, `usuarios`, `--max-docs 10000` e o fingerprint `68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60`; recebe dinamicamente START/END, objetos/paths/hashes das conditions e ADC produzidos pelo `ACTIVATION-EXEC`. O `AUTH-REVOKE` recebe o mesmo handoff e mantém a ordem: bloquear novo inventário, revogar/remover ADC, limpar ambiente, remover Token Creator exata, remover project binding exata, confirmar zero keys, desabilitar a conta, revogar a credencial humana e comprovar estado zero. Expiração nunca substitui rollback.
+
+### Pesquisa oficial e teste lógico local
+
+Fontes oficiais reconfirmadas: [IAM Conditions attributes](https://docs.cloud.google.com/iam/docs/conditions-attribute-reference), [Firestore IAM por database](https://docs.cloud.google.com/firestore/native/docs/manage-databases), [project add binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/add-iam-policy-binding), [project remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/projects/remove-iam-policy-binding), [service-account add binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/add-iam-policy-binding) e [service-account remove binding](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/remove-iam-policy-binding). Elas confirmam `request.time >= timestamp(...)`, `request.time < timestamp(...)`, `&&`, `resource.name` por database e conditions/`--condition-from-file` nos quatro comandos.
+
+Teste efêmero em PowerShell com `DateTimeOffset`/UTC: 4/4 casos passaram, incluindo NOW arbitrário com fração, `23:59:59Z`, fim de mês e fim de ano. Em todos, START foi normalizado ao segundo sem depender do próximo minuto, END foi posterior e a diferença foi exatamente 7200 segundos. Nenhuma ferramenta foi persistida.
+
+### Prompts e próximo gate
+
+`TASKS.md` contém quatro prompts completos e atualizados: `ACTIVATION-PREP-FINALIZATION`, `ACTIVATION-EXEC`, `INVENTORY-EXEC` e `AUTH-REVOKE`. O objetivo do próximo `LOGIN-EXEC` foi ajustado: ele não materializa timestamps IAM e só pode iniciar após confirmação humana de remoção de todas as conexões “Google Cloud SDK” na Conta Google ou outra prova oficial/confiável de revogação server-side. Nenhuma etapa seguinte foi iniciada automaticamente.
+
+---
+
 ## 2026-08-07 — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-OFFLINE
 
-**Status:** **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN.** Bloco estritamente local, documental e sem autenticação. Não houve login, OAuth, chamada destinada a recurso Google Cloud, mutação IAM, leitura de Firestore/Storage/Logging, inventário real, migração ou deploy.
+**Status histórico, superado pelo WINDOW-RESEQUENCING-PREP acima:** **A. ACTIVATION-PREP-OFFLINE CONCLUÍDO — CONTRATO, ADC ISOLADO, CONDITIONS, ROLLBACK E TRÊS PROMPTS PRONTOS; ESTADO ZERO; PRONTO PARA NOVO LOGIN.** Bloco estritamente local, documental e sem autenticação. Não houve login, OAuth, chamada destinada a recurso Google Cloud, mutação IAM, leitura de Firestore/Storage/Logging, inventário real, migração ou deploy.
 
 ### Preflight e estado zero
 
@@ -35,9 +79,9 @@ A validação pós-criação será apenas estrutural e sanitizada: arquivo regul
 
 ### FINALIZATION, janela e propagação
 
-O próximo login não deverá repetir pesquisa ou reconstruir prompts. Após o novo `LOGIN-EXEC`, um `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION` curto revalidará Git, prazos, credencial isolada, projeto, APIs, custom role, service account, zero chaves, zero bindings, permissões do operador, isolamento do ADC e integridade dos três prompts.
+**Registro histórico superado pelo WINDOW-RESEQUENCING-PREP acima.** Naquele desenho, o próximo login não repetiria pesquisa e o `ACTIVATION-PREP-FINALIZATION` revalidaria os gates e os três prompts então existentes.
 
-Somente após todos os gates, o FINALIZATION calculará `START_UTC = ceilToNextMinute(nowUtc + 120s)`, `END_UTC = START_UTC + 7200s` e `ACTIVATION_MUST_START_BY_UTC = START_UTC + 300s`, preservando 300 segundos antes do deadline de inatividade e 1800 segundos antes do deadline absoluto. Neste PREP, os três valores permaneceram `NOT_DEFINED`.
+O algoritmo histórico previa cálculo no FINALIZATION com próximo minuto, lead e tolerância. Ele foi **revogado para qualquer execução futura**: o FINALIZATION agora retorna timestamps deferred e somente o `ACTIVATION-EXEC`, após autorização humana, pode materializá-los imediatamente antes da primeira mutação.
 
 Não existe readiness probe aprovado sem leitura de documento. O `ACTIVATION-EXEC` não fará leitura de dados. Apenas o `INVENTORY-EXEC`, já autorizado a ler, poderá repetir a categoria sanitizada `auth-denied`, em no máximo três tentativas nos marcos `t+0s`, `t+120s` e `t+300s`, com esperas segmentadas de até 30 segundos. Nenhuma outra categoria recebe retry.
 
@@ -47,11 +91,11 @@ O comando remoto futuro foi reconciliado com a implementação real: `--database
 
 Sem instalar ou atualizar dependências, `npm --prefix "tools/admin-b2a5-inventory" run check` passou; os unitários passaram em 92/92; o gate integral isolado com Firestore Emulator passou em **102/102**, zero falhas e zero skipped. Tentativas intermediárias bloqueadas por configuração local do Firebase e por variável vazia herdada foram corrigidas no wrapper do teste; nenhuma delas autenticou ou acessou recurso remoto.
 
-Foram preparados integralmente em `TASKS.md` os três prompts separados e fail-closed: `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-EXEC`, `ADMIN-B2A5-INVENTORY-EXEC` e `ADMIN-B2A5-INVENTORY-AUTH-REVOKE`, incluindo gates, comandos, captura sanitizada, rollback exato, desabilitação posterior da service account, preservação por sete dias e revogação nominal da credencial humana.
+Naquele checkpoint foram preparados três prompts. Eles foram superados pelos quatro prompts completos do `WINDOW-RESEQUENCING-PREP`, incluindo o novo `ACTIVATION-PREP-FINALIZATION` e os handoffs dinâmicos.
 
 ### Próximo bloco
 
-O próximo bloco exclusivo é um novo `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC`, com operador somente em memória e autorização literal própria. Depois dele vem o `ACTIVATION-PREP-FINALIZATION`; `ACTIVATION-EXEC`, `INVENTORY-EXEC` e `AUTH-REVOKE` continuam não iniciados e exigem seus próprios gates e autorizações. Nenhuma etapa foi iniciada automaticamente por esta preparação.
+**Registro histórico superado:** naquele checkpoint, o próximo bloco seria um novo `LOGIN-EXEC`. O fluxo corrente exige primeiro resolver o gate de revogação server-side descrito no `WINDOW-RESEQUENCING-PREP`; nenhuma etapa foi iniciada automaticamente.
 
 ---
 
