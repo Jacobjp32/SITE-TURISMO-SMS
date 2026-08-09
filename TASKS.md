@@ -21,6 +21,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional final de 2026-08-07 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-WINDOW-RESEQUENCING-PREP` corrigiu exclusivamente em documentação a corrida `TIMESTAMP_HANDOFF_RACE`. A tentativa anterior de `ACTIVATION-EXEC` começou aproximadamente 85 segundos depois do prazo transferido e terminou antes da primeira mutação: zero binding de projeto, zero Token Creator, zero ADC, zero impersonação, zero Firestore, zero Storage, zero inventário e zero mutação IAM. A janela `2026-08-08T02:18:00Z` → `2026-08-08T04:18:00Z` e o prazo `2026-08-08T02:23:00Z` estão definitivamente invalidados e não podem ser reutilizados. A janela de 7200 segundos passa a ser materializada somente dentro do futuro `ACTIVATION-EXEC`, após autorização humana literal, depois dos gates read-only e imediatamente antes da primeira mutação. O estado local permanece zero; a revogação local anterior removeu a credencial, mas retornou exit code 1, portanto `serverSideRevocationStatus = INCONCLUSIVE` e o próximo login fica bloqueado até prova humana/oficial separada de revogação server-side.
 
+**Atualização operacional de 2026-08-08 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ADC-ISOLATION-CORRECTION-PREP` corrigiu exclusivamente o contrato local/documental de isolamento ADC, após a tentativa mais recente de `ACTIVATION-EXEC` parar antes de qualquer chamada `gcloud`, chamada remota, timestamp, binding ou ADC sob `CLOUDSDK_CONFIG_PRECEDES_APPDATA`. A configuração dedicada `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config` passa a ser `B2A5_GCLOUD_CONFIG` e o container canônico do ADC temporário; `B2A5_ADC_PATH = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`. Credenciais da CLI e ADC continuam conceitualmente distintas embora residam sob a mesma raiz B2A5. A árvore `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-activation\AppData\gcloud\application_default_credentials.json` e a alternativa `ActivationRoot\gcloud-config\application_default_credentials.json` estão invalidadas para este fluxo. A prova local, sem autenticação e sem abrir arquivos, confirmou configuração e ADC B2A5 fora do repositório, `B2A5_ADC_PATH` ausente, ADC padrão ausente, caminho antigo ausente e `GOOGLE_APPLICATION_CREDENTIALS` ausente. A pausa humana invalida toda âncora, deadline e timestamp anterior; nenhum novo prazo foi criado. Classificação: **A. ADC ISOLATION CORRIGIDO — CONFIGURAÇÃO B2A5 ISOLADA PASSA A SER O CONTAINER CANÔNICO DO ADC TEMPORÁRIO; WEB FLOW ADC GOVERNADO; QUATRO PROMPTS ATUALIZADOS; PRONTO PARA NOVA RETOMADA OPERACIONAL.**
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -29,10 +31,10 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**`ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` — próximo bloco exclusivo.**
+**Retomada operacional do ADMIN-B2A5 — próximo bloco exclusivo, somente com nova autorização humana.**
 
-- Gate anterior obrigatório: `serverSideRevocationStatus = INCONCLUSIVE` deve ser resolvido por confirmação humana de remoção de todas as conexões “Google Cloud SDK” na Conta Google ou por outra prova oficial e confiável de revogação server-side. Não tentar validar token antigo, pois ele não existe localmente.
-- Finalidade explícita do novo login: abrir uma sessão humana nova para `ACTIVATION-PREP-FINALIZATION` curto e, após autorização própria posterior, para `ACTIVATION-EXEC`; exige operador novo somente em memória e autorização literal própria. O LOGIN não materializa timestamps IAM.
+- A tentativa mais recente de `ACTIVATION-EXEC` é o estado vinculante: `CLOUDSDK_CONFIG_PRECEDES_APPDATA`, zero chamada `gcloud`, zero chamada remota, zero mutação IAM e zero ADC. A pausa posterior expirou toda âncora ou deadline operacional anterior; não reutilizar operador, login, `credentialSessionAnchorAtUtc`, `operationalInactivityDeadline`, START ou END de tentativas anteriores.
+- Primeiro validar o estado local. Se a retomada exigir credencial humana, executar novo `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` com operador novo somente em memória e autorização literal própria, seguido de `LOGIN-GOVERNANCE`. O LOGIN não materializa timestamps IAM e não autoriza FINALIZATION, ACTIVATION, INVENTORY ou REVOKE.
 - Depois do login, executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
 - `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`. Não existem mais `leadSeconds`, `startToleranceSeconds` ou `ACTIVATION_MUST_START_BY_UTC` transferidos entre turnos.
 - Não iniciar automaticamente LOGIN, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
@@ -88,13 +90,16 @@ Token Creator condition template:
 #### ADC no Windows — decisão vinculante
 
 - A busca oficial do ADC ocorre em: (1) `GOOGLE_APPLICATION_CREDENTIALS`; (2) arquivo local de `application-default login`; (3) metadata server. No Windows, o well-known path padrão é `%APPDATA%\gcloud\application_default_credentials.json`.
-- A documentação oficial confirma que `CLOUDSDK_CONFIG` muda o diretório global da CLI. A inspeção local da CLI 578.0.0 confirmou que `config.ADCFilePath()` usa a biblioteca `google.auth._cloud_sdk`, cuja função consulta `CLOUDSDK_CONFIG` antes de `%APPDATA%`; a prova local sem autenticação confirmou `cloudSdkConfigPathMatches = true`, `cloudSdkConfigPrecedesAppData = true` e nenhum arquivo criado.
-- A alternativa de alterar somente `APPDATA` mantendo `CLOUDSDK_CONFIG` apontado para a CLI humana foi rejeitada: `CLOUDSDK_CONFIG` prevalece e impediria o caminho esperado em `$ActivationAppData\gcloud`.
-- Estratégia escolhida: o processo filho exclusivo do ADC usará `$ActivationConfig = Join-Path $ActivationRoot "gcloud-config"` como `CLOUDSDK_CONFIG`, separado tanto da configuração humana `$IsolatedConfig` quanto do perfil padrão. `APPDATA` não será alterado. O caminho esperado será `$ExpectedAdcPath = Join-Path $ActivationConfig "application_default_credentials.json"`.
-- A criação futura será somente por `gcloud auth application-default login OPERATOR_IN_MEMORY --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY`, com navegador integralmente sob controle humano. Não existe `--credential-output-file` nesse comando; chave JSON permanece proibida.
-- Node.js é oficialmente suportado para ADC local por impersonação. O processo do inventário receberá `GOOGLE_APPLICATION_CREDENTIALS=$ExpectedAdcPath` somente em sua própria tabela de ambiente; o processo pai continuará sem a variável. Assim, o Node usa o arquivo exato e não depende do well-known path.
+- A documentação oficial confirma que `CLOUDSDK_CONFIG` muda o diretório global da CLI. Separadamente, a inspeção local já comprovou que a CLI 578.0.0 resolve o ADC consultando `CLOUDSDK_CONFIG` antes de `%APPDATA%`: `CLOUDSDK_CONFIG_PRECEDES_APPDATA = true`. A prova local não é substituída por inferência documental genérica.
+- Decisão canônica: `B2A5_GCLOUD_CONFIG = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config` e `B2A5_ADC_PATH = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`. A raiz já é dedicada ao B2A5, fica fora do repositório, difere do perfil padrão e é selecionada explicitamente por `CLOUDSDK_CONFIG`; não será criada uma segunda árvore de configuração apenas para o ADC.
+- Estão invalidados para o ADC deste fluxo: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-activation\AppData\gcloud\application_default_credentials.json` e `ActivationRoot\gcloud-config\application_default_credentials.json`. `APPDATA` não será redirecionado.
+- Credenciais da gcloud CLI autenticam comandos da própria CLI; ADC autentica bibliotecas cliente da aplicação. São conjuntos conceitualmente distintos mesmo quando armazenados sob a mesma raiz B2A5. O inventário Node.js usa ADC e não usa diretamente o credential store da CLI.
+- Regra de ciclo de vida: antes de `ACTIVATION`, `B2A5_ADC_PATH` deve estar ausente; durante `ACTIVATION → INVENTORY → AUTH-REVOKE`, pode existir somente após a criação autorizada; ao fim do `AUTH-REVOKE`, deve estar ausente novamente. Não apagar manualmente `credentials.db` nem remover `B2A5_GCLOUD_CONFIG` inteiro.
+- A criação futura será somente por `gcloud auth application-default login OPERATOR_IN_MEMORY --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY`, depois das duas bindings temporárias criadas e validadas. A referência oficial atual caracteriza o comando como web flow: remover as antigas exigências absolutas `storedUserCredentialReused = true` e `webOAuthStarted = false`; o futuro `ACTIVATION-EXEC` deve autorizar explicitamente a interação humana no navegador se solicitada. Isso não autoriza nem executa novo `gcloud auth login` da CLI. Chave JSON permanece proibida.
+- Node.js é oficialmente suportado para ADC local por impersonação. O processo do inventário receberá `GOOGLE_APPLICATION_CREDENTIALS=B2A5_ADC_PATH` somente em sua própria tabela de ambiente; o processo pai continuará sem a variável. Assim, o Node usa o arquivo exato.
 - Prova estrutural pós-criação, sem imprimir conteúdo: arquivo regular, fora do repositório, sem reparse point, JSON válido, `type = impersonated_service_account`, `service_account_impersonation_url` correspondente ao target mantido em memória, `source_credentials.type = authorized_user`; qualquer divergência aciona rollback.
-- Revogação: executar `gcloud auth application-default revoke` sob o mesmo `$ActivationConfig`, confirmar remoção do arquivo e então remover somente o diretório temporário exato. O comando oficial revoga ADC criado por `application-default login` e exclui o arquivo local; não afeta outras credenciais.
+- Revogação: executar `gcloud auth application-default revoke` sob `CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG` e confirmar `B2A5_ADC_PATH` ausente. O comando oficial revoga ADC criado por `application-default login` e exclui o arquivo local; não afeta as credenciais da CLI. Preservar `credentials.db` e a raiz B2A5.
+- Fontes oficiais atuais: [visão geral de autenticação](https://docs.cloud.google.com/docs/authentication), [referência de application-default login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login), [impersonação e suporte das bibliotecas](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation), [referência de application-default revoke](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/revoke) e [configurações/CLOUDSDK_CONFIG](https://docs.cloud.google.com/sdk/gcloud/reference/topic/configurations). A documentação afirma genericamente separação CLI/ADC, web flow, impersonação, suporte Node.js, revoke e override do diretório; `CLOUDSDK_CONFIG_PRECEDES_APPDATA` permanece evidência local deste ambiente.
 
 #### Comandos canônicos futuros — não executar neste PREP
 
@@ -146,7 +151,7 @@ Rollback Token Creator — condition exata:
 
 #### FINALIZATION curto, permissões e janela
 
-- Gates do `ACTIVATION-PREP-FINALIZATION`: login válido; Git `0/0`; credencial isolada; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; isolamento ADC; prompts de ACTIVATION, INVENTORY e AUTH-REVOKE íntegros; algoritmo da janela validado; relatório authorization-ready.
+- Gates do `ACTIVATION-PREP-FINALIZATION`: login válido e corrente; Git `0/0`; `B2A5_GCLOUD_CONFIG` canônico e fora do repositório; `B2A5_ADC_PATH` fora do repositório e ausente; ADC padrão ausente; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; prompts de ACTIVATION, INVENTORY e AUTH-REVOKE íntegros; algoritmo da janela validado; relatório authorization-ready.
 - Permissões mínimas futuras: projeto `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, `resourcemanager.projects.setIamPolicy`, `serviceusage.services.list` e `serviceusage.services.use`; service account `iam.serviceAccounts.get`, `iam.serviceAccounts.getIamPolicy`, `iam.serviceAccounts.setIamPolicy` e `iam.serviceAccountKeys.list`; custom role `iam.roles.get`. Não conceder nada no FINALIZATION.
 - Usar `projects.testIamPermissions` para as permissões de projeto e `projects.serviceAccounts.testIamPermissions` no recurso exato da conta para as permissões aplicáveis. `iam.roles.get`, listagem de APIs e chaves permanecem provas read-only diretas. Qualquer ausência para antes da primeira binding.
 - Resultado obrigatório: `windowAlgorithmValidated = true`, `windowDurationSeconds = 7200`, `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `humanAuthorizationBeforeMutation = true`, `timestampsUnknownAtAuthorization = true` e `windowAlgorithmKnownAtAuthorization = true`.
@@ -167,7 +172,8 @@ não executar inventário e não materializar START_UTC ou END_UTC.
 1. Confirmar login, deadlines operacionais da credencial, main, Git 0/0, índice e
    tracked tree limpos e itens protegidos fechados.
 2. Confirmar configuração isolada e uma conta humana credentialed/ativa igual ao
-   operador em memória; zero ADC/projeto/impersonação/access-token file.
+   operador em memória; B2A5_GCLOUD_CONFIG canônico e fora do repo; B2A5_ADC_PATH
+   fora do repo e ausente; ADC padrão ausente; zero projeto/impersonação/access-token file.
 3. Revalidar somente por leitura projeto turismo-sms, fingerprint
    68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60,
    lifecycle ACTIVE e as três APIs exigidas.
@@ -176,8 +182,9 @@ não executar inventário e não materializar START_UTC ou END_UTC.
 5. Confirmar zero project binding para a service account alvo, zero project binding
    usando o custom role e zero material binding na own policy, com JSON estrutural.
 6. Confirmar permissões mínimas do operador por provas read-only aprovadas.
-7. Confirmar isolamento ADC, rollback readiness, INVENTORY prompt ready e
-   AUTH-REVOKE prompt ready.
+7. Confirmar CLOUDSDK_CONFIG_PRECEDES_APPDATA como prova local já governada; confirmar
+   que credenciais CLI e ADC são distintas; validar rollback readiness e as versões
+   correntes dos prompts ACTIVATION, INVENTORY e AUTH-REVOKE.
 8. Validar somente o algoritmo autorizado: após todos os gates do ACTIVATION-EXEC e
    imediatamente antes da primeira mutação, START_UTC = UTC corrente normalizado para
    segundo inteiro e END_UTC = START_UTC + exatamente 7200 segundos.
@@ -228,18 +235,23 @@ do UTC corrente e END_UTC como START_UTC + exatamente 7200 segundos.”
 Entradas obrigatórias do FINALIZATION e mantidas somente em memória:
 LOGIN_COMPLETED_AT, LOGIN_INACTIVITY_DEADLINE, LOGIN_ABSOLUTE_DEADLINE,
 OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, project/token condition templates,
-ADC_TEMP_ROOT, windowAlgorithmValidated=true, windowDurationSeconds=7200,
+B2A5_GCLOUD_CONFIG, B2A5_ADC_PATH, windowAlgorithmValidated=true,
+windowDurationSeconds=7200,
 START_UTC=DEFERRED_TO_ACTIVATION_EXEC e END_UTC=DEFERRED_TO_ACTIVATION_EXEC.
 
-Não fazer login novo da CLI, não alterar duração/targets/textos, não usar chave JSON,
+Não fazer novo gcloud auth login da CLI, não alterar duração/targets/textos, não usar chave JSON,
 não conceder Service Account User ou qualquer papel adicional, não ler documentos,
 não acessar Storage/Logging, não executar inventário e não alterar o repositório.
+Este bloco autoriza somente o application-default login impersonado previsto em L,
+inclusive o web flow humano se o próprio comando solicitar; conta, senha, MFA,
+consentimento, URL e código permanecem integralmente sob controle humano.
 
 A. Confirmar que a autorização literal acima já foi recebida antes de qualquer mutação.
 B. Executar os gates críticos: Git/local; configuração isolada; conta humana ativa;
    projeto/fingerprint/lifecycle; APIs; custom role; service account; zero USER_MANAGED
    keys; zero project binding alvo; zero binding do custom role; zero material binding
-   na own policy; permissões do operador; ADC isolation; rollback readiness;
+   na own policy; permissões do operador; B2A5_GCLOUD_CONFIG canônico e fora do repo;
+   B2A5_ADC_PATH fora do repo e ausente; ADC padrão ausente; rollback readiness;
    INVENTORY prompt ready; AUTH-REVOKE prompt ready. Usar JSON estrutural.
 C. Confirmar windowMaterialized=false. Se a credencial humana estiver próxima do
    limite operacional, não ativar: revogar e exigir novo login.
@@ -258,23 +270,26 @@ H. Criar a project binding IMEDIATAMENTE pelo arquivo canônico. Se houver pausa
 I. Validar exatamente member, role, title, description, expression e hash da project binding.
 J. Criar Token Creator na service account como recurso pelo segundo arquivo.
 K. Validar exatamente member, role, title, description, expression e hash.
-L. No processo filho exclusivo do ADC, usar CLOUDSDK_CONFIG=ADC_TEMP_ROOT\gcloud-config,
-   APPDATA inalterado e GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
+L. Depois das duas bindings criadas e validadas, usar
+   CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG, APPDATA inalterado e
+   GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
    gcloud auth application-default login OPERATOR_IN_MEMORY
-   --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY. O navegador, conta,
-   senha, MFA e consentimento ficam integralmente sob controle humano.
-M. Confirmar ExpectedAdcPath=ADC_TEMP_ROOT\gcloud-config\application_default_credentials.json,
-   fora do repo, e validar somente shape: impersonated_service_account, target exato
-   e source authorized_user. Não imprimir, transcrever ou hashear conteúdo sensível.
+   --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY. Permitir o web flow se
+   solicitado; não exigir storedUserCredentialReused=true nem webOAuthStarted=false.
+   O navegador, conta, senha, MFA, consentimento, URL e código ficam sob controle humano.
+M. Confirmar B2A5_ADC_PATH existe e está fora do repo; validar somente metadados:
+   type=impersonated_service_account, target exato e source authorized_user. Não imprimir,
+   transcrever, persistir ou hashear access_token, refresh_token, client_secret,
+   authorization code ou o conteúdo integral do ADC.
 N. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Parar para autorização do INVENTORY
    e entregar windowMaterializedAtUtc, START_UTC, END_UTC, canonical objects/paths/hashes,
-   bindings exatas, ExpectedAdcPath e ADC pronto. Não executar inventário automaticamente.
+   bindings exatas, B2A5_ADC_PATH e ADC pronto. Não executar inventário automaticamente.
 
 Falha entre E e H sem mutação descarta a janela. Qualquer falha após binding material
 executa imediatamente o prompt AUTH-REVOKE completo com os mesmos JSON e hashes:
 revoke/remover ADC, limpar env, remover Token Creator exata, validar, remover project
 binding exata, validar e concluir o restante do rollback. Nunca usar --all e nunca
-esperar expiração. Encerrar sem INVENTORY.
+esperar expiração. Não apagar credentials.db nem B2A5_GCLOUD_CONFIG. Encerrar sem INVENTORY.
 ```
 
 #### Prompt pronto — ADMIN-B2A5-INVENTORY-EXEC
@@ -286,12 +301,13 @@ Exigir AUTH-REVOKE já autorizado/pronto antes da primeira leitura.
 Entradas dinâmicas produzidas pelo ACTIVATION-EXEC e mantidas em memória:
 START_UTC, END_UTC, projectConditionCanonical, tokenConditionCanonical,
 ProjectConditionPath/sha256, TokenConditionPath/sha256, OPERATOR_IN_MEMORY,
-TARGET_SA_EMAIL_IN_MEMORY, ExpectedAdcPath,
+TARGET_SA_EMAIL_IN_MEMORY, B2A5_GCLOUD_CONFIG, B2A5_ADC_PATH,
 fingerprint 68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60.
 
 1. Gate temporal e de continuidade; confirmar bindings canônicas ainda exatas,
-   ADC estruturalmente válido, arquivo fora do repo e nenhuma credencial alternativa.
-2. Criar processo filho com GOOGLE_APPLICATION_CREDENTIALS=ExpectedAdcPath e
+   B2A5_ADC_PATH estruturalmente válido, arquivo fora do repo, target exato e nenhuma
+   credencial alternativa.
+2. Criar processo filho com GOOGLE_APPLICATION_CREDENTIALS=B2A5_ADC_PATH e
    ADMIN_B2A5_PROJECT_ID=turismo-sms; remover FIRESTORE_EMULATOR_HOST do ambiente.
    Não definir METADATA_SERVER_DETECTION no modo remoto e não alterar o pai.
 3. Executar somente:
@@ -320,13 +336,15 @@ Executar imediatamente após INVENTORY ou qualquer falha pós-activation.
 Entradas dinâmicas recebidas somente do ACTIVATION-EXEC: START_UTC, END_UTC,
 projectConditionCanonical, tokenConditionCanonical, projectConditionSha256,
 tokenConditionSha256, ProjectConditionPath e TokenConditionPath com hashes de arquivo,
-OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, ActivationRoot, ActivationConfig e
-ExpectedAdcPath. Não aceitar timestamps ou hashes produzidos pelo FINALIZATION.
+OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, ActivationRoot, B2A5_GCLOUD_CONFIG e
+B2A5_ADC_PATH. Não aceitar timestamps ou hashes produzidos pelo FINALIZATION.
 
 1. Impedir nova execução inventory e aguardar/encerrar somente o processo filho exato.
-2. Sob CLOUDSDK_CONFIG=ActivationConfig, executar gcloud auth application-default revoke.
-3. Confirmar ExpectedAdcPath ausente; se restar arquivo parcial exato, removê-lo pelo
-   path validado. Preservar os arquivos de condition até terminar as duas remoções IAM.
+2. Sob CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG, executar uma vez
+   gcloud auth application-default revoke.
+3. Confirmar B2A5_ADC_PATH ausente. Se não estiver ausente, marcar ADC cleanup como
+   inconclusivo e continuar best-effort nos passos IAM independentes seguros; não apagar
+   credentials.db e não remover B2A5_GCLOUD_CONFIG. Preservar os arquivos de condition.
 4. Limpar GOOGLE_APPLICATION_CREDENTIALS e ADMIN_B2A5_PROJECT_ID de qualquer processo
    criado pela cadeia; comprovar ausentes no pai.
 5. Validar equivalência byte a byte e SHA-256 do TokenConditionPath e remover a Token
@@ -335,14 +353,17 @@ ExpectedAdcPath. Não aceitar timestamps ou hashes produzidos pelo FINALIZATION.
 7. Validar equivalência byte a byte e SHA-256 do ProjectConditionPath e remover a
    project binding exata com --condition-from-file. Nunca usar --all.
 8. Validar ausência da project binding por policy estrutural; só então remover os dois
-   arquivos canônicos e o ActivationRoot exato, se vazio e integralmente atribuível.
+   arquivos canônicos e o ActivationRoot exato das conditions, se vazio e integralmente
+   atribuível. B2A5_GCLOUD_CONFIG não pertence a essa limpeza.
 9. Confirmar zero USER_MANAGED keys.
 10. Desabilitar a service account.
 11. Confirmar disabled=true; preservar a conta desabilitada e o custom role por 7 dias,
     sem excluir ou desabilitar o custom role sem nova autorização.
 12. Revogar nominalmente a credencial humana da CLI isolada uma única vez.
 13. Comprovar zero contas credentialed/ativas, zero ADC, projeto, impersonação e
-    access-token file, diretório padrão ausente e nenhuma variável residual. Relatar
+    access-token file, B2A5_ADC_PATH ausente, diretório padrão separado, ADC padrão
+    ausente e nenhuma variável residual. Preservar a service account e o custom role
+    conforme a política vigente. Relatar
     somente booleanos, contagens, categorias e hashes de conditions. Não imprimir
     operador, SA e-mail integral, policies, ADC, tokens, chaves, IDs ou erros brutos.
 
