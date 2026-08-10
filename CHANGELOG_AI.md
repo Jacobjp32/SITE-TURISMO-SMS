@@ -6,6 +6,81 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-IAM-POLICY-PARSER-WRAPPER-CORRECTION-PREP
+
+**Status:** **A. IAM POLICY PARSER CORRIGIDO E VALIDADO OFFLINE — CAUSA LOCAL COMPROVADA, SOURCE CANÔNICO VERSIONADO, POWERSHELL PARSER 0 ERROS, RUNTIME SINTÉTICO PASSOU, OWN/PROJECT POLICY COMPARTILHAM CONTRATO, ESTADO CLOUD PERMANECE FAIL-CLOSED.** Bloco exclusivamente offline, local, forense e documental. Não houve login, OAuth, revoke, chamada destinada a recurso Google Cloud, IAM, enable/disable de service account, ADC, Firestore, Storage, inventário ou deploy.
+
+### Preflight e estado preservado
+
+O preflight confirmou `main`, HEAD inicial `b0c55bad8194108847c322e9eb34840443332ac6` (`docs: endurecer gate de colisão da ativação B2A5`), tracked tree limpo, índice vazio e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram não rastreados, fechados, não lidos, intocados e fora do staging.
+
+O estado Cloud não foi reconsultado e permanece somente por handoff: service account exata desabilitada, zero chave `USER_MANAGED`, zero bindings temporárias, zero ADC e credencial humana local `0/0`. `loginCalls = 0`; `OAuth = false`; `revokeCalls = 0`; `applicationDefaultLoginCalls = 0`; `remoteProjectResourcesConsulted = 0`; `serviceAccountEnableCalls = 0`; `serviceAccountDisableCalls = 0`; `IAM mutations = 0`; `ADC created = false`; `Firestore accessed = false`; `Storage accessed = false`; `inventory executed = false`.
+
+### LOCAL_FAILURE_EVIDENCE
+
+- A sessão local iniciada em `2026-08-10T18:40:57.4837235Z` preservou o comando composto exato e a saída encerrada em `2026-08-10T18:47:34.4645088Z`.
+- A execução avançou por projeto, fingerprint, lifecycle, service account exata desabilitada e zero chave gerenciada pelo usuário; a own policy já havia sido lida quando o wrapper entrou em `Parse-Policy`.
+- Source defeituoso mínimo: `return[pscustomobject]@` sem espaço entre o keyword e o type literal. O runtime tentou resolver todo o token como nome de comando.
+- `policyParserFailureSource = AD_HOC_AGENT_WRAPPER`; `policyParserFailureClass = System.Management.Automation.CommandNotFoundException`; `policyParserFailureCategory = F. SCRIPTBLOCK_OR_WRAPPER_COMPOSITION_ERROR`.
+- Mensagem sanitizada: o termo `return[pscustomobject]@` não foi reconhecido como cmdlet, função, script ou executável.
+- A reprodução do source histórico isolado confirmou `line = 1`, `column = 417`, token reportado pela mensagem `return[pscustomobject]@`, `parseErrorCount = 0` e `tokenCount = 398`.
+- `literalBugPresentInTasks = false`; `contractGapAllowedAdHocImplementation = true`; `persistentHelperInvolved = false`; `rawJsonEmbeddedInSource involved = false`. O JSON era passado como `$or.StdOut`, isto é, como dado; nenhum conteúdo real foi reproduzido ou versionado.
+- A falha não é do Google IAM, de `JsonDocument`, de `[ref]` ou de quoting da resposta. O próprio `Parser.ParseInput` aceitava o source; somente o runtime expôs a composição defeituosa.
+
+### DOCUMENTED_BEHAVIOR
+
+Foram consultadas somente fontes oficiais atuais:
+
+- Microsoft [JsonDocument](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsondocument), [JsonDocument.Parse](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsondocument.parse), [JsonElement](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonelement), [JsonElement.TryGetProperty](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonelement.trygetproperty), [JsonValueKind](https://learn.microsoft.com/en-us/dotnet/api/system.text.json.jsonvaluekind) e [JSON DOM](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/use-dom): `JsonDocument` permite inspeção estrutural, `TryGetProperty` distingue presença e devolve o valor por out/ref, `ValueKind` distingue object/array/string/null e o documento deve ser disposto.
+- Microsoft [Parser.ParseInput](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.language.parser.parseinput) e [about_Parsing](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_parsing): `ParseInput` devolve tokens e erros de parsing, enquanto a linguagem ainda resolve tokens em command/expression mode no runtime. Zero parse errors não comprova execução correta.
+- Google Cloud [Policy](https://docs.cloud.google.com/iam/docs/reference/rest/v1/Policy): policy é coleção de `bindings`; cada binding associa `members` a um `role` e pode incluir `condition`.
+- Google Cloud [serviceAccounts.getIamPolicy](https://docs.cloud.google.com/iam/docs/reference/rest/v1/projects.serviceAccounts/getIamPolicy) e [gcloud iam service-accounts get-iam-policy](https://docs.cloud.google.com/sdk/gcloud/reference/iam/service-accounts/get-iam-policy): a own policy controla quem acessa o recurso service account; grants da service account em projeto ou outro recurso devem ser consultados na policy daquele recurso.
+
+Essas fontes documentam APIs e semântica de parsing/policy. A atribuição do bug a `return[pscustomobject]@`, sua origem ad-hoc e a linha/coluna decorrem exclusivamente da evidência local e da reprodução sintética.
+
+### Correção canônica e separação código/dados
+
+`TASKS.md` agora versiona, entre marcadores inequívocos, o único source permitido: `Get-B2A5IamPolicyShape`. A função recebe JSON bruto somente por `-RawJson`, usa `System.Text.Json.JsonDocument`, exige root object, distingue property ausente/`null`/array/tipo inesperado, enumera sem truthiness, preserva a semântica material já governada, dispõe o documento em `finally` e emite somente cinco métricas sanitizadas.
+
+O mesmo parse recebe callback normalizado para filtros explícitos de own e project policy. Assim, `ownPolicyMaterialBindingCount`, `projectBindingForTargetServiceAccountCount`, `projectBindingUsingCustomRoleCount` e `tokenCreatorTemporaryBindingForOperatorCount` derivam do mesmo contrato sem um segundo wrapper. Não se afirma zero bindings globais.
+
+`bindings` ausente preserva o caso comprovado: present false, isNull false, array/material zero e shape esperado. `bindings = null` permanece material zero, mas agora é distinguido com present/isNull true e `policyShapeUnexpected = true`, portanto fail-closed. Root/tipo inesperado, binding malformada, condition não-object ou JSON inválido também param fail-closed.
+
+Invariantes: `policyParserCanonicalRequired = true`; `policyParserAdHocWrapperProhibited = true`; `rawJsonEmbeddedInSourceProhibited = true`; `policyParserSyntaxValidationRequired = true`; `policyParserRuntimeValidationRequired = true`; `policyParserParseErrorCountExpected = 0`; `policyParserRuntimeTestsExpected >= 12/12`; `ownPolicyAndProjectPolicyShareCanonicalParser = true`.
+
+### Syntax, runtime e filtros em TEMP
+
+O source operacional exato foi extraído de `TASKS.md` e executado somente em diretório único sob TEMP, fora do repositório. Nenhuma policy real foi usada.
+
+- PowerShell 7.6.3: `tokenCount = 704`, `parseErrorCount = 0`, `syntaxPass = true`, `runtimeCasesPassed = 14/14`, `filterTestsPassed = 6/6`.
+- Windows PowerShell 5.1.26100.8875: `tokenCount = 704`, `parseErrorCount = 0`, `syntaxPass = true`, `runtimeCasesPassed = 14/14`, `filterTestsPassed = 6/6`.
+- CASE 1 `{}`: PASS, ausência esperada e zero material.
+- CASE 2 array vazio: PASS.
+- CASE 3 uma binding válida: PASS, array/material 1.
+- CASE 4 múltiplas bindings válidas: PASS, array/material 2.
+- CASE 5 binding condicional válida: PASS.
+- CASE 6 `bindings = null`: PASS fail-closed, present/isNull true e shape inesperado.
+- CASE 7 `bindings` não-array: PASS fail-closed.
+- CASE 8 root não-object: PASS fail-closed.
+- CASE 9 JSON inválido: PASS, `JSON_PARSE_FAILURE` fail-closed.
+- CASE 10 caracteres especiais: PASS como dados.
+- CASE 11 JSON multilinha: PASS.
+- CASE 12 aspas/escapes JSON válidos: PASS.
+- Casos adicionais empty e whitespace: 2/2, `EMPTY_INPUT` fail-closed.
+- Filtros A–F: 6/6, cobrindo unrelated, target member, custom role com outro member, target + custom role, Token Creator do operador e bindings condicional/não condicional distintas.
+
+O source validado não contém JSON literal de policy nem o padrão proibido. `policyParserSyntaxValidationPassed = true`; `policyParserRuntimeTestsPassed = 14/14`; `filterTestsPassed = 6/6`.
+
+### Prompts e invariantes preservados
+
+REENABLE, FINALIZATION e ACTIVATION agora referenciam o mesmo source canônico. O futuro REENABLE segue: `READ own policy JSON → canonical parser → validate shape → derive own count → READ project policy JSON → SAME canonical parser → validate shape → derive project counts → test enable permission → last clock → enable`.
+
+O collision gate anterior permanece inalterado: `collisionGateParserValidationRequired = true`, zero parse errors, 7/7 casos, `Test-Path -LiteralPath`, `IsNullOrWhiteSpace` e `FileMode.CreateNew`. A correção ADC permanece sem operador posicional. O algoritmo permanece `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`.
+
+O próximo bloco possível é `ADMIN-B2A5-INVENTORY-AUTH-RESUME-LOCAL-STATE-CHECK`, somente sob autorização humana separada; nenhum login ou bloco seguinte foi iniciado.
+
+---
+
 ## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-COLLISION-GATE-SYNTAX-CORRECTION-PREP
 
 **Status:** **A. COLLISION GATE CORRIGIDO E VALIDADO OFFLINE — CAUSA LOCAL COMPROVADA, POWERSHELL PARSER 0 ERROS, TESTES DE COLISÃO PASSARAM, CONTRATO ATUALIZADO, ESTADO CLOUD PERMANECE FAIL-CLOSED.** Bloco exclusivamente offline, local e documental. Não houve login, OAuth, revoke, comando destinado a recurso Google Cloud, mutação IAM, enable/disable de service account, ADC, Firestore, Storage, inventário ou deploy.

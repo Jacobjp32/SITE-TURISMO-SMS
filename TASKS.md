@@ -27,6 +27,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional posterior de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-COLLISION-GATE-SYNTAX-CORRECTION-PREP` comprovou que a tentativa mais recente parou antes de materializar START/END por uma falha local na implementação ad-hoc do gate de colisão. O trecho gerado combinava duas invocações de `Test-Path` sem delimitar as expressões: `if (Test-Path ... -or Test-Path ...)`. Embora `Parser.ParseInput` aceite esse texto, a execução liga os dois `-LiteralPath` à mesma chamada e produz `System.Management.Automation.ParameterBindingException`/`ParameterAlreadyBound`; não é `ParserError`. O prompt versionado não continha o trecho defeituoso, mas também não especificava um gate executável, portanto foi fortalecido com loop explícito, null-safe, `Test-Path -LiteralPath`, parser obrigatório e escrita posterior sem overwrite. O trecho canônico passou com `parseErrorCount = 0` e 7/7 casos tanto no PowerShell 7.6.3 quanto no Windows PowerShell 5.1. O estado fail-closed herdado permanece: service account desabilitada, zero chave `USER_MANAGED`, zero bindings temporárias, zero ADC, credencial humana local `0/0`, Firestore/Storage não acessados e inventário não executado. Nenhuma nova tentativa operacional foi iniciada.
 
+**Atualização operacional final de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-IAM-POLICY-PARSER-WRAPPER-CORRECTION-PREP` comprovou que o último `SERVICE-ACCOUNT-REENABLE-EXEC` parou no wrapper local, depois da leitura da own policy e antes de qualquer enable. O source ad-hoc continha `return[pscustomobject]@` sem separação; `Parser.ParseInput` aceitava o texto com zero erro, mas o runtime tentou resolver esse token como comando e lançou `System.Management.Automation.CommandNotFoundException`. A causa é `F. SCRIPTBLOCK_OR_WRAPPER_COMPOSITION_ERROR`, não falha do IAM nem do JSON. O contrato agora versiona `Get-B2A5IamPolicyShape`, proíbe wrapper ad-hoc e JSON remoto embutido em source, exige código/dados separados, reutiliza o mesmo parser para own e project policy e exige syntax gate mais runtime sintético. O source canônico passou com zero parse errors no Windows PowerShell 5.1 e PowerShell 7.x; os 12 casos estruturais e os seis casos de filtro passaram em ambos. `bindings` ausente continua sendo shape esperado e zero material binding; `bindings = null`, root/tipo inválido, JSON inválido ou binding malformada são fail-closed. O estado Cloud permanece apenas por handoff: service account desabilitada, zero chave `USER_MANAGED`, zero bindings temporárias, zero ADC e credencial humana local `0/0`; nenhuma nova leitura remota foi feita.
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -40,6 +42,7 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - O estado vinculante pós-rollback é: service account exata desabilitada, zero chave `USER_MANAGED`, zero bindings alvo, ADC ausente, credencial humana local em `0/0`, Firestore/Storage não acessados e inventário não executado. Não reutilizar operador, login, autorização, `credentialSessionAnchorAtUtc`, `operationalInactivityDeadline`, START ou END de tentativas anteriores.
 - Sequência obrigatória: `LOCAL STATE CHECK → LOGIN-EXEC → LOGIN-GOVERNANCE → SERVICE-ACCOUNT-REENABLE-EXEC → ACTIVATION-PREP-FINALIZATION → ACTIVATION-EXEC → INVENTORY-EXEC → AUTH-REVOKE`.
 - Depois de uma nova sessão humana governada, executar `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC` com autorização literal própria e objetivo único de revalidar e habilitar a service account exata, sem binding, ADC, Firestore ou ACTIVATION.
+- Antes de qualquer nova sessão humana, preservar `policyParserCanonicalRequired = true`, `policyParserAdHocWrapperProhibited = true`, `rawJsonEmbeddedInSourceProhibited = true`, `policyParserSyntaxValidationRequired = true`, `policyParserRuntimeValidationRequired = true`, `policyParserParseErrorCountExpected = 0`, `policyParserRuntimeTestsExpected >= 12/12` e `ownPolicyAndProjectPolicyShareCanonicalParser = true`.
 - Somente depois do REENABLE validado executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
 - `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`. Não existem mais `leadSeconds`, `startToleranceSeconds` ou `ACTIVATION_MUST_START_BY_UTC` transferidos entre turnos.
 - Não iniciar automaticamente LOGIN, REENABLE, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
@@ -189,7 +192,11 @@ Firestore/Storage, não executar inventário e não iniciar FINALIZATION ou ACTI
 3. Revalidar por leitura projeto/fingerprint/lifecycle e a service account exata.
 4. Exigir estado de entrada: disabled=true; userManagedKeyCount=0; zero project
    binding alvo; zero binding usando o custom role; zero material binding na own
-   policy por JSON estrutural; ADC ausente; FirestoreAccessed=false.
+   policy; ADC ausente; FirestoreAccessed=false. Ler cada policy como JSON de dados,
+   invocar exatamente `Get-B2A5IamPolicyShape` do bloco versionado
+   `B2A5_IAM_POLICY_PARSER_SOURCE`, rejeitar `policyShapeUnexpected=true` e usar o
+   callback normalizado para filtros. Own e project policy usam o mesmo source;
+   é proibido gerar novo parser ou interpolar JSON no source PowerShell.
 5. Confirmar a permissão mínima do operador para iam.serviceAccounts.enable por gate
    read-only aprovado. Qualquer divergência para antes da mutação.
 6. Executar uma única chamada de enable para a service account exata.
@@ -234,7 +241,8 @@ não executar inventário e não materializar START_UTC ou END_UTC.
 4. Revalidar custom role exato, somente datastore.entities.get/list, e service account
    exata, enabled pelo REENABLE governado, com zero USER_MANAGED keys.
 5. Confirmar zero project binding para a service account alvo, zero project binding
-   usando o custom role e zero material binding na own policy, com JSON estrutural.
+   usando o custom role e zero material binding na own policy com o mesmo source
+   versionado `B2A5_IAM_POLICY_PARSER_SOURCE`; não criar wrapper alternativo.
 6. Confirmar permissões mínimas do operador por provas read-only aprovadas.
 7. Confirmar CLOUDSDK_CONFIG_PRECEDES_APPDATA como prova local já governada; confirmar
    que credenciais CLI e ADC são distintas; validar rollback readiness e as versões
@@ -312,7 +320,9 @@ B. Executar os gates críticos: Git/local; configuração isolada;
    keys; zero project binding alvo; zero binding do custom role; zero material binding
    na own policy; permissões do operador; B2A5_GCLOUD_CONFIG canônico e fora do repo;
    B2A5_ADC_PATH fora do repo e ausente; ADC padrão ausente; rollback readiness;
-   INVENTORY prompt ready; AUTH-REVOKE prompt ready. Usar JSON estrutural.
+   INVENTORY prompt ready; AUTH-REVOKE prompt ready. Own e project policy devem passar
+   pelo mesmo `B2A5_IAM_POLICY_PARSER_SOURCE`, com JSON em variável/arquivo de dados,
+   nunca embutido no source; qualquer shape inesperado para fail-closed.
 C. Confirmar windowMaterialized=false. Se a credencial humana estiver próxima do
    limite operacional, não ativar: revogar e exigir novo login.
 D. Antes de START_UTC/END_UTC e sem criar o diretório ou qualquer arquivo, derivar
@@ -494,6 +504,166 @@ expiração temporal não encerra rollback e não autoriza --all.
 - **Regra canônica:** é proibido contar `@($policy.bindings).Count` ou equivalente sobre propriedade possivelmente ausente/`null`. O parser de qualquer retomada deverá usar tokens JSON estruturais, preferencialmente `System.Text.Json.JsonDocument`, e expor somente `policyVersion`, `etagPresent`, `bindingsPropertyPresent`, `bindingsIsNull`, `bindingsArrayCount`, `materialBindingCount`, `policyShapeUnexpected`, `roleNames`, `memberTypeCounts` e `conditionCount`.
 - **Validade material:** somente conta a binding que seja objeto, tenha `role` string não vazia e `members` presente como array não vazio cujos itens sejam todos strings não vazias. `bindings` ausente, `null` ou `[]` produz zero; qualquer shape escalar ou binding malformada marca `policyShapeUnexpected = true` e não pode ser filtrada silenciosamente.
 - **Regressão vinculante:** `{ "etag": "x" }`, representando o shape real observado com `bindings` ausente, deve produzir `bindingsPropertyPresent = false`, `bindingsArrayCount = 0`, `materialBindingCount = 0` e `policyShapeUnexpected = false` — nunca `1`.
+- **Fail-closed explícito para `null`:** `bindings = null` permanece distinto de propriedade ausente: retorna `bindingsPropertyPresent = true`, `bindingsIsNull = true`, contagens zero e `policyShapeUnexpected = true`. Isso preserva `materialBindingCount = 0` e impede que `null` seja aceito como shape normal.
+- **Código e dados separados:** JSON bruto obtido da CLI deve permanecer em variável ou arquivo TEMP de dados e entrar em `-RawJson`. É proibido interpolar, concatenar ou embutir essa resposta no source de `powershell -Command`, script string ou wrapper equivalente. `rawJsonEmbeddedInSourceProhibited = true`.
+
+#### Source canônico — B2A5_IAM_POLICY_PARSER_SOURCE
+
+Este é o único source operacional permitido para own e project policy. O callback recebe somente uma binding material normalizada para filtros locais explícitos; toda saída normal da função contém apenas as cinco métricas sanitizadas. O chamador deve falhar fechado quando `policyShapeUnexpected = true` ou quando ocorrer exceção de entrada/parse. Não regenerar nem compactar este trecho.
+
+<!-- B2A5_IAM_POLICY_PARSER_SOURCE_BEGIN -->
+```powershell
+function Get-B2A5IamPolicyShape {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true, Position = 0)]
+        [AllowEmptyString()]
+        [string] $RawJson,
+
+        [Parameter(Mandatory = $false)]
+        [scriptblock] $OnMaterialBinding
+    )
+
+    if ([string]::IsNullOrWhiteSpace($RawJson)) {
+        throw [System.ArgumentException]::new('IAM_POLICY_JSON_EMPTY')
+    }
+
+    $document = [System.Text.Json.JsonDocument]::Parse($RawJson)
+
+    try {
+        $result = [ordered]@{
+            bindingsPropertyPresent = $false
+            bindingsIsNull = $false
+            bindingsArrayCount = 0
+            materialBindingCount = 0
+            policyShapeUnexpected = $false
+        }
+
+        $root = $document.RootElement
+
+        if ($root.ValueKind -ne [System.Text.Json.JsonValueKind]::Object) {
+            $result.policyShapeUnexpected = $true
+            return [pscustomobject] $result
+        }
+
+        $bindingsElement = [System.Text.Json.JsonElement]::new()
+        $result.bindingsPropertyPresent = $root.TryGetProperty(
+            'bindings',
+            [ref] $bindingsElement
+        )
+
+        if (-not $result.bindingsPropertyPresent) {
+            return [pscustomobject] $result
+        }
+
+        if ($bindingsElement.ValueKind -eq [System.Text.Json.JsonValueKind]::Null) {
+            $result.bindingsIsNull = $true
+            $result.policyShapeUnexpected = $true
+            return [pscustomobject] $result
+        }
+
+        if ($bindingsElement.ValueKind -ne [System.Text.Json.JsonValueKind]::Array) {
+            $result.policyShapeUnexpected = $true
+            return [pscustomobject] $result
+        }
+
+        foreach ($bindingElement in $bindingsElement.EnumerateArray()) {
+            $result.bindingsArrayCount++
+
+            if ($bindingElement.ValueKind -ne [System.Text.Json.JsonValueKind]::Object) {
+                $result.policyShapeUnexpected = $true
+                continue
+            }
+
+            $roleElement = [System.Text.Json.JsonElement]::new()
+            $rolePresent = $bindingElement.TryGetProperty('role', [ref] $roleElement)
+
+            if (
+                (-not $rolePresent) -or
+                ($roleElement.ValueKind -ne [System.Text.Json.JsonValueKind]::String) -or
+                [string]::IsNullOrWhiteSpace($roleElement.GetString())
+            ) {
+                $result.policyShapeUnexpected = $true
+                continue
+            }
+
+            $membersElement = [System.Text.Json.JsonElement]::new()
+            $membersPresent = $bindingElement.TryGetProperty(
+                'members',
+                [ref] $membersElement
+            )
+
+            if (
+                (-not $membersPresent) -or
+                ($membersElement.ValueKind -ne [System.Text.Json.JsonValueKind]::Array)
+            ) {
+                $result.policyShapeUnexpected = $true
+                continue
+            }
+
+            $members = [System.Collections.Generic.List[string]]::new()
+            $membersValid = $true
+
+            foreach ($memberElement in $membersElement.EnumerateArray()) {
+                if (
+                    ($memberElement.ValueKind -ne [System.Text.Json.JsonValueKind]::String) -or
+                    [string]::IsNullOrWhiteSpace($memberElement.GetString())
+                ) {
+                    $membersValid = $false
+                    continue
+                }
+
+                $members.Add($memberElement.GetString())
+            }
+
+            if ((-not $membersValid) -or ($members.Count -eq 0)) {
+                $result.policyShapeUnexpected = $true
+                continue
+            }
+
+            $conditionElement = [System.Text.Json.JsonElement]::new()
+            $conditionPresent = $bindingElement.TryGetProperty(
+                'condition',
+                [ref] $conditionElement
+            )
+
+            if (
+                $conditionPresent -and
+                ($conditionElement.ValueKind -ne [System.Text.Json.JsonValueKind]::Object)
+            ) {
+                $result.policyShapeUnexpected = $true
+                continue
+            }
+
+            $result.materialBindingCount++
+
+            if ($null -ne $OnMaterialBinding) {
+                $normalizedBinding = [pscustomobject]@{
+                    role = $roleElement.GetString()
+                    members = $members.ToArray()
+                    conditionPresent = $conditionPresent
+                }
+
+                $null = & $OnMaterialBinding $normalizedBinding
+            }
+        }
+
+        return [pscustomobject] $result
+    }
+    finally {
+        $document.Dispose()
+    }
+}
+```
+<!-- B2A5_IAM_POLICY_PARSER_SOURCE_END -->
+
+#### Contrato de validação e filtros
+
+- `policyParserCanonicalRequired = true`; `policyParserAdHocWrapperProhibited = true`; `policyParserSyntaxValidationRequired = true`; `policyParserRuntimeValidationRequired = true`; `policyParserParseErrorCountExpected = 0`; `policyParserRuntimeTestsExpected >= 12/12`; `ownPolicyAndProjectPolicyShareCanonicalParser = true`.
+- Extrair o source exato entre os marcadores, executar `Parser.ParseInput` e exigir zero erro no Windows PowerShell 5.1 e PowerShell 7.x. Zero erro sintático não substitui runtime.
+- Executar no mínimo os 12 casos sintéticos governados: ausente, array vazio, uma binding, múltiplas bindings, condition válida, `null`, tipo não-array, root não-object, JSON inválido, caracteres especiais, multilinha e aspas/escapes válidos.
+- Para project policy, o callback conta separadamente binding que contém o target como member e binding que usa o custom role. Para own policy, conta separadamente Token Creator temporária do operador. Binding condicional e não condicional são entradas distintas. Nunca afirmar zero bindings globais.
+- Fluxo obrigatório do futuro REENABLE: `READ own policy JSON → canonical parser → validate shape → derive ownPolicyMaterialBindingCount → READ project policy JSON → SAME canonical parser → validate shape → derive project target counts → test iam.serviceAccounts.enable → last clock → enable`.
 - **Estado zero deste fechamento:** `credentialedAccountCountBefore = 0`, `activeAccountCountBefore = 0`, `revokeRequired = false`, `revokeExecuted = false`, `stateZeroProven = true`; zero ADC, zero projeto persistido, zero impersonação e zero access-token file; diretório padrão ausente; nenhum login e nenhum comando destinado a recurso Google Cloud.
 
 **Ciclo de login de 2026-08-04/05 — concluído, vencido e revogado.**
