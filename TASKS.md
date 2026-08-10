@@ -23,6 +23,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional de 2026-08-08 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ADC-ISOLATION-CORRECTION-PREP` corrigiu exclusivamente o contrato local/documental de isolamento ADC, após a tentativa mais recente de `ACTIVATION-EXEC` parar antes de qualquer chamada `gcloud`, chamada remota, timestamp, binding ou ADC sob `CLOUDSDK_CONFIG_PRECEDES_APPDATA`. A configuração dedicada `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config` passa a ser `B2A5_GCLOUD_CONFIG` e o container canônico do ADC temporário; `B2A5_ADC_PATH = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`. Credenciais da CLI e ADC continuam conceitualmente distintas embora residam sob a mesma raiz B2A5. A árvore `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-activation\AppData\gcloud\application_default_credentials.json` e a alternativa `ActivationRoot\gcloud-config\application_default_credentials.json` estão invalidadas para este fluxo. A prova local, sem autenticação e sem abrir arquivos, confirmou configuração e ADC B2A5 fora do repositório, `B2A5_ADC_PATH` ausente, ADC padrão ausente, caminho antigo ausente e `GOOGLE_APPLICATION_CREDENTIALS` ausente. A pausa humana invalida toda âncora, deadline e timestamp anterior; nenhum novo prazo foi criado. Classificação: **A. ADC ISOLATION CORRIGIDO — CONFIGURAÇÃO B2A5 ISOLADA PASSA A SER O CONTAINER CANÔNICO DO ADC TEMPORÁRIO; WEB FLOW ADC GOVERNADO; QUATRO PROMPTS ATUALIZADOS; PRONTO PARA NOVA RETOMADA OPERACIONAL.**
 
+**Atualização operacional de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ADC-INVOCATION-CORRECTION-PREP` incorporou a forense da tentativa operacional posterior. As duas bindings temporárias chegaram a ser criadas e validadas; o OAuth do ADC retornou HTTP 200, mas a Google Cloud CLI 578.0.0 encerrou localmente com `google.auth.exceptions.InvalidValue` e mensagem sanitizada `None could not be converted to bytes` antes de `DumpImpersonatedServiceAccountToADC`. `ADC_FAILURE_ROOT_CAUSE = GCLOUD_578_POSITIONAL_ACCOUNT_WITH_IMPERSONATION_LOCAL_VALIDATION_FAILURE`; IAM Credentials API e `GenerateAccessToken` não foram chamados, logo `IAM_PROPAGATION_CAUSED_THIS_INCIDENT = false`. O rollback removeu as duas bindings, deixou ADC ausente, zero chave `USER_MANAGED`, zero Firestore/Storage/inventário e desabilitou a service account; a credencial humana foi revogada depois, com estado local `0/0`. A invocation futura remove obrigatoriamente o `ACCOUNT` posicional e usa `gcloud auth application-default login --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY --configuration=default`. A retomada exige nova sessão humana governada e o novo bloco autônomo `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC` antes do FINALIZATION, todos com autorizações literais próprias.
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -33,11 +35,12 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Retomada operacional do ADMIN-B2A5 — próximo bloco exclusivo, somente com nova autorização humana.**
 
-- A tentativa mais recente de `ACTIVATION-EXEC` é o estado vinculante: `CLOUDSDK_CONFIG_PRECEDES_APPDATA`, zero chamada `gcloud`, zero chamada remota, zero mutação IAM e zero ADC. A pausa posterior expirou toda âncora ou deadline operacional anterior; não reutilizar operador, login, `credentialSessionAnchorAtUtc`, `operationalInactivityDeadline`, START ou END de tentativas anteriores.
-- Primeiro validar o estado local. Se a retomada exigir credencial humana, executar novo `ADMIN-B2A5-INVENTORY-AUTH-CLI-SETUP-LOGIN-EXEC` com operador novo somente em memória e autorização literal própria, seguido de `LOGIN-GOVERNANCE`. O LOGIN não materializa timestamps IAM e não autoriza FINALIZATION, ACTIVATION, INVENTORY ou REVOKE.
-- Depois do login, executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
+- O estado vinculante pós-rollback é: service account exata desabilitada, zero chave `USER_MANAGED`, zero bindings alvo, ADC ausente, credencial humana local em `0/0`, Firestore/Storage não acessados e inventário não executado. Não reutilizar operador, login, autorização, `credentialSessionAnchorAtUtc`, `operationalInactivityDeadline`, START ou END de tentativas anteriores.
+- Sequência obrigatória: `LOCAL STATE CHECK → LOGIN-EXEC → LOGIN-GOVERNANCE → SERVICE-ACCOUNT-REENABLE-EXEC → ACTIVATION-PREP-FINALIZATION → ACTIVATION-EXEC → INVENTORY-EXEC → AUTH-REVOKE`.
+- Depois de uma nova sessão humana governada, executar `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC` com autorização literal própria e objetivo único de revalidar e habilitar a service account exata, sem binding, ADC, Firestore ou ACTIVATION.
+- Somente depois do REENABLE validado executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
 - `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`. Não existem mais `leadSeconds`, `startToleranceSeconds` ou `ACTIVATION_MUST_START_BY_UTC` transferidos entre turnos.
-- Não iniciar automaticamente LOGIN, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
+- Não iniciar automaticamente LOGIN, REENABLE, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
 
 ### PROVISION-GOVERNANCE retomada e concluída — 2026-08-07
 
@@ -95,11 +98,25 @@ Token Creator condition template:
 - Estão invalidados para o ADC deste fluxo: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-activation\AppData\gcloud\application_default_credentials.json` e `ActivationRoot\gcloud-config\application_default_credentials.json`. `APPDATA` não será redirecionado.
 - Credenciais da gcloud CLI autenticam comandos da própria CLI; ADC autentica bibliotecas cliente da aplicação. São conjuntos conceitualmente distintos mesmo quando armazenados sob a mesma raiz B2A5. O inventário Node.js usa ADC e não usa diretamente o credential store da CLI.
 - Regra de ciclo de vida: antes de `ACTIVATION`, `B2A5_ADC_PATH` deve estar ausente; durante `ACTIVATION → INVENTORY → AUTH-REVOKE`, pode existir somente após a criação autorizada; ao fim do `AUTH-REVOKE`, deve estar ausente novamente. Não apagar manualmente `credentials.db` nem remover `B2A5_GCLOUD_CONFIG` inteiro.
-- A criação futura será somente por `gcloud auth application-default login OPERATOR_IN_MEMORY --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY`, depois das duas bindings temporárias criadas e validadas. A referência oficial atual caracteriza o comando como web flow: remover as antigas exigências absolutas `storedUserCredentialReused = true` e `webOAuthStarted = false`; o futuro `ACTIVATION-EXEC` deve autorizar explicitamente a interação humana no navegador se solicitada. Isso não autoriza nem executa novo `gcloud auth login` da CLI. Chave JSON permanece proibida.
+- A invocation antiga `gcloud auth application-default login OPERATOR_IN_MEMORY --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY` está proibida. A criação futura será somente por `gcloud auth application-default login --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY --configuration=default`, sob `CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG`, depois das duas bindings temporárias criadas e validadas. O operador humano não será passado como argumento posicional; sua identidade continuará validada em gate separado antes de qualquer mutação IAM. A referência oficial atual caracteriza o comando como web flow: não exigir `storedUserCredentialReused = true` ou `webOAuthStarted = false`; o futuro `ACTIVATION-EXEC` deve autorizar explicitamente a interação humana no navegador se solicitada. Isso não autoriza nem executa novo `gcloud auth login` da CLI. Chave JSON permanece proibida.
 - Node.js é oficialmente suportado para ADC local por impersonação. O processo do inventário receberá `GOOGLE_APPLICATION_CREDENTIALS=B2A5_ADC_PATH` somente em sua própria tabela de ambiente; o processo pai continuará sem a variável. Assim, o Node usa o arquivo exato.
 - Prova estrutural pós-criação, sem imprimir conteúdo: arquivo regular, fora do repositório, sem reparse point, JSON válido, `type = impersonated_service_account`, `service_account_impersonation_url` correspondente ao target mantido em memória, `source_credentials.type = authorized_user`; qualquer divergência aciona rollback.
 - Revogação: executar `gcloud auth application-default revoke` sob `CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG` e confirmar `B2A5_ADC_PATH` ausente. O comando oficial revoga ADC criado por `application-default login` e exclui o arquivo local; não afeta as credenciais da CLI. Preservar `credentials.db` e a raiz B2A5.
-- Fontes oficiais atuais: [visão geral de autenticação](https://docs.cloud.google.com/docs/authentication), [referência de application-default login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login), [impersonação e suporte das bibliotecas](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation), [referência de application-default revoke](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/revoke) e [configurações/CLOUDSDK_CONFIG](https://docs.cloud.google.com/sdk/gcloud/reference/topic/configurations). A documentação afirma genericamente separação CLI/ADC, web flow, impersonação, suporte Node.js, revoke e override do diretório; `CLOUDSDK_CONFIG_PRECEDES_APPDATA` permanece evidência local deste ambiente.
+- Fontes oficiais atuais: [referência de application-default login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login), [uso de impersonação e suporte das bibliotecas](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation), [papéis para autenticação de service accounts](https://docs.cloud.google.com/iam/docs/service-account-permissions), [propagação de mudanças IAM](https://docs.cloud.google.com/iam/docs/access-change-propagation), [referência de application-default revoke](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/revoke) e [configurações/CLOUDSDK_CONFIG](https://docs.cloud.google.com/sdk/gcloud/reference/topic/configurations). A documentação descreve genericamente `ACCOUNT` como argumento opcional de credencial de usuário, o web flow, a invocation de ADC impersonado sem `ACCOUNT`, o suporte Node.js, Token Creator/`iam.serviceAccounts.getAccessToken`, consistência eventual de IAM, revoke e override do diretório. Ela não documenta o bug local da CLI 578.0.0; `CLOUDSDK_CONFIG_PRECEDES_APPDATA` e a causa `InvalidValue` permanecem evidências locais deste ambiente.
+
+#### Forense vinculante da falha ADC na Google Cloud CLI 578.0.0
+
+- Classificação forense: `F. OTHER_CONFIRMED_CAUSE`.
+- `ADC_FAILURE_ROOT_CAUSE = GCLOUD_578_POSITIONAL_ACCOUNT_WITH_IMPERSONATION_LOCAL_VALIDATION_FAILURE`.
+- A invocation que falhou continha simultaneamente `ACCOUNT` posicional e `--impersonate-service-account`. A validação interna local da identidade recebeu valor ausente, o decodificador JWT lançou `google.auth.exceptions.InvalidValue` com mensagem sanitizada `None could not be converted to bytes`, e o comando encerrou antes de `DumpImpersonatedServiceAccountToADC`.
+- O callback OAuth local e o token endpoint OAuth retornaram HTTP 200. Não houve erro de filesystem, quota project, flag desconhecida ou sintaxe; o ramo de escrita do ADC não foi alcançado.
+- IAM Credentials API, `GenerateAccessToken` e `iam.serviceAccounts.getAccessToken` não foram chamados; não houve `PERMISSION_DENIED` ou HTTP 403. Portanto: `IAM_PROPAGATION_CAUSED_THIS_INCIDENT = false`, `ADC_OAUTH_FAILURE = false`, `ADC_QUOTA_PROJECT_FAILURE = false`, `ADC_FILESYSTEM_FAILURE = false` e `UNKNOWN_FLAG_OR_SYNTAX_FAILURE = false`.
+- `google.auth.exceptions.InvalidValue` local não recebe retry. Qualquer ocorrência depois de binding material aciona rollback imediato. Somente um futuro `PERMISSION_DENIED` explicitamente associado a `iam.serviceAccounts.getAccessToken` ou `GenerateAccessToken` poderá ser classificado separadamente como possível propagação IAM.
+
+#### Gate separado de identidade do operador
+
+- Antes de qualquer binding futura, exigir `credentialedAccountCount = 1`, `activeAccountCount = 1`, active account e `core/account` iguais ao operador humano autorizado e `operatorAccountMatched = true`.
+- A identidade do operador não será inferida pelo `application-default login`. A remoção do `ACCOUNT` posicional altera somente a invocation ADC e não reduz o gate pré-mutação.
 
 #### Comandos canônicos futuros — não executar neste PREP
 
@@ -149,9 +166,44 @@ Rollback Token Creator — condition exata:
   --quiet
 ```
 
+#### Prompt pronto — ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC
+
+```text
+Bloco exclusivo: ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC.
+Exigir autorização literal própria:
+AUTORIZO O ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC.
+Exigir nova credencial humana governada e operador somente em memória. Não reutilizar
+login, operador, autorização, deadline ou janela de tentativa anterior.
+
+Objetivo único: revalidar a service account B2A5 exata e habilitá-la para uma nova
+tentativa governada. Não conceder binding, não criar ADC, não impersonar, não acessar
+Firestore/Storage, não executar inventário e não iniciar FINALIZATION ou ACTIVATION.
+
+1. Confirmar Git 0/0, itens protegidos fechados, B2A5_GCLOUD_CONFIG canônico e fora
+   do repo, B2A5_ADC_PATH ausente e GOOGLE_APPLICATION_CREDENTIALS ausente.
+2. Confirmar em gate separado: credentialedAccountCount=1, activeAccountCount=1,
+   active account e core/account iguais ao operador autorizado e
+   operatorAccountMatched=true.
+3. Revalidar por leitura projeto/fingerprint/lifecycle e a service account exata.
+4. Exigir estado de entrada: disabled=true; userManagedKeyCount=0; zero project
+   binding alvo; zero binding usando o custom role; zero material binding na own
+   policy por JSON estrutural; ADC ausente; FirestoreAccessed=false.
+5. Confirmar a permissão mínima do operador para iam.serviceAccounts.enable por gate
+   read-only aprovado. Qualquer divergência para antes da mutação.
+6. Executar uma única chamada de enable para a service account exata.
+7. Validar por leitura: serviceAccountExactMatch=true, disabled=false e
+   userManagedKeyCount=0.
+8. Emitir somente metadados sanitizados e parar. Não iniciar FINALIZATION.
+
+Em falha, não conceder acesso alternativo, não criar chave JSON, não criar ADC e não
+seguir para ACTIVATION. A service account só pode ser habilitada depois de uma nova
+sessão humana governada e volta a disabled=true no AUTH-REVOKE final.
+```
+
 #### FINALIZATION curto, permissões e janela
 
-- Gates do `ACTIVATION-PREP-FINALIZATION`: login válido e corrente; Git `0/0`; `B2A5_GCLOUD_CONFIG` canônico e fora do repositório; `B2A5_ADC_PATH` fora do repositório e ausente; ADC padrão ausente; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; prompts de ACTIVATION, INVENTORY e AUTH-REVOKE íntegros; algoritmo da janela validado; relatório authorization-ready.
+- Pré-requisito do `ACTIVATION-PREP-FINALIZATION`: `SERVICE-ACCOUNT-REENABLE-EXEC` concluído e governado na mesma nova sessão humana, com `serviceAccountExactMatch = true`, `disabled = false` e `userManagedKeyCount = 0`. O FINALIZATION não habilita a conta.
+- Gates do `ACTIVATION-PREP-FINALIZATION`: login válido e corrente; Git `0/0`; `B2A5_GCLOUD_CONFIG` canônico e fora do repositório; `B2A5_ADC_PATH` fora do repositório e ausente; ADC padrão ausente; projeto/fingerprint/lifecycle; três APIs; custom role exato; service account exata e habilitada pelo REENABLE governado; zero `USER_MANAGED` keys; zero binding alvo no projeto; zero binding usando o custom role; zero binding material na policy própria; permissões do operador; prompts de ACTIVATION, INVENTORY e AUTH-REVOKE íntegros; algoritmo da janela validado; relatório authorization-ready.
 - Permissões mínimas futuras: projeto `resourcemanager.projects.get`, `resourcemanager.projects.getIamPolicy`, `resourcemanager.projects.setIamPolicy`, `serviceusage.services.list` e `serviceusage.services.use`; service account `iam.serviceAccounts.get`, `iam.serviceAccounts.getIamPolicy`, `iam.serviceAccounts.setIamPolicy` e `iam.serviceAccountKeys.list`; custom role `iam.roles.get`. Não conceder nada no FINALIZATION.
 - Usar `projects.testIamPermissions` para as permissões de projeto e `projects.serviceAccounts.testIamPermissions` no recurso exato da conta para as permissões aplicáveis. `iam.roles.get`, listagem de APIs e chaves permanecem provas read-only diretas. Qualquer ausência para antes da primeira binding.
 - Resultado obrigatório: `windowAlgorithmValidated = true`, `windowDurationSeconds = 7200`, `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `humanAuthorizationBeforeMutation = true`, `timestampsUnknownAtAuthorization = true` e `windowAlgorithmKnownAtAuthorization = true`.
@@ -162,9 +214,9 @@ Rollback Token Creator — condition exata:
 
 ```text
 Bloco exclusivo: ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION.
-Exigir autorização literal própria e login humano vigente. Exigir prova prévia de que
-o gate server-side da sessão anterior foi resolvido; serverSideRevocationStatus ainda
-INCONCLUSIVE bloqueia o LOGIN anterior e não pode ser reparado neste FINALIZATION.
+Exigir autorização literal própria, login humano vigente e prova de que o bloco
+SERVICE-ACCOUNT-REENABLE-EXEC foi concluído e governado nesta nova sessão. O
+FINALIZATION não habilita a service account e não corrige estado de sessão anterior.
 
 Não criar ou remover binding, não criar ADC, não impersonar, não ler Firestore/Storage,
 não executar inventário e não materializar START_UTC ou END_UTC.
@@ -178,7 +230,7 @@ não executar inventário e não materializar START_UTC ou END_UTC.
    68cf9cf1208055a962c614232e75b8a0b4f4f7564865e77e2a84382a87bd8c60,
    lifecycle ACTIVE e as três APIs exigidas.
 4. Revalidar custom role exato, somente datastore.entities.get/list, e service account
-   exata, enabled, com zero USER_MANAGED keys.
+   exata, enabled pelo REENABLE governado, com zero USER_MANAGED keys.
 5. Confirmar zero project binding para a service account alvo, zero project binding
    usando o custom role e zero material binding na own policy, com JSON estrutural.
 6. Confirmar permissões mínimas do operador por provas read-only aprovadas.
@@ -199,8 +251,10 @@ Qualquer falha para sem mutação. O FINALIZATION não autoriza ACTIVATION-EXEC.
 
 #### Propagação e comando da ferramenta
 
-- IAM policy changes são eventualmente consistentes: tipicamente 2 minutos e potencialmente 7 minutos ou mais. O Firestore pode manter cache IAM por até 5 minutos.
-- Não existe readiness probe aprovado sem leitura de documento; `ACTIVATION-EXEC` não usará documentos reais como health check. O `INVENTORY-EXEC`, único bloco autorizado a ler, poderá repetir somente `auth-denied` em três tentativas máximas nos marcos `t+0s`, `t+120s` e `t+300s`, usando esperas de no máximo 30 segundos com rechecagem temporal. Nenhuma outra categoria recebe retry.
+- IAM policy changes são eventualmente consistentes: a documentação oficial informa tipicamente 2 minutos e potencialmente 7 minutos ou mais. Essa propriedade geral permanece relevante, mas `IAM_PROPAGATION_CAUSED_THIS_INCIDENT = false` porque a falha comprovada foi `InvalidValue` local antes de qualquer chamada à IAM Credentials API.
+- Não adicionar espera fixa antes da criação do ADC por causa deste incidente e não usar Firestore como readiness probe. O `ACTIVATION-EXEC` não usará documentos reais como health check nem criará novo probe remoto obrigatório.
+- `google.auth.exceptions.InvalidValue` não recebe retry. Um futuro `PERMISSION_DENIED` explicitamente associado a `iam.serviceAccounts.getAccessToken` ou `GenerateAccessToken` deve ser registrado como categoria separada e acionar o rollback corrente, sem loop automático neste contrato.
+- O `INVENTORY-EXEC`, único bloco autorizado a ler documentos, preserva sua política própria: poderá repetir somente a categoria sanitizada `auth-denied` em três tentativas máximas nos marcos `t+0s`, `t+120s` e `t+300s`, usando esperas de no máximo 30 segundos com rechecagem temporal. Nenhuma outra categoria recebe retry.
 - Comando remoto preparado, não executado; `ADMIN_B2A5_PROJECT_ID` e `GOOGLE_APPLICATION_CREDENTIALS` existirão somente no processo filho, e `FIRESTORE_EMULATOR_HOST` deverá estar ausente:
 
 ```powershell
@@ -220,7 +274,7 @@ node ".\tools\admin-b2a5-inventory\admin-b2a5-inventory.mjs" `
 - Project binding create falha: validar se houve materialização parcial; se ausente, zero rollback; se presente, remover a binding exata.
 - Project binding validation falha: remover a project binding exata.
 - Token Creator create/validation falha: remover Token Creator se material e remover project binding exata.
-- ADC create/validation falha: remover ADC parcial e ambas as bindings exatas.
+- ADC create/validation falha: sem retry automático; remover ADC parcial, se houver, e ambas as bindings exatas. Classificar `InvalidValue`, filesystem, cancelamento OAuth e `PERMISSION_DENIED` explícito da IAM Credentials separadamente.
 - Inventory não inicia, falha ou conclui: executar AUTH-REVOKE completo imediatamente.
 - AUTH-REVOKE parcial: continuar best-effort nos passos independentes seguros, registrar estado sanitizado exato e escalar intervenção humana. Expiração nunca equivale a rollback concluído.
 
@@ -247,8 +301,10 @@ inclusive o web flow humano se o próprio comando solicitar; conta, senha, MFA,
 consentimento, URL e código permanecem integralmente sob controle humano.
 
 A. Confirmar que a autorização literal acima já foi recebida antes de qualquer mutação.
-B. Executar os gates críticos: Git/local; configuração isolada; conta humana ativa;
-   projeto/fingerprint/lifecycle; APIs; custom role; service account; zero USER_MANAGED
+B. Executar os gates críticos: Git/local; configuração isolada;
+   credentialedAccountCount=1; activeAccountCount=1; active account e core/account iguais
+   a OPERATOR_IN_MEMORY; operatorAccountMatched=true; projeto/fingerprint/lifecycle;
+   APIs; custom role; service account exata, enabled pelo REENABLE governado; zero USER_MANAGED
    keys; zero project binding alvo; zero binding do custom role; zero material binding
    na own policy; permissões do operador; B2A5_GCLOUD_CONFIG canônico e fora do repo;
    B2A5_ADC_PATH fora do repo e ausente; ADC padrão ausente; rollback readiness;
@@ -273,9 +329,12 @@ K. Validar exatamente member, role, title, description, expression e hash.
 L. Depois das duas bindings criadas e validadas, usar
    CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG, APPDATA inalterado e
    GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
-   gcloud auth application-default login OPERATOR_IN_MEMORY
-   --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY. Permitir o web flow se
-   solicitado; não exigir storedUserCredentialReused=true nem webOAuthStarted=false.
+   gcloud auth application-default login
+   --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY
+   --configuration=default. Não passar OPERATOR_IN_MEMORY como argumento posicional.
+   A identidade do operador já deve ter sido comprovada pelo gate separado antes da
+   primeira binding. Permitir o web flow se solicitado; não exigir
+   storedUserCredentialReused=true nem webOAuthStarted=false.
    O navegador, conta, senha, MFA, consentimento, URL e código ficam sob controle humano.
 M. Confirmar B2A5_ADC_PATH existe e está fora do repo; validar somente metadados:
    type=impersonated_service_account, target exato e source authorized_user. Não imprimir,
@@ -289,7 +348,11 @@ Falha entre E e H sem mutação descarta a janela. Qualquer falha após binding 
 executa imediatamente o prompt AUTH-REVOKE completo com os mesmos JSON e hashes:
 revoke/remover ADC, limpar env, remover Token Creator exata, validar, remover project
 binding exata, validar e concluir o restante do rollback. Nunca usar --all e nunca
-esperar expiração. Não apagar credentials.db nem B2A5_GCLOUD_CONFIG. Encerrar sem INVENTORY.
+esperar expiração. `google.auth.exceptions.InvalidValue`, falha de filesystem e
+cancelamento OAuth não recebem retry cego ou automático: rollback imediato. Um
+`PERMISSION_DENIED` explicitamente associado a iam.serviceAccounts.getAccessToken ou
+GenerateAccessToken recebe categoria própria e rollback, sem loop automático. Não apagar
+credentials.db nem B2A5_GCLOUD_CONFIG. Encerrar sem INVENTORY.
 ```
 
 #### Prompt pronto — ADMIN-B2A5-INVENTORY-EXEC

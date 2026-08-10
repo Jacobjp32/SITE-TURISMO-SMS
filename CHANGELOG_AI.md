@@ -6,6 +6,87 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-ADC-INVOCATION-CORRECTION-PREP
+
+**Status:** **A. ADC INVOCATION CORRIGIDA — ACCOUNT POSICIONAL REMOVIDO, OPERADOR PASSA A SER VALIDADO EM GATE SEPARADO, REENABLE DA SERVICE ACCOUNT GOVERNADO E NOVA RETOMADA PRONTA.** Bloco offline e exclusivamente documental. Não houve `gcloud auth login`, OAuth, `application-default login`, `application-default revoke`, IAM mutation, IAM Credentials API, enable/disable de service account, Firestore, Storage, inventário ou deploy.
+
+### Preflight e escopo
+
+O preflight confirmou branch `main`, HEAD inicial `f8feb6d938383c3dffa560f50ba3047cdc668a7a`, tracked tree e índice limpos e `origin/main...main = 0/0` após `git fetch origin`. `.claude/`, `IMAGENS_MES_POLONES_2026_WEB.zip` e `images/mascotes/mascotes.zip` permaneceram não rastreados, fechados, não lidos, intocados e fora do staging. Os únicos arquivos documentais autorizados e alterados foram `TASKS.md`, `CHANGELOG_AI.md` e `CLAUDE.md`.
+
+### Causa raiz forense
+
+- Classificação: `F. OTHER_CONFIRMED_CAUSE`.
+- `ADC_FAILURE_ROOT_CAUSE = GCLOUD_578_POSITIONAL_ACCOUNT_WITH_IMPERSONATION_LOCAL_VALIDATION_FAILURE`.
+- A invocation problemática combinou `ACCOUNT` posicional com `--impersonate-service-account` na Google Cloud CLI 578.0.0.
+- O log local comprovou validação interna da conta, valor esperado ausente e `google.auth.exceptions.InvalidValue`, com mensagem sanitizada `None could not be converted to bytes`.
+- O comando encerrou antes de `DumpImpersonatedServiceAccountToADC`; o ramo de gravação do ADC não foi alcançado.
+- Callback OAuth local e token endpoint OAuth retornaram HTTP 200. Não houve falha OAuth, quota project, filesystem, flag desconhecida ou sintaxe.
+- IAM Credentials API, `GenerateAccessToken` e `iam.serviceAccounts.getAccessToken` não foram chamados; não houve `PERMISSION_DENIED` ou HTTP 403.
+- Conclusões: `IAM_PROPAGATION_CAUSED_THIS_INCIDENT = false`, `ADC_OAUTH_FAILURE = false`, `ADC_QUOTA_PROJECT_FAILURE = false`, `ADC_FILESYSTEM_FAILURE = false` e `UNKNOWN_FLAG_OR_SYNTAX_FAILURE = false`.
+
+### Documentação oficial e evidência local
+
+Foram consultadas somente fontes oficiais atuais do Google Cloud:
+
+- [gcloud auth application-default login](https://docs.cloud.google.com/sdk/gcloud/reference/auth/application-default/login): `ACCOUNT` é opcional e representa a conta de usuário usada na autorização; o comando usa web flow e aceita `--configuration` e `--impersonate-service-account` como flags globais.
+- [Use service account impersonation](https://docs.cloud.google.com/docs/authentication/use-service-account-impersonation): o exemplo canônico para criar ADC impersonado é `gcloud auth application-default login --impersonate-service-account=SERVICE_ACCT_EMAIL`, sem `ACCOUNT` posicional; Node.js é suportado.
+- [Roles for service account authentication](https://docs.cloud.google.com/iam/docs/service-account-permissions): `roles/iam.serviceAccountTokenCreator` permite impersonação e inclui `iam.serviceAccounts.getAccessToken`.
+- [IAM access change propagation](https://docs.cloud.google.com/iam/docs/access-change-propagation): alterações de policy são eventualmente consistentes, tipicamente em 2 minutos e potencialmente em 7 minutos ou mais.
+
+A documentação descreve o contrato geral, não o bug local. A causa `InvalidValue` da CLI 578.0.0 é conclusão do log forense local, e a consistência eventual de IAM não foi reinterpretada como causa deste incidente.
+
+### Invocation canônica e gate do operador
+
+Invocation antiga, agora proibida:
+
+```text
+gcloud auth application-default login OPERATOR_IN_MEMORY
+--impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY
+```
+
+Invocation nova canônica:
+
+```text
+gcloud auth application-default login
+--impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY
+--configuration=default
+```
+
+Ela será executada somente sob `CLOUDSDK_CONFIG=%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config`, depois das duas bindings criadas e validadas. `ACCOUNT positional removed = true`. A identidade humana permanece em gate separado antes de qualquer mutação: `credentialedAccountCount = 1`, `activeAccountCount = 1`, active account e `core/account` iguais ao operador autorizado e `operatorAccountMatched = true`. O `application-default login` não infere nem substitui esse gate.
+
+### ADC, web flow, retry e propagação
+
+- `B2A5_GCLOUD_CONFIG = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config`.
+- `B2A5_ADC_PATH = %LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`.
+- Após sucesso futuro, validar somente metadados estruturais: `type = impersonated_service_account`, target exato e `source_credentials.type = authorized_user`; não imprimir ou hashear conteúdo secreto e não criar chave JSON.
+- Se o web flow for solicitado, conta, senha, MFA e consentimento permanecem sob controle humano; URL completa, código e tokens não serão capturados ou impressos. `storedUserCredentialReused = true` e `webOAuthStarted = false` não são requisitos.
+- `google.auth.exceptions.InvalidValue` local não recebe retry. Falha de filesystem e cancelamento OAuth também não recebem retry cego; qualquer falha pós-binding aciona rollback.
+- Nenhuma espera fixa foi adicionada antes do ADC e nenhum Firestore readiness probe foi criado. Somente um futuro `PERMISSION_DENIED` explicitamente associado a `iam.serviceAccounts.getAccessToken` ou `GenerateAccessToken` poderá ser classificado separadamente como possível propagação IAM, com rollback e sem loop automático neste contrato.
+
+### Service account desabilitada e nova sequência
+
+O rollback da tentativa forense removeu as duas bindings, deixou ADC ausente, confirmou zero chave `USER_MANAGED`, não acessou Firestore/Storage/inventário e terminou com `serviceAccountDisabled = true`. Esse estado é intencional e impede seguir diretamente para o FINALIZATION, que exige a conta habilitada.
+
+Foi preparado o prompt `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC`, dependente de autorização literal própria e de nova sessão humana governada. Seu objetivo único é confirmar o estado de entrada, executar somente o enable necessário e validar `serviceAccountExactMatch = true`, `disabled = false` e `userManagedKeyCount = 0`, sem binding, ADC, Firestore, inventário ou ACTIVATION.
+
+Nova sequência: `LOCAL STATE CHECK → LOGIN-EXEC → LOGIN-GOVERNANCE → SERVICE-ACCOUNT-REENABLE-EXEC → ACTIVATION-PREP-FINALIZATION → ACTIVATION-EXEC → INVENTORY-EXEC → AUTH-REVOKE`. O AUTH-REVOKE continua desabilitando a service account ao final.
+
+### Prompts e invariantes
+
+- `SERVICE-ACCOUNT-REENABLE-EXEC`: novo prompt pronto.
+- `ACTIVATION-PREP-FINALIZATION`: atualizado para exigir o REENABLE concluído e governado, sem habilitar a conta por conta própria.
+- `ACTIVATION-EXEC`: preserva gates read-only, duas bindings condicionais, rollback exato, ADC canônico, zero Firestore e o algoritmo de 7200 segundos; somente a invocation ADC foi corrigida e o gate separado do operador foi explicitado.
+- `INVENTORY-EXEC`: sem mudança funcional necessária; mantém sua política própria de retry somente para a categoria sanitizada `auth-denied` durante a leitura autorizada.
+- `AUTH-REVOKE`: sem mudança necessária; já preserva a ordem ADC → env → Token Creator → project binding → keys → disable → revoke humano → estado zero.
+- `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`; `leadSeconds`, `startToleranceSeconds`, `ceilToNextMinute` e `ACTIVATION_MUST_START_BY_UTC` não foram reintroduzidos.
+
+### Estado operacional deste PREP
+
+`gcloud auth login calls = 0`; `application-default login calls = 0`; `IAM mutations = 0`; `service account enable calls = 0`; `ADC created = false`; `Firestore accessed = false`; `Storage accessed = false`; `inventory executed = false`. Nenhum bloco operacional foi iniciado automaticamente.
+
+---
+
 ## 2026-08-08 — ADMIN-B2A5-INVENTORY-AUTH-ADC-ISOLATION-CORRECTION-PREP
 
 **Status:** **A. ADC ISOLATION CORRIGIDO — CONFIGURAÇÃO B2A5 ISOLADA PASSA A SER O CONTAINER CANÔNICO DO ADC TEMPORÁRIO; WEB FLOW ADC GOVERNADO; QUATRO PROMPTS ATUALIZADOS; PRONTO PARA NOVA RETOMADA OPERACIONAL.** Bloco offline e exclusivamente documental. Não houve `gcloud auth login`, OAuth, `application-default login`, `application-default revoke`, chamada remota Google Cloud, IAM, binding, Firestore, Storage, inventário ou deploy.
