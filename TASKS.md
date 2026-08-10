@@ -25,6 +25,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ADC-INVOCATION-CORRECTION-PREP` incorporou a forense da tentativa operacional posterior. As duas bindings temporárias chegaram a ser criadas e validadas; o OAuth do ADC retornou HTTP 200, mas a Google Cloud CLI 578.0.0 encerrou localmente com `google.auth.exceptions.InvalidValue` e mensagem sanitizada `None could not be converted to bytes` antes de `DumpImpersonatedServiceAccountToADC`. `ADC_FAILURE_ROOT_CAUSE = GCLOUD_578_POSITIONAL_ACCOUNT_WITH_IMPERSONATION_LOCAL_VALIDATION_FAILURE`; IAM Credentials API e `GenerateAccessToken` não foram chamados, logo `IAM_PROPAGATION_CAUSED_THIS_INCIDENT = false`. O rollback removeu as duas bindings, deixou ADC ausente, zero chave `USER_MANAGED`, zero Firestore/Storage/inventário e desabilitou a service account; a credencial humana foi revogada depois, com estado local `0/0`. A invocation futura remove obrigatoriamente o `ACCOUNT` posicional e usa `gcloud auth application-default login --impersonate-service-account=TARGET_SA_EMAIL_IN_MEMORY --configuration=default`. A retomada exige nova sessão humana governada e o novo bloco autônomo `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC` antes do FINALIZATION, todos com autorizações literais próprias.
 
+**Atualização operacional posterior de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-COLLISION-GATE-SYNTAX-CORRECTION-PREP` comprovou que a tentativa mais recente parou antes de materializar START/END por uma falha local na implementação ad-hoc do gate de colisão. O trecho gerado combinava duas invocações de `Test-Path` sem delimitar as expressões: `if (Test-Path ... -or Test-Path ...)`. Embora `Parser.ParseInput` aceite esse texto, a execução liga os dois `-LiteralPath` à mesma chamada e produz `System.Management.Automation.ParameterBindingException`/`ParameterAlreadyBound`; não é `ParserError`. O prompt versionado não continha o trecho defeituoso, mas também não especificava um gate executável, portanto foi fortalecido com loop explícito, null-safe, `Test-Path -LiteralPath`, parser obrigatório e escrita posterior sem overwrite. O trecho canônico passou com `parseErrorCount = 0` e 7/7 casos tanto no PowerShell 7.6.3 quanto no Windows PowerShell 5.1. O estado fail-closed herdado permanece: service account desabilitada, zero chave `USER_MANAGED`, zero bindings temporárias, zero ADC, credencial humana local `0/0`, Firestore/Storage não acessados e inventário não executado. Nenhuma nova tentativa operacional foi iniciada.
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -292,6 +294,8 @@ OPERATOR_IN_MEMORY, TARGET_SA_EMAIL_IN_MEMORY, project/token condition templates
 B2A5_GCLOUD_CONFIG, B2A5_ADC_PATH, windowAlgorithmValidated=true,
 windowDurationSeconds=7200,
 START_UTC=DEFERRED_TO_ACTIVATION_EXEC e END_UTC=DEFERRED_TO_ACTIVATION_EXEC.
+Exigir também collisionGateParserValidationRequired=true,
+parseErrorCountExpected=0 e prova local anterior de collisionGateTestsPassed=7/7.
 
 Não fazer novo gcloud auth login da CLI, não alterar duração/targets/textos, não usar chave JSON,
 não conceder Service Account User ou qualquer papel adicional, não ler documentos,
@@ -311,22 +315,58 @@ B. Executar os gates críticos: Git/local; configuração isolada;
    INVENTORY prompt ready; AUTH-REVOKE prompt ready. Usar JSON estrutural.
 C. Confirmar windowMaterialized=false. Se a credencial humana estiver próxima do
    limite operacional, não ativar: revogar e exigir novo login.
-D. Fazer a última leitura do clock em UTC.
-E. Imediatamente antes da primeira mutação, normalizar o UTC corrente para RFC3339
+D. Antes de START_UTC/END_UTC e sem criar o diretório ou qualquer arquivo, derivar
+   ProjectConditionPath e TokenConditionPath futuros. Analisar o trecho exato abaixo
+   com [System.Management.Automation.Language.Parser]::ParseInput, capturar tokens e
+   parseErrors e exigir parseErrorCount=0. Depois executar exatamente o gate local:
+
+# B2A5_COLLISION_GATE_BEGIN
+$ConditionPaths = @(
+    $ProjectConditionPath,
+    $TokenConditionPath
+)
+
+$ConditionPathCollisionCount = 0
+
+foreach ($ConditionPath in $ConditionPaths) {
+
+    if ([string]::IsNullOrWhiteSpace($ConditionPath)) {
+        throw "B2A5_CONDITION_PATH_INVALID"
+    }
+
+    if (Test-Path -LiteralPath $ConditionPath) {
+        $ConditionPathCollisionCount++
+    }
+}
+
+if ($ConditionPathCollisionCount -ne 0) {
+    throw "B2A5_CONDITION_FILE_COLLISION"
+}
+# B2A5_COLLISION_GATE_END
+
+   Registrar somente a categoria sanitizada. Qualquer path inválido, colisão ou erro
+   de parser para fail-closed sem materializar a janela. Não substituir por expressão
+   compacta com `-or` nem usar `Test-Path -Path`.
+E. Fazer a última leitura do clock em UTC somente depois do gate de colisão passar.
+F. Imediatamente antes da primeira mutação, normalizar o UTC corrente para RFC3339
    com precisão de segundos: windowMaterializedAtUtc=START_UTC; definir
    END_UTC=START_UTC+7200s. Não usar ceilToNextMinute, lead, startTolerance ou
    ACTIVATION_MUST_START_BY_UTC.
-F. Criar fora do repo os dois JSON canônicos substituindo somente START_UTC/END_UTC;
-   title, description e restante da expression permanecem byte/semanticamente exatos.
-G. Calcular projectConditionSha256 e tokenConditionSha256 antes da primeira mutação;
+G. Só depois de F, criar o diretório de conditions e os dois JSON canônicos fora do
+   repo, substituindo somente START_UTC/END_UTC. Usar criação exclusiva equivalente a
+   FileMode.CreateNew, sem overwrite, para fechar a janela TOCTOU entre o check e a
+   escrita. Se qualquer criação falhar, remover somente arquivo atribuível à tentativa
+   atual, descartar START/END e parar sem binding. Title, description e restante da
+   expression permanecem byte/semanticamente exatos.
+H. Calcular projectConditionSha256 e tokenConditionSha256 antes da primeira mutação;
    tornar conteúdo, paths e hashes imutáveis para validação, handoff e rollback.
-H. Criar a project binding IMEDIATAMENTE pelo arquivo canônico. Se houver pausa humana
-   entre E e H, abortar, descartar timestamps, não mutar e não recalcular sem reiniciar
+I. Criar a project binding IMEDIATAMENTE pelo arquivo canônico. Se houver pausa humana
+   entre F e I, abortar, descartar timestamps, não mutar e não recalcular sem reiniciar
    os gates críticos.
-I. Validar exatamente member, role, title, description, expression e hash da project binding.
-J. Criar Token Creator na service account como recurso pelo segundo arquivo.
-K. Validar exatamente member, role, title, description, expression e hash.
-L. Depois das duas bindings criadas e validadas, usar
+J. Validar exatamente member, role, title, description, expression e hash da project binding.
+K. Criar Token Creator na service account como recurso pelo segundo arquivo.
+L. Validar exatamente member, role, title, description, expression e hash.
+M. Depois das duas bindings criadas e validadas, usar
    CLOUDSDK_CONFIG=B2A5_GCLOUD_CONFIG, APPDATA inalterado e
    GOOGLE_APPLICATION_CREDENTIALS ausente. Executar exatamente
    gcloud auth application-default login
@@ -336,15 +376,15 @@ L. Depois das duas bindings criadas e validadas, usar
    primeira binding. Permitir o web flow se solicitado; não exigir
    storedUserCredentialReused=true nem webOAuthStarted=false.
    O navegador, conta, senha, MFA, consentimento, URL e código ficam sob controle humano.
-M. Confirmar B2A5_ADC_PATH existe e está fora do repo; validar somente metadados:
+N. Confirmar B2A5_ADC_PATH existe e está fora do repo; validar somente metadados:
    type=impersonated_service_account, target exato e source authorized_user. Não imprimir,
    transcrever, persistir ou hashear access_token, refresh_token, client_secret,
    authorization code ou o conteúdo integral do ADC.
-N. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Parar para autorização do INVENTORY
+O. Não setar GOOGLE_APPLICATION_CREDENTIALS no pai. Parar para autorização do INVENTORY
    e entregar windowMaterializedAtUtc, START_UTC, END_UTC, canonical objects/paths/hashes,
    bindings exatas, B2A5_ADC_PATH e ADC pronto. Não executar inventário automaticamente.
 
-Falha entre E e H sem mutação descarta a janela. Qualquer falha após binding material
+Falha entre F e I sem mutação descarta a janela. Qualquer falha após binding material
 executa imediatamente o prompt AUTH-REVOKE completo com os mesmos JSON e hashes:
 revoke/remover ADC, limpar env, remover Token Creator exata, validar, remover project
 binding exata, validar e concluir o restante do rollback. Nunca usar --all e nunca

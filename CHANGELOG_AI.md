@@ -6,6 +6,66 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-COLLISION-GATE-SYNTAX-CORRECTION-PREP
+
+**Status:** **A. COLLISION GATE CORRIGIDO E VALIDADO OFFLINE — CAUSA LOCAL COMPROVADA, POWERSHELL PARSER 0 ERROS, TESTES DE COLISÃO PASSARAM, CONTRATO ATUALIZADO, ESTADO CLOUD PERMANECE FAIL-CLOSED.** Bloco exclusivamente offline, local e documental. Não houve login, OAuth, revoke, comando destinado a recurso Google Cloud, mutação IAM, enable/disable de service account, ADC, Firestore, Storage, inventário ou deploy.
+
+### Preflight e estado preservado
+
+O preflight confirmou `main`, HEAD inicial `68b38158556b6e767bf25a95e9bbd8fa0910f836` (`docs: correct B2A5 ADC impersonation invocation`), tracked tree limpo, índice vazio e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram não rastreados, fechados, não lidos, intocados e fora do staging.
+
+O estado fail-closed herdado permaneceu inalterado: service account exata desabilitada, zero chave `USER_MANAGED`, zero binding para a conta alvo, zero binding usando o custom role, zero Token Creator temporária, zero material binding na own policy, zero ADC B2A5/padrão, `GOOGLE_APPLICATION_CREDENTIALS` ausente, credencial humana local `0/0`, zero Firestore/Storage e inventário não executado.
+
+### LOCAL_FAILURE_EVIDENCE
+
+- O artefato local da invocation iniciada em `2026-08-10T17:00:15Z` registrou a parada antes de START/END e preservou o comando ad-hoc exato.
+- Trecho mínimo defeituoso: `if (Test-Path -LiteralPath $projectPath -or Test-Path -LiteralPath $tokenPath) { ... }`.
+- Fonte: implementação ad-hoc gerada pelo agente dentro do comando composto; nenhum helper persistente do repositório foi envolvido.
+- O prompt versionado não continha esse trecho, mas não especificava um gate executável de colisão, o que permitia regeneração ambígua.
+- `Parser.ParseInput` retorna zero erro para o trecho antigo. A falha real é de binding durante a execução: `System.Management.Automation.ParameterBindingException`, categoria `InvalidArgument`, identificador sanitizado `ParameterAlreadyBound, Microsoft.PowerShell.Commands.TestPathCommand` e mensagem sanitizada “LiteralPath foi especificado mais de uma vez”.
+- Linha/coluna originais não foram preservadas na saída do comando longo. A reprodução determinística em TEMP confirmou a classe e a categoria sem usar paths reais, rede ou Cloud.
+- Um `ParserError` distinto, “An empty pipe element is not allowed”, ocorreu antes em helper efêmero de cálculo de hashes e não pertence ao gate de colisão; ele não é a causa deste incidente.
+
+Classificação da origem: `A=false`, `B=true`, `C=false`, `D=false`, `E=false` — erro ad-hoc, fortalecimento preventivo do prompt versionado e nenhum helper persistente alterado.
+
+### DOCUMENTED_BEHAVIOR
+
+Foram consultadas somente fontes oficiais Microsoft:
+
+- [Test-Path](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/test-path): `-LiteralPath` usa o valor exatamente como informado e não interpreta caracteres como wildcard; path vazio retorna falso e path nulo gera erro não terminante, motivo pelo qual o gate valida null/whitespace antes da chamada.
+- [about_If](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_if): `if` avalia uma condição entre parênteses; invocações de comandos usadas como expressões precisam ser delimitadas para não serem tratadas como argumentos da mesma chamada.
+- [about_Logical_Operators](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_logical_operators): `-or` conecta statements booleanos e faz short-circuit; a forma canônica evita o operador porque duas chamadas compactadas causaram a ambiguidade.
+- [about_Comparison_Operators](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_comparison_operators): `-ne` é o operador de desigualdade usado para exigir contagem de colisões igual a zero.
+- [Parser.ParseInput](https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.language.parser.parseinput): o método recebe texto, devolve tokens e erros de parsing; o contrato agora exige `parseErrorCount = 0` sobre o trecho exato.
+
+Essas fontes documentam a linguagem e o cmdlet. A atribuição do incidente à implementação ad-hoc e à `ParameterBindingException` decorre da evidência local e da reprodução controlada, não de inferência documental.
+
+### Correção, parser e testes locais
+
+O `ACTIVATION-EXEC` agora contém um gate explícito com array de dois paths, validação `[string]::IsNullOrWhiteSpace`, loop `foreach`, contagem de colisões, `Test-Path -LiteralPath` e categorias sanitizadas `B2A5_CONDITION_PATH_INVALID`/`B2A5_CONDITION_FILE_COLLISION`. O gate ocorre antes de START/END, sem criar diretório ou arquivo. Depois da materialização, os dois arquivos serão criados sem overwrite, com semântica `FileMode.CreateNew`; qualquer colisão tardia descarta a janela antes de binding.
+
+O trecho operacional exato foi extraído e analisado com `[System.Management.Automation.Language.Parser]::ParseInput`: PowerShell 7.6.3 e Windows PowerShell 5.1 retornaram `tokenCount = 78`, `parseErrorCount = 0` e `collisionGateParserValidationPassed = true`.
+
+Os testes efêmeros foram executados somente em diretórios únicos sob TEMP, fora do repositório e fora do ActivationRoot real:
+
+1. Nenhum target existe: `PASS`, `collision=false`.
+2. Somente ProjectConditionPath existe: `FAIL-CLOSED`, `collision=true`.
+3. Somente TokenConditionPath existe: `FAIL-CLOSED`, `collision=true`.
+4. Ambos existem: `FAIL-CLOSED`, `collision=true`.
+5. ProjectConditionPath nulo: `INVALID_PATH`, fail-closed.
+6. TokenConditionPath vazio: `INVALID_PATH`, fail-closed.
+7. Nome com colchetes e arquivo que casaria como wildcard: `-Path=true`, `-LiteralPath=false`, gate `PASS`; nenhum wildcard foi interpretado.
+
+Resultado nos dois engines: `collisionGateTestsPassed = 7/7`. Nenhum JSON condition real, timestamp IAM, binding, ADC ou artefato persistente foi criado.
+
+### Invariantes e encerramento
+
+A ordem governada permanece: gates críticos → collision check → último clock → START/END → diretório/arquivos exclusivos → hashes → primeira binding imediata. `windowDurationSeconds = 7200`, `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC`, invocation ADC sem operador posicional, zero Firestore antes do INVENTORY e rollback completo após a primeira binding material foram preservados.
+
+`loginCalls = 0`; `OAuth = false`; `revokeCalls = 0`; `remoteProjectResourcesConsulted = 0`; `IAM mutations = 0`; `serviceAccountEnableCalls = 0`; `serviceAccountDisableCalls = 0`; `applicationDefaultLoginCalls = 0`; `ADC created = false`; `Firestore accessed = false`; `Storage accessed = false`; `inventory executed = false`. O próximo bloco possível é um novo `ADMIN-B2A5-INVENTORY-AUTH-RESUME-LOCAL-STATE-CHECK`, somente com autorização literal separada; não foi iniciado.
+
+---
+
 ## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-ADC-INVOCATION-CORRECTION-PREP
 
 **Status:** **A. ADC INVOCATION CORRIGIDA — ACCOUNT POSICIONAL REMOVIDO, OPERADOR PASSA A SER VALIDADO EM GATE SEPARADO, REENABLE DA SERVICE ACCOUNT GOVERNADO E NOVA RETOMADA PRONTA.** Bloco offline e exclusivamente documental. Não houve `gcloud auth login`, OAuth, `application-default login`, `application-default revoke`, IAM mutation, IAM Credentials API, enable/disable de service account, Firestore, Storage, inventário ou deploy.
