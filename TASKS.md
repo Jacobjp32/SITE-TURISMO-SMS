@@ -29,6 +29,8 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 **Atualização operacional final de 2026-08-10 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-IAM-POLICY-PARSER-WRAPPER-CORRECTION-PREP` comprovou que o último `SERVICE-ACCOUNT-REENABLE-EXEC` parou no wrapper local, depois da leitura da own policy e antes de qualquer enable. O source ad-hoc continha `return[pscustomobject]@` sem separação; `Parser.ParseInput` aceitava o texto com zero erro, mas o runtime tentou resolver esse token como comando e lançou `System.Management.Automation.CommandNotFoundException`. A causa é `F. SCRIPTBLOCK_OR_WRAPPER_COMPOSITION_ERROR`, não falha do IAM nem do JSON. O contrato agora versiona `Get-B2A5IamPolicyShape`, proíbe wrapper ad-hoc e JSON remoto embutido em source, exige código/dados separados, reutiliza o mesmo parser para own e project policy e exige syntax gate mais runtime sintético. O source canônico passou com zero parse errors no Windows PowerShell 5.1 e PowerShell 7.x; os 12 casos estruturais e os seis casos de filtro passaram em ambos. `bindings` ausente continua sendo shape esperado e zero material binding; `bindings = null`, root/tipo inválido, JSON inválido ou binding malformada são fail-closed. O estado Cloud permanece apenas por handoff: service account desabilitada, zero chave `USER_MANAGED`, zero bindings temporárias, zero ADC e credencial humana local `0/0`; nenhuma nova leitura remota foi feita.
 
+**Atualização operacional de 2026-08-13 — estado corrente e vinculante:** o `ADMIN-B2A5-INVENTORY-AUTH-LOGIN-EXITCODE-WRAPPER-RECOVERY-PREP` reconciliou o estado local isolado como `A2_ALREADY_ZERO`: contas credentialed/ativas `0/0`, `core/account` ausente, zero projeto, impersonação e access-token file, ADC B2A5/padrão ausentes e `GOOGLE_APPLICATION_CREDENTIALS` ausente; por isso nenhum revoke foi executado. A forense da invocation de 2026-08-10 comprovou no evento local `.NET Runtime` 1026 que o `pwsh.exe` encerrou por `System.Management.Automation.PSInvalidOperationException` não tratada: os handlers PowerShell de `OutputDataReceived`/`ErrorDataReceived` foram chamados por `AsyncStreamReader` em thread sem Runspace. `wrapperExitCode = -532462766` (`0xE0434352`) pertence ao host CLR; `historicalGcloudLoginExitCode = INDETERMINATE` e o estado histórico `1/1` não pode promovê-lo a zero. O LOGIN-EXEC futuro usa exclusivamente o source canônico abaixo: call operator direto e cópia imediata de `$LASTEXITCODE`, sem `System.Diagnostics.Process`, handlers assíncronos, nested PowerShell, job, runspace ou captura textual complexa. O source teve zero parse errors e runtime sintético 6/6 no Windows PowerShell 5.1.26100.9168 e PowerShell 7.6.3. O IAM policy parser 14/14 + 6/6, collision gate 7/7, invocation ADC sem operador posicional e janela diferida de 7200 segundos permanecem inalterados. Próximo bloco: `ADMIN-B2A5-INVENTORY-AUTH-RESUME-LOCAL-STATE-CHECK`, não iniciado e dependente de autorização humana própria.
+
 **Frentes pausadas:** site público, V7C1, V7C2, V6, B3 público, otimização de mídia pública, integração CMS → site público e tarefas preparadas para Claude Fable.
 
 **Regra principal:** tratar site público, Painel Admin/CMS e Portal do Usuário como sistemas separados. Não misturar refatoração ou execução entre eles sem bloco e autorização específicos.
@@ -43,9 +45,33 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - Sequência obrigatória: `LOCAL STATE CHECK → LOGIN-EXEC → LOGIN-GOVERNANCE → SERVICE-ACCOUNT-REENABLE-EXEC → ACTIVATION-PREP-FINALIZATION → ACTIVATION-EXEC → INVENTORY-EXEC → AUTH-REVOKE`.
 - Depois de uma nova sessão humana governada, executar `ADMIN-B2A5-INVENTORY-AUTH-SERVICE-ACCOUNT-REENABLE-EXEC` com autorização literal própria e objetivo único de revalidar e habilitar a service account exata, sem binding, ADC, Firestore ou ACTIVATION.
 - Antes de qualquer nova sessão humana, preservar `policyParserCanonicalRequired = true`, `policyParserAdHocWrapperProhibited = true`, `rawJsonEmbeddedInSourceProhibited = true`, `policyParserSyntaxValidationRequired = true`, `policyParserRuntimeValidationRequired = true`, `policyParserParseErrorCountExpected = 0`, `policyParserRuntimeTestsExpected >= 12/12` e `ownPolicyAndProjectPolicyShareCanonicalParser = true`.
+- Antes de qualquer novo login, exigir `loginExecutorCanonicalRequired = true`, `loginExecutorAdHocWrapperProhibited = true`, `loginExitCodeCaptureRequired = true`, `loginExitCodeCaptureMechanism = DIRECT_CALL_OPERATOR_AND_IMMEDIATE_LASTEXITCODE`, `loginExitCodeExpectedForSuccess = 0`, `loginExitCodeCaptureOccursBeforeAnyOtherNativeInvocation = true`, `loginExecutorSyntaxValidationRequired = true`, `loginExecutorRuntimeSyntheticValidationRequired = true`, `loginExecutorRuntimeSyntheticTestsExpected = 6/6`, `loginWrapperClrExceptionMustNotBeTreatedAsGcloudExitCode = true` e `historicalIndeterminateLoginMustNotBeUpgradedByPostState = true`.
 - Somente depois do REENABLE validado executar `ADMIN-B2A5-INVENTORY-AUTH-ACTIVATION-PREP-FINALIZATION`, curto e read-only. Não repetir pesquisa, reconstruir prompts, calcular `START_UTC`/`END_UTC` ou fazer governança pesada nessa etapa.
 - `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200`. Não existem mais `leadSeconds`, `startToleranceSeconds` ou `ACTIVATION_MUST_START_BY_UTC` transferidos entre turnos.
 - Não iniciar automaticamente LOGIN, REENABLE, FINALIZATION, ACTIVATION, INVENTORY ou AUTH-REVOKE a partir deste documento.
+
+### Source canônico do executor/capturador do LOGIN-EXEC
+
+Este é o único trecho autorizado para a invocation real de `gcloud auth login` e sua captura de exit code. O operador continua somente em memória. O futuro EXEC deve extrair este source exato, validá-lo nos dois engines e não adicionar wrapper de processo ou captura integral de stdout/stderr.
+
+```powershell
+# B2A5_LOGIN_EXECUTOR_SOURCE_BEGIN
+$LoginStartedAtUtc = [DateTimeOffset]::UtcNow
+& $GcloudPath auth login $Operator --brief --configuration=default
+$LoginExitCode = $LASTEXITCODE
+$LoginReturnedAtUtc = [DateTimeOffset]::UtcNow
+
+if ($null -eq $LoginExitCode) {
+    throw "B2A5_GCLOUD_LOGIN_EXITCODE_NOT_CAPTURED"
+}
+
+if ($LoginExitCode -ne 0) {
+    throw "B2A5_GCLOUD_LOGIN_NONZERO_EXIT"
+}
+# B2A5_LOGIN_EXECUTOR_SOURCE_END
+```
+
+Ordem vinculante: timestamp pré-login → chamada direta → cópia imediata de `$LASTEXITCODE` → timestamp pós-retorno → pós-validação local por `auth list`/config → somente então `loginCompleted = true` e `loginCompletedAtUtc` materializado. `LOGIN-GOVERNANCE` permanece bloqueado se o exit code não for capturado, ficar indeterminado ou for diferente de zero; conta local `1/1` nunca substitui o exit status da invocation.
 
 ### PROVISION-GOVERNANCE retomada e concluída — 2026-08-07
 

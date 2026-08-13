@@ -6,6 +6,56 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — ADMIN-B2A5-INVENTORY-AUTH-LOGIN-EXITCODE-WRAPPER-RECOVERY-PREP
+
+**Status:** **A. LOGIN EXIT-CODE WRAPPER CORRIGIDO E VALIDADO — AUTH LOCAL 0/0, CAUSA DO WRAPPER COMPROVADA, EXIT CODE HISTÓRICO PERMANECE INDETERMINADO, EXECUTOR CANÔNICO VERSIONADO, `$LASTEXITCODE` CAPTURADO DIRETAMENTE, SYNTAX 0 ERRORS, TESTES SINTÉTICOS 6/6 NOS DOIS ENGINES E ESTADO CLOUD PRESERVADO FAIL-CLOSED.**
+
+### Preflight e reconciliação local
+
+O preflight confirmou `main`, HEAD inicial `638fc403a746481bac75a5865ca303cd82036a17` (`docs: endurecer parser de policy IAM B2A5`), tracked tree limpo, índice vazio e `origin/main...main = 0/0`. Os três itens locais protegidos permaneceram apenas nominalmente no status, fechados, não lidos, intocados e fora do staging.
+
+O perfil isolado resolveu exatamente para `B2A5_GCLOUD_CONFIG`. O estado inicial foi `A2_ALREADY_ZERO`: `credentialedAccountCount = 0`, `activeAccountCount = 0`, `coreAccountPresent = false`, projeto/impersonação/access-token file ausentes, ADC B2A5 e padrão ausentes e `GOOGLE_APPLICATION_CREDENTIALS` ausente. `cleanupRevokeCallCount = 0` e `cleanupRevokeSkippedBecauseAlreadyZero = true`. A contraprova confirmou novamente `0/0`; a partir desse ponto não houve outra chamada gcloud.
+
+### LOCAL_FAILURE_EVIDENCE
+
+- A sessão local histórica iniciou a invocation em `2026-08-10T19:48:36Z` e o host encerrou em `2026-08-10T19:48:47Z`, sem emitir o objeto final que leria `Process.ExitCode`.
+- O wrapper usava `System.Diagnostics.Process`, stdout/stderr redirecionados, `BeginOutputReadLine`/`BeginErrorReadLine` e scriptblocks PowerShell como handlers de `OutputDataReceived`/`ErrorDataReceived`.
+- O Windows Application Log registrou no mesmo instante o evento `.NET Runtime` 1026: `pwsh.exe` terminado por `System.Management.Automation.PSInvalidOperationException` não tratada, porque o scriptblock do handler foi chamado em thread sem Runspace.
+- Stack location sanitizada: `ScriptBlock.GetContextFromTLS` → callback do `DataReceivedEventArgs` → `AsyncStreamReader.FlushMessageQueue` → thread pool.
+- `loginWrapperFailureSource = ASYNC_PROCESS_OUTPUT_EVENT_HANDLER`; `loginWrapperFailureClass = System.Management.Automation.PSInvalidOperationException`; `loginWrapperFailureCategory = A. DOTNET_CLR_UNHANDLED_EXCEPTION`; `loginWrapperFailurePhase = ASYNC_STDOUT_STDERR_EVENT_CALLBACK_BEFORE_RELIABLE_EXIT_CAPTURE`.
+- `gcloudProcessWasStarted = true`; `gcloudProcessReturnedToWrapper = unknown`; `gcloudExitCodeWasCaptured = false`; `wrapperExitCode = -532462766`; `wrapperExitCodeHex = 0xE0434352`; `wrapperClrExceptionConfirmed = true`.
+- `historicalGcloudLoginExitCode = INDETERMINATE`. O estado local histórico `1/1` não foi usado como inferência de exit status, e nenhum timestamp foi materializado retroativamente.
+
+### DOCUMENTED_BEHAVIOR
+
+Foram consultadas fontes oficiais atuais, separadas da evidência local:
+
+- Microsoft [about_Operators](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_operators), [Running commands in the shell](https://learn.microsoft.com/en-us/powershell/scripting/learn/shell/running-commands) e [about_Command_Precedence](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_command_precedence): o call operator `&` executa comandos armazenados em variáveis, inclusive paths completos e paths com espaços.
+- Microsoft [about_Automatic_Variables](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_automatic_variables) e [about_Error_Handling](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_error_handling): `$LASTEXITCODE` contém o exit code do último programa nativo; variáveis automáticas não devem ser sobrescritas manualmente.
+- Microsoft [CLR Exception E0434352](https://learn.microsoft.com/en-us/shows/inside/e0434352) e [Process crash troubleshooting](https://learn.microsoft.com/en-us/troubleshoot/developer/webapps/iis/site-behavior-performance/process-termination-crash): `0xE0434352` identifica exceção CLR; um evento `.NET Runtime` 1026 fornece tipo, mensagem e stack da exceção não tratada.
+- Google Cloud [gcloud auth](https://cloud.google.com/sdk/gcloud/reference/auth), [Authenticate for the gcloud CLI](https://docs.cloud.google.com/sdk/docs/authenticate) e [command conventions](https://docs.cloud.google.com/sdk/gcloud/reference/topic/command-conventions): `auth login`, `auth list` e `auth revoke` administram credenciais locais; exit status `0` indica sucesso e qualquer outro indica erro. Estado credentialed/active armazenado não substitui o exit status da invocation.
+
+As fontes documentam o comportamento geral. A atribuição do incidente ao handler assíncrono sem Runspace e a separação entre host e gcloud decorrem exclusivamente da sessão e do evento local.
+
+### Executor canônico e validação offline
+
+`TASKS.md` agora contém, entre marcadores inequívocos, `B2A5_LOGIN_EXECUTOR_SOURCE`: timestamp pré-login, chamada direta `& $GcloudPath auth login $Operator --brief --configuration=default`, cópia imediata `$LoginExitCode = $LASTEXITCODE`, timestamp pós-retorno e gates de null/nonzero. O operador continua somente em memória. O source proíbe wrappers ad-hoc, `System.Diagnostics.Process`, handlers assíncronos, nested PowerShell, jobs, runspaces e captura textual complexa para a invocation real.
+
+Arquivos `.cmd` sintéticos foram criados somente em TEMP, fora do repositório, sem gcloud e sem login real:
+
+- Windows PowerShell 5.1.26100.9168: `parseErrorCount = 0`; CASE 1 exit 0 PASS; CASE 2 exit 7 PASS; CASE 3 sequência `0,7,0` PASS; CASE 4 path com espaço PASS; CASE 5 argumento com espaço PASS; CASE 6 captura antes de outro trabalho PASS; total 6/6.
+- PowerShell 7.6.3: `parseErrorCount = 0`; CASE 1 exit 0 PASS; CASE 2 exit 7 PASS; CASE 3 sequência `0,7,0` PASS; CASE 4 path com espaço PASS; CASE 5 argumento com espaço PASS; CASE 6 captura antes de outro trabalho PASS; total 6/6.
+
+Invariantes: `loginExecutorCanonicalRequired = true`; `loginExecutorAdHocWrapperProhibited = true`; `loginExitCodeCaptureRequired = true`; `loginExitCodeCaptureMechanism = DIRECT_CALL_OPERATOR_AND_IMMEDIATE_LASTEXITCODE`; `loginExitCodeExpectedForSuccess = 0`; `loginExitCodeCaptureOccursBeforeAnyOtherNativeInvocation = true`; `loginExecutorSyntaxValidationRequired = true`; `loginExecutorRuntimeSyntheticValidationRequired = true`; `loginExecutorRuntimeSyntheticTestsExpected = 6/6`; `loginWrapperClrExceptionMustNotBeTreatedAsGcloudExitCode = true`; `historicalIndeterminateLoginMustNotBeUpgradedByPostState = true`.
+
+### Contratos preservados e próximo bloco
+
+O IAM policy parser permanece 14/14 runtime e 6/6 filtros nos dois engines; o collision gate permanece 7/7; a invocation ADC continua sem operador posicional; `START_UTC = DEFERRED_TO_ACTIVATION_EXEC`, `END_UTC = DEFERRED_TO_ACTIVATION_EXEC` e `windowDurationSeconds = 7200` permanecem inalterados.
+
+`newLoginCalls = 0`; `newOAuthFlows = 0`; `applicationDefaultLoginCalls = 0`; `remoteProjectResourcesConsulted = 0`; `serviceAccountEnableCalls = 0`; `serviceAccountDisableCalls = 0`; `IAM mutations = 0`; `bindingsCreated = 0`; `bindingsRemoved = 0`; `ADC created = false`; `Firestore accessed = false`; `Storage accessed = false`; `inventory executed = false`.
+
+Próximo bloco possível: `ADMIN-B2A5-INVENTORY-AUTH-RESUME-LOCAL-STATE-CHECK`, não iniciado e dependente de autorização humana própria.
+
 ## 2026-08-10 — ADMIN-B2A5-INVENTORY-AUTH-IAM-POLICY-PARSER-WRAPPER-CORRECTION-PREP
 
 **Status:** **A. IAM POLICY PARSER CORRIGIDO E VALIDADO OFFLINE — CAUSA LOCAL COMPROVADA, SOURCE CANÔNICO VERSIONADO, POWERSHELL PARSER 0 ERROS, RUNTIME SINTÉTICO PASSOU, OWN/PROJECT POLICY COMPARTILHAM CONTRATO, ESTADO CLOUD PERMANECE FAIL-CLOSED.** Bloco exclusivamente offline, local, forense e documental. Não houve login, OAuth, revoke, chamada destinada a recurso Google Cloud, IAM, enable/disable de service account, ADC, Firestore, Storage, inventário ou deploy.
