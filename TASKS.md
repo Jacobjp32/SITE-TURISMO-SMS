@@ -6,6 +6,23 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — discovery concluído em 2026-08-13
+
+- Bloco concluído: `POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN`.
+- Classificação: **A. ROTAS V1.1 DISCOVERY COMPLETE — CURRENT MODEL MAPPED, CANONICAL SOURCE IDENTIFIED, SAFE ADMIN ARCHITECTURE DEFINED, IMPLEMENTATION READY**.
+- `CURRENT_ROUTE_SOURCE_OF_TRUTH = MULTIPLE`: `js/data/rotas.js` é a lista editorial canônica de seis rotas; `js/rotas-data.js` duplica nomes/cores/ícones e mantém 47 empreendimentos com 56 relações; `js/locais-data.js` usa rótulos textuais que misturam rotas e agrupamentos.
+- Relação comprovada N:N: `route` + `routes[]` no legado, com nove locais em duas rotas. O contrato CMS já possui `cms_establishments.relationships.routeIds[]`; essa é a estratégia principal futura.
+- As seis rotas temáticas não possuem ordem de visita nem geometria. `js/roteiro-ia.js` tem roteiros ordenados separados, noindex e fora do escopo do CRUD temático.
+- Decisão de escopo: **C. PRECISA DE ETAPA DE NORMALIZAÇÃO ANTES DO CRUD**, incorporada ao primeiro bloco e baseada em allowlist; não gerar rotas a partir de Centro, Eventos Anuais, Turismo de Fé ou outros textos.
+- Modelo futuro mínimo: `rotas/{routeId}` com ID imutável, slug estável, conteúdo, cor, ícone, capa, `draft|published|archived`, ordem apenas de cards e auditoria. Sem `placeIds`, polylines, ordem de pontos, hard delete, página individual ou novo framework.
+- Migração parcial estimada localmente: 6 documentos de rota e 60 relações canônicas em 51 documentos, compostas por 58 ocorrências já exatas e 2 aliases claros; 11 agrupamentos não canônicos ficam fora da allowlist e permanecem preservados como legado.
+- Compatibilidade: datasource dinâmico com fallback estático somente em erro; fontes estáticas preservadas durante rollout; portal principal ainda precisa receber `routeIds[]`, filtro por rota, contagem e busca dinâmicas.
+- Documento vinculante: `docs/plano-admin-rotas-v1.1.md`.
+- Próximo bloco recomendado, não iniciado e dependente de autorização literal separada: `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`.
+- Esse próximo bloco é estritamente local: schema, Rules, testes Emulator e transformador/dry-run. Não autoriza collection real, migração, deploy, Firestore/Storage remoto, Auth, gcloud ou IAM.
+
+---
+
 ## Painel Admin V1 — estado vinculante de 2026-08-13
 
 - Bloco: `ADMIN-B2A8-ADMIN-PANEL-V1-RELEASE`.

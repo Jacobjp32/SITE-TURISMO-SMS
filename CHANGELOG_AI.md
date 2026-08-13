@@ -6,6 +6,35 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN
+
+**Status:** **A. ROTAS V1.1 DISCOVERY COMPLETE — CURRENT MODEL MAPPED, CANONICAL SOURCE IDENTIFIED, SAFE ADMIN ARCHITECTURE DEFINED, IMPLEMENTATION READY.**
+
+### Diagnóstico
+
+- O discovery local confirmou modelo híbrido: seis objetos editoriais em `js/data/rotas.js`; identidade visual duplicada e 47 empreendimentos em `js/rotas-data.js`; rótulos textuais mistos em `js/locais-data.js`; adapter público que perde relações secundárias; mapa legado que ainda reconhece `routes[]`.
+- A relação é N:N e já possui destino canônico no CMS: `cms_establishments.relationships.routeIds[]`. Nove dos 47 itens legados pertencem a duas rotas, totalizando 56 relações no source legado.
+- O preview local de 67 documentos contém 58 relações com IDs canônicos, dois aliases `rota-da-erva-mate` normalizáveis e 11 agrupamentos que não são automaticamente rotas. A estimativa pós-normalização é 60 relações canônicas em 51 documentos.
+- As seis rotas são agrupamentos temáticos sem sequência de visita e sem geometria. Os roteiros ordenados de `js/roteiro-ia.js` são um sistema separado, noindex e fora do escopo.
+- O Admin contém placeholder puro: sem handlers, persistência ou código CRUD adormecido. Firestore Rules não possuem collection `rotas`; Storage já permite reutilizar `cms-media`.
+
+### Desenho aprovado para o próximo bloco
+
+- Modelo mínimo recomendado: `rotas/{routeId}` por rota, com ID imutável, slug estável, conteúdo, identidade visual, capa, `draft|published|archived`, `displayOrder` de cards e auditoria.
+- Relações ficam nos empreendimentos por `routeIds[]`; não usar subcollection, relation collection ou `placeIds` duplicado.
+- V1.1 exclui hard delete, cascade, geometria, ordem de pontos, drag-and-drop, página pública individual, galeria além da capa, novo framework e privilégio de moderator.
+- Publicação futura usa adapter dinâmico com fallback estático somente em falha; fontes estáticas permanecem durante rollout. O portal deverá preservar `routeIds[]`, oferecer filtro por rota e atualizar HOME/busca sem romper URLs atuais.
+- Rules futuras: leitura pública apenas de `published`, CRUD somente por admin ativo, documentos malformados fail-closed e delete negado.
+- Documento criado: `docs/plano-admin-rotas-v1.1.md`.
+- Próximo bloco: `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`, local e dependente de autorização separada.
+
+### Limites
+
+- Nenhum source funcional, Firestore Rule, Storage Rule, dado, collection ou configuração de produção foi alterado.
+- Firestore, Storage, Auth, gcloud, IAM, ADC, deploy e Hosting não foram acessados/executados.
+
+---
+
 ## 2026-08-13 — ADMIN-B2A8-ADMIN-PANEL-V1-RELEASE
 
 **Status:** **A. ADMIN PANEL V1 RELEASED — ALPHA/BETA PHASE CLOSED, CORE PANEL PRODUCTION READY, ZERO P0/P1.**
