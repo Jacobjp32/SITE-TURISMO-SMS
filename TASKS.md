@@ -14,8 +14,10 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - `ADMIN-B2A6-AUTHORIZATION-RULES-HARDENING-LOCAL` concluído localmente com classificação **A. AUTHORIZATION RULES HARDENED LOCALLY**: Firestore e Storage exigem `usuarios/{uid}.ativo == true` estrito para gates administrativos/staff; `role` continua limitada a `admin`, `moderator` e `user`; `moderator` existente foi preservado sem ampliação de privilégio.
 - `validUserAuthorizationProfile(request.resource.data)` protege o estado futuro de create/update em `usuarios`: role válida e `ativo is bool`. Self-create continua restrito a `role = user` e `ativo = true`; self-update continua limitado a `nome`, `telefone`, `tipo` e `organizacao`; autoelevação e perfis malformados são negados.
 - Baseline pré-edição: Firestore Rules `87/87`. Validação final local no projeto demo `demo-turismo-sms-rules-test`: Firestore `145/145` em 6 suítes e Storage `24/24` em 2 suítes, zero fail/skipped/cancelled/todo. O Storage Emulator comprovou a arquitetura cross-service `firestore.get(...)`.
-- Nenhum login, ADC, IAM, consulta Firestore/Storage de produção, dado real, migração ou deploy ocorreu. As Rules de produção permanecem inalteradas.
-- Próximo bloco exclusivo: `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY`, ainda não iniciado e dependente de autorização literal separada.
+- `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY` concluído em produção com classificação **A. B2A6 SECURITY RULES DEPLOYED TO PRODUCTION**. A autenticação Firebase CLI foi recuperada manualmente pelo humano e confirmada por `firebase login:list`/`firebase projects:list`; este bloco não executou login ou logout. Storage Rules foram publicadas em `2026-08-13T17:11:06Z` e Firestore Rules em `2026-08-13T17:11:38Z`, ambas com exit code `0`, projeto explícito `turismo-sms` e sem IAM adicional.
+- Source implantado: HEAD `f99305ec2e88cabc9d34e417b84b5a15c93531e2`; `firestore.rules` SHA-256 `58716622eb09d79b7b49e776d2806660f55c02cd1044dcd3caf4fd1402257050`; `storage.rules` SHA-256 `2f3f58d0af112c2938775a9fe434ba5f0814bbad3855276af863da8ad8e4241c`. Evidência pré-deploy reutilizada: Firestore `145/145`, Storage `24/24`, total `169/169`, zero falhas/skips.
+- Smoke anônimo em produção passou após espera de propagação de 35 segundos: `noticias` publicadas e `cms_establishments` publicados permitidos; query ampla de `noticias`, `media_library` e fallback desconhecido negados; Storage privado retornou `storage/unauthorized`. `B2A6_RULES_DEPLOYED_TO_PRODUCTION = true`; production data writes `0`; user migrations `0`; Firebase Auth user mutations `0`; IAM mutations `0`; gcloud calls `0`; ADC `false`; Hosting e GitHub Pages não alterados.
+- Próximo bloco recomendado: `ADMIN-B2A7-ADMIN-PANEL-PRODUCTION-QA`, não iniciado e dependente de autorização literal separada.
 
 ## Estado atual resumido
 
@@ -52,12 +54,11 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ## Próximo passo recomendado
 
-**Publicar exclusivamente as Firestore/Storage Rules aprovadas no próximo bloco `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY`, somente com autorização literal separada.**
+**Executar o próximo bloco `ADMIN-B2A7-ADMIN-PANEL-PRODUCTION-QA` somente com autorização literal separada.**
 
-- B2A5 está encerrado; não iniciar novo login, IAM, ADC, inventário ou migração.
-- O deploy deve partir do commit local aprovado, repetir o preflight e confirmar as suítes A antes da publicação.
-- Publicar somente Firestore/Storage Rules, executar smoke tests controlados e confirmar o ruleset ativo.
-- Não iniciar deploy, autenticação ou módulos novos automaticamente a partir deste documento.
+- B2A5 permanece encerrado e `B2A6_RULES_DEPLOYED_TO_PRODUCTION = true`; não iniciar novo login, IAM, ADC, inventário, migração ou novo deploy de Rules.
+- B2A7 deve avaliar o Painel Admin em produção como produto real, sem inferir autorização para mutações fora do bloco que vier a ser aprovado.
+- Não iniciar autenticação ou módulos novos automaticamente a partir deste documento.
 
 ### Registro histórico: source canônico do executor/capturador do LOGIN-EXEC do B2A5 encerrado
 

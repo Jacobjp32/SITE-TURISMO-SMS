@@ -6,6 +6,27 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY
+
+**Status:** **A. B2A6 SECURITY RULES DEPLOYED TO PRODUCTION — MANUAL FIREBASE REAUTH CONFIRMED, STORAGE + FIRESTORE RELEASES SUCCESSFUL, READ-ONLY SMOKE PASS, ZERO DATA WRITE, ZERO IAM, STRICT `ativo == true` ENFORCED IN PRODUCTION.**
+
+### Baseline e autenticação
+
+- Preflight aprovado em `main`, source HEAD `f99305ec2e88cabc9d34e417b84b5a15c93531e2` (`fix: endurecer autorização de usuários ativos`), `origin/main...main = 0/0`, árvore rastreada limpa e índice vazio. Os itens locais protegidos permaneceram apenas nominais, fechados, não lidos, intocados e fora do staging.
+- Hashes implantados: `firestore.rules` SHA-256 `58716622eb09d79b7b49e776d2806660f55c02cd1044dcd3caf4fd1402257050`; `storage.rules` SHA-256 `2f3f58d0af112c2938775a9fe434ba5f0814bbad3855276af863da8ad8e4241c`.
+- Firebase CLI `15.24.0`, uma conta preexistente e acesso a `turismo-sms` confirmados por `firebase login:list` e `firebase projects:list`. A reautenticação foi concluída manualmente pelo humano antes do bloco; nenhum login, reauth ou logout foi executado neste bloco.
+- Evidência pré-deploy reutilizada no mesmo HEAD/hashes: Firestore `145/145`, Storage `24/24`, total `169/169`, zero falhas e zero skipped.
+
+### Deploy e smoke de produção
+
+- Storage Rules publicadas exclusivamente por `firebase deploy --only storage --project turismo-sms --non-interactive`: exit code `0`, release confirmada em `2026-08-13T17:11:06Z`, sem prompt cross-service e sem mutação IAM.
+- Firestore Rules publicadas exclusivamente por `firebase deploy --only firestore:rules --project turismo-sms --non-interactive`: exit code `0` e release confirmada em `2026-08-13T17:11:38Z`. Hosting, Functions e indexes não foram incluídos.
+- Após espera de propagação de 35 segundos, o smoke anônimo pelo Firebase Client SDK passou integralmente: query `noticias` com `publicado == true` permitida; query ampla de `noticias` negada; `media_library` negada; query `cms_establishments` com `status == published` permitida; fallback `admin_b2a6_unknown_smoke/synthetic` negado; leitura privada sintética no Storage negada com `storage/unauthorized`. Nenhum conteúdo de documento foi impresso.
+- Encerramento registrado em `2026-08-13T17:14:18Z`: `B2A6_RULES_DEPLOYED_TO_PRODUCTION = true`; production data writes `0`; user migrations `0`; Firebase Auth user mutations `0`; IAM mutations `0`; gcloud calls `0`; ADC created `false`; Hosting e GitHub Pages não alterados.
+- Próximo bloco recomendado: `ADMIN-B2A7-ADMIN-PANEL-PRODUCTION-QA`, não iniciado e dependente de autorização literal separada.
+
+---
+
 ## 2026-08-13 — ADMIN-B2A6-AUTHORIZATION-RULES-HARDENING-LOCAL
 
 **Status:** **A. AUTHORIZATION RULES HARDENED LOCALLY — B2A5 CLOSED, STRICT `ativo == true` ENFORCED, USER AUTHORIZATION SCHEMA GUARDED, FIRESTORE/STORAGE REGRESSION TESTS PASS, ZERO PRODUCTION MUTATION, READY FOR RULES DEPLOY.**
