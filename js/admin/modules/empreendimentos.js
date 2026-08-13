@@ -679,7 +679,10 @@
         var image = item.media && item.media.mainImage && item.media.mainImage.url
             ? '<img src="' + escapeAttr(item.media.mainImage.url) + '" alt="" style="width:48px;height:36px;object-fit:cover;border-radius:4px;border:1px solid #ddd;">'
             : '<span style="display:inline-flex;width:48px;height:36px;align-items:center;justify-content:center;border:1px solid #ddd;border-radius:4px;color:#aaa;font-size:0.75rem;">sem</span>';
-        var contact = [item.contact.phone || item.contact.whatsapp, item.location.address].filter(Boolean).join("<br>");
+        var contact = [item.contact.phone || item.contact.whatsapp, item.location.address]
+            .filter(Boolean)
+            .map(escapeHtml)
+            .join("<br>");
         return '<tr>' +
             '<td><div style="display:flex;gap:0.65rem;align-items:center;">' + image +
                 '<div><strong>' + escapeHtml(item.name || "(sem nome)") + '</strong><br>' +

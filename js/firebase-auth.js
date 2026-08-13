@@ -950,8 +950,8 @@ const FirebaseSystem = {
 
     getCurrentUser: function() { return currentUser; },
     isLoggedIn:     function() { return currentUser !== null; },
-    isAdmin:        function() { return currentUser && currentUser.role === 'admin'; },
-    isModerator:    function() { return currentUser && (currentUser.role === 'admin' || currentUser.role === 'moderator'); },
+    isAdmin:        function() { return currentUser && currentUser.ativo === true && currentUser.role === 'admin'; },
+    isModerator:    function() { return currentUser && currentUser.ativo === true && (currentUser.role === 'admin' || currentUser.role === 'moderator'); },
 
     // ========================================
     // GERENCIAMENTO DE USUÁRIOS (ADMIN)
@@ -960,8 +960,9 @@ const FirebaseSystem = {
     getUsers: async function() {
         if (!this.isAdmin()) return [];
         try {
-            const snap = await firebase.firestore().collection('usuarios').orderBy('criadoEm', 'desc').get();
-            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+            const snap = await firebase.firestore().collection('usuarios').get();
+            const users = snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+            return sortByTimestampDesc(users, 'criadoEm');
         } catch(e) { console.error(e); return []; }
     },
 

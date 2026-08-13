@@ -1072,6 +1072,7 @@
         var currentCover = getPrimaryEventImage(item);
         var images = normalizeEventImages(item.images);
         var selectedMediaId = getMatchingMediaId(mediaItems, currentCover && currentCover.url);
+        var eventIsPublished = Boolean(item.id) && isPublished(item);
 
         return '<form id="eventCmsForm" onsubmit="AdminContentCMS.saveEvent(event)">' +
             '<div class="admin-modal-body">' +
@@ -1116,7 +1117,7 @@
                             renderEventGalleryList(item) +
                         '</div>' +
                     '</div>' +
-                    '<div class="admin-field"><label for="eventPublished">Status</label><select id="eventPublished" name="publicado"><option value="true"' + (isPublished(item) ? " selected" : "") + '>Publicado</option><option value="false"' + (!isPublished(item) ? " selected" : "") + '>Despublicado</option></select></div>' +
+                    '<div class="admin-field"><label for="eventPublished">Status</label><select id="eventPublished" name="publicado"><option value="true"' + (eventIsPublished ? " selected" : "") + '>Publicado</option><option value="false"' + (!eventIsPublished ? " selected" : "") + '>Despublicado</option></select></div>' +
                     '<div class="admin-field full"><label><input type="checkbox" name="destaque" ' + (item.destaque ? "checked" : "") + '> Evento em destaque</label></div>' +
                     textarea("description", "Descrição", item.description || item.descricao || "") +
                 '</div>' +
