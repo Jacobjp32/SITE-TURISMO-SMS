@@ -6,6 +6,35 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
+
+**Status:** **A. ROTAS V1.1 DATA MODEL + RULES READY — SCHEMA FROZEN, NORMALIZATION DETERMINISTIC, N:N PRESERVED, FIRESTORE RULES TESTED LOCALLY, ZERO PRODUCTION ACCESS, ADMIN CRUD READY TO IMPLEMENT.**
+
+### Implementação local
+
+- Congelado o schema `rotas/{routeId}` com ID imutável, slug bloqueado após primeira publicação, conteúdo/identidade visual, cover mínima, tags, `displayOrder`, status `draft|published|archived` e auditoria baseada em `request.time`.
+- Adicionado `match /rotas/{routeId}`: público lê somente `published`; admin ativo lê todos e cria/atualiza dentro do schema; moderator/user não escrevem; delete sempre negado; `archived` terminal.
+- Preservado `cms_establishments.relationships.routeIds[]` como relação N:N. Adicionado update estreito para batches de associação, limitado a `relationships`, `updatedAt` e `updatedBy`, sem lookup de `/rotas`, sem duplicação bidirecional e sem IDs hardcoded nas Rules.
+- Criados `scripts/lib/rotas-v1.1-model.mjs` e `scripts/rotas-v1.1-normalize-dry-run.mjs`: allowlist fechada, normalização determinística, idempotência, preservação de unknown groupings e gerador de seis seeds locais em `draft`.
+- Dry-run revalidou 58 relações canônicas + 2 aliases = 60, em 51 documentos; nove casos multirrota; 11 agrupamentos não canônicos preservados; segunda passagem sem mudanças.
+
+### Validação
+
+- Baseline anterior: `169/169 PASS` (`145` Firestore + `24` Storage).
+- Modelo/normalizador: `29/29 PASS`.
+- Firestore final: `203/203 PASS`, incluindo `50/50` casos de Rotas, `8/8` casos N:N e os `145/145` legados.
+- Storage final: `24/24 PASS`; `storage.rules` não foi alterado.
+- Total final: `256/256 PASS`; falhas `0`; skips `0`; `git diff --check = PASS`.
+
+### Limites e próximo bloco
+
+- Zero Firestore/Storage/Auth remoto, migração, documentos reais, Firebase login, deploy, `gcloud`, IAM ou ADC.
+- Portal público, datasource/fallback, Admin UI e placeholder Rotas não foram alterados.
+- Rotas deve entrar na detecção de mídia em uso no próximo bloco antes de habilitar seleção/remoção de capa.
+- `NEXT_BLOCK_READY = true`; próximo bloco não iniciado: `POST-V1-ROTAS-V1.1-ADMIN-CRUD`.
+
+---
+
 ## 2026-08-13 — POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN
 
 **Status:** **A. ROTAS V1.1 DISCOVERY COMPLETE — CURRENT MODEL MAPPED, CANONICAL SOURCE IDENTIFIED, SAFE ADMIN ARCHITECTURE DEFINED, IMPLEMENTATION READY.**

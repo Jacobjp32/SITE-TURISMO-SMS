@@ -1,14 +1,16 @@
 # Plano executável — Admin Rotas V1.1
 
-**Bloco:** `POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN`
+**Bloco atual:** `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`
+
+**Handoff de origem:** `POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN`
 
 **Data operacional:** 2026-08-13
 
 **Fuso:** `America/Sao_Paulo`
 
-**Natureza:** discovery e desenho técnico local; nenhuma implementação, migração, leitura remota ou publicação
+**Natureza:** schema, Rules, normalização, seed e Emulator exclusivamente locais; nenhuma migração, leitura remota, publicação ou deploy
 
-**Baseline:** `main` em `4ac2922e27d3a54e003cb31d27ab851c5a4d9ff4` (`release: painel administrativo v1.0.0`)
+**Baseline deste bloco:** `main` em `06828cd88f5f63abd03688d9b3e8949ab0b1ba5d` (`docs: definir arquitetura de rotas do Admin V1.1`)
 
 ## 1. Decisão executiva
 
@@ -634,7 +636,7 @@ Excluído:
 - dry-run final, migração e deploy somente sob autorizações remotas explícitas próprias;
 - regressão pública e rollback verificado.
 
-## 18. Gates de encerramento deste discovery
+## 18. Gates de encerramento do discovery (histórico)
 
 ```text
 zero source funcional modificado = true
@@ -650,4 +652,107 @@ NEXT_BLOCK_READY = true
 NEXT_BLOCK = POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
 ```
 
-Este documento autoriza apenas entendimento e planejamento. Não autoriza criar a collection, alterar Rules, executar migração, acessar produção ou iniciar automaticamente o próximo bloco.
+O texto das seções 1 a 18 preserva o discovery histórico e suas fronteiras originais. O resultado vigente do bloco local autorizado está registrado a seguir; migração, acesso a produção, deploy e início automático do próximo bloco continuam proibidos.
+
+## 19. Resultado implementado do Bloco 1
+
+### 19.1 Classificação e limites
+
+**Classificação:** **A. ROTAS V1.1 DATA MODEL + RULES READY — SCHEMA FROZEN, NORMALIZATION DETERMINISTIC, N:N PRESERVED, FIRESTORE RULES TESTED LOCALLY, ZERO PRODUCTION ACCESS, ADMIN CRUD READY TO IMPLEMENT.**
+
+O bloco alterou somente modelo/helper local, dry-run, testes, `firestore.rules`, integração npm e documentação. Não houve Firestore, Storage ou Auth de produção; não houve login Firebase, `gcloud`, IAM, ADC, deploy, migração, criação de documentos reais, alteração de source público ou substituição do placeholder Admin.
+
+### 19.2 Schema final congelado
+
+`rotas/{routeId}` usa todos os campos abaixo como obrigatórios; não há campos opcionais na V1.1:
+
+```text
+id, slug, name, category, description, color, icon,
+status, displayOrder, cover, tags,
+createdAt, createdBy, updatedAt, updatedBy,
+publishedAt, publishedBy, archivedAt, archivedBy
+```
+
+- `id == document ID` e é imutável.
+- `slug` começa igual ao ID, pode mudar enquanto `publishedAt == null` e torna-se imutável após a primeira publicação.
+- `status`: `draft | published | archived`.
+- Transições: `draft -> draft|published|archived`; `published -> published|draft|archived`; `archived -> archived`.
+- `displayOrder` ordena somente cards; não existe ordem de pontos.
+- `tags` foi mantido porque existe nas seis rotas editoriais e alimenta busca/classificação; a lista é limitada nas Rules e os elementos são validados no modelo local, respeitando a limitação da linguagem de Rules.
+- `cover` contém exatamente `mediaId`, `url`, `path` e `alt`. O seed estático usa `url` local, `mediaId/path` vazios e `alt` igual ao nome; não duplica o objeto de `media_library`.
+- Não existem `placeIds`, `geometry`, `coordinates` ou `orderedPlaceIds`.
+
+### 19.3 Auditoria e publicação
+
+- Create somente em `draft`, com `createdAt == updatedAt == request.time` e `createdBy == updatedBy == request.auth.uid`.
+- Update preserva `createdAt/createdBy`, exige `updatedAt == request.time` e `updatedBy == request.auth.uid`.
+- Primeira publicação materializa `publishedAt == request.time` e `publishedBy == request.auth.uid`; depois ambos são históricos e imutáveis, inclusive ao voltar para `draft`.
+- Archive materializa `archivedAt/archivedBy`; `archived` é terminal.
+- Hard delete é negado para todos.
+- Leitura pública permite apenas `published`; query pública precisa incluir `where("status", "==", "published")`.
+- Admin exige `role == admin && ativo == true`; moderator, user e anonymous não recebem write.
+
+### 19.4 Normalização, aliases e seed
+
+Implementação: `scripts/lib/rotas-v1.1-model.mjs` e `scripts/rotas-v1.1-normalize-dry-run.mjs`.
+
+IDs canônicos, na ordem:
+
+```text
+sabores-memorias
+rota-erva-mate
+rota-polonesa
+rota-das-aguas
+caminhos-de-fluviopolis
+rota-da-terra
+```
+
+Allowlist de aliases comprovados:
+
+```text
+sabores -> sabores-memorias
+mate -> rota-erva-mate
+polonesa -> rota-polonesa
+aguas -> rota-das-aguas
+fluviop -> caminhos-de-fluviopolis
+terra -> rota-da-terra
+rota-da-erva-mate -> rota-erva-mate
+```
+
+O dry-run deriva novamente do source e do preview local: 67 documentos inspecionados; 58 relações canônicas antes; 2 aliases normalizados; 60 relações canônicas depois; 51 documentos com rota canônica; 9 documentos multirrota; 11 agrupamentos não canônicos preservados; 0 duplicatas no preview corrente. A segunda passagem registra zero aliases e zero duplicatas adicionais, comprovando idempotência.
+
+O seed gera deterministicamente seis payloads `draft` a partir de `js/data/rotas.js`, preservando nomes, categorias, descrições, cores, ícones, imagens, tags e ordem. O gerador recebe ator e timestamp como parâmetros; não executa write.
+
+### 19.5 Contrato N:N de empreendimentos
+
+`cms_establishments.relationships.routeIds[]` continua sendo a única relação. Não foi criado lookup dinâmico para `/rotas/{id}` nem hardcode dos seis IDs nas Rules.
+
+Foi adicionado um caminho estreito de update para batches do módulo Rotas: somente `relationships`, `updatedAt` e `updatedBy` podem mudar; ID e auditoria de criação permanecem imutáveis; admin ativo e `request.time` são obrigatórios; o shape completo de `relationships` continua validado. Isso evita reavaliar o schema integral legado quando apenas a relação N:N muda.
+
+As Rules garantem presença, tipo list e limite de 50, mas não iteram genericamente o tipo/unicidade de cada elemento e não comprovam existência referencial. Duplicatas são removidas pelo normalizador; IDs desconhecidos são tratados pelo modelo, Admin e migração allowlist.
+
+### 19.6 Testes finais locais
+
+```text
+baseline legado = 169/169 PASS (145 Firestore + 24 Storage)
+modelo/normalizador = 29/29 PASS
+Rules Firestore final = 203/203 PASS
+  legado = 145/145 PASS
+  Rotas = 50/50 PASS
+  relationships.routeIds = 8/8 PASS no Emulator
+Storage final = 24/24 PASS
+total final = 256/256 PASS
+failures = 0
+skipped = 0
+```
+
+Os oito casos de relacionamento também possuem espelho local puro, cobrindo array vazio, uma rota, duas rotas, duplicatas, não-list, null, ausente e unknown routeId. Storage Rules permaneceram byte a byte sem alteração.
+
+### 19.7 Próximo bloco
+
+```text
+NEXT_BLOCK_READY = true
+NEXT_BLOCK = POST-V1-ROTAS-V1.1-ADMIN-CRUD
+```
+
+O próximo bloco não foi iniciado. Antes de habilitar seleção/remoção de capa, ele deve incluir Rotas na detecção de mídia em uso.

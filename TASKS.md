@@ -6,6 +6,24 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — modelo, Rules e Emulator concluídos em 2026-08-13
+
+- Bloco concluído: `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`.
+- Classificação: **A. ROTAS V1.1 DATA MODEL + RULES READY — SCHEMA FROZEN, NORMALIZATION DETERMINISTIC, N:N PRESERVED, FIRESTORE RULES TESTED LOCALLY, ZERO PRODUCTION ACCESS, ADMIN CRUD READY TO IMPLEMENT**.
+- Schema final de `rotas/{routeId}` congelado com ID imutável, slug mutável somente antes da primeira publicação, `draft|published|archived`, `displayOrder`, cover mínima, tags editoriais e auditoria completa. Hard delete negado e `archived` terminal.
+- `firestore.rules` ganhou leitura pública somente de `published`, CRUD somente por admin com `ativo == true`, allowlist/tipos/lifecycle fail-closed e delete negado. Moderator e user não recebem write.
+- `cms_establishments.relationships.routeIds[]` permanece como relação N:N. Um caminho estreito permite ao admin ativo atualizar somente `relationships` + auditoria de update, sem lookup dinâmico nem IDs canônicos hardcoded nas Rules.
+- Normalizador/seed local: `scripts/lib/rotas-v1.1-model.mjs`; CLI sanitizado: `scripts/rotas-v1.1-normalize-dry-run.mjs`.
+- Dry-run: 6 IDs canônicos; 67 documentos inspecionados; 58 relações canônicas antes; 2 aliases; 60 depois; 51 documentos relacionados; 9 multirrota; 11 agrupamentos não canônicos preservados; idempotência comprovada; 6 seeds futuros em `draft`; zero write.
+- Testes: baseline legado `169/169`; modelo/normalizador `29/29`; Firestore final `203/203` (`145` legados + `50` Rotas + `8` relacionamentos); Storage `24/24`; total final `256/256`; zero falhas e zero skips.
+- `storage.rules`, source público, datasource/fallback, HOME/mapas/local/busca/galeria, Admin UI e placeholder Rotas permaneceram inalterados.
+- Produção intocada: Firestore/Storage/Auth remotos `false`; deploy `0`; `gcloud` `0`; IAM `0`; ADC `false`; documentos reais criados/alterados `0`.
+- Requisito do próximo bloco: incluir referências de `rotas.cover` na detecção de mídia em uso antes de habilitar seleção/remoção de capa.
+- `NEXT_BLOCK_READY = true`.
+- Próximo bloco exato, não iniciado e dependente de autorização própria: `POST-V1-ROTAS-V1.1-ADMIN-CRUD`.
+
+---
+
 ## Rotas Admin V1.1 — discovery concluído em 2026-08-13
 
 - Bloco concluído: `POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN`.

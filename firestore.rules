@@ -401,6 +401,165 @@ service cloud.firestore {
         validEstablishmentBase(request.resource.data);
     }
 
+    // Caminho estreito para o batch N:N do modulo Rotas. Evita reavaliar o
+    // schema integral legado (que se aproxima do limite de expressoes) quando
+    // somente relationships e a auditoria de update mudam.
+    function isValidEstablishmentRelationshipUpdate() {
+      return isAdmin() &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['relationships', 'updatedAt', 'updatedBy']) &&
+        request.resource.data.id == resource.data.id &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        validEstablishmentRelationships(request.resource.data.relationships);
+    }
+
+    // --- Rotas V1.1 ---
+    // Modelo editorial por documento. Relacoes N:N continuam exclusivamente
+    // em cms_establishments.relationships.routeIds[].
+    function isRouteStatus(value) {
+      return value in ['draft', 'published', 'archived'];
+    }
+
+    function routeFieldsAllowed(data) {
+      return data.keys().hasAll([
+          'id', 'slug', 'name', 'category', 'description', 'color', 'icon',
+          'status', 'displayOrder', 'cover', 'tags',
+          'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+          'publishedAt', 'publishedBy', 'archivedAt', 'archivedBy'
+        ]) &&
+        data.keys().hasOnly([
+          'id', 'slug', 'name', 'category', 'description', 'color', 'icon',
+          'status', 'displayOrder', 'cover', 'tags',
+          'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+          'publishedAt', 'publishedBy', 'archivedAt', 'archivedBy'
+        ]);
+    }
+
+    function validRouteCover(data) {
+      return data is map &&
+        data.keys().hasAll(['mediaId', 'url', 'path', 'alt']) &&
+        data.keys().hasOnly(['mediaId', 'url', 'path', 'alt']) &&
+        data.mediaId is string && data.mediaId.size() <= 200 &&
+        data.url is string && data.url.size() <= 2048 &&
+        data.path is string && data.path.size() <= 1024 &&
+        data.alt is string && data.alt.size() <= 300;
+    }
+
+    function validRouteAudit(data) {
+      return data.createdAt is timestamp &&
+        data.createdBy is string && data.createdBy.size() > 0 && data.createdBy.size() <= 128 &&
+        data.updatedAt is timestamp &&
+        data.updatedBy is string && data.updatedBy.size() > 0 && data.updatedBy.size() <= 128 &&
+        validNullableTimestamp(data.publishedAt) &&
+        data.publishedBy is string && data.publishedBy.size() <= 128 &&
+        validNullableTimestamp(data.archivedAt) &&
+        data.archivedBy is string && data.archivedBy.size() <= 128;
+    }
+
+    function validRouteLifecycle(data) {
+      return ((data.publishedAt == null && data.publishedBy == '') ||
+          (data.publishedAt is timestamp && data.publishedBy.size() > 0)) &&
+        ((data.archivedAt == null && data.archivedBy == '') ||
+          (data.archivedAt is timestamp && data.archivedBy.size() > 0)) &&
+        (data.status != 'published' || data.publishedAt is timestamp) &&
+        (data.status != 'archived' || data.archivedAt is timestamp) &&
+        (data.status == 'archived' || (data.archivedAt == null && data.archivedBy == ''));
+    }
+
+    function validRouteBase(data) {
+      return routeFieldsAllowed(data) &&
+        data.id is string && data.id.size() > 0 && data.id.size() <= 80 &&
+        data.slug is string && data.slug.size() > 0 && data.slug.size() <= 80 &&
+        data.slug.matches('^[a-z0-9]+(-[a-z0-9]+)*$') &&
+        data.name is string && data.name.size() > 0 && data.name.size() <= 160 &&
+        data.category is string && data.category.size() > 0 && data.category.size() <= 120 &&
+        data.description is string && data.description.size() > 0 && data.description.size() <= 4000 &&
+        data.color is string && data.color.matches('^#[0-9a-fA-F]{6}$') &&
+        data.icon is string && data.icon.size() > 0 && data.icon.size() <= 32 &&
+        isRouteStatus(data.status) &&
+        data.displayOrder is int && data.displayOrder >= 0 && data.displayOrder <= 100000 &&
+        validRouteCover(data.cover) &&
+        data.tags is list && data.tags.size() <= 30 &&
+        validRouteAudit(data) &&
+        validRouteLifecycle(data);
+    }
+
+    function routePublishedContentComplete(data) {
+      return data.status != 'published' ||
+        ((data.cover.url.size() > 0 || data.cover.mediaId.size() > 0) &&
+          data.cover.alt.size() > 0);
+    }
+
+    function validRouteStatusTransition() {
+      return (resource.data.status == 'draft' &&
+          request.resource.data.status in ['draft', 'published', 'archived']) ||
+        (resource.data.status == 'published' &&
+          request.resource.data.status in ['published', 'draft', 'archived']) ||
+        (resource.data.status == 'archived' &&
+          request.resource.data.status == 'archived');
+    }
+
+    function validRoutePublicationUpdate() {
+      return (resource.data.publishedAt == null &&
+          ((request.resource.data.status == 'published' &&
+              request.resource.data.publishedAt == request.time &&
+              request.resource.data.publishedBy == request.auth.uid) ||
+            (request.resource.data.status != 'published' &&
+              request.resource.data.publishedAt == null &&
+              request.resource.data.publishedBy == ''))) ||
+        (resource.data.publishedAt != null &&
+          request.resource.data.publishedAt == resource.data.publishedAt &&
+          request.resource.data.publishedBy == resource.data.publishedBy);
+    }
+
+    function validRouteArchiveUpdate() {
+      return (resource.data.archivedAt == null &&
+          ((request.resource.data.status == 'archived' &&
+              request.resource.data.archivedAt == request.time &&
+              request.resource.data.archivedBy == request.auth.uid) ||
+            (request.resource.data.status != 'archived' &&
+              request.resource.data.archivedAt == null &&
+              request.resource.data.archivedBy == ''))) ||
+        (resource.data.archivedAt != null &&
+          request.resource.data.archivedAt == resource.data.archivedAt &&
+          request.resource.data.archivedBy == resource.data.archivedBy);
+    }
+
+    function isValidRouteCreate(routeId) {
+      return isAdmin() &&
+        request.resource.data.id == routeId &&
+        request.resource.data.status == 'draft' &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.publishedAt == null &&
+        request.resource.data.publishedBy == '' &&
+        request.resource.data.archivedAt == null &&
+        request.resource.data.archivedBy == '' &&
+        validRouteBase(request.resource.data) &&
+        routePublishedContentComplete(request.resource.data);
+    }
+
+    function isValidRouteUpdate(routeId) {
+      return isAdmin() &&
+        request.resource.data.id == routeId &&
+        request.resource.data.id == resource.data.id &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        (resource.data.publishedAt == null || request.resource.data.slug == resource.data.slug) &&
+        validRouteStatusTransition() &&
+        validRoutePublicationUpdate() &&
+        validRouteArchiveUpdate() &&
+        validRouteBase(request.resource.data) &&
+        routePublishedContentComplete(request.resource.data);
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if validUserAuthorizationProfile(request.resource.data) && (
@@ -586,8 +745,21 @@ service cloud.firestore {
       allow get: if isAdmin() || resource.data.status == 'published';
       allow list: if isAdmin() || resource.data.status == 'published';
       allow create: if isValidEstablishmentCreate(establishmentId);
-      allow update: if isValidEstablishmentUpdate();
+      allow update: if isValidEstablishmentRelationshipUpdate() ||
+        (!request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['relationships', 'updatedAt', 'updatedBy']) &&
+          isValidEstablishmentUpdate());
       allow delete: if isAdmin() && isDeletableEstablishmentStatus(resource.data.status);
+    }
+
+    match /rotas/{routeId} {
+      // Firestore Rules nao filtram resultados: consultas publicas devem usar
+      // where("status", "==", "published").
+      allow get: if isAdmin() || resource.data.status == 'published';
+      allow list: if isAdmin() || resource.data.status == 'published';
+      allow create: if isValidRouteCreate(routeId);
+      allow update: if isValidRouteUpdate(routeId);
+      allow delete: if false;
     }
 
     match /noticias/{noticiaId} {
