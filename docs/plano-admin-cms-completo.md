@@ -1,5 +1,7 @@
 # Plano — Admin CMS completo do Portal de Turismo
 
+> **Estado do produto em 2026-08-13:** o núcleo do Painel Admin foi oficializado como V1 operacional (`ADMIN_PANEL_VERSION = 1.0.0`, `ADMIN_PANEL_V1_RELEASED = true`, `ALPHA_BETA_PHASE = closed`). Dashboard, Aprovações, Solicitações de vínculo, Gerenciar Vínculos, Usuários, Eventos, Notícias, Mídia, Banners / Pop-ups e Empreendimentos compõem a V1. Rotas, Galeria, Configurações, Sazonal / Clima, Mascote e Logs / Auditoria permanecem **Em preparação** no roadmap V1.x/pós-V1; isso não torna o núcleo V1 um produto Beta. O rótulo Master desses placeholders continua exclusivamente cosmético.
+
 > Rodada **somente de análise e planejamento**. Nenhum código foi alterado, nada foi
 > commitado, e nenhuma regra (Firestore/Storage), auth, role ou rota foi tocada.
 > Documento gerado em 2026-06-25 a partir de inspeção arquitetural do projeto.

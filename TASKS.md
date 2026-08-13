@@ -6,6 +6,24 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Painel Admin V1 — estado vinculante de 2026-08-13
+
+- Bloco: `ADMIN-B2A8-ADMIN-PANEL-V1-RELEASE`.
+- `ADMIN_PANEL_VERSION = 1.0.0`.
+- `ADMIN_PANEL_V1_RELEASED = true`.
+- `V1_RELEASE_DATE = 2026-08-13`.
+- `CORE_PANEL_RELEASE_READY = true`.
+- `ALPHA_BETA_PHASE = closed`.
+- `FUTURE_MODULES_COMPLETE = false`.
+- Dependências reconhecidas: `B2A5 = complete`; `B2A6 = complete`; `B2A7 = passed`, com classificação A, zero P0/P1 e recomendação vinculante de saída da fase Alfa/Beta.
+- Núcleo operacional V1: Dashboard; Aprovações; Solicitações de vínculo; Gerenciar Vínculos; Usuários; Eventos; Notícias; Mídia; Banners / Pop-ups; Empreendimentos.
+- Roadmap V1.x/pós-V1, preservado como **Em preparação**: Rotas; Galeria; Configurações; Sazonal / Clima; Mascote; Logs / Auditoria. Um módulo em preparação não torna o núcleo V1 um produto Beta.
+- `Master = cosmeticOnly` permanece verdadeiro nos placeholders: não existe role, custom claim ou enforcement master real.
+- P3 anterior `logout messaging`: **RESOLVED**. O logout voluntário preserva o fluxo aprovado e informa `Sessão encerrada.`; expiração de sessão continua com mensagem própria.
+- Nenhuma feature futura, collection, persistência, schema, role, claim, Firestore Rule ou Storage Rule integra este release.
+
+---
+
 ## Estado vinculante do ADMIN-B2A5/B2A6 — 2026-08-13
 
 - `B2A5_OPERATIONAL_FLOW_COMPLETE = true`. Classificação final: **A. INVENTORY CONCLUÍDO E AUTH-REVOKE COMPLETO — B2A5 OPERACIONAL ENCERRADO EM ESTADO FAIL-CLOSED**.

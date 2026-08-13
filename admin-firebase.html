@@ -1893,10 +1893,7 @@
         }
 
         async function handleLogout() {
-            adminLoginIntent = false;
-            clearAdminSessionStorage();
-            showAdminLogin();
-            await FirebaseSystem.logout();
+            return forceAdminLogout('Sessão encerrada.', 'info');
         }
 
         function showSection(section) {

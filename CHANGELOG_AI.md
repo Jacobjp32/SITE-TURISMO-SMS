@@ -6,6 +6,26 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — ADMIN-B2A8-ADMIN-PANEL-V1-RELEASE
+
+**Status:** **A. ADMIN PANEL V1 RELEASED — ALPHA/BETA PHASE CLOSED, CORE PANEL PRODUCTION READY, ZERO P0/P1.**
+
+### Oficialização da V1
+
+- O resultado vinculante do B2A7 foi reconhecido: classificação A, `CORE_PANEL_RELEASE_READY = true`, `ALPHA_BETA_EXIT_RECOMMENDED = true`, zero P0/P1 e núcleo aprovado em desktop, tablet e mobile.
+- `ADMIN_PANEL_VERSION = 1.0.0`; `ADMIN_PANEL_V1_RELEASED = true`; `V1_RELEASE_DATE = 2026-08-13`; `ALPHA_BETA_PHASE = closed`; `FUTURE_MODULES_COMPLETE = false`.
+- Núcleo V1: Dashboard, Aprovações, Solicitações de vínculo, Gerenciar Vínculos, Usuários, Eventos, Notícias, Mídia, Banners / Pop-ups e Empreendimentos.
+- Rotas, Galeria, Configurações, Sazonal / Clima, Mascote e Logs / Auditoria continuam visíveis como **Em preparação** e pertencem ao roadmap V1.x/pós-V1. Esse status não classifica o painel corrente como Beta.
+- `Master = cosmeticOnly` foi preservado; nenhuma role, custom claim ou proteção master real foi criada.
+
+### Ajuste residual e limites
+
+- A UI corrente não continha marcador Alfa/Beta. As ocorrências de `preview` são prévias funcionais de conteúdo e não status do produto.
+- P3 `logout messaging`: **RESOLVED**. O logout voluntário passou a exibir `Sessão encerrada.`, reutilizando o fluxo existente sem alterar Firebase Auth, persistência de sessão ou comportamento de negócio.
+- Nenhum módulo futuro foi implementado; não houve alteração de Rules, schema Firestore, Storage, Auth, App Check, IAM, service accounts, custom claims, roles, indexes, Functions ou configuração de hosting.
+
+---
+
 ## 2026-08-13 — ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY
 
 **Status:** **A. B2A6 SECURITY RULES DEPLOYED TO PRODUCTION — MANUAL FIREBASE REAUTH CONFIRMED, STORAGE + FIRESTORE RELEASES SUCCESSFUL, READ-ONLY SMOKE PASS, ZERO DATA WRITE, ZERO IAM, STRICT `ativo == true` ENFORCED IN PRODUCTION.**
