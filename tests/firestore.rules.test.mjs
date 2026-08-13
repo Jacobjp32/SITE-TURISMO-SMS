@@ -10,6 +10,7 @@ import {
 import {
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDoc,
   getDocs,
@@ -1017,7 +1018,7 @@ describe("Contrato de leitura e escrita de media_library", () => {
   });
 });
 
-describe("Baseline atual do campo ativo em isAdmin", () => {
+describe("Autorização administrativa pós-B2A5 exige ativo boolean true", () => {
   const cases = [
     {
       name: "ativo true permite",
@@ -1038,22 +1039,34 @@ describe("Baseline atual do campo ativo em isAdmin", () => {
       expectation: assertFails,
     },
     {
-      name: "ativo null permite por null != false",
+      name: "ativo null nega",
       uid: "admin-null",
       profile: { role: "admin", ativo: null },
-      expectation: assertSucceeds,
+      expectation: assertFails,
     },
     {
-      name: "ativo string true permite por tipo diferente de false",
+      name: "ativo string true nega",
       uid: "admin-string",
       profile: { role: "admin", ativo: "true" },
-      expectation: assertSucceeds,
+      expectation: assertFails,
     },
     {
-      name: "ativo numérico 1 permite por tipo diferente de false",
+      name: "ativo numérico 1 nega",
       uid: "admin-number",
       profile: { role: "admin", ativo: 1 },
-      expectation: assertSucceeds,
+      expectation: assertFails,
+    },
+    {
+      name: "ativo array nega",
+      uid: "admin-array",
+      profile: { role: "admin", ativo: [] },
+      expectation: assertFails,
+    },
+    {
+      name: "ativo map nega",
+      uid: "admin-map",
+      profile: { role: "admin", ativo: {} },
+      expectation: assertFails,
     },
     {
       name: "role ausente nega",
@@ -1070,7 +1083,7 @@ describe("Baseline atual do campo ativo em isAdmin", () => {
   ];
 
   for (const { name, uid, profile, expectation } of cases) {
-    test(`BASELINE ATUAL: ${name} na criação administrativa de noticia — sem correção antes do B2A5`, async () => {
+    test(`PÓS-B2A5: ${name} na criação administrativa de noticia`, async () => {
       await seedDocuments([[`usuarios/${uid}`, profile]]);
       await expectation(
         setDoc(
@@ -1081,7 +1094,7 @@ describe("Baseline atual do campo ativo em isAdmin", () => {
     });
   }
 
-  test("BASELINE ATUAL: documento usuarios ausente nega criação administrativa de noticia — sem correção antes do B2A5", async () => {
+  test("PÓS-B2A5: documento usuarios ausente nega criação administrativa de noticia", async () => {
     await assertFails(
       setDoc(
         doc(
@@ -1095,8 +1108,8 @@ describe("Baseline atual do campo ativo em isAdmin", () => {
   });
 });
 
-describe("Baseline atual de moderator", () => {
-  test("BASELINE ATUAL: moderator ativo lê eventos_pendentes — contrato isModerator preservado até o B2A5", async () => {
+describe("Semântica pós-B2A5 de moderator", () => {
+  test("PÓS-B2A5: moderator ativo lê eventos_pendentes", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       [
@@ -1115,7 +1128,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator ativo atualiza eventos_pendentes — contrato isModerator preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator ativo atualiza eventos_pendentes", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       [
@@ -1135,7 +1148,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator ativo exclui eventos_pendentes — contrato isModerator preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator ativo exclui eventos_pendentes", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       [
@@ -1154,7 +1167,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator inativo recebe DENY em eventos_pendentes — contrato ativo preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator inativo recebe DENY em eventos_pendentes", async () => {
     await seedDocuments([
       userEntry("moderator-inactive", "moderator", false),
       [
@@ -1173,7 +1186,34 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator não cria noticia — escrita exclusiva de admin preservada até o B2A5", async () => {
+  for (const { name, ativo } of [
+    { name: "ativo ausente", ativo: undefined },
+    { name: "ativo null", ativo: null },
+    { name: "ativo string", ativo: "true" },
+    { name: "ativo numérico", ativo: 1 },
+    { name: "ativo array", ativo: [] },
+    { name: "ativo map", ativo: {} },
+  ]) {
+    test(`PÓS-B2A5: moderator com ${name} recebe DENY em eventos_pendentes`, async () => {
+      const uid = `moderator-malformed-${String(name).replaceAll(" ", "-")}`;
+      await seedDocuments([
+        ativo === undefined
+          ? [`usuarios/${uid}`, { role: "moderator" }]
+          : userEntry(uid, "moderator", ativo),
+        [
+          "eventos_pendentes/pending-event",
+          { submittedBy: "synthetic-owner", status: "pendente" },
+        ],
+      ]);
+      await assertFails(
+        getDoc(
+          doc(authenticatedDb(uid), "eventos_pendentes", "pending-event"),
+        ),
+      );
+    });
+  }
+
+  test("PÓS-B2A5: moderator não cria noticia exclusiva de admin", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
     ]);
@@ -1185,7 +1225,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator não cria media_library — escrita exclusiva de admin preservada até o B2A5", async () => {
+  test("PÓS-B2A5: moderator não cria media_library exclusiva de admin", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
     ]);
@@ -1201,7 +1241,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator não lista usuarios — limite administrativo preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator não lista usuarios", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       userEntry("user-active", "user", true),
@@ -1211,7 +1251,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator lê o próprio documento usuario — acesso próprio preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator lê o próprio documento usuario", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
     ]);
@@ -1226,7 +1266,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator não administra cms_establishments draft — limite exclusivo de admin preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator não administra cms_establishments draft exclusivo de admin", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
       [
@@ -1245,7 +1285,7 @@ describe("Baseline atual de moderator", () => {
     );
   });
 
-  test("BASELINE ATUAL: moderator escreve eventos_aprovados conforme Rule atual — contrato isModerator preservado até o B2A5", async () => {
+  test("PÓS-B2A5: moderator escreve eventos_aprovados conforme contrato preservado", async () => {
     await seedDocuments([
       userEntry("moderator-active", "moderator", true),
     ]);
@@ -1262,8 +1302,317 @@ describe("Baseline atual de moderator", () => {
   });
 });
 
-describe("Baseline atual do fallback deny", () => {
-  test("BASELINE ATUAL: anônimo não lê coleção desconhecida — fallback global DENY confirmado", async () => {
+describe("Schema de autorização de usuarios pós-B2A5", () => {
+  test("usuário ativo lê o próprio documento", async () => {
+    await seedDocuments([userEntry("user-active", "user", true)]);
+    await assertSucceeds(
+      getDoc(doc(authenticatedDb("user-active"), "usuarios", "user-active")),
+    );
+  });
+
+  test("usuário não lê documento de outro uid", async () => {
+    await seedDocuments([
+      userEntry("user-active", "user", true),
+      userEntry("other-user", "user", true),
+    ]);
+    await assertFails(
+      getDoc(doc(authenticatedDb("user-active"), "usuarios", "other-user")),
+    );
+  });
+
+  test("usuário não lista usuarios", async () => {
+    await seedDocuments([userEntry("user-active", "user", true)]);
+    await assertFails(
+      getDocs(collection(authenticatedDb("user-active"), "usuarios")),
+    );
+  });
+
+  test("usuário cria o próprio perfil com role user e ativo true", async () => {
+    await assertSucceeds(
+      setDoc(doc(authenticatedDb("new-user"), "usuarios", "new-user"), {
+        nome: "Synthetic user",
+        role: "user",
+        ativo: true,
+      }),
+    );
+  });
+
+  for (const role of ["admin", "moderator"]) {
+    test(`usuário não cria o próprio perfil com role ${role}`, async () => {
+      const uid = `self-create-${role}`;
+      await assertFails(
+        setDoc(doc(authenticatedDb(uid), "usuarios", uid), {
+          nome: "Synthetic user",
+          role,
+          ativo: true,
+        }),
+      );
+    });
+  }
+
+  for (const { name, ativo } of [
+    { name: "false", ativo: false },
+    { name: "null", ativo: null },
+    { name: "string", ativo: "true" },
+    { name: "number", ativo: 1 },
+    { name: "array", ativo: [] },
+    { name: "map", ativo: {} },
+    { name: "ausente", ativo: undefined },
+  ]) {
+    test(`usuário não cria o próprio perfil com ativo ${name}`, async () => {
+      const uid = `self-create-active-${name}`;
+      const profile = { nome: "Synthetic user", role: "user" };
+      if (ativo !== undefined) {
+        profile.ativo = ativo;
+      }
+      await assertFails(
+        setDoc(doc(authenticatedDb(uid), "usuarios", uid), profile),
+      );
+    });
+  }
+
+  for (const { name, profile } of [
+    { name: "ausente", profile: { ativo: true } },
+    { name: "inválida", profile: { role: "owner", ativo: true } },
+  ]) {
+    test(`usuário não cria o próprio perfil com role ${name}`, async () => {
+      const uid = `self-create-role-${name}`;
+      await assertFails(
+        setDoc(doc(authenticatedDb(uid), "usuarios", uid), {
+          nome: "Synthetic user",
+          ...profile,
+        }),
+      );
+    });
+  }
+
+  test("usuário não cria documento de outro uid", async () => {
+    await assertFails(
+      setDoc(doc(authenticatedDb("user-active"), "usuarios", "other-user"), {
+        nome: "Synthetic other user",
+        role: "user",
+        ativo: true,
+      }),
+    );
+  });
+
+  test("usuário atualiza somente campos de perfil permitidos", async () => {
+    await seedDocuments([
+      [
+        "usuarios/user-active",
+        {
+          nome: "Synthetic user",
+          telefone: "",
+          tipo: "turista",
+          organizacao: "",
+          role: "user",
+          ativo: true,
+        },
+      ],
+    ]);
+    await assertSucceeds(
+      updateDoc(doc(authenticatedDb("user-active"), "usuarios", "user-active"), {
+        nome: "Synthetic updated user",
+        telefone: "000000000",
+      }),
+    );
+  });
+
+  for (const role of ["admin", "moderator"]) {
+    test(`usuário não altera a própria role para ${role}`, async () => {
+      const uid = `user-role-${role}`;
+      await seedDocuments([userEntry(uid, "user", true)]);
+      await assertFails(
+        updateDoc(doc(authenticatedDb(uid), "usuarios", uid), { role }),
+      );
+    });
+  }
+
+  for (const { name, role } of [
+    { name: "inválida", role: "owner" },
+    { name: "null", role: null },
+    { name: "numérica", role: 1 },
+    { name: "ausente", role: undefined },
+  ]) {
+    test(`usuário não altera a própria role para valor ${name}`, async () => {
+      const uid = `user-invalid-role-${name}`;
+      await seedDocuments([userEntry(uid, "user", true)]);
+      await assertFails(
+        updateDoc(doc(authenticatedDb(uid), "usuarios", uid), {
+          role: role === undefined ? deleteField() : role,
+        }),
+      );
+    });
+  }
+
+  test("usuário não altera o próprio ativo", async () => {
+    await seedDocuments([userEntry("user-active", "user", true)]);
+    await assertFails(
+      updateDoc(doc(authenticatedDb("user-active"), "usuarios", "user-active"), {
+        ativo: false,
+      }),
+    );
+  });
+
+  for (const { name, ativo } of [
+    { name: "null", ativo: null },
+    { name: "string", ativo: "true" },
+    { name: "number", ativo: 1 },
+    { name: "array", ativo: [] },
+    { name: "map", ativo: {} },
+    { name: "ausente", ativo: undefined },
+  ]) {
+    test(`usuário não altera o próprio ativo para valor ${name}`, async () => {
+      const uid = `user-invalid-active-${name}`;
+      await seedDocuments([userEntry(uid, "user", true)]);
+      await assertFails(
+        updateDoc(doc(authenticatedDb(uid), "usuarios", uid), {
+          ativo: ativo === undefined ? deleteField() : ativo,
+        }),
+      );
+    });
+  }
+
+  test("admin ativo lista usuarios", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      userEntry("user-active", "user", true),
+    ]);
+    await assertSucceeds(
+      getDocs(collection(authenticatedDb("admin-active"), "usuarios")),
+    );
+  });
+
+  test("admin ativo cria perfil de autorização válido", async () => {
+    await seedDocuments([userEntry("admin-active", "admin", true)]);
+    await assertSucceeds(
+      setDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "created-user"),
+        { nome: "Synthetic created user", role: "moderator", ativo: true },
+      ),
+    );
+  });
+
+  test("admin ativo atualiza role para valor permitido", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      userEntry("managed-user", "user", true),
+    ]);
+    await assertSucceeds(
+      updateDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "managed-user"),
+        { role: "moderator" },
+      ),
+    );
+  });
+
+  test("admin ativo atualiza ativo com booleanos true e false", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      userEntry("managed-user", "user", true),
+    ]);
+    const target = doc(
+      authenticatedDb("admin-active"),
+      "usuarios",
+      "managed-user",
+    );
+    await assertSucceeds(updateDoc(target, { ativo: false }));
+    await assertSucceeds(updateDoc(target, { ativo: true }));
+  });
+
+  test("admin ativo não cria perfil com role inválida", async () => {
+    await seedDocuments([userEntry("admin-active", "admin", true)]);
+    await assertFails(
+      setDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "invalid-role"),
+        { role: "owner", ativo: true },
+      ),
+    );
+  });
+
+  test("admin ativo não atualiza perfil para role inválida", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      userEntry("managed-user", "user", true),
+    ]);
+    await assertFails(
+      updateDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "managed-user"),
+        { role: "owner" },
+      ),
+    );
+  });
+
+  test("admin ativo não cria perfil com role ausente", async () => {
+    await seedDocuments([userEntry("admin-active", "admin", true)]);
+    await assertFails(
+      setDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "missing-role"),
+        { ativo: true },
+      ),
+    );
+  });
+
+  test("admin ativo não atualiza perfil para remover role", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      userEntry("managed-user", "user", true),
+    ]);
+    await assertFails(
+      setDoc(
+        doc(authenticatedDb("admin-active"), "usuarios", "managed-user"),
+        { ativo: true },
+      ),
+    );
+  });
+
+  for (const { name, ativo } of [
+    { name: "null", ativo: null },
+    { name: "string", ativo: "true" },
+    { name: "number", ativo: 1 },
+    { name: "array", ativo: [] },
+    { name: "map", ativo: {} },
+    { name: "ausente", ativo: undefined },
+  ]) {
+    test(`admin ativo não cria perfil com ativo ${name}`, async () => {
+      await seedDocuments([userEntry("admin-active", "admin", true)]);
+      const profile = { role: "user" };
+      if (ativo !== undefined) {
+        profile.ativo = ativo;
+      }
+      await assertFails(
+        setDoc(
+          doc(
+            authenticatedDb("admin-active"),
+            "usuarios",
+            `created-malformed-${name}`,
+          ),
+          profile,
+        ),
+      );
+    });
+
+    test(`admin ativo não atualiza perfil para ativo ${name}`, async () => {
+      await seedDocuments([
+        userEntry("admin-active", "admin", true),
+        userEntry(`managed-malformed-${name}`, "user", true),
+      ]);
+      const target = doc(
+        authenticatedDb("admin-active"),
+        "usuarios",
+        `managed-malformed-${name}`,
+      );
+      if (ativo === undefined) {
+        await assertFails(setDoc(target, { role: "user" }));
+      } else {
+        await assertFails(updateDoc(target, { ativo }));
+      }
+    });
+  }
+});
+
+describe("Regressão pós-B2A5 do fallback deny", () => {
+  test("PÓS-B2A5: anônimo não lê coleção desconhecida", async () => {
     await seedDocuments([
       ["private_unknown_collection/private-document", { value: "synthetic" }],
     ]);
@@ -1278,7 +1627,7 @@ describe("Baseline atual do fallback deny", () => {
     );
   });
 
-  test("BASELINE ATUAL: usuário comum não lê coleção desconhecida — fallback global DENY confirmado", async () => {
+  test("PÓS-B2A5: usuário comum não lê coleção desconhecida", async () => {
     await seedDocuments([
       userEntry("user-active", "user", true),
       ["private_unknown_collection/private-document", { value: "synthetic" }],
@@ -1294,7 +1643,7 @@ describe("Baseline atual do fallback deny", () => {
     );
   });
 
-  test("BASELINE ATUAL: admin não lê coleção desconhecida sem match explícito — fallback global DENY confirmado", async () => {
+  test("PÓS-B2A5: admin não lê coleção desconhecida sem match explícito", async () => {
     await seedDocuments([
       userEntry("admin-active", "admin", true),
       ["private_unknown_collection/private-document", { value: "synthetic" }],

@@ -11,7 +11,7 @@ service cloud.firestore {
     }
 
     function hasRole(roles) {
-      return signedIn() && userDoc().data.role in roles && userDoc().data.ativo != false;
+      return signedIn() && userDoc().data.role in roles && userDoc().data.ativo == true;
     }
 
     function isAdmin() {
@@ -20,6 +20,11 @@ service cloud.firestore {
 
     function isModerator() {
       return hasRole(['admin', 'moderator']);
+    }
+
+    function validUserAuthorizationProfile(data) {
+      return data.role in ['admin', 'moderator', 'user'] &&
+        data.ativo is bool;
     }
 
     function owns(resourceData) {
@@ -398,19 +403,23 @@ service cloud.firestore {
 
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
-      allow create: if isAdmin() || (
-        signedIn() &&
-        request.auth.uid == userId &&
-        request.resource.data.role == 'user' &&
-        request.resource.data.ativo == true
+      allow create: if validUserAuthorizationProfile(request.resource.data) && (
+        isAdmin() || (
+          signedIn() &&
+          request.auth.uid == userId &&
+          request.resource.data.role == 'user' &&
+          request.resource.data.ativo == true
+        )
       );
-      allow update: if isAdmin() || (
-        signedIn() &&
-        request.auth.uid == userId &&
-        request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['nome', 'telefone', 'tipo', 'organizacao']) &&
-        request.resource.data.role == resource.data.role &&
-        request.resource.data.ativo == resource.data.ativo
+      allow update: if validUserAuthorizationProfile(request.resource.data) && (
+        isAdmin() || (
+          signedIn() &&
+          request.auth.uid == userId &&
+          request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['nome', 'telefone', 'tipo', 'organizacao']) &&
+          request.resource.data.role == resource.data.role &&
+          request.resource.data.ativo == resource.data.ativo
+        )
       );
       allow delete: if isAdmin();
     }

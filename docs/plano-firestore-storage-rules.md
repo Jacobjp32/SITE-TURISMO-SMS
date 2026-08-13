@@ -1,5 +1,40 @@
 # Plano de Firestore e Storage Rules
 
+## Status do ADMIN-B2A6 - hardening local de autorização
+
+Classificação local: **A. AUTHORIZATION RULES HARDENED LOCALLY**.
+
+Estado que liberou a mudança:
+
+- `B2A5_OPERATIONAL_FLOW_COMPLETE = true`;
+- inventário agregado de 11 perfis: 3 admin, 0 moderator, 8 user;
+- 11/11 com `ativo` boolean true;
+- zero perfil exigindo revisão;
+- AUTH-REVOKE completo, zero ADC/bindings temporárias e service account desabilitada;
+- nenhuma migração corretiva necessária.
+
+Contrato local aprovado:
+
+- Firestore `hasRole(roles)` e Storage `isAdmin()`/`isStaff()` exigem `usuarios/{uid}.ativo == true` estrito;
+- `false`, campo ausente, null, string, número, array e map não equivalem a usuário ativo;
+- roles válidas permanecem `admin`, `moderator` e `user`;
+- `moderator` preserva somente as permissões já existentes, sem acesso novo à administração de `usuarios` ou a operações exclusivas de admin;
+- create/update de `usuarios` validam o estado futuro com role válida e `ativo` booleano;
+- usuário comum cria somente o próprio perfil com `role = user` e `ativo = true`, atualiza somente os campos de perfil permitidos e não altera `role`/`ativo`;
+- leituras públicas, paths, ownership, MIME, tamanho de upload e fallback deny foram preservados.
+
+Validação local:
+
+- baseline Firestore: 87/87;
+- Firestore final: 145/145 em 6 suítes;
+- Storage final: 24/24 em 2 suítes;
+- projeto Emulator: `demo-turismo-sms-rules-test`;
+- Storage Emulator: porta 9199, com `firestore.get(...)` cross-service comprovado;
+- produção e dados reais não foram acessados;
+- nenhuma Rule foi publicada.
+
+Próximo bloco exclusivo: `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY`, somente mediante autorização literal separada. O deploy não faz parte deste documento nem deste bloco local.
+
 ## Status da Fase 1.4 - rules locais para alteracoes de empreendimento
 
 Arquivos ajustados nesta fase:

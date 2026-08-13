@@ -134,6 +134,16 @@ Ao mexer em SEO/head/metadados:
 
 ## Observações específicas já conhecidas
 
+### Estado vinculante pós-B2A5/B2A6 — 2026-08-13
+
+- Esta seção supersede, para trabalho corrente, notas históricas abaixo que ainda descrevem B2A5, `ativo != false`, remoção futura de `moderator`, Storage/B2B ou inventário como pendentes.
+- `B2A5_OPERATIONAL_FLOW_COMPLETE = true`: inventário agregado concluído com 11 perfis, sendo 3 admin, 0 moderator e 8 user; 11/11 têm `ativo` boolean true; zero perfil exige revisão; nenhuma migração corretiva é necessária. AUTH-REVOKE está completo, ADC/bindings temporárias estão ausentes, a service account está desabilitada e a auth CLI humana está em `0/0`.
+- O contrato local versionável do B2A6 exige `usuarios/{uid}.ativo == true` estrito em Firestore e Storage para privilégios administrativos/staff. `false`, ausência, null, string, número, array e map negam. A fonte de role permanece o documento Firestore; não introduzir custom claims sem decisão arquitetural futura.
+- Roles válidas são `admin`, `moderator` e `user`. Preservar as permissões legítimas existentes de `moderator`; não removê-las nem ampliá-las sem bloco específico. `moderator` continua sem administração de `usuarios`, drafts de `noticias`, `media_library` ou operações exclusivas de admin.
+- Create/update de `usuarios` devem manter o estado futuro com role válida e `ativo` booleano. Self-create é somente `role = user` e `ativo = true`; self-update é somente `nome`, `telefone`, `tipo` e `organizacao`, sem autoelevação ou alteração de `ativo`.
+- Baseline local Firestore: 87/87. Validação final Emulator: Firestore 145/145 e Storage 24/24 no projeto demo `demo-turismo-sms-rules-test`, incluindo cross-service `firestore.get(...)`. Produção não foi acessada e nenhuma Rule foi publicada.
+- Próximo bloco exclusivo: `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY`, somente com autorização literal separada. Não iniciar login, IAM, ADC, migração ou deploy automaticamente.
+
 ### Admin/CMS/Firebase — estado após conclusão funcional do ADMIN-B2A4-EXEC
 
 - O checkpoint de referência existente é `pre-admin-restart-20260720`. A frente ativa continua sendo **Painel Admin/CMS/Firebase**; site público, V7C1, V7C2, V6, B3 público, Fable e integração CMS → site público permanecem pausados. Site público, Painel Admin/CMS e Portal do Usuário são sistemas separados.

@@ -12,13 +12,13 @@ service firebase.storage {
 
     function isAdmin() {
       return signedIn() &&
-        userDoc().data.ativo != false &&
+        userDoc().data.ativo == true &&
         userDoc().data.role == 'admin';
     }
 
     function isStaff() {
       return signedIn() &&
-        userDoc().data.ativo != false &&
+        userDoc().data.ativo == true &&
         (userDoc().data.role == 'admin' || userDoc().data.role == 'moderator');
     }
 

@@ -3,8 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test:rules:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs",
-    "test:rules": "firebase emulators:exec --only firestore --project demo-turismo-sms-rules-test \"npm run test:rules:node\""
+    "test:rules:firestore:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs",
+    "test:rules:storage:node": "node --test --test-concurrency=1 tests/storage.rules.test.mjs",
+    "test:rules:node": "npm run test:rules:firestore:node && npm run test:rules:storage:node",
+    "test:rules": "firebase emulators:exec --only firestore,storage --project demo-turismo-sms-rules-test \"npm run test:rules:node\""
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.1",

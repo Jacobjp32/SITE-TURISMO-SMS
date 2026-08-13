@@ -6,6 +6,34 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-13 — ADMIN-B2A6-AUTHORIZATION-RULES-HARDENING-LOCAL
+
+**Status:** **A. AUTHORIZATION RULES HARDENED LOCALLY — B2A5 CLOSED, STRICT `ativo == true` ENFORCED, USER AUTHORIZATION SCHEMA GUARDED, FIRESTORE/STORAGE REGRESSION TESTS PASS, ZERO PRODUCTION MUTATION, READY FOR RULES DEPLOY.**
+
+### Baseline e encerramento do B2A5
+
+- Preflight vinculante aprovado em `main` no HEAD inicial `0b254417cbabc658216d9051baa6a0b09092c60a` (`docs: harden B2A5 login exit-code capture`), com `origin/main...main = 0/0`, árvore rastreada limpa e índice vazio. Os três itens locais protegidos permaneceram apenas nominais, fechados, não lidos, intocados e fora do staging.
+- `B2A5_OPERATIONAL_FLOW_COMPLETE = true`. Inventário agregado final: 11 documentos em `usuarios`; 3 admin, 0 moderator, 8 user; 11/11 com `ativo` boolean true; zero perfil administrativo ou de qualidade exigindo revisão; todas as invariantes verdadeiras. Nenhum UID, email ou dado individual foi versionado.
+- Não há migração corretiva de `role` ou `ativo` antes do hardening. AUTH-REVOKE está completo; ADC e bindings temporárias ausentes; conditions removidas; service account desabilitada; zero chave `USER_MANAGED`; auth CLI humana `0/0`; zero escrita Firestore e zero acesso Storage durante B2A5. Esse estado foi aceito por handoff e não revalidado remotamente neste bloco.
+
+### Hardening local
+
+- `firestore.rules`: `hasRole(roles)` passou de `ativo != false` para `ativo == true`. A nova função `validUserAuthorizationProfile(data)` exige `role` em `admin`, `moderator` ou `user` e `ativo is bool` no estado futuro de create/update em `usuarios`.
+- Self-create permanece somente no próprio UID, com `role = user` e `ativo = true`. Self-update permanece somente em `nome`, `telefone`, `tipo` e `organizacao`, sem alteração de `role`/`ativo`. Admin continua administrando perfis válidos, mas não pode criar ou produzir role ausente/inválida nem `ativo` ausente, null, string, número, array ou map.
+- `storage.rules`: `isAdmin()` e `isStaff()` passaram a exigir `userDoc().data.ativo == true`, preservando `admin` e `admin || moderator`, `firestore.get(...)`, paths, ownership, MIME, tamanho, leitura pública de `cms-media` e fallback deny.
+- O cliente existente permaneceu compatível: cadastro grava `role: 'user'` e `ativo: true`; o painel oferece somente as três roles válidas e o toggle grava booleano. Nenhum arquivo de runtime precisou de alteração.
+
+### Testes e limites
+
+- Baseline Firestore pré-edição: 87/87, zero falhas e zero skips, no projeto demo `demo-turismo-sms-rules-test`. A primeira tentativa não alcançou os testes por `EPERM` no configstore global da Firebase CLI; a repetição com configuração temporária isolada passou e é a evidência funcional válida.
+- Infraestrutura Storage local adicionada no Emulator Suite, porta 9199, sem dependência npm nova. O runtime oficial do Storage Emulator foi obtido uma vez para permitir a execução local.
+- Validação final: Firestore 145/145 em 6 suítes; Storage 24/24 em 2 suítes; total 169/169, zero fail/skipped/cancelled/todo. Cobertura inclui `false`, ausente, null, string, número, array e map; moderator válido e malformado; self-create/update; administração de perfis; public reads; ownership; cross-service `firestore.get(...)`; e fallbacks deny.
+- Nenhum teste foi removido para obter aprovação. A antiga evidência permissiva de null/string/number foi preservada como regressão pós-B2A5 com expectativa DENY.
+- Produção acessada = false; Firestore produção acessado = false; Storage produção acessado = false; `firebase deploy` calls = 0; `gcloud login` calls = 0; ADC criado = false; IAM = 0; migração = 0.
+- Próximo bloco: `ADMIN-B2A6-AUTHORIZATION-RULES-DEPLOY`, não iniciado e dependente de autorização literal separada.
+
+---
+
 ## 2026-08-13 — ADMIN-B2A5-INVENTORY-AUTH-LOGIN-EXITCODE-WRAPPER-RECOVERY-PREP
 
 **Status:** **A. LOGIN EXIT-CODE WRAPPER CORRIGIDO E VALIDADO — AUTH LOCAL 0/0, CAUSA DO WRAPPER COMPROVADA, EXIT CODE HISTÓRICO PERMANECE INDETERMINADO, EXECUTOR CANÔNICO VERSIONADO, `$LASTEXITCODE` CAPTURADO DIRETAMENTE, SYNTAX 0 ERRORS, TESTES SINTÉTICOS 6/6 NOS DOIS ENGINES E ESTADO CLOUD PRESERVADO FAIL-CLOSED.**
