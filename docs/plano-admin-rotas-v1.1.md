@@ -10,6 +10,8 @@
 
 **Natureza:** schema, Rules, normalização, seed e Emulator exclusivamente locais; nenhuma migração, leitura remota, publicação ou deploy
 
+> Atualização operacional de 2026-08-21: a primeira baseline remota read-only de Rotas V1.1 ficou classificada como **F — INCONCLUSIVO**. Não houve leitura de `rotas`/`cms_establishments`, write, Storage ou alteração de Rules; o cleanup final foi comprovado. A evidência histórica não determina se o enable nativo chegou a ser enviado, portanto `historicalEnableInvocation = INDETERMINATE` e o dry-run de migração permanece bloqueado. O retry exigirá autorização própria e o executor canônico `B2A5_MUTATION_EXECUTOR_SOURCE` versionado em `TASKS.md`, com journal sanitizado por mutation, captura imediata de exit code e proibição de retry automático. O executor passou `10/10` testes sintéticos com `parseErrorCount=0` no Windows PowerShell 5.1 e no PowerShell 7.x.
+
 **Baseline deste bloco:** `main` em `06828cd88f5f63abd03688d9b3e8949ab0b1ba5d` (`docs: definir arquitetura de rotas do Admin V1.1`)
 
 ## 1. Decisão executiva

@@ -6,6 +6,132 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — instrumentation PREP da baseline read-only em 2026-08-21
+
+- Bloco: `POST-V1-ROTAS-V1.1-READONLY-BASELINE-INSTRUMENTATION-PREP`.
+- O bloco remoto anterior `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE` permanece classificado como **F — INCONCLUSIVO**: não leu `rotas` ou `cms_establishments`, não escreveu Firestore e terminou com cleanup comprovado (bindings ausentes, service account desabilitada, zero chaves `USER_MANAGED`, ADC ausente, artifacts removidos e credencial humana revogada).
+- A forense local preserva `historicalEnableInvocation = INDETERMINATE`. O run registrou apenas uma categoria agregada de falha e não serializou `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, `exitCode`, stage ou journal de mutações. O estado pós-cleanup não pode promover essa evidência a “enable não enviado” nem a “enable concluído”.
+- `migrationDryRunSafeToPrepare = NOT_PROVEN`. Migração continua bloqueada. O único próximo bloco possível, dependente de autorização literal nova, é `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-RETRY`.
+
+### Source canônico — B2A5_MUTATION_EXECUTOR_SOURCE
+
+Todo comando nativo mutável do futuro retry — enable/disable da service account, add/remove das duas bindings e `auth revoke` quando aplicável — deve usar exclusivamente este executor. Ele não recebe token, policy, URL OAuth, argumento bruto nem saída nativa no objeto retornado; o chamador fornece somente `SanitizedTargetLabel`.
+
+<!-- B2A5_MUTATION_EXECUTOR_SOURCE_BEGIN -->
+```powershell
+function Invoke-B2A5NativeMutation {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Executable,
+
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [string[]] $Arguments,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $OperationName,
+
+        [Parameter(Mandatory = $true)]
+        [ref] $CallCounterRef,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateRange(1, [int]::MaxValue)]
+        [int] $ExpectedCallOrdinal,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $SanitizedTargetLabel
+    )
+
+    $record = [ordered]@{
+        operationName = $OperationName
+        sanitizedTargetLabel = $SanitizedTargetLabel
+        callCountBefore = $null
+        callCountAfter = $null
+        commandInvocationEntered = $false
+        commandWasSent = $false
+        commandReturned = $false
+        exitCodeCaptured = $false
+        exitCode = $null
+        startedAtUtc = $null
+        returnedAtUtc = $null
+        wrapperFailure = $false
+        wrapperFailureClass = $null
+        wrapperFailurePhase = $null
+    }
+
+    try {
+        $callCountBefore = [int] $CallCounterRef.Value
+
+        if ($ExpectedCallOrdinal -ne ($callCountBefore + 1)) {
+            throw [System.InvalidOperationException]::new(
+                'B2A5_MUTATION_CALL_ORDINAL_COLLISION'
+            )
+        }
+
+        $CallCounterRef.Value = $callCountBefore + 1
+        $record.callCountBefore = $callCountBefore
+        $record.callCountAfter = [int] $CallCounterRef.Value
+        $record.startedAtUtc = [DateTimeOffset]::UtcNow.ToString('o')
+        $record.commandInvocationEntered = $true
+
+        & $Executable @Arguments
+        $NativeExitCode = $LASTEXITCODE
+
+        $record.commandReturned = $true
+        $record.exitCodeCaptured = $true
+        $record.commandWasSent = $true
+        $record.exitCode = [int] $NativeExitCode
+        $record.returnedAtUtc = [DateTimeOffset]::UtcNow.ToString('o')
+    }
+    catch {
+        $record.wrapperFailure = $true
+
+        if ($record.commandInvocationEntered -and -not $record.exitCodeCaptured) {
+            $record.commandWasSent = 'INDETERMINATE'
+            $record.exitCode = 'INDETERMINATE'
+            $record.wrapperFailureClass =
+                'HOST_FAILURE_AFTER_INVOCATION_ENTERED'
+            $record.wrapperFailurePhase =
+                'afterInvocationEnteredBeforeExitCapture'
+        }
+        else {
+            $record.commandWasSent = $false
+            $record.wrapperFailureClass = 'LOCAL_PREINVOCATION_FAILURE'
+            $record.wrapperFailurePhase =
+                'beforeCommandInvocationEntered'
+        }
+    }
+
+    return [pscustomobject] $record
+}
+```
+<!-- B2A5_MUTATION_EXECUTOR_SOURCE_END -->
+
+### Contrato operacional do retry
+
+1. Antes de cada mutation, o chamador valida que `ExpectedCallOrdinal` é único e cria um journal process-local com `sequence`, `operationName`, `callOrdinal`, `startedAtUtc`, `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, `exitCode`, `postValidationStarted`, `postValidationResult` e `cleanupRequired`.
+2. O executor incrementa o contador e grava `commandInvocationEntered=true` imediatamente antes de `& $Executable @Arguments`. A atribuição `$NativeExitCode = $LASTEXITCODE` é a primeira instrução executável após o retorno nativo.
+3. Se falhar antes de `commandInvocationEntered`, `commandWasSent=false`. Se falhar depois da entrada e antes da captura, `commandWasSent=INDETERMINATE` e `exitCode=INDETERMINATE`. Estado remoto pós-operação jamais substitui exit code ausente.
+4. Leitura pós-operação começa somente depois do record estrutural do executor e atualiza somente `postValidationStarted`/`postValidationResult` no journal. Falha de serialização ou cleanup não apaga records já capturados.
+5. Não há retry automático de mutation. `exitCodeCaptured=true` com exit diferente de zero bloqueia repetição; evidence `INDETERMINATE` exige reconciliação separada e cleanup fail-closed.
+6. O cleanup mantém a remoção exata de bindings, disable final, zero chaves, ADC ausente, revogação nominal da credencial criada e remoção de artifacts. Ele pode apagar artifacts operacionais, mas não os records sanitizados em memória antes do relatório final.
+
+### Campos obrigatórios do relatório de retry
+
+Para o enable da service account: `serviceAccountEnableCallCount`, `enableCommandInvocationEntered`, `enableCommandReturned`, `enableExitCodeCaptured`, `enableExitCode`, `enableStartedAtUtc`, `enableReturnedAtUtc`, `enablePostReadAtUtc` e `disabledAfterEnable`. A mesma disciplina vale para ADD/REMOVE de binding, disable e revoke. O executor proíbe `System.Diagnostics.Process` com handlers assíncronos, `OutputDataReceived`, `ErrorDataReceived`, jobs, `Start-Job`, parsing de comando como string única, `Invoke-Expression` e atribuição manual a `$LASTEXITCODE`.
+
+### Validação sintética deste PREP
+
+- `Windows PowerShell 5.1`: `parseErrorCount=0`; `10/10 PASS`.
+- `PowerShell 7.x`: `parseErrorCount=0`; `10/10 PASS`.
+- Os dez casos cobriram exit `0`, exit `7`, sequência sem `$LASTEXITCODE` stale, executável e argumento com espaço, ordem literal da captura, falha pré-invocation, host failure após `commandInvocationEntered`, falha de serialização posterior e colisão de ordinal. Nenhum caso executou `gcloud` ou qualquer acesso remoto.
+
+---
+
 ## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
 
 - Classificação: **A. ROLLOUT PREP COMPLETE**, restrita a Git/local e documentação.

@@ -5137,3 +5137,25 @@ Atualizar `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` para refletir os milestone
 
 - Nenhum arquivo de código/HTML/CSS/JS/dados foi alterado nesta tarefa.
 - Sem commit/deploy; aguardando autorização.
+## 2026-08-21 — POST-V1-ROTAS-V1.1-READONLY-BASELINE-INSTRUMENTATION-PREP
+
+**Status:** **A. BASELINE INSTRUMENTATION PREP COMPLETE.** Correção exclusivamente local/documental do contrato de instrumentação das mutations nativas da baseline read-only. Não houve login, `gcloud`, acesso a Google Cloud, IAM, Firestore, Storage, ADC, migração, deploy ou integração de `main`.
+
+### Forense do bloco F anterior
+
+- A execução iniciada em `2026-08-21T18:26:41Z` preservou a categoria fail-closed agregada e o cleanup final, mas não preservou stage, `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, exit code ou journal serializado da tentativa de enable.
+- O source histórico mantinha um flag local de tentativa, porém esse flag não chegou ao objeto sanitizado final. Não há evidência local suficiente para determinar se `gcloud iam service-accounts enable` não iniciou, iniciou sem retorno ou retornou antes da falha posterior.
+- Resultado obrigatório: `historicalBaselineClassification=F`, `historicalEnableInvocation=INDETERMINATE`, `FirestoreReadOnlyAccess=false`, `firestoreWrites=0`, `StorageAccess=false` e `migrationDryRunSafeToPrepare=NOT_PROVEN`. Estado de cleanup não é usado como inferência do exit code histórico.
+
+### Contrato corrigido e validação local
+
+- `TASKS.md` passou a conter `B2A5_MUTATION_EXECUTOR_SOURCE`: invocation direta `& $Executable @Arguments`, contador antes da chamada, marcação imediatamente anterior, cópia imediata de `$LASTEXITCODE`, timestamps distintos e classificação explícita de falha pré-invocation ou pós-entrada sem exit capturado.
+- O retorno é estrutural e sanitizado: não contém argumentos, executável, token, URL OAuth, Authorization, policy ou output nativo. O journal process-local conserva sequence, ordinal, evidência de invocation, exit e validação pós-operação até o relatório final.
+- Retry automático permanece proibido. Post-state não converte exit `INDETERMINATE` em sucesso nem em “zero enable provado”. A remoção exata de bindings, disable final, zero keys, ADC ausente, revoke nominal e remoção de artifacts permanecem obrigatórios, sem apagar evidência estrutural antes da classificação.
+- Validação sintética: `Windows PowerShell 5.1` e `PowerShell 7.x` retornaram `parseErrorCount=0` e `10/10 PASS`. Foram exercitados exit `0`/`7`, sequência sem exit stale, path/argumento com espaço, captura imediatamente posterior, falha pré-invocation, falha após entrada sem exit, preservação pós-serialização e bloqueio por contador.
+
+### Continuidade
+
+`POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-RETRY` é o próximo bloco possível, exclusivamente com autorização literal nova. Ele deve repetir os gates e a baseline com o executor canônico; não está iniciado. Migração e seu dry-run seguem bloqueados.
+
+---
