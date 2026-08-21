@@ -6,6 +6,23 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-21 — POST-V1-ROTAS-V1.1-ROLLOUT-PREP
+
+**Status:** **A. ROLLOUT PREP COMPLETE — plano fail-closed definido; rollout permanece pendente.**
+
+### Evidências e decisão
+
+- Auditadas a topologia Git, o diff completo de release, o estado da `main`, os hashes das Rules, o seed local e o dry-run; `main` segue em `cc17086` e a feature alinhada em `8433a72`, permitindo integração futura por fast-forward após nova revalidação.
+- O portal público ainda depende exclusivamente das fontes estáticas e não ganhou leitura de `rotas`; o Admin pode ser liberado sem adapter público. `storage.rules` não mudou.
+- Definidos blocos independentes para baseline read-only, Rules, dry-run de dados, EXEC de dados, release do Admin e adapter público posterior. Dados iniciais recomendados como `draft`, com manifest, aprovação humana e rollback por camada.
+
+### Limites
+
+- Zero Firestore/Storage/Auth de produção, deploy, migração, merge, alteração de `main`, `gcloud`, IAM ou ADC.
+- Próximo bloco, não iniciado e dependente de autorização própria: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`.
+
+---
+
 ## 2026-08-20 — POST-V1-ROTAS-V1.1-ADMIN-CRUD
 
 **Status:** **A. ADMIN CRUD LOCAL CONCLUÍDO — QA_LOCAL_ROTAS_PASS; ROLLOUT AINDA PENDENTE.**

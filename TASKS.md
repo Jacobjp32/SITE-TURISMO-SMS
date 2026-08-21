@@ -6,6 +6,17 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
+
+- Classificação: **A. ROLLOUT PREP COMPLETE**, restrita a Git/local e documentação.
+- Topologia confirmada: `origin/main` e merge-base em `cc170862d4378229a7485f788b31308174032a6d`; feature alinhada em `8433a7232dd67ce4654bb6316192c2ca01b1dfff`; integração futura pode usar `git merge --ff-only` após revalidação.
+- O release contém Admin UI/JS, endurecimento fail-closed de `firestore.rules`, testes e documentação. `storage.rules` permaneceu byte a byte idêntico; o portal público continua com fontes estáticas e não lê a collection `rotas`.
+- Ordem recomendada: baseline remoto somente leitura; deploy isolado das Rules exatas; dry-run remoto com manifest; EXEC de dados autorizado separadamente; release/Admin smoke; adapter público somente depois.
+- Seeds futuros são os seis IDs canônicos em `draft`; normalização preserva valores não canônicos e exige dry-run, aprovação humana e pós-verificação antes de qualquer write.
+- Não houve produção, deploy, migração, merge ou alteração de `main`. Próximo bloco autorizado somente mediante novo comando literal: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`.
+
+---
+
 ## Rotas Admin V1.1 — CRUD local concluído e QA_LOCAL_ROTAS_PASS em 2026-08-21
 
 - Bloco em execução: `POST-V1-ROTAS-V1.1-ADMIN-CRUD`, na branch isolada `feature/rotas-v1.1-admin-crud`, criada a partir de `cc170862d4378229a7485f788b31308174032a6d`. `main` não foi alterada.
