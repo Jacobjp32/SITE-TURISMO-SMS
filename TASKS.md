@@ -6,6 +6,20 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — CRUD local concluído e QA_LOCAL_ROTAS_PASS em 2026-08-21
+
+- Bloco em execução: `POST-V1-ROTAS-V1.1-ADMIN-CRUD`, na branch isolada `feature/rotas-v1.1-admin-crud`, criada a partir de `cc170862d4378229a7485f788b31308174032a6d`. `main` não foi alterada.
+- Implementados `js/admin/modules/rotas-helpers.js` e `js/admin/modules/rotas.js`: listagem ordenada, filtros, create/edit de rascunho, preview, publicar, despublicar, arquivar e ausência deliberada de hard delete.
+- Associação N:N é calculada por diferença e escrita em `runTransaction`, somente nos documentos alterados de `cms_establishments.relationships.routeIds[]`; IDs secundários existentes são preservados.
+- A capa é selecionada exclusivamente de `media_library`, persistida no shape mínimo `mediaId|url|path|alt`, e a exclusão na biblioteca agora bloqueia mídia referenciada por `rotas.cover` por ID, path ou URL.
+- O alias `edit: openForm` corrigiu o Editar. Nas Rules, guards estruturais e o caminho relacional estreito corrigiram os blockers de expressão/propriedade, mantendo autorização de admin ativo e malformed fail-closed.
+- Regressão final: testes Admin `8/8 PASS`; modelo/normalizador `29/29 PASS`; dry-run local sanitizado PASS; Firestore `212/212`; Storage `24/24`; total Rules `265/265`, sem failures/skips, exclusivamente no projeto demo/Emulator.
+- `firestore.rules`, `storage.rules`, datasource público, mapas, HOME, busca e demais placeholders não foram alterados.
+- **Classificação atual: A. ADMIN CRUD LOCAL CONCLUÍDO — `QA_LOCAL_ROTAS_PASS`.** O QA humano posterior validou o fluxo autenticado no Emulator, incluindo desktop/tablet/mobile e ausência dos blockers. Não houve fallback ou acesso à produção.
+- A feature continua isolada e não integrada a `main`; rollout permanece pendente. Próximo passo autorizável: `POST-V1-ROTAS-V1.1-ROLLOUT-PREP`.
+
+---
+
 ## Rotas Admin V1.1 — modelo, Rules e Emulator concluídos em 2026-08-13
 
 - Bloco concluído: `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`.

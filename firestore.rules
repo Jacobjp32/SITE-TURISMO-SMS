@@ -167,7 +167,13 @@ service cloud.firestore {
     }
 
     function establishmentFieldsAllowed(data) {
-      return data.keys().hasOnly([
+      return data.keys().hasAll([
+        'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
+        'content', 'contact', 'location', 'media', 'relationships',
+        'display', 'seo', 'publishing', 'review', 'source',
+        'createdAt', 'createdBy', 'updatedAt', 'updatedBy'
+      ]) &&
+        data.keys().hasOnly([
         'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
         'content', 'contact', 'location', 'media', 'relationships',
         'display', 'seo', 'publishing', 'review', 'source',
@@ -286,6 +292,10 @@ service cloud.firestore {
 
     function validEstablishmentRelationships(data) {
       return data is map &&
+        data.keys().hasAll([
+          'routeIds', 'relatedPlaceIds', 'relatedEventIds',
+          'legacyRoute', 'legacyRouteName'
+        ]) &&
         data.keys().hasOnly([
           'routeIds', 'relatedPlaceIds', 'relatedEventIds',
           'legacyRoute', 'legacyRouteName'
@@ -384,21 +394,27 @@ service cloud.firestore {
         data.updatedBy is string;
     }
 
+    function hasEstablishmentIdentity(data) {
+      return data is map &&
+        data.keys().hasAll(['id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']);
+    }
+
     function isValidEstablishmentCreate(establishmentId) {
       return isAdmin() &&
+        validEstablishmentBase(request.resource.data) &&
         request.resource.data.id == establishmentId &&
         request.resource.data.createdBy == request.auth.uid &&
-        request.resource.data.updatedBy == request.auth.uid &&
-        validEstablishmentBase(request.resource.data);
+        request.resource.data.updatedBy == request.auth.uid;
     }
 
     function isValidEstablishmentUpdate() {
       return isAdmin() &&
+        hasEstablishmentIdentity(resource.data) &&
+        validEstablishmentBase(request.resource.data) &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdBy == resource.data.createdBy &&
         request.resource.data.createdAt == resource.data.createdAt &&
-        request.resource.data.updatedBy == request.auth.uid &&
-        validEstablishmentBase(request.resource.data);
+        request.resource.data.updatedBy == request.auth.uid;
     }
 
     // Caminho estreito para o batch N:N do modulo Rotas. Evita reavaliar o
@@ -406,6 +422,8 @@ service cloud.firestore {
     // somente relationships e a auditoria de update mudam.
     function isValidEstablishmentRelationshipUpdate() {
       return isAdmin() &&
+        hasEstablishmentIdentity(resource.data) &&
+        hasEstablishmentIdentity(request.resource.data) &&
         request.resource.data.diff(resource.data).affectedKeys()
           .hasOnly(['relationships', 'updatedAt', 'updatedBy']) &&
         request.resource.data.id == resource.data.id &&
@@ -414,6 +432,11 @@ service cloud.firestore {
         request.resource.data.updatedAt == request.time &&
         request.resource.data.updatedBy == request.auth.uid &&
         validEstablishmentRelationships(request.resource.data.relationships);
+    }
+
+    function isEstablishmentRelationshipOnlyUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(['relationships', 'updatedAt', 'updatedBy']);
     }
 
     // --- Rotas V1.1 ---
@@ -530,6 +553,7 @@ service cloud.firestore {
 
     function isValidRouteCreate(routeId) {
       return isAdmin() &&
+        validRouteBase(request.resource.data) &&
         request.resource.data.id == routeId &&
         request.resource.data.status == 'draft' &&
         request.resource.data.createdAt == request.time &&
@@ -540,12 +564,13 @@ service cloud.firestore {
         request.resource.data.publishedBy == '' &&
         request.resource.data.archivedAt == null &&
         request.resource.data.archivedBy == '' &&
-        validRouteBase(request.resource.data) &&
         routePublishedContentComplete(request.resource.data);
     }
 
     function isValidRouteUpdate(routeId) {
       return isAdmin() &&
+        routeFieldsAllowed(resource.data) &&
+        validRouteBase(request.resource.data) &&
         request.resource.data.id == routeId &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdAt == resource.data.createdAt &&
@@ -556,7 +581,6 @@ service cloud.firestore {
         validRouteStatusTransition() &&
         validRoutePublicationUpdate() &&
         validRouteArchiveUpdate() &&
-        validRouteBase(request.resource.data) &&
         routePublishedContentComplete(request.resource.data);
     }
 
@@ -745,10 +769,9 @@ service cloud.firestore {
       allow get: if isAdmin() || resource.data.status == 'published';
       allow list: if isAdmin() || resource.data.status == 'published';
       allow create: if isValidEstablishmentCreate(establishmentId);
-      allow update: if isValidEstablishmentRelationshipUpdate() ||
-        (!request.resource.data.diff(resource.data).affectedKeys()
-          .hasOnly(['relationships', 'updatedAt', 'updatedBy']) &&
-          isValidEstablishmentUpdate());
+      allow update: if isEstablishmentRelationshipOnlyUpdate()
+        ? isValidEstablishmentRelationshipUpdate()
+        : isValidEstablishmentUpdate();
       allow delete: if isAdmin() && isDeletableEstablishmentStatus(resource.data.status);
     }
 

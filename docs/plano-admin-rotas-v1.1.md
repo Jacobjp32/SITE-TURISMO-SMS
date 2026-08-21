@@ -654,6 +654,14 @@ NEXT_BLOCK = POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
 
 O texto das seções 1 a 18 preserva o discovery histórico e suas fronteiras originais. O resultado vigente do bloco local autorizado está registrado a seguir; migração, acesso a produção, deploy e início automático do próximo bloco continuam proibidos.
 
+## 18.1 Resultado final do Bloco 2 — Admin CRUD
+
+Em `2026-08-20`, o CRUD de Rotas foi implementado somente na branch `feature/rotas-v1.1-admin-crud`, derivada de `cc170862d4378229a7485f788b31308174032a6d`; `main` não foi alterada. O módulo reutiliza o registro, UI e modal existentes do Admin e inclui lista/filtros, criação em rascunho, edição, preview, publicação, despublicação, arquivamento, validação local e ausência de hard delete.
+
+As relações permanecem exclusivamente em `cms_establishments.relationships.routeIds[]`. O save calcula diff e usa `runTransaction` apenas para os documentos adicionados/removidos, preservando IDs secundários. A capa reutiliza `media_library` no shape mínimo `mediaId`, `url`, `path`, `alt`; a detecção de mídia em uso inclui `rotas.cover` por ID, path ou URL e bloqueia exclusão quando houver referência.
+
+O alias `edit: openForm` corrigiu o Editar; guards estruturais e o caminho relacional estreito nas Rules corrigiram os blockers N:N mantendo autorização de admin ativo e malformed fail-closed. A regressão final aprovou testes Admin `8/8`, modelo/normalizador `29/29`, dry-run sanitizado e Rules `265/265` (Firestore `212`, Storage `24`), sem failures/skips, somente no projeto demo dos Emulators. O QA humano posterior confirmou `QA_LOCAL_ROTAS_PASS`, inclusive associação N:N, mídia e responsividade. **Classificação vigente: A — implementação local concluída; nenhuma produção, deploy, migração ou integração em `main`. O rollout permanece pendente.**
+
 ## 19. Resultado implementado do Bloco 1
 
 ### 19.1 Classificação e limites

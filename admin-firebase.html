@@ -1614,6 +1614,9 @@
     <script src="js/admin/modules/banners.js?v=admin-banners-4e-20260629"></script>
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
     <script src="js/admin/modules/empreendimentos.js?v=admin-establishments-cms-4d-20260708"></script>
+    <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
+    <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
+    <script src="js/admin/modules/rotas.js?v=rotas-v1-1-admin-20260820"></script>
     <!-- Placeholders de módulos futuros (Etapa 3A): sem CRUD, sem persistência. -->
     <script src="js/admin/modules/placeholder.js?v=admin-modular-20260626"></script>
     <script>
@@ -1919,6 +1922,9 @@
             // CMS-2B: CRUD interno de empreendimentos (sem leitura publica e sem migracao).
             if (section === 'empreendimentos' && window.AdminEstablishmentsModule && typeof window.AdminEstablishmentsModule.activate === 'function') {
                 window.AdminEstablishmentsModule.activate(window.AdminContext || null);
+            }
+            if (section === 'rotas' && window.AdminRoutesModule && typeof window.AdminRoutesModule.activate === 'function') {
+                window.AdminRoutesModule.activate(window.AdminContext || null);
             }
         }
 

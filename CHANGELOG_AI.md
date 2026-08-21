@@ -6,6 +6,26 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-20 — POST-V1-ROTAS-V1.1-ADMIN-CRUD
+
+**Status:** **A. ADMIN CRUD LOCAL CONCLUÍDO — QA_LOCAL_ROTAS_PASS; ROLLOUT AINDA PENDENTE.**
+
+### Implementação local na feature branch
+
+- Criada `feature/rotas-v1.1-admin-crud` a partir do baseline exigido `cc170862d4378229a7485f788b31308174032a6d`; `main` permaneceu intacta.
+- Substituído somente o placeholder `rotas` pelo módulo real e seus helpers puros: lista/filtros, estado loading/empty/error, criação em `draft`, edição, preview, publicar, despublicar e arquivar. Não há delete de rota.
+- O editor usa `relationships.routeIds[]` como fonte única de N:N. O diff seleciona somente adições/remoções e a transação preserva todos os outros IDs de rota de cada empreendimento.
+- Capa usa mídia existente da `media_library`, sem novo uploader ou path. A proteção de uso de mídia passou a incluir `rotas.cover` por `mediaId`, `path` ou URL e bloqueia a exclusão referenciada.
+
+### Validação e limite
+
+- O alias `edit: openForm` corrigiu o bloqueio de edição; o caminho N:N nas Rules recebeu guards estruturais e seleção fail-closed do validador relacional, eliminando os blockers de expressão e propriedade ausente no Emulator.
+- O QA humano local posterior confirmou `QA_LOCAL_ROTAS_PASS`, incluindo Editar, associação N:N com preservação da relação secundária, mídia, status e responsividade, exclusivamente no projeto demo/Emulator.
+- Regressão final: `node --check`, testes Admin `8/8`, modelo `29/29`, dry-run local e Rules `265/265` (Firestore `212`, Storage `24`), sem failures/skips.
+- Nenhuma produção, deploy, migração, dado real, `gcloud`, IAM ou ADC foi utilizado. O rollout permanece pendente e a feature ainda não foi integrada a `main`.
+
+---
+
 ## 2026-08-13 — POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
 
 **Status:** **A. ROTAS V1.1 DATA MODEL + RULES READY — SCHEMA FROZEN, NORMALIZATION DETERMINISTIC, N:N PRESERVED, FIRESTORE RULES TESTED LOCALLY, ZERO PRODUCTION ACCESS, ADMIN CRUD READY TO IMPLEMENT.**
