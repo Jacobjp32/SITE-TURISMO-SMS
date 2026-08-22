@@ -362,6 +362,109 @@ Não executar retry se houver malformed response, wrong principal, wrong role, w
 - O reporter sanitizado acrescenta `enableObservationAttempts`, `enableObservedAtUtc`, `disableObservationAttempts`, `disableObservedAtUtc`, `projectBindingObservationAttempts`, `tokenBindingObservationAttempts`, `adcAuthPropagationAttempts` e `priorRunCleanupReconciled`.
 - Todo o restante do contrato normativo congelado permanece inalterado.
 
+## Rotas Admin V1.1 — erratum Token Creator command contract
+
+Este erratum integra o contrato normativo da baseline read-only de produção e prevalece sobre qualquer construção anterior incompatível da mutation Token Creator. `TOKEN_CREATOR_MUTATION_EXIT_CODE_DOES_NOT_PROVE_REMOTE_STATE=true`.
+
+### Token Creator ADD — contrato exato
+
+A única mutation ADD autorizável usa `gcloud iam service-accounts add-iam-policy-binding` com os seguintes argumentos semânticos exatos:
+
+- `SERVICE_ACCOUNT = <TARGET_SERVICE_ACCOUNT_EMAIL_IN_MEMORY>`;
+- `--member=user:<OPERATOR_IN_MEMORY>`;
+- `--role=roles/iam.serviceAccountTokenCreator`;
+- `--condition-from-file=<TOKEN_CONDITION_FILE>`;
+- `--project=turismo-sms`;
+- `--account=<OPERATOR_IN_MEMORY>`;
+- `--quiet`.
+
+A ordem das flags pode variar se aceita pela CLI, mas todos os argumentos acima são obrigatórios. É proibido usar `--condition` inline, condition string montada diretamente no argv, omitir `--project`, omitir `--account`, usar `--all`, outro role ou outro principal.
+
+### Construção e validação local do argv
+
+A chamada deve ser construída como argv estruturado, sem concatenar command string dinâmica. Cada flag/value deve ocupar exatamente um argumento lógico conforme exigido pela CLI. Antes da mutation, a validação local do argv planejado deve exigir cumulativamente:
+
+- command `iam service-accounts add-iam-policy-binding`;
+- target service account correta;
+- member prefix `user:`;
+- role exato `roles/iam.serviceAccountTokenCreator`;
+- condition mechanism `condition-from-file`;
+- project `turismo-sms`;
+- account igual ao operador humano aprovado;
+- `quiet` presente.
+
+Se qualquer item divergir: `COMMAND_CONSTRUCTION_FAILURE` e parada antes da mutation. Valores sensíveis e argv sensível bruto não integram o relatório.
+
+### Token condition file
+
+A Token Creator condition deve existir exclusivamente em arquivo local temporário, criado de forma exclusiva fora do repositório, em JSON ou YAML aceito oficialmente pelo gcloud, com conteúdo semântico exato:
+
+- title: `admin_b2a5_inventory_impersonation_window`;
+- description: `Rotas V1.1 temporary inventory impersonation window`;
+- expression: `request.time >= timestamp("<START_UTC>") && request.time < timestamp("<END_UTC>")`.
+
+`START_UTC` e `END_UTC` são os valores da janela corrente definidos pelo contrato. A Token Creator condition não pode incluir `resource.name`.
+
+Antes da mutation, reparsear o arquivo e confirmar title, description, expression e `START_UTC < END_UTC`; calcular hash local; manter path/hash somente em memória operacional; não persistir o arquivo no repositório. O mesmo `TOKEN_CONDITION_FILE` criado para ADD deve permanecer disponível até que o cleanup da Token Creator binding tenha sido totalmente reconciliado. Não apagá-lo antes. A remoção deve reutilizar a mesma condition — title, description e expression — e preferencialmente o mesmo arquivo/hash pertencente ao run.
+
+### Token Creator REMOVE — contrato exato
+
+Quando o cleanup exigir remoção, usar `gcloud iam service-accounts remove-iam-policy-binding` com os seguintes argumentos semânticos exatos:
+
+- `SERVICE_ACCOUNT = <TARGET_SERVICE_ACCOUNT_EMAIL_IN_MEMORY>`;
+- `--member=user:<OPERATOR_IN_MEMORY>`;
+- `--role=roles/iam.serviceAccountTokenCreator`;
+- `--condition-from-file=<MESMO_TOKEN_CONDITION_FILE>`;
+- `--project=turismo-sms`;
+- `--account=<OPERATOR_IN_MEMORY>`;
+- `--quiet`.
+
+São proibidos `--all`, condition diferente, member diferente, role diferente ou remover binding não atribuída ao run.
+
+### Reconciliation obrigatória da Token Creator
+
+Antes da mutation ADD, a precondition deve provar a ausência da target exact Token Creator binding. Depois de qualquer tentativa de ADD — `exitCode=0`, `exitCode!=0` ou resultado indeterminado — deve existir reconciliation read-only antes de revogar a credencial humana. É proibido derivar `bindingAbsent=true` de `exitCode != 0`.
+
+A reconciliation deve ler a IAM policy da target service account e procurar exatamente:
+
+- member `user:<OPERATOR>`;
+- role `roles/iam.serviceAccountTokenCreator`;
+- condition title `admin_b2a5_inventory_impersonation_window`;
+- condition description `Rotas V1.1 temporary inventory impersonation window`;
+- condition expression com os `START_UTC` e `END_UTC` exatos deste run.
+
+Classificar o resultado como `CONFIRMED_PRESENT_CREATED_BY_RUN`, `CONFIRMED_ABSENT` ou `INCONCLUSIVE`.
+
+- Se ADD retornar `exitCode=0`, usar o bounded policy polling normatizado até confirmar `PRESENT`.
+- Se ADD retornar `exitCode!=0`, não repetir a mutation; realizar reconciliation read-only. Se a exact binding estiver presente, classificar `REMOTE_EFFECT_AFTER_NONZERO_EXIT` e removê-la exatamente uma vez no cleanup. Se estiver comprovadamente ausente, classificar `CONFIRMED_ABSENT`. Se o read falhar, estiver malformed ou for inconclusivo, classificar `INCONCLUSIVE` e falhar fechado.
+
+### Reporter fail-closed
+
+`bindingsAbsentFinal=true` somente quando BOTH forem comprovadas por remote read: project binding absent e Token Creator binding absent. Nunca derivar ausência de mutation não executada, exit code não zero, exception ou cleanup path não alcançado. Se Token Creator absence não puder ser lida, `bindingsAbsentFinal=false` ou estado equivalente not-proven permitido pelo schema, e `baselineClassification=F`.
+
+O reporter sanitizado desta execução deve contemplar os campos aprovados pelo bloco `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-TOKEN-CREATOR-FIX-AND-RETRY`, incluindo `tokenConditionSemanticallyValid`, `tokenConditionSha256`, `tokenCreatorPlannedArgvSemanticallyValid`, `tokenCreatorAddExitCode`, `tokenCreatorReconciliationResult`, `tokenCreatorBindingCreated`, `tokenCreatorBindingAbsentFinal` e `bindingsAbsentFinal`, sem operador, service account, condition payload bruto, argv sensível bruto, token, raw policy ou raw Firestore documents.
+
+### Cleanup obrigatório após qualquer IAM mutation
+
+Não revogar primeiro a autenticação humana se ainda forem necessárias reads para reconciliation ou cleanup. Após qualquer tentativa de IAM mutation, executar best-effort nesta ordem:
+
+1. interromper ADC/Firestore, se iniciados;
+2. revoke ADC, se criado;
+3. reconcile Token Creator binding;
+4. remover a Token Creator binding exata se comprovadamente criada pelo run;
+5. provar Token Creator binding ausente;
+6. reconcile project binding;
+7. remover a project binding exata se criada pelo run;
+8. provar project binding ausente;
+9. disable service account se habilitada pelo run;
+10. bounded observation até `disabled=true`;
+11. confirmar `USER_MANAGED keys=0`;
+12. remover condition artifacts pertencentes ao run;
+13. somente então revogar a credencial humana;
+14. confirmar auth `0/0`.
+
+Mesmo se alguma reconciliation falhar, continuar best-effort nos passos independentes e classificar `baselineClassification=F`. Nenhuma mutation possui retry automático; o erratum de observação de propagação permanece aplicável às leituras bounded e ao retry congelado de ADC em `t+0`, `t+120` e `t+300` quando, e somente quando, seu gate específico for atendido.
+
 ---
 
 ## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
