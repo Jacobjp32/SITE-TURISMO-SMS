@@ -132,6 +132,188 @@ Para o enable da service account: `serviceAccountEnableCallCount`, `enableComman
 
 ---
 
+## Rotas Admin V1.1 — contrato normativo da baseline read-only de produção
+
+### Identidade, escopo e precedência
+
+- Bloco que congelou este contrato: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-CONTRACT-RESET`.
+- `CONTRACT_KIND = NEW_HUMAN_APPROVED_REPLACEMENT`.
+- `DATA_CONTRACT = ROTAS_V1.1`.
+- `HISTORICAL_RETRY_CONTRACTS_SUPERSEDED=true`.
+- `CANONICAL_RUNNER_DETOUR_SUPERSEDED=true`.
+- `NEW_NORMATIVE_BASELINE_CONTRACT_FROZEN=true`.
+- Esta é a nova fonte normativa, aprovada pelo humano, para substituir os retries históricos incompletos somente quanto à próxima baseline de produção de Rotas V1.1. Os prompts históricos recuperados permanecem apenas como provenance; não realizar nova recuperação histórica, procurar outro runner ou reconstruir V1/V2/V3.
+- Este contrato não é `ADMIN-B2A5-INVENTORY`, não trata de `usuarios`, `ativo`, `role` nem institui canonical runner.
+- Fontes rastreadas preservadas: `TASKS.md`, `scripts/lib/rotas-v1.1-model.mjs`, `scripts/rotas-v1.1-normalize-dry-run.mjs` e `firestore.rules`. Para `RELATIONSHIPS`, a autoridade funcional é `scripts/lib/rotas-v1.1-model.mjs`; sua normalização não deve ser reinventada.
+- O bloco de congelamento foi `LOCAL-ONLY`, `DOCUMENTATION-ONLY`, `ZERO-CLOUD`, `ZERO-AUTH`, `ZERO-IAM` e `ZERO-FIRESTORE`, alterando somente `TASKS.md`. Este texto define um futuro EXEC, mas não o autoriza nem o inicia.
+
+### Preflight obrigatório do futuro EXEC
+
+Executar `git fetch origin`, `git status --short --branch --untracked-files=all`, `git status --porcelain=v2 --branch`, `git rev-parse HEAD`, `git rev-parse origin/feature/rotas-v1.1-admin-crud`, `git diff --check` e `git diff --cached --check`. Exigir branch `feature/rotas-v1.1-admin-crud`, HEAD aprovado pelo bloco futuro, tracked tree limpo e índice vazio. Confirmar que `tools/admin-b2a5-canonical-runner` não existe. Não abrir, ler, modificar ou stagear `.claude/settings.local.json`, `IMAGENS_MES_POLONES_2026_WEB.zip` e `images/mascotes/mascotes.zip`.
+
+### Auth e IAM temporários do futuro EXEC
+
+- `AUTH_MODEL = HISTORICAL_TEMPORARY_SERVICE_ACCOUNT_IMPERSONATION`.
+- A proibição total de IAM introduzida posteriormente está explicitamente superada para esta baseline. No futuro EXEC, e somente nele, são autorizáveis exatamente estas mutations temporárias:
+  1. habilitar a dedicated service account;
+  2. adicionar a ela, no project, o custom role `projects/turismo-sms/roles/adminB2A5InventoryRead`;
+  3. adicionar ao operador humano, somente no recurso da service account, `roles/iam.serviceAccountTokenCreator`;
+  4. executar cleanup reverso exato: remover a Token Creator binding criada pelo run; remover a project binding criada pelo run; desabilitar novamente a service account; confirmar zero chaves `USER_MANAGED`; revogar ADC; e revogar a credencial humana criada no run.
+- Nenhuma outra IAM mutation é autorizável.
+- Dedicated service account logical ID: `admin-b2a5-inventory-reader`.
+- Permissões exatas do custom role: `datastore.entities.get` e `datastore.entities.list`.
+- São proibidos `Owner`, `Editor`, `Datastore User`, `Datastore Viewer`, `Firebase Admin` e service-account key.
+- O e-mail do operador não pode ser persistido em `TASKS.md`. No futuro EXEC, deve ser fornecido literalmente pelo humano ou já estar presente como literal humano recuperável na mesma task. Nunca inferir por Git, username do Windows, estado do gcloud, arquivo ou ambiente.
+
+### Janela temporária
+
+- `START_UTC` é o UTC atual normalizado ao segundo inteiro, materializado imediatamente antes da primeira IAM mutation.
+- `END_UTC = START_UTC + 7200 segundos`.
+- As bindings temporárias devem usar `request.time >= timestamp(START_UTC) AND request.time < timestamp(END_UTC)`.
+- A project read binding permanece restrita ao database por `resource.name == "projects/turismo-sms/databases/(default)"`.
+- Não reintroduzir `ceilToNextMinute`, lead, `startTolerance` ou `ACTIVATION_MUST_START_BY`.
+
+### ADC isolado
+
+- Config root: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config`.
+- ADC: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`.
+- Antes do login: `credentialed accounts = 0`, `active accounts = 0` e ADC file ausente.
+- O config root pode existir somente se estiver sem credentialed account, sem active account, sem ADC e sem impersonation/access-token-file residual. Não apagar recursivamente o config root.
+- O ADC deve usar impersonação da dedicated service account. O access token para REST deve ser obtido somente do ADC impersonado, mantido em memória e nunca persistido.
+
+### Transporte Firestore estritamente read-only
+
+- `FIRESTORE_READ_METHOD = projects.databases.documents.listDocuments`.
+- API Firestore REST v1, método HTTP `GET`, parent `projects/turismo-sms/databases/(default)/documents`.
+- Não usar `runQuery`, `batchGet`, `getDocument` individual como estratégia principal, `runAggregationQuery` nem Firebase client SDK.
+- Não escrever Firestore.
+
+#### Collection `rotas`
+
+- DocumentMask somente com `id`, `slug`, `status` e `displayOrder`.
+- O technical document ID é o segmento final de `Document.name`.
+- Não incluir conteúdo editorial no relatório.
+- `pageSize = 100`; paginar por `nextPageToken` até sua ausência; `showMissing = false`; sem filtros.
+- Hard safety cap de `10000` documentos. Se excedido, baseline inconclusiva e `FAIL-CLOSED`.
+
+#### Collection `cms_establishments`
+
+- DocumentMask exata: `relationships.routeIds`.
+- O technical document ID é o segmento final de `Document.name`.
+- Não ler `name`, `contact`, `location`, `content`, `media`, SEO, PII nem conteúdo editorial.
+- `pageSize = 100`; paginar por `nextPageToken` até sua ausência; `showMissing = false`; sem filtros.
+- Hard safety cap de `10000` documentos. Se excedido, baseline inconclusiva e `FAIL-CLOSED`.
+
+### Rotas canônicas e aliases
+
+IDs canônicos, preservados exatamente e nesta autoridade:
+
+1. `sabores-memorias`
+2. `rota-erva-mate`
+3. `rota-polonesa`
+4. `rota-das-aguas`
+5. `caminhos-de-fluviopolis`
+6. `rota-da-terra`
+
+Alias map preservado exatamente:
+
+- `sabores` → `sabores-memorias`
+- `mate` → `rota-erva-mate`
+- `polonesa` → `rota-polonesa`
+- `aguas` → `rota-das-aguas`
+- `fluviop` → `caminhos-de-fluviopolis`
+- `terra` → `rota-da-terra`
+- `rota-da-erva-mate` → `rota-erva-mate`
+
+### Normalização vinculante de relacionamentos
+
+A baseline deve espelhar exatamente `normalizeRouteIds()` e `normalizeRelationshipDocuments()` de `scripts/lib/rotas-v1.1-model.mjs`, somente em memória:
+
+- `routeIds` deve ser list/array, com no máximo 50 elementos, todos strings;
+- ID canônico permanece canônico e alias aprovado é convertido;
+- string não canônica é preservada;
+- duplicate é removido somente dentro do mesmo documento, preservando a primeira ocorrência;
+- não existe dedupe global entre documentos.
+
+São `malformedRelationshipDocument`: `relationships` ausente; `routeIds` ausente, `null` ou não-array; mais de 50 elementos; ou qualquer elemento não-string. Cada ocorrência deve compor `malformedRelationshipDocuments` e impor `ROTAS_DRY_RUN_ALLOWED=false`. String desconhecida não é malformed: é `nonCanonicalPreserved` / `unknownValue`.
+
+### Agregados sanitizados
+
+Para `cms_establishments`, produzir somente:
+
+- `documentsInspected`
+- `documentsWithCanonicalRoutes`
+- `canonicalRelationshipsBefore`
+- `aliasesNormalized`
+- `canonicalRelationshipsAfter`
+- `multiRouteDocuments`
+- `nonCanonicalGroupingsPreserved`
+- `duplicatesRemoved`
+- `unknownValues`
+- `malformedRelationshipDocuments`
+
+Para `rotas`, produzir somente:
+
+- `routeDocumentsInspected`
+- `canonicalRouteDocumentsPresent`
+- `nonCanonicalRouteDocumentCount`
+- `malformedRouteDocumentCount`
+
+Não listar IDs de `cms_establishments` no relatório.
+
+### Referência local não vinculante
+
+Os números do dry-run local rastreado são somente referência, nunca gate numérico de produção: `canonicalRouteCount = 6`, `canonicalRelationshipsAfter = 60`, `documentsWithCanonicalRoutes = 51`, `aliasesNormalized = 2`, `nonCanonicalGroupingsPreserved = 11`, `multiRouteDocuments = 9`, `seedRouteCount = 6` e `seedValid = true`. Produção não precisa ser numericamente idêntica; diferenças devem ser reportadas, não tratadas automaticamente como erro.
+
+### Fingerprint vinculante byte a byte
+
+Calcular somente quando houver zero malformed relationship documents:
+
+1. Para cada documento válido de `cms_establishments`, extrair `technicalId` como o segmento final de `Document.name`.
+2. Aplicar `normalizeRouteIds()` e copiar os `routeIds` normalizados.
+3. Ordenar essa cópia por comparação ordinal de string.
+4. Serializar um JSON array compacto `[technicalId,sortedNormalizedRouteIds]`, com JSON escaping padrão e sem whitespace adicional.
+5. Ordenar todos os records por `technicalId`, usando comparação ordinal.
+6. Concatenar os JSON records com LF, byte `0x0A`, entre records e sem LF final.
+7. Codificar em UTF-8 sem BOM e calcular SHA-256.
+8. Emitir `relationshipFingerprintSha256` como hexadecimal lowercase de 64 caracteres.
+
+Os technical IDs são usados internamente, mas o payload pré-hash não integra o relatório. Se houver qualquer malformed, `relationshipFingerprintSha256 = null` e a baseline não pode ser `A`.
+
+### Reporter mínimo e fechado
+
+- `schemaVersion = "rotas-production-baseline-1.0"`.
+- O relatório final possui somente estas famílias fechadas: `identity`, `timing`, `git`, `auth`, `rotas`, `cmsEstablishments`, `relationshipFingerprintSha256`, `cleanup`, `mutationCounters`, `baselineClassification`, `failureCategory` e `rotasDryRunAllowed`.
+- Não recriar reporter de 78, 96 ou 137 campos e não reutilizar reporter do canonical runner.
+- Não persistir e-mail do operador, token, URL/code OAuth, e-mail da service account, raw IAM policy, raw Firestore documents, technical IDs de CMS, PII ou conteúdo editorial.
+
+### Critério de sucesso fail-closed
+
+`baselineClassification = A` somente quando todos os itens forem provados:
+
+- Git preflight aprovado;
+- auth baseline aprovado;
+- activation temporária concluída com journal auditável;
+- leitura completa de `rotas` e `cms_establishments`, ambas abaixo do hard cap;
+- zero malformed route documents e zero malformed relationship documents;
+- fingerprint produzido;
+- zero Firestore write, zero Storage mutation/access, zero Firebase Auth mutation e zero Rules mutation;
+- cleanup completo;
+- project binding temporária ausente e Token Creator binding temporária ausente;
+- service account desabilitada e zero chaves `USER_MANAGED`;
+- ADC ausente, credencial humana criada pelo run revogada e auth final zero;
+- Git inalterado.
+
+Somente nesse estado `ROTAS_DRY_RUN_ALLOWED=true`. Qualquer condição não provada impõe `baselineClassification=F` e `ROTAS_DRY_RUN_ALLOWED=false`.
+
+### Próximo passo, sem execução automática
+
+Se e somente se a baseline terminar em `A`, apenas liberar preparação, sem executar automaticamente, para a sequência rastreada: (1) deploy isolado das Rules exatas; (2) data migration dry-run com manifest; (3) migration EXEC com autorização separada; (4) release Admin + smoke; (5) adapter público posteriormente.
+
+O próximo bloco autorizável é `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-EXEC`. Este contrato congelado não autoriza produção, autenticação, IAM, Firestore, deploy, migration, merge ou push e não inicia esse próximo bloco.
+
+---
+
 ## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
 
 - Classificação: **A. ROLLOUT PREP COMPLETE**, restrita a Git/local e documentação.
