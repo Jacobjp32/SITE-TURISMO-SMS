@@ -465,6 +465,86 @@ Não revogar primeiro a autenticação humana se ainda forem necessárias reads 
 
 Mesmo se alguma reconciliation falhar, continuar best-effort nos passos independentes e classificar `baselineClassification=F`. Nenhuma mutation possui retry automático; o erratum de observação de propagação permanece aplicável às leituras bounded e ao retry congelado de ADC em `t+0`, `t+120` e `t+300` quando, e somente quando, seu gate específico for atendido.
 
+## Rotas Admin V1.1 — erratum project binding argv e journal
+
+Este erratum integra o contrato normativo da baseline read-only de produção. Preserva integralmente os contratos anteriores, inclusive o erratum Token Creator, e corrige exclusivamente a atomicidade do argv da project binding e a preservação monotônica de exit codes nativos já capturados.
+
+### Project binding ADD — argv exato
+
+A project binding temporária deve ser criada semanticamente como os seguintes argumentos lógicos separados:
+
+1. `gcloud`;
+2. `projects`;
+3. `add-iam-policy-binding`;
+4. `turismo-sms`;
+5. `--member=serviceAccount:<TARGET_SERVICE_ACCOUNT_IN_MEMORY>`;
+6. `--role=projects/turismo-sms/roles/adminB2A5InventoryRead`;
+7. `--condition-from-file=<PROJECT_CONDITION_FILE>`;
+8. `--account=<OPERATOR_IN_MEMORY>`;
+9. `--quiet`.
+
+O `PROJECT_ID` `turismo-sms` é argumento posicional único. Cada flag com valor deve chegar à CLI como um argumento lógico completo. É proibido entregar `"--member="` e `"serviceAccount:<target>"` como dois argumentos separados; o token deve ser semanticamente `"--member=serviceAccount:<target>"`. A mesma atomicidade é obrigatória para `--role=`, `--condition-from-file=` e `--account=`.
+
+Não concatenar project, member, role e condition em uma única shell command string. Antes da mutation, validar localmente o argv planejado. Se qualquer token estiver partido ou divergente: `COMMAND_CONSTRUCTION_FAILURE` e parada antes da mutation.
+
+### Project condition preservada
+
+Usar exclusivamente `--condition-from-file=<PROJECT_CONDITION_FILE>`; condition inline permanece proibida. A project condition continua contendo semanticamente:
+
+- `resource.name == "projects/turismo-sms/databases/(default)"`;
+- `request.time >= timestamp("<START_UTC>")`;
+- `request.time < timestamp("<END_UTC>")`.
+
+O restante do contrato temporal permanece inalterado.
+
+### Project binding REMOVE — argv exato
+
+O cleanup deve usar semanticamente os seguintes argumentos lógicos separados:
+
+1. `gcloud`;
+2. `projects`;
+3. `remove-iam-policy-binding`;
+4. `turismo-sms`;
+5. `--member=serviceAccount:<TARGET_SERVICE_ACCOUNT_IN_MEMORY>`;
+6. `--role=projects/turismo-sms/roles/adminB2A5InventoryRead`;
+7. `--condition-from-file=<MESMO_PROJECT_CONDITION_FILE>`;
+8. `--account=<OPERATOR_IN_MEMORY>`;
+9. `--quiet`.
+
+Aplicar a mesma regra de argv atômico. São proibidos `--all`, member diferente, role diferente ou condition diferente.
+
+### Token Creator preservado
+
+O erratum Token Creator já publicado permanece integralmente vinculante e não é alterado. Continuam obrigatórios target service account posicional correto, `--member=user:<OPERATOR>`, `--role=roles/iam.serviceAccountTokenCreator`, `--condition-from-file=<TOKEN_CONDITION_FILE>`, `--project=turismo-sms`, `--account=<OPERATOR>` e `--quiet`, cada flag/value como um único argumento lógico.
+
+### Journal de exit code monotônico
+
+`CAPTURED_NATIVE_EXIT_CODE_IS_MONOTONIC=true`.
+
+Quando uma chamada nativa retornar, capturar imediatamente:
+
+```powershell
+$capturedExitCode = $LASTEXITCODE
+```
+
+Depois que `exitCodeCaptured=true` e `exitCode=<integer>` forem registrados em memória/journal, nenhuma falha posterior pode converter esse valor em `INDETERMINATE`, `NOT_CAPTURED`, `null` ou apagar o valor. Falha de reporter, emissão de evento, serialização, pós-validação ou exception posterior deve possuir campo/categoria separada e não modifica o exit code já observado.
+
+Para qualquer mutation nativa, a ordem obrigatória é:
+
+1. registrar `invocationEntered=true`;
+2. executar o comando;
+3. capturar imediatamente `$LASTEXITCODE`;
+4. registrar em estrutura in-memory `returned=true`, `exitCodeCaptured=true` e `exitCode=<valor>`;
+5. somente depois executar report emission, post-validation, read-back, serialization ou instrumentação adicional.
+
+Se a etapa 5 falhar, preservar integralmente as evidências das etapas 1–4.
+
+`INDETERMINATE` fica reservado somente para situação em que realmente não seja possível saber se o processo nativo retornou ou se o código foi capturado. Não usar `INDETERMINATE` apenas porque pós-validação, reporter, binding ausente ou lógica posterior falhou. Exit code e efeito remoto permanecem separados; `exitCode=0` com `remoteEffect=CONFIRMED_ABSENT` é um estado válido e não autoriza reescrever o exit code.
+
+### Reconciliation preservada
+
+Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/reconciliation continua obrigatória e a mutation não é repetida automaticamente. Para project binding e Token Creator, preservar as classificações `CONFIRMED_PRESENT_CREATED_BY_RUN`, `CONFIRMED_ABSENT` e `INCONCLUSIVE` conforme seus contratos vigentes.
+
 ---
 
 ## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
