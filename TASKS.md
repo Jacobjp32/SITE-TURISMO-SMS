@@ -312,6 +312,56 @@ Se e somente se a baseline terminar em `A`, apenas liberar preparação, sem exe
 
 O próximo bloco autorizável é `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-EXEC`. Este contrato congelado não autoriza produção, autenticação, IAM, Firestore, deploy, migration, merge ou push e não inicia esse próximo bloco.
 
+## Rotas Admin V1.1 — erratum de observação de propagação
+
+`POST_MUTATION_OBSERVATION_CONTRACT = BOUNDED_READ_POLLING`.
+
+Mutation jamais é repetida apenas porque o read-back ainda não observou o estado esperado.
+
+### Service account enable/disable
+
+Após `exitCode=0` da única mutation de enable ou disable, realizar somente leituras de estado nos offsets aproximados `t+5s`, `t+15s`, `t+30s` e `t+60s`, medidos desde o retorno da mutation. Parar imediatamente quando o estado esperado for comprovado.
+
+- Para enable, o estado esperado é `disabled=false`.
+- Para disable, o estado esperado é `disabled=true`.
+- Cada leitura deve ter exit code capturado, ser parseada estruturalmente, confirmar a mesma service account, nunca alterar estado e nunca imprimir identidade no reporter.
+- Se nenhuma leitura comprovar o estado esperado até `t+60s`: `POST_VALIDATION_PROPAGATION_TIMEOUT` → `FAIL-CLOSED` → cleanup quando aplicável.
+- O `exitCode=0` da mutation continua não sendo prova suficiente sozinho.
+
+### IAM policy read-back
+
+Após project binding add/remove ou Token Creator binding add/remove, a mutation também continua sendo executada uma única vez. A observação da policy pode ser repetida somente por `getIamPolicy` ou leitura equivalente nos offsets aproximados `t+5s`, `t+15s`, `t+30s` e `t+60s`, medidos desde o retorno da mutation.
+
+- Após add, procurar a binding exata.
+- Após remove, provar ausência da binding exata.
+- Não criar ou remover novamente a binding por causa de atraso do read-back.
+- Se a observação não convergir até `t+60s`: `POST_VALIDATION_PROPAGATION_TIMEOUT` → `FAIL-CLOSED` → cleanup.
+
+### Authorization effect propagation
+
+Policy visibility e authorization effectiveness não são a mesma coisa.
+
+Depois que as duas bindings estiverem comprovadamente presentes na policy, a tentativa de ADC impersonado pode ainda receber `permission-denied` enquanto o IAM propaga o novo acesso. Nesse caso específico, permitir somente `ADC_IMPERSONATION_AUTH_PROPAGATION_RETRY`, com tentativas em `t+0`, `t+120s` e `t+300s`, contadas a partir da primeira tentativa de ADC.
+
+O retry é permitido somente quando:
+
+- o policy read-back continua comprovando as duas bindings exatas;
+- a service account continua enabled;
+- `USER_MANAGED keys=0`;
+- o erro é compatível com authorization/permission propagation.
+
+Não executar retry se houver malformed response, wrong principal, wrong role, wrong condition, missing binding, project mismatch, ADC path collision, filesystem failure, OAuth/login failure ou qualquer erro não relacionado a authorization propagation. Não repetir enable, bindings ou login durante esses retries. Se a tentativa de `t+300s` também falhar: `FAIL-CLOSED` → cleanup.
+
+### Disciplina vinculante
+
+- `MUTATION_RETRY = PROHIBITED`.
+- `READ_OBSERVATION_RETRY = ALLOWED_BOUNDED`.
+- `AUTH_EFFECT_RETRY = ALLOWED_BOUNDED_WHEN_EXPLICITLY_DEFINED`.
+- Cleanup de binding remove somente a binding comprovadamente criada pela execução.
+- Cleanup disable usa a mesma observação limitada em `t+5s`, `t+15s`, `t+30s` e `t+60s`; somente uma leitura que comprove `disabled=true` permite `serviceAccountDisabledFinal=true`.
+- O reporter sanitizado acrescenta `enableObservationAttempts`, `enableObservedAtUtc`, `disableObservationAttempts`, `disableObservedAtUtc`, `projectBindingObservationAttempts`, `tokenBindingObservationAttempts`, `adcAuthPropagationAttempts` e `priorRunCleanupReconciled`.
+- Todo o restante do contrato normativo congelado permanece inalterado.
+
 ---
 
 ## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
