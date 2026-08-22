@@ -6,6 +6,572 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — instrumentation PREP da baseline read-only em 2026-08-21
+
+- Bloco: `POST-V1-ROTAS-V1.1-READONLY-BASELINE-INSTRUMENTATION-PREP`.
+- O bloco remoto anterior `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE` permanece classificado como **F — INCONCLUSIVO**: não leu `rotas` ou `cms_establishments`, não escreveu Firestore e terminou com cleanup comprovado (bindings ausentes, service account desabilitada, zero chaves `USER_MANAGED`, ADC ausente, artifacts removidos e credencial humana revogada).
+- A forense local preserva `historicalEnableInvocation = INDETERMINATE`. O run registrou apenas uma categoria agregada de falha e não serializou `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, `exitCode`, stage ou journal de mutações. O estado pós-cleanup não pode promover essa evidência a “enable não enviado” nem a “enable concluído”.
+- `migrationDryRunSafeToPrepare = NOT_PROVEN`. Migração continua bloqueada. O único próximo bloco possível, dependente de autorização literal nova, é `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-RETRY`.
+
+### Source canônico — B2A5_MUTATION_EXECUTOR_SOURCE
+
+Todo comando nativo mutável do futuro retry — enable/disable da service account, add/remove das duas bindings e `auth revoke` quando aplicável — deve usar exclusivamente este executor. Ele não recebe token, policy, URL OAuth, argumento bruto nem saída nativa no objeto retornado; o chamador fornece somente `SanitizedTargetLabel`.
+
+<!-- B2A5_MUTATION_EXECUTOR_SOURCE_BEGIN -->
+```powershell
+function Invoke-B2A5NativeMutation {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Executable,
+
+        [Parameter(Mandatory = $true)]
+        [AllowEmptyCollection()]
+        [string[]] $Arguments,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $OperationName,
+
+        [Parameter(Mandatory = $true)]
+        [ref] $CallCounterRef,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateRange(1, [int]::MaxValue)]
+        [int] $ExpectedCallOrdinal,
+
+        [Parameter(Mandatory = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $SanitizedTargetLabel
+    )
+
+    $record = [ordered]@{
+        operationName = $OperationName
+        sanitizedTargetLabel = $SanitizedTargetLabel
+        callCountBefore = $null
+        callCountAfter = $null
+        commandInvocationEntered = $false
+        commandWasSent = $false
+        commandReturned = $false
+        exitCodeCaptured = $false
+        exitCode = $null
+        startedAtUtc = $null
+        returnedAtUtc = $null
+        wrapperFailure = $false
+        wrapperFailureClass = $null
+        wrapperFailurePhase = $null
+    }
+
+    try {
+        $callCountBefore = [int] $CallCounterRef.Value
+
+        if ($ExpectedCallOrdinal -ne ($callCountBefore + 1)) {
+            throw [System.InvalidOperationException]::new(
+                'B2A5_MUTATION_CALL_ORDINAL_COLLISION'
+            )
+        }
+
+        $CallCounterRef.Value = $callCountBefore + 1
+        $record.callCountBefore = $callCountBefore
+        $record.callCountAfter = [int] $CallCounterRef.Value
+        $record.startedAtUtc = [DateTimeOffset]::UtcNow.ToString('o')
+        $record.commandInvocationEntered = $true
+
+        & $Executable @Arguments
+        $NativeExitCode = $LASTEXITCODE
+
+        $record.commandReturned = $true
+        $record.exitCodeCaptured = $true
+        $record.commandWasSent = $true
+        $record.exitCode = [int] $NativeExitCode
+        $record.returnedAtUtc = [DateTimeOffset]::UtcNow.ToString('o')
+    }
+    catch {
+        $record.wrapperFailure = $true
+
+        if ($record.commandInvocationEntered -and -not $record.exitCodeCaptured) {
+            $record.commandWasSent = 'INDETERMINATE'
+            $record.exitCode = 'INDETERMINATE'
+            $record.wrapperFailureClass =
+                'HOST_FAILURE_AFTER_INVOCATION_ENTERED'
+            $record.wrapperFailurePhase =
+                'afterInvocationEnteredBeforeExitCapture'
+        }
+        else {
+            $record.commandWasSent = $false
+            $record.wrapperFailureClass = 'LOCAL_PREINVOCATION_FAILURE'
+            $record.wrapperFailurePhase =
+                'beforeCommandInvocationEntered'
+        }
+    }
+
+    return [pscustomobject] $record
+}
+```
+<!-- B2A5_MUTATION_EXECUTOR_SOURCE_END -->
+
+### Contrato operacional do retry
+
+1. Antes de cada mutation, o chamador valida que `ExpectedCallOrdinal` é único e cria um journal process-local com `sequence`, `operationName`, `callOrdinal`, `startedAtUtc`, `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, `exitCode`, `postValidationStarted`, `postValidationResult` e `cleanupRequired`.
+2. O executor incrementa o contador e grava `commandInvocationEntered=true` imediatamente antes de `& $Executable @Arguments`. A atribuição `$NativeExitCode = $LASTEXITCODE` é a primeira instrução executável após o retorno nativo.
+3. Se falhar antes de `commandInvocationEntered`, `commandWasSent=false`. Se falhar depois da entrada e antes da captura, `commandWasSent=INDETERMINATE` e `exitCode=INDETERMINATE`. Estado remoto pós-operação jamais substitui exit code ausente.
+4. Leitura pós-operação começa somente depois do record estrutural do executor e atualiza somente `postValidationStarted`/`postValidationResult` no journal. Falha de serialização ou cleanup não apaga records já capturados.
+5. Não há retry automático de mutation. `exitCodeCaptured=true` com exit diferente de zero bloqueia repetição; evidence `INDETERMINATE` exige reconciliação separada e cleanup fail-closed.
+6. O cleanup mantém a remoção exata de bindings, disable final, zero chaves, ADC ausente, revogação nominal da credencial criada e remoção de artifacts. Ele pode apagar artifacts operacionais, mas não os records sanitizados em memória antes do relatório final.
+
+### Campos obrigatórios do relatório de retry
+
+Para o enable da service account: `serviceAccountEnableCallCount`, `enableCommandInvocationEntered`, `enableCommandReturned`, `enableExitCodeCaptured`, `enableExitCode`, `enableStartedAtUtc`, `enableReturnedAtUtc`, `enablePostReadAtUtc` e `disabledAfterEnable`. A mesma disciplina vale para ADD/REMOVE de binding, disable e revoke. O executor proíbe `System.Diagnostics.Process` com handlers assíncronos, `OutputDataReceived`, `ErrorDataReceived`, jobs, `Start-Job`, parsing de comando como string única, `Invoke-Expression` e atribuição manual a `$LASTEXITCODE`.
+
+### Validação sintética deste PREP
+
+- `Windows PowerShell 5.1`: `parseErrorCount=0`; `10/10 PASS`.
+- `PowerShell 7.x`: `parseErrorCount=0`; `10/10 PASS`.
+- Os dez casos cobriram exit `0`, exit `7`, sequência sem `$LASTEXITCODE` stale, executável e argumento com espaço, ordem literal da captura, falha pré-invocation, host failure após `commandInvocationEntered`, falha de serialização posterior e colisão de ordinal. Nenhum caso executou `gcloud` ou qualquer acesso remoto.
+
+---
+
+## Rotas Admin V1.1 — contrato normativo da baseline read-only de produção
+
+### Identidade, escopo e precedência
+
+- Bloco que congelou este contrato: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-CONTRACT-RESET`.
+- `CONTRACT_KIND = NEW_HUMAN_APPROVED_REPLACEMENT`.
+- `DATA_CONTRACT = ROTAS_V1.1`.
+- `HISTORICAL_RETRY_CONTRACTS_SUPERSEDED=true`.
+- `CANONICAL_RUNNER_DETOUR_SUPERSEDED=true`.
+- `NEW_NORMATIVE_BASELINE_CONTRACT_FROZEN=true`.
+- Esta é a nova fonte normativa, aprovada pelo humano, para substituir os retries históricos incompletos somente quanto à próxima baseline de produção de Rotas V1.1. Os prompts históricos recuperados permanecem apenas como provenance; não realizar nova recuperação histórica, procurar outro runner ou reconstruir V1/V2/V3.
+- Este contrato não é `ADMIN-B2A5-INVENTORY`, não trata de `usuarios`, `ativo`, `role` nem institui canonical runner.
+- Fontes rastreadas preservadas: `TASKS.md`, `scripts/lib/rotas-v1.1-model.mjs`, `scripts/rotas-v1.1-normalize-dry-run.mjs` e `firestore.rules`. Para `RELATIONSHIPS`, a autoridade funcional é `scripts/lib/rotas-v1.1-model.mjs`; sua normalização não deve ser reinventada.
+- O bloco de congelamento foi `LOCAL-ONLY`, `DOCUMENTATION-ONLY`, `ZERO-CLOUD`, `ZERO-AUTH`, `ZERO-IAM` e `ZERO-FIRESTORE`, alterando somente `TASKS.md`. Este texto define um futuro EXEC, mas não o autoriza nem o inicia.
+
+### Preflight obrigatório do futuro EXEC
+
+Executar `git fetch origin`, `git status --short --branch --untracked-files=all`, `git status --porcelain=v2 --branch`, `git rev-parse HEAD`, `git rev-parse origin/feature/rotas-v1.1-admin-crud`, `git diff --check` e `git diff --cached --check`. Exigir branch `feature/rotas-v1.1-admin-crud`, HEAD aprovado pelo bloco futuro, tracked tree limpo e índice vazio. Confirmar que `tools/admin-b2a5-canonical-runner` não existe. Não abrir, ler, modificar ou stagear `.claude/settings.local.json`, `IMAGENS_MES_POLONES_2026_WEB.zip` e `images/mascotes/mascotes.zip`.
+
+### Auth e IAM temporários do futuro EXEC
+
+- `AUTH_MODEL = HISTORICAL_TEMPORARY_SERVICE_ACCOUNT_IMPERSONATION`.
+- A proibição total de IAM introduzida posteriormente está explicitamente superada para esta baseline. No futuro EXEC, e somente nele, são autorizáveis exatamente estas mutations temporárias:
+  1. habilitar a dedicated service account;
+  2. adicionar a ela, no project, o custom role `projects/turismo-sms/roles/adminB2A5InventoryRead`;
+  3. adicionar ao operador humano, somente no recurso da service account, `roles/iam.serviceAccountTokenCreator`;
+  4. executar cleanup reverso exato: remover a Token Creator binding criada pelo run; remover a project binding criada pelo run; desabilitar novamente a service account; confirmar zero chaves `USER_MANAGED`; revogar ADC; e revogar a credencial humana criada no run.
+- Nenhuma outra IAM mutation é autorizável.
+- Dedicated service account logical ID: `admin-b2a5-inventory-reader`.
+- Permissões exatas do custom role: `datastore.entities.get` e `datastore.entities.list`.
+- São proibidos `Owner`, `Editor`, `Datastore User`, `Datastore Viewer`, `Firebase Admin` e service-account key.
+- O e-mail do operador não pode ser persistido em `TASKS.md`. No futuro EXEC, deve ser fornecido literalmente pelo humano ou já estar presente como literal humano recuperável na mesma task. Nunca inferir por Git, username do Windows, estado do gcloud, arquivo ou ambiente.
+
+### Janela temporária
+
+- `START_UTC` é o UTC atual normalizado ao segundo inteiro, materializado imediatamente antes da primeira IAM mutation.
+- `END_UTC = START_UTC + 7200 segundos`.
+- As bindings temporárias devem usar `request.time >= timestamp(START_UTC) AND request.time < timestamp(END_UTC)`.
+- A project read binding permanece restrita ao database por `resource.name == "projects/turismo-sms/databases/(default)"`.
+- Não reintroduzir `ceilToNextMinute`, lead, `startTolerance` ou `ACTIVATION_MUST_START_BY`.
+
+### ADC isolado
+
+- Config root: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config`.
+- ADC: `%LOCALAPPDATA%\Google\CloudSDK\admin-b2a5-config\application_default_credentials.json`.
+- Antes do login: `credentialed accounts = 0`, `active accounts = 0` e ADC file ausente.
+- O config root pode existir somente se estiver sem credentialed account, sem active account, sem ADC e sem impersonation/access-token-file residual. Não apagar recursivamente o config root.
+- O ADC deve usar impersonação da dedicated service account. O access token para REST deve ser obtido somente do ADC impersonado, mantido em memória e nunca persistido.
+
+### Transporte Firestore estritamente read-only
+
+- `FIRESTORE_READ_METHOD = projects.databases.documents.listDocuments`.
+- API Firestore REST v1, método HTTP `GET`, parent `projects/turismo-sms/databases/(default)/documents`.
+- Não usar `runQuery`, `batchGet`, `getDocument` individual como estratégia principal, `runAggregationQuery` nem Firebase client SDK.
+- Não escrever Firestore.
+
+#### Collection `rotas`
+
+- DocumentMask somente com `id`, `slug`, `status` e `displayOrder`.
+- O technical document ID é o segmento final de `Document.name`.
+- Não incluir conteúdo editorial no relatório.
+- `pageSize = 100`; paginar por `nextPageToken` até sua ausência; `showMissing = false`; sem filtros.
+- Hard safety cap de `10000` documentos. Se excedido, baseline inconclusiva e `FAIL-CLOSED`.
+
+#### Collection `cms_establishments`
+
+- DocumentMask exata: `relationships.routeIds`.
+- O technical document ID é o segmento final de `Document.name`.
+- Não ler `name`, `contact`, `location`, `content`, `media`, SEO, PII nem conteúdo editorial.
+- `pageSize = 100`; paginar por `nextPageToken` até sua ausência; `showMissing = false`; sem filtros.
+- Hard safety cap de `10000` documentos. Se excedido, baseline inconclusiva e `FAIL-CLOSED`.
+
+### Rotas canônicas e aliases
+
+IDs canônicos, preservados exatamente e nesta autoridade:
+
+1. `sabores-memorias`
+2. `rota-erva-mate`
+3. `rota-polonesa`
+4. `rota-das-aguas`
+5. `caminhos-de-fluviopolis`
+6. `rota-da-terra`
+
+Alias map preservado exatamente:
+
+- `sabores` → `sabores-memorias`
+- `mate` → `rota-erva-mate`
+- `polonesa` → `rota-polonesa`
+- `aguas` → `rota-das-aguas`
+- `fluviop` → `caminhos-de-fluviopolis`
+- `terra` → `rota-da-terra`
+- `rota-da-erva-mate` → `rota-erva-mate`
+
+### Normalização vinculante de relacionamentos
+
+A baseline deve espelhar exatamente `normalizeRouteIds()` e `normalizeRelationshipDocuments()` de `scripts/lib/rotas-v1.1-model.mjs`, somente em memória:
+
+- `routeIds` deve ser list/array, com no máximo 50 elementos, todos strings;
+- ID canônico permanece canônico e alias aprovado é convertido;
+- string não canônica é preservada;
+- duplicate é removido somente dentro do mesmo documento, preservando a primeira ocorrência;
+- não existe dedupe global entre documentos.
+
+São `malformedRelationshipDocument`: `relationships` ausente; `routeIds` ausente, `null` ou não-array; mais de 50 elementos; ou qualquer elemento não-string. Cada ocorrência deve compor `malformedRelationshipDocuments` e impor `ROTAS_DRY_RUN_ALLOWED=false`. String desconhecida não é malformed: é `nonCanonicalPreserved` / `unknownValue`.
+
+### Agregados sanitizados
+
+Para `cms_establishments`, produzir somente:
+
+- `documentsInspected`
+- `documentsWithCanonicalRoutes`
+- `canonicalRelationshipsBefore`
+- `aliasesNormalized`
+- `canonicalRelationshipsAfter`
+- `multiRouteDocuments`
+- `nonCanonicalGroupingsPreserved`
+- `duplicatesRemoved`
+- `unknownValues`
+- `malformedRelationshipDocuments`
+
+Para `rotas`, produzir somente:
+
+- `routeDocumentsInspected`
+- `canonicalRouteDocumentsPresent`
+- `nonCanonicalRouteDocumentCount`
+- `malformedRouteDocumentCount`
+
+Não listar IDs de `cms_establishments` no relatório.
+
+### Referência local não vinculante
+
+Os números do dry-run local rastreado são somente referência, nunca gate numérico de produção: `canonicalRouteCount = 6`, `canonicalRelationshipsAfter = 60`, `documentsWithCanonicalRoutes = 51`, `aliasesNormalized = 2`, `nonCanonicalGroupingsPreserved = 11`, `multiRouteDocuments = 9`, `seedRouteCount = 6` e `seedValid = true`. Produção não precisa ser numericamente idêntica; diferenças devem ser reportadas, não tratadas automaticamente como erro.
+
+### Fingerprint vinculante byte a byte
+
+Calcular somente quando houver zero malformed relationship documents:
+
+1. Para cada documento válido de `cms_establishments`, extrair `technicalId` como o segmento final de `Document.name`.
+2. Aplicar `normalizeRouteIds()` e copiar os `routeIds` normalizados.
+3. Ordenar essa cópia por comparação ordinal de string.
+4. Serializar um JSON array compacto `[technicalId,sortedNormalizedRouteIds]`, com JSON escaping padrão e sem whitespace adicional.
+5. Ordenar todos os records por `technicalId`, usando comparação ordinal.
+6. Concatenar os JSON records com LF, byte `0x0A`, entre records e sem LF final.
+7. Codificar em UTF-8 sem BOM e calcular SHA-256.
+8. Emitir `relationshipFingerprintSha256` como hexadecimal lowercase de 64 caracteres.
+
+Os technical IDs são usados internamente, mas o payload pré-hash não integra o relatório. Se houver qualquer malformed, `relationshipFingerprintSha256 = null` e a baseline não pode ser `A`.
+
+### Reporter mínimo e fechado
+
+- `schemaVersion = "rotas-production-baseline-1.0"`.
+- O relatório final possui somente estas famílias fechadas: `identity`, `timing`, `git`, `auth`, `rotas`, `cmsEstablishments`, `relationshipFingerprintSha256`, `cleanup`, `mutationCounters`, `baselineClassification`, `failureCategory` e `rotasDryRunAllowed`.
+- Não recriar reporter de 78, 96 ou 137 campos e não reutilizar reporter do canonical runner.
+- Não persistir e-mail do operador, token, URL/code OAuth, e-mail da service account, raw IAM policy, raw Firestore documents, technical IDs de CMS, PII ou conteúdo editorial.
+
+### Critério de sucesso fail-closed
+
+`baselineClassification = A` somente quando todos os itens forem provados:
+
+- Git preflight aprovado;
+- auth baseline aprovado;
+- activation temporária concluída com journal auditável;
+- leitura completa de `rotas` e `cms_establishments`, ambas abaixo do hard cap;
+- zero malformed route documents e zero malformed relationship documents;
+- fingerprint produzido;
+- zero Firestore write, zero Storage mutation/access, zero Firebase Auth mutation e zero Rules mutation;
+- cleanup completo;
+- project binding temporária ausente e Token Creator binding temporária ausente;
+- service account desabilitada e zero chaves `USER_MANAGED`;
+- ADC ausente, credencial humana criada pelo run revogada e auth final zero;
+- Git inalterado.
+
+Somente nesse estado `ROTAS_DRY_RUN_ALLOWED=true`. Qualquer condição não provada impõe `baselineClassification=F` e `ROTAS_DRY_RUN_ALLOWED=false`.
+
+### Próximo passo, sem execução automática
+
+Se e somente se a baseline terminar em `A`, apenas liberar preparação, sem executar automaticamente, para a sequência rastreada: (1) deploy isolado das Rules exatas; (2) data migration dry-run com manifest; (3) migration EXEC com autorização separada; (4) release Admin + smoke; (5) adapter público posteriormente.
+
+O próximo bloco autorizável é `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-EXEC`. Este contrato congelado não autoriza produção, autenticação, IAM, Firestore, deploy, migration, merge ou push e não inicia esse próximo bloco.
+
+## Rotas Admin V1.1 — erratum de observação de propagação
+
+`POST_MUTATION_OBSERVATION_CONTRACT = BOUNDED_READ_POLLING`.
+
+Mutation jamais é repetida apenas porque o read-back ainda não observou o estado esperado.
+
+### Service account enable/disable
+
+Após `exitCode=0` da única mutation de enable ou disable, realizar somente leituras de estado nos offsets aproximados `t+5s`, `t+15s`, `t+30s` e `t+60s`, medidos desde o retorno da mutation. Parar imediatamente quando o estado esperado for comprovado.
+
+- Para enable, o estado esperado é `disabled=false`.
+- Para disable, o estado esperado é `disabled=true`.
+- Cada leitura deve ter exit code capturado, ser parseada estruturalmente, confirmar a mesma service account, nunca alterar estado e nunca imprimir identidade no reporter.
+- Se nenhuma leitura comprovar o estado esperado até `t+60s`: `POST_VALIDATION_PROPAGATION_TIMEOUT` → `FAIL-CLOSED` → cleanup quando aplicável.
+- O `exitCode=0` da mutation continua não sendo prova suficiente sozinho.
+
+### IAM policy read-back
+
+Após project binding add/remove ou Token Creator binding add/remove, a mutation também continua sendo executada uma única vez. A observação da policy pode ser repetida somente por `getIamPolicy` ou leitura equivalente nos offsets aproximados `t+5s`, `t+15s`, `t+30s` e `t+60s`, medidos desde o retorno da mutation.
+
+- Após add, procurar a binding exata.
+- Após remove, provar ausência da binding exata.
+- Não criar ou remover novamente a binding por causa de atraso do read-back.
+- Se a observação não convergir até `t+60s`: `POST_VALIDATION_PROPAGATION_TIMEOUT` → `FAIL-CLOSED` → cleanup.
+
+### Authorization effect propagation
+
+Policy visibility e authorization effectiveness não são a mesma coisa.
+
+Depois que as duas bindings estiverem comprovadamente presentes na policy, a tentativa de ADC impersonado pode ainda receber `permission-denied` enquanto o IAM propaga o novo acesso. Nesse caso específico, permitir somente `ADC_IMPERSONATION_AUTH_PROPAGATION_RETRY`, com tentativas em `t+0`, `t+120s` e `t+300s`, contadas a partir da primeira tentativa de ADC.
+
+O retry é permitido somente quando:
+
+- o policy read-back continua comprovando as duas bindings exatas;
+- a service account continua enabled;
+- `USER_MANAGED keys=0`;
+- o erro é compatível com authorization/permission propagation.
+
+Não executar retry se houver malformed response, wrong principal, wrong role, wrong condition, missing binding, project mismatch, ADC path collision, filesystem failure, OAuth/login failure ou qualquer erro não relacionado a authorization propagation. Não repetir enable, bindings ou login durante esses retries. Se a tentativa de `t+300s` também falhar: `FAIL-CLOSED` → cleanup.
+
+### Disciplina vinculante
+
+- `MUTATION_RETRY = PROHIBITED`.
+- `READ_OBSERVATION_RETRY = ALLOWED_BOUNDED`.
+- `AUTH_EFFECT_RETRY = ALLOWED_BOUNDED_WHEN_EXPLICITLY_DEFINED`.
+- Cleanup de binding remove somente a binding comprovadamente criada pela execução.
+- Cleanup disable usa a mesma observação limitada em `t+5s`, `t+15s`, `t+30s` e `t+60s`; somente uma leitura que comprove `disabled=true` permite `serviceAccountDisabledFinal=true`.
+- O reporter sanitizado acrescenta `enableObservationAttempts`, `enableObservedAtUtc`, `disableObservationAttempts`, `disableObservedAtUtc`, `projectBindingObservationAttempts`, `tokenBindingObservationAttempts`, `adcAuthPropagationAttempts` e `priorRunCleanupReconciled`.
+- Todo o restante do contrato normativo congelado permanece inalterado.
+
+## Rotas Admin V1.1 — erratum Token Creator command contract
+
+Este erratum integra o contrato normativo da baseline read-only de produção e prevalece sobre qualquer construção anterior incompatível da mutation Token Creator. `TOKEN_CREATOR_MUTATION_EXIT_CODE_DOES_NOT_PROVE_REMOTE_STATE=true`.
+
+### Token Creator ADD — contrato exato
+
+A única mutation ADD autorizável usa `gcloud iam service-accounts add-iam-policy-binding` com os seguintes argumentos semânticos exatos:
+
+- `SERVICE_ACCOUNT = <TARGET_SERVICE_ACCOUNT_EMAIL_IN_MEMORY>`;
+- `--member=user:<OPERATOR_IN_MEMORY>`;
+- `--role=roles/iam.serviceAccountTokenCreator`;
+- `--condition-from-file=<TOKEN_CONDITION_FILE>`;
+- `--project=turismo-sms`;
+- `--account=<OPERATOR_IN_MEMORY>`;
+- `--quiet`.
+
+A ordem das flags pode variar se aceita pela CLI, mas todos os argumentos acima são obrigatórios. É proibido usar `--condition` inline, condition string montada diretamente no argv, omitir `--project`, omitir `--account`, usar `--all`, outro role ou outro principal.
+
+### Construção e validação local do argv
+
+A chamada deve ser construída como argv estruturado, sem concatenar command string dinâmica. Cada flag/value deve ocupar exatamente um argumento lógico conforme exigido pela CLI. Antes da mutation, a validação local do argv planejado deve exigir cumulativamente:
+
+- command `iam service-accounts add-iam-policy-binding`;
+- target service account correta;
+- member prefix `user:`;
+- role exato `roles/iam.serviceAccountTokenCreator`;
+- condition mechanism `condition-from-file`;
+- project `turismo-sms`;
+- account igual ao operador humano aprovado;
+- `quiet` presente.
+
+Se qualquer item divergir: `COMMAND_CONSTRUCTION_FAILURE` e parada antes da mutation. Valores sensíveis e argv sensível bruto não integram o relatório.
+
+### Token condition file
+
+A Token Creator condition deve existir exclusivamente em arquivo local temporário, criado de forma exclusiva fora do repositório, em JSON ou YAML aceito oficialmente pelo gcloud, com conteúdo semântico exato:
+
+- title: `admin_b2a5_inventory_impersonation_window`;
+- description: `Rotas V1.1 temporary inventory impersonation window`;
+- expression: `request.time >= timestamp("<START_UTC>") && request.time < timestamp("<END_UTC>")`.
+
+`START_UTC` e `END_UTC` são os valores da janela corrente definidos pelo contrato. A Token Creator condition não pode incluir `resource.name`.
+
+Antes da mutation, reparsear o arquivo e confirmar title, description, expression e `START_UTC < END_UTC`; calcular hash local; manter path/hash somente em memória operacional; não persistir o arquivo no repositório. O mesmo `TOKEN_CONDITION_FILE` criado para ADD deve permanecer disponível até que o cleanup da Token Creator binding tenha sido totalmente reconciliado. Não apagá-lo antes. A remoção deve reutilizar a mesma condition — title, description e expression — e preferencialmente o mesmo arquivo/hash pertencente ao run.
+
+### Token Creator REMOVE — contrato exato
+
+Quando o cleanup exigir remoção, usar `gcloud iam service-accounts remove-iam-policy-binding` com os seguintes argumentos semânticos exatos:
+
+- `SERVICE_ACCOUNT = <TARGET_SERVICE_ACCOUNT_EMAIL_IN_MEMORY>`;
+- `--member=user:<OPERATOR_IN_MEMORY>`;
+- `--role=roles/iam.serviceAccountTokenCreator`;
+- `--condition-from-file=<MESMO_TOKEN_CONDITION_FILE>`;
+- `--project=turismo-sms`;
+- `--account=<OPERATOR_IN_MEMORY>`;
+- `--quiet`.
+
+São proibidos `--all`, condition diferente, member diferente, role diferente ou remover binding não atribuída ao run.
+
+### Reconciliation obrigatória da Token Creator
+
+Antes da mutation ADD, a precondition deve provar a ausência da target exact Token Creator binding. Depois de qualquer tentativa de ADD — `exitCode=0`, `exitCode!=0` ou resultado indeterminado — deve existir reconciliation read-only antes de revogar a credencial humana. É proibido derivar `bindingAbsent=true` de `exitCode != 0`.
+
+A reconciliation deve ler a IAM policy da target service account e procurar exatamente:
+
+- member `user:<OPERATOR>`;
+- role `roles/iam.serviceAccountTokenCreator`;
+- condition title `admin_b2a5_inventory_impersonation_window`;
+- condition description `Rotas V1.1 temporary inventory impersonation window`;
+- condition expression com os `START_UTC` e `END_UTC` exatos deste run.
+
+Classificar o resultado como `CONFIRMED_PRESENT_CREATED_BY_RUN`, `CONFIRMED_ABSENT` ou `INCONCLUSIVE`.
+
+- Se ADD retornar `exitCode=0`, usar o bounded policy polling normatizado até confirmar `PRESENT`.
+- Se ADD retornar `exitCode!=0`, não repetir a mutation; realizar reconciliation read-only. Se a exact binding estiver presente, classificar `REMOTE_EFFECT_AFTER_NONZERO_EXIT` e removê-la exatamente uma vez no cleanup. Se estiver comprovadamente ausente, classificar `CONFIRMED_ABSENT`. Se o read falhar, estiver malformed ou for inconclusivo, classificar `INCONCLUSIVE` e falhar fechado.
+
+### Reporter fail-closed
+
+`bindingsAbsentFinal=true` somente quando BOTH forem comprovadas por remote read: project binding absent e Token Creator binding absent. Nunca derivar ausência de mutation não executada, exit code não zero, exception ou cleanup path não alcançado. Se Token Creator absence não puder ser lida, `bindingsAbsentFinal=false` ou estado equivalente not-proven permitido pelo schema, e `baselineClassification=F`.
+
+O reporter sanitizado desta execução deve contemplar os campos aprovados pelo bloco `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-TOKEN-CREATOR-FIX-AND-RETRY`, incluindo `tokenConditionSemanticallyValid`, `tokenConditionSha256`, `tokenCreatorPlannedArgvSemanticallyValid`, `tokenCreatorAddExitCode`, `tokenCreatorReconciliationResult`, `tokenCreatorBindingCreated`, `tokenCreatorBindingAbsentFinal` e `bindingsAbsentFinal`, sem operador, service account, condition payload bruto, argv sensível bruto, token, raw policy ou raw Firestore documents.
+
+### Cleanup obrigatório após qualquer IAM mutation
+
+Não revogar primeiro a autenticação humana se ainda forem necessárias reads para reconciliation ou cleanup. Após qualquer tentativa de IAM mutation, executar best-effort nesta ordem:
+
+1. interromper ADC/Firestore, se iniciados;
+2. revoke ADC, se criado;
+3. reconcile Token Creator binding;
+4. remover a Token Creator binding exata se comprovadamente criada pelo run;
+5. provar Token Creator binding ausente;
+6. reconcile project binding;
+7. remover a project binding exata se criada pelo run;
+8. provar project binding ausente;
+9. disable service account se habilitada pelo run;
+10. bounded observation até `disabled=true`;
+11. confirmar `USER_MANAGED keys=0`;
+12. remover condition artifacts pertencentes ao run;
+13. somente então revogar a credencial humana;
+14. confirmar auth `0/0`.
+
+Mesmo se alguma reconciliation falhar, continuar best-effort nos passos independentes e classificar `baselineClassification=F`. Nenhuma mutation possui retry automático; o erratum de observação de propagação permanece aplicável às leituras bounded e ao retry congelado de ADC em `t+0`, `t+120` e `t+300` quando, e somente quando, seu gate específico for atendido.
+
+## Rotas Admin V1.1 — erratum project binding argv e journal
+
+Este erratum integra o contrato normativo da baseline read-only de produção. Preserva integralmente os contratos anteriores, inclusive o erratum Token Creator, e corrige exclusivamente a atomicidade do argv da project binding e a preservação monotônica de exit codes nativos já capturados.
+
+### Project binding ADD — argv exato
+
+A project binding temporária deve ser criada semanticamente como os seguintes argumentos lógicos separados:
+
+1. `gcloud`;
+2. `projects`;
+3. `add-iam-policy-binding`;
+4. `turismo-sms`;
+5. `--member=serviceAccount:<TARGET_SERVICE_ACCOUNT_IN_MEMORY>`;
+6. `--role=projects/turismo-sms/roles/adminB2A5InventoryRead`;
+7. `--condition-from-file=<PROJECT_CONDITION_FILE>`;
+8. `--account=<OPERATOR_IN_MEMORY>`;
+9. `--quiet`.
+
+O `PROJECT_ID` `turismo-sms` é argumento posicional único. Cada flag com valor deve chegar à CLI como um argumento lógico completo. É proibido entregar `"--member="` e `"serviceAccount:<target>"` como dois argumentos separados; o token deve ser semanticamente `"--member=serviceAccount:<target>"`. A mesma atomicidade é obrigatória para `--role=`, `--condition-from-file=` e `--account=`.
+
+Não concatenar project, member, role e condition em uma única shell command string. Antes da mutation, validar localmente o argv planejado. Se qualquer token estiver partido ou divergente: `COMMAND_CONSTRUCTION_FAILURE` e parada antes da mutation.
+
+### Project condition preservada
+
+Usar exclusivamente `--condition-from-file=<PROJECT_CONDITION_FILE>`; condition inline permanece proibida. A project condition continua contendo semanticamente:
+
+- `resource.name == "projects/turismo-sms/databases/(default)"`;
+- `request.time >= timestamp("<START_UTC>")`;
+- `request.time < timestamp("<END_UTC>")`.
+
+O restante do contrato temporal permanece inalterado.
+
+### Project binding REMOVE — argv exato
+
+O cleanup deve usar semanticamente os seguintes argumentos lógicos separados:
+
+1. `gcloud`;
+2. `projects`;
+3. `remove-iam-policy-binding`;
+4. `turismo-sms`;
+5. `--member=serviceAccount:<TARGET_SERVICE_ACCOUNT_IN_MEMORY>`;
+6. `--role=projects/turismo-sms/roles/adminB2A5InventoryRead`;
+7. `--condition-from-file=<MESMO_PROJECT_CONDITION_FILE>`;
+8. `--account=<OPERATOR_IN_MEMORY>`;
+9. `--quiet`.
+
+Aplicar a mesma regra de argv atômico. São proibidos `--all`, member diferente, role diferente ou condition diferente.
+
+### Token Creator preservado
+
+O erratum Token Creator já publicado permanece integralmente vinculante e não é alterado. Continuam obrigatórios target service account posicional correto, `--member=user:<OPERATOR>`, `--role=roles/iam.serviceAccountTokenCreator`, `--condition-from-file=<TOKEN_CONDITION_FILE>`, `--project=turismo-sms`, `--account=<OPERATOR>` e `--quiet`, cada flag/value como um único argumento lógico.
+
+### Journal de exit code monotônico
+
+`CAPTURED_NATIVE_EXIT_CODE_IS_MONOTONIC=true`.
+
+Quando uma chamada nativa retornar, capturar imediatamente:
+
+```powershell
+$capturedExitCode = $LASTEXITCODE
+```
+
+Depois que `exitCodeCaptured=true` e `exitCode=<integer>` forem registrados em memória/journal, nenhuma falha posterior pode converter esse valor em `INDETERMINATE`, `NOT_CAPTURED`, `null` ou apagar o valor. Falha de reporter, emissão de evento, serialização, pós-validação ou exception posterior deve possuir campo/categoria separada e não modifica o exit code já observado.
+
+Para qualquer mutation nativa, a ordem obrigatória é:
+
+1. registrar `invocationEntered=true`;
+2. executar o comando;
+3. capturar imediatamente `$LASTEXITCODE`;
+4. registrar em estrutura in-memory `returned=true`, `exitCodeCaptured=true` e `exitCode=<valor>`;
+5. somente depois executar report emission, post-validation, read-back, serialization ou instrumentação adicional.
+
+Se a etapa 5 falhar, preservar integralmente as evidências das etapas 1–4.
+
+`INDETERMINATE` fica reservado somente para situação em que realmente não seja possível saber se o processo nativo retornou ou se o código foi capturado. Não usar `INDETERMINATE` apenas porque pós-validação, reporter, binding ausente ou lógica posterior falhou. Exit code e efeito remoto permanecem separados; `exitCode=0` com `remoteEffect=CONFIRMED_ABSENT` é um estado válido e não autoriza reescrever o exit code.
+
+### Reconciliation preservada
+
+Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/reconciliation continua obrigatória e a mutation não é repetida automaticamente. Para project binding e Token Creator, preservar as classificações `CONFIRMED_PRESENT_CREATED_BY_RUN`, `CONFIRMED_ABSENT` e `INCONCLUSIVE` conforme seus contratos vigentes.
+
+---
+
+## Rotas Admin V1.1 — rollout PREP concluído em 2026-08-21
+
+- Classificação: **A. ROLLOUT PREP COMPLETE**, restrita a Git/local e documentação.
+- Topologia confirmada: `origin/main` e merge-base em `cc170862d4378229a7485f788b31308174032a6d`; feature alinhada em `8433a7232dd67ce4654bb6316192c2ca01b1dfff`; integração futura pode usar `git merge --ff-only` após revalidação.
+- O release contém Admin UI/JS, endurecimento fail-closed de `firestore.rules`, testes e documentação. `storage.rules` permaneceu byte a byte idêntico; o portal público continua com fontes estáticas e não lê a collection `rotas`.
+- Ordem recomendada: baseline remoto somente leitura; deploy isolado das Rules exatas; dry-run remoto com manifest; EXEC de dados autorizado separadamente; release/Admin smoke; adapter público somente depois.
+- Seeds futuros são os seis IDs canônicos em `draft`; normalização preserva valores não canônicos e exige dry-run, aprovação humana e pós-verificação antes de qualquer write.
+- Não houve produção, deploy, migração, merge ou alteração de `main`. Próximo bloco autorizado somente mediante novo comando literal: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`.
+
+---
+
+## Rotas Admin V1.1 — CRUD local concluído e QA_LOCAL_ROTAS_PASS em 2026-08-21
+
+- Bloco em execução: `POST-V1-ROTAS-V1.1-ADMIN-CRUD`, na branch isolada `feature/rotas-v1.1-admin-crud`, criada a partir de `cc170862d4378229a7485f788b31308174032a6d`. `main` não foi alterada.
+- Implementados `js/admin/modules/rotas-helpers.js` e `js/admin/modules/rotas.js`: listagem ordenada, filtros, create/edit de rascunho, preview, publicar, despublicar, arquivar e ausência deliberada de hard delete.
+- Associação N:N é calculada por diferença e escrita em `runTransaction`, somente nos documentos alterados de `cms_establishments.relationships.routeIds[]`; IDs secundários existentes são preservados.
+- A capa é selecionada exclusivamente de `media_library`, persistida no shape mínimo `mediaId|url|path|alt`, e a exclusão na biblioteca agora bloqueia mídia referenciada por `rotas.cover` por ID, path ou URL.
+- O alias `edit: openForm` corrigiu o Editar. Nas Rules, guards estruturais e o caminho relacional estreito corrigiram os blockers de expressão/propriedade, mantendo autorização de admin ativo e malformed fail-closed.
+- Regressão final: testes Admin `8/8 PASS`; modelo/normalizador `29/29 PASS`; dry-run local sanitizado PASS; Firestore `212/212`; Storage `24/24`; total Rules `265/265`, sem failures/skips, exclusivamente no projeto demo/Emulator.
+- `firestore.rules`, `storage.rules`, datasource público, mapas, HOME, busca e demais placeholders não foram alterados.
+- **Classificação atual: A. ADMIN CRUD LOCAL CONCLUÍDO — `QA_LOCAL_ROTAS_PASS`.** O QA humano posterior validou o fluxo autenticado no Emulator, incluindo desktop/tablet/mobile e ausência dos blockers. Não houve fallback ou acesso à produção.
+- A feature continua isolada e não integrada a `main`; rollout permanece pendente. Próximo passo autorizável: `POST-V1-ROTAS-V1.1-ROLLOUT-PREP`.
+
+---
+
 ## Rotas Admin V1.1 — modelo, Rules e Emulator concluídos em 2026-08-13
 
 - Bloco concluído: `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`.

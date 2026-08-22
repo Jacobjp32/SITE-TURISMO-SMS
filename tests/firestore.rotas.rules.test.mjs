@@ -15,6 +15,7 @@ import {
   getDoc,
   getDocs,
   query,
+  runTransaction,
   serverTimestamp,
   setDoc,
   Timestamp,
@@ -524,4 +525,134 @@ describe("Rotas V1.1 — relationships.routeIds[] em cms_establishments", () => 
     ["unknown-synthetic-route"],
     assertSucceeds,
   ));
+
+  test("admin ativo salva a rota e adiciona associação N:N em uma transação", async () => {
+    const routeA = routeDocument("qa-route-a");
+    const routeB = routeDocument("qa-route-b");
+    const nnEstablishment = existingEstablishment(["qa-route-b"]);
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["rotas/qa-route-a", routeA],
+      ["rotas/qa-route-b", routeB],
+      [establishmentPath, nnEstablishment],
+    ]);
+
+    const db = authenticatedDb("admin-active");
+    await assertSucceeds(runTransaction(db, async (transaction) => {
+      transaction.set(doc(db, "rotas", "qa-route-a"), {
+        ...routeA,
+        name: "Synthetic Route A updated",
+        updatedAt: serverTimestamp(),
+        updatedBy: "admin-active",
+      });
+      transaction.update(doc(db, establishmentPath), {
+        "relationships.routeIds": ["qa-route-b", "qa-route-a"],
+        updatedAt: serverTimestamp(),
+        updatedBy: "admin-active",
+      });
+    }));
+
+    const snapshot = await assertSucceeds(getDoc(doc(db, establishmentPath)));
+    assert.deepEqual(snapshot.data().relationships.routeIds, ["qa-route-b", "qa-route-a"]);
+  });
+
+  test("nega fechado a transação quando a rota existente não tem id persistido", async () => {
+    const routeA = routeDocument("qa-route-a");
+    const malformedStoredRouteA = { ...routeA };
+    delete malformedStoredRouteA.id;
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      ["rotas/qa-route-a", malformedStoredRouteA],
+      ["rotas/qa-route-b", routeDocument("qa-route-b")],
+      [establishmentPath, existingEstablishment(["qa-route-b"])],
+    ]);
+
+    const db = authenticatedDb("admin-active");
+    await assertFails(runTransaction(db, async (transaction) => {
+      transaction.set(doc(db, "rotas", "qa-route-a"), {
+        ...routeA,
+        updatedAt: serverTimestamp(),
+        updatedBy: "admin-active",
+      });
+      transaction.update(doc(db, establishmentPath), {
+        "relationships.routeIds": ["qa-route-b", "qa-route-a"],
+        updatedAt: serverTimestamp(),
+        updatedBy: "admin-active",
+      });
+    }));
+  });
+
+  test("remove A e preserva a relação secundária B", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      [establishmentPath, existingEstablishment(["qa-route-b", "qa-route-a"])],
+    ]);
+    const db = authenticatedDb("admin-active");
+    await assertSucceeds(updateDoc(doc(db, establishmentPath), {
+      "relationships.routeIds": ["qa-route-b"],
+      updatedAt: serverTimestamp(),
+      updatedBy: "admin-active",
+    }));
+    const snapshot = await assertSucceeds(getDoc(doc(db, establishmentPath)));
+    assert.deepEqual(snapshot.data().relationships.routeIds, ["qa-route-b"]);
+  });
+
+  for (const { label, uid, role, ativo } of [
+    { label: "user", uid: "user-active", role: "user", ativo: true },
+    { label: "moderator", uid: "moderator-active", role: "moderator", ativo: true },
+    { label: "admin inativo", uid: "admin-inactive", role: "admin", ativo: false },
+  ]) {
+    test(`${label} não altera routeIds`, async () => {
+      await seedDocuments([
+        userEntry(uid, role, ativo),
+        [establishmentPath, existingEstablishment(["qa-route-b"])],
+      ]);
+      await assertFails(updateDoc(doc(authenticatedDb(uid), establishmentPath), {
+        "relationships.routeIds": ["qa-route-b", "qa-route-a"],
+        updatedAt: serverTimestamp(),
+        updatedBy: uid,
+      }));
+    });
+  }
+
+  test("nega caminho relacional com campo adicional", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      [establishmentPath, existingEstablishment(["qa-route-b"])],
+    ]);
+    await assertFails(updateDoc(doc(authenticatedDb("admin-active"), establishmentPath), {
+      "relationships.routeIds": ["qa-route-b", "qa-route-a"],
+      name: "Alteração fora do caminho relacional",
+      updatedAt: serverTimestamp(),
+      updatedBy: "admin-active",
+    }));
+  });
+
+  test("nega relationships malformado e routeIds com tipo inválido", async () => {
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      [establishmentPath, existingEstablishment(["qa-route-b"])],
+    ]);
+    const db = authenticatedDb("admin-active");
+    await assertFails(updateDoc(doc(db, establishmentPath), {
+      relationships: { routeIds: "qa-route-a" },
+      updatedAt: serverTimestamp(),
+      updatedBy: "admin-active",
+    }));
+  });
+
+  test("documento sem id no empreendimento falha fechado no caminho relacional", async () => {
+    const malformedEstablishment = existingEstablishment(["qa-route-b"]);
+    delete malformedEstablishment.id;
+    await seedDocuments([
+      userEntry("admin-active", "admin", true),
+      [establishmentPath, malformedEstablishment],
+    ]);
+    await assertFails(updateDoc(doc(authenticatedDb("admin-active"), establishmentPath), {
+      "relationships.routeIds": ["qa-route-b", "qa-route-a"],
+      updatedAt: serverTimestamp(),
+      updatedBy: "admin-active",
+    }));
+  });
+
 });

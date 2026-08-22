@@ -1,14 +1,16 @@
 # Plano executável — Admin Rotas V1.1
 
-**Bloco atual:** `POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR`
+**Bloco atual:** `POST-V1-ROTAS-V1.1-ROLLOUT-PREP` concluído localmente em 2026-08-21
 
-**Handoff de origem:** `POST-V1-ROTAS-V1.1-DISCOVERY-AND-DESIGN`
+**Handoff de origem:** `POST-V1-ROTAS-V1.1-ADMIN-CRUD` (`QA_LOCAL_ROTAS_PASS`)
 
-**Data operacional:** 2026-08-13
+**Data operacional:** 2026-08-21
 
 **Fuso:** `America/Sao_Paulo`
 
 **Natureza:** schema, Rules, normalização, seed e Emulator exclusivamente locais; nenhuma migração, leitura remota, publicação ou deploy
+
+> Atualização operacional de 2026-08-21: a primeira baseline remota read-only de Rotas V1.1 ficou classificada como **F — INCONCLUSIVO**. Não houve leitura de `rotas`/`cms_establishments`, write, Storage ou alteração de Rules; o cleanup final foi comprovado. A evidência histórica não determina se o enable nativo chegou a ser enviado, portanto `historicalEnableInvocation = INDETERMINATE` e o dry-run de migração permanece bloqueado. O retry exigirá autorização própria e o executor canônico `B2A5_MUTATION_EXECUTOR_SOURCE` versionado em `TASKS.md`, com journal sanitizado por mutation, captura imediata de exit code e proibição de retry automático. O executor passou `10/10` testes sintéticos com `parseErrorCount=0` no Windows PowerShell 5.1 e no PowerShell 7.x.
 
 **Baseline deste bloco:** `main` em `06828cd88f5f63abd03688d9b3e8949ab0b1ba5d` (`docs: definir arquitetura de rotas do Admin V1.1`)
 
@@ -654,6 +656,14 @@ NEXT_BLOCK = POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
 
 O texto das seções 1 a 18 preserva o discovery histórico e suas fronteiras originais. O resultado vigente do bloco local autorizado está registrado a seguir; migração, acesso a produção, deploy e início automático do próximo bloco continuam proibidos.
 
+## 18.1 Resultado final do Bloco 2 — Admin CRUD
+
+Em `2026-08-20`, o CRUD de Rotas foi implementado somente na branch `feature/rotas-v1.1-admin-crud`, derivada de `cc170862d4378229a7485f788b31308174032a6d`; `main` não foi alterada. O módulo reutiliza o registro, UI e modal existentes do Admin e inclui lista/filtros, criação em rascunho, edição, preview, publicação, despublicação, arquivamento, validação local e ausência de hard delete.
+
+As relações permanecem exclusivamente em `cms_establishments.relationships.routeIds[]`. O save calcula diff e usa `runTransaction` apenas para os documentos adicionados/removidos, preservando IDs secundários. A capa reutiliza `media_library` no shape mínimo `mediaId`, `url`, `path`, `alt`; a detecção de mídia em uso inclui `rotas.cover` por ID, path ou URL e bloqueia exclusão quando houver referência.
+
+O alias `edit: openForm` corrigiu o Editar; guards estruturais e o caminho relacional estreito nas Rules corrigiram os blockers N:N mantendo autorização de admin ativo e malformed fail-closed. A regressão final aprovou testes Admin `8/8`, modelo/normalizador `29/29`, dry-run sanitizado e Rules `265/265` (Firestore `212`, Storage `24`), sem failures/skips, somente no projeto demo dos Emulators. O QA humano posterior confirmou `QA_LOCAL_ROTAS_PASS`, inclusive associação N:N, mídia e responsividade. **Classificação vigente: A — implementação local concluída; nenhuma produção, deploy, migração ou integração em `main`. O rollout permanece pendente.**
+
 ## 19. Resultado implementado do Bloco 1
 
 ### 19.1 Classificação e limites
@@ -756,3 +766,75 @@ NEXT_BLOCK = POST-V1-ROTAS-V1.1-ADMIN-CRUD
 ```
 
 O próximo bloco não foi iniciado. Antes de habilitar seleção/remoção de capa, ele deve incluir Rotas na detecção de mídia em uso.
+
+## 20. Resultado do POST-V1-ROTAS-V1.1-ROLLOUT-PREP — 2026-08-21
+
+### 20.1 Limite, topologia e escopo revisado
+
+Este PREP foi somente Git/local e documental: não acessou Firestore, Storage ou Auth de produção, não executou `firebase login`, `firebase deploy`, `gcloud`, IAM, ADC, migração, merge ou deploy.
+
+| Item | Evidência local |
+| --- | --- |
+| `MAIN_HEAD` | `cc170862d4378229a7485f788b31308174032a6d` |
+| `FEATURE_HEAD` | `8433a7232dd67ce4654bb6316192c2ca01b1dfff` |
+| `MERGE_BASE` | `cc170862d4378229a7485f788b31308174032a6d` |
+| exclusivos da feature | `8433a72 feat: implementar CRUD de rotas no Admin V1.1` |
+| exclusivos de `main` | nenhum |
+| alinhamento feature remoto/local | `0/0` |
+| alinhamento main remoto/local | `0/0` |
+
+Logo, a integração futura pode ser fast-forward. A recomendação é preservar a rastreabilidade com `git merge --ff-only origin/feature/rotas-v1.1-admin-crud`, executado somente no bloco de release autorizado, após revalidar os dois heads. Não usar rebase, cherry-pick ou merge commit neste caso.
+
+O diff de release contém 11 arquivos: Admin UI (`admin-firebase.html`); Admin JS (`js/admin-content-cms.js`, `js/admin/modules/rotas-helpers.js`, `js/admin/modules/rotas.js`); Rules (`firestore.rules`); testes (`tests/admin.rotas.helpers.test.mjs`, `tests/admin.rotas.module.test.mjs`, `tests/firestore.rotas.rules.test.mjs`); e documentação (`CHANGELOG_AI.md`, `TASKS.md`, este plano). Não há script/modelo/normalizador novo neste commit, pois eles já pertenciam ao baseline `cc17086`.
+
+Não foi identificado no source de produção adicionado endpoint `127.0.0.1`/`localhost`, `projectId` demo, credencial, token, segredo ou artefato temporário. O `projectId` demo existe somente no teste de Rules. Nenhuma fixture QA foi incluída no release. Os itens protegidos não rastreados observados no status permaneceram sem abertura, leitura, alteração, stage ou commit.
+
+### 20.2 Estado da main e impacto de Rules
+
+| Componente | `origin/main` | Feature | Efeito do rollout |
+| --- | --- | --- |
+| menu/section Rotas | placeholder “Em preparação” | módulo Admin registrado e ativado | Admin deixa de ser placeholder após integração |
+| `AdminRoutesModule` | ausente | presente | leitura/escrita administrativa em `rotas` e associações N:N |
+| `firestore.rules` de Rotas | modelo e match já presentes | endurece guards fail-closed e seleção do caminho N:N | Rules exatas da feature devem preceder Admin e migração |
+| modelo, seed e normalizador | já presentes | sem alteração | continuam a base local do dry-run/migração futura |
+| portal público | fonte estática; sem `collection('rotas')` | sem alteração | continua estático neste rollout |
+
+O diff de `firestore.rules` não cria leitura pública nova além de documentos `rotas` com `status == 'published'`; a feature não publica documentos no PREP. Para escrita, permanece exigido admin ativo, schema/ciclo de vida e o caminho relacional estreito em `cms_establishments.relationships.routeIds[]`. O endurecimento adicional exige identidade e campos estruturais nos documentos de empreendimento; portanto, o baseline futuro deve detectar documentos legados malformados antes de qualquer normalização. Esse é um gate remoto, não autorização para corrigir dados automaticamente.
+
+```text
+MAIN_FIRESTORE_RULES_SHA256    = C70FEFD7A40B8DF9266E4D0B4565879FA7CDF89F99BF4D85E107857ACD695569
+FEATURE_FIRESTORE_RULES_SHA256 = 502B463504249B707CCB8A1F319060A59D8938715ADD783C90B1FB8BE1CF2FC3
+MAIN_STORAGE_RULES_SHA256      = 2F3F58D0AF112C2938775A9FE434BA5F0814BBAD3855276AF863DA8AD8E4241C
+FEATURE_STORAGE_RULES_SHA256   = 2F3F58D0AF112C2938775A9FE434BA5F0814BBAD3855276AF863DA8AD8E4241C
+storageRulesChanged            = false
+```
+
+### 20.3 Ordem recomendada e gates
+
+1. Executar `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE` e parar se a produção divergir materialmente do contrato/dry-run local.
+2. Em autorização separada, publicar somente o `firestore.rules` cujo hash corresponda ao da feature; capturar previamente a versão/hash remoto para rollback. `storage.rules` não entra no deploy.
+3. Executar `POST-V1-ROTAS-V1.1-DATA-MIGRATION-DRY-RUN`: leitura de `rotas` e `cms_establishments`, cálculo de manifest imutável e nenhuma escrita.
+4. Após aprovação humana literal do manifest, executar `POST-V1-ROTAS-V1.1-DATA-MIGRATION-EXEC`, criar os seis documentos e aplicar somente diferenças allowlisted de `relationships.routeIds[]`; verificar o pós-write.
+5. Só então integrar a feature em `main`, publicar o Admin e realizar smoke autenticado no bloco `POST-V1-ROTAS-V1.1-ADMIN-RELEASE`.
+6. Manter o portal público nas fontes estáticas. `POST-V1-ROTAS-V1.1-PUBLIC-ADAPTER` é um bloco posterior, com fallback apenas para falha técnica; resultado vazio autoritativo nunca pode apagar silenciosamente a experiência pública.
+
+Essa ordem evita Admin incompatível com Rules, impede tratar collection vazia como módulo operacional e isola o adapter público do rollout administrativo inicial. O adapter público não é necessário para a liberação do Admin.
+
+### 20.4 Baseline, seed e normalização futuros
+
+O baseline read-only do projeto `turismo-sms` / database `(default)` deve reportar apenas agregados e IDs técnicos indispensáveis: existência, quantidade, IDs e schema de `rotas`; quantidade de `cms_establishments`, documentos com `routeIds`, total de relações, aliases, IDs desconhecidos, multirrotas e divergência contra o dry-run local; e referências de `media_library` apenas quando necessárias para uma capa. `usuarios` somente entra no smoke administrativo e sem inventário amplo. Divergência material encerra o bloco em fail-closed, sem migração.
+
+O seed local validado contém os IDs `sabores-memorias`, `rota-erva-mate`, `rota-polonesa`, `rota-das-aguas`, `caminhos-de-fluviopolis` e `rota-da-terra`, todos com `slug == id`, `status: draft`, `displayOrder` 10, 20, 30, 40, 50 e 60, capa estática existente e auditoria preenchida pelo ator/timestamp reais somente no EXEC. A recomendação é criar inicialmente em `draft`: o portal público continua estático, o Admin pode ser validado sem exposição pública e a publicação editorial fica deliberada e auditável depois.
+
+O dry-run local confirmado produz 67 documentos inspecionados, 58 relações canônicas antes, 2 aliases normalizados, 60 relações canônicas depois, 51 documentos com rota, 9 multirrotas, 11 agrupamentos não canônicos preservados, nenhuma duplicata e idempotência. A execução futura deve: ler estado atual; calcular diff usando exclusivamente a allowlist de sete aliases; preservar grupos secundários/desconhecidos; recusar overwrite cego e hard delete; emitir manifest `before/after` apenas dos campos alterados; exigir aprovação entre dry-run e write; e verificar o resultado. Batch é apropriado somente para o conjunto fechado de documentos já lidos e aprovados; dividir em batches limitados e registrar manifest por batch se o volume exceder o limite do Firestore.
+
+### 20.5 Rollback e blocos operacionais
+
+| Camada | Rollback autorizado futuro | Disparo objetivo |
+| --- | --- | --- |
+| Rules | redeploy da fonte/hash remoto anterior, nunca ajuste improvisado no console | Admin/migração negados por regressão atribuída à Rule ou acesso indevido confirmado |
+| Dados | aplicar o manifest reverso somente aos documentos tocados, com precondição de que não houve alteração concorrente | contagens, IDs ou `routeIds[]` pós-write diferem do manifest aprovado |
+| Admin | revert controlado do commit em `main`; preservar a feature branch | smoke autenticado falha em fluxo crítico ou regressão Admin atribuída ao release |
+| Público | não aplicável neste rollout; fontes estáticas continuam isoladas | adapter público não integra este release |
+
+Os blocos seguintes continuam independentes e requerem autorização literal própria: (1) `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`; (2) `POST-V1-ROTAS-V1.1-RULES-DEPLOY`; (3) `POST-V1-ROTAS-V1.1-DATA-MIGRATION-DRY-RUN`; (4) `POST-V1-ROTAS-V1.1-DATA-MIGRATION-EXEC`; (5) `POST-V1-ROTAS-V1.1-ADMIN-RELEASE`; (6) `POST-V1-ROTAS-V1.1-PUBLIC-ADAPTER`. O próximo bloco exato é o primeiro: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`; ele não foi iniciado.

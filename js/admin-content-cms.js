@@ -630,7 +630,8 @@
                 var results = await Promise.all([
                     this.ensureMediaLoaded(true),
                     this.db.collection("eventos_aprovados").get(),
-                    this.db.collection("noticias").get()
+                    this.db.collection("noticias").get(),
+                    this.db.collection("rotas").get()
                 ]);
                 this.events = results[1].docs.map(function (doc) {
                     return Object.assign({ id: doc.id }, doc.data());
@@ -638,7 +639,9 @@
                 this.news = results[2].docs.map(function (doc) {
                     return Object.assign({ id: doc.id }, doc.data());
                 }).sort(compareAdminDateDesc);
-                this.mediaUsageMap = buildMediaUsageMap(this.events, this.news);
+                this.mediaUsageMap = buildMediaUsageMap(this.events, this.news, results[3].docs.map(function (doc) {
+                    return Object.assign({ id: doc.id }, doc.data());
+                }));
 
                 if (!this.media.length) {
                     container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhuma mídia cadastrada.</p>';
@@ -647,7 +650,7 @@
 
                 var SEC = this.SEC;
                 container.innerHTML = '<div class="media-admin-grid">' + this.media.map(function (item) {
-                    var usage = getMediaUsageInfo(item.url, this.mediaUsageMap);
+                    var usage = getMediaUsageInfo(item, this.mediaUsageMap);
                     return '<article class="media-admin-card">' +
                         '<div class="media-admin-thumb">' +
                             '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\\\'.media-admin-thumb\\\').classList.add(\\\'is-error\\\');this.remove();">' +
@@ -791,7 +794,11 @@
         deleteMedia: async function (mediaId) {
             var item = getMediaById(this.media, mediaId);
             if (!item) return;
-            var usage = getMediaUsageInfo(item.url, this.mediaUsageMap);
+            var usage = getMediaUsageInfo(item, this.mediaUsageMap);
+            if (usage.routeCount) {
+                alert("Esta mídia está em uso como capa de rota e não pode ser excluída.");
+                return;
+            }
             var confirmMessage = usage.total
                 ? "Esta mídia parece estar em uso em " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "") + ". Excluir mesmo assim? Eventos ou notícias referenciados podem ficar sem imagem."
                 : "Excluir esta mídia da biblioteca?";
@@ -1329,7 +1336,7 @@
         });
     }
 
-    function buildMediaUsageMap(events, news) {
+    function buildMediaUsageMap(events, news, routes) {
         var usageMap = {};
 
         (events || []).forEach(function (eventItem) {
@@ -1346,20 +1353,33 @@
             });
         });
 
+        (routes || []).forEach(function (route) {
+            var cover = route && route.cover || {};
+            var title = clean(route && route.name) || "Rota sem nome";
+            registerMediaUsage(usageMap, { mediaId: cover.mediaId, path: cover.path, url: cover.url }, "route", title);
+        });
+
         return usageMap;
     }
 
-    function registerMediaUsage(usageMap, url, type, title) {
-        var key = normalizeComparableUrl(url);
-        if (!key) return;
-
+    function registerMediaUsage(usageMap, source, type, title) {
+        var identity = source && typeof source === "object" ? source : { url: source };
+        var keys = [
+            clean(identity.mediaId) ? "id:" + clean(identity.mediaId) : "",
+            clean(identity.path || identity.storagePath) ? "path:" + clean(identity.path || identity.storagePath) : "",
+            normalizeComparableUrl(identity.url) ? "url:" + normalizeComparableUrl(identity.url) : ""
+        ].filter(Boolean);
+        if (!keys.length) return;
+        keys.forEach(function (key) {
         if (!usageMap[key]) {
             usageMap[key] = {
                 total: 0,
                 eventCount: 0,
                 newsCount: 0,
+                routeCount: 0,
                 eventTitles: [],
-                newsTitles: []
+                newsTitles: [],
+                routeTitles: []
             };
         }
 
@@ -1371,22 +1391,37 @@
             target.total += 1;
             return;
         }
-
+        if (type === "route") {
+            if (target.routeTitles.indexOf(title) !== -1) return;
+            target.routeTitles.push(title); target.routeCount += 1; target.total += 1; return;
+        }
         if (target.newsTitles.indexOf(title) !== -1) return;
-        target.newsTitles.push(title);
-        target.newsCount += 1;
-        target.total += 1;
+        target.newsTitles.push(title); target.newsCount += 1; target.total += 1;
+        });
     }
 
-    function getMediaUsageInfo(url, usageMap) {
-        var key = normalizeComparableUrl(url);
-        var usage = key && usageMap ? usageMap[key] : null;
-        return usage || {
+    function getMediaUsageInfo(media, usageMap) {
+        media = media && typeof media === "object" ? media : { url: media };
+        var keys = [clean(media.id || media.mediaId) ? "id:" + clean(media.id || media.mediaId) : "", clean(media.storagePath || media.path) ? "path:" + clean(media.storagePath || media.path) : "", normalizeComparableUrl(media.url) ? "url:" + normalizeComparableUrl(media.url) : ""].filter(Boolean);
+        var matches = keys.map(function (key) { return usageMap && usageMap[key]; }).filter(Boolean);
+        if (matches.length) {
+            var titles = { events: {}, news: {}, routes: {} };
+            matches.forEach(function (match) {
+                (match.eventTitles || []).forEach(function (title) { titles.events[title] = true; });
+                (match.newsTitles || []).forEach(function (title) { titles.news[title] = true; });
+                (match.routeTitles || []).forEach(function (title) { titles.routes[title] = true; });
+            });
+            var eventTitles = Object.keys(titles.events), newsTitles = Object.keys(titles.news), routeTitles = Object.keys(titles.routes);
+            return { total: eventTitles.length + newsTitles.length + routeTitles.length, eventCount: eventTitles.length, newsCount: newsTitles.length, routeCount: routeTitles.length, eventTitles: eventTitles, newsTitles: newsTitles, routeTitles: routeTitles };
+        }
+        return {
             total: 0,
             eventCount: 0,
             newsCount: 0,
+            routeCount: 0,
             eventTitles: [],
-            newsTitles: []
+            newsTitles: [],
+            routeTitles: []
         };
     }
 
@@ -1398,6 +1433,7 @@
         var parts = [];
         if (usage.eventCount) parts.push(usage.eventCount + " evento(s)");
         if (usage.newsCount) parts.push(usage.newsCount + " notícia(s)");
+        if (usage.routeCount) parts.push(usage.routeCount + " rota(s)");
         return "Em uso em " + parts.join(" e ") + ".";
     }
 

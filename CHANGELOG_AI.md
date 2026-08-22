@@ -6,6 +6,43 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-08-21 — POST-V1-ROTAS-V1.1-ROLLOUT-PREP
+
+**Status:** **A. ROLLOUT PREP COMPLETE — plano fail-closed definido; rollout permanece pendente.**
+
+### Evidências e decisão
+
+- Auditadas a topologia Git, o diff completo de release, o estado da `main`, os hashes das Rules, o seed local e o dry-run; `main` segue em `cc17086` e a feature alinhada em `8433a72`, permitindo integração futura por fast-forward após nova revalidação.
+- O portal público ainda depende exclusivamente das fontes estáticas e não ganhou leitura de `rotas`; o Admin pode ser liberado sem adapter público. `storage.rules` não mudou.
+- Definidos blocos independentes para baseline read-only, Rules, dry-run de dados, EXEC de dados, release do Admin e adapter público posterior. Dados iniciais recomendados como `draft`, com manifest, aprovação humana e rollback por camada.
+
+### Limites
+
+- Zero Firestore/Storage/Auth de produção, deploy, migração, merge, alteração de `main`, `gcloud`, IAM ou ADC.
+- Próximo bloco, não iniciado e dependente de autorização própria: `POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE`.
+
+---
+
+## 2026-08-20 — POST-V1-ROTAS-V1.1-ADMIN-CRUD
+
+**Status:** **A. ADMIN CRUD LOCAL CONCLUÍDO — QA_LOCAL_ROTAS_PASS; ROLLOUT AINDA PENDENTE.**
+
+### Implementação local na feature branch
+
+- Criada `feature/rotas-v1.1-admin-crud` a partir do baseline exigido `cc170862d4378229a7485f788b31308174032a6d`; `main` permaneceu intacta.
+- Substituído somente o placeholder `rotas` pelo módulo real e seus helpers puros: lista/filtros, estado loading/empty/error, criação em `draft`, edição, preview, publicar, despublicar e arquivar. Não há delete de rota.
+- O editor usa `relationships.routeIds[]` como fonte única de N:N. O diff seleciona somente adições/remoções e a transação preserva todos os outros IDs de rota de cada empreendimento.
+- Capa usa mídia existente da `media_library`, sem novo uploader ou path. A proteção de uso de mídia passou a incluir `rotas.cover` por `mediaId`, `path` ou URL e bloqueia a exclusão referenciada.
+
+### Validação e limite
+
+- O alias `edit: openForm` corrigiu o bloqueio de edição; o caminho N:N nas Rules recebeu guards estruturais e seleção fail-closed do validador relacional, eliminando os blockers de expressão e propriedade ausente no Emulator.
+- O QA humano local posterior confirmou `QA_LOCAL_ROTAS_PASS`, incluindo Editar, associação N:N com preservação da relação secundária, mídia, status e responsividade, exclusivamente no projeto demo/Emulator.
+- Regressão final: `node --check`, testes Admin `8/8`, modelo `29/29`, dry-run local e Rules `265/265` (Firestore `212`, Storage `24`), sem failures/skips.
+- Nenhuma produção, deploy, migração, dado real, `gcloud`, IAM ou ADC foi utilizado. O rollout permanece pendente e a feature ainda não foi integrada a `main`.
+
+---
+
 ## 2026-08-13 — POST-V1-ROTAS-V1.1-DATA-MODEL-RULES-AND-EMULATOR
 
 **Status:** **A. ROTAS V1.1 DATA MODEL + RULES READY — SCHEMA FROZEN, NORMALIZATION DETERMINISTIC, N:N PRESERVED, FIRESTORE RULES TESTED LOCALLY, ZERO PRODUCTION ACCESS, ADMIN CRUD READY TO IMPLEMENT.**
@@ -5100,3 +5137,25 @@ Atualizar `CLAUDE.md`, `TASKS.md` e `CHANGELOG_AI.md` para refletir os milestone
 
 - Nenhum arquivo de código/HTML/CSS/JS/dados foi alterado nesta tarefa.
 - Sem commit/deploy; aguardando autorização.
+## 2026-08-21 — POST-V1-ROTAS-V1.1-READONLY-BASELINE-INSTRUMENTATION-PREP
+
+**Status:** **A. BASELINE INSTRUMENTATION PREP COMPLETE.** Correção exclusivamente local/documental do contrato de instrumentação das mutations nativas da baseline read-only. Não houve login, `gcloud`, acesso a Google Cloud, IAM, Firestore, Storage, ADC, migração, deploy ou integração de `main`.
+
+### Forense do bloco F anterior
+
+- A execução iniciada em `2026-08-21T18:26:41Z` preservou a categoria fail-closed agregada e o cleanup final, mas não preservou stage, `commandInvocationEntered`, `commandReturned`, `exitCodeCaptured`, exit code ou journal serializado da tentativa de enable.
+- O source histórico mantinha um flag local de tentativa, porém esse flag não chegou ao objeto sanitizado final. Não há evidência local suficiente para determinar se `gcloud iam service-accounts enable` não iniciou, iniciou sem retorno ou retornou antes da falha posterior.
+- Resultado obrigatório: `historicalBaselineClassification=F`, `historicalEnableInvocation=INDETERMINATE`, `FirestoreReadOnlyAccess=false`, `firestoreWrites=0`, `StorageAccess=false` e `migrationDryRunSafeToPrepare=NOT_PROVEN`. Estado de cleanup não é usado como inferência do exit code histórico.
+
+### Contrato corrigido e validação local
+
+- `TASKS.md` passou a conter `B2A5_MUTATION_EXECUTOR_SOURCE`: invocation direta `& $Executable @Arguments`, contador antes da chamada, marcação imediatamente anterior, cópia imediata de `$LASTEXITCODE`, timestamps distintos e classificação explícita de falha pré-invocation ou pós-entrada sem exit capturado.
+- O retorno é estrutural e sanitizado: não contém argumentos, executável, token, URL OAuth, Authorization, policy ou output nativo. O journal process-local conserva sequence, ordinal, evidência de invocation, exit e validação pós-operação até o relatório final.
+- Retry automático permanece proibido. Post-state não converte exit `INDETERMINATE` em sucesso nem em “zero enable provado”. A remoção exata de bindings, disable final, zero keys, ADC ausente, revoke nominal e remoção de artifacts permanecem obrigatórios, sem apagar evidência estrutural antes da classificação.
+- Validação sintética: `Windows PowerShell 5.1` e `PowerShell 7.x` retornaram `parseErrorCount=0` e `10/10 PASS`. Foram exercitados exit `0`/`7`, sequência sem exit stale, path/argumento com espaço, captura imediatamente posterior, falha pré-invocation, falha após entrada sem exit, preservação pós-serialização e bloqueio por contador.
+
+### Continuidade
+
+`POST-V1-ROTAS-V1.1-PRODUCTION-READONLY-BASELINE-RETRY` é o próximo bloco possível, exclusivamente com autorização literal nova. Ele deve repetir os gates e a baseline com o executor canônico; não está iniciado. Migração e seu dry-run seguem bloqueados.
+
+---
