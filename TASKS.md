@@ -6,6 +6,26 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — baseline de produção e Firestore Rules publicadas
+
+- `baselineClassification=A`
+- `ROTAS_DRY_RUN_ALLOWED=true`
+- `productionRotasDocuments=0`
+- `productionCmsEstablishmentsDocuments=67`
+- `canonicalRelationshipsAfter=60`
+- `malformedRelationshipDocuments=0`
+- `relationshipFingerprintSha256=b6ae88e498fee6c7216e5624112acf5fd0f47fdd61a6be132ad733c9e561badd`
+- `firestoreRulesDeployClassification=A`
+- `firestoreRulesDeployUtc=2026-08-22T23:24:12.748Z`
+- `firestoreRulesSourceSha256=502b463504249b707ccb8a1f319060a59d8938715add783c90b1fb8be1cf2fc3`
+- `firestoreRulesProject=turismo-sms`
+- `storageRulesDeployed=false`
+- `hostingDeployed=false`
+- `migrationExecuted=false`
+- `NEXT_PHASE=REMOTE_DATA_MIGRATION_DRY_RUN_WITH_MANIFEST`
+
+---
+
 ## Rotas Admin V1.1 — instrumentation PREP da baseline read-only em 2026-08-21
 
 - Bloco: `POST-V1-ROTAS-V1.1-READONLY-BASELINE-INSTRUMENTATION-PREP`.
