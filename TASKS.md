@@ -6,6 +6,33 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — Admin release e smoke read-only de Rotas aprovados
+
+- `adminReleaseClassification=A`
+- `productionReleaseHead=20c70b10c922976ec4f187751f5813b850999fba`
+- `githubPagesRelease=true`
+- `productionDomain=turismo.saomateusdosul.pr.gov.br`
+- `productionAdminAssetsMatched=true`
+- `adminRotasReadonlySmoke=true`
+- `productionRotasVisibleToAdmin=6`
+- `productionRotasDraft=6`
+- `productionRotasPublished=0`
+- `adminSmokeFirestoreWrites=0`
+- `adminSmokeStorageWrites=0`
+- `publicRegressionDetected=false`
+- `publicAdapterReleased=false`
+- `migrationClassification=A`
+- `migrationExecuted=true`
+- `knownIssueCmsEstablishmentsFullSave=true`
+- `knownIssueCategory=FIRESTORE_RULE_EXPRESSION_LIMIT_1000`
+- `knownIssueRegressionClassification=PREEXISTING_ESTABLISHMENT_CONTRACT_ISSUE`
+- `knownIssueIntroducedByRotasV11=false`
+- `knownIssueFixApplied=false`
+- `priorHumanStorageMutation=INDETERMINATE`
+- `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE`
+
+---
+
 ## Rotas Admin V1.1 — data migration executada em produção
 
 - `migrationClassification=A`
