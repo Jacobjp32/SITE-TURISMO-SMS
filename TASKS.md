@@ -6,6 +6,35 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
+## Rotas Admin V1.1 — data migration executada em produção
+
+- `migrationClassification=A`
+- `migrationExecutorHead=c79e2c6d7c6e31fef36a5543011705e956eda6cd`
+- `manifestFileSha256=528e0547b0bcf40da04a50e8bac6c8a317e7cf65df16dbad74299ccbd2176557`
+- `planSha256=888ef5ffadcc44d9fc1a3cd7459e39e83cb11bd88f40a4b93ed29298a4722fe5`
+- `routeCreatesApplied=6`
+- `cmsUpdatesApplied=2`
+- `totalWritesApplied=8`
+- `postMigrationRotasDocuments=6`
+- `postMigrationCmsDocuments=67`
+- `postMigrationCanonicalRelationships=60`
+- `postMigrationUnknownValuesPreserved=11`
+- `postMigrationMalformedRelationships=0`
+- `postMigrationRelationshipFingerprintSha256=b6ae88e498fee6c7216e5624112acf5fd0f47fdd61a6be132ad733c9e561badd`
+- `commitTime=2026-08-24T13:49:39.098378Z`
+- `writeRoleBindingAbsent=true`
+- `writeRoleDeleted=true`
+- `readBindingAbsent=true`
+- `tokenCreatorBindingAbsent=true`
+- `serviceAccountDisabled=true`
+- `userManagedKeys=0`
+- `adcAbsent=true`
+- `authFinalZero=true`
+- `migrationExecuted=true`
+- `NEXT_PHASE=ROTAS_V1.1_ADMIN_RELEASE_AND_PRODUCTION_SMOKE`
+
+---
+
 ## Rotas Admin V1.1 — remote migration dry-run aprovado
 
 - `remoteMigrationDryRunClassification=A`
