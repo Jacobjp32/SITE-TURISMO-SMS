@@ -20,13 +20,33 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 - `unknownValuesPreserved=11`
 - `malformedRelationshipDocuments=0`
 - `planSha256=888ef5ffadcc44d9fc1a3cd7459e39e83cb11bd88f40a4b93ed29298a4722fe5`
-- `manifestFileSha256=528e0547b0bcf40da04a50e8bac6c8a317e7cf65df16dbad74299cccbd2176557`
+- `manifestFileSha256=528e0547b0bcf40da04a50e8bac6c8a317e7cf65df16dbad74299ccbd2176557`
 - `seedValidation=true`
 - `idempotency=true`
 - `FirestoreWrites=0`
 - `migrationExecuted=false`
 - `MIGRATION_EXEC_ALLOWED=false`
 - `NEXT_PHASE=ROTAS_V1.1_DATA_MIGRATION_EXEC_HUMAN_REVIEW`
+
+---
+
+## Rotas Admin V1.1 — erratum do SHA-256 do manifest de migração
+
+- `manifestSha256ErratumClassification=A`
+- `manifestSha256ErratumReason=DOCUMENTARY_EXTRA_HEX_CHARACTER`
+- `previousInvalidManifestFileSha256Length=65`
+- `correctManifestFileSha256=528e0547b0bcf40da04a50e8bac6c8a317e7cf65df16dbad74299ccbd2176557`
+- `manifestSha256Length=64`
+- `manifestIndependentHashAgreement=true`
+- `manifestBytesModified=false`
+- `planSha256=888ef5ffadcc44d9fc1a3cd7459e39e83cb11bd88f40a4b93ed29298a4722fe5`
+- `planSha256Matched=true`
+- `remoteMigrationDryRunClassification=A`
+- `migrationExecHumanReviewClassification=A`
+- `migrationExecuted=false`
+- `MIGRATION_EXEC_ALLOWED=false`
+
+O valor documental anterior possuía 65 caracteres por conter um caractere hexadecimal extra. O literal inválido completo não é preservado neste checkpoint. Os bytes do manifesto e o plan não foram modificados.
 
 ---
 
