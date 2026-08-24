@@ -473,6 +473,43 @@ describe("Rotas V1.1 — hard delete", () => {
   });
 });
 
+describe("Rotas V1.1 — leitura pública de cms_establishments", () => {
+  const published = { id: "public-establishment", name: "Public", status: "published" };
+  const draft = { id: "draft-establishment", name: "Draft", status: "draft" };
+
+  test("anônimo lê empreendimento published", async () => {
+    await seedDocuments([["cms_establishments/public-establishment", published]]);
+    const snapshot = await assertSucceeds(getDoc(doc(anonymousDb(), "cms_establishments", "public-establishment")));
+    assert.equal(snapshot.exists(), true);
+  });
+
+  test("anônimo não lê empreendimento draft", async () => {
+    await seedDocuments([["cms_establishments/draft-establishment", draft]]);
+    await assertFails(getDoc(doc(anonymousDb(), "cms_establishments", "draft-establishment")));
+  });
+
+  test("anônimo consulta somente cms_establishments published", async () => {
+    await seedDocuments([
+      ["cms_establishments/public-establishment", published],
+      ["cms_establishments/draft-establishment", draft],
+    ]);
+    const snapshot = await assertSucceeds(getDocs(query(
+      collection(anonymousDb(), "cms_establishments"),
+      where("status", "==", "published"),
+    )));
+    assert.equal(snapshot.size, 1);
+  });
+
+  test("anônimo não lista cms_establishments sem filtro", async () => {
+    await seedDocuments([["cms_establishments/public-establishment", published]]);
+    await assertFails(getDocs(collection(anonymousDb(), "cms_establishments")));
+  });
+
+  test("anônimo não escreve em cms_establishments", async () => {
+    await assertFails(setDoc(doc(anonymousDb(), "cms_establishments", "anonymous-write"), published));
+  });
+});
+
 describe("Rotas V1.1 — relationships.routeIds[] em cms_establishments", () => {
   const establishmentPath = "cms_establishments/synthetic-establishment";
 

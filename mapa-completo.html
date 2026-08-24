@@ -10,6 +10,8 @@
     <script src="js/breadcrumbs.js"></script>
     <meta name="description" content="Mapa completo das rotas turísticas de São Mateus do Sul — explore a Capital Polonesa do Paraná com todos os pontos turísticos, culturais e gastronômicos.">
     <meta name="robots" content="noindex,follow">
+    <meta http-equiv="refresh" content="0; url=/mapa-turistico?grupo=roteiros">
+    <script>window.__MAPA_COMPLETO_BRIDGE__ = true; window.location.replace('/mapa-turistico?grupo=roteiros');</script>
     <title>Mapa Completo - Rotas Turísticas São Mateus do Sul</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
@@ -22,8 +24,7 @@
 </head>
 <body>
     <script src="js/nav-shared.js?v=site-mes-polones-20260805-1417"></script>
-    <!-- Mesma fonte de dados do Rotas Turísticas (coordenadas reais) -->
-    <script src="js/rotas-data.js"></script>
+    <!-- URL legada preservada como ponte para a fonte pública consolidada. -->
 
     <!-- Mapa Leaflet (ocupa tela inteira abaixo da nav) -->
     <div id="leaflet-map"></div>
@@ -57,6 +58,7 @@
 
     <script>
     (function () {
+        if (window.__MAPA_COMPLETO_BRIDGE__) return;
         var _retries = 0;
 
         // ── Aguarda a nav renderizar (nav-shared.js injeta assincronamente) ──

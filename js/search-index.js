@@ -47,37 +47,45 @@
     makeEntry("Institucional", "Sobre", "Transparência, conselho, fundo municipal e informações oficiais.", "/transparencia", ["institucional", "transparencia", "comtur", "fumtur", "prefeitura"])
   ];
 
-  var data = getData();
+  function routeUrl(item) {
+    if (window.TURISMO_PUBLIC_DATA_UTILS && typeof window.TURISMO_PUBLIC_DATA_UTILS.routeUrl === "function") {
+      return window.TURISMO_PUBLIC_DATA_UTILS.routeUrl(item);
+    }
+    return "/mapa-turistico?grupo=roteiros&rota=" + encodeURIComponent(String(item && (item.slug || item.id) || ""));
+  }
 
-  var pontoEntries = fromCollection(data.pontos, function (item) {
-    return makeEntry(item.nome, "Ponto Turístico", item.descricao, item.url || "/mapa-turistico?grupo=pontos-turisticos", item.tags || []);
-  });
+  function rebuildSearchIndex() {
+    var data = getData();
+    var pontoEntries = fromCollection(data.pontos, function (item) {
+      return makeEntry(item.nome, "Ponto Turístico", item.descricao, item.url || "/mapa-turistico?grupo=pontos-turisticos", item.tags || []);
+    });
+    var rotaEntries = fromCollection(data.rotas, function (item) {
+      return makeEntry(item.nome, "Agenda" === item.categoria ? item.categoria : "Explore", item.descricao, routeUrl(item), item.tags || []);
+    });
+    var hospedagemEntries = fromCollection(data.hospedagens, function (item) {
+      return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/mapa-turistico?categoria=Hospedagem", (item.tags || []).concat([item.categoria || "hospedagem", item.localizacao || ""]));
+    });
+    var restauranteEntries = fromCollection(data.restaurantes, function (item) {
+      return makeEntry(item.nome, "Sabores", item.descricao, item.url || "/mapa-turistico?categoria=Gastronomia", (item.tags || []).concat([item.categoria || "restaurantes"]));
+    });
+    var eventoEntries = fromCollection(data.eventos, function (item) {
+      return makeEntry(item.nome, "Agenda", item.descricao, item.url || "/eventos", (item.tags || []).concat([item.categoria || "evento", item.periodo || "", item.local || ""]));
+    });
+    var infoEntries = fromCollection(data.informacoesEssenciais, function (item) {
+      return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/#visitor-guide-title", item.tags || []);
+    });
 
-  var rotaEntries = fromCollection(data.rotas, function (item) {
-    return makeEntry(item.nome, "Agenda" === item.categoria ? item.categoria : "Explore", item.descricao, item.url || "/mapa-turistico?grupo=roteiros", item.tags || []);
-  });
+    window.TURISMO_SEARCH_INDEX = fixedEntries
+      .concat(pontoEntries)
+      .concat(rotaEntries)
+      .concat(restauranteEntries)
+      .concat(eventoEntries)
+      .concat(hospedagemEntries)
+      .concat(infoEntries);
+    return window.TURISMO_SEARCH_INDEX;
+  }
 
-  var hospedagemEntries = fromCollection(data.hospedagens, function (item) {
-    return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/mapa-turistico?categoria=Hospedagem", (item.tags || []).concat([item.categoria || "hospedagem", item.localizacao || ""]));
-  });
-
-  var restauranteEntries = fromCollection(data.restaurantes, function (item) {
-    return makeEntry(item.nome, "Sabores", item.descricao, item.url || "/mapa-turistico?categoria=Gastronomia", (item.tags || []).concat([item.categoria || "restaurantes"]));
-  });
-
-  var eventoEntries = fromCollection(data.eventos, function (item) {
-    return makeEntry(item.nome, "Agenda", item.descricao, item.url || "/eventos", (item.tags || []).concat([item.categoria || "evento", item.periodo || "", item.local || ""]));
-  });
-
-  var infoEntries = fromCollection(data.informacoesEssenciais, function (item) {
-    return makeEntry(item.nome, "Planeje sua visita", item.descricao, item.url || "/#visitor-guide-title", item.tags || []);
-  });
-
-  window.TURISMO_SEARCH_INDEX = fixedEntries
-    .concat(pontoEntries)
-    .concat(rotaEntries)
-    .concat(restauranteEntries)
-    .concat(eventoEntries)
-    .concat(hospedagemEntries)
-    .concat(infoEntries);
+  window.TURISMO_SEARCH_INDEX_API = { rebuild: rebuildSearchIndex };
+  rebuildSearchIndex();
+  window.addEventListener("turismo:data-ready", rebuildSearchIndex);
 })();

@@ -92,4 +92,5 @@
   }
 
   window.addEventListener("load", refreshSiteStats);
+  window.addEventListener("turismo:data-ready", refreshSiteStats);
 })();

@@ -423,6 +423,8 @@
     selectedItemId: null,
     activeFilter: "all",
     panelGroup: "all",
+    requestedRoute: "",
+    selectedRouteCanonical: null,
     searchTerm: "",
     searchValue: "",
     lang: "pt",
@@ -1082,6 +1084,7 @@
 
     return {
       id: item.id || item.nome,
+      slug: item.slug || item.id || "",
       nome: item.nome,
       tipo: itemType,
       panelGroup: panelGroup,
@@ -1103,6 +1106,9 @@
       horario: item.horario || item.hours || item.periodo || "",
       destaque: item.destaque || "",
       rota: item.rota || item.route || item.legacyRouteName || "",
+      routeIds: Array.isArray(item.routeIds)
+        ? item.routeIds.slice()
+        : (item.relationships && Array.isArray(item.relationships.routeIds) ? item.relationships.routeIds.slice() : []),
       site: item.site || item.website || "",
       instagram: item.instagram || item.social || "",
       facebook: item.facebook || "",
@@ -1221,6 +1227,13 @@
     var params = new URLSearchParams(window.location.search);
     var requestedFilter = resolveFilterAlias(params.get("categoria") || params.get("filter"));
     var requestedGroup = resolvePanelGroupAlias(params.get("grupo") || window.location.hash.replace(/^#/, ""));
+    state.requestedRoute = String(params.get("rota") || "").trim();
+    if (state.requestedRoute) {
+      state.panelGroup = "routes";
+      state.selectedRouteCanonical = window.TURISMO_PUBLIC_DATA_UTILS
+        ? window.TURISMO_PUBLIC_DATA_UTILS.resolveRouteCanonical((window.TURISMO_DATA || {}).rotas, state.requestedRoute)
+        : state.requestedRoute;
+    }
 
     if (requestedFilter) {
       state.activeFilter = requestedFilter;
@@ -1236,17 +1249,29 @@
       state.activeFilter = "all";
       state.panelGroup = "routes";
     }
+    if (state.requestedRoute) {
+      state.panelGroup = "routes";
+    }
   }
 
   function syncUrlState() {
     if (!window.history || !window.history.replaceState) return;
 
-    var params = new URLSearchParams();
+    var params = new URLSearchParams(window.location.search || "");
     if (state.activeFilter !== "all") {
       params.set("categoria", t("categories." + state.activeFilter, state.activeFilter));
+    } else {
+      params.delete("categoria");
     }
     if (state.panelGroup !== "all") {
       params.set("grupo", getPanelGroupSlug(state.panelGroup));
+    } else {
+      params.delete("grupo");
+    }
+    if (state.requestedRoute) {
+      params.set("rota", state.requestedRoute);
+    } else {
+      params.delete("rota");
     }
 
     var query = params.toString();
@@ -1260,7 +1285,19 @@
     state.filteredItems = state.items.filter(function (item) {
       var byCategory = state.activeFilter === "all" || item.categoriaMapa === state.activeFilter;
       var bySearch = !state.searchTerm || item.searchText.indexOf(state.searchTerm) !== -1;
-      return byCategory && bySearch;
+      var byRoute = true;
+      if (state.requestedRoute) {
+        if (!state.selectedRouteCanonical) return false;
+        if (isRouteItem(item)) {
+          byRoute = String(item.id) === String(state.selectedRouteCanonical)
+            || String(item.slug) === String(state.requestedRoute);
+        } else {
+          byRoute = window.TURISMO_PUBLIC_DATA_UTILS
+            ? window.TURISMO_PUBLIC_DATA_UTILS.itemMatchesRoute(item, state.selectedRouteCanonical)
+            : item.routeIds.indexOf(state.selectedRouteCanonical) !== -1;
+        }
+      }
+      return byCategory && bySearch && byRoute;
     });
 
     state.missingItems = state.filteredItems.filter(function (item) {
@@ -2005,6 +2042,17 @@
     loadApprovedEventsForMap();
   }
 
+  function refreshDynamicData() {
+    if (!state.map) return;
+    state.items = buildItems();
+    attachApprovedEventsToItems(state.items, state.approvedEvents);
+    state.selectedRouteCanonical = state.requestedRoute && window.TURISMO_PUBLIC_DATA_UTILS
+      ? window.TURISMO_PUBLIC_DATA_UTILS.resolveRouteCanonical((window.TURISMO_DATA || {}).rotas, state.requestedRoute)
+      : state.selectedRouteCanonical;
+    state.selectedItemId = null;
+    refreshView();
+  }
+
   function bootstrap() {
     if (!window.L || !window.TURISMO_DATA || !document.getElementById("tourismMap")) return;
     initMap();
@@ -2015,4 +2063,5 @@
   } else {
     bootstrap();
   }
+  window.addEventListener("turismo:data-ready", refreshDynamicData);
 })();

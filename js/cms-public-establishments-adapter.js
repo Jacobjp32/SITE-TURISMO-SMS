@@ -90,13 +90,19 @@
   }
 
   function makeFallback(error, reason) {
+    var sanitizedError = sanitizeError(error, reason) || {
+      code: "unknown",
+      message: "Leitura CMS indisponivel."
+    };
     return {
       items: [],
       count: 0,
-      source: "fallback",
+      source: "static-fallback",
+      state: "TECHNICAL_FAILURE",
       collection: COLLECTION,
       queriedStatus: STATUS,
-      error: sanitizeError(error, reason),
+      fallbackReason: sanitizedError.code,
+      error: sanitizedError,
       generatedAt: new Date().toISOString()
     };
   }
@@ -195,6 +201,8 @@
     var name = clean(data.name);
     var slug = clean(data.slug) || clean(data.id) || clean(docId);
     var id = clean(data.id) || clean(docId);
+    var routeIds = ensureArray(data.relationships && data.relationships.routeIds)
+      .filter(function (routeId) { return typeof routeId === "string"; });
 
     if (!id || !name || !category.label) return null;
 
@@ -227,6 +235,10 @@
       imagem: mainImage ? mainImage.url : "",
       galeria: gallery.map(function (item) { return item.url; }),
       tags: ensureArray(content.tags).map(clean).filter(Boolean),
+      relationships: {
+        routeIds: routeIds.slice()
+      },
+      routeIds: routeIds.slice(),
       status: STATUS,
       source: COLLECTION
     };
@@ -288,10 +300,11 @@
           lastResult = {
             items: [],
             count: 0,
-            source: COLLECTION,
+            source: "firestore",
             collection: COLLECTION,
             queriedStatus: STATUS,
-            state: "empty-published",
+            state: "AUTHORITATIVE_EMPTY",
+            fallbackReason: null,
             message: "Leitura permitida, mas nao ha empreendimentos published.",
             error: null,
             generatedAt: new Date().toISOString()
@@ -303,10 +316,11 @@
         lastResult = {
           items: items,
           count: items.length,
-          source: COLLECTION,
+          source: "firestore",
           collection: COLLECTION,
           queriedStatus: STATUS,
-          state: "success",
+          state: "SUCCESS",
+          fallbackReason: null,
           message: "Leitura concluida.",
           error: null,
           generatedAt: new Date().toISOString()

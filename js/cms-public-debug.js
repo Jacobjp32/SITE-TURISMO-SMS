@@ -20,7 +20,7 @@
     setText("cmsDebugCount", String(result.count || 0));
     if (result.error) {
       setText("cmsDebugStatus", "Fallback");
-    } else if (result.state === "empty-published") {
+    } else if (result.state === "AUTHORITATIVE_EMPTY" || result.state === "empty-published") {
       setText("cmsDebugStatus", "Sem published");
     } else {
       setText("cmsDebugStatus", "Leitura concluida");
