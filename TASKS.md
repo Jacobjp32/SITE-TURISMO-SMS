@@ -2905,3 +2905,46 @@ Equivalentes identificados:
 - [ ] Nenhum layout/CSS foi alterado em tarefa de SEO/dados.
 - [ ] Nenhum arquivo legado foi mexido sem autorização.
 - [ ] Usuário autorizou commit.
+
+---
+
+## Rotas V1.1 — publicação editorial Firestore comprovada
+
+- `publicationClassification=A`
+- `publicationMethod=ONE_SHOT_SERVER_SIDE_MANIFEST_CONTROLLED`
+- `publicationManifestFileSha256=1ff5de417ae22d9d165f5be4bf7a3cf2c3811836f6dc9f4528cc3c29694a1979`
+- `publicationPlanSha256=db5bea69c0cb711b9a0ddd38b896a763b3dc03c0b149016d1314f2d79f7271d1`
+- `publicationWriteTemplateSha256=93cc3cb62cb488ce8a143b98c59dd6bb5293c8c3f660300a7b6688ac71564e23`
+- `routesPublished=6`
+- `cmsEstablishmentsPublished=67`
+- `totalPublicationWrites=73`
+- `publicationCommitTime=2026-08-25T14:34:23.798594Z`
+- `productionPublishedRoutes=6`
+- `productionPublishedEstablishments=67`
+- `routesPublicQueryState=SUCCESS`
+- `establishmentsPublicQueryState=SUCCESS`
+- `humanApprovedRelationshipNormalizations=2`
+- `mediaMismatchCount=0`
+- `unapprovedPublicProjectionMismatchCount=0`
+- `knownIssueCmsEstablishmentsFullSave=true`
+- `knownIssueFixApplied=false`
+- `orphanStorageObjectPossible=true`
+- `storageCleanupDeferred=true`
+- `publicAdapterImplemented=true`
+- `publicAdapterReleased=false`
+- `publicAdapterCutover=false`
+- `FirestoreWritesThisBlock=73`
+- `FirestoreCreatesThisBlock=0`
+- `FirestoreUpdatesThisBlock=73`
+- `FirestoreDeletesThisBlock=0`
+- `StorageWritesThisBlock=0`
+- `StorageDeletesThisBlock=0`
+- `writeRoleBindingAbsent=true`
+- `writeRoleDeleted=true`
+- `readBindingAbsent=true`
+- `tokenCreatorBindingAbsent=true`
+- `serviceAccountDisabled=true`
+- `userManagedKeys=0`
+- `adcAbsent=true`
+- `authFinalZero=true`
+- `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_CUTOVER`
