@@ -2948,3 +2948,45 @@ Equivalentes identificados:
 - `adcAbsent=true`
 - `authFinalZero=true`
 - `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_CUTOVER`
+
+## Rotas V1.1 — public adapter cutover comprovado
+
+- `publicAdapterReleaseClassification=A`
+- `productionCutoverHead=4cdae36797c9672fb539ae643241c1b0730d2b31`
+- `searchSmokeAdjudication=HUMAN_PASS_AUTOMATION_INTERACTION_FALSE_NEGATIVE`
+- `previousAutomatedSearchSmokeFailed=true`
+- `humanSearchSmokePassed=true`
+- `searchProductionRegressionProven=false`
+- `searchHotfixRequired=false`
+- `searchHotfixReleased=false`
+- `publicAdapterReleased=true`
+- `publicAdapterCutover=true`
+- `publicRouteSource=firestore`
+- `publicEstablishmentSource=firestore`
+- `productionPublishedRoutes=6`
+- `productionPublishedEstablishments=67`
+- `routesPublicQueryState=SUCCESS`
+- `establishmentsPublicQueryState=SUCCESS`
+- `routeFilterEnabled=true`
+- `routeFilterPassed=true`
+- `routeIdsPreserved=true`
+- `multiRoutePreserved=true`
+- `multiRoutePassed=true`
+- `canonicalRelationshipNormalizationPreserved=true`
+- `marinaPublicGalleryCount=8`
+- `searchDynamicRoutes=true`
+- `searchDynamicRoutesPassed=true`
+- `homePublishedRouteCount=true`
+- `staticFallbackTechnicalFailureOnly=true`
+- `authoritativeEmptyIsNotFallback=true`
+- `publicRegressionDetected=false`
+- `FirestoreWritesThisBlock=0`
+- `StorageWritesThisBlock=0`
+- `RulesDeploysThisBlock=0`
+- `FirebaseAuthMutationsThisBlock=0`
+- `knownIssueCmsEstablishmentsFullSave=true`
+- `knownIssueFixApplied=false`
+- `orphanStorageObjectPossible=true`
+- `storageCleanupDeferred=true`
+- `ROTAS_V1.1_ROLLOUT_COMPLETE=true`
+- `NEXT_PHASE=NONE_AUTOMATIC`
