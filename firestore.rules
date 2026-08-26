@@ -167,30 +167,176 @@ service cloud.firestore {
     }
 
     function establishmentFieldsAllowed(data) {
-      return data.keys().hasAll([
+      return data.keys().hasOnly([
         'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
         'content', 'contact', 'location', 'media', 'relationships',
         'display', 'seo', 'publishing', 'review', 'source',
-        'createdAt', 'createdBy', 'updatedAt', 'updatedBy'
-      ]) &&
-        data.keys().hasOnly([
-        'id', 'slug', 'name', 'categoryId', 'categoryLabel', 'status',
-        'content', 'contact', 'location', 'media', 'relationships',
-        'display', 'seo', 'publishing', 'review', 'source',
-        'createdAt', 'createdBy', 'updatedAt', 'updatedBy'
+        'createdAt', 'createdBy', 'updatedAt', 'updatedBy',
+        'schemaVersion', 'validatedGroups', 'revision', 'editSession'
       ]);
+    }
+
+    function establishmentShellFieldsAllowed(data) {
+      return data.keys().hasAll([
+          'id', 'slug', 'status', 'createdAt', 'createdBy', 'updatedAt',
+          'updatedBy', 'schemaVersion', 'validatedGroups', 'revision'
+        ]) &&
+        data.keys().hasOnly([
+          'id', 'slug', 'status', 'createdAt', 'createdBy', 'updatedAt',
+          'updatedBy', 'schemaVersion', 'validatedGroups', 'revision'
+        ]);
+    }
+
+    function establishmentGroupKeys() {
+      return [
+        'core', 'content', 'contact', 'location', 'media',
+        'relationshipsRouteIds', 'relationshipsRelatedPlaceIds',
+        'relationshipsRelatedEventIds',
+        'display', 'seo', 'review', 'source', 'lifecycle'
+      ];
+    }
+
+    function validEstablishmentMarkers(data) {
+      return data is map && data.keys().hasOnly(establishmentGroupKeys());
+    }
+
+    function validEstablishmentEditSession(data) {
+      return data is map &&
+        data.keys().hasAll(['resumeStatus', 'startedAt', 'startedBy']) &&
+        data.keys().hasOnly(['resumeStatus', 'startedAt', 'startedBy']) &&
+        data.resumeStatus == 'published' &&
+        data.startedAt is timestamp &&
+        data.startedBy is string;
     }
 
     function validNullableTimestamp(value) {
       return value == null || value is timestamp;
     }
 
-    function validStringList(value) {
-      return value is list && value.size() <= 50;
+    function validStringListBlock0(value, size) {
+      return (size <= 0 || value[0] is string) &&
+        (size <= 1 || value[1] is string) &&
+        (size <= 2 || value[2] is string) &&
+        (size <= 3 || value[3] is string) &&
+        (size <= 4 || value[4] is string) &&
+        (size <= 5 || value[5] is string) &&
+        (size <= 6 || value[6] is string) &&
+        (size <= 7 || value[7] is string) &&
+        (size <= 8 || value[8] is string) &&
+        (size <= 9 || value[9] is string);
     }
 
-    function validNullableCoordinate(value) {
-      return value == null || value is number;
+    function validStringListBlock1(value, size) {
+      return (size <= 10 || value[10] is string) &&
+        (size <= 11 || value[11] is string) &&
+        (size <= 12 || value[12] is string) &&
+        (size <= 13 || value[13] is string) &&
+        (size <= 14 || value[14] is string) &&
+        (size <= 15 || value[15] is string) &&
+        (size <= 16 || value[16] is string) &&
+        (size <= 17 || value[17] is string) &&
+        (size <= 18 || value[18] is string) &&
+        (size <= 19 || value[19] is string);
+    }
+
+    function validStringListBlock2(value, size) {
+      return (size <= 20 || value[20] is string) &&
+        (size <= 21 || value[21] is string) &&
+        (size <= 22 || value[22] is string) &&
+        (size <= 23 || value[23] is string) &&
+        (size <= 24 || value[24] is string) &&
+        (size <= 25 || value[25] is string) &&
+        (size <= 26 || value[26] is string) &&
+        (size <= 27 || value[27] is string) &&
+        (size <= 28 || value[28] is string) &&
+        (size <= 29 || value[29] is string);
+    }
+
+    function validStringListBlock3(value, size) {
+      return (size <= 30 || value[30] is string) &&
+        (size <= 31 || value[31] is string) &&
+        (size <= 32 || value[32] is string) &&
+        (size <= 33 || value[33] is string) &&
+        (size <= 34 || value[34] is string) &&
+        (size <= 35 || value[35] is string) &&
+        (size <= 36 || value[36] is string) &&
+        (size <= 37 || value[37] is string) &&
+        (size <= 38 || value[38] is string) &&
+        (size <= 39 || value[39] is string);
+    }
+
+    function validStringListBlock4(value, size) {
+      return (size <= 40 || value[40] is string) &&
+        (size <= 41 || value[41] is string) &&
+        (size <= 42 || value[42] is string) &&
+        (size <= 43 || value[43] is string) &&
+        (size <= 44 || value[44] is string) &&
+        (size <= 45 || value[45] is string) &&
+        (size <= 46 || value[46] is string) &&
+        (size <= 47 || value[47] is string) &&
+        (size <= 48 || value[48] is string) &&
+        (size <= 49 || value[49] is string);
+    }
+
+    function validStringListFullBlock0(value) {
+      return value[0] is string && value[1] is string &&
+        value[2] is string && value[3] is string &&
+        value[4] is string && value[5] is string &&
+        value[6] is string && value[7] is string &&
+        value[8] is string && value[9] is string;
+    }
+
+    function validStringListFullBlock1(value) {
+      return value[10] is string && value[11] is string &&
+        value[12] is string && value[13] is string &&
+        value[14] is string && value[15] is string &&
+        value[16] is string && value[17] is string &&
+        value[18] is string && value[19] is string;
+    }
+
+    function validStringListFullBlock2(value) {
+      return value[20] is string && value[21] is string &&
+        value[22] is string && value[23] is string &&
+        value[24] is string && value[25] is string &&
+        value[26] is string && value[27] is string &&
+        value[28] is string && value[29] is string;
+    }
+
+    function validStringListFullBlock3(value) {
+      return value[30] is string && value[31] is string &&
+        value[32] is string && value[33] is string &&
+        value[34] is string && value[35] is string &&
+        value[36] is string && value[37] is string &&
+        value[38] is string && value[39] is string;
+    }
+
+    function validStringListFullBlock4(value) {
+      return value[40] is string && value[41] is string &&
+        value[42] is string && value[43] is string &&
+        value[44] is string && value[45] is string &&
+        value[46] is string && value[47] is string &&
+        value[48] is string && value[49] is string;
+    }
+
+    function validStringList(value) {
+      let size = value.size();
+      return value is list && size <= 50 &&
+        (size <= 10
+          ? validStringListBlock0(value, size)
+          : validStringListFullBlock0(value) && (size <= 20
+            ? validStringListBlock1(value, size)
+            : validStringListFullBlock1(value) && (size <= 30
+              ? validStringListBlock2(value, size)
+              : validStringListFullBlock2(value) && (size <= 40
+                ? validStringListBlock3(value, size)
+                : validStringListFullBlock3(value) && (size < 50
+                  ? validStringListBlock4(value, size)
+                  : validStringListFullBlock4(value))))));
+    }
+
+    function validNullableCoordinate(value, minimum, maximum) {
+      return value == null ||
+        (value is number && value == value && value >= minimum && value <= maximum);
     }
 
     function optionalString(data, field) {
@@ -273,8 +419,8 @@ service cloud.firestore {
         data.postalCode is string &&
         data.coordinates is map &&
         data.coordinates.keys().hasOnly(['lat', 'lng']) &&
-        validNullableCoordinate(data.coordinates.lat) &&
-        validNullableCoordinate(data.coordinates.lng) &&
+        validNullableCoordinate(data.coordinates.lat, -90, 90) &&
+        validNullableCoordinate(data.coordinates.lng, -180, 180) &&
         data.mapsUrl is string &&
         data.coordStatus is string &&
         data.coordNote is string;
@@ -303,6 +449,20 @@ service cloud.firestore {
         validStringList(data.routeIds) &&
         validStringList(data.relatedPlaceIds) &&
         validStringList(data.relatedEventIds) &&
+        data.legacyRoute is string &&
+        data.legacyRouteName is string;
+    }
+
+    function validEstablishmentRelationshipsShape(data) {
+      return data is map &&
+        data.keys().hasAll([
+          'routeIds', 'relatedPlaceIds', 'relatedEventIds',
+          'legacyRoute', 'legacyRouteName'
+        ]) &&
+        data.keys().hasOnly([
+          'routeIds', 'relatedPlaceIds', 'relatedEventIds',
+          'legacyRoute', 'legacyRouteName'
+        ]) &&
         data.legacyRoute is string &&
         data.legacyRouteName is string;
     }
@@ -366,57 +526,498 @@ service cloud.firestore {
         validNullableTimestamp(data.sourceUpdatedAt);
     }
 
-    function validEstablishmentBase(data) {
-      return establishmentFieldsAllowed(data) &&
-        data.id is string &&
-        data.slug is string &&
-        data.name is string &&
-        data.categoryId is string &&
-        data.categoryLabel is string &&
-        isEstablishmentStatus(data.status) &&
-        data.name.size() > 0 &&
-        data.slug.size() > 0 &&
-        data.categoryId.size() > 0 &&
-        data.categoryLabel.size() > 0 &&
-        validEstablishmentContent(data.content) &&
-        validEstablishmentContact(data.contact) &&
-        validEstablishmentLocation(data.location) &&
-        validEstablishmentMedia(data.media) &&
-        validEstablishmentRelationships(data.relationships) &&
-        validEstablishmentDisplay(data.display) &&
-        validEstablishmentSeo(data.seo) &&
-        validEstablishmentPublishing(data.publishing) &&
-        validEstablishmentReview(data.review) &&
-        validEstablishmentSource(data.source) &&
-        data.createdAt is timestamp &&
-        data.createdBy is string &&
-        data.updatedAt is timestamp &&
-        data.updatedBy is string;
-    }
-
     function hasEstablishmentIdentity(data) {
       return data is map &&
         data.keys().hasAll(['id', 'createdAt', 'createdBy', 'updatedAt', 'updatedBy']);
     }
 
-    function isValidEstablishmentCreate(establishmentId) {
-      return isAdmin() &&
-        validEstablishmentBase(request.resource.data) &&
-        request.resource.data.id == establishmentId &&
-        request.resource.data.createdBy == request.auth.uid &&
-        request.resource.data.updatedBy == request.auth.uid;
+    function validEstablishmentCore(data) {
+      return data.keys().hasAll(['slug', 'name', 'categoryId', 'categoryLabel']) &&
+        data.slug is string && data.slug.size() > 0 &&
+        data.name is string && data.name.size() > 0 &&
+        data.categoryId is string && data.categoryId.size() > 0 &&
+        data.categoryLabel is string && data.categoryLabel.size() > 0;
     }
 
-    function isValidEstablishmentUpdate() {
+    function validEstablishmentLifecycle(data) {
+      return data.keys().hasAll(['status', 'publishing']) &&
+        isEstablishmentStatus(data.status) &&
+        validEstablishmentPublishing(data.publishing);
+    }
+
+    function isValidEstablishmentShellCreate(establishmentId) {
       return isAdmin() &&
+        establishmentShellFieldsAllowed(request.resource.data) &&
+        request.resource.data.id == establishmentId &&
+        request.resource.data.slug == establishmentId &&
+        request.resource.data.status == 'draft' &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.schemaVersion == 2 &&
+        request.resource.data.validatedGroups == {} &&
+        request.resource.data.revision == 0;
+    }
+
+    function establishmentSourceMetadataValid() {
+      return (
+          !resource.data.keys().hasAny(['schemaVersion', 'validatedGroups', 'revision'])
+        ) || (
+          resource.data.keys().hasAll(['schemaVersion', 'validatedGroups', 'revision']) &&
+          resource.data.schemaVersion == 2 &&
+          resource.data.revision is int && resource.data.revision >= 0 &&
+          validEstablishmentMarkers(resource.data.validatedGroups)
+        );
+    }
+
+    function establishmentEditSessionTransitionValid() {
+      return (
+          resource.data.keys().hasAny(['editSession']) &&
+          !request.resource.data.keys().hasAny(['editSession']) &&
+          resource.data.status == 'draft' &&
+          request.resource.data.status == 'published' &&
+          validEstablishmentEditSession(resource.data.editSession)
+        ) || (
+          !resource.data.keys().hasAny(['editSession']) &&
+          request.resource.data.keys().hasAny(['editSession']) &&
+          resource.data.status == 'published' &&
+          request.resource.data.status == 'draft' &&
+          validEstablishmentEditSession(request.resource.data.editSession) &&
+          request.resource.data.editSession.resumeStatus == 'published' &&
+          request.resource.data.editSession.startedAt == request.time &&
+          request.resource.data.editSession.startedBy == request.auth.uid
+        ) || (
+          resource.data.keys().hasAny(['editSession']) &&
+          request.resource.data.keys().hasAny(['editSession']) &&
+          resource.data.status == 'draft' &&
+          request.resource.data.status == 'draft' &&
+          validEstablishmentEditSession(resource.data.editSession) &&
+          request.resource.data.editSession == resource.data.editSession
+        ) || (
+          !resource.data.keys().hasAny(['editSession']) &&
+          !request.resource.data.keys().hasAny(['editSession'])
+        );
+    }
+
+    function establishmentV2EnvelopeValid() {
+      return establishmentFieldsAllowed(request.resource.data) &&
         hasEstablishmentIdentity(resource.data) &&
-        validEstablishmentBase(request.resource.data) &&
+        hasEstablishmentIdentity(request.resource.data) &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdBy == resource.data.createdBy &&
         request.resource.data.createdAt == resource.data.createdAt &&
-        request.resource.data.updatedBy == request.auth.uid;
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.schemaVersion == 2 &&
+        request.resource.data.revision == resource.data.get('revision', 0) + 1 &&
+        validEstablishmentMarkers(request.resource.data.validatedGroups) &&
+        establishmentSourceMetadataValid() &&
+        (!resource.data.keys().hasAny(['schemaVersion']) ||
+          request.resource.data.schemaVersion == resource.data.schemaVersion);
     }
 
+    function establishmentMarkerValid(group) {
+      return request.resource.data.validatedGroups[group] == 2 &&
+        request.resource.data.validatedGroups.diff(
+          resource.data.get('validatedGroups', {})
+        ).affectedKeys().hasOnly([group]);
+    }
+
+    function establishmentGroupWriteKeysValid(fields) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+        fields.concat([
+          'updatedAt', 'updatedBy', 'schemaVersion', 'validatedGroups', 'revision'
+        ])
+      );
+    }
+
+    function isCoreGroupWrite() {
+      return establishmentGroupWriteKeysValid(['slug', 'name', 'categoryId', 'categoryLabel']) &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['slug', 'name', 'categoryId', 'categoryLabel', 'validatedGroups']) &&
+        establishmentMarkerValid('core') &&
+        validEstablishmentCore(request.resource.data);
+    }
+
+    function isContentGroupWrite() {
+      return establishmentGroupWriteKeysValid(['content']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['content', 'validatedGroups']) &&
+        establishmentMarkerValid('content') &&
+        validEstablishmentContent(request.resource.data.content);
+    }
+
+    function isContactGroupWrite() {
+      return establishmentGroupWriteKeysValid(['contact']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['contact', 'validatedGroups']) &&
+        establishmentMarkerValid('contact') &&
+        validEstablishmentContact(request.resource.data.contact);
+    }
+
+    function isLocationGroupWrite() {
+      return establishmentGroupWriteKeysValid(['location']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['location', 'validatedGroups']) &&
+        establishmentMarkerValid('location') &&
+        validEstablishmentLocation(request.resource.data.location);
+    }
+
+    function isMediaGroupWrite() {
+      return establishmentGroupWriteKeysValid(['media']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['media', 'validatedGroups']) &&
+        establishmentMarkerValid('media') &&
+        validEstablishmentMedia(request.resource.data.media);
+    }
+
+    function establishmentRelationshipWriteKeysValid(field) {
+      return establishmentGroupWriteKeysValid(['relationships']) && (
+        resource.data.keys().hasAny(['relationships'])
+          ? request.resource.data.relationships.diff(resource.data.relationships)
+              .affectedKeys().hasOnly(field == 'routeIds'
+                ? ['routeIds', 'legacyRoute', 'legacyRouteName']
+                : [field])
+          : request.resource.data.relationships.relatedPlaceIds.size() == 0 &&
+            request.resource.data.relationships.relatedEventIds.size() == 0 &&
+            field == 'routeIds'
+      );
+    }
+
+    function isRelationshipsRouteIdsGroupWrite() {
+      return establishmentGroupWriteKeysValid(['relationships']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid('routeIds') &&
+        establishmentMarkerValid('relationshipsRouteIds') &&
+        validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
+        validStringList(request.resource.data.relationships.routeIds);
+    }
+
+    function isRelationshipsRelatedPlaceIdsGroupWrite() {
+      return establishmentGroupWriteKeysValid(['relationships']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid('relatedPlaceIds') &&
+        establishmentMarkerValid('relationshipsRelatedPlaceIds') &&
+        validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
+        validStringList(request.resource.data.relationships.relatedPlaceIds);
+    }
+
+    function isRelationshipsRelatedEventIdsGroupWrite() {
+      return establishmentGroupWriteKeysValid(['relationships']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid('relatedEventIds') &&
+        establishmentMarkerValid('relationshipsRelatedEventIds') &&
+        validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
+        validStringList(request.resource.data.relationships.relatedEventIds);
+    }
+
+    function isDisplayGroupWrite() {
+      return establishmentGroupWriteKeysValid(['display']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['display', 'validatedGroups']) &&
+        establishmentMarkerValid('display') &&
+        validEstablishmentDisplay(request.resource.data.display);
+    }
+
+    function isSeoGroupWrite() {
+      return establishmentGroupWriteKeysValid(['seo']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['seo', 'validatedGroups']) &&
+        establishmentMarkerValid('seo') &&
+        validEstablishmentSeo(request.resource.data.seo);
+    }
+
+    function isReviewGroupWrite() {
+      return establishmentGroupWriteKeysValid(['review']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['review', 'validatedGroups']) &&
+        establishmentMarkerValid('review') &&
+        validEstablishmentReview(request.resource.data.review);
+    }
+
+    function isSourceGroupWrite() {
+      return establishmentGroupWriteKeysValid(['source']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasAny(['source', 'validatedGroups']) &&
+        establishmentMarkerValid('source') &&
+        validEstablishmentSource(request.resource.data.source);
+    }
+
+    function establishmentPublishMarkersReady(data) {
+      return data.validatedGroups.keys().hasAll(establishmentGroupKeys()) &&
+        data.validatedGroups.keys().hasOnly(establishmentGroupKeys()) &&
+        data.validatedGroups.core == data.schemaVersion &&
+        data.validatedGroups.content == data.schemaVersion &&
+        data.validatedGroups.contact == data.schemaVersion &&
+        data.validatedGroups.location == data.schemaVersion &&
+        data.validatedGroups.media == data.schemaVersion &&
+        data.validatedGroups.relationshipsRouteIds == data.schemaVersion &&
+        data.validatedGroups.relationshipsRelatedPlaceIds == data.schemaVersion &&
+        data.validatedGroups.relationshipsRelatedEventIds == data.schemaVersion &&
+        data.validatedGroups.display == data.schemaVersion &&
+        data.validatedGroups.seo == data.schemaVersion &&
+        data.validatedGroups.review == data.schemaVersion &&
+        data.validatedGroups.source == data.schemaVersion &&
+        data.validatedGroups.lifecycle == data.schemaVersion;
+    }
+
+    function establishmentPublishContentReady(data) {
+      return data.keys().hasAll(['name', 'slug', 'categoryId', 'categoryLabel', 'content', 'location']) &&
+        data.name is string && data.name.size() > 0 &&
+        data.slug is string && data.slug.size() > 0 &&
+        data.categoryId is string && data.categoryId.size() > 0 &&
+        data.categoryLabel is string && data.categoryLabel.size() > 0 &&
+        ((data.content.summary is string && data.content.summary.size() > 0) ||
+          (data.content.description is string && data.content.description.size() > 0)) &&
+        ((data.location.address is string && data.location.address.size() > 0) ||
+          (data.location.coordinates.lat is number &&
+            data.location.coordinates.lat >= -90 && data.location.coordinates.lat <= 90 &&
+            data.location.coordinates.lng is number &&
+            data.location.coordinates.lng >= -180 && data.location.coordinates.lng <= 180));
+    }
+
+    function establishmentLifecycleTransitionValid() {
+      return (resource.data.status == 'draft' && request.resource.data.status in ['draft', 'published', 'archived']) ||
+        (resource.data.status == 'published' && request.resource.data.status in ['draft', 'archived']) ||
+        (resource.data.status == 'archived' && request.resource.data.status == 'draft');
+    }
+
+    function establishmentLifecycleAuditValid() {
+      return (request.resource.data.status == 'published'
+          ? request.resource.data.publishing.publishedAt == request.time &&
+            request.resource.data.publishing.publishedBy == request.auth.uid &&
+            request.resource.data.publishing.archivedAt == null &&
+            request.resource.data.publishing.archivedBy == '' &&
+            request.resource.data.publishing.archiveReason == '' &&
+            establishmentPublishMarkersReady(request.resource.data) &&
+            establishmentPublishContentReady(request.resource.data)
+          : true) &&
+        (request.resource.data.status == 'draft' && resource.data.status == 'published'
+          ? request.resource.data.publishing.publishedAt == null &&
+            request.resource.data.publishing.publishedBy == ''
+          : true) &&
+        (request.resource.data.status == 'archived'
+          ? request.resource.data.publishing.archivedAt == request.time &&
+            request.resource.data.publishing.archivedBy == request.auth.uid
+          : request.resource.data.publishing.archivedAt == null &&
+            request.resource.data.publishing.archivedBy == '' &&
+            request.resource.data.publishing.archiveReason == '');
+    }
+
+    function isLifecycleGroupWrite() {
+      return establishmentGroupWriteKeysValid(['status', 'publishing', 'editSession']) &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['status', 'publishing', 'editSession', 'validatedGroups']) &&
+        establishmentMarkerValid('lifecycle') &&
+        validEstablishmentLifecycle(request.resource.data) &&
+        establishmentLifecycleTransitionValid() &&
+        ((!request.resource.data.diff(resource.data).affectedKeys().hasAny(['editSession']) &&
+            !resource.data.keys().hasAny(['editSession'])) ||
+          establishmentEditSessionTransitionValid()) &&
+        establishmentLifecycleAuditValid();
+    }
+
+    function establishmentMutationSelectsOneGroup() {
+      let markerKeys = request.resource.data.validatedGroups.diff(
+        resource.data.get('validatedGroups', {})
+      ).affectedKeys();
+      return markerKeys.size() <= 1 &&
+        (markerKeys.size() == 1 ||
+          request.resource.data.diff(resource.data).affectedKeys().hasAny([
+            'slug', 'name', 'categoryId', 'categoryLabel', 'content', 'contact',
+            'location', 'media', 'relationships', 'display', 'seo', 'review',
+            'source', 'status', 'publishing'
+          ]));
+    }
+
+    function selectedDraftGroupWriteValid() {
+      let changedKeys = request.resource.data.diff(resource.data).affectedKeys();
+      let markerKeys = request.resource.data.validatedGroups.diff(
+        resource.data.get('validatedGroups', {})
+      ).affectedKeys();
+      return (changedKeys.hasAny(['slug', 'name', 'categoryId', 'categoryLabel']) || markerKeys.hasAny(['core']))
+          ? isCoreGroupWrite()
+        : (changedKeys.hasAny(['content']) || markerKeys.hasAny(['content']))
+          ? isContentGroupWrite()
+        : (changedKeys.hasAny(['contact']) || markerKeys.hasAny(['contact']))
+          ? isContactGroupWrite()
+        : (changedKeys.hasAny(['location']) || markerKeys.hasAny(['location']))
+          ? isLocationGroupWrite()
+        : (changedKeys.hasAny(['media']) || markerKeys.hasAny(['media']))
+          ? isMediaGroupWrite()
+        : (markerKeys.hasAny(['relationshipsRouteIds']) ||
+            (changedKeys.hasAny(['relationships']) &&
+              request.resource.data.relationships.diff(resource.data.relationships)
+                .affectedKeys().hasAny(['routeIds'])))
+          ? isRelationshipsRouteIdsGroupWrite()
+        : (markerKeys.hasAny(['relationshipsRelatedPlaceIds']) ||
+            (changedKeys.hasAny(['relationships']) &&
+              request.resource.data.relationships.diff(resource.data.relationships)
+                .affectedKeys().hasAny(['relatedPlaceIds'])))
+          ? isRelationshipsRelatedPlaceIdsGroupWrite()
+        : (markerKeys.hasAny(['relationshipsRelatedEventIds']) ||
+            (changedKeys.hasAny(['relationships']) &&
+              request.resource.data.relationships.diff(resource.data.relationships)
+                .affectedKeys().hasAny(['relatedEventIds'])))
+          ? isRelationshipsRelatedEventIdsGroupWrite()
+        : (changedKeys.hasAny(['display']) || markerKeys.hasAny(['display']))
+          ? isDisplayGroupWrite()
+        : (changedKeys.hasAny(['seo']) || markerKeys.hasAny(['seo']))
+          ? isSeoGroupWrite()
+        : (changedKeys.hasAny(['review']) || markerKeys.hasAny(['review']))
+          ? isReviewGroupWrite()
+        : (changedKeys.hasAny(['source']) || markerKeys.hasAny(['source']))
+          ? isSourceGroupWrite()
+        : false;
+    }
+
+    function isEstablishmentAtomicRelationshipUpdate() {
+      return request.resource.data.keys().hasAll(['validatedGroups']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'relationships', 'updatedAt', 'updatedBy', 'schemaVersion',
+          'validatedGroups', 'revision'
+        ]) &&
+        request.resource.data.validatedGroups.diff(
+          resource.data.get('validatedGroups', {})
+        ).affectedKeys().size() <= 1 &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships']) ||
+          request.resource.data.validatedGroups.diff(
+            resource.data.get('validatedGroups', {})
+          ).affectedKeys().hasAny([
+            'relationshipsRouteIds', 'relationshipsRelatedPlaceIds',
+            'relationshipsRelatedEventIds'
+          ]));
+    }
+
+    function cheapDraftGroupEnvelopeValid() {
+      return isAdmin() &&
+        hasEstablishmentIdentity(resource.data) &&
+        hasEstablishmentIdentity(request.resource.data) &&
+        resource.data.status == 'draft' &&
+        request.resource.data.status == 'draft' &&
+        request.resource.data.id == resource.data.id &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.schemaVersion == 2 &&
+        request.resource.data.revision == resource.data.get('revision', 0) + 1 &&
+        validEstablishmentMarkers(request.resource.data.validatedGroups) &&
+        establishmentSourceMetadataShapeValid();
+    }
+
+    function establishmentSourceMetadataShapeValid() {
+      return !resource.data.keys().hasAny(['schemaVersion', 'validatedGroups', 'revision']) ||
+        (resource.data.keys().hasAll(['schemaVersion', 'validatedGroups', 'revision']) &&
+          resource.data.schemaVersion == 2 &&
+          resource.data.revision is int && resource.data.revision >= 0 &&
+          resource.data.validatedGroups is map);
+    }
+
+    function selectedAtomicRelationshipWriteValid() {
+      let markerKeys = request.resource.data.validatedGroups.diff(
+        resource.data.get('validatedGroups', {})
+      ).affectedKeys();
+      return (markerKeys.hasAny(['relationshipsRouteIds']) ||
+            request.resource.data.relationships.diff(resource.data.relationships)
+              .affectedKeys().hasAny(['routeIds', 'legacyRoute', 'legacyRouteName']))
+          ? isRelationshipsRouteIdsGroupWrite()
+        : (markerKeys.hasAny(['relationshipsRelatedPlaceIds']) ||
+            request.resource.data.relationships.diff(resource.data.relationships)
+              .affectedKeys().hasAny(['relatedPlaceIds']))
+          ? isRelationshipsRelatedPlaceIdsGroupWrite()
+        : (markerKeys.hasAny(['relationshipsRelatedEventIds']) ||
+            request.resource.data.relationships.diff(resource.data.relationships)
+              .affectedKeys().hasAny(['relatedEventIds']))
+          ? isRelationshipsRelatedEventIdsGroupWrite()
+        : false;
+    }
+
+    function isValidEstablishmentAtomicRelationshipUpdate() {
+      return cheapDraftGroupEnvelopeValid() &&
+        selectedAtomicRelationshipWriteValid();
+    }
+
+    function isEstablishmentSourceGroupUpdate() {
+      return request.resource.data.keys().hasAll(['validatedGroups']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'source', 'updatedAt', 'updatedBy', 'schemaVersion',
+          'validatedGroups', 'revision'
+        ]) &&
+        request.resource.data.validatedGroups.diff(
+          resource.data.get('validatedGroups', {})
+        ).affectedKeys().hasOnly(['source']) &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['source']) ||
+          request.resource.data.validatedGroups.diff(
+            resource.data.get('validatedGroups', {})
+          ).affectedKeys().hasAny(['source']));
+    }
+
+    function isValidEstablishmentSourceGroupUpdate() {
+      return cheapDraftGroupEnvelopeValid() && isSourceGroupWrite();
+    }
+
+    function isEstablishmentContentGroupUpdate() {
+      return request.resource.data.keys().hasAll(['validatedGroups']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'content', 'updatedAt', 'updatedBy', 'schemaVersion',
+          'validatedGroups', 'revision'
+        ]) &&
+        request.resource.data.validatedGroups.diff(
+          resource.data.get('validatedGroups', {})
+        ).affectedKeys().hasOnly(['content']) &&
+        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['content']) ||
+          request.resource.data.validatedGroups.diff(
+            resource.data.get('validatedGroups', {})
+          ).affectedKeys().hasAny(['content']));
+    }
+
+    function isValidEstablishmentContentGroupUpdate() {
+      return cheapDraftGroupEnvelopeValid() && isContentGroupWrite();
+    }
+
+    function isEstablishmentLifecycleGroupUpdate() {
+      return request.resource.data.keys().hasAll(['validatedGroups']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'publishing', 'editSession', 'updatedAt', 'updatedBy',
+          'schemaVersion', 'validatedGroups', 'revision'
+        ]) &&
+        request.resource.data.validatedGroups.diff(
+          resource.data.get('validatedGroups', {})
+        ).affectedKeys().hasOnly(['lifecycle']) &&
+        (request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['status', 'publishing', 'editSession']) ||
+          request.resource.data.validatedGroups.diff(
+            resource.data.get('validatedGroups', {})
+          ).affectedKeys().hasAny(['lifecycle']));
+    }
+
+    function lifecycleGroupEnvelopeValid() {
+      return isAdmin() &&
+        hasEstablishmentIdentity(resource.data) &&
+        hasEstablishmentIdentity(request.resource.data) &&
+        request.resource.data.id == resource.data.id &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid &&
+        request.resource.data.schemaVersion == 2 &&
+        request.resource.data.revision == resource.data.get('revision', 0) + 1 &&
+        validEstablishmentMarkers(request.resource.data.validatedGroups) &&
+        establishmentSourceMetadataShapeValid();
+    }
+
+    function isValidEstablishmentLifecycleGroupUpdate() {
+      return lifecycleGroupEnvelopeValid() && isLifecycleGroupWrite();
+    }
+
+    function isValidEstablishmentV2GroupUpdate() {
+      return isAdmin() &&
+        establishmentV2EnvelopeValid() &&
+        establishmentMutationSelectsOneGroup() &&
+        (request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['status', 'publishing', 'editSession']) ||
+          request.resource.data.validatedGroups.diff(
+            resource.data.get('validatedGroups', {})
+          ).affectedKeys().hasAny(['lifecycle'])
+          ? isLifecycleGroupWrite()
+          : resource.data.status == 'draft' &&
+            request.resource.data.status == 'draft' &&
+            selectedDraftGroupWriteValid());
+    }
     // Caminho estreito para o batch N:N do modulo Rotas. Evita reavaliar o
     // schema integral legado (que se aproxima do limite de expressoes) quando
     // somente relationships e a auditoria de update mudam.
@@ -431,7 +1032,10 @@ service cloud.firestore {
         request.resource.data.createdBy == resource.data.createdBy &&
         request.resource.data.updatedAt == request.time &&
         request.resource.data.updatedBy == request.auth.uid &&
-        validEstablishmentRelationships(request.resource.data.relationships);
+        request.resource.data.relationships.diff(resource.data.relationships)
+          .affectedKeys().hasOnly(['routeIds']) &&
+        validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
+        validStringList(request.resource.data.relationships.routeIds);
     }
 
     function isEstablishmentRelationshipOnlyUpdate() {
@@ -768,11 +1372,21 @@ service cloud.firestore {
       // where("status", "==", "published").
       allow get: if isAdmin() || resource.data.status == 'published';
       allow list: if isAdmin() || resource.data.status == 'published';
-      allow create: if isValidEstablishmentCreate(establishmentId);
+      allow create: if isValidEstablishmentShellCreate(establishmentId);
       allow update: if isEstablishmentRelationshipOnlyUpdate()
         ? isValidEstablishmentRelationshipUpdate()
-        : isValidEstablishmentUpdate();
-      allow delete: if isAdmin() && isDeletableEstablishmentStatus(resource.data.status);
+        : isEstablishmentAtomicRelationshipUpdate()
+          ? isValidEstablishmentAtomicRelationshipUpdate()
+          : isEstablishmentLifecycleGroupUpdate()
+            ? isValidEstablishmentLifecycleGroupUpdate()
+            : isEstablishmentSourceGroupUpdate()
+              ? isValidEstablishmentSourceGroupUpdate()
+              : isEstablishmentContentGroupUpdate()
+                ? isValidEstablishmentContentGroupUpdate()
+                : isValidEstablishmentV2GroupUpdate();
+      allow delete: if isAdmin() &&
+        isDeletableEstablishmentStatus(resource.data.status) &&
+        !resource.data.keys().hasAny(['editSession']);
     }
 
     match /rotas/{routeId} {

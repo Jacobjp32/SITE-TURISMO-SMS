@@ -33,6 +33,28 @@
     var STATUSES = ["draft", "published", "archived"];
     var EDITABLE_STATUSES = ["draft", "archived"];
     var IMAGE_STATUSES = ["active", "removed"];
+    var SCHEMA_VERSION = 2;
+    var RECONCILIATION_MODE = "SEMANTIC_IDEMPOTENT_EQUIVALENCE";
+    var GROUP_ORDER = [
+        "core", "content", "contact", "location", "media",
+        "relationshipsRouteIds", "relationshipsRelatedPlaceIds", "relationshipsRelatedEventIds",
+        "display", "seo", "review", "source", "lifecycle"
+    ];
+    var GROUP_FIELDS = {
+        core: ["slug", "name", "categoryId", "categoryLabel"],
+        content: ["content"],
+        contact: ["contact"],
+        location: ["location"],
+        media: ["media"],
+        relationshipsRouteIds: ["relationships.routeIds", "relationships.legacyRoute", "relationships.legacyRouteName"],
+        relationshipsRelatedPlaceIds: ["relationships.relatedPlaceIds"],
+        relationshipsRelatedEventIds: ["relationships.relatedEventIds"],
+        display: ["display"],
+        seo: ["seo"],
+        review: ["review"],
+        source: ["source"],
+        lifecycle: ["status", "publishing"]
+    };
     var PUBLIC_STATIC_NOTICE = "Isso altera apenas o catalogo interno do CMS. O site publico ainda usa dados estaticos.";
     var CATEGORIES = [
         { id: "gastronomia", label: "Gastronomia" },
@@ -55,7 +77,11 @@
         query: "",
         editingId: "",
         mainPreviewUrl: "",
-        galleryPreviewUrls: []
+        galleryPreviewUrls: [],
+        editingBase: null,
+        pendingSaga: null,
+        uploadCache: new WeakMap(),
+        draftShellId: ""
     };
 
     function escapeHtml(value) {
@@ -115,6 +141,14 @@
     function serverTimestamp() {
         try {
             return window.firebase.firestore.FieldValue.serverTimestamp();
+        } catch (error) {
+            return null;
+        }
+    }
+
+    function deleteField() {
+        try {
+            return window.firebase.firestore.FieldValue.delete();
         } catch (error) {
             return null;
         }
@@ -219,26 +253,63 @@
             .slice(0, 90);
     }
 
-    function uploadImage(storage, file, uid, establishmentId, subfolder) {
+    function createUploadId() {
+        var secureRandom = window.crypto;
+        if (secureRandom && typeof secureRandom.randomUUID === "function") {
+            return secureRandom.randomUUID();
+        }
+        if (secureRandom && typeof secureRandom.getRandomValues === "function") {
+            var bytes = new Uint8Array(16);
+            secureRandom.getRandomValues(bytes);
+            bytes[6] = (bytes[6] & 15) | 64;
+            bytes[8] = (bytes[8] & 63) | 128;
+            var hex = Array.prototype.map.call(bytes, function (value) {
+                return value.toString(16).padStart(2, "0");
+            }).join("");
+            return [hex.slice(0, 8), hex.slice(8, 12), hex.slice(12, 16), hex.slice(16, 20), hex.slice(20)].join("-");
+        }
+        var error = new Error("Fonte criptografica segura indisponivel para criar o upload.");
+        error.code = "secure-random-unavailable";
+        throw error;
+    }
+
+    function createUploadPlan(storage, file, uid, establishmentId, subfolder) {
         validateImageFile(file);
-        var filename = Date.now() + "-" + safeFileName(file.name);
+        var uploadId = createUploadId();
+        var filename = uploadId + "-" + safeFileName(file.name);
         var path = ["cms-media", uid, "establishments", establishmentId, subfolder, filename].join("/");
-        var ref = storage.ref(path);
-        return ref.put(file, {
-            contentType: file.type,
-            cacheControl: "public,max-age=31536000,immutable"
-        }).then(function () {
-            return ref.getDownloadURL().then(function (url) {
-                return {
-                    url: url,
-                    path: path,
-                    alt: "",
-                    caption: "",
-                    credit: "",
-                    source: "cms-media",
-                    status: "active"
-                };
+        return {
+            uploadId: uploadId,
+            path: path,
+            ref: storage.ref(path),
+            state: "UPLOAD_IDENTITY_PLANNED",
+            url: ""
+        };
+    }
+
+    function uploadImage(plan, file) {
+        var upload = plan.state === "UPLOAD_BYTES_CONFIRMED"
+            ? Promise.resolve()
+            : plan.ref.put(file, {
+                contentType: file.type,
+                cacheControl: "public,max-age=31536000,immutable"
+            }).then(function () {
+                plan.state = "UPLOAD_BYTES_CONFIRMED";
             });
+        return upload.then(function () {
+            return plan.ref.getDownloadURL();
+        }).then(function (url) {
+            plan.url = url;
+            plan.state = "DOWNLOAD_URL_CONFIRMED";
+            return {
+                url: url,
+                path: plan.path,
+                alt: "",
+                caption: "",
+                credit: "",
+                source: "cms-media",
+                status: "active"
+            };
         });
     }
 
@@ -411,7 +482,10 @@
             createdAt: serverTimestamp(),
             createdBy: uid,
             updatedAt: serverTimestamp(),
-            updatedBy: uid
+            updatedBy: uid,
+            schemaVersion: SCHEMA_VERSION,
+            validatedGroups: {},
+            revision: 0
         };
     }
 
@@ -519,7 +593,19 @@
             createdAt: raw.createdAt || null,
             createdBy: clean(raw.createdBy),
             updatedAt: raw.updatedAt || null,
-            updatedBy: clean(raw.updatedBy)
+            updatedBy: clean(raw.updatedBy),
+            schemaVersion: raw.schemaVersion === SCHEMA_VERSION ? SCHEMA_VERSION : null,
+            validatedGroups: raw.validatedGroups && typeof raw.validatedGroups === "object"
+                ? Object.assign({}, raw.validatedGroups)
+                : {},
+            revision: Number.isInteger(raw.revision) && raw.revision >= 0 ? raw.revision : 0,
+            editSession: raw.editSession && typeof raw.editSession === "object"
+                ? {
+                    resumeStatus: clean(raw.editSession.resumeStatus),
+                    startedAt: raw.editSession.startedAt || null,
+                    startedBy: clean(raw.editSession.startedBy)
+                }
+                : null
         };
     }
 
@@ -703,10 +789,17 @@
     }
 
     function deleteButton(item, jsId) {
+        if (hasDeleteBlockingEditSession(item)) {
+            return '<button class="btn-secondary" type="button" disabled title="Conclua a edicao publicada interrompida antes de excluir">Excluir</button>';
+        }
         if (item.status === "published") {
             return '<button class="btn-secondary" type="button" disabled title="Arquive antes de excluir">Excluir</button>';
         }
         return '<button class="btn-danger" type="button" onclick="AdminEstablishmentsModule.remove(\'' + jsId + '\')">Excluir</button>';
+    }
+
+    function hasDeleteBlockingEditSession(item) {
+        return !!(item && item.editSession);
     }
 
     function statusBadge(status) {
@@ -726,6 +819,8 @@
         var existing = state.editingId ? findItem(state.editingId) : null;
         var uid = currentUid();
         var item = existing || defaultDoc("", uid);
+        state.editingBase = existing ? cloneValue(item) : null;
+        state.pendingSaga = null;
         var target = document.getElementById ? document.getElementById("establishments-admin-editor") : null;
         if (!target) return;
         target.innerHTML = buildForm(item, !!existing);
@@ -825,8 +920,12 @@
     function buildForm(item, editing) {
         var title = editing ? "Editar empreendimento" : "Novo empreendimento";
         var mainImage = item.media && item.media.mainImage ? item.media.mainImage : emptyImage();
+        var resumeNotice = hasResumeEditSession(item)
+            ? '<p class="admin-helper-text" role="status"><strong>Edicao publicada interrompida.</strong> Revise os dados persistidos e conclua o salvamento para republicar.</p>'
+            : '';
         return '<div class="card" id="establishmentsEditorCard">' +
             '<div class="card-header"><h2>' + escapeHtml(title) + '</h2><span class="badge badge-info">Uso interno</span></div>' +
+            resumeNotice +
             '<form id="establishmentForm" onsubmit="AdminEstablishmentsModule.submitForm(event)">' +
                 '<input type="hidden" id="est_form_editingId" value="' + escapeAttr(item.__id || "") + '">' +
                 '<div class="admin-modal-grid">' +
@@ -1148,6 +1247,410 @@
         return "";
     }
 
+    function semanticCanonicalizationError() {
+        var error = conflictError();
+        error.reason = "SEMANTIC_CANONICALIZATION_INVALID";
+        return error;
+    }
+
+    function cloneValue(value) {
+        if (typeof value === "number") {
+            if (!Number.isFinite(value)) throw semanticCanonicalizationError();
+            return value;
+        }
+        if (value == null || typeof value !== "object") return value;
+        if (Object.prototype.toString.call(value) === "[object Date]") {
+            var dateMillis = value.getTime();
+            if (!Number.isFinite(dateMillis)) throw semanticCanonicalizationError();
+            return { __timestampMillis: dateMillis };
+        }
+        if (typeof value.toMillis === "function") {
+            var timestampMillis = value.toMillis();
+            if (!Number.isFinite(timestampMillis)) throw semanticCanonicalizationError();
+            return { __timestampMillis: timestampMillis };
+        }
+        if (Array.isArray(value)) return value.map(cloneValue);
+        return Object.keys(value).sort().reduce(function (copy, key) {
+            copy[key] = cloneValue(value[key]);
+            return copy;
+        }, {});
+    }
+
+    function semanticEqual(left, right) {
+        try {
+            return JSON.stringify(cloneValue(left)) === JSON.stringify(cloneValue(right));
+        } catch (_error) {
+            return false;
+        }
+    }
+
+    function hasResumeEditSession(doc) {
+        var session = doc && doc.editSession;
+        return !!(doc && doc.status === "draft" && session &&
+            session.resumeStatus === "published" && session.startedAt && session.startedBy);
+    }
+
+    function groupValue(doc, group) {
+        if (group === "core") {
+            return {
+                slug: doc.slug,
+                name: doc.name,
+                categoryId: doc.categoryId,
+                categoryLabel: doc.categoryLabel
+            };
+        }
+        if (group === "lifecycle") {
+            return {
+                status: doc.status,
+                publishing: cloneValue(doc.publishing),
+                editSession: cloneValue(doc.editSession || null)
+            };
+        }
+        if (group === "relationshipsRouteIds") {
+            return {
+                routeIds: cloneValue(doc.relationships && doc.relationships.routeIds),
+                legacyRoute: cloneValue(doc.relationships && doc.relationships.legacyRoute),
+                legacyRouteName: cloneValue(doc.relationships && doc.relationships.legacyRouteName)
+            };
+        }
+        if (group === "relationshipsRelatedPlaceIds") {
+            return cloneValue(doc.relationships && doc.relationships.relatedPlaceIds);
+        }
+        if (group === "relationshipsRelatedEventIds") {
+            return cloneValue(doc.relationships && doc.relationships.relatedEventIds);
+        }
+        return cloneValue(doc[group]);
+    }
+
+    function semanticGroupValueEqual(doc, group, value) {
+        try {
+            return semanticEqual(groupValue(doc, group), value);
+        } catch (_error) {
+            return false;
+        }
+    }
+
+    function semanticGroupsEqual(leftDoc, rightDoc, group) {
+        try {
+            return semanticEqual(groupValue(leftDoc, group), groupValue(rightDoc, group));
+        } catch (_error) {
+            return false;
+        }
+    }
+
+    function stringListSourceValid(value) {
+        if (value === undefined) return true;
+        return Array.isArray(value) && value.every(function (item) {
+            return typeof item === "string";
+        });
+    }
+
+    function semanticGroupSourceValid(doc, group) {
+        try {
+            groupValue(doc, group);
+            if (group === "content") return stringListSourceValid(doc.content && doc.content.tags);
+            if (group === "relationshipsRouteIds") {
+                return !doc.relationships || stringListSourceValid(doc.relationships.routeIds);
+            }
+            if (group === "relationshipsRelatedPlaceIds") {
+                return !!doc.relationships && stringListSourceValid(doc.relationships.relatedPlaceIds);
+            }
+            if (group === "relationshipsRelatedEventIds") {
+                return !!doc.relationships && stringListSourceValid(doc.relationships.relatedEventIds);
+            }
+            if (group === "source") return stringListSourceValid(doc.source && doc.source.legacyIds);
+            return true;
+        } catch (_error) {
+            return false;
+        }
+    }
+
+    function groupPatch(group, desired, currentRaw, uid, nextRevision) {
+        var patch = {};
+        if (group === "relationshipsRouteIds" ||
+            group === "relationshipsRelatedPlaceIds" ||
+            group === "relationshipsRelatedEventIds") {
+            var currentRelationships = currentRaw.relationships && typeof currentRaw.relationships === "object"
+                ? currentRaw.relationships
+                : { routeIds: [], relatedPlaceIds: [], relatedEventIds: [], legacyRoute: "", legacyRouteName: "" };
+            patch.relationships = Object.assign({}, currentRelationships);
+            if (group === "relationshipsRouteIds") {
+                patch.relationships.routeIds = desired.relationships.routeIds;
+                patch.relationships.legacyRoute = desired.relationships.legacyRoute;
+                patch.relationships.legacyRouteName = desired.relationships.legacyRouteName;
+            } else if (group === "relationshipsRelatedPlaceIds") {
+                patch.relationships.relatedPlaceIds = desired.relationships.relatedPlaceIds;
+            } else {
+                patch.relationships.relatedEventIds = desired.relationships.relatedEventIds;
+            }
+        } else {
+            GROUP_FIELDS[group].forEach(function (fieldName) {
+                patch[fieldName] = desired[fieldName];
+            });
+        }
+        if (group === "lifecycle") {
+            if (desired.editSession) patch.editSession = desired.editSession;
+            else if (currentRaw.editSession) patch.editSession = deleteField();
+        }
+        patch.schemaVersion = SCHEMA_VERSION;
+        patch.validatedGroups = Object.assign({}, currentRaw.validatedGroups || {});
+        patch.validatedGroups[group] = SCHEMA_VERSION;
+        patch.revision = nextRevision;
+        patch.updatedAt = serverTimestamp();
+        patch.updatedBy = uid;
+        return patch;
+    }
+
+    function conflictError() {
+        var error = new Error("Este empreendimento foi alterado por outro administrador. Recarregue os dados antes de continuar.");
+        error.code = "establishment-conflict";
+        return error;
+    }
+
+    function setSaveProgress(message, retry) {
+        var button = document.getElementById ? document.getElementById("establishmentSaveBtn") : null;
+        if (!button) return;
+        button.disabled = false;
+        button.textContent = retry ? "Tentar novamente" : message;
+        if (!retry && message !== "Salvar rascunho interno") button.disabled = true;
+    }
+
+    function shellPayload(id, uid) {
+        return {
+            id: id,
+            slug: id,
+            status: "draft",
+            createdAt: serverTimestamp(),
+            createdBy: uid,
+            updatedAt: serverTimestamp(),
+            updatedBy: uid,
+            schemaVersion: SCHEMA_VERSION,
+            validatedGroups: {},
+            revision: 0
+        };
+    }
+
+    function uploadContextKey(uid, establishmentId, subfolder, slot) {
+        return [uid, establishmentId, subfolder, slot].join("|");
+    }
+
+    function uploadOnce(storage, file, uid, establishmentId, subfolder, slot) {
+        var plansByContext = state.uploadCache.get(file);
+        if (!plansByContext) {
+            plansByContext = new Map();
+            state.uploadCache.set(file, plansByContext);
+        }
+        var key = uploadContextKey(uid, establishmentId, subfolder, slot);
+        var plan = plansByContext.get(key);
+        if (!plan) {
+            plan = createUploadPlan(storage, file, uid, establishmentId, subfolder);
+            plansByContext.set(key, plan);
+        }
+        if (plan.state === "DOWNLOAD_URL_CONFIRMED") {
+            return Promise.resolve({
+                url: plan.url,
+                path: plan.path,
+                alt: "",
+                caption: "",
+                credit: "",
+                source: "cms-media",
+                status: "active"
+            });
+        }
+        return uploadImage(plan, file).then(function (image) {
+            return cloneValue(image);
+        });
+    }
+
+    function deduplicateMedia(items) {
+        var seen = {};
+        return ensureArray(items).filter(function (image) {
+            var key = clean(image && (image.path || image.url));
+            if (!key || seen[key]) return false;
+            seen[key] = true;
+            return true;
+        });
+    }
+
+    function prepareUploads(storage, uid, payload, mainFile, galleryFiles) {
+        var mainPromise = mainFile
+            ? uploadOnce(storage, mainFile, uid, payload.id, "main", "main").then(function (image) {
+                payload.media.mainImage = Object.assign({}, payload.media.mainImage, image, {
+                    alt: payload.media.mainImage.alt,
+                    caption: payload.media.mainImage.caption,
+                    credit: payload.media.mainImage.credit,
+                    source: "cms-media"
+                });
+            })
+            : Promise.resolve();
+        return mainPromise.then(function () {
+            return Promise.all(galleryFiles.map(function (file, index) {
+                return uploadOnce(storage, file, uid, payload.id, "gallery", "gallery-" + index);
+            }));
+        }).then(function (uploadedGallery) {
+            payload.media.gallery = deduplicateMedia(payload.media.gallery.concat(uploadedGallery))
+                .map(function (image, index) {
+                    image.position = index + 1;
+                    return image;
+                });
+            return payload;
+        });
+    }
+
+    function runGroupTransaction(db, saga, group) {
+        return db.runTransaction(function (transaction) {
+            return transaction.get(saga.ref).then(function (snapshot) {
+                if (!snapshot.exists) throw conflictError();
+                var raw = snapshot.data() || {};
+                if (!semanticGroupSourceValid(raw, group)) throw conflictError();
+                var current = normalizeDoc(raw, snapshot.id);
+                var currentRevision = Number.isInteger(raw.revision) ? raw.revision : 0;
+                if (currentRevision !== saga.expectedRevision) throw conflictError();
+                if (!semanticGroupValueEqual(current, group, saga.baseGroups[group])) throw conflictError();
+                var patch = groupPatch(group, saga.desired, raw, saga.uid, currentRevision + 1);
+                transaction.update(saga.ref, patch);
+                return {
+                    revision: currentRevision + 1,
+                    groupValue: groupValue(saga.desired, group)
+                };
+            });
+        });
+    }
+
+    function reconcilePendingGroup(saga, group) {
+        return saga.ref.get().then(function (snapshot) {
+            if (!snapshot.exists) throw conflictError();
+            var raw = snapshot.data() || {};
+            if (!semanticGroupSourceValid(raw, group)) throw conflictError();
+            var current = normalizeDoc(raw, snapshot.id);
+            var revision = Number.isInteger(raw.revision) ? raw.revision : 0;
+            if (revision === saga.expectedRevision) return false;
+            if (revision === saga.expectedRevision + 1 &&
+                raw.schemaVersion === SCHEMA_VERSION &&
+                raw.validatedGroups && raw.validatedGroups[group] === SCHEMA_VERSION &&
+                semanticGroupsEqual(current, saga.desired, group)) {
+                // Estado semantico desejado ja presente; nao comprova autoria do write.
+                saga.expectedRevision = revision;
+                saga.baseGroups[group] = groupValue(current, group);
+                return true;
+            }
+            throw conflictError();
+        });
+    }
+
+    function applyNextGroup(db, saga) {
+        if (!saga.groups.length) return Promise.resolve(saga);
+        var group = saga.groups[0];
+        setSaveProgress("Salvando grupo " + (saga.completed + 1) + "/" + saga.total + "...", false);
+        return reconcilePendingGroup(saga, group).then(function (alreadyApplied) {
+            if (alreadyApplied) return null;
+            return runGroupTransaction(db, saga, group).then(function (result) {
+                saga.expectedRevision = result.revision;
+                saga.baseGroups[group] = result.groupValue;
+            });
+        }).then(function () {
+            saga.groups.shift();
+            saga.completed += 1;
+            return applyNextGroup(db, saga);
+        });
+    }
+
+    function buildSaga(ref, desired, base, uid, groups) {
+        var baseGroups = {};
+        GROUP_ORDER.forEach(function (group) { baseGroups[group] = groupValue(base, group); });
+        return {
+            ref: ref,
+            desired: desired,
+            uid: uid,
+            expectedRevision: base.revision || 0,
+            baseGroups: baseGroups,
+            groups: groups.slice(),
+            total: groups.length,
+            completed: 0
+        };
+    }
+
+    function groupsToWrite(base, desired) {
+        return GROUP_ORDER.filter(function (group) {
+            return !semanticGroupsEqual(base, desired, group) ||
+                !base.validatedGroups || base.validatedGroups[group] !== SCHEMA_VERSION;
+        });
+    }
+
+    function lifecycleDraft(doc) {
+        var desired = normalizeDoc(doc, doc.__id || doc.id);
+        desired.status = "draft";
+        desired.publishing = Object.assign({}, desired.publishing, {
+            publishedAt: null,
+            publishedBy: "",
+            archivedAt: null,
+            archivedBy: "",
+            archiveReason: ""
+        });
+        return desired;
+    }
+
+    function lifecycleEditDraft(doc, uid) {
+        var desired = lifecycleDraft(doc);
+        desired.editSession = {
+            resumeStatus: "published",
+            startedAt: serverTimestamp(),
+            startedBy: uid
+        };
+        return desired;
+    }
+
+    function lifecyclePublished(doc, uid) {
+        var desired = normalizeDoc(doc, doc.__id || doc.id);
+        desired.status = "published";
+        desired.publishing = Object.assign({}, desired.publishing, {
+            publishedAt: serverTimestamp(),
+            publishedBy: uid,
+            archivedAt: null,
+            archivedBy: "",
+            archiveReason: ""
+        });
+        desired.editSession = null;
+        return desired;
+    }
+
+    function executeSaga(db, saga) {
+        state.pendingSaga = saga;
+        return applyNextGroup(db, saga).then(function () {
+            state.pendingSaga = null;
+            return saga;
+        });
+    }
+
+    function resumeSagaWorkflow(db, completedSaga) {
+        if (!completedSaga || completedSaga.resumePhase === "finish") return Promise.resolve();
+        return completedSaga.ref.get().then(function (snapshot) {
+            if (!snapshot.exists) throw conflictError();
+            var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
+            var nextSaga;
+            if (completedSaga.resumePhase === "groups") {
+                var desired = completedSaga.resumePayload;
+                nextSaga = buildSaga(
+                    completedSaga.ref,
+                    desired,
+                    base,
+                    completedSaga.uid,
+                    groupsToWrite(base, desired)
+                );
+                nextSaga.flow = "form";
+                nextSaga.resumePhase = completedSaga.resumeWasPublished ? "publish" : "finish";
+            } else if (completedSaga.resumePhase === "publish") {
+                var published = lifecyclePublished(base, completedSaga.uid);
+                nextSaga = buildSaga(completedSaga.ref, published, base, completedSaga.uid, ["lifecycle"]);
+                nextSaga.flow = "form";
+                nextSaga.resumePhase = "finish";
+            }
+            return executeSaga(db, nextSaga).then(function () {
+                return resumeSagaWorkflow(db, nextSaga);
+            });
+        });
+    }
+
     function submitForm(event) {
         if (event && event.preventDefault) event.preventDefault();
         var db = getDb();
@@ -1173,69 +1676,112 @@
         var galleryInput = document.getElementById("est_galleryFiles");
         var mainFile = mainInput && mainInput.files ? mainInput.files[0] : null;
         var galleryFiles = galleryInput && galleryInput.files ? Array.prototype.slice.call(galleryInput.files) : [];
-        var uploaded = [];
-        var button = document.getElementById("establishmentSaveBtn");
-        if (button) {
-            button.disabled = true;
-            button.textContent = "Salvando...";
+        if (state.pendingSaga && state.pendingSaga.flow === "form" && state.pendingSaga.ref.id === payload.id) {
+            setSaveProgress("Salvando...", false);
+            var pendingSaga = state.pendingSaga;
+            executeSaga(db, pendingSaga)
+                .then(function () { return resumeSagaWorkflow(db, pendingSaga); })
+                .then(finishSave)
+                .catch(failSave);
+            return false;
         }
-        Promise.resolve()
-            .then(function () {
-                if (editingId) return null;
-                return db.collection(COLLECTION).doc(payload.id).get().then(function (snap) {
-                    if (snap.exists) {
-                        var existsError = new Error("Ja existe um empreendimento com este ID/slug.");
-                        existsError.code = "already-exists";
-                        throw existsError;
+        var ref = db.collection(COLLECTION).doc(payload.id);
+        var shouldResumePublished = !!(existing &&
+            (existing.status === "published" || hasResumeEditSession(existing)));
+        var base;
+        var saga;
+        setSaveProgress(editingId ? "Salvando..." : "Criando rascunho...", false);
+        Promise.resolve().then(function () {
+            if (editingId) {
+                base = state.editingBase || normalizeDoc(existing, existing.__id);
+                return ref.get().then(function (snapshot) {
+                    if (!snapshot.exists) throw conflictError();
+                    var current = normalizeDoc(snapshot.data() || {}, snapshot.id);
+                    if (current.revision !== base.revision) throw conflictError();
+                });
+            }
+            return ref.get().then(function (snapshot) {
+                if (snapshot.exists) {
+                    if (state.draftShellId === payload.id) {
+                        base = normalizeDoc(snapshot.data() || {}, snapshot.id);
+                        return null;
                     }
-                    return null;
+                    var existsError = new Error("Ja existe um empreendimento com este ID/slug.");
+                    existsError.code = "already-exists";
+                    throw existsError;
+                }
+                return ref.set(shellPayload(payload.id, uid)).then(function () {
+                    state.draftShellId = payload.id;
+                    return ref.get();
+                }).then(function (createdSnapshot) {
+                    base = normalizeDoc(createdSnapshot.data() || {}, createdSnapshot.id);
                 });
-            })
-            .then(function () {
-                if (!mainFile) return null;
-                return uploadImage(storage, mainFile, uid, payload.id, "main").then(function (image) {
-                    uploaded.push(image);
-                    payload.media.mainImage = Object.assign({}, payload.media.mainImage, image, {
-                        alt: payload.media.mainImage.alt,
-                        caption: payload.media.mainImage.caption,
-                        credit: payload.media.mainImage.credit,
-                        source: "cms-media"
-                    });
-                    return image;
+            });
+        }).then(function () {
+            return prepareUploads(storage, uid, payload, mainFile, galleryFiles);
+        }).then(function () {
+            payload.status = "draft";
+            payload.publishing = lifecycleDraft(payload).publishing;
+            if (base.status === "published" || base.status === "archived") {
+                setSaveProgress(base.status === "published" ? "Retirando publicacao..." : "Restaurando rascunho...", false);
+                var draftDesired = base.status === "published"
+                    ? lifecycleEditDraft(base, uid)
+                    : lifecycleDraft(base);
+                saga = buildSaga(ref, draftDesired, base, uid, ["lifecycle"]);
+                saga.flow = "form";
+                saga.resumePhase = "groups";
+                saga.resumePayload = payload;
+                saga.resumeWasPublished = shouldResumePublished;
+                return executeSaga(db, saga).then(function () {
+                    base = draftDesired;
+                    base.revision = saga.expectedRevision;
+                    base.validatedGroups.lifecycle = SCHEMA_VERSION;
+                    payload.editSession = draftDesired.editSession;
                 });
-            })
+            }
+            return null;
+        }).then(function () {
+            var groups = groupsToWrite(base, payload);
+            saga = buildSaga(ref, payload, base, uid, groups);
+            saga.flow = "form";
+            saga.resumePhase = shouldResumePublished ? "publish" : "finish";
+            return executeSaga(db, saga);
+        }).then(function () {
+            if (!shouldResumePublished) return null;
+            setSaveProgress("Republicando...", false);
+            var published = lifecyclePublished(payload, uid);
+            var publishBase = normalizeDoc(payload, payload.id);
+            publishBase.revision = saga.expectedRevision;
+            publishBase.validatedGroups = Object.assign({}, payload.validatedGroups || {});
+            GROUP_ORDER.forEach(function (group) { publishBase.validatedGroups[group] = SCHEMA_VERSION; });
+            saga = buildSaga(ref, published, publishBase, uid, ["lifecycle"]);
+            saga.flow = "form";
+            saga.resumePhase = "finish";
+            return executeSaga(db, saga);
+        })
             .then(function () {
-                return Promise.all(galleryFiles.map(function (file) {
-                    return uploadImage(storage, file, uid, payload.id, "gallery").then(function (image) {
-                        uploaded.push(image);
-                        image.position = payload.media.gallery.length + 1;
-                        payload.media.gallery.push(image);
-                        return image;
-                    });
-                }));
-            })
-            .then(function () {
-                payload.media.gallery = payload.media.gallery.map(function (image, index) {
-                    image.position = index + 1;
-                    return image;
-                });
-                return db.collection(COLLECTION).doc(payload.id).set(toWritePayload(payload));
-            })
-            .then(function () {
-                toast("Empreendimento salvo como registro interno.", "success");
-                cancelForm();
-                return load();
+                finishSave();
             })
             .catch(function (error) {
-                deleteUploadedFiles(uploaded);
-                handleWriteError(error, "salvar empreendimento");
-            })
-            .then(function () {
-                if (button) {
-                    button.disabled = false;
-                    button.textContent = "Salvar rascunho interno";
-                }
+                failSave(error);
             });
+
+        function finishSave() {
+            toast("Empreendimento salvo como registro interno.", "success");
+            cancelForm();
+            return load();
+        }
+
+        function failSave(error) {
+            if (error && error.code === "establishment-conflict") {
+                toast(error.message, "error");
+                setSaveProgress("Tentar novamente", true);
+                return;
+            }
+            toast("Falha parcial. O rascunho foi preservado. Tente novamente.", "error");
+            handleWriteError(error, "salvar empreendimento");
+            setSaveProgress("Tentar novamente", true);
+        }
         return false;
     }
 
@@ -1246,6 +1792,10 @@
             toast("Este empreendimento ja esta arquivado.", "info");
             return;
         }
+        if (hasResumeEditSession(item)) {
+            toast("Conclua primeiro a edicao publicada interrompida antes de arquivar.", "error");
+            return;
+        }
         var reason = window.prompt('Motivo do arquivamento de "' + (item.name || item.__id) + '"?', item.publishing.archiveReason || "");
         if (reason === null) return;
         var uid = currentUid();
@@ -1254,13 +1804,12 @@
             toast("Firebase ou sessao admin indisponivel.", "error");
             return;
         }
-        db.collection(COLLECTION).doc(item.__id).update({
-            status: "archived",
-            "publishing.archivedAt": serverTimestamp(),
-            "publishing.archivedBy": uid,
-            "publishing.archiveReason": limit(reason, 500),
-            updatedAt: serverTimestamp(),
-            updatedBy: uid
+        runLifecycleAction(item.__id, function (desired) {
+            desired.status = "archived";
+            desired.publishing.archivedAt = serverTimestamp();
+            desired.publishing.archivedBy = uid;
+            desired.publishing.archiveReason = limit(reason, 500);
+            return desired;
         }).then(function () {
             toast("Empreendimento arquivado.", "success");
             return load();
@@ -1283,14 +1832,7 @@
             toast("Firebase ou sessao admin indisponivel.", "error");
             return;
         }
-        db.collection(COLLECTION).doc(item.__id).update({
-            status: "draft",
-            "publishing.archivedAt": null,
-            "publishing.archivedBy": "",
-            "publishing.archiveReason": "",
-            updatedAt: serverTimestamp(),
-            updatedBy: uid
-        }).then(function () {
+        runLifecycleAction(item.__id, lifecycleDraft).then(function () {
             toast("Empreendimento restaurado como rascunho.", "success");
             return load();
         }).catch(function (error) {
@@ -1301,28 +1843,48 @@
     function remove(id) {
         var item = findItem(id);
         if (!item) return;
+        if (hasDeleteBlockingEditSession(item)) {
+            toast("Este empreendimento possui uma edicao publicada interrompida. Conclua a edicao e republicacao antes de exclui-lo.", "error");
+            return;
+        }
         if (item.status === "published") {
             toast("Arquive antes de excluir.", "error");
             return;
         }
-        var label = item.slug || item.__id || item.name;
-        var typed = window.prompt(
-            'Esta ação é definitiva e remove o registro interno do CMS. O site público ainda usa dados estáticos neste momento.\n\nDigite "' +
-            label +
-            '" para confirmar a exclusão.'
-        );
-        if (typed === null) return;
-        if (clean(typed) !== clean(label) && clean(typed) !== clean(item.name)) {
-            toast("Exclusao cancelada: confirmacao nao confere com o slug ou nome.", "error");
-            return;
-        }
-        if (!window.confirm('Excluir definitivamente "' + (item.name || item.__id) + '" do CMS interno?')) return;
         var db = getDb();
         if (!db) {
             toast("Firebase indisponivel.", "error");
             return;
         }
-        db.collection(COLLECTION).doc(item.__id).delete().then(function () {
+        var ref = db.collection(COLLECTION).doc(item.__id);
+        return ref.get().then(function (snapshot) {
+            if (!snapshot.exists) throw conflictError();
+            var remoteRaw = snapshot.data();
+            if (!remoteRaw || typeof remoteRaw !== "object" || Array.isArray(remoteRaw)) throw conflictError();
+            if (Object.prototype.hasOwnProperty.call(remoteRaw, "editSession")) {
+                toast("Este empreendimento possui uma edicao publicada interrompida. Conclua a edicao e republicacao antes de exclui-lo.", "error");
+                return false;
+            }
+            var current = normalizeDoc(remoteRaw, snapshot.id);
+            if (current.status === "published") {
+                toast("Arquive antes de excluir.", "error");
+                return false;
+            }
+            var label = current.slug || current.__id || current.name;
+            var typed = window.prompt(
+                'Esta ação é definitiva e remove o registro interno do CMS. O site público ainda usa dados estáticos neste momento.\n\nDigite "' +
+                label +
+                '" para confirmar a exclusão.'
+            );
+            if (typed === null) return false;
+            if (clean(typed) !== clean(label) && clean(typed) !== clean(current.name)) {
+                toast("Exclusao cancelada: confirmacao nao confere com o slug ou nome.", "error");
+                return false;
+            }
+            if (!window.confirm('Excluir definitivamente "' + (current.name || current.__id) + '" do CMS interno?')) return false;
+            return ref.delete();
+        }).then(function (deleted) {
+            if (deleted === false) return null;
             toast("Empreendimento excluido do CMS interno.", "success");
             cancelForm();
             return load();
@@ -1380,6 +1942,32 @@
         return payload;
     }
 
+    function runLifecycleAction(id, mutate) {
+        var db = getDb();
+        var uid = currentUid();
+        var ref = db.collection(COLLECTION).doc(id);
+        return ref.get().then(function (snapshot) {
+            if (!snapshot.exists) throw conflictError();
+            var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
+            if (hasResumeEditSession(base)) {
+                var sessionError = new Error("Conclua primeiro a edicao publicada interrompida.");
+                sessionError.code = "active-edit-session";
+                throw sessionError;
+            }
+            var desired = mutate(normalizeDoc(snapshot.data() || {}, snapshot.id), uid);
+            return executeSaga(db, buildSaga(ref, desired, base, uid, ["lifecycle"]));
+        });
+    }
+
+    function assignNested(target, path, value) {
+        var parts = path.split(".");
+        var cursor = target;
+        parts.forEach(function (part, index) {
+            if (index === parts.length - 1) cursor[part] = value;
+            else cursor = cursor[part];
+        });
+    }
+
     function writeMediaUpdate(id, fields, successMessage, reason) {
         var item = findItem(id);
         var db = getDb();
@@ -1388,7 +1976,49 @@
             toast("Firebase ou sessao admin indisponivel.", "error");
             return;
         }
-        return db.collection(COLLECTION).doc(item.__id).update(mediaAuditPayload(fields, uid, reason))
+        var ref = db.collection(COLLECTION).doc(item.__id);
+        return ref.get().then(function (snapshot) {
+            if (!snapshot.exists) throw conflictError();
+            var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
+            var desired = normalizeDoc(snapshot.data() || {}, snapshot.id);
+            Object.keys(fields || {}).forEach(function (path) {
+                assignNested(desired, path, fields[path]);
+            });
+            desired.review.lastMediaEditedAt = serverTimestamp();
+            desired.review.lastMediaEditedBy = uid;
+            desired.review.mediaEditReason = limit(reason, 240);
+            var wasPublished = base.status === "published";
+            var draftPromise = Promise.resolve();
+            if (wasPublished) {
+                var draft = lifecycleEditDraft(base, uid);
+                var draftSaga = buildSaga(ref, draft, base, uid, ["lifecycle"]);
+                draftPromise = executeSaga(db, draftSaga).then(function () {
+                    base = draft;
+                    base.revision = draftSaga.expectedRevision;
+                    base.validatedGroups.lifecycle = SCHEMA_VERSION;
+                    desired.status = "draft";
+                    desired.publishing = draft.publishing;
+                    desired.editSession = draft.editSession;
+                });
+            }
+            return draftPromise.then(function () {
+                var groups = ["media", "review"];
+                var editSaga = buildSaga(ref, desired, base, uid, groups);
+                return executeSaga(db, editSaga).then(function () {
+                    if (!wasPublished) return null;
+                    var publishBase = normalizeDoc(desired, desired.id);
+                    publishBase.revision = editSaga.expectedRevision;
+                    publishBase.validatedGroups = Object.assign({}, base.validatedGroups);
+                    GROUP_ORDER.forEach(function (group) {
+                        if (base.validatedGroups[group] === SCHEMA_VERSION || groups.indexOf(group) !== -1) {
+                            publishBase.validatedGroups[group] = SCHEMA_VERSION;
+                        }
+                    });
+                    var publish = lifecyclePublished(publishBase, uid);
+                    return executeSaga(db, buildSaga(ref, publish, publishBase, uid, ["lifecycle"]));
+                });
+            });
+        })
             .then(function () {
                 toast(successMessage, "success");
                 return load().then(function () {
@@ -1500,6 +2130,9 @@
     function cancelForm() {
         releasePreviewUrls();
         state.editingId = "";
+        state.editingBase = null;
+        state.pendingSaga = null;
+        state.draftShellId = "";
         var target = document.getElementById ? document.getElementById("establishments-admin-editor") : null;
         if (target) target.innerHTML = "";
     }
@@ -1566,6 +2199,24 @@
         _readForm: readForm,
         _validateDocForSave: validateDocForSave,
         _makeSlug: makeSlug,
+        _GROUP_ORDER: GROUP_ORDER,
+        _GROUP_FIELDS: GROUP_FIELDS,
+        _groupValue: groupValue,
+        _semanticEqual: semanticEqual,
+        _buildSaga: buildSaga,
+        _groupsToWrite: groupsToWrite,
+        _runGroupTransaction: runGroupTransaction,
+        _executeSaga: executeSaga,
+        _lifecycleDraft: lifecycleDraft,
+        _lifecycleEditDraft: lifecycleEditDraft,
+        _lifecyclePublished: lifecyclePublished,
+        _hasResumeEditSession: hasResumeEditSession,
+        _prepareUploads: prepareUploads,
+        _resumeSagaWorkflow: resumeSagaWorkflow,
+        _reconcilePendingGroup: reconcilePendingGroup,
+        _deleteButton: deleteButton,
+        _hasDeleteBlockingEditSession: hasDeleteBlockingEditSession,
+        _RECONCILIATION_MODE: RECONCILIATION_MODE,
         _MAX_IMAGE_BYTES: MAX_IMAGE_BYTES,
         _IMAGE_TYPE_REGEX: IMAGE_TYPE_REGEX
     };
