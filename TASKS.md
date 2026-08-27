@@ -2948,3 +2948,55 @@ Equivalentes identificados:
 - `adcAbsent=true`
 - `authFinalZero=true`
 - `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_CUTOVER`
+
+---
+
+## CMS Establishments Save Contract V2 — prova final de produção
+
+- `classification=A — CMS ESTABLISHMENTS SAVE CONTRACT V2 PRODUCTION WRITE SMOKE PROVEN`
+- `productionHead=a52bd92a9b20aefd302459f9cd5635e03d61c9d1`
+- `adminWriteTransport=PRODUCTION_ADMIN_WEB_FIREBASE_COMPAT_WEB_SDK_PRODUCTION_RULES`
+- `humanApprovalReceived=true`
+- `smokeDocumentIdSanitized=cms-v2-smoke-<timestamp>-************`
+- `createCompleted=true`
+- `expectedCreateWrites=14`
+- `revisionAfterCreate=13`
+- `validatedMarkerCountAfterCreate=13`
+- `allExpectedMarkersValid=true`
+- `publicDraftVisible=false`
+- `publishedEstablishmentsCountPreserved=67`
+- `publishedRoutesCountPreserved=6`
+- `updateCompleted=true`
+- `updateGroup=content`
+- `revisionAfterUpdate=14`
+- `exactlyOneSemanticGroupChanged=true`
+- `deleteCompleted=true`
+- `documentExistsFinal=false`
+- `committedFirestoreWrites=16`
+- `hardWriteCapExceeded=false`
+- `manualRetryUsed=false`
+- `uploadCalls=0`
+- `StorageWrites=0`
+- `StorageDeletes=0`
+- `existingProductionDocumentsModified=0`
+- `publishedDocumentsCreated=0`
+- `firestoreRulesV2Deployed=true`
+- `adminV2Deployed=true`
+- `productionWriteSmokeProven=true`
+- `CMS_ESTABLISHMENTS_SAVE_CONTRACT_V2_ROLLOUT_COMPLETE=true`
+
+### Resolução operacional registrada
+
+O problema operacional anteriormente registrado para o full-save de Empreendimentos, causado por `FIRESTORE_RULE_EXPRESSION_LIMIT_1000`, foi resolvido para o fluxo atual do Admin pela arquitetura Save Contract V2 / C1. O limite de 1.000 expressões continua existindo na plataforma; o fluxo atual não depende mais do full-save problemático e foi comprovado em produção.
+
+### Limites deste checkpoint documental
+
+- `FirestoreReads=0`
+- `FirestoreWrites=0`
+- `StorageReads=0`
+- `StorageWritesThisCheckpoint=0`
+- `RulesDeploys=0`
+- `HostingDeploys=0`
+- `mainPushes=0`
+- `functionalSourceFilesModified=0`
+- `NEXT_PHASE=NONE_AUTOMATIC`
