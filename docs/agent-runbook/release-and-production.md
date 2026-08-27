@@ -33,6 +33,37 @@ Trate como operações distintas:
 - smoke read-only em produção;
 - smoke com escrita em produção.
 
+## Leituras durante smoke público
+
+Um smoke visual/funcional real executa o runtime normal da página. Se esse
+runtime consulta Firestore ou carrega objetos do Storage, essas leituras são
+esperadas e não equivalem a uma consulta operacional iniciada pelo agente.
+
+Relate separadamente:
+
+- `FirestoreOperationalReadsByAgent`: consultas administrativas ou diretas por
+  gcloud, Firebase/Admin SDK, REST Firestore, script de diagnóstico, service
+  account, console/API administrativa ou ferramenta equivalente;
+- `FirestoreRuntimeReadsDuringPublicSmoke`: `EXPECTED` quando o runtime público
+  consultado usa Firestore;
+- `FirestoreWrites`: escritas realizadas durante o bloco;
+- `StorageOperationalReadsByAgent`: leituras diretas ou administrativas de
+  Storage iniciadas pelo agente;
+- `StorageRuntimeReadsDuringPublicSmoke`: `EXPECTED` quando assets ou o runtime
+  público usam Storage;
+- `StorageWrites`: escritas realizadas durante o bloco.
+
+Em bloco documental ou de release com browser smoke, o gate de leitura deve ser
+`FirestoreOperationalReadsByAgent=0` e, quando pertinente,
+`StorageOperationalReadsByAgent=0`. Não exija contagem exata de leituras do
+runtime quando o objetivo não for auditoria de billing. As escritas continuam
+gate absoluto: quando mutações forem proibidas, `FirestoreWrites=0` e
+`StorageWrites=0`.
+
+Uma leitura esperada do runtime não converte automaticamente um release
+bem-sucedido em falha. Registre-a como runtime read e mantenha separada da
+atividade operacional do agente.
+
 ## Evidência de Security Rules
 
 Use o Firebase Web SDK quando o objetivo for provar as Security Rules reais do
@@ -64,3 +95,6 @@ efêmero, explicitamente autorizado e removível puder comprovar o contrato.
 - O artefato validado mudou antes da publicação.
 - Resultado remoto é ambíguo ou o rollback exigiria force-push.
 - O teste proposto usa Admin SDK para alegar prova de Security Rules.
+- O agente iniciou consulta administrativa/direta fora do escopo autorizado.
+- O smoke produziu escrita inesperada ou qualquer mutação Firebase não
+  autorizada.
