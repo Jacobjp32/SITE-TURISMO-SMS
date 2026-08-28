@@ -3000,3 +3000,75 @@ O problema operacional anteriormente registrado para o full-save de Empreendimen
 - `mainPushes=0`
 - `functionalSourceFilesModified=0`
 - `NEXT_PHASE=NONE_AUTOMATIC`
+
+---
+
+## Storage e segurança referencial de mídia — checkpoint de produção
+
+- `classification=A — STORAGE AND MEDIA REFERENCE SAFETY DEPLOYED AND READONLY SMOKE PROVEN`
+- `productionFunctionalHead=1c8ce12b7b071626cc76fcd3208e34aee196a7e2`
+- `cms07Resolved=true`
+- `cmsLibraryPhysicalDeleteRemoved=true`
+- `logicalUnlinkPreserved=true`
+- `activeClientPhysicalDeletePathsRemaining=0`
+- `cms08Resolved=true`
+- `submissionCreatePreserved=true`
+- `submissionUpdateDenied=true`
+- `submissionDeleteDenied=true`
+- `portalDestructiveCleanupRemoved=true`
+- `cmsMediaCreatePreserved=true`
+- `cmsMediaReadPreserved=true`
+- `cmsMediaUpdateDenied=true`
+- `cmsMediaDeleteDenied=true`
+- `storageCreateOnlyPreserved=true`
+- `ambiguousRetrySafe=true`
+- `metadataReconciliationSufficient=true`
+- `samePathPreserved=true`
+- `pathRotationIntroduced=false`
+- `secondPutAfterMatchingReconciliation=false`
+- `c1ContractChanged=false`
+- `c1InvariantsPreserved=true`
+
+### Validação e publicação registradas
+
+- `preDeployFocusedTests=11/11 PASS`
+- `preDeployFullTests=458/458 PASS`
+- `failures=0`
+- `cancelled=0`
+- `unexpectedSkips=0`
+- `expressionLimitDetected=false`
+- `storageRulesDeployed=true`
+- `storageRulesDeployScope=storage-only`
+- `firestoreDeployed=false`
+- `hostingDeployedByFirebase=false`
+- `otherFirebaseServicesDeployed=false`
+- `mainFastForwardOnly=true`
+- `pagesHeadMatched=true`
+- `productionRuntimeAssetsMatched=true`
+- `adminReadonlySmoke=true`
+- `portalReadonlySmoke=true`
+- `publicHttpSmoke=true`
+- `unexpectedPermissionDenied=0`
+- `consoleErrorsDetected=0`
+
+### Contabilidade e política técnica atual
+
+- `FirestoreWrites=0`
+- `StorageObjectWrites=0`
+- `StorageObjectDeletes=0`
+- `FirebaseAuthMutations=0`
+- `STORAGE_AND_MEDIA_REFERENCE_SAFETY_ROLLOUT_COMPLETE=true`
+
+Objetos em `submissions` são tecnicamente tratados como create-only pelo cliente e pelas Rules atuais. O physical cleanup não é mais uma operação casual do navegador: qualquer limpeza física futura exige fluxo de manutenção controlado e autorização separada. Inventário e cleanup de órfãos continuam sendo uma tarefa distinta; este checkpoint não afirma que todos os objetos atualmente existentes no bucket foram auditados.
+
+### Limites deste checkpoint documental
+
+- `FirestoreOperationalReadsByAgent=0`
+- `FirestoreWritesThisCheckpoint=0`
+- `StorageOperationalReadsByAgent=0`
+- `StorageWritesThisCheckpoint=0`
+- `StorageDeletesThisCheckpoint=0`
+- `RulesDeploys=0`
+- `FirebaseAuthMutationsThisCheckpoint=0`
+- `functionalSourceFilesModified=0`
+- `NEXT_PHASE=NONE_AUTOMATIC`
