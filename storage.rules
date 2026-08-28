@@ -25,6 +25,7 @@ service firebase.storage {
     function validPendingImageUpload(uid) {
       return signedIn() &&
         request.auth.uid == uid &&
+        resource == null &&
         request.resource != null &&
         request.resource.size <= 5 * 1024 * 1024 &&
         request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
@@ -33,6 +34,7 @@ service firebase.storage {
     function validCmsImageUpload(uid) {
       return isAdmin() &&
         request.auth.uid == uid &&
+        resource == null &&
         request.resource != null &&
         request.resource.size <= 5 * 1024 * 1024 &&
         request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
@@ -40,30 +42,30 @@ service firebase.storage {
 
     match /submissions/establishments/{uid}/{submissionId}/{fileName} {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
-      allow write: if validPendingImageUpload(uid);
-      allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow create: if validPendingImageUpload(uid);
+      allow update, delete: if false;
     }
 
     match /submissions/events/{uid}/{submissionId}/{fileName} {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
-      allow write: if validPendingImageUpload(uid);
-      allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow create: if validPendingImageUpload(uid);
+      allow update, delete: if false;
     }
 
     match /submissions/establishment-updates/{uid}/{submissionId}/{fileName} {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
-      allow write: if validPendingImageUpload(uid);
-      allow delete: if signedIn() && (request.auth.uid == uid || isStaff());
+      allow create: if validPendingImageUpload(uid);
+      allow update, delete: if false;
     }
 
     // Recursivo ({allFiles=**}) para cobrir tanto os uploads atuais do CMS
     // (cms-media/{uid}/{file}) quanto imagens de banners/pop-ups
     // (cms-media/{uid}/banners/{bannerId}/{file}) sem nova arvore. Bloco 4B.
-    // Escrita: validCmsImageUpload = isAdmin + uid proprio + <=5MB + jpeg/jpg/png/webp.
+    // Criacao: validCmsImageUpload = isAdmin + uid proprio + <=5MB + jpeg/jpg/png/webp.
     match /cms-media/{uid}/{allFiles=**} {
       allow read: if true;
-      allow write: if validCmsImageUpload(uid);
-      allow delete: if isAdmin();
+      allow create: if validCmsImageUpload(uid);
+      allow update, delete: if false;
     }
 
     match /{allPaths=**} {

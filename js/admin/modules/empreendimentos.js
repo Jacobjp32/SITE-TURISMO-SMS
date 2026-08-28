@@ -282,21 +282,84 @@
             uploadId: uploadId,
             path: path,
             ref: storage.ref(path),
-            state: "UPLOAD_IDENTITY_PLANNED",
+            state: "NOT_ATTEMPTED",
+            uploadAttempt: null,
             url: ""
         };
     }
 
-    function uploadImage(plan, file) {
-        var upload = plan.state === "UPLOAD_BYTES_CONFIRMED"
-            ? Promise.resolve()
-            : plan.ref.put(file, {
+    function normalizedUploadContentType(value) {
+        var contentType = clean(value).toLowerCase();
+        return contentType === "image/jpg" ? "image/jpeg" : contentType;
+    }
+
+    function uploadMetadataMatches(plan, file, metadata) {
+        // O path usa UUID criptografico; fullPath + size + contentType bastam para
+        // reconciliar o descritor sem hash pesado ou metadata mutavel adicional.
+        return metadata &&
+            metadata.fullPath === plan.path &&
+            Number(metadata.size) === Number(file.size) &&
+            normalizedUploadContentType(metadata.contentType) === normalizedUploadContentType(file.type);
+    }
+
+    function uploadReconciliationError(code, message) {
+        var error = new Error(message);
+        error.code = code;
+        return error;
+    }
+
+    function startUploadAttempt(plan, file) {
+        plan.state = "UPLOAD_ATTEMPT_IN_FLIGHT";
+        plan.uploadAttempt = Promise.resolve().then(function () {
+            return plan.ref.put(file, {
                 contentType: file.type,
                 cacheControl: "public,max-age=31536000,immutable"
-            }).then(function () {
-                plan.state = "UPLOAD_BYTES_CONFIRMED";
             });
-        return upload.then(function () {
+        }).then(function () {
+            plan.state = "UPLOAD_BYTES_CONFIRMED";
+        }).catch(function (error) {
+            plan.state = "UPLOAD_RESULT_AMBIGUOUS";
+            throw error;
+        });
+        return plan.uploadAttempt;
+    }
+
+    function reconcileAmbiguousUpload(plan, file) {
+        return plan.ref.getMetadata().then(function (metadata) {
+            if (!uploadMetadataMatches(plan, file, metadata)) {
+                throw uploadReconciliationError(
+                    "storage/upload-reconciliation-mismatch",
+                    "O objeto existente nao corresponde ao UploadPlan reservado."
+                );
+            }
+            plan.state = "UPLOAD_BYTES_CONFIRMED";
+            return true;
+        }).catch(function (error) {
+            if (error && error.code === "storage/object-not-found") {
+                plan.state = "NOT_ATTEMPTED";
+                return false;
+            }
+            throw error;
+        });
+    }
+
+    function ensureUploadBytes(plan, file) {
+        if (plan.state === "UPLOAD_BYTES_CONFIRMED" || plan.state === "DOWNLOAD_URL_CONFIRMED") {
+            return Promise.resolve();
+        }
+        if (plan.state === "UPLOAD_ATTEMPT_IN_FLIGHT") {
+            return plan.uploadAttempt;
+        }
+        if (plan.state === "UPLOAD_RESULT_AMBIGUOUS") {
+            return reconcileAmbiguousUpload(plan, file).then(function (existingObjectConfirmed) {
+                return existingObjectConfirmed ? null : startUploadAttempt(plan, file);
+            });
+        }
+        return startUploadAttempt(plan, file);
+    }
+
+    function uploadImage(plan, file) {
+        return ensureUploadBytes(plan, file).then(function () {
             return plan.ref.getDownloadURL();
         }).then(function (url) {
             plan.url = url;
@@ -311,14 +374,6 @@
                 status: "active"
             };
         });
-    }
-
-    function deleteUploadedFiles(files) {
-        var storage = getStorage();
-        if (!storage) return Promise.resolve();
-        return Promise.all(ensureArray(files).map(function (item) {
-            return item && item.path ? storage.ref(item.path).delete().catch(function () { return null; }) : null;
-        }));
     }
 
     function emptyImage() {

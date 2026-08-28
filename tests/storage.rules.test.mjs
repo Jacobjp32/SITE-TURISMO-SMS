@@ -10,6 +10,22 @@ import {
 const PROJECT_ID = "demo-turismo-sms-rules-test";
 const IMAGE_CONTENT = "synthetic-image-content";
 const IMAGE_METADATA = { contentType: "image/png" };
+const OVERSIZED_IMAGE_CONTENT = "x".repeat(5 * 1024 * 1024 + 1);
+
+const SUBMISSION_PATHS = [
+  {
+    name: "estabelecimentos",
+    path: "submissions/establishments/submission-owner/retention-establishment/image.png",
+  },
+  {
+    name: "eventos",
+    path: "submissions/events/submission-owner/retention-event/image.png",
+  },
+  {
+    name: "atualizações de empreendimento",
+    path: "submissions/establishment-updates/submission-owner/retention-update/image.png",
+  },
+];
 
 let testEnv;
 
@@ -45,10 +61,19 @@ async function seedStorageObject(path) {
   });
 }
 
-function uploadImage(uid, path) {
+function uploadImage(
+  uid,
+  path,
+  content = IMAGE_CONTENT,
+  metadata = IMAGE_METADATA,
+) {
   return storageFor(uid)
     .ref(path)
-    .putString(IMAGE_CONTENT, "raw", IMAGE_METADATA);
+    .putString(content, "raw", metadata);
+}
+
+function deleteImage(uid, path) {
+  return storageFor(uid).ref(path).delete();
 }
 
 before(async () => {
@@ -216,5 +241,165 @@ describe("Semântica staff e ownership de Storage pós-B2A5", () => {
     await assertFails(
       uploadImage("admin-active", "private-unknown/file.png"),
     );
+  });
+});
+
+describe("Retenção create-only de originals em submissions", () => {
+  for (const submission of SUBMISSION_PATHS) {
+    test(`owner cria e lê original válido de ${submission.name}`, async () => {
+      await assertSucceeds(uploadImage("submission-owner", submission.path));
+      await assertSucceeds(
+        storageFor("submission-owner").ref(submission.path).getMetadata(),
+      );
+    });
+
+    test(`owner não atualiza original existente de ${submission.name}`, async () => {
+      await seedStorageObject(submission.path);
+      await assertFails(
+        uploadImage(
+          "submission-owner",
+          submission.path,
+          "replacement-image-content",
+        ),
+      );
+    });
+
+    test(`owner não exclui original existente de ${submission.name}`, async () => {
+      await seedStorageObject(submission.path);
+      await assertFails(deleteImage("submission-owner", submission.path));
+    });
+
+    for (const role of ["admin", "moderator"]) {
+      const uid = `${role}-active`;
+
+      test(`${role} ativo lê, mas não atualiza nem exclui original de ${submission.name}`, async () => {
+        await seedProfiles([[uid, profileData(role, true)]]);
+        await seedStorageObject(submission.path);
+
+        await assertSucceeds(
+          storageFor(uid).ref(submission.path).getMetadata(),
+        );
+        await assertFails(
+          uploadImage(uid, submission.path, "staff-replacement-content"),
+        );
+        await assertFails(deleteImage(uid, submission.path));
+      });
+    }
+
+    test(`outro usuário não cria, atualiza nem exclui original de ${submission.name}`, async () => {
+      await assertFails(uploadImage("other-user", submission.path));
+      await seedStorageObject(submission.path);
+      await assertFails(
+        uploadImage("other-user", submission.path, "other-user-replacement"),
+      );
+      await assertFails(deleteImage("other-user", submission.path));
+    });
+
+    test(`anônimo não cria, atualiza nem exclui original de ${submission.name}`, async () => {
+      await assertFails(uploadImage(null, submission.path));
+      await seedStorageObject(submission.path);
+      await assertFails(
+        uploadImage(null, submission.path, "anonymous-replacement"),
+      );
+      await assertFails(deleteImage(null, submission.path));
+    });
+  }
+
+  test("owner não cria submission com tipo inválido", async () => {
+    await assertFails(
+      uploadImage(
+        "submission-owner",
+        SUBMISSION_PATHS[0].path,
+        IMAGE_CONTENT,
+        { contentType: "application/pdf" },
+      ),
+    );
+  });
+
+  test("owner não cria submission acima de 5 MB", async () => {
+    await assertFails(
+      uploadImage(
+        "submission-owner",
+        SUBMISSION_PATHS[0].path,
+        OVERSIZED_IMAGE_CONTENT,
+      ),
+    );
+  });
+});
+
+describe("Retenção create-only de cms-media", () => {
+  const ownPath = "cms-media/admin-active/library/image.png";
+  const otherAdminPath = "cms-media/other-admin/library/image.png";
+
+  test("admin ativo cria imagem válida no próprio UID", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await assertSucceeds(uploadImage("admin-active", ownPath));
+  });
+
+  test("admin ativo não cria imagem sob UID de outro admin", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await assertFails(uploadImage("admin-active", otherAdminPath));
+  });
+
+  test("admin ativo não atualiza objeto próprio existente", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await seedStorageObject(ownPath);
+    await assertFails(
+      uploadImage("admin-active", ownPath, "replacement-image-content"),
+    );
+  });
+
+  test("admin ativo não exclui objeto próprio nem de outro UID", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await Promise.all([
+      seedStorageObject(ownPath),
+      seedStorageObject(otherAdminPath),
+    ]);
+
+    await assertFails(deleteImage("admin-active", ownPath));
+    await assertFails(deleteImage("admin-active", otherAdminPath));
+  });
+
+  for (const actor of [
+    { uid: "moderator-active", profile: profileData("moderator", true) },
+    { uid: "user-active", profile: profileData("user", true) },
+    { uid: null, profile: null },
+  ]) {
+    const label = actor.uid || "anônimo";
+
+    test(`${label} não cria nem exclui objeto em cms-media`, async () => {
+      if (actor.profile) {
+        await seedProfiles([[actor.uid, actor.profile]]);
+      }
+      await assertFails(
+        uploadImage(actor.uid, `cms-media/${actor.uid || "anonymous"}/image.png`),
+      );
+      await seedStorageObject(ownPath);
+      await assertFails(deleteImage(actor.uid, ownPath));
+    });
+  }
+
+  test("admin ativo não cria cms-media com tipo inválido", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await assertFails(
+      uploadImage(
+        "admin-active",
+        ownPath,
+        IMAGE_CONTENT,
+        { contentType: "application/pdf" },
+      ),
+    );
+  });
+
+  test("admin ativo não cria cms-media acima de 5 MB", async () => {
+    await seedProfiles([["admin-active", profileData("admin", true)]]);
+    await assertFails(
+      uploadImage("admin-active", ownPath, OVERSIZED_IMAGE_CONTENT),
+    );
+  });
+
+  test("leitura pública de cms-media permanece permitida", async () => {
+    await seedStorageObject(ownPath);
+    await assertSucceeds(storageFor().ref(ownPath).getMetadata());
   });
 });

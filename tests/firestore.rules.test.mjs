@@ -2612,7 +2612,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     }
   });
 
-  test("UPLOAD_IDENTITY DISTINCT_FILE_OBJECTS_SAME_METADATA_REMAIN_DISTINCT", async () => {
+  test("UPLOAD_RECONCILIATION DISTINCT_FILE_OBJECTS_SAME_METADATA_REMAIN_DISTINCT", async () => {
     const { module } = await loadAdminModule();
     const refPaths = [];
     const putCalls = [];
@@ -2643,7 +2643,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.equal(putCalls[1].path, planB.path);
   });
 
-  test("DISTINCT_FILES_SAME_METADATA_GALLERY_HAS_TWO", async () => {
+  test("UPLOAD_RECONCILIATION DISTINCT_FILES_SAME_METADATA_GALLERY_HAS_TWO", async () => {
     const { module } = await loadAdminModule();
     const storage = {
       ref(path) {
@@ -2662,7 +2662,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.equal(new Set(payload.media.gallery.map((image) => image.path)).size, 2);
   });
 
-  test("UPLOAD_IDENTITY SAME_DESCRIPTOR_RETRY_REUSES_UPLOAD_ID", async () => {
+  test("UPLOAD_RECONCILIATION NORMAL_UPLOAD_AND_SAME_DESCRIPTOR_RETRY", async () => {
     const { module } = await loadAdminModule();
     let puts = 0;
     const storage = {
@@ -2679,6 +2679,8 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     const plan = module._state.uploadCache.get(file).get("admin-v2|est-v2|gallery|gallery-0");
     const initialUploadId = plan.uploadId;
     const initialPath = plan.path;
+    assert.equal(plan.state, "DOWNLOAD_URL_CONFIRMED");
+    assert.equal(payload.media.gallery[0].url, `https://example.test/${plan.path}`);
     await module._prepareUploads(storage, "admin-v2", payload, null, [file]);
     assert.equal(puts, 1);
     assert.equal(plan.uploadId, initialUploadId);
@@ -2686,7 +2688,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.equal(payload.media.gallery.length, 1);
   });
 
-  test("UPLOAD_IDENTITY URL_FAILURE_REUSES_UPLOAD_ID_AND_PATH", async () => {
+  test("UPLOAD_RECONCILIATION DOWNLOAD_URL_FAILURE_DOES_NOT_REPEAT_PUT", async () => {
     const { module } = await loadAdminModule();
     const paths = [];
     let puts = 0;
@@ -2719,19 +2721,24 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.equal(payload.media.gallery.length, 1);
   });
 
-  test("UPLOAD_IDENTITY AMBIGUOUS_PUT_REUSES_UPLOAD_ID_AND_PATH", async () => {
+  test("UPLOAD_RECONCILIATION OBJECT_NOT_FOUND_ALLOWS_ONE_RETRY_ON_SAME_PATH", async () => {
     const { module } = await loadAdminModule();
-    const refPaths = [];
     const putPaths = [];
     let puts = 0;
+    let metadataReads = 0;
     const storage = {
       ref(path) {
-        refPaths.push(path);
         return {
           put: async () => {
             puts += 1;
             putPaths.push(path);
             if (puts === 1) throw new Error("simulated-ambiguous-put");
+          },
+          getMetadata: async () => {
+            metadataReads += 1;
+            const error = new Error("missing");
+            error.code = "storage/object-not-found";
+            throw error;
           },
           getDownloadURL: async () => `https://example.test/${path}`,
         };
@@ -2744,15 +2751,134 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     const initialUploadId = plan.uploadId;
     const initialPath = plan.path;
     await module._prepareUploads(storage, "admin-v2", payload, null, [file]);
-    assert.equal(refPaths.length, 1);
     assert.equal(new Set(putPaths).size, 1);
     assert.equal(plan.uploadId, initialUploadId);
     assert.equal(plan.path, initialPath);
     assert.equal(puts, 2);
+    assert.equal(metadataReads, 1);
     assert.equal(payload.media.gallery.length, 1);
   });
 
-  test("UPLOAD_IDENTITY CROSS_INSTANCE_SAME_TIMESTAMP_SAME_METADATA_DISTINCT_PATHS", async () => {
+  test("UPLOAD_RECONCILIATION MATCHING_EXISTING_OBJECT_PREVENTS_SECOND_PUT", async () => {
+    const { module } = await loadAdminModule();
+    let puts = 0;
+    let metadataReads = 0;
+    const storage = {
+      ref(path) {
+        return {
+          put: async () => {
+            puts += 1;
+            if (puts === 1) throw new Error("simulated-lost-response");
+          },
+          getMetadata: async () => {
+            metadataReads += 1;
+            return { fullPath: path, size: 100, contentType: "image/jpeg" };
+          },
+          getDownloadURL: async () => `https://example.test/${path}`,
+        };
+      },
+    };
+    const file = { name: "existing.jpg", size: 100, lastModified: 4, type: "image/jpeg" };
+    const payload = { id: "est-v2", media: { mainImage: establishmentFixture().media.mainImage, gallery: [] } };
+    await assert.rejects(module._prepareUploads(storage, "admin-v2", payload, null, [file]), /simulated-lost-response/);
+    const plan = module._state.uploadCache.get(file).get("admin-v2|est-v2|gallery|gallery-0");
+    const initialPath = plan.path;
+    assert.equal(plan.state, "UPLOAD_RESULT_AMBIGUOUS");
+    await module._prepareUploads(storage, "admin-v2", payload, null, [file]);
+    assert.equal(plan.path, initialPath);
+    assert.equal(plan.state, "DOWNLOAD_URL_CONFIRMED");
+    assert.equal(puts, 1);
+    assert.equal(metadataReads, 1);
+    assert.equal(payload.media.gallery[0].url, `https://example.test/${initialPath}`);
+  });
+
+  test("UPLOAD_RECONCILIATION MISMATCHED_EXISTING_OBJECT_FAILS_CLOSED", async () => {
+    const { module } = await loadAdminModule();
+    let puts = 0;
+    let metadataReads = 0;
+    let deletes = 0;
+    const storage = {
+      ref(path) {
+        return {
+          put: async () => {
+            puts += 1;
+            throw new Error("simulated-ambiguous-put");
+          },
+          getMetadata: async () => {
+            metadataReads += 1;
+            return { fullPath: path, size: 101, contentType: "image/jpeg" };
+          },
+          getDownloadURL: async () => "unexpected",
+          delete: async () => { deletes += 1; },
+        };
+      },
+    };
+    const file = { name: "mismatch.jpg", size: 100, lastModified: 5, type: "image/jpeg" };
+    const payload = { id: "est-v2", media: { mainImage: establishmentFixture().media.mainImage, gallery: [] } };
+    await assert.rejects(module._prepareUploads(storage, "admin-v2", payload, null, [file]), /simulated-ambiguous-put/);
+    await assert.rejects(
+      module._prepareUploads(storage, "admin-v2", payload, null, [file]),
+      { code: "storage/upload-reconciliation-mismatch" },
+    );
+    assert.equal(puts, 1);
+    assert.equal(metadataReads, 1);
+    assert.equal(deletes, 0);
+  });
+
+  for (const metadataErrorCode of ["storage/unauthorized", "storage/permission-denied", "storage/retry-limit-exceeded", "storage/unknown"]) {
+    test(`UPLOAD_RECONCILIATION ${metadataErrorCode} FAILS_CLOSED`, async () => {
+      const { module } = await loadAdminModule();
+      let puts = 0;
+      let metadataReads = 0;
+      const storage = {
+        ref() {
+          return {
+            put: async () => {
+              puts += 1;
+              throw new Error("simulated-ambiguous-put");
+            },
+            getMetadata: async () => {
+              metadataReads += 1;
+              const error = new Error(metadataErrorCode);
+              error.code = metadataErrorCode;
+              throw error;
+            },
+            getDownloadURL: async () => "unexpected",
+          };
+        },
+      };
+      const file = { name: `${metadataErrorCode}.jpg`, size: 100, lastModified: 6, type: "image/jpeg" };
+      const payload = { id: "est-v2", media: { mainImage: establishmentFixture().media.mainImage, gallery: [] } };
+      await assert.rejects(module._prepareUploads(storage, "admin-v2", payload, null, [file]), /simulated-ambiguous-put/);
+      await assert.rejects(module._prepareUploads(storage, "admin-v2", payload, null, [file]), { code: metadataErrorCode });
+      assert.equal(puts, 1);
+      assert.equal(metadataReads, 1);
+    });
+  }
+
+  test("UPLOAD_RECONCILIATION CONTENT_TYPE_JPG_AND_JPEG_ARE_COMPATIBLE", async () => {
+    const { module } = await loadAdminModule();
+    let puts = 0;
+    const storage = {
+      ref(path) {
+        return {
+          put: async () => {
+            puts += 1;
+            throw new Error("simulated-ambiguous-put");
+          },
+          getMetadata: async () => ({ fullPath: path, size: 100, contentType: "image/jpeg" }),
+          getDownloadURL: async () => `https://example.test/${path}`,
+        };
+      },
+    };
+    const file = { name: "compatible.jpg", size: 100, lastModified: 7, type: "image/jpg" };
+    const payload = { id: "est-v2", media: { mainImage: establishmentFixture().media.mainImage, gallery: [] } };
+    await assert.rejects(module._prepareUploads(storage, "admin-v2", payload, null, [file]), /simulated-ambiguous-put/);
+    await module._prepareUploads(storage, "admin-v2", payload, null, [file]);
+    assert.equal(puts, 1);
+  });
+
+  test("UPLOAD_RECONCILIATION CROSS_INSTANCE_SAME_TIMESTAMP_SAME_METADATA_DISTINCT_PATHS", async () => {
     const uuidA = "11111111-1111-4111-8111-111111111111";
     const uuidB = "22222222-2222-4222-8222-222222222222";
     const [{ module: moduleA }, { module: moduleB }] = await Promise.all([
@@ -2793,7 +2919,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.notEqual(pathsA[0], pathsB[0]);
   });
 
-  test("UPLOAD_IDENTITY CROSS_INSTANCE_DISTINCT_UPLOAD_IDS", async () => {
+  test("UPLOAD_RECONCILIATION CROSS_INSTANCE_DISTINCT_UPLOAD_IDS", async () => {
     const [{ module: moduleA }, { module: moduleB }] = await Promise.all([
       loadAdminModule({ crypto: { randomUUID: () => "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" } }),
       loadAdminModule({ crypto: { randomUUID: () => "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb" } }),
@@ -2810,7 +2936,7 @@ describe("CMS establishments C1 V2 — concorrência e side effects do orquestra
     assert.notEqual(planA.uploadId, planB.uploadId);
   });
 
-  test("UPLOAD_IDENTITY NO_SECURE_RANDOM_SOURCE_FAILS_CLOSED", async () => {
+  test("UPLOAD_RECONCILIATION NO_SECURE_RANDOM_SOURCE_FAILS_CLOSED", async () => {
     const { module } = await loadAdminModule({ crypto: undefined });
     let refs = 0;
     let puts = 0;

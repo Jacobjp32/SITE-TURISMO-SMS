@@ -6,11 +6,11 @@
     "test:rotas:model": "node --test --test-concurrency=1 tests/rotas-v1.1-model.test.mjs",
     "test:rotas:public": "node --test --test-concurrency=1 tests/public-routes-adapter.test.mjs",
     "canary:rotas:public": "node scripts/rotas-v1.1-public-canary.mjs",
-    "canary:rotas:public": "node scripts/rotas-v1.1-public-canary.mjs",
     "test:rotas:dry-run": "node scripts/rotas-v1.1-normalize-dry-run.mjs",
+    "test:media-reference-safety": "node --test --test-concurrency=1 tests/media-reference-safety.test.mjs",
     "test:rules:firestore:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs tests/firestore.rotas.rules.test.mjs",
     "test:rules:storage:node": "node --test --test-concurrency=1 tests/storage.rules.test.mjs",
-    "test:rules:node": "npm run test:rotas:model && npm run test:rotas:dry-run && npm run test:rules:firestore:node && npm run test:rules:storage:node",
+    "test:rules:node": "npm run test:rotas:model && npm run test:rotas:dry-run && npm run test:media-reference-safety && npm run test:rules:firestore:node && npm run test:rules:storage:node",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-turismo-sms-rules-test \"npm run test:rules:node\""
   },
   "devDependencies": {

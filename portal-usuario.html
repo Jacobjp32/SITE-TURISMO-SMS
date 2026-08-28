@@ -955,15 +955,6 @@
         if (input) input.value = '';
     }
 
-    async function deleteUploadedFiles(uploadedItems) {
-        var storage = getPortalStorage();
-        await Promise.all((uploadedItems || []).map(function(item) {
-            return storage.ref(item.path).delete().catch(function() {
-                return null;
-            });
-        }));
-    }
-
     async function uploadSubmissionImages(kind, submissionId, user) {
         var config = getUploadConfig(kind);
         var storage = getPortalStorage();
@@ -992,15 +983,17 @@
                     contentType: normalizedContentType,
                     cacheControl: 'private,max-age=0,no-transform'
                 });
-                var url = await snapshot.ref.getDownloadURL();
-                uploaded.push({
-                    url: url,
+                var uploadedItem = {
+                    url: '',
                     path: path,
                     name: safeName,
                     contentType: normalizedContentType,
                     size: file.size,
                     uploadedAt: new Date().toISOString()
-                });
+                };
+                uploaded.push(uploadedItem);
+                var url = await snapshot.ref.getDownloadURL();
+                uploadedItem.url = url;
             } catch (error) {
                 console.error('[portal-upload] Falha no upload de imagem', {
                     uploadPath: path,
@@ -1010,14 +1003,25 @@
                     fileSize: file && file.size,
                     currentUserUid: currentUser && currentUser.uid,
                     firebaseErrorCode: error && error.code,
-                    firebaseErrorMessage: error && error.message
+                    firebaseErrorMessage: error && error.message,
+                    preservedUploadCount: uploaded.length,
+                    physicalCleanup: 'denied'
                 });
-                await deleteUploadedFiles(uploaded);
+                if (error && typeof error === 'object') {
+                    error.portalPreservedUploads = uploaded.slice();
+                }
                 throw error;
             }
         }
 
         return uploaded;
+    }
+
+    function getPreservedUploadsNotice(uploadedItems) {
+        var count = Array.isArray(uploadedItems) ? uploadedItems.length : 0;
+        return count > 0
+            ? ' ' + count + ' arquivo(s) já enviado(s) foram preservados; nenhum rollback no Storage foi executado.'
+            : '';
     }
 
     function getStorageErrorMessage(error) {
@@ -1677,10 +1681,7 @@
 
             var result = await FirebaseSystem.submitEvent(payload);
             if (!result.success) {
-                if (uploadedImages.length > 0) {
-                    await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
-                }
-                mostrarNotif(result.message, 'error');
+                mostrarNotif(result.message + getPreservedUploadsNotice(uploadedImages), 'error');
                 return;
             }
 
@@ -1689,10 +1690,10 @@
             resetEventForm();
             carregarEventos();
         } catch (error) {
-            if (uploadedImages.length > 0) {
-                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            if (!uploadedImages.length && error && Array.isArray(error.portalPreservedUploads)) {
+                uploadedImages = error.portalPreservedUploads;
             }
-            mostrarNotif(getStorageErrorMessage(error), 'error');
+            mostrarNotif(getStorageErrorMessage(error) + getPreservedUploadsNotice(uploadedImages), 'error');
         } finally {
             btn.disabled = false;
             atualizarAvisoEventoVinculado();
@@ -1773,10 +1774,10 @@
             fecharModal('establishmentModal');
             resetEstablishmentForm();
         } catch (error) {
-            if (uploadedImages.length > 0) {
-                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            if (!uploadedImages.length && error && Array.isArray(error.portalPreservedUploads)) {
+                uploadedImages = error.portalPreservedUploads;
             }
-            mostrarNotif(getStorageErrorMessage(error), 'error');
+            mostrarNotif(getStorageErrorMessage(error) + getPreservedUploadsNotice(uploadedImages), 'error');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Enviar para Análise';
@@ -1922,10 +1923,7 @@
             });
 
             if (!result.success) {
-                if (uploadedImages.length > 0) {
-                    await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
-                }
-                mostrarNotif(result.message, 'error');
+                mostrarNotif(result.message + getPreservedUploadsNotice(uploadedImages), 'error');
                 return;
             }
 
@@ -1933,10 +1931,10 @@
             fecharModal('establishmentUpdateModal');
             carregarSolicitacoesAlteracaoEmpreendimento();
         } catch (error) {
-            if (uploadedImages.length > 0) {
-                await deleteUploadedFiles(uploadedImages).catch(function() { return null; });
+            if (!uploadedImages.length && error && Array.isArray(error.portalPreservedUploads)) {
+                uploadedImages = error.portalPreservedUploads;
             }
-            mostrarNotif(getStorageErrorMessage(error), 'error');
+            mostrarNotif(getStorageErrorMessage(error) + getPreservedUploadsNotice(uploadedImages), 'error');
         } finally {
             btn.disabled = false;
             btn.textContent = 'Enviar solicitação';

@@ -800,25 +800,17 @@
                 return;
             }
             var confirmMessage = usage.total
-                ? "Esta mídia parece estar em uso em " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "") + ". Excluir mesmo assim? Eventos ou notícias referenciados podem ficar sem imagem."
-                : "Excluir esta mídia da biblioteca?";
+                ? "Esta mídia parece estar em uso em " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "") + ". Remover somente o item da biblioteca? O arquivo físico e as referências existentes serão preservados."
+                : "Remover esta mídia da biblioteca? O arquivo físico será preservado.";
             if (!confirm(confirmMessage)) return;
 
             try {
-                if (item.storagePath && this.storage) {
-                    try {
-                        await this.storage.ref(item.storagePath).delete();
-                    } catch (storageError) {
-                        console.error("[admin-content-cms] Não foi possível remover o arquivo do Storage.", storageError);
-                    }
-                }
-
                 await this.db.collection("media_library").doc(mediaId).delete();
                 await this.loadMedia();
-                alert("Mídia excluída.");
+                alert("Mídia removida da biblioteca. O arquivo físico foi preservado.");
             } catch (error) {
-                console.error("[admin-content-cms] Erro ao excluir mídia.", error);
-                alert("Erro ao excluir mídia.");
+                console.error("[admin-content-cms] Erro ao remover mídia da biblioteca.", error);
+                alert("Erro ao remover mídia da biblioteca.");
             }
         }
     };
