@@ -3072,3 +3072,103 @@ Objetos em `submissions` são tecnicamente tratados como create-only pelo client
 - `FirebaseAuthMutationsThisCheckpoint=0`
 - `functionalSourceFilesModified=0`
 - `NEXT_PHASE=NONE_AUTOMATIC`
+
+---
+
+## PWA-03 — fallback offline de navegação — resolvido em produção
+
+- `classification=A — PWA OFFLINE FALLBACK DEPLOYED AND PROVEN IN PRODUCTION`
+- `productionFunctionalHead=dbdc6364f07fd5377a8d3400cd606490ed80ade1`
+- `PWA03Resolved=true`
+- `PWA_OFFLINE_FALLBACK_ROLLOUT_COMPLETE=true`
+
+### Causa raiz e contrato final
+
+- `rootCause=NAVIGATION_NOT_INTERCEPTED`
+- Navegações públicas não eram interceptadas pelo Service Worker: o fluxo retornava antes de `event.respondWith()`, deixando `offline.html` existente, porém inalcançável em falhas de navegação.
+- `navigationHandlerCoversNavigate=true`
+- `navigationStrategy=NETWORK_FIRST`
+- `publicVisitedPageAvailableOffline=true`
+- `publicUnvisitedPageReturnsFallback=true`
+- `offlineFallbackPrecached=true`
+- `offlineFallbackSelfContained=true`
+- `queryStringBehavior=PASS_IGNORE_SEARCH_DOCUMENT_ONLY`
+- `privatePagesServedFromPublicCache=false`
+- `authenticatedPagesCached=false`
+- `firebaseApiResponsesCached=false`
+- `storageGoogleApisExcluded=true`
+- `firebasestorageAppBucketsExcluded=true`
+- `responseCloneSemanticsCorrect=true`
+- `publicNavigationRespondWithSynchronous=true`
+- `backgroundCacheWorkAttachedToEvent=true`
+- `backgroundCacheRejectionsHandled=true`
+- `noUnhandledFetchRejections=true`
+- `missingOfflineFallbackReturnsControlled503=true`
+
+### Ciclo de cache
+
+- `oldCacheVersion=turismo-sms-v21`
+- `newCacheVersion=turismo-sms-v22`
+- `oldCacheCleanupScoped=true`
+- `currentCacheNeverDeleted=true`
+- `immediateActivationCompatibility=SAFE`
+- `productionUpgradeFromV21DirectlyObserved=false`
+- Upgrade e limpeza de cache foram comprovados localmente no candidato idêntico; produção comprovou o worker v22 ativo e controlando, com `turismo-sms-v22` presente.
+
+### Revisão e evidências
+
+- `sourceReviewR1=REJECTED_WITH_CONCRETE_FINDINGS`: foram corrigidas a exclusão incompleta de hosts Storage/Firebase, a detecção insuficiente de mutants obrigatórios pelo harness e as Promises de cache em background sem lifecycle/rejection handling adequado.
+- `sourceReviewR2=APPROVED`
+- `blockingFindingsFinal=0`
+- `focusedTests=24/24 PASS`
+- `failures=0`
+- `cancelled=0`
+- `unexpectedSkips=0`
+- `mutationDetection=6/6`
+- `localBrowserProof=PASS_UNDER_DENY_EXTERNAL_BEFORE_NETWORK_ALLOW_LOCALHOST`
+- `FirebaseProductionRequestsAllowedDuringLocalProof=0`
+
+### Prova de produção
+
+- `mainFastForwardOnly=true`
+- `mainProductionHead=dbdc6364f07fd5377a8d3400cd606490ed80ade1`
+- `pagesDeployObserved=true`
+- `pagesStatus=built`
+- `pagesHeadMatched=true`
+- `canonicalSwBlobOid=fb2296870fc25e23d1d441570a852d763365dedf`
+- `productionSwAssetMatched=true`
+- `registrationActive=true`
+- `serviceWorkerControllerPresent=true`
+- `activeCacheV22=true`
+- `publicVisitedPageAvailableOffline=true`
+- `publicUnvisitedPageReturnsFallback=true`
+- `offlineFallbackSelfContained=true`
+- `queryStringBehavior=PASS_IGNORE_SEARCH_DOCUMENT_ONLY`
+- `privatePagesServedFromPublicCache=false`
+- `networkFirstRestored=true`
+- `unexpectedPwaErrors=0`
+- `publicHttpSmoke=8/8 PASS`
+
+### Lição de isolamento e contabilidade de produção
+
+`localBrowserSmokeFirebaseLesson`: localhost não implica Firebase Emulator; quando zero acesso backend é um gate, o smoke browser deve conectar explicitamente aos Emulators ou usar isolamento de rede comprovado antes da primeira navegação.
+
+- `FirestoreOperationalReadsByAgent=0`
+- `FirestoreRuntimeReadsDuringSmoke=BLOCKED_BY_ISOLATION`
+- `FirestoreWrites=0`
+- `StorageOperationalReadsByAgent=0`
+- `StorageRuntimeReadsDuringSmoke=NOT_COUNTED_NO_STORAGE_REQUEST_OBSERVED`
+- `StorageWrites=0`
+- `StorageDeletes=0`
+- `FirebaseAuthMutations=0`
+- `FirebaseDeploys=0`
+- `RulesDeploys=0`
+
+### Observações e limites deste checkpoint documental
+
+- `sw.js` permanece com EOL misto e o housekeeping foi deliberadamente diferido.
+- A observação ambiental do commit-graph não afetou os objetos relevantes.
+- Essas observações não bloqueiam PWA-03.
+- Todos os demais findings e itens de backlog permanecem inalterados.
+- `functionalSourceFilesModified=0`
+- `NEXT_PHASE=NONE_AUTOMATIC`
