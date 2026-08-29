@@ -7,14 +7,19 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v21';
+const CACHE_NAME = 'turismo-sms-v22';
 const OFFLINE_URL = 'offline.html';
+
+const OFFLINE_CORE_ASSETS = [
+    OFFLINE_URL,
+    'css/variables.css',
+    'css/offline.css'
+];
 
 // Arquivos para cache inicial
 // Apenas assets estáticos que raramente mudam
 // HTMLs e JSONs são excluídos intencionalmente (sempre buscados da rede)
-const PRECACHE_ASSETS = [
-    'offline.html',
+const OPTIONAL_PRECACHE_ASSETS = [
     'translations.js',
     'js/tourism-mascot.js',
     'css/tourism-mascot.css',
@@ -33,7 +38,6 @@ const PRECACHE_ASSETS = [
 
 // URLs que nunca devem ser cacheadas
 const NEVER_CACHE = [
-    'firebasestorage.googleapis.com',
     'firestore.googleapis.com',
     'identitytoolkit.googleapis.com',
     'securetoken.googleapis.com',
@@ -54,6 +58,11 @@ const NEVER_CACHE = [
     'www.googletagmanager.com'
 ];
 
+const FIREBASE_STORAGE_HOSTNAMES = new Set([
+    'firebasestorage.googleapis.com',
+    'storage.googleapis.com'
+]);
+
 // Extensões que nunca devem ser cacheadas (sempre busca da rede)
 const NEVER_CACHE_EXT = ['.json', '.html', '.mp4', '.webm', '.mov', '.m4v'];
 
@@ -61,7 +70,12 @@ const NEVER_CACHE_EXT = ['.json', '.html', '.mp4', '.webm', '.mov', '.m4v'];
 self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(PRECACHE_ASSETS))
+            .then(async cache => {
+                await cache.addAll(OFFLINE_CORE_ASSETS);
+                await Promise.allSettled(
+                    OPTIONAL_PRECACHE_ASSETS.map(asset => cache.add(asset))
+                );
+            })
             .then(() => self.skipWaiting())
     );
 });
@@ -87,63 +101,151 @@ self.addEventListener('fetch', event => {
     // Ignorar requisições de extensões
     if (event.request.url.includes('chrome-extension')) return;
 
-    // Nunca cachear APIs externas / Firebase
-    if (NEVER_CACHE.some(domain => event.request.url.includes(domain))) return;
-
-    // Nunca cachear navegacoes, JSON e HTML — sempre buscar da rede
     const url = new URL(event.request.url);
+
+    // Nunca cachear APIs externas / Firebase, inclusive todos os hosts Storage usados pelo projeto.
+    if (shouldBypassCache(url)) return;
+
+    // Navegações públicas usam network-first com fallback offline.
     if (isSensitivePath(url.pathname)) return;
-    if (event.request.mode === 'navigate') return;
+    if (event.request.mode === 'navigate') {
+        if (url.origin !== self.location.origin) return;
+        const completeBackgroundWork = createBestEffortBackground(event);
+        event.respondWith(handlePublicNavigation(event.request, completeBackgroundWork));
+        return;
+    }
+
+    // JSON e HTML que não são navegações continuam sempre na rede.
     if (NEVER_CACHE_EXT.some(ext => url.pathname.endsWith(ext))) return;
     
-    event.respondWith(
-        caches.match(event.request)
-            .then(cachedResponse => {
-                // Retornar do cache se disponível
-                if (cachedResponse) {
-                    // Atualizar cache em background
-                    fetchAndCache(event.request);
-                    return cachedResponse;
-                }
-                
-                // Senão, buscar da rede
-                return fetch(event.request)
-                    .then(response => {
-                        // Cachear resposta válida
-                        if (response && response.status === 200) {
-                            const responseClone = response.clone();
-                            caches.open(CACHE_NAME)
-                                .then(cache => cache.put(event.request, responseClone));
-                        }
-                        return response;
-                    })
-                    .catch(() => {
-                        // Offline - retornar página offline para navegação
-                        if (event.request.mode === 'navigate') {
-                            return caches.match('offline.html');
-                        }
-                    });
-            })
-    );
+    const completeBackgroundWork = createBestEffortBackground(event);
+    event.respondWith(handleNonNavigationRequest(event.request, completeBackgroundWork));
 });
 
-// Buscar e atualizar cache
-function fetchAndCache(request) {
-    fetch(request)
-        .then(response => {
+async function handlePublicNavigation(request, completeBackgroundWork) {
+    let backgroundWork;
+
+    try {
+        const response = await fetch(request);
+
+        if (isCacheablePublicNavigation(request, response)) {
+            backgroundWork = putInCurrentCache(request, response.clone());
+        }
+
+        return response;
+    } catch (_) {
+        try {
+            const cache = await caches.open(CACHE_NAME);
+            const visitedResponse = await cache.match(request, { ignoreSearch: true });
+            if (visitedResponse) return visitedResponse;
+
+            const offlineResponse = await cache.match(OFFLINE_URL);
+            if (offlineResponse) return offlineResponse;
+        } catch (_) {
+            // Se CacheStorage falhar, ainda devolvemos uma resposta offline controlada.
+        }
+
+        return createControlledOfflineResponse();
+    } finally {
+        completeBackgroundWork(backgroundWork);
+    }
+}
+
+async function handleNonNavigationRequest(request, completeBackgroundWork) {
+    let backgroundWork;
+
+    try {
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+            backgroundWork = fetchAndCache(request);
+            return cachedResponse;
+        }
+
+        try {
+            const response = await fetch(request);
             if (response && response.status === 200) {
-                caches.open(CACHE_NAME)
-                    .then(cache => cache.put(request, response));
+                backgroundWork = putInCurrentCache(request, response.clone());
             }
-        })
-        .catch(() => {});
+            return response;
+        } catch (_) {
+            return undefined;
+        }
+    } finally {
+        completeBackgroundWork(backgroundWork);
+    }
+}
+
+function isCacheablePublicNavigation(request, response) {
+    const url = new URL(request.url);
+
+    return request.method === 'GET'
+        && request.mode === 'navigate'
+        && url.origin === self.location.origin
+        && !isSensitivePath(url.pathname)
+        && !shouldBypassCache(url)
+        && response
+        && response.status === 200
+        && response.type !== 'opaque'
+        && response.type !== 'opaqueredirect'
+        && !response.redirected;
+}
+
+function shouldBypassCache(url) {
+    const hostname = url.hostname.toLowerCase();
+
+    if (FIREBASE_STORAGE_HOSTNAMES.has(hostname)) return true;
+    if (hostname === 'firebasestorage.app' || hostname.endsWith('.firebasestorage.app')) return true;
+
+    return NEVER_CACHE.some(domain => url.href.includes(domain));
+}
+
+function createBestEffortBackground(event) {
+    let complete;
+    const handledPromise = new Promise(resolve => {
+        complete = resolve;
+    }).catch(() => {});
+
+    event.waitUntil(handledPromise);
+    return work => complete(work);
+}
+
+async function putInCurrentCache(request, response) {
+    const cache = await caches.open(CACHE_NAME);
+    await cache.put(request, response);
+}
+
+function createControlledOfflineResponse() {
+    return new Response(
+        '<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Offline</title><body><h1>Você está offline</h1><p>Não foi possível carregar esta página agora.</p></body></html>',
+        {
+            status: 503,
+            headers: {
+                'Cache-Control': 'no-store',
+                'Content-Type': 'text/html; charset=utf-8'
+            }
+        }
+    );
+}
+
+// Buscar e atualizar cache
+async function fetchAndCache(request) {
+    const response = await fetch(request);
+    if (response && response.status === 200) {
+        await putInCurrentCache(request, response);
+    }
 }
 
 function isSensitivePath(pathname) {
+    const normalizedPath = pathname.length > 1
+        ? pathname.replace(/\/+$/, '')
+        : pathname;
+
     return [
+        '/admin-firebase',
         '/admin-firebase.html',
+        '/portal-usuario',
         '/portal-usuario.html'
-    ].some(path => pathname.endsWith(path));
+    ].includes(normalizedPath);
 }
 
 // Push notifications (preparado para futuro)
