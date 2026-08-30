@@ -224,10 +224,10 @@ const locaisData = {
     'parque-exposicoes': {
         id: 'parque-exposicoes',
         nome: 'Parque de Exposições',
-        subtitulo: 'Eventos · Agropecuária · AgroSamas',
+        subtitulo: 'Eventos · Agropecuária · Espaço multiuso',
         badge: '🚜 Agropecuária',
-        descricao: 'O Parque de Exposições de São Mateus do Sul é o principal espaço para eventos de grande porte do município. Sede do V AgroSamas — o maior evento do município —, o parque recebe anualmente exposições agropecuárias, shows nacionais, feiras gastronômicas e o famoso Parque dos Dinossauros.',
-        historia: 'O Parque de Exposições foi construído para suprir a demanda por espaços adequados à realização de eventos de grande porte na cidade. Seu maior destaque é o AgroSamas, que em sua edição mais recente reuniu mais de 100 mil visitantes.',
+        descricao: 'O Parque de Exposições de São Mateus do Sul é um espaço destinado à realização de eventos de grande porte, exposições agropecuárias, shows e feiras.',
+        historia: 'O Parque de Exposições foi construído para suprir a demanda por espaços adequados à realização de eventos de grande porte na cidade.',
         imagem: 'images/parque-exposicoes-aerea.webp',
         galeria: [
             'images/parque-exposicoes-aerea.webp',
@@ -236,7 +236,7 @@ const locaisData = {
         endereco: 'São Mateus do Sul, PR (confirmar endereço)',
         horario: 'Varia conforme eventos. Consulte o calendário.',
         telefone: '(42) 3532-0000',
-        site: 'https://agrosamas.com.br',
+        site: null,
         instagram: '@prefeiturasms',
         facebook: null,
         lat: -25.8800,
