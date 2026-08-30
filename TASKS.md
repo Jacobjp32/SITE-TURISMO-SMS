@@ -6,7 +6,162 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
-## Rotas Admin V1.1 — Admin release e smoke read-only de Rotas aprovados
+## Backlog reconciliado — 30/08/2026
+
+- `baseHead=869a1a4c8b8474e9e21b61065faf28d98619cb3d`
+- `historicalSectionsCanBeStale=true`
+- `latestEvidenceWins=true`
+
+Este checkpoint reconcilia pendências históricas com releases, testes e evidências posteriores. Itens antigos permanecem como provenance quando necessário, mas não reabrem automaticamente frentes concluídas.
+
+### Regra canônica de leitura
+
+- Este checkpoint é a fonte atual para `CURRENT ACTIVE BACKLOG`, `RESOLVED`, `HISTORICAL / PROVENANCE`, `EXTERNAL WAIT`, `OPTIONAL / DEFERRED` e `HOUSEKEEPING`.
+- Se uma afirmação abaixo deste checkpoint divergir dele, a afirmação antiga deve ser lida como `HISTÓRICO — SUPERADO POR CHECKPOINT POSTERIOR`.
+- Uma frente histórica somente volta ao backlog ativo quando aparecer em `Backlog ativo reconciliado` com status aberto.
+- Releases, testes e evidências posteriores prevalecem sobre marcadores intermediários de PREP, dry-run, migração ou cutover.
+
+### RESOLVED
+
+#### Rotas V1.1
+
+- `ROTAS_SCHEMA_RULES=RESOLVED`
+- `ROTAS_NORMALIZATION=RESOLVED`
+- `ROTAS_DATA_MIGRATION=RESOLVED`
+- `ROTAS_ADMIN_CRUD=RESOLVED`
+- `ROTAS_ADMIN_RELEASE=RESOLVED`
+- `ROTAS_PUBLIC_ADAPTER=RESOLVED`
+- `legacyStaticRoutesPresent=true`
+- `cmsRoutesCollectionPresent=true`
+- `adminRoutesReady=true`
+- `migratedRoutesCount=6`
+- `publishedRoutesCount=6`
+- `draftRoutesCount=0`
+- `publicAdapterImplemented=true`
+- `publicAdapterReleased=true`
+- As rotas publicadas no Firestore são a fonte pública quando os adapters retornam `SUCCESS`; as rotas estáticas permanecem apenas como fallback técnico e segurança de precutover.
+- `ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE` foi removido do backlog ativo. Checkpoints anteriores permanecem somente como provenance.
+
+#### Admin V1
+
+- `ADMIN_V1_CORE=RESOLVED`
+- Módulos concluídos: Dashboard; Aprovações; Solicitações de vínculo; Gerenciar Vínculos; Usuários; Eventos; Notícias; Mídia; Banners / Pop-ups; Empreendimentos.
+- `ADMIN-B1`, `ADMIN-B2A*` e os marcos Admin `ALPHA/BETA` são provenance histórica, não pendências do núcleo V1.
+- `ADMIN_FUTURE_MODULES=OPTIONAL`, `priority=LOW`: Galeria, Configurações, Sazonal, Mascote e Logs são possibilidades futuras, não dívida do release V1.
+
+#### PWA-03
+
+- `PWA_03=RESOLVED`
+- O fallback offline não integra mais o backlog ativo; a evidência de produção permanece no checkpoint histórico específico.
+
+#### AgroSamas e Parque de Exposições
+
+- `AGROSAMAS_RESOLVED_CHAIN=RESOLVED`
+- Local funcional corrigido para Rua do Mathe: `localId=rua-do-mathe`, `/local?id=rua-do-mathe`, `coordinates=-25.878,-50.385`.
+- Associação editorial antiga do Parque removida; galeria corrigida; documento CMS `parque-exposicoes` convergido.
+- Commits da cadeia: `0ca9554449ffb29ddee37cdcdb59f7bebb20f998` e `869a1a4c8b8474e9e21b61065faf28d98619cb3d`.
+- Não há pendências equivalentes dessa cadeia no backlog ativo. A taxonomia do Parque é uma frente editorial independente.
+
+#### CMS, App Check e V7
+
+- `CMS_07=RESOLVED_BY_LATER_WORK`
+- `CMS_08=RESOLVED_BY_LATER_WORK`
+- `CMS_FULL_SAVE=RESOLVED_BY_LATER_WORK`
+- `APP_CHECK_CSP=RESOLVED_WITH_CONDITIONAL_MONITORING`: funcionalmente resolvido; monitorar timeout somente se reaparecer, sem tratar como bug ativo.
+- `V7A=RESOLVED`
+- `V7B=RESOLVED`
+
+`resolvedItems=[Admin V1 core, PWA-03, AgroSamas Rua do Mathe, associação antiga do Parque, galeria Parque, convergência CMS Parque, Rotas schema/Rules, Rotas normalization, Rotas migration/publication, Rotas Admin CRUD/release, Rotas public adapter/cutover, CMS-07, CMS-08, CMS full-save, App Check/reCAPTCHA CSP, V7A, V7B]`
+
+### PARTIALLY RESOLVED
+
+#### CMS-5D
+
+- `CMS_5D=PARTIALLY_RESOLVED`
+- Decomposição original: `CMS-5C=mapa`; `CMS-5D=local.html`; `CMS-5E=busca, sabores, onde-ficar e o-que-fazer`; `home=posterior`.
+- Concluído por trabalhos posteriores: adapter público `cms_establishments`; leituras `published-only`; mapa dinâmico via `TURISMO_DATA`; Rotas V1.1 públicas; relacionamentos N:N em `relationships.routeIds[]`; estatísticas dinâmicas da home; busca dinâmica nas superfícies que carregam `TURISMO_DATA`.
+- Remainder real: `local.html` ainda estático; `CMS-first /local?id=slug`; busca em páginas sem adapters/`TURISMO_DATA`; `sabores.html` editorial/estático; `onde-ficar.html` editorial/estático; `o-que-fazer.html` como ponte estática; cards editoriais da home ainda não integralmente migrados ao CMS.
+- Somente `CMS_5D_OPEN_REMAINDER` permanece ativo; a frente histórica completa não está aberta.
+
+### Backlog ativo reconciliado
+
+Esta é a única lista canônica de pendências ativas. Menções antigas fora deste bloco são provenance e não duplicam o backlog.
+
+#### P1
+
+- `POLISH_MONTH_HOME_EDITORIAL_ROTATION=OPEN_TIME_BOUND`, `priority=P1` — evento/destaque vigente até `2026-08-30`; ação ativa a partir de `2026-08-31`; `recommendedWindow=2026-08-31..2026-09-06`; `NEXT_FUNCTIONAL_FRONT_AFTER_RECONCILIATION`.
+- `EVENTS_MISSING_ESTABLISHMENT_ID=OPEN_DATA_AUDIT_REQUIRED`, `priority=P1` — auditar eventos sem vínculo seguro antes de alterar dados.
+- `EVENT_SOURCE_DUPLICATION=OPEN_DATA_ARCHITECTURE`, `priority=P1` — `duplicationStillExists=true`; `canonicalEventSourceDefined=PARTIAL_ONLY`. Fontes atuais: `eventos-2026.json`, papel de fonte anual primária de agenda/home, `count=228`; `js/data/eventos.js` / `TURISMO_EVENTOS`, papel de mapa/busca, `count=8`; `eventos_aprovados`, papel de enriquecimento Firestore opcional. Não existe fonte global única declarada.
+- `ANNUAL_ROLLOVER_2027=OPEN_FUTURE_REQUIRED`, `priority=P1` — `annualEventsRolloverRequired=true`; `recommendedTiming=planejar no Q4/2026 e concluir antes da primeira publicação da agenda 2027`.
+
+#### P2
+
+- `CMS_5D_OPEN_REMAINDER=OPEN`, `priority=P2` — executar somente o remainder descrito na seção `PARTIALLY RESOLVED`.
+- `CMS_4E_EXEC=OPEN`, `priority=P2` — inventário remoto read-only de mídias; não executar sem bloco próprio e autorização operacional; sem cleanup.
+- `ROUTE_NONCANONICAL_11=OPEN`, `priority=P2`, `blocking=false` — os 11 agrupamentos não canônicos não bloqueiam Rotas V1.1 públicas e dependem de decisão editorial/de dados separada.
+- `EVENT_DATA_HYGIENE=OPEN`, `priority=P2` — snapshot versionado: 17 eventos com horário `A confirmar` e 2 eventos com local `A confirmar`; não corrigir sem bloco de dados.
+- `V7C1=OPEN`, `priority=P2` — limpeza de runtime; deve preceder V7C2.
+- `V5D=OPEN_EDITORIAL_REVIEW`, `priority=P2` — revisão anti-envelhecimento editorial; não iniciar automaticamente.
+- `PARQUE_TAXONOMY=OPEN_EDITORIAL_TAXONOMY`, `priority=P2`, `blocking=false` — badge CMS observado `GA Gastronomia` versus taxonomia estática `Agropecuária`; independente de AgroSamas.
+- `LOCAL_DATA_HYGIENE=OPEN`, `priority=P2` — registros/endereço ainda marcados como `A confirmar`; não corrigir sem fonte confiável.
+- `NEWS_SOURCE_DUPLICATION=OPEN`, `priority=P2` — home/listagem ainda têm dívida de fonte de verdade.
+- `NEWS_DYNAMIC_SEO=OPEN`, `priority=P2` — a notícia dinâmica atualiza canonical, mas metadados dinâmicos completos ainda precisam revisão.
+- `FORMSPREE_EMAIL=EXTERNAL_WAIT` / `FORM_SPREE_INSTITUTIONAL_EMAIL=EXTERNAL_WAIT`, `priority=P2` — `temporaryWorkflow=imprensapmsms@gmail.com`; `institutionalEmail=turismo@saomateusdosul.pr.gov.br`; `institutionalEmailState=PENDING`. Não afirmar estado atual do painel sem verificação externa autorizada.
+
+#### P3
+
+- `V7C2=BLOCKED_BY_V7C1`, `priority=P3` — executar somente depois da limpeza de runtime V7C1.
+- `V6=OPEN_REQUIRES_EDITORIAL_REVIEW`, `priority=P3` — reordenação da metade inferior da home; não iniciar automaticamente.
+- `V5C3=HOUSEKEEPING_VISUAL_REFACTOR`, `priority=P3` — possível extração de estilos inline dos CTAs; depende de revisão visual.
+- `ORPHAN_FRONTEND_CHAIN=HOUSEKEEPING`, `priority=P3` — `.map-modal-*`, `.agrosamas-banner` e configurações/chaves i18n relacionadas a elementos ausentes; dependência `V7C1/V7C2`.
+- `SITEMAP_FRESHNESS=OPEN`, `priority=P3` — alterar `lastmod` somente quando houver mudança real da URL/conteúdo; não atualizar artificialmente.
+- `PWA_SHORTCUT_ICONS=OPEN_P3`, `priority=P3` — polimento separado de PWA-03.
+
+#### LOW
+
+- `PWA_ICON_512=OPEN_LOW`, `priority=LOW` — polimento separado de PWA-03.
+- `FIREBASE_COMPAT_MODULAR=OPTIONAL`, `priority=LOW` — não priorizar antes das frentes funcionais/documentais.
+- `B3_MEDIA_PERFORMANCE=OPEN_DEFERRED`, `priority=LOW` — executar após o trabalho funcional prioritário; métricas existentes permanecem apenas como snapshot histórico, sem nova auditoria pesada neste checkpoint.
+- `GIT_EOL_POLICY=HOUSEKEEPING_NON_BLOCKING`, `priority=LOW` — `js/locais-data.js` e `sw.js` possuem histórico mixed EOL; não há política `.gitattributes` consolidada; releases atuais não sofreram churn não relacionado. Não criar `.gitattributes` nem renormalizar neste bloco.
+- `SW_LEAFLET_LOCALHOST=CONDITIONAL_FOLLOWUP`, `priority=LOW` — investigar somente se reproduzir novamente; não é bug ativo de produção.
+
+### HISTORICAL / PROVENANCE
+
+Todos os itens seguintes são `HISTÓRICO — SUPERADO POR CHECKPOINT POSTERIOR` quando encontrados em seções antigas deste arquivo:
+
+`historicalOnlyItems=[ADMIN-B1, ADMIN-B2A*, Admin ALPHA/BETA, Rotas discovery/dry-runs encerrados, markers antigos de migração Rotas, publicAdapterReleased=false, productionRotasDraft=6, NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE, PWA-03 como bug aberto, AgroSamas associado ao Parque, CMS-07/CMS-08 como P1, knownIssueCmsEstablishmentsFullSave=true, App Check/CSP como bug ativo anterior, V7A/V7B como etapas abertas]`
+
+Esses registros permanecem para auditoria. Eles não representam o backlog vigente e sempre apontam conceitualmente para este checkpoint atual.
+
+### Ordem oficial de execução
+
+`recommendedExecutionOrder=[`
+
+1. Revisão editorial pós-Mês Polonês — a partir de 31/08/2026.
+2. Auditoria de eventos sem `establishmentId` + definição da fonte canônica.
+3. Preparação da virada anual 2027.
+4. `CMS-5D open remainder`.
+5. `CMS-4E-EXEC` read-only, com autorização própria.
+6. V7C1.
+7. 11 agrupamentos não canônicos + higiene editorial/taxonômica.
+8. V7C2, V6, V5C3 e V5D conforme decisão editorial.
+9. B3, PWA polish, EOL e demais housekeeping.
+
+`]`
+
+Rotas V1.1 não integra mais a fila de próximas execuções.
+
+### Próximo bloco funcional
+
+- `nextFunctionalBlock=SITE-V2-POLISH-MONTH-HOME-EDITORIAL-ROTATION-PREP`
+- `eligibleFrom=2026-08-31`
+- O destaque do Mês Polonês permanece válido até `2026-08-30`; a home não foi modificada neste checkpoint.
+
+---
+
+## HISTÓRICO — Rotas Admin V1.1 — Admin release e smoke read-only de Rotas aprovados — SUPERADO PELO CHECKPOINT DE 30/08/2026
+
+> Os marcadores intermediários abaixo, inclusive `productionRotasDraft=6`, `publicAdapterReleased=false`, `knownIssueCmsEstablishmentsFullSave=true` e `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE`, são provenance. O estado vigente está em `Backlog reconciliado — 30/08/2026`.
 
 - `adminReleaseClassification=A`
 - `productionReleaseHead=20c70b10c922976ec4f187751f5813b850999fba`
@@ -727,7 +882,7 @@ Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/r
 
 ---
 
-## Painel Admin V1 — estado vinculante de 2026-08-13
+## HISTÓRICO — Painel Admin V1 — estado vinculante de 2026-08-13 — SUPERADO PELO CHECKPOINT DE 30/08/2026
 
 - Bloco: `ADMIN-B2A8-ADMIN-PANEL-V1-RELEASE`.
 - `ADMIN_PANEL_VERSION = 1.0.0`.
@@ -745,7 +900,7 @@ Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/r
 
 ---
 
-## Estado vinculante do ADMIN-B2A5/B2A6 — 2026-08-13
+## HISTÓRICO — Estado vinculante do ADMIN-B2A5/B2A6 — 2026-08-13 — SUPERADO PELO CHECKPOINT DE 30/08/2026
 
 - `B2A5_OPERATIONAL_FLOW_COMPLETE = true`. Classificação final: **A. INVENTORY CONCLUÍDO E AUTH-REVOKE COMPLETO — B2A5 OPERACIONAL ENCERRADO EM ESTADO FAIL-CLOSED**.
 - Inventário agregado de `usuarios`: total `11`; `admin = 3`; `moderator = 0`; `user = 8`; `ativo` boolean `true = 11/11`; `administrativeProfilesRequiringEvaluation = 0`; `dataQualityDocumentsRequiringReview = 0`; todas as invariantes `true`. Não há migração corretiva de `role` ou `ativo` antes do hardening.
@@ -758,7 +913,7 @@ Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/r
 - Smoke anônimo em produção passou após espera de propagação de 35 segundos: `noticias` publicadas e `cms_establishments` publicados permitidos; query ampla de `noticias`, `media_library` e fallback desconhecido negados; Storage privado retornou `storage/unauthorized`. `B2A6_RULES_DEPLOYED_TO_PRODUCTION = true`; production data writes `0`; user migrations `0`; Firebase Auth user mutations `0`; IAM mutations `0`; gcloud calls `0`; ADC `false`; Hosting e GitHub Pages não alterados.
 - Próximo bloco recomendado: `ADMIN-B2A7-ADMIN-PANEL-PRODUCTION-QA`, não iniciado e dependente de autorização literal separada.
 
-## Estado atual resumido
+## HISTÓRICO — Estado então atual resumido — SUPERADO PELO CHECKPOINT DE 30/08/2026
 
 **Projeto:** SITE-TURISMO-SMS  
 **Área atual de trabalho:** Painel Admin, CMS e Firebase — Authentication, Firestore, Storage, moderação, segurança e integridade dos fluxos administrativos.
@@ -791,7 +946,7 @@ Exit code não prova efeito remoto. Após qualquer tentativa de ADD, read-back/r
 
 ---
 
-## Próximo passo recomendado
+## HISTÓRICO — Próximo passo então recomendado — SUPERADO PELO CHECKPOINT DE 30/08/2026
 
 **Executar o próximo bloco `ADMIN-B2A7-ADMIN-PANEL-PRODUCTION-QA` somente com autorização literal separada.**
 
@@ -2567,7 +2722,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 ---
 
-## Ordem das frentes após o checkpoint de 2026-07-20
+## HISTÓRICO — Ordem das frentes após o checkpoint de 2026-07-20 — SUPERADA PELO CHECKPOINT DE 30/08/2026
 
 1. **ADMIN-B1-PREP, ADMIN-B1B-PREP e ADMIN-B2A-PREP** — concluídos.
 2. **ADMIN-B2A1-EXEC** — infraestrutura local e baseline automatizado concluídos em 44/44, sem alteração ou publicação de Rules.
@@ -2600,7 +2755,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 ---
 
-## Tarefas abertas
+## HISTÓRICO — Tarefas abertas anteriores — SUPERADAS PELO BACKLOG RECONCILIADO DE 30/08/2026
 
 ### [PAUSADA] Auditoria e melhoria do site público
 
@@ -2696,7 +2851,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Regra:** executar somente o bloco autorizado. `ADMIN-B2A5-PREP`, suas decisões humanas, `ADMIN-B2A5-INVENTORY-PREP`, `ADMIN-B2A5-INVENTORY-TOOL-PREP`, o ROOT-RECOVERY-AND-ISOLATION-PREP e o ISOLATED-TOOL-EXEC estão concluídos. A ferramenta isolada foi classificada como **A. VALIDADO LOCALMENTE** e publicada no Git no commit `1102741201d4858b55a7145570568856f6859573`. `ADMIN-B2A5-INVENTORY-AUTH-PREP` é o próximo bloco possível e permanece não iniciado; autenticação, inventário real, eventual migração, Firestore, runtime, `ADMIN-B2B` e `ADMIN-B3` não foram executados. A publicação continua bloqueada e exclusiva do `ADMIN-B3`.
 
-### [ABERTA / FUTURO] CMS-5D — Integração controlada do CMS no site público
+### [HISTÓRICO — PARCIALMENTE SUPERADO] CMS-5D — Integração controlada do CMS no site público
 
 **Contexto:** CMS-5C foi concluído, commitado, enviado por push e as Firestore Rules foram publicadas para permitir leitura pública mínima de `cms_establishments` apenas quando `status == "published"`.
 **Status:** ainda não iniciado.
@@ -2708,7 +2863,7 @@ O V7B foi concluído em 2026-07-17 como cutover atômico da navegação da home 
 
 **Regra:** não ligar mapa, `local.html`, busca, sabores, onde-ficar, o-que-fazer ou home ao CMS até o CMS-5D ser explicitamente iniciado.
 
-### [ABERTA / FUTURO] CMS-4E-EXEC — Inventário remoto de mídias
+### [HISTÓRICO / PROVENANCE] CMS-4E-EXEC — Inventário remoto de mídias
 
 **Contexto:** inventário remoto de mídias do CMS segue pendente.
 **Status:** ainda não iniciado/concluído nesta pausa.
@@ -2908,7 +3063,9 @@ Equivalentes identificados:
 
 ---
 
-## Rotas V1.1 — publicação editorial Firestore comprovada
+## HISTÓRICO — Rotas V1.1 — publicação editorial Firestore comprovada — SUPERADO PELO CHECKPOINT DE 30/08/2026
+
+> Este checkpoint preserva a fotografia intermediária da publicação. `knownIssueCmsEstablishmentsFullSave=true`, `publicAdapterReleased=false`, `publicAdapterCutover=false` e `NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_CUTOVER` foram superados por trabalhos posteriores e não integram o backlog vigente.
 
 - `publicationClassification=A`
 - `publicationMethod=ONE_SHOT_SERVER_SIDE_MANIFEST_CONTROLLED`
