@@ -12,12 +12,12 @@ window.TURISMO_EVENTOS = [
       "images/empreendimentos/agrosamas/agrosamas-03.jpeg"
     ],
     url: "/eventos",
-    localId: "parque-exposicoes",
-    localUrl: "/local?id=parque-exposicoes",
+    localId: "rua-do-mathe",
+    localUrl: "/local?id=rua-do-mathe",
     periodo: "Setembro",
-    local: "Parque de Exposições",
+    local: "Rua do Mathe",
     recorrencia: "anual",
-    coordenadas: { lat: -25.88, lng: -50.39 },
+    coordenadas: { lat: -25.878, lng: -50.385 },
     tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "setembro"]
   },
   {
