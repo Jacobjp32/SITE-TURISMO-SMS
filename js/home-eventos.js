@@ -27,6 +27,10 @@
             return String(value || '').trim().toLowerCase();
         }
 
+        function normalizarTextoAssinatura(value) {
+            return normalizarTexto(value).replace(/\s+/g, ' ');
+        }
+
         function statusPublico(evento) {
             const status = normalizarTexto(evento && evento.status);
             if (statusBloqueados.has(status)) return false;
@@ -44,8 +48,66 @@
             return String(value).slice(0, 10);
         }
 
+        function obterTituloEvento(evento) {
+            return evento && (evento.title || evento.nome || evento.titulo) || '';
+        }
+
+        function obterDataValor(evento) {
+            return evento && (evento.date || evento.data || evento.dataInicio || evento.startDate || evento.inicio);
+        }
+
+        function obterHorarioEvento(evento) {
+            return evento && (evento.time || evento.hora || evento.horario || evento.horaInicio) || '';
+        }
+
+        function obterLocalEvento(evento) {
+            return evento && (
+                evento.location ||
+                evento.local ||
+                evento.localNome ||
+                evento.venue ||
+                evento.establishmentName ||
+                evento.organizer ||
+                evento.organizador
+            ) || '';
+        }
+
+        function obterIdentidadeEvento(evento) {
+            if (!evento) return '';
+            if (evento.source === 'annual' && evento.sourceId !== undefined && evento.sourceId !== null) {
+                return 'annual:' + evento.sourceId;
+            }
+            if (evento.source === 'firestore') {
+                return evento.id || (evento.sourceId ? 'firestore:' + evento.sourceId : '');
+            }
+            return evento.id !== undefined && evento.id !== null ? String(evento.id) : '';
+        }
+
+        function obterAssinaturaEvento(evento) {
+            return [
+                obterTituloEvento(evento),
+                normalizarData(obterDataValor(evento)),
+                obterHorarioEvento(evento),
+                obterLocalEvento(evento)
+            ].map(normalizarTextoAssinatura).join('\u001f');
+        }
+
+        function deduplicarEventos(eventos) {
+            const identidades = new Set();
+            const assinaturas = new Set();
+            return (eventos || []).filter(evento => {
+                const identidade = obterIdentidadeEvento(evento);
+                const assinatura = obterAssinaturaEvento(evento);
+                if (identidade && identidades.has(identidade)) return false;
+                if (assinatura && assinaturas.has(assinatura)) return false;
+                if (identidade) identidades.add(identidade);
+                if (assinatura) assinaturas.add(assinatura);
+                return true;
+            });
+        }
+
         function obterDataEvento(evento) {
-            const dataStr = normalizarData(evento && (evento.data || evento.dataInicio || evento.startDate || evento.inicio));
+            const dataStr = normalizarData(obterDataValor(evento));
             if (!/^\d{4}-\d{2}-\d{2}$/.test(dataStr)) return null;
             const data = new Date(dataStr + 'T12:00:00');
             return Number.isNaN(data.getTime()) ? null : data;
@@ -82,7 +144,7 @@
                 return Number(eventoComVinculo(b)) - Number(eventoComVinculo(a));
             };
 
-            const base = (eventos || [])
+            const base = deduplicarEventos(eventos)
                 .map(evento => Object.assign({}, evento, { _dataObj: obterDataEvento(evento) }))
                 .filter(evento => evento._dataObj && evento._dataObj >= hoje && statusPublico(evento))
                 .sort(ordenarPorData);
@@ -100,20 +162,21 @@
             }
 
             container.innerHTML = filtrados.map(evento => {
-                const titulo = esc(evento.titulo || evento.nome || 'Evento');
+                const titulo = esc(obterTituloEvento(evento) || 'Evento');
                 const data = evento._dataObj;
                 const dia = data.getDate();
                 const mes = meses[data.getMonth() + 1];
                 const diaSemana = diasSemana[data.getDay()];
                 const categoria = esc(evento.categoria || 'Evento');
-                const horario = esc(evento.horario || evento.hora || '');
-                const local = esc(evento.local || evento.localNome || evento.venue || '');
+                const horario = esc(obterHorarioEvento(evento));
+                const local = esc(obterLocalEvento(evento));
+                const identidade = esc(obterIdentidadeEvento(evento));
                 const mapUrl = evento.mapUrl || evento.mapaUrl || '';
                 const detalheUrl = mapUrl || evento.url || '/eventos';
                 const cta = mapUrl ? 'Abrir no mapa' : 'Ver detalhes';
 
                 return `
-                    <article class="home-event-card">
+                    <article class="home-event-card" data-event-id="${identidade}">
                         <div class="home-event-date" aria-label="${dia} de ${mes}">
                             <strong>${dia}</strong>
                             <span>${mes}</span>
@@ -133,7 +196,11 @@
         try {
             // 1. Carregar JSON estático primeiro (rápido)
             const jsonRes = await fetch('eventos-2026.json');
-            const jsonEventos = (await jsonRes.json()).map(evento => Object.assign({ _fonte: 'static' }, evento));
+            const jsonEventos = (await jsonRes.json()).map(evento => Object.assign({
+                _fonte: 'static',
+                source: 'annual',
+                sourceId: String(evento.id)
+            }, evento));
             renderEventos(jsonEventos); // exibe imediatamente
 
             // 2. Tentar enriquecer com Firebase
@@ -149,14 +216,17 @@
                 const db = getFirestore(app);
                 const snap = await getDocs(collection(db, 'eventos_aprovados'));
                 if (!snap.empty) {
-                    const fbEventos = snap.docs.map((d, i) => {
+                    const fbEventos = snap.docs.map((d) => {
                         const e = d.data();
+                        const documentId = String(d.id);
                         return {
-                            id: 90000 + i,
-                            titulo: e.nome || e.titulo || 'Evento',
-                            data: normalizarData(e.data || e.dataInicio || e.startDate || e.inicio),
-                            horario: e.horario || e.hora || '',
-                            local: e.local || e.localNome || e.venue || '',
+                            id: 'firestore:' + documentId,
+                            source: 'firestore',
+                            sourceId: documentId,
+                            title: obterTituloEvento(e) || 'Evento',
+                            date: normalizarData(obterDataValor(e)),
+                            time: obterHorarioEvento(e),
+                            location: obterLocalEvento(e),
                             categoria: e.categoria || 'cultural',
                             descricao: e.descricao || '',
                             destaque: e.destaque || false,
