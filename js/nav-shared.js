@@ -77,7 +77,7 @@
                 <button class="dropdown-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="navSobreMenu" aria-label="Abrir menu Sobre" data-lang-key-aria-label="nav-open-about"><span data-lang-key="nav-sobre">Sobre</span> <span class="arrow">▼</span></button>
                 <div class="dropdown-menu" id="navSobreMenu" role="menu">
                     <a href="/#sobre" role="menuitem" data-lang-key="nav-sobre-cidade">Sobre a Cidade</a>
-                    <a href="/mapa-turistico?categoria=Cultura" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
+                    <a href="/mes-polones" role="menuitem" data-lang-key="nav-capital-polonesa">Capital Polonesa do Paraná</a>
                     <a href="/transparencia" role="menuitem" data-lang-key="nav-institucional">Institucional</a>
                 </div>
             </li>
@@ -491,7 +491,7 @@ body.font-larger{font-size:140%!important;}
         if (!hasLoadedScript(src)) {
             var script = document.createElement('script');
             script.src = src === 'js/search-index.js'
-                ? src + '?v=site-mes-polones-20260805-1417'
+                ? src + '?v=site-polish-hub-20260901'
                 : src;
             script.async = false;
             document.body.appendChild(script);

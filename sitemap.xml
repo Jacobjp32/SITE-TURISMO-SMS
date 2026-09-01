@@ -9,7 +9,15 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Programação temática do 32º Mês Polonês -->
+  <!-- Área cultural permanente do Mês Polonês -->
+  <url>
+    <loc>https://turismo.saomateusdosul.pr.gov.br/mes-polones</loc>
+    <lastmod>2026-09-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.95</priority>
+  </url>
+
+  <!-- Arquivo da programação do 32º Mês Polonês -->
   <url>
     <loc>https://turismo.saomateusdosul.pr.gov.br/mes-polones-2026</loc>
     <lastmod>2026-08-05</lastmod>

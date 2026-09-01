@@ -32,6 +32,7 @@
   }
 
   var fixedEntries = [
+    makeEntry("Mês Polonês — Tradycje Polskie", "Cultura · Mês Polonês", "Área permanente sobre a herança polonesa, a tradição e as edições do Mês Polonês em São Mateus do Sul.", "/mes-polones", ["mes polones", "mês polonês", "tradycje polskie", "capital polonesa", "capital paranaense polonesa", "cultura polonesa", "braspol"]),
     makeEntry("32º Mês Polonês 2026", "Agenda", "Programação do 32º Mês Polonês — Tradycje Polskie, de 18 de julho a 30 de agosto em São Mateus do Sul.", "/mes-polones-2026", ["mes polones", "mês polonês", "tradycje polskie", "polskie smaki", "cultura polonesa", "agosto", "braspol"]),
     makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-turistico", ["mapa", "turistico", "rotas", "pontos", "guia"]),
     makeEntry("Roteiros", "Explore", "As rotas e experiencias agora estao reunidas no mapa turistico interativo.", "/mapa-turistico?grupo=roteiros", ["roteiros", "rotas", "experiencias", "trajeto", "mapa"]),
@@ -41,7 +42,7 @@
     makeEntry("Notícias", "Agenda", "Atualizações, chamadas públicas e novidades do turismo.", "/noticias", ["noticias", "novidades", "portal", "turismo"]),
     makeEntry("São Mateus do Sul", "Sobre", "Visão geral sobre identidade, cultura e posicionamento do destino.", "/#sobre", ["sao mateus do sul", "cidade", "destino", "sobre"]),
     makeEntry("História", "Sobre", "Origem, colonização e marcos históricos do município.", "/#sobre", ["historia", "origem", "colonizacao", "memoria"]),
-    makeEntry("Capital Polonesa do Paraná", "Sobre", "Título e legado da herança polonesa na cidade.", "/mapa-turistico?categoria=Cultura", ["capital polonesa", "polonesa", "imigracao", "cultura"]),
+    makeEntry("Capital Polonesa do Paraná", "Sobre", "Título e legado da herança polonesa na cidade.", "/mes-polones", ["capital polonesa", "capital paranaense polonesa", "polonesa", "imigracao", "cultura"]),
     makeEntry("Terra da Erva-mate", "Sobre", "Importância econômica e cultural da erva-mate para a região.", "/mapa-turistico?grupo=roteiros", ["terra da erva-mate", "erva-mate", "economia", "tradicao"]),
     makeEntry("Xisto", "Sobre", "Dimensão histórica e produtiva ligada ao xisto no município.", "/#sobre", ["xisto", "terra do xisto", "industria", "energia"]),
     makeEntry("Institucional", "Sobre", "Transparência, conselho, fundo municipal e informações oficiais.", "/transparencia", ["institucional", "transparencia", "comtur", "fumtur", "prefeitura"])
