@@ -6,9 +6,9 @@ Atualize este arquivo apenas quando houver mudança real de estado, decisão apr
 
 ---
 
-## Backlog reconciliado — 30/08/2026
+## Backlog reconciliado — 01/09/2026
 
-- `baseHead=869a1a4c8b8474e9e21b61065faf28d98619cb3d`
+- `baseHead=5224f015f1c8c8f5ba4368ad4694935aacd755bc`
 - `historicalSectionsCanBeStale=true`
 - `latestEvidenceWins=true`
 
@@ -62,6 +62,25 @@ Este checkpoint reconcilia pendências históricas com releases, testes e evidê
 - Commits da cadeia: `0ca9554449ffb29ddee37cdcdb59f7bebb20f998` e `869a1a4c8b8474e9e21b61065faf28d98619cb3d`.
 - Não há pendências equivalentes dessa cadeia no backlog ativo. A taxonomia do Parque é uma frente editorial independente.
 
+#### Mês Polonês
+
+- `POLISH_MONTH_HOME_EDITORIAL_ROTATION=RESOLVED`
+- O destaque temporário foi removido após o encerramento de agosto no release `4f35145b28c990a67a78b68998673a5faea4b2c4`; a produção foi validada em desktop e mobile e `/mes-polones-2026` permaneceu preservado.
+- `POLISH_MONTH_PERMANENT_HUB=RESOLVED`
+- O release `5224f015f1c8c8f5ba4368ad4694935aacd755bc` criou `/mes-polones`, integrou `Sobre > Capital Polonesa do Paraná`, busca e sitemap, preservou `/mes-polones-2026` como arquivo independente e incorporou retrospectiva 2026 e a seção da Rede Municipal de Ensino.
+- Os smokes de desktop, mobile, browser e execução das novas versões de cache foram aprovados em produção.
+
+#### Eventos — identidade, deduplicação e publicação da Home
+
+- `EVENTS_HOME_IDENTITY_DEDUP=RESOLVED`
+- A identidade sintética `90000+index` foi removida; eventos Firestore preservam `documentId`; o runtime usa `annual:<event.id>` e `firestore:<documentId>`; a deduplicação é identity-first, com static-first e limite de quatro cards preservados. Release concluído.
+- `EVENTS_HOME_IDENTITY_CACHE_BUST=RESOLVED` — parte da cadeia de identidade, não uma tarefa ativa independente; geração `events-home-identity-44ed8c68` publicada e comprovada no browser.
+- `EVENTS_HOME_PUBLICATION_POLICY=RESOLVED`
+- A policy canônica aplica `publicado=false` como veto absoluto; status bloqueado vence `publicado=true`; status desconhecido falha fechado; status ausente exige `publicado=true`; `approved`/`aprovado` sem `publicado` continua público; a fonte anual permanece implicitamente publicada.
+- Evidência: suíte `29/29`; release `25bebd00f9be0789fee088984cad6d9010080db8`.
+- `EVENTS_HOME_PUBLICATION_POLICY_CACHE_BUST=RESOLVED` — parte da cadeia da policy, sem item ativo independente; geração vigente `events-home-policy-25bebd00`, publicada e executada em produção.
+- Esses contratos estabilizam a Home, mas não resolvem a duplicação arquitetural entre fontes, os vínculos canônicos ausentes, a virada anual ou a higiene de dados.
+
 #### CMS, App Check e V7
 
 - `CMS_07=RESOLVED_BY_LATER_WORK`
@@ -71,7 +90,7 @@ Este checkpoint reconcilia pendências históricas com releases, testes e evidê
 - `V7A=RESOLVED`
 - `V7B=RESOLVED`
 
-`resolvedItems=[Admin V1 core, PWA-03, AgroSamas Rua do Mathe, associação antiga do Parque, galeria Parque, convergência CMS Parque, Rotas schema/Rules, Rotas normalization, Rotas migration/publication, Rotas Admin CRUD/release, Rotas public adapter/cutover, CMS-07, CMS-08, CMS full-save, App Check/reCAPTCHA CSP, V7A, V7B]`
+`resolvedItems=[Admin V1 core, PWA-03, AgroSamas Rua do Mathe, associação antiga do Parque, galeria Parque, convergência CMS Parque, Mês Polonês rotação editorial da Home, Mês Polonês hub permanente, Eventos Home identity/dedup, Eventos Home identity cache bust, Eventos Home publication policy, Eventos Home publication policy cache bust, Rotas schema/Rules, Rotas normalization, Rotas migration/publication, Rotas Admin CRUD/release, Rotas public adapter/cutover, CMS-07, CMS-08, CMS full-save, App Check/reCAPTCHA CSP, V7A, V7B]`
 
 ### PARTIALLY RESOLVED
 
@@ -89,9 +108,8 @@ Esta é a única lista canônica de pendências ativas. Menções antigas fora d
 
 #### P1
 
-- `POLISH_MONTH_HOME_EDITORIAL_ROTATION=OPEN_TIME_BOUND`, `priority=P1` — evento/destaque vigente até `2026-08-30`; ação ativa a partir de `2026-08-31`; `recommendedWindow=2026-08-31..2026-09-06`; `NEXT_FUNCTIONAL_FRONT_AFTER_RECONCILIATION`.
 - `EVENTS_MISSING_ESTABLISHMENT_ID=OPEN_DATA_AUDIT_REQUIRED`, `priority=P1` — auditar eventos sem vínculo seguro antes de alterar dados.
-- `EVENT_SOURCE_DUPLICATION=OPEN_DATA_ARCHITECTURE`, `priority=P1` — `duplicationStillExists=true`; `canonicalEventSourceDefined=PARTIAL_ONLY`. Fontes atuais: `eventos-2026.json`, papel de fonte anual primária de agenda/home, `count=228`; `js/data/eventos.js` / `TURISMO_EVENTOS`, papel de mapa/busca, `count=8`; `eventos_aprovados`, papel de enriquecimento Firestore opcional. Não existe fonte global única declarada.
+- `EVENT_SOURCE_DUPLICATION=OPEN_DATA_ARCHITECTURE`, `priority=P1` — `duplicationStillExists=true`; `canonicalEventSourceDefined=PARTIAL_ONLY`. Fontes versionadas: `eventos-2026.json`, com papel anual de agenda/home; `js/data/eventos.js` / `TURISMO_EVENTOS`, com papel de mapa/busca; e `eventos_aprovados`, como enriquecimento Firestore opcional. Identidade runtime, deduplicação e policy de publicação da Home foram estabilizadas, mas não existe fonte global única consolidada e a duplicação arquitetural permanece aberta.
 - `ANNUAL_ROLLOVER_2027=OPEN_FUTURE_REQUIRED`, `priority=P1` — `annualEventsRolloverRequired=true`; `recommendedTiming=planejar no Q4/2026 e concluir antes da primeira publicação da agenda 2027`.
 
 #### P2
@@ -113,7 +131,8 @@ Esta é a única lista canônica de pendências ativas. Menções antigas fora d
 - `V7C2=BLOCKED_BY_V7C1`, `priority=P3` — executar somente depois da limpeza de runtime V7C1.
 - `V6=OPEN_REQUIRES_EDITORIAL_REVIEW`, `priority=P3` — reordenação da metade inferior da home; não iniciar automaticamente.
 - `V5C3=HOUSEKEEPING_VISUAL_REFACTOR`, `priority=P3` — possível extração de estilos inline dos CTAs; depende de revisão visual.
-- `ORPHAN_FRONTEND_CHAIN=HOUSEKEEPING`, `priority=P3` — `.map-modal-*`, `.agrosamas-banner` e configurações/chaves i18n relacionadas a elementos ausentes; dependência `V7C1/V7C2`.
+- `ORPHAN_FRONTEND_CHAIN=HOUSEKEEPING`, `priority=P3` — `.map-modal-*`, `.agrosamas-banner`, `.mes-polones-home-*` e configurações/chaves i18n relacionadas a elementos ausentes; o CSS `.mes-polones-home-*` tornou-se órfão após a rotação da Home; dependência `V7C1/V7C2`. Não limpar neste checkpoint.
+- `POLISH_MONTH_ROTATION_HOLD_BRANCH_CLEANUP=OPTIONAL_HOUSEKEEPING`, `priority=P3` — a branch `hold/polish-month-home-rotation-2026-09-01` pode ser reconciliada futuramente, mas não deve ser deletada neste bloco nem tratada como P1/P2.
 - `SITEMAP_FRESHNESS=OPEN`, `priority=P3` — alterar `lastmod` somente quando houver mudança real da URL/conteúdo; não atualizar artificialmente.
 - `PWA_SHORTCUT_ICONS=OPEN_P3`, `priority=P3` — polimento separado de PWA-03.
 
@@ -124,12 +143,13 @@ Esta é a única lista canônica de pendências ativas. Menções antigas fora d
 - `B3_MEDIA_PERFORMANCE=OPEN_DEFERRED`, `priority=LOW` — executar após o trabalho funcional prioritário; métricas existentes permanecem apenas como snapshot histórico, sem nova auditoria pesada neste checkpoint.
 - `GIT_EOL_POLICY=HOUSEKEEPING_NON_BLOCKING`, `priority=LOW` — `js/locais-data.js` e `sw.js` possuem histórico mixed EOL; não há política `.gitattributes` consolidada; releases atuais não sofreram churn não relacionado. Não criar `.gitattributes` nem renormalizar neste bloco.
 - `SW_LEAFLET_LOCALHOST=CONDITIONAL_FOLLOWUP`, `priority=LOW` — investigar somente se reproduzir novamente; não é bug ativo de produção.
+- `serviceWorkerHardeningDeferred=true` — os releases recentes comprovaram a execução das gerações por query string; não abrir task P1 de service worker por causa desses cache busts.
 
 ### HISTORICAL / PROVENANCE
 
 Todos os itens seguintes são `HISTÓRICO — SUPERADO POR CHECKPOINT POSTERIOR` quando encontrados em seções antigas deste arquivo:
 
-`historicalOnlyItems=[ADMIN-B1, ADMIN-B2A*, Admin ALPHA/BETA, Rotas discovery/dry-runs encerrados, markers antigos de migração Rotas, publicAdapterReleased=false, productionRotasDraft=6, NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE, PWA-03 como bug aberto, AgroSamas associado ao Parque, CMS-07/CMS-08 como P1, knownIssueCmsEstablishmentsFullSave=true, App Check/CSP como bug ativo anterior, V7A/V7B como etapas abertas]`
+`historicalOnlyItems=[ADMIN-B1, ADMIN-B2A*, Admin ALPHA/BETA, Rotas discovery/dry-runs encerrados, markers antigos de migração Rotas, publicAdapterReleased=false, productionRotasDraft=6, NEXT_PHASE=ROTAS_V1.1_PUBLIC_ADAPTER_RELEASE, PWA-03 como bug aberto, AgroSamas associado ao Parque, POLISH_MONTH_HOME_EDITORIAL_ROTATION=OPEN_TIME_BOUND, SITE-V2-POLISH-MONTH-HOME-EDITORIAL-ROTATION-PREP, CMS-07/CMS-08 como P1, knownIssueCmsEstablishmentsFullSave=true, App Check/CSP como bug ativo anterior, V7A/V7B como etapas abertas]`
 
 Esses registros permanecem para auditoria. Eles não representam o backlog vigente e sempre apontam conceitualmente para este checkpoint atual.
 
@@ -137,15 +157,14 @@ Esses registros permanecem para auditoria. Eles não representam o backlog vigen
 
 `recommendedExecutionOrder=[`
 
-1. Revisão editorial pós-Mês Polonês — a partir de 31/08/2026.
-2. Auditoria de eventos sem `establishmentId` + definição da fonte canônica.
-3. Preparação da virada anual 2027.
-4. `CMS-5D open remainder`.
-5. `CMS-4E-EXEC` read-only, com autorização própria.
-6. V7C1.
-7. 11 agrupamentos não canônicos + higiene editorial/taxonômica.
-8. V7C2, V6, V5C3 e V5D conforme decisão editorial.
-9. B3, PWA polish, EOL e demais housekeeping.
+1. Auditoria dos eventos sem `establishmentId` + arquitetura/fonte canônica de eventos.
+2. Preparação da virada anual 2027.
+3. `CMS-5D open remainder`.
+4. `CMS-4E-EXEC` read-only, com autorização própria.
+5. V7C1.
+6. 11 agrupamentos não canônicos + higiene editorial/taxonômica.
+7. V7C2, V6, V5C3 e V5D conforme decisão editorial.
+8. B3, PWA polish, EOL e demais housekeeping.
 
 `]`
 
@@ -153,9 +172,10 @@ Rotas V1.1 não integra mais a fila de próximas execuções.
 
 ### Próximo bloco funcional
 
-- `nextFunctionalBlock=SITE-V2-POLISH-MONTH-HOME-EDITORIAL-ROTATION-PREP`
-- `eligibleFrom=2026-08-31`
-- O destaque do Mês Polonês permanece válido até `2026-08-30`; a home não foi modificada neste checkpoint.
+- `nextFunctionalBlock=SITE-V2-EVENTS-MISSING-ESTABLISHMENT-ID-AND-SOURCE-AUDIT-PREP`
+- `nextFunctionalBlockExecuted=false`
+- Objetivo futuro: discovery/audit `READ-ONLY` de eventos sem vínculo canônico seguro; `establishmentId`/`localId`/`placeId`/aliases existentes; fontes anuais; `TURISMO_EVENTOS`; `eventos_aprovados`; duplicações e divergências; e proposta de arquitetura canônica.
+- Esse bloco futuro não foi executado neste checkpoint.
 
 ---
 
