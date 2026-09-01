@@ -15,7 +15,13 @@
 
         const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-        const statusBloqueados = new Set(['pendente', 'pending', 'rejeitado', 'rejected', 'rascunho', 'draft']);
+        const statusAprovados = new Set(['aprovado', 'approved']);
+        const statusNaoPublicos = new Set([
+            'pendente', 'pending',
+            'rejeitado', 'rejected',
+            'rascunho', 'draft',
+            'despublicado', 'unpublished'
+        ]);
 
         function esc(value) {
             return String(value || '').replace(/[&<>"']/g, function(ch) {
@@ -32,9 +38,14 @@
         }
 
         function statusPublico(evento) {
-            const status = normalizarTexto(evento && evento.status);
-            if (statusBloqueados.has(status)) return false;
-            return !status || status === 'aprovado' || status === 'approved' || evento.publicado === true || evento._fonte === 'static';
+            if (!evento) return false;
+            if (evento.source === 'annual' || evento._fonte === 'static') return true;
+            if (evento.publicado === false) return false;
+
+            const status = normalizarTexto(evento.status);
+            if (statusNaoPublicos.has(status)) return false;
+            if (statusAprovados.has(status)) return true;
+            return !status && evento.publicado === true;
         }
 
         function normalizarData(value) {

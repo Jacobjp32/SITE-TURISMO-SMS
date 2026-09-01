@@ -17,7 +17,14 @@ function event(overrides = {}) {
 }
 
 function firestoreDoc(id, data) {
-    return { id, data: () => data };
+    return {
+        id,
+        data: () => ({
+            status: 'aprovado',
+            publicado: true,
+            ...data
+        })
+    };
 }
 
 function extractCards(html) {
