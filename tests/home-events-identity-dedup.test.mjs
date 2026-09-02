@@ -4,6 +4,7 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const HOME_SOURCE = readFileSync(new URL('../js/home-eventos.js', import.meta.url), 'utf8');
+const ADAPTER_SOURCE = readFileSync(new URL('../js/event-occurrence-adapter.js', import.meta.url), 'utf8');
 let harnessSequence = 0;
 
 function event(overrides = {}) {
@@ -32,7 +33,7 @@ function extractCards(html) {
         .map(match => ({ id: match[1], title: match[2] }));
 }
 
-async function runHome({ annual = [], docs = [], source = HOME_SOURCE } = {}) {
+async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSource = ADAPTER_SOURCE, loadAdapter = true } = {}) {
     const renders = [];
     const listeners = new Map();
     const container = {
@@ -58,7 +59,12 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE } = {}) {
             initModularAppCheck: async () => {}
         }
     };
-    const logs = { log() {}, warn() {}, error() {} };
+    const logEntries = [];
+    const logs = {
+        log(...args) { logEntries.push({ level: 'log', message: args.join(' ') }); },
+        warn(...args) { logEntries.push({ level: 'warn', message: args.join(' ') }); },
+        error(...args) { logEntries.push({ level: 'error', message: args.join(' ') }); }
+    };
     const localStorage = { getItem() { return null; } };
     const executableSource = source
         .replace("import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js')", 'Promise.resolve(window.__firebaseAppModule)')
@@ -73,10 +79,14 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE } = {}) {
         localStorage,
         window
     });
+    if (loadAdapter) {
+        vm.runInContext(adapterSource, context, { filename: 'js/event-occurrence-adapter.js' });
+        window.EventOccurrenceAdapter = context.EventOccurrenceAdapter;
+    }
     vm.runInContext(executableSource, context, { filename: `js/home-eventos.js#${harnessSequence}` });
     await listeners.get('DOMContentLoaded')();
 
-    return { cards: extractCards(renders.at(-1) || ''), renders };
+    return { cards: extractCards(renders.at(-1) || ''), renders, logEntries };
 }
 
 test('same Firestore document keeps identity regardless of query ordering', async () => {
@@ -191,21 +201,51 @@ test('unique events fill slots before recurring events', async () => {
     assert.ok(titles.includes('Único C'));
 });
 
+test('Home detects missing EventOccurrenceAdapter dependency', async () => {
+    const missingResult = await runHome({
+        annual: [event({ id: 'missing-adapter', titulo: 'Não deve renderizar' })],
+        loadAdapter: false
+    });
+
+    assert.equal(missingResult.cards.length, 0);
+    assert.match(missingResult.renders.at(-1) || '', /home-events-fallback/);
+    assert.ok(missingResult.logEntries.some(entry => (
+        entry.level === 'error' &&
+        /\[home-eventos\] EventOccurrenceAdapter ausente ou inválido/.test(entry.message)
+    )));
+
+    const invalidResult = await runHome({
+        annual: [event({ id: 'invalid-adapter', titulo: 'Também não deve renderizar' })],
+        adapterSource: 'globalThis.EventOccurrenceAdapter = { RUNTIME_SOURCES: {} };'
+    });
+
+    assert.equal(invalidResult.cards.length, 0);
+    assert.match(invalidResult.renders.at(-1) || '', /home-events-fallback/);
+    assert.ok(invalidResult.logEntries.some(entry => (
+        entry.level === 'error' &&
+        /\[home-eventos\] EventOccurrenceAdapter ausente ou inválido/.test(entry.message)
+    )));
+});
+
 test('focused suite detects the four requested behavioral mutations', async () => {
-    const syntheticIdentitySource = HOME_SOURCE
-        .replace('snap.docs.map((d) =>', 'snap.docs.map((d, i) =>')
-        .replace("id: 'firestore:' + documentId", 'id: 90000 + i');
+    const syntheticIdentitySource = ADAPTER_SOURCE.replace(
+        "return 'firestore:' + normalizedSourceId;",
+        "return 'firestore-index:' + normalizedSourceId;"
+    );
     const syntheticResult = await runHome({
         docs: [firestoreDoc('abc123', event({ title: 'Mutação sintética' }))],
-        source: syntheticIdentitySource
+        adapterSource: syntheticIdentitySource
     });
     assert.notEqual(syntheticResult.cards[0].id, 'firestore:abc123');
 
-    const namespaceRemovedSource = HOME_SOURCE.replace("id: 'firestore:' + documentId", 'id: documentId');
+    const namespaceRemovedSource = ADAPTER_SOURCE.replace(
+        "return 'firestore:' + normalizedSourceId;",
+        'return normalizedSourceId;'
+    );
     const namespaceResult = await runHome({
         annual: [event({ id: 123, titulo: 'Anual' })],
         docs: [firestoreDoc('123', event({ title: 'Firestore', date: '2099-09-11' }))],
-        source: namespaceRemovedSource
+        adapterSource: namespaceRemovedSource
     });
     assert.notEqual(
         namespaceResult.cards.find(card => card.title === 'Firestore').id,

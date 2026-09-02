@@ -4,6 +4,7 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const HOME_SOURCE = readFileSync(new URL('../js/home-eventos.js', import.meta.url), 'utf8');
+const ADAPTER_SOURCE = readFileSync(new URL('../js/event-occurrence-adapter.js', import.meta.url), 'utf8');
 let harnessSequence = 0;
 
 function annualEvent(overrides = {}) {
@@ -36,7 +37,7 @@ function extractCards(html) {
         .map(match => ({ id: match[1], title: match[2] }));
 }
 
-async function runHome({ annual = [], docs = [], source = HOME_SOURCE } = {}) {
+async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSource = ADAPTER_SOURCE } = {}) {
     const renders = [];
     const listeners = new Map();
     const container = {
@@ -75,16 +76,18 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE } = {}) {
         localStorage: { getItem() { return null; } },
         window
     });
+    vm.runInContext(adapterSource, context, { filename: 'js/event-occurrence-adapter.js' });
+    window.EventOccurrenceAdapter = context.EventOccurrenceAdapter;
     vm.runInContext(executableSource, context, { filename: `js/home-eventos.js#policy-${harnessSequence}` });
     await listeners.get('DOMContentLoaded')();
 
     return { cards: extractCards(renders.at(-1) || ''), renders };
 }
 
-async function assertFirestoreEligibility(fields, expected, source = HOME_SOURCE, message = '') {
+async function assertFirestoreEligibility(fields, expected, adapterSource = ADAPTER_SOURCE, message = '') {
     const result = await runHome({
         docs: [firestoreDoc('policy-candidate', firestoreEvent(fields))],
-        source
+        adapterSource
     });
     assert.equal(result.cards.length === 1, expected, message);
 }
@@ -127,7 +130,7 @@ test('canonical publication truth table controls real Home rendering', async (t)
     ];
 
     for (const [name, fields, expected] of cases) {
-        await t.test(name, () => assertFirestoreEligibility(fields, expected, HOME_SOURCE, name));
+        await t.test(name, () => assertFirestoreEligibility(fields, expected, ADAPTER_SOURCE, name));
     }
 });
 
@@ -148,48 +151,48 @@ test('audited production combinations remain eligible without real document IDs'
     assert.equal(eligibleCount, 10);
 });
 
-async function assertMutationSentinel(source) {
-    await assertFirestoreEligibility({ status: 'aprovado', publicado: false }, false, source, 'publicado=false veto');
-    await assertFirestoreEligibility({ status: 'pending', publicado: true }, false, source, 'pending blocked');
-    await assertFirestoreEligibility({ status: 'draft', publicado: true }, false, source, 'draft blocked');
-    await assertFirestoreEligibility({ status: 'unpublished', publicado: true }, false, source, 'unpublished blocked');
-    await assertFirestoreEligibility({ status: 'unknown', publicado: true }, false, source, 'unknown fails closed');
-    await assertFirestoreEligibility({}, false, source, 'missing publication fields fail closed');
+async function assertMutationSentinel(adapterSource) {
+    await assertFirestoreEligibility({ status: 'aprovado', publicado: false }, false, adapterSource, 'publicado=false veto');
+    await assertFirestoreEligibility({ status: 'pending', publicado: true }, false, adapterSource, 'pending blocked');
+    await assertFirestoreEligibility({ status: 'draft', publicado: true }, false, adapterSource, 'draft blocked');
+    await assertFirestoreEligibility({ status: 'unpublished', publicado: true }, false, adapterSource, 'unpublished blocked');
+    await assertFirestoreEligibility({ status: 'unknown', publicado: true }, false, adapterSource, 'unknown fails closed');
+    await assertFirestoreEligibility({}, false, adapterSource, 'missing publication fields fail closed');
 }
 
 test('all six required publication-policy mutations are detected', async (t) => {
     const mutations = [
-        ['removePublicadoFalseVeto', 'if (evento.publicado === false) return false;', 'if (false) return false;'],
+        ['removePublicadoFalseVeto', 'if (rawEvent.publicado === false) return false;', 'if (false) return false;'],
         [
             'allowPendingWhenPublicadoTrue',
-            'if (statusNaoPublicos.has(status)) return false;',
-            "if (statusNaoPublicos.has(status) && status !== 'pending') return false;\n            if (status === 'pending') return true;"
+            'if (BLOCKED_STATUSES.has(status)) return false;',
+            "if (BLOCKED_STATUSES.has(status) && status !== 'pending') return false;\n        if (status === 'pending') return true;"
         ],
         [
             'allowDraftWhenPublicadoTrue',
-            'if (statusNaoPublicos.has(status)) return false;',
-            "if (statusNaoPublicos.has(status) && status !== 'draft') return false;\n            if (status === 'draft') return true;"
+            'if (BLOCKED_STATUSES.has(status)) return false;',
+            "if (BLOCKED_STATUSES.has(status) && status !== 'draft') return false;\n        if (status === 'draft') return true;"
         ],
         [
             'allowUnpublishedWhenPublicadoTrue',
-            'if (statusNaoPublicos.has(status)) return false;',
-            "if (statusNaoPublicos.has(status) && status !== 'unpublished') return false;\n            if (status === 'unpublished') return true;"
+            'if (BLOCKED_STATUSES.has(status)) return false;',
+            "if (BLOCKED_STATUSES.has(status) && status !== 'unpublished') return false;\n        if (status === 'unpublished') return true;"
         ],
         [
             'allowUnknownStatusWhenPublicadoTrue',
-            'return !status && evento.publicado === true;',
-            'return evento.publicado === true;'
+            'return !status && rawEvent.publicado === true;',
+            'return rawEvent.publicado === true;'
         ],
         [
             'allowMissingStatusMissingPublicado',
-            'return !status && evento.publicado === true;',
-            'return !status && evento.publicado !== false;'
+            'return !status && rawEvent.publicado === true;',
+            'return !status && rawEvent.publicado !== false;'
         ]
     ];
 
     for (const [name, original, replacement] of mutations) {
         await t.test(name, async () => {
-            const mutant = replaceOnce(HOME_SOURCE, original, replacement);
+            const mutant = replaceOnce(ADAPTER_SOURCE, original, replacement);
             await assert.rejects(() => assertMutationSentinel(mutant));
         });
     }

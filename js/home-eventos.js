@@ -5,110 +5,67 @@
  * Extraído no R1 sem alteração de comportamento.
  */
 (function () {
+    function requireEventOccurrenceAdapter() {
+        const adapter = window.EventOccurrenceAdapter;
+        const runtimeSources = adapter && adapter.RUNTIME_SOURCES;
+        if (
+            !adapter ||
+            typeof adapter.normalizeEventOccurrence !== 'function' ||
+            !runtimeSources ||
+            typeof runtimeSources.ANNUAL_STATIC !== 'string' ||
+            typeof runtimeSources.FIRESTORE_APPROVED !== 'string'
+        ) {
+            throw new Error('[home-eventos] EventOccurrenceAdapter ausente ou inválido');
+        }
+        return adapter;
+    }
+
     // Função para carregar próximos eventos (Firebase + JSON estático)
     async function carregarProximosEventos() {
         const container = document.getElementById('proximosEventosHome');
         if (!container) return;
+
+        let eventAdapter;
+        try {
+            eventAdapter = requireEventOccurrenceAdapter();
+        } catch (dependencyError) {
+            console.error(dependencyError.message);
+            renderFallback();
+            return;
+        }
 
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
         const meses = ['', 'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
         const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-        const statusAprovados = new Set(['aprovado', 'approved']);
-        const statusNaoPublicos = new Set([
-            'pendente', 'pending',
-            'rejeitado', 'rejected',
-            'rascunho', 'draft',
-            'despublicado', 'unpublished'
-        ]);
-
         function esc(value) {
             return String(value || '').replace(/[&<>"']/g, function(ch) {
                 return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[ch];
             });
         }
 
-        function normalizarTexto(value) {
-            return String(value || '').trim().toLowerCase();
-        }
-
-        function normalizarTextoAssinatura(value) {
-            return normalizarTexto(value).replace(/\s+/g, ' ');
-        }
-
-        function statusPublico(evento) {
-            if (!evento) return false;
-            if (evento.source === 'annual' || evento._fonte === 'static') return true;
-            if (evento.publicado === false) return false;
-
-            const status = normalizarTexto(evento.status);
-            if (statusNaoPublicos.has(status)) return false;
-            if (statusAprovados.has(status)) return true;
-            return !status && evento.publicado === true;
-        }
-
-        function normalizarData(value) {
-            if (!value) return '';
-            if (typeof value === 'object' && typeof value.toDate === 'function') {
-                return value.toDate().toISOString().slice(0, 10);
-            }
-            if (typeof value === 'object' && typeof value.seconds === 'number') {
-                return new Date(value.seconds * 1000).toISOString().slice(0, 10);
-            }
-            return String(value).slice(0, 10);
-        }
-
-        function obterTituloEvento(evento) {
-            return evento && (evento.title || evento.nome || evento.titulo) || '';
-        }
-
-        function obterDataValor(evento) {
-            return evento && (evento.date || evento.data || evento.dataInicio || evento.startDate || evento.inicio);
-        }
-
-        function obterHorarioEvento(evento) {
-            return evento && (evento.time || evento.hora || evento.horario || evento.horaInicio) || '';
-        }
-
-        function obterLocalEvento(evento) {
-            return evento && (
-                evento.location ||
-                evento.local ||
-                evento.localNome ||
-                evento.venue ||
-                evento.establishmentName ||
-                evento.organizer ||
-                evento.organizador
-            ) || '';
-        }
-
-        function obterIdentidadeEvento(evento) {
-            if (!evento) return '';
-            if (evento.source === 'annual' && evento.sourceId !== undefined && evento.sourceId !== null) {
-                return 'annual:' + evento.sourceId;
-            }
-            if (evento.source === 'firestore') {
-                return evento.id || (evento.sourceId ? 'firestore:' + evento.sourceId : '');
-            }
-            return evento.id !== undefined && evento.id !== null ? String(evento.id) : '';
-        }
-
-        function obterAssinaturaEvento(evento) {
-            return [
-                obterTituloEvento(evento),
-                normalizarData(obterDataValor(evento)),
-                obterHorarioEvento(evento),
-                obterLocalEvento(evento)
-            ].map(normalizarTextoAssinatura).join('\u001f');
+        function normalizarEventoHome(rawEvent, runtimeSource, sourceId) {
+            const normalized = eventAdapter.normalizeEventOccurrence(rawEvent, { runtimeSource, sourceId });
+            if (!normalized) return null;
+            return Object.assign(normalized, {
+                category: normalized.category || (
+                    runtimeSource === eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED ? 'cultural' : ''
+                ),
+                recurrence: runtimeSource === eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED
+                    ? false
+                    : normalized.recurrence,
+                mapUrl: rawEvent.mapUrl || rawEvent.mapaUrl || '',
+                url: runtimeSource === eventAdapter.RUNTIME_SOURCES.ANNUAL_STATIC ? rawEvent.url || '' : ''
+            });
         }
 
         function deduplicarEventos(eventos) {
             const identidades = new Set();
             const assinaturas = new Set();
             return (eventos || []).filter(evento => {
-                const identidade = obterIdentidadeEvento(evento);
-                const assinatura = obterAssinaturaEvento(evento);
+                const identidade = evento.runtimeId;
+                const assinatura = evento.metadata && evento.metadata.exactSignature;
                 if (identidade && identidades.has(identidade)) return false;
                 if (assinatura && assinaturas.has(assinatura)) return false;
                 if (identidade) identidades.add(identidade);
@@ -118,20 +75,16 @@
         }
 
         function obterDataEvento(evento) {
-            const dataStr = normalizarData(obterDataValor(evento));
+            const dataStr = evento && evento.date || '';
             if (!/^\d{4}-\d{2}-\d{2}$/.test(dataStr)) return null;
             const data = new Date(dataStr + 'T12:00:00');
             return Number.isNaN(data.getTime()) ? null : data;
         }
 
         function eventoComVinculo(evento) {
-            return Boolean(evento && (
-                evento.estabelecimentoId ||
-                evento.empreendimentoId ||
-                evento.localId ||
-                evento.mapaId ||
-                evento.placeId ||
-                evento.businessId
+            return Boolean(evento && evento.locationBinding && (
+                evento.locationBinding.type === 'CANONICAL_REFERENCE' ||
+                evento.metadata && evento.metadata.legacyReferenceCandidate
             ));
         }
 
@@ -157,12 +110,12 @@
 
             const base = deduplicarEventos(eventos)
                 .map(evento => Object.assign({}, evento, { _dataObj: obterDataEvento(evento) }))
-                .filter(evento => evento._dataObj && evento._dataObj >= hoje && statusPublico(evento))
+                .filter(evento => evento._dataObj && evento._dataObj >= hoje && evento.publication === true)
                 .sort(ordenarPorData);
 
             // Prioriza eventos únicos; recorrentes só preenchem vagas restantes
-            const unicos = base.filter(evento => evento.recorrente !== true);
-            const recorrentes = base.filter(evento => evento.recorrente === true);
+            const unicos = base.filter(evento => evento.recurrence !== true);
+            const recorrentes = base.filter(evento => evento.recurrence === true);
             const filtrados = [...unicos, ...recorrentes]
                 .slice(0, 4)
                 .sort(ordenarPorData);
@@ -173,15 +126,15 @@
             }
 
             container.innerHTML = filtrados.map(evento => {
-                const titulo = esc(obterTituloEvento(evento) || 'Evento');
+                const titulo = esc(evento.title || 'Evento');
                 const data = evento._dataObj;
                 const dia = data.getDate();
                 const mes = meses[data.getMonth() + 1];
                 const diaSemana = diasSemana[data.getDay()];
-                const categoria = esc(evento.categoria || 'Evento');
-                const horario = esc(obterHorarioEvento(evento));
-                const local = esc(obterLocalEvento(evento));
-                const identidade = esc(obterIdentidadeEvento(evento));
+                const categoria = esc(evento.category || 'Evento');
+                const horario = esc(evento.time || '');
+                const local = esc(evento.rawLocationText || '');
+                const identidade = esc(evento.runtimeId);
                 const mapUrl = evento.mapUrl || evento.mapaUrl || '';
                 const detalheUrl = mapUrl || evento.url || '/eventos';
                 const cta = mapUrl ? 'Abrir no mapa' : 'Ver detalhes';
@@ -207,11 +160,13 @@
         try {
             // 1. Carregar JSON estático primeiro (rápido)
             const jsonRes = await fetch('eventos-2026.json');
-            const jsonEventos = (await jsonRes.json()).map(evento => Object.assign({
-                _fonte: 'static',
-                source: 'annual',
-                sourceId: String(evento.id)
-            }, evento));
+            const jsonEventos = (await jsonRes.json())
+                .map(evento => normalizarEventoHome(
+                    evento,
+                    eventAdapter && eventAdapter.RUNTIME_SOURCES.ANNUAL_STATIC,
+                    evento.id
+                ))
+                .filter(Boolean);
             renderEventos(jsonEventos); // exibe imediatamente
 
             // 2. Tentar enriquecer com Firebase
@@ -230,28 +185,12 @@
                     const fbEventos = snap.docs.map((d) => {
                         const e = d.data();
                         const documentId = String(d.id);
-                        return {
-                            id: 'firestore:' + documentId,
-                            source: 'firestore',
-                            sourceId: documentId,
-                            title: obterTituloEvento(e) || 'Evento',
-                            date: normalizarData(obterDataValor(e)),
-                            time: obterHorarioEvento(e),
-                            location: obterLocalEvento(e),
-                            categoria: e.categoria || 'cultural',
-                            descricao: e.descricao || '',
-                            destaque: e.destaque || false,
-                            recorrente: false,
-                            status: e.status,
-                            publicado: e.publicado,
-                            estabelecimentoId: e.estabelecimentoId,
-                            empreendimentoId: e.empreendimentoId,
-                            localId: e.localId,
-                            mapaId: e.mapaId,
-                            mapUrl: e.mapUrl || e.mapaUrl || '',
-                            _fonte: 'firebase'
-                        };
-                    }).filter(statusPublico);
+                        return normalizarEventoHome(
+                            e,
+                            eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED,
+                            documentId
+                        );
+                    }).filter(evento => evento && evento.publication === true);
                     renderEventos([...jsonEventos, ...fbEventos]); // re-renderiza com Firebase
                     console.log(`✅ Home: ${fbEventos.length} eventos do Firebase mesclados`);
                 }
