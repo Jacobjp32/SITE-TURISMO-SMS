@@ -461,7 +461,7 @@ body.font-larger{font-size:140%!important;}
 
     if (!hasLoadedScript('js/season-theme.js')) {
         var seasonScript = document.createElement('script');
-        seasonScript.src = 'js/season-theme.js?v=site-public-b1-20260708';
+        seasonScript.src = 'js/season-theme.js?v=site-admin-finalization-20260903';
         seasonScript.defer = true;
         document.body.appendChild(seasonScript);
     }

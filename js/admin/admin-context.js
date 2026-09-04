@@ -76,9 +76,8 @@
         isModerator: function () {
             return !!(window.FirebaseSystem && typeof window.FirebaseSystem.isModerator === "function" && window.FirebaseSystem.isModerator());
         },
-        // Cosmético nesta fase: separação real de "admin master" depende de regras (rodada futura).
-        isMaster: function () {
-            return !!(window.currentUser && window.currentUser.master === true);
+        isActiveAdmin: function () {
+            return !!(window.currentUser && window.currentUser.role === "admin" && window.currentUser.ativo === true);
         },
 
         // ---- Prontidão ----

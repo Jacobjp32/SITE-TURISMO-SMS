@@ -6,7 +6,7 @@
  * infraestrutura para registrar/consultar módulos futuros.
  *
  * Contrato mínimo de um módulo:
- *   { id, label, icon, requiredRole, master, navGroup, order,
+ *   { id, label, icon, requiredRole, navGroup, order,
  *     render(container, context), load(context), dispose() }
  *
  * IIFE, sem build step, sem import/export.
@@ -38,7 +38,6 @@
             label: def.label || def.id,
             icon: def.icon || "",
             requiredRole: def.requiredRole || "admin",
-            master: def.master === true,
             navGroup: def.navGroup || "Geral",
             order: typeof def.order === "number" ? def.order : 100,
             render: def.render,

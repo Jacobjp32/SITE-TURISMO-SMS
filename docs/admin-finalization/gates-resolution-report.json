@@ -1,0 +1,1517 @@
+{
+  "auditVersion": 1,
+  "sourceCommit": "ef31a5a051e2ed587df31cb187bd79f1f0292fdf",
+  "firestoreOperationalReadOperations": 39,
+  "firestoreOperationalDocumentsRead": 92,
+  "firestoreOperationalUniqueDocumentsRead": 82,
+  "firestoreWrites": 0,
+  "remoteCollectionsObserved": [
+    "banners",
+    "cms_establishments",
+    "estabelecimentos_aprovados",
+    "establishment_claims",
+    "establishment_managers",
+    "establishment_update_requests",
+    "eventos_aprovados",
+    "noticias",
+    "rotas",
+    "usuarios"
+  ],
+  "remoteSchemaCompatibilityMatrix": {
+    "usuarios": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 11,
+      "sampleShape": {
+        "ativo": "boolean",
+        "email": "string",
+        "nome": "string",
+        "role": "string",
+        "tipo": "string"
+      },
+      "observedValues": {
+        "role": [
+          "admin",
+          "user"
+        ],
+        "ativo": [
+          true
+        ]
+      }
+    },
+    "eventos_pendentes": {
+      "classification": "UNKNOWN",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    },
+    "estabelecimentos_pendentes": {
+      "classification": "UNKNOWN",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    },
+    "eventos_aprovados": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 10,
+      "sampleShape": {
+        "categoria": "string",
+        "contato": "string",
+        "createdAt": "timestamp",
+        "dataFim": "string",
+        "dataInicio": "string",
+        "date": "string",
+        "descricao": "string",
+        "description": "string",
+        "entrada": "string",
+        "horaFim": "string",
+        "horaInicio": "string",
+        "id": "string",
+        "imageCount": "integer",
+        "images": "array<map>",
+        "instagram": "string",
+        "linkedEstablishmentId": "null",
+        "linkedEstablishmentName": "null",
+        "linkedEstablishmentRole": "null",
+        "linkedManagerId": "null",
+        "local": "string",
+        "location": "string",
+        "mainImage": "string",
+        "nome": "string",
+        "organizer": "string",
+        "ownerEmail": "string",
+        "ownerName": "string",
+        "ownerUid": "string",
+        "phone": "string",
+        "reviewedAt": "timestamp",
+        "reviewedBy": "string",
+        "reviewNotes": "string",
+        "site": "string",
+        "source": "string",
+        "status": "string",
+        "submittedAt": "timestamp",
+        "submittedBy": "string",
+        "submittedByEmail": "string",
+        "submittedByName": "string",
+        "time": "string",
+        "title": "string",
+        "updatedAt": "timestamp",
+        "valor": "string",
+        "website": "string",
+        "whatsapp": "string"
+      },
+      "observedValues": {
+        "status": [
+          "aprovado"
+        ],
+        "publicado": [
+          true
+        ]
+      }
+    },
+    "estabelecimentos_aprovados": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 1,
+      "sampleShape": {
+        "address": "string",
+        "categoria": "string",
+        "category": "string",
+        "createdAt": "timestamp",
+        "descricao": "string",
+        "description": "string",
+        "endereco": "string",
+        "horario": "string",
+        "id": "string",
+        "imageCount": "integer",
+        "images": "array<map>",
+        "instagram": "string",
+        "mainImage": "string",
+        "name": "string",
+        "nome": "string",
+        "openingHours": "string",
+        "ownerEmail": "string",
+        "ownerName": "string",
+        "ownerUid": "string",
+        "phone": "string",
+        "reviewedAt": "timestamp",
+        "reviewedBy": "string",
+        "reviewNotes": "string",
+        "site": "string",
+        "source": "string",
+        "status": "string",
+        "submittedAt": "timestamp",
+        "submittedBy": "string",
+        "submittedByEmail": "string",
+        "submittedByName": "string",
+        "telefone": "string",
+        "updatedAt": "timestamp",
+        "website": "string",
+        "whatsapp": "string"
+      },
+      "observedValues": {
+        "status": [
+          "aprovado"
+        ]
+      }
+    },
+    "establishment_claims": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 3,
+      "sampleShape": {
+        "contactPhone": "string",
+        "createdAt": "timestamp",
+        "establishmentCategory": "string",
+        "establishmentId": "string",
+        "establishmentName": "string",
+        "establishmentOriginalId": "string",
+        "establishmentSource": "string",
+        "id": "string",
+        "message": "string",
+        "rejectionReason": "string",
+        "requestedRole": "string",
+        "reviewedAt": "timestamp",
+        "reviewedBy": "string",
+        "reviewNotes": "string",
+        "source": "string",
+        "status": "string",
+        "updatedAt": "timestamp",
+        "userEmail": "string",
+        "userId": "string",
+        "userName": "string"
+      },
+      "observedValues": {
+        "status": [
+          "approved"
+        ]
+      }
+    },
+    "establishment_managers": {
+      "classification": "COMPATIBLE_LEGACY",
+      "exists": true,
+      "documentCount": 12,
+      "sampleShape": {
+        "active": "boolean",
+        "approvedAt": "timestamp",
+        "approvedBy": "string",
+        "claimId": "string",
+        "establishmentId": "string",
+        "establishmentName": "string",
+        "replacedBy": "string",
+        "revokedAt": "timestamp",
+        "revokedBy": "string",
+        "revokeReason": "string",
+        "role": "string",
+        "updatedAt": "timestamp",
+        "updatedBy": "string",
+        "userEmail": "string",
+        "userId": "string",
+        "userName": "string"
+      },
+      "observedValues": {
+        "role": [
+          "manager",
+          "proprietario"
+        ]
+      }
+    },
+    "establishment_update_requests": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 1,
+      "sampleShape": {
+        "appliedAt": "timestamp",
+        "appliedBy": "string",
+        "appliedFields": "array<string>",
+        "appliedMedia": "array<map>",
+        "appliedTo": "string",
+        "changesRequestedNotes": "string",
+        "createdAt": "timestamp",
+        "currentSnapshot": {
+          "type": "map",
+          "fields": {
+            "address": "string",
+            "category": "string",
+            "description": "string",
+            "imageCount": "integer",
+            "images": "array<string>",
+            "instagram": "string",
+            "mainImage": "string",
+            "name": "string",
+            "openingHours": "string",
+            "originalId": "string",
+            "phone": "string",
+            "source": "string",
+            "website": "string",
+            "whatsapp": "string"
+          }
+        },
+        "establishmentCategory": "string",
+        "establishmentId": "string",
+        "establishmentName": "string",
+        "establishmentSource": "string",
+        "id": "string",
+        "imageCount": "integer",
+        "images": "array<map>",
+        "mainImage": "string",
+        "managerId": "string",
+        "mediaAppliedAt": "timestamp",
+        "mediaAppliedBy": "string",
+        "mediaAppliedTo": "string",
+        "mediaReview": {
+          "type": "map",
+          "fields": {
+            "images": "array<map>",
+            "reviewedAt": "timestamp",
+            "reviewedBy": "string"
+          }
+        },
+        "ownerEmail": "string",
+        "ownerName": "string",
+        "ownerUid": "string",
+        "rejectionReason": "string",
+        "requestedChanges": {
+          "type": "map",
+          "fields": {
+            "additionalNotes": "string"
+          }
+        },
+        "reviewedAt": "timestamp",
+        "reviewedBy": "string",
+        "reviewNotes": "string",
+        "source": "string",
+        "status": "string",
+        "submittedAt": "timestamp",
+        "updatedAt": "timestamp"
+      },
+      "observedValues": {
+        "status": [
+          "approved"
+        ]
+      }
+    },
+    "cms_establishments": {
+      "classification": "COMPATIBLE_LEGACY",
+      "exists": true,
+      "documentCount": 67,
+      "sampleShape": {
+        "categoryId": "string",
+        "categoryLabel": "string",
+        "contact": {
+          "type": "map",
+          "fields": {
+            "email": "string",
+            "facebook": "string",
+            "instagram": "string",
+            "phone": "string",
+            "website": "string",
+            "whatsapp": "string"
+          }
+        },
+        "content": {
+          "type": "map",
+          "fields": {
+            "accessibility": "string",
+            "description": "string",
+            "longDescription": "string",
+            "notesInternal": "string",
+            "openingHours": "string",
+            "summary": "string",
+            "tags": "array<string>"
+          }
+        },
+        "createdAt": "timestamp",
+        "createdBy": "string",
+        "display": {
+          "type": "map",
+          "fields": {
+            "claimable": "boolean",
+            "featured": "boolean",
+            "mapVisible": "boolean",
+            "priority": "integer"
+          }
+        },
+        "id": "string",
+        "location": {
+          "type": "map",
+          "fields": {
+            "address": "string",
+            "city": "string",
+            "coordinates": {
+              "type": "map",
+              "fields": {
+                "lat": "double",
+                "lng": "double"
+              }
+            },
+            "coordNote": "string",
+            "coordStatus": "string",
+            "mapsUrl": "string",
+            "neighborhood": "string",
+            "postalCode": "string",
+            "state": "string"
+          }
+        },
+        "media": {
+          "type": "map",
+          "fields": {
+            "gallery": "array<map>",
+            "mainImage": {
+              "type": "map",
+              "fields": {
+                "alt": "string",
+                "caption": "string",
+                "credit": "string",
+                "path": "string",
+                "source": "string",
+                "url": "string"
+              }
+            },
+            "sourceCredits": "string",
+            "videoUrl": "string"
+          }
+        },
+        "name": "string",
+        "publishing": {
+          "type": "map",
+          "fields": {
+            "archivedAt": "null",
+            "archivedBy": "string",
+            "archiveReason": "string",
+            "publishedAt": "timestamp",
+            "publishedBy": "string"
+          }
+        },
+        "relationships": {
+          "type": "map",
+          "fields": {
+            "legacyRoute": "string",
+            "legacyRouteName": "string",
+            "relatedEventIds": "array<empty>",
+            "relatedPlaceIds": "array<empty>",
+            "routeIds": "array<string>"
+          }
+        },
+        "review": {
+          "type": "map",
+          "fields": {
+            "lastAppliedAt": "null",
+            "lastAppliedBy": "string",
+            "lastAppliedRequestId": "string",
+            "lastReviewNotes": "string"
+          }
+        },
+        "seo": {
+          "type": "map",
+          "fields": {
+            "canonicalPath": "string",
+            "description": "string",
+            "title": "string"
+          }
+        },
+        "slug": "string",
+        "source": {
+          "type": "map",
+          "fields": {
+            "legacyIds": "array<string>",
+            "origin": "string",
+            "originalCategory": "string",
+            "originalId": "string",
+            "seededAt": "timestamp",
+            "sourceFile": "string",
+            "sourceUpdatedAt": "null"
+          }
+        },
+        "status": "string",
+        "updatedAt": "timestamp",
+        "updatedBy": "string"
+      },
+      "observedValues": {
+        "status": [
+          "published"
+        ]
+      }
+    },
+    "rotas": {
+      "classification": "MATCH",
+      "exists": true,
+      "documentCount": 6,
+      "sampleShape": {
+        "archivedAt": "null",
+        "archivedBy": "string",
+        "category": "string",
+        "color": "string",
+        "cover": {
+          "type": "map",
+          "fields": {
+            "alt": "string",
+            "mediaId": "string",
+            "path": "string",
+            "url": "string"
+          }
+        },
+        "createdAt": "timestamp",
+        "createdBy": "string",
+        "description": "string",
+        "displayOrder": "integer",
+        "icon": "string",
+        "id": "string",
+        "name": "string",
+        "publishedAt": "timestamp",
+        "publishedBy": "string",
+        "slug": "string",
+        "status": "string",
+        "tags": "array<string>",
+        "updatedAt": "timestamp",
+        "updatedBy": "string"
+      },
+      "observedValues": {
+        "status": [
+          "published"
+        ]
+      }
+    },
+    "noticias": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 9,
+      "sampleShape": {
+        "autor": "string",
+        "categoria": "string",
+        "conteudo": "string",
+        "createdAt": "timestamp",
+        "data": "string",
+        "destaque": "boolean",
+        "galeria": "array<empty>",
+        "id": "string",
+        "imagem": "string",
+        "linkOrigem": "string",
+        "origemArquivo": "string",
+        "origemTipo": "string",
+        "publicado": "boolean",
+        "publishedAt": "string",
+        "resumo": "string",
+        "slug": "string",
+        "status": "string",
+        "titulo": "string",
+        "updatedAt": "timestamp",
+        "updatedBy": "string"
+      },
+      "observedValues": {
+        "status": [
+          "publicado"
+        ],
+        "publicado": [
+          true
+        ]
+      }
+    },
+    "media_library": {
+      "classification": "UNKNOWN",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    },
+    "banners": {
+      "classification": "COMPATIBLE_SUPERSET",
+      "exists": true,
+      "documentCount": 4,
+      "sampleShape": {
+        "createdAt": "timestamp",
+        "createdBy": "string",
+        "ctaLabel": "string",
+        "ctaTarget": "string",
+        "ctaUrl": "string",
+        "description": "string",
+        "dismissible": "boolean",
+        "endAt": "timestamp",
+        "frequency": "string",
+        "id": "string",
+        "imageAlt": "string",
+        "imageUrl": "string",
+        "maxWidth": "null",
+        "placement": "string",
+        "priority": "integer",
+        "publishedAt": "timestamp",
+        "showDelayMs": "integer",
+        "slug": "string",
+        "startAt": "null",
+        "status": "string",
+        "targetPages": "array<empty>",
+        "title": "string",
+        "type": "string",
+        "updatedAt": "timestamp",
+        "updatedBy": "string"
+      },
+      "observedValues": {
+        "status": [
+          "archived",
+          "draft",
+          "published"
+        ],
+        "type": [
+          "banner",
+          "popup"
+        ]
+      }
+    },
+    "gallery_items": {
+      "classification": "MIGRATION_REQUIRED",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    },
+    "site_config": {
+      "classification": "MIGRATION_REQUIRED",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    },
+    "audit_logs": {
+      "classification": "MIGRATION_REQUIRED",
+      "exists": false,
+      "documentCount": 0,
+      "sampleShape": null,
+      "observedValues": {}
+    }
+  },
+  "seasonalRemoteState": "ABSENT_PLANNED_CREATE",
+  "mascotRemoteState": "ABSENT_PLANNED_CREATE",
+  "gallery": {
+    "sourceItems": 33,
+    "sourceImages": 28,
+    "sourceVideosRetainedInStaticFallback": 5,
+    "exactMediaMatches": 0,
+    "staticOnlyItems": 33,
+    "ambiguousItems": 0,
+    "invalidItems": 0,
+    "createsPlanned": 28,
+    "updatesPlanned": 0,
+    "deletesPlanned": 0,
+    "manifestFingerprint": "0bd0057e7a4d240f1025a05e4344028ca658687d881b2a39dba71dd3cbefe68d",
+    "manifestReady": true,
+    "migrationWriteExecuted": false
+  },
+  "galleryInventory": [
+    {
+      "sourcePath": "images/IGREJA_MATRIZ_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_MATRIZ_1.png",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Matriz",
+      "description": "Majestosa arquitetura neogótica que marca o centro da cidade há mais de um século, vista do portal de entrada da cidade.",
+      "alt": "Igreja Matriz com portal São Mateus do Sul",
+      "currentOrder": 1,
+      "itemId": "igreja-matriz-1-4429c79f2ae6",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/PREFEITURA_MUNICIPAL.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PREFEITURA_MUNICIPAL.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Prefeitura Municipal",
+      "description": "Elegante arquitetura que representa a administração e a história da cidade.",
+      "alt": "Prefeitura Municipal",
+      "currentOrder": 2,
+      "itemId": "prefeitura-municipal-ef644460e21a",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca",
+      "description": "Joia da arquitetura polonesa rural, preservando tradições centenárias dos imigrantes.",
+      "alt": "Igreja Água Branca",
+      "currentOrder": 3,
+      "itemId": "igreja-agua-branca-9dbdd063a85d",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_2.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_2.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Vista",
+      "description": "Vista geral da Igreja da Comunidade Água Branca em seu entorno rural.",
+      "alt": "Igreja Água Branca — Vista",
+      "currentOrder": 4,
+      "itemId": "igreja-agua-branca-2-d285c34ba600",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_3.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_3.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Interior",
+      "description": "Interior com rica decoração de herança polonesa preservada pelos descendentes.",
+      "alt": "Igreja Água Branca — Interior",
+      "currentOrder": 5,
+      "itemId": "igreja-agua-branca-3-b3cc1ea9bb40",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_4.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_4.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Altar",
+      "description": "Altar central com detalhes artísticos que revelam a devoção dos colonos poloneses.",
+      "alt": "Igreja Água Branca — Altar",
+      "currentOrder": 6,
+      "itemId": "igreja-agua-branca-4-a9185fa732f9",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_5.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_5.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Nave",
+      "description": "Nave com bancos e vitrais que contam a história dos imigrantes poloneses.",
+      "alt": "Igreja Água Branca — Nave",
+      "currentOrder": 7,
+      "itemId": "igreja-agua-branca-5-32bcaf3aae37",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_6.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_6.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Detalhe",
+      "description": "Detalhes arquitetônicos que revelam o esmero dos construtores poloneses do séc. XIX.",
+      "alt": "Igreja Água Branca — Detalhe",
+      "currentOrder": 8,
+      "itemId": "igreja-agua-branca-6-fd7a644b0b0c",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_7.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_7.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Entorno",
+      "description": "Vista do entorno da Igreja integrada à paisagem rural de herança polonesa.",
+      "alt": "Igreja Água Branca — Entorno",
+      "currentOrder": 9,
+      "itemId": "igreja-agua-branca-7-27af45fbc8ba",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_8.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_8.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Painel",
+      "description": "Painel artístico decorativo preservado pelos descendentes poloneses.",
+      "alt": "Igreja Água Branca — Painel",
+      "currentOrder": 10,
+      "itemId": "igreja-agua-branca-8-2451808d4a66",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_9.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_9.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Façada",
+      "description": "Façada principal, símbolo da fé e da tradição polonesa em São Mateus do Sul.",
+      "alt": "Igreja Água Branca — Façada",
+      "currentOrder": 11,
+      "itemId": "igreja-agua-branca-9-2f3bb3c09172",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_10.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_10.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "caption": "Igreja Água Branca — Celebração",
+      "description": "Momento de celebração religiosa que une gerações da comunidade polonesa.",
+      "alt": "Igreja Água Branca — Celebração",
+      "currentOrder": 12,
+      "itemId": "igreja-agua-branca-10-c5587fc92d0d",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/POLSKIE_SMAKI__1_.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLSKIE_SMAKI__1_.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Polskie Smaki",
+      "description": "Autêntica gastronomia polonesa no coração de São Mateus do Sul durante o festival.",
+      "alt": "Polskie Smaki",
+      "currentOrder": 13,
+      "itemId": "polskie-smaki-1-e02fc0da5fe2",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Festival Polskie Smaki",
+      "description": "O festival de gastronomia polonesa do Grupo Karolinka: pratos típicos, cultura e tradição.",
+      "alt": "Polskie Smaki — Festival de Gastronomia Polonesa",
+      "currentOrder": 14,
+      "itemId": "polones-polskie-smaki-1-26-62244b8411cd",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/PARRERAL__1_.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PARRERAL__1_.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Parreral",
+      "description": "Experiência gastronômica privilegiada com vista para a natureza paranaense.",
+      "alt": "Parreral",
+      "currentOrder": 15,
+      "itemId": "parreral-1-5d63b9d1cae2",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Rua do Mathe",
+      "description": "Coração gastronômico da cidade: feiras, festas e a tradição da erva-mate com Indicação Geográfica.",
+      "alt": "Rua do Mathe — espaço gastronômico de São Mateus do Sul",
+      "currentOrder": 16,
+      "itemId": "rua-do-mathe-1-8185073a8e32",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Rua do Mathe — Vista Geral",
+      "description": "O espaço moderno que concentra a produção e cultura da erva-mate na Capital Polonesa do Paraná.",
+      "alt": "Rua do Mathe — vista geral",
+      "currentOrder": 17,
+      "itemId": "rua-do-mathe-2-649c1ff054d2",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/RUA_DO_MATHE.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/RUA_DO_MATHE.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "caption": "Rua do Mathe",
+      "description": "Estrutura moderna do espaço gastronômico — sede das principais feiras, festas e degustações de erva-mate.",
+      "alt": "Estrutura da Rua do Mathe — pav. gastronômico de São Mateus do Sul",
+      "currentOrder": 18,
+      "itemId": "rua-do-mathe-e1bc102612ee",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/diorama_sao_mateus.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/diorama_sao_mateus.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "caption": "Diorama Artístico",
+      "description": "Representação artística que captura a essência histórica e cultural de São Mateus do Sul.",
+      "alt": "Diorama Artístico",
+      "currentOrder": 19,
+      "itemId": "diorama-sao-mateus-846605e3de19",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IMIGRANTES_IA_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_1.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "caption": "Imigrantes Poloneses",
+      "description": "Recriação imaginária dos corajosos imigrantes poloneses que fundaram a cidade no séc. XIX.",
+      "alt": "Imigrantes Poloneses — Ilustração IA",
+      "currentOrder": 20,
+      "itemId": "imigrantes-ia-1-7728cd97f838",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/IMIGRANTES_IA_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_2.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "caption": "Herança Polonesa",
+      "description": "Cenas do cotidiano dos primeiros colonos poloneses, recriadas com inteligência artificial.",
+      "alt": "Herança Polonesa — Ilustração IA",
+      "currentOrder": 21,
+      "itemId": "imigrantes-ia-2-145ad1e0c74b",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/POLACA_ORACAO.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLACA_ORACAO.jpg",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "caption": "Devoção Polonesa",
+      "description": "Imagem que representa a profunda fé cristã, pilar da cultura polonesa em São Mateus do Sul.",
+      "alt": "Devoção Polonesa",
+      "currentOrder": 22,
+      "itemId": "polaca-oracao-6efea99861a7",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Capivara Pinhão",
+      "description": "Simpática capivara que representa a fauna local e o pinhão, símbolo do Paraná e da Araucária.",
+      "alt": "Mascote Capivara Pinhão",
+      "currentOrder": 23,
+      "itemId": "mascote-capivara-pinhao-10ca4cf9dfd2",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Capivara Pinhão — Variação",
+      "description": "Segunda pose da Capivara Pinhão, explorando diferentes expressões e personalidade do personagem.",
+      "alt": "Mascote Capivara Pinhão — Variação",
+      "currentOrder": 24,
+      "itemId": "mascote-capivara-pinhao-2-72482449e765",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Mate, Xisto & Água",
+      "description": "Trio que representa os três pilares econômicos de São Mateus do Sul: a erva-mate, o xisto e a água.",
+      "alt": "Mascote Mate, Xisto e Água",
+      "currentOrder": 25,
+      "itemId": "mascote-mate-xisto-agua-3b24e6c1a9d2",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Menino Polonês",
+      "description": "Personagem que celebra a herança polonesa, principal raiz cultural dos fundadores da cidade.",
+      "alt": "Mascote Menino Polonês",
+      "currentOrder": 26,
+      "itemId": "mascote-menino-polones-1-d0cc3a107f91",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Menino Polonês — Variação",
+      "description": "Variação do Menino Polonês com traje típico, homenageando as festividades e tradições da colônia.",
+      "alt": "Mascote Menino Polonês — Variação",
+      "currentOrder": 27,
+      "itemId": "mascote-menino-polones-2-4abd935f4e59",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "images/mascotes/MASCOTE_PERY.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_PERY.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "caption": "Pery",
+      "description": "Personagem cheio de energia que representa o espírito acolhedor e aventureiro de São Mateus do Sul.",
+      "alt": "Mascote Pery",
+      "currentOrder": 28,
+      "itemId": "mascote-pery-52a95e952f54",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "videos/INSTITUCIONAL_POLONES.mp4",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/videos/INSTITUCIONAL_POLONES.mp4",
+      "mediaType": "video",
+      "category": "videos",
+      "caption": "Cultura Polonesa de São Mateus do Sul",
+      "description": "Vídeo institucional legendado sobre a herança polonesa que define a identidade de São Mateus do Sul — Capital Polonesa do Paraná.",
+      "alt": "",
+      "currentOrder": 29,
+      "itemId": "institucional-polones-cc0036d6e788",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "videos/VIDEO_ABERTURA_4K.mp4",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/videos/VIDEO_ABERTURA_4K.mp4",
+      "mediaType": "video",
+      "category": "videos",
+      "caption": "São Mateus do Sul — Vídeo de Abertura 4K",
+      "description": "Vídeo 4K mostrando as belezas naturais, a cultura e os principais atrativos turísticos da cidade.",
+      "alt": "",
+      "currentOrder": 30,
+      "itemId": "video-abertura-4k-8fe3cfe1bbd8",
+      "sourceState": "PRESENT"
+    },
+    {
+      "sourcePath": "https://www.youtube.com/embed/SrPU_gGw-mY",
+      "publicUrl": "https://www.youtube.com/embed/SrPU_gGw-mY",
+      "mediaType": "video",
+      "category": "videos",
+      "caption": "São Mateus do Sul — Turismo",
+      "description": "Conheça as atrações turísticas e a cultura da Capital Polonesa do Paraná.",
+      "alt": "São Mateus do Sul — Turismo",
+      "currentOrder": 31,
+      "itemId": "srpu-ggw-my-5bfbb7db6cc1",
+      "sourceState": "REMOTE_NOT_FETCHED"
+    },
+    {
+      "sourcePath": "https://www.youtube.com/embed/3H7I9-bw6mQ",
+      "publicUrl": "https://www.youtube.com/embed/3H7I9-bw6mQ",
+      "mediaType": "video",
+      "category": "videos",
+      "caption": "Cultura e Tradições Polonesas",
+      "description": "Mergulhe na rica cultura polonesa preservada pelas comunidades de São Mateus do Sul.",
+      "alt": "Cultura e Tradições Polonesas",
+      "currentOrder": 32,
+      "itemId": "3h7i9-bw6mq-b5d40d660591",
+      "sourceState": "REMOTE_NOT_FETCHED"
+    },
+    {
+      "sourcePath": "https://www.youtube.com/embed/20U2Gkqt9yg",
+      "publicUrl": "https://www.youtube.com/embed/20U2Gkqt9yg",
+      "mediaType": "video",
+      "category": "videos",
+      "caption": "São Mateus do Sul — Destino Turístico",
+      "description": "Descubra por que São Mateus do Sul é um dos destinos turísticos mais autênticos e especiais do Paraná.",
+      "alt": "São Mateus do Sul — Destino Turístico",
+      "currentOrder": 33,
+      "itemId": "20u2gkqt9yg-10278ad64155",
+      "sourceState": "REMOTE_NOT_FETCHED"
+    }
+  ],
+  "galleryMediaMatchMatrix": [
+    {
+      "itemId": "igreja-matriz-1-4429c79f2ae6",
+      "sourcePath": "images/IGREJA_MATRIZ_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_MATRIZ_1.png",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 1,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "prefeitura-municipal-ef644460e21a",
+      "sourcePath": "images/PREFEITURA_MUNICIPAL.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PREFEITURA_MUNICIPAL.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 2,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-9dbdd063a85d",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 3,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-2-d285c34ba600",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_2.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_2.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 4,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-3-b3cc1ea9bb40",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_3.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_3.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 5,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-4-a9185fa732f9",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_4.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_4.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 6,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-5-32bcaf3aae37",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_5.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_5.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 7,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-6-fd7a644b0b0c",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_6.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_6.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 8,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-7-27af45fbc8ba",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_7.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_7.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 9,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-8-2451808d4a66",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_8.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_8.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 10,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-9-2f3bb3c09172",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_9.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_9.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 11,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "igreja-agua-branca-10-c5587fc92d0d",
+      "sourcePath": "images/IGREJA_AGUA_BRANCA_10.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_10.jpg",
+      "mediaType": "image",
+      "category": "patrimonio",
+      "currentOrder": 12,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "polskie-smaki-1-e02fc0da5fe2",
+      "sourcePath": "images/POLSKIE_SMAKI__1_.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLSKIE_SMAKI__1_.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 13,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "polones-polskie-smaki-1-26-62244b8411cd",
+      "sourcePath": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 14,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "parreral-1-5d63b9d1cae2",
+      "sourcePath": "images/PARRERAL__1_.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PARRERAL__1_.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 15,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "rua-do-mathe-1-8185073a8e32",
+      "sourcePath": "images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_1_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 16,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "rua-do-mathe-2-649c1ff054d2",
+      "sourcePath": "images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_2_.webp",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 17,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "rua-do-mathe-e1bc102612ee",
+      "sourcePath": "images/RUA_DO_MATHE.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/RUA_DO_MATHE.jpg",
+      "mediaType": "image",
+      "category": "gastronomia",
+      "currentOrder": 18,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "diorama-sao-mateus-846605e3de19",
+      "sourcePath": "images/diorama_sao_mateus.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/diorama_sao_mateus.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "currentOrder": 19,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "imigrantes-ia-1-7728cd97f838",
+      "sourcePath": "images/IMIGRANTES_IA_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_1.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "currentOrder": 20,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "imigrantes-ia-2-145ad1e0c74b",
+      "sourcePath": "images/IMIGRANTES_IA_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_2.png",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "currentOrder": 21,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "polaca-oracao-6efea99861a7",
+      "sourcePath": "images/POLACA_ORACAO.jpg",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLACA_ORACAO.jpg",
+      "mediaType": "image",
+      "category": "arte-historia",
+      "currentOrder": 22,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-capivara-pinhao-10ca4cf9dfd2",
+      "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 23,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-capivara-pinhao-2-72482449e765",
+      "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 24,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-mate-xisto-agua-3b24e6c1a9d2",
+      "sourcePath": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 25,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-menino-polones-1-d0cc3a107f91",
+      "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 26,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-menino-polones-2-4abd935f4e59",
+      "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 27,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "mascote-pery-52a95e952f54",
+      "sourcePath": "images/mascotes/MASCOTE_PERY.png",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_PERY.png",
+      "mediaType": "image",
+      "category": "mascotes",
+      "currentOrder": 28,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": true,
+      "excludedReason": null,
+      "candidateCount": 0
+    },
+    {
+      "itemId": "institucional-polones-cc0036d6e788",
+      "sourcePath": "videos/INSTITUCIONAL_POLONES.mp4",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/videos/INSTITUCIONAL_POLONES.mp4",
+      "mediaType": "video",
+      "category": "videos",
+      "currentOrder": 29,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": false,
+      "excludedReason": "VIDEO_NOT_ALLOWED_IN_GALLERY_V1",
+      "candidateCount": 0
+    },
+    {
+      "itemId": "video-abertura-4k-8fe3cfe1bbd8",
+      "sourcePath": "videos/VIDEO_ABERTURA_4K.mp4",
+      "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/videos/VIDEO_ABERTURA_4K.mp4",
+      "mediaType": "video",
+      "category": "videos",
+      "currentOrder": 30,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": false,
+      "excludedReason": "VIDEO_NOT_ALLOWED_IN_GALLERY_V1",
+      "candidateCount": 0
+    },
+    {
+      "itemId": "srpu-ggw-my-5bfbb7db6cc1",
+      "sourcePath": "https://www.youtube.com/embed/SrPU_gGw-mY",
+      "publicUrl": "https://www.youtube.com/embed/SrPU_gGw-mY",
+      "mediaType": "video",
+      "category": "videos",
+      "currentOrder": 31,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": false,
+      "excludedReason": "VIDEO_NOT_ALLOWED_IN_GALLERY_V1",
+      "candidateCount": 0
+    },
+    {
+      "itemId": "3h7i9-bw6mq-b5d40d660591",
+      "sourcePath": "https://www.youtube.com/embed/3H7I9-bw6mQ",
+      "publicUrl": "https://www.youtube.com/embed/3H7I9-bw6mQ",
+      "mediaType": "video",
+      "category": "videos",
+      "currentOrder": 32,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": false,
+      "excludedReason": "VIDEO_NOT_ALLOWED_IN_GALLERY_V1",
+      "candidateCount": 0
+    },
+    {
+      "itemId": "20u2gkqt9yg-10278ad64155",
+      "sourcePath": "https://www.youtube.com/embed/20U2Gkqt9yg",
+      "publicUrl": "https://www.youtube.com/embed/20U2Gkqt9yg",
+      "mediaType": "video",
+      "category": "videos",
+      "currentOrder": 33,
+      "matchStatus": "STATIC_ASSET_NO_LIBRARY_MATCH",
+      "matchBasis": "none",
+      "mediaId": null,
+      "storagePath": null,
+      "migrationEligible": false,
+      "excludedReason": "VIDEO_NOT_ALLOWED_IN_GALLERY_V1",
+      "candidateCount": 0
+    }
+  ],
+  "cloudFunctionsReadiness": {
+    "firebaseProjectId": "turismo-sms",
+    "firestoreRegion": "southamerica-east1",
+    "functionsRegionRecommended": "southamerica-east1",
+    "firebaseBillingPlan": "BLAZE_COMPATIBLE_BILLING_ENABLED",
+    "billingVerification": "VERIFIED",
+    "cloudFunctionsProductionDeployPossible": "PREREQUISITE_APIS_ENABLEMENT_REQUIRED",
+    "cloudFunctionsApiState": "HTTP_403",
+    "serviceUsageState": "VERIFIED",
+    "requiredServiceStates": {
+      "artifactregistry.googleapis.com": "NOT_OBSERVED_ENABLED",
+      "cloudbuild.googleapis.com": "NOT_OBSERVED_ENABLED",
+      "cloudfunctions.googleapis.com": "NOT_OBSERVED_ENABLED",
+      "eventarc.googleapis.com": "NOT_OBSERVED_ENABLED",
+      "firestore.googleapis.com": "ENABLED",
+      "logging.googleapis.com": "ENABLED",
+      "pubsub.googleapis.com": "ENABLED",
+      "run.googleapis.com": "NOT_OBSERVED_ENABLED"
+    }
+  }
+}

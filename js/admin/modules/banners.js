@@ -1434,7 +1434,6 @@
         label: "Banners / Pop-ups",
         icon: "📢",
         requiredRole: "admin",
-        master: false,
         navGroup: "Conteúdo",
         order: 40,
 

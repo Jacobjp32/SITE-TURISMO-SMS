@@ -1,4 +1,10 @@
 {
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default"
+    }
+  ],
   "firestore": {
     "rules": "firestore.rules"
   },
@@ -6,6 +12,9 @@
     "rules": "storage.rules"
   },
   "emulators": {
+    "auth": {
+      "port": 9099
+    },
     "firestore": {
       "port": 8080
     },

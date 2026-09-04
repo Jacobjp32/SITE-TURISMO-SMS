@@ -44,7 +44,6 @@
         label: "Dashboard",
         icon: "📊",
         requiredRole: "admin",
-        master: false,
         navGroup: "Operação",
         order: 10,
 

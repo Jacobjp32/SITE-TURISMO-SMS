@@ -81,7 +81,7 @@ test("links de âncora internos possuem destinos", () => {
 });
 
 test("home preserva policy e não restaura destaque temporário", () => {
-  assert.match(home, /js\/home-eventos\.js\?v=events-home-policy-25bebd00/);
+  assert.match(home, /js\/home-eventos\.js\?v=events-home-adapter-v1-20260902/);
   assert.doesNotMatch(home, /id="mes-polones-feature"|temporary-polish-month-feature/i);
 });
 

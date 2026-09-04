@@ -254,7 +254,7 @@
             color: var(--primary);
         }
         
-        /* Etapa 3A: rótulo de grupo e selo Master na sidebar (cosmético). */
+        /* Rótulos auxiliares da navegação lateral. */
         .sidebar-group-label {
             margin-top: 1rem;
             padding: 0 1rem;
@@ -264,7 +264,7 @@
             color: rgba(255,255,255,0.45);
         }
 
-        .sidebar-master-tag {
+        .sidebar-role-tag {
             margin-left: auto;
             font-size: 0.6rem;
             font-style: normal;
@@ -1177,7 +1177,7 @@
             
             .sidebar-logo span,
             .sidebar-menu a span,
-            .sidebar-menu a .sidebar-master-tag,
+            .sidebar-menu a .sidebar-role-tag,
             .sidebar-group-label {
                 display: none;
             }
@@ -1274,21 +1274,18 @@
                 <li><a data-section="vinculos">🤝 <span>Solicitações de vínculo</span></a></li>
                 <li><a data-section="gerenciar-vinculos">🗂️ <span>Gerenciar Vínculos</span></a></li>
                 <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
-                <!-- Conteúdo / CMS: módulos com CRUD real (inclui Banners desde o Bloco 4C). -->
+                <!-- Conteúdo / CMS -->
                 <li class="sidebar-group-label"><span>Conteúdo</span></li>
                 <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
                 <li><a data-section="noticias">📰 <span>Notícias</span></a></li>
                 <li><a data-section="midia">🖼️ <span>Mídia</span></a></li>
                 <li><a data-section="banners">📢 <span>Banners / Pop-ups</span></a></li>
                 <li><a data-section="empreendimentos">🏨 <span>Empreendimentos</span></a></li>
-                <!-- Etapa 3A: placeholders de módulos futuros (sem CRUD, sem persistência). -->
-                <li class="sidebar-group-label"><span>Em preparação</span></li>
                 <li><a data-section="rotas">🗺️ <span>Rotas</span></a></li>
                 <li><a data-section="galeria">🖼️ <span>Galeria</span></a></li>
-                <li><a data-section="configuracoes">⚙️ <span>Configurações</span> <em class="sidebar-master-tag">Master</em></a></li>
-                <li><a data-section="sazonal">🌦️ <span>Sazonal / Clima</span> <em class="sidebar-master-tag">Master</em></a></li>
-                <li><a data-section="mascote">🐾 <span>Mascote</span> <em class="sidebar-master-tag">Master</em></a></li>
-                <li><a data-section="audit-logs">📜 <span>Logs / Auditoria</span> <em class="sidebar-master-tag">Master</em></a></li>
+                <li><a data-section="sazonal">🌦️ <span>Sazonal / Clima</span></a></li>
+                <li><a data-section="mascote">🐾 <span>Mascote</span></a></li>
+                <li><a data-section="audit-logs">📜 <span>Logs / Auditoria</span></a></li>
                 <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
             </ul>
             
@@ -1502,13 +1499,10 @@
                 </div>
             </section>
 
-            <!-- Etapa 3A: containers de placeholders (preenchidos por js/admin/modules/placeholder.js).
-                 Sem forms reais, sem botões de salvar, sem chamadas Firebase. -->
             <section class="admin-section" id="section-banners"></section>
             <section class="admin-section" id="section-empreendimentos"></section>
             <section class="admin-section" id="section-rotas"></section>
             <section class="admin-section" id="section-galeria"></section>
-            <section class="admin-section" id="section-configuracoes"></section>
             <section class="admin-section" id="section-sazonal"></section>
             <section class="admin-section" id="section-mascote"></section>
             <section class="admin-section" id="section-audit-logs"></section>
@@ -1607,7 +1601,7 @@
     <script src="js/admin/admin-registry.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-router.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
-    <!-- Módulos migrados (Etapa 2): Dashboard. Demais seções seguem no fluxo legado. -->
+    <!-- Módulos do painel. -->
     <script src="js/admin/modules/dashboard.js?v=admin-modular-20260625"></script>
     <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
@@ -1617,8 +1611,10 @@
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
     <script src="js/admin/modules/rotas.js?v=rotas-v1-1-admin-20260820"></script>
-    <!-- Placeholders de módulos futuros (Etapa 3A): sem CRUD, sem persistência. -->
-    <script src="js/admin/modules/placeholder.js?v=admin-modular-20260626"></script>
+    <script src="js/admin/modules/gallery.js?v=site-admin-finalization-20260903"></script>
+    <script src="js/admin/modules/site-config.js?v=site-admin-finalization-20260903"></script>
+    <script src="js/admin/modules/audit-logs.js?v=site-admin-finalization-20260903"></script>
+    <script src="js/admin/modules/placeholder.js?v=site-admin-finalization-20260903"></script>
     <script>
         const SEC = window.SMSecurity;
         var adminUsersCache = [];
@@ -1925,6 +1921,16 @@
             }
             if (section === 'rotas' && window.AdminRoutesModule && typeof window.AdminRoutesModule.activate === 'function') {
                 window.AdminRoutesModule.activate(window.AdminContext || null);
+            }
+            const modularSections = {
+                galeria: window.AdminGalleryModule,
+                sazonal: window.AdminSeasonalModule,
+                mascote: window.AdminMascotModule,
+                'audit-logs': window.AdminAuditLogsModule
+            };
+            const modularSection = modularSections[section];
+            if (modularSection && typeof modularSection.activate === 'function') {
+                modularSection.activate(window.AdminContext || null);
             }
         }
 

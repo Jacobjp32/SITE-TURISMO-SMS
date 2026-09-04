@@ -27,6 +27,59 @@ service cloud.firestore {
         data.ativo is bool;
     }
 
+    function galleryFieldsAllowed(data) {
+      return data.keys().hasOnly([
+        'mediaId', 'url', 'storagePath', 'mediaType', 'category',
+        'displayOrder', 'published', 'caption', 'alt', 'createdAt',
+        'createdBy', 'updatedAt', 'updatedBy', 'schemaVersion'
+      ]);
+    }
+
+    function validGalleryData(data) {
+      return galleryFieldsAllowed(data) &&
+        data.url is string && data.url.size() > 0 &&
+        data.mediaType == 'image' &&
+        data.category is string && data.category.size() > 0 &&
+        data.displayOrder is int && data.displayOrder >= 0 &&
+        data.published is bool && data.caption is string && data.alt is string &&
+        data.createdAt is timestamp && data.createdBy is string &&
+        data.updatedAt is timestamp && data.updatedBy is string &&
+        data.schemaVersion == 1 &&
+        (!data.keys().hasAny(['mediaId']) || data.mediaId is string) &&
+        (!data.keys().hasAny(['storagePath']) || data.storagePath is string);
+    }
+
+    function validGalleryCreate() {
+      return isAdmin() && validGalleryData(request.resource.data) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.createdBy == request.auth.uid &&
+        request.resource.data.updatedBy == request.auth.uid;
+    }
+
+    function validGalleryUpdate() {
+      return isAdmin() && validGalleryData(request.resource.data) &&
+        request.resource.data.createdAt == resource.data.createdAt &&
+        request.resource.data.createdBy == resource.data.createdBy &&
+        request.resource.data.updatedAt == request.time &&
+        request.resource.data.updatedBy == request.auth.uid;
+    }
+
+    function validSeasonalConfig(data) {
+      return data.keys().hasOnly(['enabled', 'mode', 'seasonOverride', 'updatedAt', 'updatedBy', 'schemaVersion']) &&
+        data.enabled is bool && data.mode in ['AUTO', 'MANUAL'] &&
+        ((data.mode == 'AUTO' && data.seasonOverride == null) ||
+          (data.mode == 'MANUAL' && data.seasonOverride in ['summer', 'autumn', 'winter', 'spring'])) &&
+        data.updatedAt == request.time && data.updatedBy == request.auth.uid &&
+        data.schemaVersion == 1;
+    }
+
+    function validMascotConfig(data) {
+      return data.keys().hasOnly(['enabled', 'updatedAt', 'updatedBy', 'schemaVersion']) &&
+        data.enabled is bool && data.updatedAt == request.time &&
+        data.updatedBy == request.auth.uid && data.schemaVersion == 1;
+    }
+
     function owns(resourceData) {
       return signedIn() && resourceData.submittedBy == request.auth.uid;
     }
@@ -1440,6 +1493,28 @@ service cloud.firestore {
       // Outras collections usam delete por moderador/admin, mas banners
       // ficam mais seguros sem exclusao definitiva (ver doc 4B).
       allow delete: if false;
+    }
+
+    match /gallery_items/{itemId} {
+      allow get, list: if isAdmin() || resource.data.published == true;
+      allow create: if validGalleryCreate();
+      allow update: if validGalleryUpdate();
+      allow delete: if false;
+    }
+
+    match /site_config/{configId} {
+      allow get: if configId in ['seasonal', 'mascot'];
+      allow list: if false;
+      allow create, update: if isAdmin() && (
+        (configId == 'seasonal' && validSeasonalConfig(request.resource.data)) ||
+        (configId == 'mascot' && validMascotConfig(request.resource.data))
+      );
+      allow delete: if false;
+    }
+
+    match /audit_logs/{eventId} {
+      allow read: if isAdmin();
+      allow create, update, delete: if false;
     }
 
     match /{document=**} {

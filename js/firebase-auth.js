@@ -806,16 +806,31 @@ function initFirebase() {
             }
 
             try {
+                const localEmulatorRequested = /^(?:localhost|127\.0\.0\.1)$/.test(window.location.hostname) &&
+                    new URLSearchParams(window.location.search).get('emulator') === '1';
+                const runtimeFirebaseConfig = localEmulatorRequested
+                    ? Object.assign({}, firebaseConfig, {
+                        projectId: 'demo-turismo-sms-admin-finalization',
+                        authDomain: 'demo-turismo-sms-admin-finalization.firebaseapp.com',
+                        storageBucket: 'demo-turismo-sms-admin-finalization.appspot.com'
+                    })
+                    : firebaseConfig;
                 // Inicializar app (evita dupla inicialização)
                 if (!firebase.apps.length) {
-                    firebase.initializeApp(firebaseConfig);
+                    firebase.initializeApp(runtimeFirebaseConfig);
                 }
-
-                const { initCompatAppCheck } = await import('./firebase-app-check.js');
-                await initCompatAppCheck(firebase);
-
                 const auth = firebase.auth();
                 const db   = firebase.firestore();
+                if (localEmulatorRequested && !window.__SMSFirebaseEmulatorsConnected) {
+                    db.settings({ host: '127.0.0.1:8080', ssl: false, experimentalForceLongPolling: true });
+                    auth.useEmulator('http://localhost:9099', { disableWarnings: true });
+                    if (firebase.storage) firebase.storage().useEmulator('localhost', 9199);
+                    window.__SMSFirebaseEmulatorsConnected = true;
+                }
+                if (!localEmulatorRequested) {
+                    const { initCompatAppCheck } = await import('./firebase-app-check.js');
+                    await initCompatAppCheck(firebase);
+                }
 
                 // Guardar referências globais para compatibilidade
                 window.firebaseAuth = { auth };

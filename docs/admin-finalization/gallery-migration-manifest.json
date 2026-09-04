@@ -1,0 +1,664 @@
+{
+  "manifestVersion": 1,
+  "sourceCommit": "ef31a5a051e2ed587df31cb187bd79f1f0292fdf",
+  "sourceFile": "galeria.html",
+  "targetCollection": "gallery_items",
+  "idAlgorithm": "slug(basename-without-extension, max 48) + '-' + first 12 hex of SHA-256(category + newline + mediaType + newline + canonicalPublicUrl)",
+  "targetSchemaVersion": 1,
+  "deterministicFingerprintAlgorithm": "SHA-256 over compact JSON serialization of items in current public order",
+  "manifestFingerprint": "0bd0057e7a4d240f1025a05e4344028ca658687d881b2a39dba71dd3cbefe68d",
+  "policy": {
+    "writeMode": "CREATE_IF_ABSENT",
+    "updatesPlanned": 0,
+    "deletesPlanned": 0,
+    "videoMigration": false,
+    "staticFallbackRetained": true,
+    "remoteWriteExecuted": false
+  },
+  "items": [
+    {
+      "itemId": "igreja-matriz-1-4429c79f2ae6",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_MATRIZ_1.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_MATRIZ_1.png",
+        "fingerprint": "4429c79f2ae66925e6ee3d88d3599a80d05ab4140b48b0e0ce6900fa62ad44d4"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_MATRIZ_1.png",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 1,
+        "published": true,
+        "caption": "Igreja Matriz",
+        "alt": "Igreja Matriz com portal São Mateus do Sul",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "prefeitura-municipal-ef644460e21a",
+      "sourceIdentity": {
+        "sourcePath": "images/PREFEITURA_MUNICIPAL.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PREFEITURA_MUNICIPAL.jpg",
+        "fingerprint": "ef644460e21a69b6b2b026a9c57824cba93c81f398fe3b21426b1610356364dd"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/PREFEITURA_MUNICIPAL.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 2,
+        "published": true,
+        "caption": "Prefeitura Municipal",
+        "alt": "Prefeitura Municipal",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-9dbdd063a85d",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA.jpg",
+        "fingerprint": "9dbdd063a85d3c36c2999123fb6d12aa0c6ea3da0914b10ebc75c7497760e6af"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 3,
+        "published": true,
+        "caption": "Igreja Água Branca",
+        "alt": "Igreja Água Branca",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-2-d285c34ba600",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_2.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_2.jpg",
+        "fingerprint": "d285c34ba6007c03bcd15222dfc31dc5f8c3b4dcc5df0568d6488b5555d8721e"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_2.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 4,
+        "published": true,
+        "caption": "Igreja Água Branca — Vista",
+        "alt": "Igreja Água Branca — Vista",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-3-b3cc1ea9bb40",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_3.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_3.jpg",
+        "fingerprint": "b3cc1ea9bb40a134b06e6545cf61933a33eab658137bab1205231dd6a4f56cfd"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_3.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 5,
+        "published": true,
+        "caption": "Igreja Água Branca — Interior",
+        "alt": "Igreja Água Branca — Interior",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-4-a9185fa732f9",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_4.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_4.jpg",
+        "fingerprint": "a9185fa732f9911f43b7c11dce5f5041da93dd34cecfa517be2dab5427e46bf0"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_4.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 6,
+        "published": true,
+        "caption": "Igreja Água Branca — Altar",
+        "alt": "Igreja Água Branca — Altar",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-5-32bcaf3aae37",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_5.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_5.jpg",
+        "fingerprint": "32bcaf3aae379fef07a35ad16b8764969ca42896f4cd9398a0c591bf55ddec5a"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_5.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 7,
+        "published": true,
+        "caption": "Igreja Água Branca — Nave",
+        "alt": "Igreja Água Branca — Nave",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-6-fd7a644b0b0c",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_6.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_6.jpg",
+        "fingerprint": "fd7a644b0b0c88c22b0d38b5d787f07c127c45c0e2187824ca8d243cc7a421a1"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_6.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 8,
+        "published": true,
+        "caption": "Igreja Água Branca — Detalhe",
+        "alt": "Igreja Água Branca — Detalhe",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-7-27af45fbc8ba",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_7.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_7.jpg",
+        "fingerprint": "27af45fbc8bab9acca8fcef9421530b049b84857d7519a46849e94195c2a19c1"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_7.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 9,
+        "published": true,
+        "caption": "Igreja Água Branca — Entorno",
+        "alt": "Igreja Água Branca — Entorno",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-8-2451808d4a66",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_8.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_8.jpg",
+        "fingerprint": "2451808d4a666254985b39a2645bc9c5d97920a050e51d6c6ff7b939b7760df5"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_8.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 10,
+        "published": true,
+        "caption": "Igreja Água Branca — Painel",
+        "alt": "Igreja Água Branca — Painel",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-9-2f3bb3c09172",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_9.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_9.jpg",
+        "fingerprint": "2f3bb3c09172cd3ab249196222133567ef8bec7486373c2f236f85ad9a712b11"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_9.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 11,
+        "published": true,
+        "caption": "Igreja Água Branca — Façada",
+        "alt": "Igreja Água Branca — Façada",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "igreja-agua-branca-10-c5587fc92d0d",
+      "sourceIdentity": {
+        "sourcePath": "images/IGREJA_AGUA_BRANCA_10.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_10.jpg",
+        "fingerprint": "c5587fc92d0d502de4412f89a8778a877c99c15ccfa90fa02367875dd2df4022"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IGREJA_AGUA_BRANCA_10.jpg",
+        "mediaType": "image",
+        "category": "patrimonio",
+        "displayOrder": 12,
+        "published": true,
+        "caption": "Igreja Água Branca — Celebração",
+        "alt": "Igreja Água Branca — Celebração",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "polskie-smaki-1-e02fc0da5fe2",
+      "sourceIdentity": {
+        "sourcePath": "images/POLSKIE_SMAKI__1_.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLSKIE_SMAKI__1_.jpg",
+        "fingerprint": "e02fc0da5fe2ba434018d8ac6e887ba1393a9e7a9756afea0c8a43a6598987b0"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/POLSKIE_SMAKI__1_.jpg",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 13,
+        "published": true,
+        "caption": "Polskie Smaki",
+        "alt": "Polskie Smaki",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "polones-polskie-smaki-1-26-62244b8411cd",
+      "sourceIdentity": {
+        "sourcePath": "images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+        "fingerprint": "62244b8411cd857490067f890ab21647353a440170e0cdd188cc4fffab235c12"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 14,
+        "published": true,
+        "caption": "Festival Polskie Smaki",
+        "alt": "Polskie Smaki — Festival de Gastronomia Polonesa",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "parreral-1-5d63b9d1cae2",
+      "sourceIdentity": {
+        "sourcePath": "images/PARRERAL__1_.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/PARRERAL__1_.jpg",
+        "fingerprint": "5d63b9d1cae24c21b64b73e461631fef67a52df27704f1ab5445f4fd55489e3e"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/PARRERAL__1_.jpg",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 15,
+        "published": true,
+        "caption": "Parreral",
+        "alt": "Parreral",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "rua-do-mathe-1-8185073a8e32",
+      "sourceIdentity": {
+        "sourcePath": "images/WEBP/RUA-DO-MATHE-_1_.webp",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_1_.webp",
+        "fingerprint": "8185073a8e324bfa245e243bfa06b57f8ca41aa25387d0a2fa1a637b04b4b2a1"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_1_.webp",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 16,
+        "published": true,
+        "caption": "Rua do Mathe",
+        "alt": "Rua do Mathe — espaço gastronômico de São Mateus do Sul",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "rua-do-mathe-2-649c1ff054d2",
+      "sourceIdentity": {
+        "sourcePath": "images/WEBP/RUA-DO-MATHE-_2_.webp",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_2_.webp",
+        "fingerprint": "649c1ff054d24ad8448c79a27d1e42084398034ffebb477ece16cca704585381"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/WEBP/RUA-DO-MATHE-_2_.webp",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 17,
+        "published": true,
+        "caption": "Rua do Mathe — Vista Geral",
+        "alt": "Rua do Mathe — vista geral",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "rua-do-mathe-e1bc102612ee",
+      "sourceIdentity": {
+        "sourcePath": "images/RUA_DO_MATHE.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/RUA_DO_MATHE.jpg",
+        "fingerprint": "e1bc102612eee2646444340ace1c5de68f3ac01828a760cf846a1a795bd6e931"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/RUA_DO_MATHE.jpg",
+        "mediaType": "image",
+        "category": "gastronomia",
+        "displayOrder": 18,
+        "published": true,
+        "caption": "Rua do Mathe",
+        "alt": "Estrutura da Rua do Mathe — pav. gastronômico de São Mateus do Sul",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "diorama-sao-mateus-846605e3de19",
+      "sourceIdentity": {
+        "sourcePath": "images/diorama_sao_mateus.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/diorama_sao_mateus.png",
+        "fingerprint": "846605e3de193ad929b7c376f0218d66da16796d81b519d1c0731d1b9ca14dca"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/diorama_sao_mateus.png",
+        "mediaType": "image",
+        "category": "arte-historia",
+        "displayOrder": 19,
+        "published": true,
+        "caption": "Diorama Artístico",
+        "alt": "Diorama Artístico",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "imigrantes-ia-1-7728cd97f838",
+      "sourceIdentity": {
+        "sourcePath": "images/IMIGRANTES_IA_1.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_1.png",
+        "fingerprint": "7728cd97f8388c269eac21b674cc16da04b05141cda829e230dc84b9e4e36290"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_1.png",
+        "mediaType": "image",
+        "category": "arte-historia",
+        "displayOrder": 20,
+        "published": true,
+        "caption": "Imigrantes Poloneses",
+        "alt": "Imigrantes Poloneses — Ilustração IA",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "imigrantes-ia-2-145ad1e0c74b",
+      "sourceIdentity": {
+        "sourcePath": "images/IMIGRANTES_IA_2.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_2.png",
+        "fingerprint": "145ad1e0c74b923d5e304f3d513159e4b718ca6aa367971adc94281644162a43"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/IMIGRANTES_IA_2.png",
+        "mediaType": "image",
+        "category": "arte-historia",
+        "displayOrder": 21,
+        "published": true,
+        "caption": "Herança Polonesa",
+        "alt": "Herança Polonesa — Ilustração IA",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "polaca-oracao-6efea99861a7",
+      "sourceIdentity": {
+        "sourcePath": "images/POLACA_ORACAO.jpg",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/POLACA_ORACAO.jpg",
+        "fingerprint": "6efea99861a76d515a836994c803d20f8a7739298a0c6b923255a5fce2d76a1f"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/POLACA_ORACAO.jpg",
+        "mediaType": "image",
+        "category": "arte-historia",
+        "displayOrder": 22,
+        "published": true,
+        "caption": "Devoção Polonesa",
+        "alt": "Devoção Polonesa",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-capivara-pinhao-10ca4cf9dfd2",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+        "fingerprint": "10ca4cf9dfd2ec343ac918e2fc5ccf2d523502d7d4c126c07987683b877e0d43"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 23,
+        "published": true,
+        "caption": "Capivara Pinhão",
+        "alt": "Mascote Capivara Pinhão",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-capivara-pinhao-2-72482449e765",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+        "fingerprint": "72482449e7658e19a467e8318de1d62e42c145dae743c388b7fc92417dcb5e35"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_CAPIVARA_PINHAO_2.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 24,
+        "published": true,
+        "caption": "Capivara Pinhão — Variação",
+        "alt": "Mascote Capivara Pinhão — Variação",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-mate-xisto-agua-3b24e6c1a9d2",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+        "fingerprint": "3b24e6c1a9d294e45d7c0c933ec6353ab9ebf2ecdbcd41356a326a868b238f9e"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MATE_XISTO_AGUA.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 25,
+        "published": true,
+        "caption": "Mate, Xisto & Água",
+        "alt": "Mascote Mate, Xisto e Água",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-menino-polones-1-d0cc3a107f91",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+        "fingerprint": "d0cc3a107f912a85e5ce9b4d712752120d350c4682dc6c6030a04addd8cf4a41"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_1.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 26,
+        "published": true,
+        "caption": "Menino Polonês",
+        "alt": "Mascote Menino Polonês",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-menino-polones-2-4abd935f4e59",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+        "fingerprint": "4abd935f4e59bffeb20c0fd6e15f016268000c6304aaa4b491e093c9c745f03c"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_MENINO_POLONES_2.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 27,
+        "published": true,
+        "caption": "Menino Polonês — Variação",
+        "alt": "Mascote Menino Polonês — Variação",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    },
+    {
+      "itemId": "mascote-pery-52a95e952f54",
+      "sourceIdentity": {
+        "sourcePath": "images/mascotes/MASCOTE_PERY.png",
+        "publicUrl": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_PERY.png",
+        "fingerprint": "52a95e952f54d4686a0e977d140e4d8b125713014a55e2047ce861ab5c91bc44"
+      },
+      "target": {
+        "url": "https://turismo.saomateusdosul.pr.gov.br/images/mascotes/MASCOTE_PERY.png",
+        "mediaType": "image",
+        "category": "mascotes",
+        "displayOrder": 28,
+        "published": true,
+        "caption": "Pery",
+        "alt": "Mascote Pery",
+        "createdAt": "__SERVER_TIMESTAMP__",
+        "createdBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "updatedAt": "__SERVER_TIMESTAMP__",
+        "updatedBy": "__MIGRATION_ACTOR_PRINCIPAL__",
+        "schemaVersion": 1
+      },
+      "operation": "CREATE_IF_ABSENT"
+    }
+  ]
+}

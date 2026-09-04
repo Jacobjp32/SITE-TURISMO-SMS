@@ -28,6 +28,43 @@
     var MASCOT_IMG = 'images/mascotes/MASCOTE_CAPIVARA_PINHAO.webp';
     var MASCOT_FALLBACK = '🌿'; // fallback visual simples se a imagem falhar
 
+    function resolveMascotEnabled(config) {
+        return !config || config.enabled !== false;
+    }
+
+    function useLocalEmulator() {
+        return (location.hostname === 'localhost' || location.hostname === '127.0.0.1') && new URLSearchParams(location.search).get('emulator') === '1';
+    }
+
+    async function readMascotConfig() {
+        if (!window.CONFIG || !window.CONFIG.firebase) return null;
+        try {
+            if (useLocalEmulator()) {
+                var localResponse = await fetch('http://localhost:8080/v1/projects/demo-turismo-sms-admin-finalization/databases/(default)/documents/site_config/mascot');
+                if (localResponse.status === 404) return null;
+                if (!localResponse.ok) throw new Error('Firestore Emulator respondeu ' + localResponse.status + '.');
+                var localFields = (await localResponse.json()).fields || {};
+                return { enabled: localFields.enabled && localFields.enabled.booleanValue };
+            }
+            if (window.firebase && window.firebase.firestore) {
+                if (!window.firebase.apps.length) window.firebase.initializeApp(window.CONFIG.firebase);
+                var compatDb = window.firebase.firestore();
+                var compatSnapshot = await compatDb.collection('site_config').doc('mascot').get();
+                return compatSnapshot.exists ? compatSnapshot.data() : null;
+            }
+            var appModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+            var firestoreModule = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+            var app = appModule.getApps().find(function (candidate) { return candidate.name === 'sms-public-site-config'; }) || appModule.initializeApp(window.CONFIG.firebase, 'sms-public-site-config');
+            var db = firestoreModule.getFirestore(app);
+            var snapshot = await firestoreModule.getDoc(firestoreModule.doc(db, 'site_config', 'mascot'));
+            return snapshot.exists() ? snapshot.data() : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
+    window.SMSMascotConfig = { resolveEnabled: resolveMascotEnabled };
+
     // ── Textos (fallback PT-BR embutido). As chaves espelham translations.js. ──
     var STR = {
         pt: {
@@ -455,11 +492,14 @@
     }
 
     function schedule() {
-        if ('requestIdleCallback' in window) {
-            window.requestIdleCallback(init, { timeout: 2500 });
-        } else {
-            window.setTimeout(init, 1200);
-        }
+        readMascotConfig().then(function (config) {
+            if (!resolveMascotEnabled(config)) return;
+            if ('requestIdleCallback' in window) {
+                window.requestIdleCallback(init, { timeout: 2500 });
+            } else {
+                window.setTimeout(init, 1200);
+            }
+        });
     }
 
     if (document.readyState === 'complete') {

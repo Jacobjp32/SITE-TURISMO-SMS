@@ -72,6 +72,48 @@
     };
     var ASSET_CACHE = {};
 
+    function resolveAdminMode(config, legacyMode) {
+        if (!config || config.enabled === false) return legacyMode;
+        if (config.mode === "AUTO") return AUTO_MODE;
+        if (config.mode === "MANUAL" && ["summer", "autumn", "winter", "spring"].indexOf(config.seasonOverride) >= 0) return config.seasonOverride;
+        return legacyMode;
+    }
+
+    function useLocalEmulator() {
+        return (location.hostname === "localhost" || location.hostname === "127.0.0.1") && new URLSearchParams(location.search).get("emulator") === "1";
+    }
+
+    async function readSeasonalConfig() {
+        if (!window.CONFIG || !window.CONFIG.firebase) return null;
+        try {
+            if (useLocalEmulator()) {
+                var localResponse = await fetch("http://localhost:8080/v1/projects/demo-turismo-sms-admin-finalization/databases/(default)/documents/site_config/seasonal");
+                if (localResponse.status === 404) return null;
+                if (!localResponse.ok) throw new Error("Firestore Emulator respondeu " + localResponse.status + ".");
+                var localFields = (await localResponse.json()).fields || {};
+                return {
+                    enabled: localFields.enabled && localFields.enabled.booleanValue,
+                    mode: localFields.mode && localFields.mode.stringValue,
+                    seasonOverride: localFields.seasonOverride && localFields.seasonOverride.stringValue
+                };
+            }
+            if (window.firebase && window.firebase.firestore) {
+                if (!window.firebase.apps.length) window.firebase.initializeApp(window.CONFIG.firebase);
+                var compatDb = window.firebase.firestore();
+                var compatSnapshot = await compatDb.collection("site_config").doc("seasonal").get();
+                return compatSnapshot.exists ? compatSnapshot.data() : null;
+            }
+            var appModule = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js");
+            var firestoreModule = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+            var app = appModule.getApps().find(function (candidate) { return candidate.name === "sms-public-site-config"; }) || appModule.initializeApp(window.CONFIG.firebase, "sms-public-site-config");
+            var db = firestoreModule.getFirestore(app);
+            var snapshot = await firestoreModule.getDoc(firestoreModule.doc(db, "site_config", "seasonal"));
+            return snapshot.exists() ? snapshot.data() : null;
+        } catch (error) {
+            return null;
+        }
+    }
+
     function isKnownMode(mode) {
         return Object.prototype.hasOwnProperty.call(SEASON_META, mode);
     }
@@ -650,7 +692,11 @@
         ensureAmbientLayer();
         ensureSwitcher();
         mountMascotSlot();
-        applySeason(safeGetStoredMode());
+        var legacyMode = safeGetStoredMode();
+        applySeason(legacyMode);
+        readSeasonalConfig().then(function (config) {
+            applySeason(resolveAdminMode(config, legacyMode));
+        });
         renderWeatherBadges();
 
         document.addEventListener("click", function (event) {
@@ -677,6 +723,7 @@
         applySeason: applySeason,
         getAutomaticSeason: getAutomaticSeason,
         getSeasonAssets: getSeasonAssetManifest,
+        resolveAdminMode: resolveAdminMode,
         refreshAssets: function () {
             updateSeasonAssets(document.documentElement.dataset.season || getAutomaticSeason());
         }

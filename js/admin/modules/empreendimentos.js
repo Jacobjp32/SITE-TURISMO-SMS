@@ -2223,7 +2223,6 @@
         label: "Empreendimentos",
         icon: "🏨",
         requiredRole: "admin",
-        master: false,
         navGroup: "Conteudo",
         order: 41,
         render: render,
