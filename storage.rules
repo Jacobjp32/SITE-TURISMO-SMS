@@ -40,6 +40,14 @@ service firebase.storage {
         request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
     }
 
+    function validApprovedImageUpload() {
+      return isStaff() &&
+        resource == null &&
+        request.resource != null &&
+        request.resource.size <= 5 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/(jpeg|jpg|png|webp)');
+    }
+
     match /submissions/establishments/{uid}/{submissionId}/{fileName} {
       allow read: if signedIn() && (request.auth.uid == uid || isStaff());
       allow create: if validPendingImageUpload(uid);
@@ -65,6 +73,20 @@ service firebase.storage {
     match /cms-media/{uid}/{allFiles=**} {
       allow read: if true;
       allow create: if validCmsImageUpload(uid);
+      allow update, delete: if false;
+    }
+
+    match /approved-media/events/{eventId}/{fileName} {
+      allow read: if isStaff() ||
+        firestore.exists(/databases/(default)/documents/eventos_aprovados/$(eventId));
+      allow create: if validApprovedImageUpload();
+      allow update, delete: if false;
+    }
+
+    match /approved-media/establishments/{estId}/{fileName} {
+      allow read: if isStaff() ||
+        firestore.exists(/databases/(default)/documents/estabelecimentos_aprovados/$(estId));
+      allow create: if validApprovedImageUpload();
       allow update, delete: if false;
     }
 

@@ -118,6 +118,18 @@ function normalizeComparableId(value) {
         .trim();
 }
 
+function requirePublicationContracts() {
+    if (
+        typeof SMSPublicationContracts === 'undefined' ||
+        typeof SMSPublicationContracts.projectPublicEvent !== 'function' ||
+        typeof SMSPublicationContracts.projectPublicEstablishment !== 'function' ||
+        typeof SMSPublicationContracts.publicDocumentId !== 'function'
+    ) {
+        throw new Error('[firebase-auth] Contrato canônico de publicação indisponível.');
+    }
+    return SMSPublicationContracts;
+}
+
 function getComparableTimestamp(value) {
     if (!value) return 0;
     if (typeof value.toMillis === 'function') return value.toMillis();
@@ -512,12 +524,18 @@ function normalizeStorageSourcePath(value) {
     }
     raw = safeDecodeStoragePath(raw).replace(/^\/+/, '');
 
-    var updatePathIndex = raw.indexOf('submissions/establishment-updates/');
-    if (updatePathIndex === -1) {
-        return '';
+    var allowedRoots = [
+        'submissions/establishment-updates/',
+        'submissions/establishments/',
+        'submissions/events/'
+    ];
+    for (var rootIndex = 0; rootIndex < allowedRoots.length; rootIndex += 1) {
+        var pathIndex = raw.indexOf(allowedRoots[rootIndex]);
+        if (pathIndex !== -1) {
+            return raw.slice(pathIndex);
+        }
     }
-
-    return raw.slice(updatePathIndex);
+    return '';
 }
 
 function extractStoragePathFromUrl(url) {
@@ -738,6 +756,124 @@ async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishme
     };
 }
 
+function getApprovedMediaEntityConfig(entityKind) {
+    if (entityKind === 'event') {
+        return { sourceRoot: 'events', destinationRoot: 'events' };
+    }
+    if (entityKind === 'establishment') {
+        return { sourceRoot: 'establishments', destinationRoot: 'establishments' };
+    }
+    throw createMediaApplicationError('download', 'Tipo de mídia de publicação inválido.');
+}
+
+function getSubmissionMediaSourcePath(image) {
+    return normalizeStorageSourcePath(image && image.path) ||
+        extractStoragePathFromUrl(image && image.url);
+}
+
+function assertOwnedSubmissionMediaPath(sourcePath, entityKind, ownerUid, documentId) {
+    var config = getApprovedMediaEntityConfig(entityKind);
+    var normalizedOwnerUid = sanitizeSimpleText(ownerUid, 160);
+    var normalizedDocumentId = requirePublicationContracts().publicDocumentId(documentId);
+    var expectedPrefix = 'submissions/' + config.sourceRoot + '/' + normalizedOwnerUid + '/' + normalizedDocumentId + '/';
+    if (!normalizedOwnerUid || !normalizedDocumentId || sourcePath.indexOf(expectedPrefix) !== 0) {
+        var error = createMediaApplicationError('download', 'A mídia não pertence à submissão aprovada.');
+        error.code = 'publication/invalid-field';
+        error.field = 'images';
+        throw error;
+    }
+    return config;
+}
+
+async function getExistingApprovedMediaUrl(destinationRef) {
+    try {
+        return await destinationRef.getDownloadURL();
+    } catch(error) {
+        var code = String(error && error.code || '');
+        if (code === 'storage/object-not-found' || code === 'object-not-found') return '';
+        throw createMediaApplicationError('upload', 'Não foi possível verificar a mídia pública existente.', error);
+    }
+}
+
+async function copySubmissionImageToApprovedMedia(image, entityKind, documentId, ownerUid, index) {
+    var normalizedImage = typeof image === 'string' ? { url: image } : Object.assign({}, image || {});
+    var sourcePath = getSubmissionMediaSourcePath(normalizedImage);
+    if (!sourcePath) {
+        var sourceError = createMediaApplicationError('download', 'A mídia da submissão não possui origem privada verificável.');
+        sourceError.code = 'publication/invalid-field';
+        sourceError.field = 'images';
+        throw sourceError;
+    }
+
+    var config = assertOwnedSubmissionMediaPath(sourcePath, entityKind, ownerUid, documentId);
+    var contentType = sanitizeSimpleText(normalizedImage.contentType, 80) || 'image/jpeg';
+    var sourceName = sanitizeSimpleText(normalizedImage.name, 120) || getSafeFileNameFromPath(sourcePath);
+    var safeFileName = getSafeFileNameFromPath(sourceName);
+    var destinationPath = [
+        'approved-media',
+        config.destinationRoot,
+        documentId,
+        String(index + 1).padStart(2, '0') + '-' + safeFileName
+    ].join('/');
+    var storage = firebase.storage();
+    var destinationRef = storage.ref(destinationPath);
+    var destinationUrl = await getExistingApprovedMediaUrl(destinationRef);
+
+    if (!destinationUrl) {
+        var blob = await downloadStorageBlobFromPath(storage, sourcePath, contentType);
+        try {
+            await destinationRef.put(blob, {
+                contentType: contentType,
+                cacheControl: 'public,max-age=31536000,immutable'
+            });
+            destinationUrl = await destinationRef.getDownloadURL();
+        } catch(error) {
+            throw createMediaApplicationError('upload', 'Falha ao republicar mídia aprovada em namespace público.', error);
+        }
+    }
+
+    normalizedImage.url = destinationUrl;
+    delete normalizedImage.path;
+    delete normalizedImage.uploadedAt;
+    return normalizedImage;
+}
+
+async function preparePublicSubmissionMedia(rawDocument, entityKind, documentId) {
+    var raw = rawDocument || {};
+    var ownerUid = sanitizeSimpleText(raw.submittedBy, 160);
+    var sourceImages = Array.isArray(raw.images) ? raw.images : [];
+    var projectedImages = [];
+    var urlMap = Object.create(null);
+
+    for (var index = 0; index < sourceImages.length; index += 1) {
+        var sourceImage = typeof sourceImages[index] === 'string'
+            ? { url: sourceImages[index] }
+            : Object.assign({}, sourceImages[index] || {});
+        var publicImage = await copySubmissionImageToApprovedMedia(sourceImage, entityKind, documentId, ownerUid, index);
+        projectedImages.push(publicImage);
+        if (sourceImage.url && publicImage.url) urlMap[String(sourceImage.url)] = publicImage.url;
+    }
+
+    var prepared = Object.assign({}, raw, { images: projectedImages });
+    var rawMainImage = sanitizeSimpleText(raw.mainImage || raw.image, 2048);
+    if (rawMainImage) {
+        var publicMainImage = urlMap[rawMainImage] || '';
+        if (!publicMainImage) {
+            var copiedCover = await copySubmissionImageToApprovedMedia(
+                { url: rawMainImage, contentType: raw.mainImageContentType || '' },
+                entityKind,
+                documentId,
+                ownerUid,
+                projectedImages.length
+            );
+            publicMainImage = copiedCover.url || rawMainImage;
+        }
+        prepared.mainImage = publicMainImage;
+        prepared.image = publicMainImage;
+    }
+    return prepared;
+}
+
 function normalizeEventReviewStatus(status) {
     var normalized = String(status == null ? '' : status).trim().toLowerCase();
 
@@ -857,7 +993,7 @@ function initFirebase() {
                                 'firestore/profile-timeout'
                             );
                             if (userDoc.exists) {
-                                currentUser = Object.assign({ uid: user.uid, email: user.email, _profilePending: false, _profileError: false }, userDoc.data());
+                                currentUser = Object.assign({}, userDoc.data(), { uid: user.uid, email: user.email, _profilePending: false, _profileError: false });
                             } else {
                                 currentUser._profilePending = false;
                                 currentUser._profileError = false;
@@ -982,7 +1118,7 @@ const FirebaseSystem = {
         if (!this.isAdmin()) return [];
         try {
             const snap = await firebase.firestore().collection('usuarios').get();
-            const users = snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+            const users = snap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
             return sortByTimestampDesc(users, 'criadoEm');
         } catch(e) { console.error(e); return []; }
     },
@@ -1087,7 +1223,7 @@ const FirebaseSystem = {
         try {
             const snap = await firebase.firestore().collection('eventos_pendentes').get();
             const items = snap.docs
-                .map(function(d) { return Object.assign({ id: d.id }, d.data()); })
+                .map(function(d) { return Object.assign({}, d.data(), { id: d.id }); })
                 .filter(function(item) { return isPendingStatus(item && item.status); })
                 .sort(function(a, b) {
                     return getSortableTimestampValue(b && (b.submittedAt || b.createdAt || b.updatedAt)) -
@@ -1120,31 +1256,52 @@ const FirebaseSystem = {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
         notes = notes || '';
         try {
+            const publicationContracts = requirePublicationContracts();
+            const publicEventId = publicationContracts.publicDocumentId(eventId);
+            if (!publicEventId) return { success: false, message: 'ID de evento inválido.' };
             const db  = firebase.firestore();
-            const ref = db.collection('eventos_pendentes').doc(eventId);
+            const ref = db.collection('eventos_pendentes').doc(publicEventId);
+            const publicRef = db.collection('eventos_aprovados').doc(publicEventId);
             const doc = await ref.get();
             if (!doc.exists) return { success: false, message: 'Evento não encontrado.' };
-            await db.collection('eventos_aprovados').doc(eventId).set(
-                Object.assign({}, doc.data(), {
-                    status:      'aprovado',
-                    publicado:   true,
-                    reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
-                    reviewedBy:  currentUser.uid,
-                    reviewNotes: notes,
-                    updatedAt:   firebase.firestore.FieldValue.serverTimestamp(),
-                    updatedBy:   currentUser.uid
-                })
+            const existingPublicDoc = await publicRef.get();
+            if (existingPublicDoc.exists) {
+                return { success: false, message: 'Já existe um evento público com este ID; aprovação interrompida.' };
+            }
+            const publicSource = await preparePublicSubmissionMedia(doc.data(), 'event', publicEventId);
+            const approvedAt = firebase.firestore.FieldValue.serverTimestamp();
+            const batch = db.batch();
+            batch.set(
+                publicRef,
+                publicationContracts.projectPublicEvent(publicSource, publicEventId)
             );
-            await ref.delete();
+            batch.update(ref, {
+                status: 'aprovado',
+                reviewedAt: approvedAt,
+                reviewedBy: currentUser.uid,
+                reviewNotes: notes,
+                updatedAt: approvedAt,
+                updatedBy: currentUser.uid
+            });
+            await batch.commit();
             return { success: true, message: 'Evento aprovado com sucesso!' };
-        } catch(e) { return { success: false, message: 'Erro ao aprovar evento.' }; }
+        } catch(e) {
+            return {
+                success: false,
+                message: e && e.code === 'publication/invalid-field'
+                    ? e.message
+                    : (e && e.cmsMediaType ? formatMediaApplicationError(e) : 'Erro ao aprovar evento.')
+            };
+        }
     },
 
     rejectEvent: async function(eventId, reason) {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
         reason = reason || '';
         try {
-            await firebase.firestore().collection('eventos_pendentes').doc(eventId).update({
+            const rejectedEventId = requirePublicationContracts().publicDocumentId(eventId);
+            if (!rejectedEventId) return { success: false, message: 'ID de evento inválido.' };
+            await firebase.firestore().collection('eventos_pendentes').doc(rejectedEventId).update({
                 status:      'rejeitado',
                 reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
                 reviewedBy:  currentUser.uid,
@@ -1158,17 +1315,12 @@ const FirebaseSystem = {
         if (!this.isLoggedIn()) return [];
         try {
             const db = firebase.firestore();
-            const [pendSnap, appSnap] = await withTimeout(
-                Promise.all([
-                    db.collection('eventos_pendentes').where('submittedBy', '==', currentUser.uid).get(),
-                    db.collection('eventos_aprovados').where('submittedBy', '==', currentUser.uid).get()
-                ]),
+            const submissionSnap = await withTimeout(
+                db.collection('eventos_pendentes').where('submittedBy', '==', currentUser.uid).get(),
                 PROFILE_LOAD_TIMEOUT_MS,
                 'firestore/events-timeout'
             );
-            const pending  = pendSnap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
-            const approved = appSnap.docs.map(function(d)  { return Object.assign({ id: d.id }, d.data()); });
-            return pending.concat(approved);
+            return submissionSnap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
         } catch(e) { console.error(e); return []; }
     },
 
@@ -1180,9 +1332,11 @@ const FirebaseSystem = {
         if (!this.isLoggedIn()) return { success: false, message: 'Você precisa estar logado.' };
         try {
             const db = firebase.firestore();
-            const estId = 'est_' + Date.now();
+            const payload = Object.assign({}, estData || {});
+            const requestedId = requirePublicationContracts().publicDocumentId(String(payload.id || '').trim());
+            const estId = requestedId || ('est_' + Date.now());
             await db.collection('estabelecimentos_pendentes').doc(estId).set(
-                Object.assign({}, estData, {
+                Object.assign({}, payload, {
                     id: estId,
                     submittedBy:      currentUser.uid,
                     submittedByName:  currentUser.nome,
@@ -1200,7 +1354,7 @@ const FirebaseSystem = {
         try {
             const snap = await firebase.firestore().collection('estabelecimentos_pendentes')
                 .where('status', '==', 'pendente').get();
-            return snap.docs.map(function(d) { return Object.assign({ id: d.id }, d.data()); });
+            return snap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
         } catch(e) { return []; }
     },
 
@@ -1208,28 +1362,50 @@ const FirebaseSystem = {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
         notes = notes || '';
         try {
+            const publicationContracts = requirePublicationContracts();
+            const publicEstablishmentId = publicationContracts.publicDocumentId(estId);
+            if (!publicEstablishmentId) return { success: false, message: 'ID de estabelecimento inválido.' };
             const db  = firebase.firestore();
-            const ref = db.collection('estabelecimentos_pendentes').doc(estId);
+            const ref = db.collection('estabelecimentos_pendentes').doc(publicEstablishmentId);
+            const publicRef = db.collection('estabelecimentos_aprovados').doc(publicEstablishmentId);
             const doc = await ref.get();
             if (!doc.exists) return { success: false, message: 'Estabelecimento não encontrado.' };
-            await db.collection('estabelecimentos_aprovados').doc(estId).set(
-                Object.assign({}, doc.data(), {
-                    status:      'aprovado',
-                    reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
-                    reviewedBy:  currentUser.uid,
-                    reviewNotes: notes
-                })
+            const existingPublicDoc = await publicRef.get();
+            if (existingPublicDoc.exists) {
+                return { success: false, message: 'Já existe um estabelecimento público com este ID; aprovação interrompida.' };
+            }
+            const publicSource = await preparePublicSubmissionMedia(doc.data(), 'establishment', publicEstablishmentId);
+            const approvedAt = firebase.firestore.FieldValue.serverTimestamp();
+            const batch = db.batch();
+            batch.set(
+                publicRef,
+                publicationContracts.projectPublicEstablishment(publicSource, publicEstablishmentId)
             );
-            await ref.delete();
+            batch.update(ref, {
+                status: 'aprovado',
+                reviewedAt: approvedAt,
+                reviewedBy: currentUser.uid,
+                reviewNotes: notes
+            });
+            await batch.commit();
             return { success: true, message: 'Estabelecimento aprovado com sucesso!' };
-        } catch(e) { return { success: false, message: 'Erro ao aprovar estabelecimento.' }; }
+        } catch(e) {
+            return {
+                success: false,
+                message: e && e.code === 'publication/invalid-field'
+                    ? e.message
+                    : (e && e.cmsMediaType ? formatMediaApplicationError(e) : 'Erro ao aprovar estabelecimento.')
+            };
+        }
     },
 
     rejectEstablishment: async function(estId, reason) {
         if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
         reason = reason || '';
         try {
-            await firebase.firestore().collection('estabelecimentos_pendentes').doc(estId).update({
+            const rejectedEstablishmentId = requirePublicationContracts().publicDocumentId(estId);
+            if (!rejectedEstablishmentId) return { success: false, message: 'ID de estabelecimento inválido.' };
+            await firebase.firestore().collection('estabelecimentos_pendentes').doc(rejectedEstablishmentId).update({
                 status:      'rejeitado',
                 reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
                 reviewedBy:  currentUser.uid,
@@ -1300,7 +1476,7 @@ const FirebaseSystem = {
                 .get();
 
             var relatedClaims = claimsSnap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).filter(function(item) {
                 return normalizeComparableId(item.establishmentId) === normalizedTarget;
             });
@@ -1363,7 +1539,7 @@ const FirebaseSystem = {
                 .get();
 
             return sortByTimestampDesc(snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }), 'createdAt');
         } catch(error) {
             console.error(error);
@@ -1383,7 +1559,7 @@ const FirebaseSystem = {
                 .get();
 
             return snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).filter(function(item) {
                 return item.active !== false;
             }).sort(function(a, b) {
@@ -1409,7 +1585,7 @@ const FirebaseSystem = {
 
                 if (!managerDoc.exists) return null;
 
-                var manager = Object.assign({ id: managerDoc.id }, managerDoc.data());
+                var manager = Object.assign({}, managerDoc.data(), { id: managerDoc.id });
                 return isActiveManagerRecord(manager, currentUser.uid, normalizedEstablishmentId) ? manager : null;
             }
 
@@ -1527,7 +1703,7 @@ const FirebaseSystem = {
                 .get();
 
             return sortByTimestampDesc(snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }), 'createdAt');
         } catch(error) {
             console.error(error);
@@ -1542,7 +1718,7 @@ const FirebaseSystem = {
             var statusList = ensureArray(statusFilter).map(normalizeUpdateRequestStatus);
 
             return sortByTimestampDesc(snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).filter(function(item) {
                 if (!statusList.length) return true;
                 return statusList.indexOf(normalizeUpdateRequestStatus(item.status)) !== -1;
@@ -1989,7 +2165,7 @@ const FirebaseSystem = {
                 .get();
 
             return sortByTimestampDesc(snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }), 'createdAt');
         } catch(error) {
             console.error(error);
@@ -2002,7 +2178,7 @@ const FirebaseSystem = {
         try {
             var snap = await firebase.firestore().collection('establishment_managers').get();
             return snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).sort(function(a, b) {
                 if ((a.active === false) !== (b.active === false)) {
                     return a.active === false ? 1 : -1;
@@ -2035,7 +2211,7 @@ const FirebaseSystem = {
 
             var targetId = normalizeComparableId(normalizedEstablishmentId);
             return snap.docs.map(function(doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).find(function(item) {
                 return item.id !== normalizedExcludeId &&
                     normalizeComparableId(item.establishmentId) === targetId;
@@ -2125,7 +2301,7 @@ const FirebaseSystem = {
                 return { success: false, message: 'Vínculo não encontrado.' };
             }
 
-            var currentManager = Object.assign({ id: managerSnap.id }, managerSnap.data());
+            var currentManager = Object.assign({}, managerSnap.data(), { id: managerSnap.id });
             var currentUserId = String(currentManager.userId || '').trim();
             var establishmentId = String(managerData && managerData.establishmentId || currentManager.establishmentId || '').trim();
             var establishmentName = String(managerData && managerData.establishmentName || currentManager.establishmentName || '').trim();
@@ -2266,7 +2442,7 @@ const FirebaseSystem = {
                 return { success: false, message: 'Vínculo não encontrado.' };
             }
 
-            var currentManager = Object.assign({ id: managerSnap.id }, managerSnap.data());
+            var currentManager = Object.assign({}, managerSnap.data(), { id: managerSnap.id });
             var duplicateManager = await this.checkExistingManager(
                 currentManager.userId,
                 currentManager.establishmentId,
@@ -2307,7 +2483,7 @@ const FirebaseSystem = {
                 return { success: false, message: 'Solicitação não encontrada.' };
             }
 
-            var claim = Object.assign({ id: claimSnap.id }, claimSnap.data());
+            var claim = Object.assign({}, claimSnap.data(), { id: claimSnap.id });
 
             if (claim.status === 'approved') {
                 return { success: false, message: 'Esta solicitação já foi aprovada.' };

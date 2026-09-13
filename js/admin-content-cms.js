@@ -55,7 +55,7 @@
 
             var snapshot = await this.db.collection("media_library").get();
             this.media = snapshot.docs.map(function (doc) {
-                return Object.assign({ id: doc.id }, doc.data());
+                return Object.assign({}, doc.data(), { id: doc.id });
             }).sort(compareAdminDateDesc);
             return this.media;
         },
@@ -71,7 +71,7 @@
             try {
                 var snapshot = await this.db.collection("eventos_aprovados").get();
                 this.events = snapshot.docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
 
                 if (!this.events.length) {
@@ -97,12 +97,12 @@
                             (eventItem.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>Atualizado: ' +
                             SEC.html(formatAdminDate(eventItem.updatedAt || eventItem.reviewedAt), "—") + '<br>Por: ' +
                             SEC.html(eventItem.updatedBy || eventItem.reviewedBy || "—") + '</small></td><td>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.previewEvent(\'' + SEC.js(eventItem.id) + '\')">Prévia</button>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.openEventModal(\'' + SEC.js(eventItem.id) + '\')">Editar</button>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.duplicateEvent(\'' + SEC.js(eventItem.id) + '\')">Duplicar</button>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleEventPublish(\'' + SEC.js(eventItem.id) + '\')">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleEventFeatured(\'' + SEC.js(eventItem.id) + '\')">' + (eventItem.destaque ? 'Remover destaque' : 'Destacar') + '</button>' +
-                            '<button class="btn-sm btn-delete" onclick="AdminContentCMS.deleteEvent(\'' + SEC.js(eventItem.id) + '\')">Excluir</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-preview-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Prévia</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Editar</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-duplicate-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Duplicar</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-toggle-event-publish" data-admin-target-id="' + SEC.attr(eventItem.id) + '">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-toggle-event-featured" data-admin-target-id="' + SEC.attr(eventItem.id) + '">' + (eventItem.destaque ? 'Remover destaque' : 'Destacar') + '</button>' +
+                            '<button class="btn-sm btn-delete" type="button" data-admin-action="content-delete-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Excluir</button>' +
                             '</td></tr>';
                     }).join("") + '</tbody></table></div>';
             } catch (error) {
@@ -415,7 +415,7 @@
             try {
                 var snapshot = await this.db.collection("noticias").get();
                 this.news = snapshot.docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
 
                 if (!this.news.length) {
@@ -438,10 +438,10 @@
                             '</td><td><span class="badge ' + (published ? 'badge-success">Publicado' : 'badge-warning">Rascunho') + '</span>' +
                             (item.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>' +
                             SEC.html(formatAdminDate(item.updatedAt || item.publishedAt || item.data), "—") + '<br>' + SEC.html(item.updatedBy || "—") + '</small></td><td>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.openNewsModal(\'' + SEC.js(item.id) + '\')">Editar</button>' +
-                            '<button class="btn-sm btn-edit" onclick="AdminContentCMS.toggleNewsPublish(\'' + SEC.js(item.id) + '\')">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-news" data-admin-target-id="' + SEC.attr(item.id) + '">Editar</button>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-toggle-news-publish" data-admin-target-id="' + SEC.attr(item.id) + '">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
                             originAction +
-                            '<button class="btn-sm btn-delete" onclick="AdminContentCMS.deleteNews(\'' + SEC.js(item.id) + '\')">Excluir</button>' +
+                            '<button class="btn-sm btn-delete" type="button" data-admin-action="content-delete-news" data-admin-target-id="' + SEC.attr(item.id) + '">Excluir</button>' +
                             '</td></tr>';
                     }).join("") + '</tbody></table></div>';
             } catch (error) {
@@ -634,13 +634,13 @@
                     this.db.collection("rotas").get()
                 ]);
                 this.events = results[1].docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
                 this.news = results[2].docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
                 this.mediaUsageMap = buildMediaUsageMap(this.events, this.news, results[3].docs.map(function (doc) {
-                    return Object.assign({ id: doc.id }, doc.data());
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }));
 
                 if (!this.media.length) {
@@ -663,11 +663,11 @@
                             '<span class="manager-meta">' + SEC.html(formatMediaUsageSummary(usage)) + '</span>' +
                             '<div class="media-admin-url">' + SEC.html(item.url, "—") + '</div>' +
                             '<div class="media-admin-actions">' +
-                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.copyMediaUrl(\'' + SEC.js(item.id) + '\')">Copiar URL</button>' +
-                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.openMediaModal(\'' + SEC.js(item.id) + '\')">Editar</button>' +
-                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.useMediaInNewEvent(\'' + SEC.js(item.id) + '\')">Usar em evento</button>' +
-                                '<button class="btn-sm btn-edit" type="button" onclick="AdminContentCMS.useMediaInNewNews(\'' + SEC.js(item.id) + '\')">Usar em notícia</button>' +
-                                '<button class="btn-sm btn-delete" type="button" onclick="AdminContentCMS.deleteMedia(\'' + SEC.js(item.id) + '\')">Excluir</button>' +
+                                '<button class="btn-sm btn-edit" type="button" data-admin-action="content-copy-media-url" data-admin-target-id="' + SEC.attr(item.id) + '">Copiar URL</button>' +
+                                '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-media" data-admin-target-id="' + SEC.attr(item.id) + '">Editar</button>' +
+                                '<button class="btn-sm btn-edit" type="button" data-admin-action="content-use-media-event" data-admin-target-id="' + SEC.attr(item.id) + '">Usar em evento</button>' +
+                                '<button class="btn-sm btn-edit" type="button" data-admin-action="content-use-media-news" data-admin-target-id="' + SEC.attr(item.id) + '">Usar em notícia</button>' +
+                                '<button class="btn-sm btn-delete" type="button" data-admin-action="content-delete-media" data-admin-target-id="' + SEC.attr(item.id) + '">Excluir</button>' +
                             '</div>' +
                         '</div>' +
                     '</article>';
@@ -1063,7 +1063,7 @@
             '</div>' +
             '<section class="event-gallery-admin"><h4>Galeria atual</h4>' + renderEventGalleryList(item) + '</section>' +
             '<section class="event-preview-panel"><h4>Descrição</h4><div class="event-preview-fields"><div>' + escapeHtml(item.description || item.descricao || "Sem descrição cadastrada.") + '</div></div></section>' +
-        '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button><button class="btn-primary" type="button" onclick="AdminContentCMS.closeModal();AdminContentCMS.openEventModal(\'' + escapeJsString(item.id || "") + '\')">Editar este evento</button></div>';
+        '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button><button class="btn-primary" type="button" data-admin-action="close-modal-open-event" data-admin-target-id="' + escapeHtml(item.id || "") + '">Editar este evento</button></div>';
     }
 
     function buildEventForm(item, mediaItems) {

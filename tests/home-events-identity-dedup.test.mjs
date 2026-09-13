@@ -5,6 +5,7 @@ import vm from 'node:vm';
 
 const HOME_SOURCE = readFileSync(new URL('../js/home-eventos.js', import.meta.url), 'utf8');
 const ADAPTER_SOURCE = readFileSync(new URL('../js/event-occurrence-adapter.js', import.meta.url), 'utf8');
+const PUBLICATION_SOURCE = readFileSync(new URL('../js/publication-contracts.js', import.meta.url), 'utf8');
 let harnessSequence = 0;
 
 function event(overrides = {}) {
@@ -77,8 +78,12 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSo
         document,
         fetch: async () => ({ json: async () => annual }),
         localStorage,
-        window
+        window,
+        URL,
+        TextEncoder
     });
+    vm.runInContext(PUBLICATION_SOURCE, context, { filename: 'js/publication-contracts.js' });
+    window.SMSPublicationContracts = context.SMSPublicationContracts;
     if (loadAdapter) {
         vm.runInContext(adapterSource, context, { filename: 'js/event-occurrence-adapter.js' });
         window.EventOccurrenceAdapter = context.EventOccurrenceAdapter;

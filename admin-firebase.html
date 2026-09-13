@@ -1583,6 +1583,7 @@
     </div>
 
     <script src="js/security-utils.js"></script>
+    <script src="js/publication-contracts.js?v=security-hardening-02a-20260913"></script>
     <script src="js/data/restaurantes.js"></script>
     <script src="js/data/hospedagens.js"></script>
     <script src="js/establishment-catalog.js"></script>
@@ -1635,11 +1636,92 @@
 
         let adminInteractionsBound = false;
 
+        function runAdminDelegatedAction(actionElement) {
+            const action = actionElement.getAttribute('data-admin-action') || '';
+            const targetId = actionElement.getAttribute('data-admin-target-id');
+            let result;
+
+            switch (action) {
+                case 'approve-event': result = approveEvent(targetId); break;
+                case 'reject-event': result = rejectEvent(targetId); break;
+                case 'view-event': result = viewEvent(targetId); break;
+                case 'approve-establishment': result = approveEstablishment(targetId); break;
+                case 'reject-establishment': result = rejectEstablishment(targetId); break;
+                case 'change-user-role': result = changeUserRole(targetId, actionElement.value); break;
+                case 'copy-user-email': result = copyUserEmail(actionElement.getAttribute('data-admin-value') || ''); break;
+                case 'focus-user-managers': result = focusUserManagers(targetId); break;
+                case 'open-add-manager': result = openAddManagerModal(targetId); break;
+                case 'focus-user-claims': result = focusUserClaims(targetId); break;
+                case 'toggle-user-status': result = toggleUserStatus(targetId, actionElement.getAttribute('data-admin-next-active') === 'true'); break;
+                case 'approve-claim': result = approveClaim(targetId); break;
+                case 'reject-claim': result = rejectClaimReview(targetId); break;
+                case 'edit-manager': result = openEditManagerModal(targetId); break;
+                case 'reactivate-manager': result = reactivateManager(targetId); break;
+                case 'deactivate-manager': result = deactivateManager(targetId); break;
+                case 'clear-user-claims-filter': result = clearUserClaimsFilter(); break;
+                case 'clear-user-managers-filter': result = clearUserManagersFilter(); break;
+                case 'close-modal-approve-event':
+                    AdminContentCMS.closeModal();
+                    result = approveEvent(targetId);
+                    break;
+                case 'apply-update-media': result = applyAcceptedEstablishmentUpdateMedia(targetId); break;
+                case 'approve-update-request': result = approveEstablishmentUpdateRequest(targetId); break;
+                case 'reject-update-request': result = rejectEstablishmentUpdateRequest(targetId); break;
+                case 'request-update-changes': result = requestChangesForEstablishmentUpdate(targetId); break;
+                case 'apply-update-request': result = applyEstablishmentUpdateRequest(targetId); break;
+                case 'save-update-media-review': result = saveEstablishmentUpdateMediaReview(targetId); break;
+                case 'content-preview-event': result = AdminContentCMS.previewEvent(targetId); break;
+                case 'content-open-event': result = AdminContentCMS.openEventModal(targetId); break;
+                case 'content-duplicate-event': result = AdminContentCMS.duplicateEvent(targetId); break;
+                case 'content-toggle-event-publish': result = AdminContentCMS.toggleEventPublish(targetId); break;
+                case 'content-toggle-event-featured': result = AdminContentCMS.toggleEventFeatured(targetId); break;
+                case 'content-delete-event': result = AdminContentCMS.deleteEvent(targetId); break;
+                case 'content-open-news': result = AdminContentCMS.openNewsModal(targetId); break;
+                case 'content-toggle-news-publish': result = AdminContentCMS.toggleNewsPublish(targetId); break;
+                case 'content-delete-news': result = AdminContentCMS.deleteNews(targetId); break;
+                case 'content-copy-media-url': result = AdminContentCMS.copyMediaUrl(targetId); break;
+                case 'content-open-media': result = AdminContentCMS.openMediaModal(targetId); break;
+                case 'content-use-media-event': result = AdminContentCMS.useMediaInNewEvent(targetId); break;
+                case 'content-use-media-news': result = AdminContentCMS.useMediaInNewNews(targetId); break;
+                case 'content-delete-media': result = AdminContentCMS.deleteMedia(targetId); break;
+                case 'close-modal-open-event':
+                    AdminContentCMS.closeModal();
+                    result = AdminContentCMS.openEventModal(targetId);
+                    break;
+                default: return;
+            }
+
+            if (result && typeof result.catch === 'function') {
+                result.catch(function(error) {
+                    console.error('[admin-firebase] Falha em ação delegada.', { action: action, error: error });
+                });
+            }
+        }
+
+        function handleAdminDelegatedClick(event) {
+            const actionElement = event.target && typeof event.target.closest === 'function'
+                ? event.target.closest('[data-admin-action]')
+                : null;
+            if (!actionElement || actionElement.tagName === 'SELECT') return;
+            event.preventDefault();
+            runAdminDelegatedAction(actionElement);
+        }
+
+        function handleAdminDelegatedChange(event) {
+            const actionElement = event.target && typeof event.target.matches === 'function' && event.target.matches('[data-admin-action]')
+                ? event.target
+                : null;
+            if (!actionElement) return;
+            runAdminDelegatedAction(actionElement);
+        }
+
         function bindAdminInteractions() {
             if (adminInteractionsBound) return;
             document.getElementById('adminLoginForm').addEventListener('submit', handleLogin);
             document.getElementById('toggleLoginPassword').addEventListener('click', toggleLoginPasswordVisibility);
             document.getElementById('managerForm').addEventListener('submit', handleManagerFormSubmit);
+            document.addEventListener('click', handleAdminDelegatedClick);
+            document.addEventListener('change', handleAdminDelegatedChange);
             document.querySelectorAll('.sidebar-menu a[data-section]').forEach(link => {
                 link.addEventListener('click', () => showSection(link.dataset.section));
             });
@@ -2035,9 +2117,9 @@
                                         </td>
                                         <td>${renderPendingEventImages(e)}</td>
                                         <td>
-                                            <button class="btn-sm btn-approve" onclick="approveEvent('${SEC.js(e.id)}')">✅ Aprovar</button>
-                                            <button class="btn-sm btn-reject" onclick="rejectEvent('${SEC.js(e.id)}')">❌ Rejeitar</button>
-                                            <button class="btn-sm btn-edit" onclick="viewEvent('${SEC.js(e.id)}')">👁️ Revisar</button>
+                                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-event" data-admin-target-id="${SEC.attr(e.id)}">✅ Aprovar</button>
+                                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-event" data-admin-target-id="${SEC.attr(e.id)}">❌ Rejeitar</button>
+                                            <button class="btn-sm btn-edit" type="button" data-admin-action="view-event" data-admin-target-id="${SEC.attr(e.id)}">👁️ Revisar</button>
                                         </td>
                                     </tr>
                                 `).join('')}
@@ -2084,8 +2166,8 @@
                                     <td>${SEC.html(e.submittedByName, '—')}</td>
                                     <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
-                                        <button class="btn-sm btn-approve" onclick="approveEstablishment('${SEC.js(e.id)}')">✅</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectEstablishment('${SEC.js(e.id)}')">❌</button>
+                                        <button class="btn-sm btn-approve" type="button" data-admin-action="approve-establishment" data-admin-target-id="${SEC.attr(e.id)}">✅</button>
+                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-establishment" data-admin-target-id="${SEC.attr(e.id)}">❌</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -2144,7 +2226,7 @@
                                         <td>${SEC.html(u.email, '—')}</td>
                                         <td>${SEC.html(u.tipo || 'turista')}</td>
                                         <td>
-                                            <select onchange="changeUserRole('${SEC.js(u.id)}', this.value)" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
+                                            <select data-admin-action="change-user-role" data-admin-target-id="${SEC.attr(u.id)}" ${u.id === window.currentUser?.uid ? 'disabled' : ''}>
                                                 <option value="user" ${u.role === 'user' ? 'selected' : ''}>Usuário</option>
                                                 <option value="moderator" ${u.role === 'moderator' ? 'selected' : ''}>Moderador</option>
                                                 <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
@@ -2166,15 +2248,15 @@
                                         </td>
                                         <td>
                                             <div class="user-support-actions">
-                                                <button class="btn-sm btn-edit" type="button" onclick="copyUserEmail('${SEC.js(u.email || '')}')">Copiar e-mail</button>
-                                                <button class="btn-sm btn-edit" type="button" onclick="focusUserManagers('${SEC.js(u.id)}')">Ver vínculos</button>
-                                                <button class="btn-sm btn-approve" type="button" onclick="openAddManagerModal('${SEC.js(u.id)}')">Adicionar vínculo</button>
+                                                <button class="btn-sm btn-edit" type="button" data-admin-action="copy-user-email" data-admin-value="${SEC.attr(u.email || '')}">Copiar e-mail</button>
+                                                <button class="btn-sm btn-edit" type="button" data-admin-action="focus-user-managers" data-admin-target-id="${SEC.attr(u.id)}">Ver vínculos</button>
+                                                <button class="btn-sm btn-approve" type="button" data-admin-action="open-add-manager" data-admin-target-id="${SEC.attr(u.id)}">Adicionar vínculo</button>
                                                 ${pendingClaims.length
-                                                    ? `<button class="btn-sm btn-edit" type="button" onclick="focusUserClaims('${SEC.js(u.id)}')">Ver solicitações</button>`
+                                                    ? `<button class="btn-sm btn-edit" type="button" data-admin-action="focus-user-claims" data-admin-target-id="${SEC.attr(u.id)}">Ver solicitações</button>`
                                                     : '<span class="user-empty-state">Nenhuma solicitação pendente</span>'}
                                                 ${u.id !== window.currentUser?.uid ? `
                                                     <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" type="button"
-                                                            onclick="toggleUserStatus('${SEC.js(u.id)}', ${u.ativo === false})">
+                                                            data-admin-action="toggle-user-status" data-admin-target-id="${SEC.attr(u.id)}" data-admin-next-active="${u.ativo === false}">
                                                         ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
                                                     </button>
                                                 ` : '<small style="color:#888;">Você</small>'}
@@ -2199,13 +2281,13 @@
 
             if (!filteredClaims.length) {
                 container.innerHTML = (adminClaimUserFilterId
-                    ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, 0, 'clearUserClaimsFilter()')
+                    ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, 0, 'clear-user-claims-filter')
                     : '') + '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de vínculo pendente.</p>';
                 return;
             }
 
             container.innerHTML = `
-                ${adminClaimUserFilterId ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, filteredClaims.length, 'clearUserClaimsFilter()') : ''}
+                ${adminClaimUserFilterId ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, filteredClaims.length, 'clear-user-claims-filter') : ''}
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
@@ -2235,8 +2317,8 @@
                                     <td class="claim-admin-actions">
                                         <textarea class="admin-textarea" id="claim-note-${SEC.attr(claim.id)}" placeholder="Observação interna (opcional)"></textarea>
                                         <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
-                                        <button class="btn-sm btn-approve" onclick="approveClaim('${SEC.js(claim.id)}')">✅ Aprovar</button>
-                                        <button class="btn-sm btn-reject" onclick="rejectClaimReview('${SEC.js(claim.id)}')">❌ Rejeitar</button>
+                                        <button class="btn-sm btn-approve" type="button" data-admin-action="approve-claim" data-admin-target-id="${SEC.attr(claim.id)}">✅ Aprovar</button>
+                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-claim" data-admin-target-id="${SEC.attr(claim.id)}">❌ Rejeitar</button>
                                         <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
                                     </td>
                                 </tr>
@@ -2327,13 +2409,13 @@
 
             if (!filteredManagers.length) {
                 container.innerHTML = (adminManagerUserFilterId
-                    ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, 0, 'clearUserManagersFilter()')
+                    ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, 0, 'clear-user-managers-filter')
                     : '') + '<p style="text-align:center;padding:2rem;color:#888;">Nenhum vínculo cadastrado ainda.</p>';
                 return;
             }
 
             container.innerHTML = `
-                ${adminManagerUserFilterId ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, filteredManagers.length, 'clearUserManagersFilter()') : ''}
+                ${adminManagerUserFilterId ? renderFilterBannerHtml('vínculos', adminManagerUserFilterId, filteredManagers.length, 'clear-user-managers-filter') : ''}
                 <div class="table-responsive">
                     <table class="data-table">
                         <thead>
@@ -2369,10 +2451,10 @@
                                     </td>
                                     <td>${SEC.html(formatFirestoreDate(manager.approvedAt))}</td>
                                     <td class="manager-actions">
-                                        <button class="btn-sm btn-edit" onclick="openEditManagerModal('${SEC.js(manager.id)}')">✏️ Editar</button>
+                                        <button class="btn-sm btn-edit" type="button" data-admin-action="edit-manager" data-admin-target-id="${SEC.attr(manager.id)}">✏️ Editar</button>
                                         ${manager.active === false
-                                            ? `<button class="btn-sm btn-approve" onclick="reactivateManager('${SEC.js(manager.id)}')">✅ Reativar</button>`
-                                            : `<button class="btn-sm btn-reject" onclick="deactivateManager('${SEC.js(manager.id)}')">🚫 Desativar</button>`}
+                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="reactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">✅ Reativar</button>`
+                                            : `<button class="btn-sm btn-reject" type="button" data-admin-action="deactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">🚫 Desativar</button>`}
                                     </td>
                                 </tr>
                             `).join('')}
@@ -2644,7 +2726,7 @@
                 const db = window.firebaseDB && window.firebaseDB.db;
                 if (!db) throw new Error('Firestore não inicializado.');
                 const snapshot = await db.collection('eventos_aprovados').get();
-                const eventos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                const eventos = snapshot.docs.map(doc => Object.assign({}, doc.data(), { id: doc.id }));
 
                 const container = document.getElementById('eventos-aprovados-container');
                 
@@ -2749,7 +2831,7 @@
                 </div>
                 <div class="admin-modal-footer">
                     <button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button>
-                    <button class="btn-primary" type="button" onclick="AdminContentCMS.closeModal(); approveEvent('${SEC.js(eventItem.id)}');">Aprovar</button>
+                    <button class="btn-primary" type="button" data-admin-action="close-modal-approve-event" data-admin-target-id="${SEC.attr(eventItem.id)}">Aprovar</button>
                 </div>
             `;
 
@@ -2997,7 +3079,7 @@
                         <strong>Filtro ativo:</strong> ${SEC.html(resolveUserDisplayName(userId))}<br>
                         <small>${SEC.html(String(count))} ${SEC.html(kind)} encontrado(s) para ${SEC.html(userId)}</small>
                     </div>
-                    <button class="btn-sm btn-edit" type="button" onclick="${clearAction}">Limpar filtro</button>
+                    <button class="btn-sm btn-edit" type="button" data-admin-action="${SEC.attr(clearAction)}">Limpar filtro</button>
                 </div>
             `;
         }
@@ -3468,7 +3550,7 @@
                     Regra deste bloco: primeira aceita vira imagem principal somente se o catálogo ainda não tiver capa; as demais entram na galeria.
                 </div>
                 <div class="page-actions" style="margin-top:0.75rem;">
-                    <button class="btn-sm btn-approve" type="button" onclick="applyAcceptedEstablishmentUpdateMedia('${SEC.js(request.id)}')">Aplicar mídia ao catálogo</button>
+                    <button class="btn-sm btn-approve" type="button" data-admin-action="apply-update-media" data-admin-target-id="${SEC.attr(request.id)}">Aplicar mídia ao catálogo</button>
                 </div>
             `;
         }
@@ -3484,9 +3566,9 @@
                         <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
                         <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
                         <div class="page-actions">
-                            <button class="btn-sm btn-approve" onclick="approveEstablishmentUpdateRequest('${SEC.js(request.id)}')">✅ Aprovar para revisão</button>
-                            <button class="btn-sm btn-reject" onclick="rejectEstablishmentUpdateRequest('${SEC.js(request.id)}')">❌ Rejeitar</button>
-                            <button class="btn-sm btn-edit" onclick="requestChangesForEstablishmentUpdate('${SEC.js(request.id)}')">🛠️ Pedir ajustes</button>
+                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-update-request" data-admin-target-id="${SEC.attr(request.id)}">✅ Aprovar para revisão</button>
+                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-update-request" data-admin-target-id="${SEC.attr(request.id)}">❌ Rejeitar</button>
+                            <button class="btn-sm btn-edit" type="button" data-admin-action="request-update-changes" data-admin-target-id="${SEC.attr(request.id)}">🛠️ Pedir ajustes</button>
                         </div>
                         <div class="update-request-callout">
                             Aprovar não aplica no catálogo e não publica no site público. A aplicação fica em uma ação separada.
@@ -3516,7 +3598,7 @@
                 const actionHtml = applicableFields.length
                     ? (canApply ? `
                         <div class="page-actions">
-                            <button class="btn-sm btn-approve" onclick="applyEstablishmentUpdateRequest('${SEC.js(request.id)}')">Aplicar ao catálogo</button>
+                            <button class="btn-sm btn-approve" type="button" data-admin-action="apply-update-request" data-admin-target-id="${SEC.attr(request.id)}">Aplicar ao catálogo</button>
                         </div>
                     ` : '<p class="update-request-field">Somente administradores podem aplicar no catálogo editorial.</p>')
                     : '<p class="update-request-field">Sem campos textuais aplicáveis para aplicar automaticamente. Revise imagens e observações manualmente.</p>';
@@ -3609,7 +3691,7 @@
                     A revisão editorial salva apenas a decisão por imagem. A aplicação ao catálogo é uma ação separada, confirmada e restrita a administradores.
                 </div>
                 <div class="page-actions" style="margin-top:0.75rem;">
-                    <button class="btn-sm btn-approve" type="button" onclick="saveEstablishmentUpdateMediaReview('${SEC.js(requestId)}')">Salvar revisão das imagens</button>
+                    <button class="btn-sm btn-approve" type="button" data-admin-action="save-update-media-review" data-admin-target-id="${SEC.attr(requestId)}">Salvar revisão das imagens</button>
                 </div>
                 ${renderUpdateRequestMediaApplicationPanel(request)}
             `;

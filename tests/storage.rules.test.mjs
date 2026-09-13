@@ -52,6 +52,12 @@ async function seedProfiles(entries) {
   });
 }
 
+async function seedApprovedDocument(collection, id) {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await context.firestore().doc(`${collection}/${id}`).set({ status: "aprovado" });
+  });
+}
+
 async function seedStorageObject(path) {
   await testEnv.withSecurityRulesDisabled(async (context) => {
     await context
@@ -401,5 +407,66 @@ describe("Retenção create-only de cms-media", () => {
   test("leitura pública de cms-media permanece permitida", async () => {
     await seedStorageObject(ownPath);
     await assertSucceeds(storageFor().ref(ownPath).getMetadata());
+  });
+});
+
+describe("Mídia aprovada em namespace público neutro", () => {
+  const eventPath = "approved-media/events/evt-public/image.png";
+  const establishmentPath = "approved-media/establishments/est-public/image.png";
+
+  for (const role of ["admin", "moderator"]) {
+    test(`${role} ativo cria mídia aprovada de evento e empreendimento`, async () => {
+      const uid = `${role}-approved-media`;
+      const roleEventPath = `approved-media/events/evt-${role}/image.png`;
+      const roleEstablishmentPath = `approved-media/establishments/est-${role}/image.png`;
+      await seedProfiles([[uid, profileData(role, true)]]);
+      await assertSucceeds(uploadImage(uid, roleEventPath));
+      await assertSucceeds(uploadImage(uid, roleEstablishmentPath));
+    });
+  }
+
+  test("usuário comum e anônimo não criam mídia aprovada", async () => {
+    await seedProfiles([["user-approved-media", profileData("user", true)]]);
+    await assertFails(uploadImage("user-approved-media", eventPath));
+    await assertFails(uploadImage(null, eventPath));
+  });
+
+  test("objeto órfão não é legível anonimamente antes do documento público", async () => {
+    await seedStorageObject(eventPath);
+    await assertFails(storageFor().ref(eventPath).getMetadata());
+  });
+
+  test("mídia de evento é pública somente após existir evento aprovado", async () => {
+    await seedStorageObject(eventPath);
+    await seedApprovedDocument("eventos_aprovados", "evt-public");
+    await assertSucceeds(storageFor().ref(eventPath).getMetadata());
+  });
+
+  test("mídia de empreendimento é pública somente após existir empreendimento aprovado", async () => {
+    await seedStorageObject(establishmentPath);
+    await seedApprovedDocument("estabelecimentos_aprovados", "est-public");
+    await assertSucceeds(storageFor().ref(establishmentPath).getMetadata());
+  });
+
+  test("mídia aprovada permanece create-only", async () => {
+    await seedProfiles([["moderator-approved-media", profileData("moderator", true)]]);
+    await seedStorageObject(eventPath);
+    await assertFails(uploadImage("moderator-approved-media", eventPath, "replacement"));
+    await assertFails(deleteImage("moderator-approved-media", eventPath));
+  });
+
+  test("mídia aprovada rejeita tipo inválido e tamanho excessivo", async () => {
+    await seedProfiles([["moderator-approved-media", profileData("moderator", true)]]);
+    await assertFails(uploadImage(
+      "moderator-approved-media",
+      eventPath,
+      IMAGE_CONTENT,
+      { contentType: "application/pdf" },
+    ));
+    await assertFails(uploadImage(
+      "moderator-approved-media",
+      eventPath,
+      OVERSIZED_IMAGE_CONTENT,
+    ));
   });
 });

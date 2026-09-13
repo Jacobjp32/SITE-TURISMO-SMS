@@ -20,14 +20,29 @@
         return adapter;
     }
 
+    function requirePublicationContracts() {
+        const contracts = window.SMSPublicationContracts;
+        if (
+            !contracts ||
+            !contracts.url ||
+            typeof contracts.url.map !== 'function' ||
+            typeof contracts.url.publicNavigation !== 'function'
+        ) {
+            throw new Error('[home-eventos] SMSPublicationContracts ausente ou inválido');
+        }
+        return contracts;
+    }
+
     // Função para carregar próximos eventos (Firebase + JSON estático)
     async function carregarProximosEventos() {
         const container = document.getElementById('proximosEventosHome');
         if (!container) return;
 
         let eventAdapter;
+        let publicationContracts;
         try {
             eventAdapter = requireEventOccurrenceAdapter();
+            publicationContracts = requirePublicationContracts();
         } catch (dependencyError) {
             console.error(dependencyError.message);
             renderFallback();
@@ -46,7 +61,11 @@
         }
 
         function normalizarEventoHome(rawEvent, runtimeSource, sourceId) {
-            const normalized = eventAdapter.normalizeEventOccurrence(rawEvent, { runtimeSource, sourceId });
+            const adapterInput = runtimeSource === eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED
+                ? Object.assign({}, rawEvent)
+                : rawEvent;
+            if (adapterInput !== rawEvent) delete adapterInput.ownerName;
+            const normalized = eventAdapter.normalizeEventOccurrence(adapterInput, { runtimeSource, sourceId });
             if (!normalized) return null;
             return Object.assign(normalized, {
                 category: normalized.category || (
@@ -55,8 +74,10 @@
                 recurrence: runtimeSource === eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED
                     ? false
                     : normalized.recurrence,
-                mapUrl: rawEvent.mapUrl || rawEvent.mapaUrl || '',
-                url: runtimeSource === eventAdapter.RUNTIME_SOURCES.ANNUAL_STATIC ? rawEvent.url || '' : ''
+                mapUrl: publicationContracts.url.map(rawEvent.mapUrl || rawEvent.mapaUrl, ''),
+                url: runtimeSource === eventAdapter.RUNTIME_SOURCES.ANNUAL_STATIC
+                    ? publicationContracts.url.publicNavigation(rawEvent.url, '')
+                    : ''
             });
         }
 
@@ -136,7 +157,7 @@
                 const local = esc(evento.rawLocationText || '');
                 const identidade = esc(evento.runtimeId);
                 const mapUrl = evento.mapUrl || evento.mapaUrl || '';
-                const detalheUrl = mapUrl || evento.url || '/eventos';
+                const detalheUrl = publicationContracts.url.publicNavigation(mapUrl || evento.url, '/eventos');
                 const cta = mapUrl ? 'Abrir no mapa' : 'Ver detalhes';
 
                 return `

@@ -318,6 +318,7 @@
     </footer>
 
     <script src="config.js?v=agro-02-20260909"></script>
+    <script src="js/publication-contracts.js?v=security-hardening-02a-20260913"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js" defer></script>
@@ -504,17 +505,28 @@
         return '';
     }
 
-    function sanitizePublicUrl(value) {
-        const text = asCleanString(value);
-        if (!text) return '';
-        if (/^(https?:\/\/|\/|\.\/|\.\.\/)/i.test(text)) return text;
-        return '';
+    function requirePublicationContracts() {
+        const contracts = window.SMSPublicationContracts;
+        if (!contracts || !contracts.url) {
+            throw new Error('[eventos] SMSPublicationContracts ausente ou inválido');
+        }
+        return contracts;
+    }
+
+    function sanitizePublicAssetUrl(value) {
+        return requirePublicationContracts().url.publicAsset(value, '');
+    }
+
+    function sanitizePublicNavigationUrl(value) {
+        return requirePublicationContracts().url.publicNavigation(value, '');
     }
 
     function normalizeWhatsAppLink(value) {
         const text = asCleanString(value);
         if (!text) return '';
-        if (/^https?:\/\//i.test(text)) return text;
+        if (/^[a-z][a-z0-9+.-]*:/i.test(text) || /^\/\//.test(text)) {
+            return requirePublicationContracts().url.externalHttps(text, '');
+        }
         const digits = text.replace(/\D/g, '');
         return digits ? `https://wa.me/${digits}` : '';
     }
@@ -574,9 +586,9 @@
             local: asCleanString(evento.local),
             localId: asCleanString(evento.localId || evento.placeId || evento.mapaId),
             organizador: asCleanString(evento.organizador),
-            imagem: sanitizePublicUrl(evento.imagem || evento.image),
+            imagem: sanitizePublicAssetUrl(evento.imagem || evento.image),
             valor: asCleanString(evento.valor),
-            site: sanitizePublicUrl(evento.site || evento.url),
+            site: sanitizePublicNavigationUrl(evento.site || evento.url),
             whatsapp: normalizeWhatsAppLink(evento.whatsapp),
             categoria: normalizeCategory(evento.categoria, 'cultural'),
             recorrente: Boolean(evento.recorrente),
@@ -607,10 +619,10 @@
             horario: asCleanString(raw.time || raw.hora || raw.horaInicio),
             local: asCleanString(raw.location || raw.local || raw.establishmentName || raw.organizer),
             localId: asCleanString(raw.localId || raw.placeId || raw.mapaId || raw.establishmentId || raw.linkedEstablishmentId || raw.establishmentSlug),
-            organizador: asCleanString(raw.organizer || raw.establishmentName || raw.ownerName),
-            imagem: sanitizePublicUrl(raw.mainImage || extractEventMainImage(raw.images) || raw.image),
+            organizador: asCleanString(raw.organizer || raw.establishmentName),
+            imagem: sanitizePublicAssetUrl(raw.mainImage || extractEventMainImage(raw.images) || raw.image),
             valor: asCleanString(raw.value || raw.valor || raw.entrada),
-            site: sanitizePublicUrl(raw.website || raw.site || raw.url),
+            site: sanitizePublicNavigationUrl(raw.website || raw.site || raw.url),
             whatsapp: normalizeWhatsAppLink(raw.whatsapp || raw.phone || raw.telefone),
             categoria: normalizeCategory(categoriaBruta, 'cultural'),
             recorrente: Boolean(raw.recorrente),

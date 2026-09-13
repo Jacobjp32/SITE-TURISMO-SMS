@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SECURITY-HARDENING-02A — QA local</title>
+    <style>
+        body { margin: 0; padding: 2rem; background: #f4f7f5; color: #173b2f; font: 16px/1.5 system-ui, sans-serif; }
+        main { max-width: 760px; margin: auto; }
+        h1 { margin-bottom: .25rem; }
+        .summary, .case { margin: 1rem 0; padding: 1rem; border: 1px solid #b8cec5; border-radius: 12px; background: white; }
+        .pass { color: #08783f; font-weight: 700; }
+        .fail { color: #a31818; font-weight: 700; }
+        button, a { display: inline-block; margin: .35rem .35rem 0 0; padding: .55rem .8rem; border-radius: 8px; }
+        button { border: 1px solid #27634e; background: #e8f4ef; color: #173b2f; cursor: pointer; }
+        a { color: #075a3c; }
+        code { overflow-wrap: anywhere; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>SECURITY-HARDENING-02A</h1>
+    <p>Fixture sintética local — sem Firebase e sem acesso à produção.</p>
+    <section class="summary" aria-live="polite">
+        Resultado: <span id="overall" class="fail">PENDENTE</span>
+    </section>
+    <section class="case">
+        <h2>URLs públicas</h2>
+        <a id="valid-link">Destino HTTPS legítimo</a>
+        <a id="blocked-link">Destino hostil com fallback</a>
+        <p id="url-result"></p>
+    </section>
+    <section class="case">
+        <h2>Projeção pública</h2>
+        <p id="projection-result"></p>
+    </section>
+    <section class="case">
+        <h2>ID adversarial no Admin</h2>
+        <button id="admin-action" type="button" data-admin-action="approve-event">Executar ação delegada</button>
+        <p id="id-result">Ainda não acionado.</p>
+    </section>
+</main>
+<script src="../../js/security-utils.js"></script>
+<script src="../../js/publication-contracts.js?security-hardening-02a=2"></script>
+<script>
+    (function () {
+        var contracts = window.SMSPublicationContracts;
+        var hostileId = 'evt"<tag>\'fixture';
+        var validLink = document.getElementById('valid-link');
+        var blockedLink = document.getElementById('blocked-link');
+        var privateSubmissionUrl = 'https://firebasestorage.googleapis.com/v0/b/demo/o/submissions%2Fevents%2Fuid-private%2Fevt-private%2Fimage.png?alt=media&token=secret';
+        var privateMediaBlocked = contracts.url.publicAsset(privateSubmissionUrl, '') === '';
+        validLink.href = contracts.url.publicNavigation('https://maps.example/place', '/eventos');
+        blockedLink.href = contracts.url.publicNavigation('javascript:alert(1)', '/eventos');
+        document.getElementById('url-result').textContent =
+            validLink.getAttribute('href') === 'https://maps.example/place' &&
+            blockedLink.getAttribute('href') === '/eventos' &&
+            privateMediaBlocked
+                ? 'PASS — HTTPS preservado; javascript: convertido em /eventos; namespace privado de submissions bloqueado.'
+                : 'FAIL — política de URL divergente.';
+
+        var projected = contracts.projectPublicEvent({
+            title: 'Evento legítimo',
+            mapUrl: 'https://maps.example/place',
+            submittedByEmail: 'privado@example.test',
+            reviewNotes: 'interno',
+            unknownField: 'não publicar'
+        }, 'evt-legitimo');
+        var projectionPass = projected.title === 'Evento legítimo' &&
+            projected.mapUrl === 'https://maps.example/place' &&
+            !Object.prototype.hasOwnProperty.call(projected, 'submittedByEmail') &&
+            !Object.prototype.hasOwnProperty.call(projected, 'reviewNotes') &&
+            !Object.prototype.hasOwnProperty.call(projected, 'unknownField');
+        document.getElementById('projection-result').textContent = projectionPass
+            ? 'PASS — DTO contém somente campos públicos permitidos.'
+            : 'FAIL — campo privado ou desconhecido alcançou o DTO.';
+
+        var button = document.getElementById('admin-action');
+        button.setAttribute('data-admin-target-id', hostileId);
+        button.addEventListener('click', function (event) {
+            var receivedId = event.currentTarget.getAttribute('data-admin-target-id');
+            var idPass = receivedId === hostileId;
+            document.getElementById('id-result').textContent = idPass
+                ? 'PASS — ID recebido literalmente, sem execução inline: ' + receivedId
+                : 'FAIL — ID alterado: ' + receivedId;
+            overall.textContent = initialPass && idPass ? 'PASS COMPLETO' : 'FAIL';
+            overall.className = initialPass && idPass ? 'pass' : 'fail';
+        });
+
+        var initialPass = projectionPass &&
+            validLink.getAttribute('href') === 'https://maps.example/place' &&
+            blockedLink.getAttribute('href') === '/eventos' &&
+            privateMediaBlocked &&
+            !button.hasAttribute('onclick');
+        var overall = document.getElementById('overall');
+        overall.textContent = initialPass ? 'PASS (clique a ação do Admin)' : 'FAIL';
+        overall.className = initialPass ? 'pass' : 'fail';
+    })();
+</script>
+</body>
+</html>

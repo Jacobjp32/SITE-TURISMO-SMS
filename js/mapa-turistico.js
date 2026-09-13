@@ -529,14 +529,22 @@
     });
   }
 
+  function requirePublicationContracts() {
+    var contracts = window.SMSPublicationContracts;
+    if (!contracts || !contracts.url) {
+      throw new Error("[mapa-turistico] SMSPublicationContracts ausente ou inválido");
+    }
+    return contracts;
+  }
+
   function isExternalUrl(value) {
-    return /^https?:\/\//i.test(String(value || ""));
+    return !!requirePublicationContracts().url.externalHttps(value, "");
   }
 
   function normalizeSocialLink(value) {
     var social = String(value || "").trim();
     if (!social) return "";
-    if (isExternalUrl(social)) return social;
+    if (isExternalUrl(social)) return requirePublicationContracts().url.externalHttps(social, "");
     if (social.charAt(0) === "@") {
       return "https://www.instagram.com/" + social.replace(/^@+/, "");
     }
@@ -564,10 +572,8 @@
   function sanitizeActionUrl(value, fallback) {
     var raw = cleanTextValue(value);
     if (!raw) return fallback || "";
-    if (isExternalUrl(raw)) return raw;
-    if (/^www\./i.test(raw)) return "https://" + raw;
-    if (/^\//.test(raw)) return raw;
-    return fallback || "";
+    if (/^www\./i.test(raw)) raw = "https://" + raw;
+    return requirePublicationContracts().url.publicNavigation(raw, fallback || "");
   }
 
   function extractImageUrl(value) {
@@ -683,8 +689,13 @@
 
   function normalizeApprovedEvent(rawEvent, docId) {
     var raw = rawEvent || {};
-    var images = extractImageUrls(raw.images);
-    var mainImage = cleanTextValue(raw.mainImage) || extractImageUrl(raw.image) || (images[0] || "");
+    var images = extractImageUrls(raw.images).map(function (image) {
+      return requirePublicationContracts().url.publicAsset(image, "");
+    }).filter(Boolean);
+    var mainImage = requirePublicationContracts().url.publicAsset(
+      cleanTextValue(raw.mainImage) || extractImageUrl(raw.image) || (images[0] || ""),
+      ""
+    );
 
     if (mainImage && images.indexOf(mainImage) === -1) {
       images.unshift(mainImage);
@@ -697,7 +708,7 @@
       dateValue: raw.date || raw.data || raw.dataInicio || "",
       timeValue: cleanTextValue(raw.time || raw.hora || raw.horaInicio),
       location: cleanTextValue(raw.location || raw.local || raw.establishmentName || raw.linkedEstablishmentName || raw.organizer),
-      organizer: cleanTextValue(raw.organizer || raw.establishmentName || raw.linkedEstablishmentName || raw.ownerName),
+      organizer: cleanTextValue(raw.organizer || raw.establishmentName || raw.linkedEstablishmentName),
       establishmentId: cleanTextValue(raw.establishmentId || raw.linkedEstablishmentId || raw.establishmentSlug),
       establishmentName: cleanTextValue(raw.establishmentName || raw.linkedEstablishmentName || raw.organizer || raw.location || raw.local),
       mainImage: mainImage,
