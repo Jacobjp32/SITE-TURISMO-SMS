@@ -5,7 +5,7 @@ import vm from 'node:vm';
 
 const SW_SOURCE = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const ORIGIN = 'https://turismo.test';
-const CACHE_NAME = 'turismo-sms-v22';
+const CACHE_NAME = 'turismo-sms-v25';
 
 class MockResponse {
     constructor(body = '', init = {}) {
@@ -484,7 +484,7 @@ test('retorno da rede substitui o fallback na navegação seguinte', async () =>
     assert.equal((await onlineEvent.responsePromise).body, 'network-restored');
 });
 
-test('activate mantém v22 e remove caches turismo-sms antigos', async () => {
+test('activate mantém v25 e remove caches turismo-sms antigos', async () => {
     const harness = createHarness({
         initialCacheNames: ['turismo-sms-v20', 'turismo-sms-v21', CACHE_NAME, 'third-party-cache']
     });

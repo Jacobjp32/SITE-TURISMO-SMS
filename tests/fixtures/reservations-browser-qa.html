@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QA local — Reservas</title>
+    <link rel="stylesheet" href="../../css/shared.css">
+    <link rel="stylesheet" href="../../css/reservas.css">
+</head>
+<body>
+    <main class="main-content" id="main-content">
+        <h1>QA local — Reservas</h1>
+        <p id="qa-scenario" role="status" aria-live="polite"></p>
+        <div id="lista-experiencias"></div>
+    </main>
+    <script src="../../js/reservas.js?v=browser-qa-post-review"></script>
+    <script>
+        (function () {
+            const params = new URLSearchParams(location.search);
+            const scenario = params.get('scenario') || 'reject';
+            if (params.get('legacy') === '1') {
+                localStorage.setItem('sms_reservas', '[{"nome":"Pessoa Sintética Legada"}]');
+                localStorage.setItem('smsLang', 'pt-BR');
+            }
+            Reservas.config.confirmationTimeoutMs = 100;
+            if (scenario === 'success') {
+                Reservas.backendWriter = async function () { return { id: 'firestore-browser-qa' }; };
+            } else if (scenario === 'pending') {
+                Reservas.backendWriter = function () { return new Promise(function () {}); };
+            } else {
+                Reservas.backendWriter = async function () { throw new Error('synthetic-browser-rejection'); };
+            }
+            document.addEventListener('DOMContentLoaded', function () {
+                Reservas.renderizarLista('lista-experiencias');
+                setTimeout(function () {
+                    const legacyPurged = localStorage.getItem('sms_reservas') === null;
+                    const preferencePreserved = localStorage.getItem('smsLang') === 'pt-BR';
+                    document.getElementById('qa-scenario').textContent =
+                        'Cenário sintético: ' + scenario +
+                        ' | legacy purged: ' + legacyPurged +
+                        ' | preference preserved: ' + preferencePreserved;
+                }, 0);
+            });
+        }());
+    </script>
+</body>
+</html>

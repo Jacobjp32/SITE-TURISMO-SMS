@@ -13,8 +13,22 @@ const Reservas = {
     config: {
         whatsapp: '554235324163', // Departamento de Cultura e Turismo (WhatsApp)
         email: 'turismo@saomateusdosul.pr.gov.br',
-        storageKey: 'sms_reservas'
+        legacyStorageKey: 'sms_reservas',
+        confirmationTimeoutMs: 12000
     },
+
+    states: Object.freeze({
+        IDLE: 'IDLE',
+        SUBMITTING: 'SUBMITTING',
+        CONFIRMED_BACKEND: 'CONFIRMED_BACKEND',
+        PENDING_HANDOFF: 'PENDING_HANDOFF',
+        FAILED: 'FAILED'
+    }),
+
+    state: 'IDLE',
+    activeReservation: null,
+    pendingWrite: null,
+    backendWriter: null,
     
     // Experiências disponíveis
     experiencias: [
@@ -98,25 +112,25 @@ const Reservas = {
         }
     ],
     
-    // Reservas armazenadas
-    reservas: [],
-    
     // Inicializar sistema
     init: function() {
-        this.carregarReservas();
+        this.purgeLegacyReservationStorage();
+        this.setState(this.states.IDLE);
         return this;
     },
-    
-    // Carregar reservas do localStorage
-    carregarReservas: function() {
-        const stored = localStorage.getItem(this.config.storageKey);
-        this.reservas = stored ? JSON.parse(stored) : [];
-        return this.reservas;
+
+    setState: function(nextState) {
+        this.state = nextState;
+        return nextState;
     },
-    
-    // Salvar reservas
-    salvarReservas: function() {
-        localStorage.setItem(this.config.storageKey, JSON.stringify(this.reservas));
+
+    // Remove somente o depósito legado conhecido de reservas com PII.
+    purgeLegacyReservationStorage: function() {
+        try {
+            localStorage.removeItem(this.config.legacyStorageKey);
+        } catch (storageErr) {
+            // Storage pode estar indisponível; nunca ler ou registrar o conteúdo legado.
+        }
     },
     
     // Obter experiência por ID
@@ -124,13 +138,11 @@ const Reservas = {
         return this.experiencias.find(e => e.id === id);
     },
     
-    // Criar reserva (salva no Firestore + localStorage fallback)
-    criarReserva: async function(dados) {
+    construirReserva: function(dados) {
         const experiencia = this.getExperiencia(dados.experienciaId);
         if (!experiencia) return null;
-        
-        const reserva = {
-            id: Date.now(),
+
+        return {
             experienciaId: dados.experienciaId,
             experienciaNome: experiencia.nome,
             data: dados.data,
@@ -144,31 +156,83 @@ const Reservas = {
             status: 'pendente',
             criadaEm: new Date().toISOString()
         };
-        
-        // Tentar salvar no Firestore (config vem de CONFIG.firebase via config.js)
-        try {
-            if (typeof CONFIG !== 'undefined' && CONFIG.firebase) {
-                const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-                const { initModularAppCheck } = await import('./firebase-app-check.js');
-                const app = getApps().length ? getApps()[0] : initializeApp(CONFIG.firebase, 'reservas-app');
-                await initModularAppCheck(app);
-                const db = getFirestore(app);
-                const docRef = await addDoc(collection(db, 'reservas'), {
-                    ...reserva,
-                    criadoEm: serverTimestamp()
-                });
-                reserva.firestoreId = docRef.id;
-            }
-        } catch (fbErr) {
-            // Firestore indisponível — continua com localStorage
+    },
+
+    escreverReservaNoBackend: async function(reserva) {
+        if (typeof this.backendWriter === 'function') {
+            return this.backendWriter(reserva);
         }
-        
-        // Sempre salva no localStorage como fallback
-        this.reservas.push(reserva);
-        this.salvarReservas();
-        
-        return reserva;
+
+        if (typeof CONFIG === 'undefined' || !CONFIG.firebase) {
+            throw new Error('BACKEND_UNAVAILABLE');
+        }
+
+        const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
+        const { getFirestore, collection, addDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const { initModularAppCheck } = await import('./firebase-app-check.js');
+        const app = getApps().length ? getApps()[0] : initializeApp(CONFIG.firebase, 'reservas-app');
+        await initModularAppCheck(app);
+        const db = getFirestore(app);
+        return addDoc(collection(db, 'reservas'), {
+            ...reserva,
+            criadoEm: serverTimestamp()
+        });
+    },
+
+    criarReserva: async function(dados) {
+        const reserva = this.construirReserva(dados);
+        if (!reserva) {
+            this.setState(this.states.FAILED);
+            return { state: this.state, reserva: null };
+        }
+
+        this.activeReservation = reserva;
+        this.setState(this.states.SUBMITTING);
+
+        const trackedWrite = Promise.resolve()
+            .then(() => this.escreverReservaNoBackend(reserva))
+            .then(
+                docRef => ({ kind: 'confirmed', docRef }),
+                error => ({ kind: 'failed', error })
+            );
+        this.pendingWrite = trackedWrite;
+
+        let timeoutId;
+        const timeout = new Promise(resolve => {
+            timeoutId = setTimeout(() => resolve({ kind: 'unconfirmed' }), this.config.confirmationTimeoutMs);
+        });
+        const outcome = await Promise.race([trackedWrite, timeout]);
+        clearTimeout(timeoutId);
+
+        if (outcome.kind === 'unconfirmed') {
+            this.setState(this.states.PENDING_HANDOFF);
+            trackedWrite.then(lateOutcome => this.handleLateBackendOutcome(trackedWrite, reserva, lateOutcome));
+            return { state: this.state, reserva };
+        }
+
+        this.pendingWrite = null;
+        if (outcome.kind === 'confirmed') {
+            reserva.firestoreId = outcome.docRef.id;
+            this.setState(this.states.CONFIRMED_BACKEND);
+        } else {
+            this.setState(this.states.FAILED);
+        }
+        return { state: this.state, reserva };
+    },
+
+    handleLateBackendOutcome: function(trackedWrite, reserva, outcome) {
+        if (this.pendingWrite !== trackedWrite) return;
+        this.pendingWrite = null;
+
+        if (outcome.kind === 'confirmed') {
+            reserva.firestoreId = outcome.docRef.id;
+            this.setState(this.states.CONFIRMED_BACKEND);
+            this.concluirConfirmacao(reserva);
+            return;
+        }
+
+        this.setState(this.states.FAILED);
+        this.mostrarFalhaNoFormulario();
     },
     
     // Gerar mensagem WhatsApp
@@ -185,15 +249,20 @@ const Reservas = {
             `Nome: ${reserva.nome}\n` +
             `Email: ${reserva.email}\n` +
             `Telefone: ${reserva.telefone}\n` +
-            (reserva.observacoes ? `Observações: ${reserva.observacoes}\n` : '') +
-            `\n_Reserva #${reserva.id}_`
+            (reserva.observacoes ? `Observações: ${reserva.observacoes}\n` : '')
         );
     },
     
     // Abrir WhatsApp com reserva
     abrirWhatsApp: function(reserva) {
+        reserva = reserva || this.activeReservation;
+        if (!reserva) return false;
+        if (this.state !== this.states.CONFIRMED_BACKEND) {
+            this.setState(this.states.PENDING_HANDOFF);
+        }
         const msg = this.gerarMensagemWhatsApp(reserva);
         window.open(`https://wa.me/${this.config.whatsapp}?text=${msg}`, '_blank', 'noopener,noreferrer');
+        return true;
     },
     
     // Formatar data
@@ -248,6 +317,7 @@ const Reservas = {
     
     // Abrir modal de reserva
     abrirModal: function(experienciaId) {
+        if (this.pendingWrite) return false;
         const exp = this.getExperiencia(experienciaId);
         if (!exp) return;
         
@@ -260,7 +330,7 @@ const Reservas = {
         modal.innerHTML = `
             <div class="reserva-modal-overlay" onclick="Reservas.fecharModal()"></div>
             <div class="reserva-modal-content">
-                <button class="reserva-modal-close" onclick="Reservas.fecharModal()">×</button>
+                <button class="reserva-modal-close" data-reserva-dismiss aria-label="Fechar formulário de reserva" onclick="Reservas.fecharModal()">×</button>
                 
                 <div class="reserva-modal-header">
                     <h2>Reservar: ${exp.nome}</h2>
@@ -268,6 +338,7 @@ const Reservas = {
                 </div>
                 
                 <form id="form-reserva" onsubmit="Reservas.submeterReserva(event, ${exp.id})">
+                    <div id="reserva-status" class="reserva-status" role="status" aria-live="polite" tabindex="-1"></div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="reserva-data">Data *</label>
@@ -318,28 +389,34 @@ const Reservas = {
                         <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.85rem;cursor:pointer;font-weight:400;color:#555;">
                             <input type="checkbox" id="reserva-lgpd" required style="margin-top:3px;flex-shrink:0;">
                             Concordo com o uso dos meus dados para contato sobre esta reserva, conforme a 
-                            <a href="/transparencia" target="_blank" rel="noopener noreferrer" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
+                            <a href="/privacidade" target="_blank" rel="noopener noreferrer" style="color:#0a3d2e;">Política de Privacidade</a> (LGPD).
                         </label>
                     </div>
                     <div class="reserva-modal-footer">
-                        <button type="button" class="btn-secundario" onclick="Reservas.fecharModal()">Cancelar</button>
+                        <button type="button" class="btn-secundario" data-reserva-dismiss onclick="Reservas.fecharModal()">Cancelar</button>
                         <button type="submit" class="btn-primario">Confirmar Reserva</button>
                     </div>
+                    <button type="button" id="reserva-whatsapp-handoff" class="btn-whatsapp reserva-handoff" hidden onclick="Reservas.abrirWhatsApp()">
+                        📱 Continuar pelo WhatsApp
+                    </button>
                 </form>
             </div>
         `;
         
         document.body.appendChild(modal);
         document.body.style.overflow = 'hidden';
+        return true;
     },
     
     // Fechar modal
     fecharModal: function() {
+        if (this.pendingWrite) return false;
         const modal = document.getElementById('reserva-modal');
         if (modal) {
             modal.remove();
             document.body.style.overflow = '';
         }
+        return true;
     },
     
     // Atualizar total
@@ -353,7 +430,10 @@ const Reservas = {
     submeterReserva: async function(event, experienciaId) {
         event.preventDefault();
         const btn = event.target.querySelector('button[type="submit"]');
+        if (this.pendingWrite || this.state === this.states.SUBMITTING) return;
         if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+        this.setDismissControlsDisabled(true);
+        this.atualizarStatusFormulario('Enviando sua solicitação…', this.states.SUBMITTING);
         
         const dados = {
             experienciaId: experienciaId,
@@ -366,13 +446,66 @@ const Reservas = {
             observacoes: document.getElementById('reserva-obs').value
         };
         
-        const reserva = await this.criarReserva(dados);
-        
-        if (reserva) {
-            this.fecharModal();
-            this.mostrarConfirmacao(reserva);
+        const result = await this.criarReserva(dados);
+
+        if (result.state === this.states.CONFIRMED_BACKEND) {
+            this.concluirConfirmacao(result.reserva, event.target);
+            return;
         }
-        if (btn) { btn.disabled = false; btn.textContent = 'Confirmar Reserva'; }
+
+        if (result.state === this.states.PENDING_HANDOFF) {
+            this.mostrarHandoffNoFormulario();
+            if (btn) { btn.disabled = true; btn.textContent = 'Envio sem confirmação'; }
+            return;
+        }
+
+        this.mostrarFalhaNoFormulario();
+        if (btn) { btn.disabled = false; btn.textContent = 'Tentar novamente'; }
+    },
+
+    atualizarStatusFormulario: function(message, state) {
+        const status = document.getElementById('reserva-status');
+        if (!status) return;
+        status.className = `reserva-status reserva-status--${String(state).toLowerCase()}`;
+        status.textContent = message;
+        status.focus();
+    },
+
+    setDismissControlsDisabled: function(disabled) {
+        document.querySelectorAll('[data-reserva-dismiss]').forEach(control => {
+            control.disabled = disabled;
+        });
+    },
+
+    mostrarHandoffNoFormulario: function() {
+        this.atualizarStatusFormulario(
+            'Não conseguimos confirmar o recebimento da sua solicitação. Para evitar duplicidade, não faça outro envio agora. Se desejar, conclua o contato pelo WhatsApp como um canal alternativo.',
+            this.states.PENDING_HANDOFF
+        );
+        const handoff = document.getElementById('reserva-whatsapp-handoff');
+        if (handoff) handoff.hidden = false;
+        this.setDismissControlsDisabled(true);
+    },
+
+    mostrarFalhaNoFormulario: function() {
+        this.atualizarStatusFormulario(
+            'Não foi possível enviar nem confirmar sua solicitação. Seus dados continuam apenas neste formulário; você pode tentar novamente ou continuar pelo WhatsApp.',
+            this.states.FAILED
+        );
+        const handoff = document.getElementById('reserva-whatsapp-handoff');
+        if (handoff) handoff.hidden = false;
+        this.setDismissControlsDisabled(false);
+        const btn = document.querySelector('#form-reserva button[type="submit"]');
+        if (btn) { btn.disabled = false; btn.textContent = 'Tentar novamente'; }
+    },
+
+    concluirConfirmacao: function(reserva, form) {
+        const activeForm = form || document.getElementById('form-reserva');
+        if (activeForm && typeof activeForm.reset === 'function') activeForm.reset();
+        this.purgeLegacyReservationStorage();
+        this.fecharModal();
+        this.mostrarConfirmacao(reserva);
+        this.activeReservation = null;
     },
     
     // Mostrar confirmação
@@ -381,27 +514,20 @@ const Reservas = {
         modal.id = 'reserva-confirmacao';
         modal.innerHTML = `
             <div class="reserva-modal-overlay" onclick="this.parentElement.remove()"></div>
-            <div class="reserva-modal-content confirmacao">
-                <div class="confirmacao-icon">✅</div>
-                <h2>Reserva Enviada!</h2>
-                <p>Sua reserva foi registrada com sucesso.</p>
+                <div class="reserva-modal-content confirmacao" role="dialog" aria-modal="true" aria-labelledby="reserva-confirmacao-titulo">
+                    <div class="confirmacao-icon">✅</div>
+                    <h2 id="reserva-confirmacao-titulo" tabindex="-1">Solicitação recebida</h2>
+                    <p>O sistema recebeu sua solicitação. A equipe ainda verificará disponibilidade e entrará em contato.</p>
                 
                 <div class="confirmacao-detalhes">
-                    <p><strong>Código:</strong> #${reserva.id}</p>
+                    <p><strong>Protocolo:</strong> ${reserva.firestoreId}</p>
                     <p><strong>Experiência:</strong> ${reserva.experienciaNome}</p>
                     <p><strong>Data:</strong> ${this.formatarData(reserva.data)}</p>
                     <p><strong>Horário:</strong> ${reserva.horario}</p>
                     <p><strong>Valor:</strong> R$ ${reserva.valorTotal.toFixed(2)}</p>
                 </div>
                 
-                <p class="confirmacao-aviso">
-                    Para confirmar sua reserva, entre em contato via WhatsApp:
-                </p>
-                
                 <div class="confirmacao-botoes">
-                    <button class="btn-whatsapp" onclick="Reservas.abrirWhatsApp(Reservas.reservas[Reservas.reservas.length-1])">
-                        📱 Confirmar via WhatsApp
-                    </button>
                     <button class="btn-secundario" onclick="this.closest('#reserva-confirmacao').remove()">
                         Fechar
                     </button>
@@ -410,6 +536,8 @@ const Reservas = {
         `;
         
         document.body.appendChild(modal);
+        const title = document.getElementById('reserva-confirmacao-titulo');
+        if (title) title.focus();
     },
     
     // Injetar estilos
@@ -603,6 +731,26 @@ const Reservas = {
                 border-radius: 10px;
                 text-align: center;
             }
+
+            .reserva-status {
+                border-radius: 10px;
+                line-height: 1.5;
+                margin-bottom: 1rem;
+                outline: none;
+            }
+
+            .reserva-status:not(:empty) {
+                background: #f5f5f5;
+                border-left: 4px solid #666;
+                padding: 0.85rem 1rem;
+            }
+
+            .reserva-status--failed,
+            .reserva-status--pending_handoff {
+                background: #fff7e6 !important;
+                border-left-color: #9a6700 !important;
+                color: #553700;
+            }
             
             .reserva-modal-footer {
                 display: flex;
@@ -669,6 +817,20 @@ const Reservas = {
                 font-weight: 600;
                 font-size: 1.1rem;
                 cursor: pointer;
+            }
+
+            .reserva-handoff {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            .reserva-handoff[hidden] {
+                display: none;
+            }
+
+            .btn-primario:disabled {
+                cursor: wait;
+                opacity: 0.65;
             }
             
             @media (max-width: 600px) {
