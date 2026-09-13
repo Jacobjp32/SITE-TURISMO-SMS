@@ -129,26 +129,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Google Analytics
-    if (CONFIG.analytics && CONFIG.analytics.enabled && CONFIG.analytics.ga4Id && !window.__SMS_GA_INITIALIZED) {
-        if (typeof window.gtag === 'function') {
-            window.__SMS_GA_INITIALIZED = true;
-            return;
-        }
-
-        // Carregar script do GA4
-        const script = document.createElement('script');
-        script.async = true;
-        script.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.analytics.ga4Id;
-        document.head.appendChild(script);
-        
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', CONFIG.analytics.ga4Id);
-        window.__SMS_GA_INITIALIZED = true;
-    }
-    
 });
 
 // Exportar para uso global
