@@ -12,7 +12,7 @@
     "canary:rotas:public": "node scripts/rotas-v1.1-public-canary.mjs",
     "test:rotas:dry-run": "node scripts/rotas-v1.1-normalize-dry-run.mjs",
     "test:media-reference-safety": "node --test --test-concurrency=1 tests/media-reference-safety.test.mjs",
-    "test:rules:firestore:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs tests/firestore.rotas.rules.test.mjs tests/admin-finalization.rules.test.mjs",
+    "test:rules:firestore:node": "node --test --test-concurrency=1 tests/firestore.rules.test.mjs tests/firestore.rotas.rules.test.mjs tests/firestore.reservations.rules.test.mjs tests/admin-finalization.rules.test.mjs",
     "test:admin-finalization": "node --test --test-concurrency=1 tests/admin-finalization.structure.test.mjs tests/functions.audit.test.cjs tests/public-admin-config.test.mjs",
     "test:admin-public-e2e:node": "node --test --test-concurrency=1 tests/admin-public-e2e.test.mjs",
     "test:admin-public-e2e": "firebase emulators:exec --only firestore,storage --project demo-turismo-sms-admin-finalization \"npm run test:admin-public-e2e:node\"",

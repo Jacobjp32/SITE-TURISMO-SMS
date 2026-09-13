@@ -1262,6 +1262,114 @@ service cloud.firestore {
         routePublishedContentComplete(request.resource.data);
     }
 
+    function reservationTwoDigits(value) {
+      return value < 10 ? '0' + string(value) : string(value);
+    }
+
+    function reservationDateAt(value) {
+      return string(value.year()) + '-' +
+        reservationTwoDigits(value.month()) + '-' +
+        reservationTwoDigits(value.day());
+    }
+
+    function reservationRequestDate() {
+      return reservationDateAt(request.time);
+    }
+
+    function validReservationCalendarDate(value) {
+      return value is string && value.matches(
+        '^(([0-9]{4}-(01|03|05|07|08|10|12)-(0[1-9]|[12][0-9]|3[01]))|([0-9]{4}-(04|06|09|11)-(0[1-9]|[12][0-9]|30))|([0-9]{4}-02-(0[1-9]|1[0-9]|2[0-8]))|(([0-9]{2}(0[48]|[2468][048]|[13579][26])|(0[48]|[2468][048]|[13579][26])00)-02-29))$'
+      );
+    }
+
+    function validReservationExperience(data) {
+      return (
+        data.experienciaId == 1 &&
+        data.experienciaNome == 'Passeio de Barco pelo Rio Iguaçu' &&
+        data.horario in ['09:00', '14:00', '16:00'] &&
+        data.pessoas <= 12 && data.valorTotal == data.pessoas * 80
+      ) || (
+        data.experienciaId == 2 &&
+        data.experienciaNome == 'Tour Rota da Erva-Mate' &&
+        data.horario in ['08:30', '13:30'] &&
+        data.pessoas <= 15 && data.valorTotal == data.pessoas * 120
+      ) || (
+        data.experienciaId == 3 &&
+        data.experienciaNome == 'Experiência Gastronômica Polonesa' &&
+        data.horario in ['10:00', '15:00'] &&
+        data.pessoas <= 8 && data.valorTotal == data.pessoas * 150
+      ) || (
+        data.experienciaId == 4 &&
+        data.experienciaNome == 'Roteiro de Turismo Religioso' &&
+        data.horario in ['08:00', '13:00'] &&
+        data.pessoas <= 20 && data.valorTotal == data.pessoas * 100
+      ) || (
+        data.experienciaId == 5 &&
+        data.experienciaNome == 'Trilha Ecológica do Iguaçu' &&
+        data.horario in ['07:00', '15:00'] &&
+        data.pessoas <= 10 && data.valorTotal == data.pessoas * 60
+      ) || (
+        data.experienciaId == 6 &&
+        data.experienciaNome == 'City Tour São Mateus do Sul' &&
+        data.horario in ['09:00', '14:00'] &&
+        data.pessoas <= 25 && data.valorTotal == data.pessoas * 70
+      );
+    }
+
+    function validReservationCreate(data) {
+      return data.keys().hasAll([
+          'experienciaId',
+          'experienciaNome',
+          'data',
+          'horario',
+          'pessoas',
+          'nome',
+          'email',
+          'telefone',
+          'valorTotal',
+          'status',
+          'criadaEm',
+          'criadoEm'
+        ]) &&
+        data.keys().hasOnly([
+          'experienciaId',
+          'experienciaNome',
+          'data',
+          'horario',
+          'pessoas',
+          'nome',
+          'email',
+          'telefone',
+          'observacoes',
+          'valorTotal',
+          'status',
+          'criadaEm',
+          'criadoEm'
+        ]) &&
+        data.experienciaId is int &&
+        data.experienciaId >= 1 && data.experienciaId <= 6 &&
+        data.experienciaNome is string &&
+        validReservationCalendarDate(data.data) &&
+        data.data >= reservationRequestDate() &&
+        data.horario is string &&
+        data.pessoas is int && data.pessoas >= 1 && data.pessoas <= 25 &&
+        data.nome is string && data.nome.size() > 0 && data.nome.size() <= 160 &&
+        data.email is string && data.email.size() >= 5 && data.email.size() <= 254 &&
+        data.email.matches('^[^@ ]+@[^@ ]+[.][^@ ]+$') &&
+        data.telefone is string && data.telefone.size() >= 8 && data.telefone.size() <= 32 &&
+        data.get('observacoes', '') is string &&
+        data.get('observacoes', '').size() <= 2000 &&
+        data.valorTotal is int &&
+        data.status is string && data.status == 'pendente' &&
+        data.criadaEm is string && data.criadaEm.size() == 24 &&
+        validReservationCalendarDate(data.criadaEm[0:10]) &&
+        data.criadaEm[0:10] >= reservationDateAt(request.time - duration.value(5, 'm')) &&
+        data.criadaEm[0:10] <= reservationRequestDate() &&
+        data.criadaEm[10:24].matches('^T([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9][.][0-9]{3}Z$') &&
+        data.criadoEm is timestamp && data.criadoEm == request.time &&
+        validReservationExperience(data);
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if validUserAuthorizationProfile(request.resource.data) && (
@@ -1486,24 +1594,7 @@ service cloud.firestore {
     }
 
     match /reservas/{reservaId} {
-      allow create: if request.resource.data.status == 'pendente' &&
-        request.resource.data.keys().hasOnly([
-          'id',
-          'experienciaId',
-          'experienciaNome',
-          'data',
-          'horario',
-          'pessoas',
-          'nome',
-          'email',
-          'telefone',
-          'observacoes',
-          'valorTotal',
-          'status',
-          'criadaEm',
-          'criadoEm',
-          'firestoreId'
-        ]);
+      allow create: if validReservationCreate(request.resource.data);
       allow read, update, delete: if isAdmin();
     }
 
