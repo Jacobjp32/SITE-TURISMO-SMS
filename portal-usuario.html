@@ -174,7 +174,7 @@
                     <div class="card-icon">🤝</div>
                     <h3 class="card-title">Vincular Empreendimento</h3>
                     <p class="card-desc">Solicite acesso a um empreendimento turístico já cadastrado para acompanhar futuros recursos exclusivos.</p>
-                    <button class="card-action" onclick="document.getElementById('claimRequestSection').scrollIntoView({behavior:'smooth'})">Solicitar Vínculo</button>
+                    <button class="card-action" onclick="abrirSecaoSolicitacaoVinculo()">Solicitar Vínculo</button>
                 </div>
             </div>
 
@@ -490,7 +490,8 @@
     <script src="js/firebase-auth.js?v=auth-login-fix-20260525"></script>
     <script src="js/data/hospedagens.js"></script>
     <script src="js/data/restaurantes.js"></script>
-    <script src="js/establishment-catalog.js"></script>
+    <script src="js/cms-public-establishments-adapter.js?v=admin-e2e-publication-20260911"></script>
+    <script src="js/establishment-catalog.js?v=establishment-catalog-cms-20260914"></script>
 
 
     <script>
@@ -1379,19 +1380,20 @@
         }
     }
 
-    async function getCatalogoEmpreendimentos() {
+    async function getCatalogoEmpreendimentos(options) {
+        options = options || {};
         if (!window.EstablishmentCatalog || typeof window.EstablishmentCatalog.ready !== 'function') {
             return [];
         }
-        await window.EstablishmentCatalog.ready();
-        return window.EstablishmentCatalog.list();
+        await window.EstablishmentCatalog.ready({ force: options.force === true });
+        return window.EstablishmentCatalog.list({ claimableOnly: options.claimableOnly === true });
     }
 
     async function preencherCatalogoEmpreendimentos() {
         var select = document.getElementById('claimEstablishment');
         if (!select) return;
 
-        var items = await getCatalogoEmpreendimentos();
+        var items = await getCatalogoEmpreendimentos({ force: true, claimableOnly: true });
         var currentValue = select.value;
         select.innerHTML = '<option value="">Selecione um empreendimento</option>';
 
@@ -1413,6 +1415,11 @@
         if (currentValue) {
             select.value = currentValue;
         }
+    }
+
+    async function abrirSecaoSolicitacaoVinculo() {
+        await preencherCatalogoEmpreendimentos();
+        document.getElementById('claimRequestSection').scrollIntoView({ behavior: 'smooth' });
     }
 
     function preencherContatoSolicitacao(user) {
@@ -1829,8 +1836,8 @@
             return;
         }
 
-        await window.EstablishmentCatalog.ready();
-        var selectedItem = window.EstablishmentCatalog.findById(selectedId);
+        await window.EstablishmentCatalog.ready({ force: true });
+        var selectedItem = window.EstablishmentCatalog.findById(selectedId, { claimableOnly: true });
         if (!selectedItem) {
             mostrarNotif('Empreendimento inválido. Recarregue a página e tente novamente.', 'error');
             return;

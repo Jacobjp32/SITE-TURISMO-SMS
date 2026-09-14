@@ -1586,7 +1586,8 @@
     <script src="js/publication-contracts.js?v=security-hardening-02a-20260913"></script>
     <script src="js/data/restaurantes.js"></script>
     <script src="js/data/hospedagens.js"></script>
-    <script src="js/establishment-catalog.js"></script>
+    <script src="js/cms-public-establishments-adapter.js?v=admin-e2e-publication-20260911"></script>
+    <script src="js/establishment-catalog.js?v=establishment-catalog-cms-20260914"></script>
     <script src="config.js?v=admin-stability-20260608"></script>
     <!-- Painel administrativo principal: permissões controladas por usuarios/{uid}.role no Firebase. -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
@@ -2384,11 +2385,9 @@
         async function ensureManagerFormSources() {
             var results = await Promise.all([
                 adminUsersCache.length ? Promise.resolve(adminUsersCache) : Promise.resolve(FirebaseSystem.getUsers()),
-                adminEstablishmentCatalog.length
-                    ? Promise.resolve(adminEstablishmentCatalog)
-                    : (window.EstablishmentCatalog && typeof window.EstablishmentCatalog.ready === 'function'
-                        ? window.EstablishmentCatalog.ready()
-                        : Promise.resolve([]))
+                window.EstablishmentCatalog && typeof window.EstablishmentCatalog.ready === 'function'
+                    ? window.EstablishmentCatalog.ready({ force: true })
+                    : Promise.resolve([])
             ]);
 
             adminUsersCache = Array.isArray(results[0]) ? results[0].slice().sort(function(a, b) {
@@ -2401,7 +2400,14 @@
             const container = document.getElementById('establishment-managers-container');
             container.innerHTML = '<div class="loading">Carregando...</div>';
 
-            const managers = await FirebaseSystem.listAllEstablishmentManagers();
+            const results = await Promise.all([
+                FirebaseSystem.listAllEstablishmentManagers(),
+                window.EstablishmentCatalog && typeof window.EstablishmentCatalog.ready === 'function'
+                    ? window.EstablishmentCatalog.ready({ force: true })
+                    : Promise.resolve([])
+            ]);
+            const managers = results[0];
+            adminEstablishmentCatalog = Array.isArray(results[1]) ? results[1].slice() : [];
             adminManagersCache = Array.isArray(managers) ? managers.slice() : [];
             const filteredManagers = adminManagerUserFilterId
                 ? adminManagersCache.filter(manager => manager.userId === adminManagerUserFilterId)
@@ -2511,6 +2517,33 @@
             }).join('');
         }
 
+        function ensureManagerEstablishmentOption(managerData) {
+            const select = document.getElementById('managerEstablishmentId');
+            const establishmentId = String(managerData && managerData.establishmentId || '').trim();
+
+            if (!establishmentId) {
+                return;
+            }
+
+            const existingOption = Array.from(select.options).find(function(option) {
+                return option.value === establishmentId;
+            });
+
+            if (existingOption) {
+                existingOption.selected = true;
+                return;
+            }
+
+            const tempOption = document.createElement('option');
+            const establishmentName = String(managerData && managerData.establishmentName || '').trim() || establishmentId;
+
+            tempOption.value = establishmentId;
+            tempOption.textContent = establishmentName + ' | Vínculo existente';
+            tempOption.setAttribute('data-existing-manager-option', 'true');
+            tempOption.selected = true;
+            select.appendChild(tempOption);
+        }
+
         function closeManagerModal() {
             document.getElementById('managerModal').hidden = true;
             document.getElementById('managerForm').reset();
@@ -2567,6 +2600,7 @@
             populateManagerUserSelect(manager.userId);
             ensureManagerUserOption(manager);
             populateManagerEstablishmentSelect(manager.establishmentId);
+            ensureManagerEstablishmentOption(manager);
 
             document.getElementById('managerModalTitle').textContent = 'Editar vínculo';
             document.getElementById('managerFormMode').value = 'edit';
@@ -2601,9 +2635,21 @@
             const selectedUser = adminUsersCache.find(function(user) {
                 return user.id === userId;
             });
-            const selectedEstablishment = adminEstablishmentCatalog.find(function(item) {
+            let selectedEstablishment = adminEstablishmentCatalog.find(function(item) {
                 return item.establishmentId === establishmentId;
             });
+
+            if (!selectedEstablishment && mode === 'edit') {
+                const existingManager = adminManagersCache.find(function(item) {
+                    return item.id === managerId && item.establishmentId === establishmentId;
+                });
+                if (existingManager) {
+                    selectedEstablishment = {
+                        establishmentId: existingManager.establishmentId,
+                        establishmentName: existingManager.establishmentName
+                    };
+                }
+            }
 
             if (!selectedEstablishment) {
                 alert('Selecione um empreendimento válido.');
