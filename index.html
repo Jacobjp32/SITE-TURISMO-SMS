@@ -198,17 +198,16 @@
                 <div class="hero-media-label" data-lang-key="hero-media-label">São Mateus do Sul em imagens</div>
                 <video
                     class="hero-video"
-                    autoplay
                     muted
                     loop
                     playsinline
-                    preload="metadata"
+                    preload="none"
                     width="1920"
                     height="1080"
                     aria-label="Vídeo panorâmico de São Mateus do Sul"
                     data-lang-key-aria-label="hero-media-video-label"
                     poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
-                    <source src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
+                    <source data-src="videos/ROTA_DO_TURISMO.hero-720p.mp4" type="video/mp4">
                     Sua navegacao nao suporta video em HTML5.
                 </video>
             </div>
@@ -1270,6 +1269,7 @@
     </footer>
 
     <script src="js/home-acessibilidade.js?v=site-public-b1-20260708" defer></script>
+    <script src="js/home-hero-video.js?v=performance-05-20260914" defer></script>
     <script src="js/home-contato.js?v=site-public-b1-20260708" defer></script>
     <script src="js/home-experiencias.js?v=site-public-b1-20260708" defer></script>
     <script src="js/publication-contracts.js?v=security-hardening-02a-20260913" defer></script>

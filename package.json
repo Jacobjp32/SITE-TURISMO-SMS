@@ -5,6 +5,7 @@
   "scripts": {
     "test:reservations": "node --test --test-concurrency=1 tests/reservations-truthful-state.test.mjs",
     "test:consent": "node --test --test-concurrency=1 tests/consent-first.test.mjs",
+    "test:hero-deferred": "node --test --test-concurrency=1 tests/hero-video-deferred.test.mjs",
     "test:header-structural": "node --test --test-concurrency=1 tests/header-structural-hardening.test.mjs",
     "test:agrosamas": "node --test --test-concurrency=1 tests/agrosamas-architecture-contract.test.mjs tests/agrosamas-visual-foundation.test.mjs tests/agrosamas-global-integration.test.mjs tests/agrosamas-location-data.test.mjs tests/event-occurrence-adapter.test.mjs tests/home-events-identity-dedup.test.mjs tests/home-events-publication-policy.test.mjs",
     "test:rotas:model": "node --test --test-concurrency=1 tests/rotas-v1.1-model.test.mjs",
