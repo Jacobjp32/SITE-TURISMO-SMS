@@ -1809,6 +1809,134 @@ describe("Regressão pós-B2A5 do fallback deny", () => {
   });
 });
 
+describe("Aprovação de empreendimentos V2 — papéis e autoridade de workflow", () => {
+  function pendingSubmission(overrides = {}) {
+    return {
+      id: "submission-v2",
+      nome: "Empreendimento sintético",
+      endereco: "Rua de teste, 100",
+      submittedBy: "submission-owner",
+      status: "pendente",
+      reviewedAt: null,
+      reviewedBy: null,
+      reviewNotes: "",
+      ...overrides,
+    };
+  }
+
+  test("usuário cria submissão pendente, mas não forja autoridade CMS", async () => {
+    await seedDocuments([userEntry("submission-owner", "user", true)]);
+    const db = authenticatedDb("submission-owner");
+    await assertSucceeds(setDoc(
+      doc(db, "estabelecimentos_pendentes", "submission-v2"),
+      pendingSubmission(),
+    ));
+    await assertFails(setDoc(
+      doc(db, "estabelecimentos_pendentes", "submission-forged"),
+      pendingSubmission({
+        id: "submission-forged",
+        cmsEstablishmentId: "forged-cms",
+        cmsImportState: "draft_created",
+      }),
+    ));
+  });
+
+  test("moderator somente rejeita a submissão com transição estreita", async () => {
+    await seedDocuments([
+      userEntry("submission-owner", "user", true),
+      userEntry("approval-moderator", "moderator", true),
+      ["estabelecimentos_pendentes/submission-v2", pendingSubmission()],
+    ]);
+    const target = doc(authenticatedDb("approval-moderator"), "estabelecimentos_pendentes", "submission-v2");
+    await assertFails(updateDoc(target, {
+      status: "aprovado",
+      cmsEstablishmentId: "empreendimento-sintetico",
+      cmsImportState: "draft_created",
+    }));
+    await assertFails(updateDoc(target, {
+      status: "rejeitado",
+      nome: "Conteúdo alterado pelo moderador",
+      reviewedAt: serverTimestamp(),
+      reviewedBy: "approval-moderator",
+      reviewNotes: "rejeição sintética",
+    }));
+    await assertSucceeds(updateDoc(target, {
+      status: "rejeitado",
+      reviewedAt: serverTimestamp(),
+      reviewedBy: "approval-moderator",
+      reviewNotes: "rejeição sintética",
+    }));
+    await assertFails(deleteDoc(target));
+
+    await seedDocuments([["estabelecimentos_pendentes/submission-started", pendingSubmission({
+      id: "submission-started",
+      cmsEstablishmentId: "empreendimento-sintetico",
+      cmsImportState: "media_preparing",
+    })]]);
+    await assertFails(updateDoc(
+      doc(authenticatedDb("approval-moderator"), "estabelecimentos_pendentes", "submission-started"),
+      {
+        status: "rejeitado",
+        reviewedAt: serverTimestamp(),
+        reviewedBy: "approval-moderator",
+        reviewNotes: "rejeição tardia",
+      },
+    ));
+
+    for (const [id, workflowAuthority] of [
+      ["submission-linked-without-state", { cmsEstablishmentId: "empreendimento-sintetico" }],
+      ["submission-imported-without-state", { cmsImportedAt: new Date("2026-09-14T12:00:00.000Z") }],
+    ]) {
+      await seedDocuments([[`estabelecimentos_pendentes/${id}`, pendingSubmission({ id, ...workflowAuthority })]]);
+      await assertFails(updateDoc(
+        doc(authenticatedDb("approval-moderator"), "estabelecimentos_pendentes", id),
+        {
+          status: "rejeitado",
+          reviewedAt: serverTimestamp(),
+          reviewedBy: "approval-moderator",
+          reviewNotes: "rejeição após autoridade de workflow",
+        },
+      ));
+    }
+  });
+
+  test("admin controla a saga e lock sem conceder mutação do lock após create", async () => {
+    await seedDocuments([
+      userEntry("approval-admin", "admin", true),
+      userEntry("approval-moderator", "moderator", true),
+      ["estabelecimentos_pendentes/submission-v2", pendingSubmission()],
+    ]);
+    const adminDb = authenticatedDb("approval-admin");
+    const pending = doc(adminDb, "estabelecimentos_pendentes", "submission-v2");
+    await assertSucceeds(updateDoc(pending, {
+      cmsEstablishmentId: "empreendimento-sintetico",
+      cmsImportState: "media_preparing",
+      updatedAt: serverTimestamp(),
+      updatedBy: "approval-admin",
+    }));
+
+    const lockPath = "cms_establishment_submission_locks/empreendimento-sintetico-1234abcd";
+    const lock = doc(adminDb, lockPath);
+    const lockPayload = {
+      id: "empreendimento-sintetico-1234abcd",
+      cmsEstablishmentId: "empreendimento-sintetico",
+      submissionId: "submission-v2",
+      policy: "permanent_alias_v1",
+      createdAt: serverTimestamp(),
+      createdBy: "approval-admin",
+    };
+    await assertSucceeds(setDoc(lock, lockPayload));
+    await assertSucceeds(getDoc(lock));
+    await assertFails(getDoc(doc(authenticatedDb("approval-moderator"), lockPath)));
+    await assertFails(setDoc(
+      doc(authenticatedDb("approval-moderator"), "cms_establishment_submission_locks/moderator-lock"),
+      { ...lockPayload, id: "moderator-lock", createdBy: "approval-moderator" },
+    ));
+    await assertFails(updateDoc(lock, { submissionId: "other-submission" }));
+    await assertFails(deleteDoc(lock));
+  });
+});
+
 describe("CMS establishments C1 V2 — shell e leitura pública legada", () => {
   test("admin cria somente shell draft exato e consegue lê-lo", async () => {
     await seedDocuments([userEntry("admin-v2", "admin", true)]);

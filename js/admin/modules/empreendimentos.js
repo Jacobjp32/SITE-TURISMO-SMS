@@ -195,14 +195,15 @@
         return null;
     }
 
+    function submissionBridge() {
+        if (!window.EstablishmentSubmissionBridge) {
+            throw new Error("EstablishmentSubmissionBridge indisponível.");
+        }
+        return window.EstablishmentSubmissionBridge;
+    }
+
     function makeSlug(value) {
-        return clean(value)
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, "")
-            .slice(0, 120) || "empreendimento";
+        return submissionBridge().makeCanonicalSlug(value);
     }
 
     function normalizeText(value) {
@@ -460,6 +461,37 @@
         }));
     }
 
+    function approvedPublicMediaPaths(mainImage, gallery, establishmentId) {
+        var prefix = "approved-media/cms-establishments/" + clean(establishmentId) + "/";
+        var seen = Object.create(null);
+        // Preserve o realm do array vindo do SDK. Firestore rejeita arrays com
+        // prototype de outro realm em testes/browser embutido.
+        var candidates = ensureArray(gallery).slice();
+        candidates.unshift(mainImage);
+        return candidates.filter(function (image) {
+            if (!image || !clean(image.url) || isRemovedImage(image)) return false;
+            var path = limit(image.path, 512);
+            if (!clean(establishmentId) || !path || path.indexOf(prefix) !== 0) return false;
+            try {
+                return decodeURIComponent(clean(image.url)).indexOf(path) !== -1;
+            } catch (_error) {
+                return false;
+            }
+        }).map(function (image) {
+            return limit(image.path, 512);
+        }).filter(function (path) {
+            if (seen[path]) return false;
+            seen[path] = true;
+            return true;
+        }).slice(0, 50);
+    }
+
+    function syncApprovedPublicMediaPaths(doc) {
+        if (!doc || !doc.media) return doc;
+        doc.media.publicPaths = approvedPublicMediaPaths(doc.media.mainImage, doc.media.gallery, doc.id);
+        return doc;
+    }
+
     function defaultDoc(id, uid) {
         return {
             id: id,
@@ -499,6 +531,7 @@
             media: {
                 mainImage: emptyImage(),
                 gallery: [],
+                publicPaths: [],
                 videoUrl: "",
                 sourceCredits: ""
             },
@@ -610,6 +643,7 @@
             media: {
                 mainImage: normalizeImage(media.mainImage),
                 gallery: normalizeGallery(media.gallery),
+                publicPaths: approvedPublicMediaPaths(media.mainImage, media.gallery, id),
                 videoUrl: clean(media.videoUrl),
                 sourceCredits: clean(media.sourceCredits)
             },
@@ -1276,13 +1310,18 @@
             coordStatus: limit(value("est_coordStatus"), 80),
             coordNote: limit(value("est_coordNote"), 500)
         };
+        var requestedMainImageUrl = limit(value("est_mainImageUrl"), 2048);
+        var preserveMainImageProvenance = !!requestedMainImageUrl &&
+            requestedMainImageUrl === clean(base.media.mainImage.url);
         base.media.mainImage = normalizeImage(Object.assign({}, base.media.mainImage, {
-            url: limit(value("est_mainImageUrl"), 2048),
-            path: base.media.mainImage.path,
+            url: requestedMainImageUrl,
+            path: preserveMainImageProvenance ? base.media.mainImage.path : "",
             alt: limit(value("est_mainImageAlt"), 160),
             caption: limit(value("est_mainImageCaption"), 240),
             credit: limit(value("est_mainImageCredit"), 160),
-            source: base.media.mainImage.source || (value("est_mainImageUrl") ? "external" : "")
+            source: preserveMainImageProvenance
+                ? base.media.mainImage.source
+                : (requestedMainImageUrl ? "external" : "")
         }));
         base.media.gallery = manualGallery.map(function (img, index) {
             img.position = index + 1;
@@ -1324,7 +1363,7 @@
             base.createdAt = serverTimestamp();
             base.createdBy = uid;
         }
-        return base;
+        return syncApprovedPublicMediaPaths(base);
     }
 
     function validateDocForSave(doc) {
@@ -1591,7 +1630,7 @@
                     return image;
                 });
             state.pendingUploadedMedia = uploaded;
-            return payload;
+            return syncApprovedPublicMediaPaths(payload);
         });
     }
 
@@ -1608,8 +1647,22 @@
 
     function runGroupTransaction(db, saga, group) {
         return db.runTransaction(function (transaction) {
-            return transaction.get(saga.ref).then(function (snapshot) {
+            var workflowProgress = saga.workflowProgress;
+            var reads = [transaction.get(saga.ref)];
+            if (workflowProgress && workflowProgress.ref) reads.push(transaction.get(workflowProgress.ref));
+            return Promise.all(reads).then(function (snapshots) {
+                var snapshot = snapshots[0];
                 if (!snapshot.exists) throw conflictError();
+                if (workflowProgress && workflowProgress.ref) {
+                    var workflowSnapshot = snapshots[1];
+                    var workflowData = workflowSnapshot && workflowSnapshot.exists ? (workflowSnapshot.data() || {}) : {};
+                    if (!workflowSnapshot || !workflowSnapshot.exists ||
+                        clean(workflowData.status).toLowerCase() !== clean(workflowProgress.statusValue).toLowerCase() ||
+                        clean(workflowData[workflowProgress.stateField]) !== clean(workflowProgress.stateValue) ||
+                        workflowData[workflowProgress.fingerprintField] !== workflowProgress.fingerprintValue) {
+                        throw conflictError();
+                    }
+                }
                 var raw = snapshot.data() || {};
                 if (!semanticGroupSourceValid(raw, group)) throw conflictError();
                 var current = normalizeDoc(raw, snapshot.id);
@@ -1618,6 +1671,16 @@
                 if (!semanticGroupValueEqual(current, group, saga.baseGroups[group])) throw conflictError();
                 var patch = groupPatch(group, saga.desired, raw, saga.uid, currentRevision + 1);
                 transaction.update(saga.ref, patch);
+                if (workflowProgress && workflowProgress.ref &&
+                    (workflowProgress.field === "textApplyProgress" || workflowProgress.field === "mediaApplyProgress")) {
+                    var progressKey = group;
+                    if (group === "lifecycle") {
+                        progressKey = saga.desired.status === "published" ? "lifecyclePublished" : "lifecycleDraft";
+                    }
+                    var progressPatch = {};
+                    progressPatch[workflowProgress.field + "." + progressKey] = true;
+                    transaction.update(workflowProgress.ref, progressPatch);
+                }
                 return {
                     revision: currentRevision + 1,
                     groupValue: groupValue(saga.desired, group)
@@ -1752,11 +1815,13 @@
                     groupsToWrite(base, desired)
                 );
                 nextSaga.flow = completedSaga.flow || "canonical-update";
+                nextSaga.workflowProgress = completedSaga.workflowProgress;
                 nextSaga.resumePhase = completedSaga.resumeWasPublished ? "publish" : "finish";
             } else if (completedSaga.resumePhase === "publish") {
                 var published = lifecyclePublished(base, completedSaga.uid);
                 nextSaga = buildSaga(completedSaga.ref, published, base, completedSaga.uid, ["lifecycle"]);
                 nextSaga.flow = completedSaga.flow || "canonical-update";
+                nextSaga.workflowProgress = completedSaga.workflowProgress;
                 nextSaga.resumePhase = "finish";
             }
             return executeSaga(db, nextSaga).then(function () {
@@ -1807,6 +1872,8 @@
         setSaveProgress(editingId ? "Salvando..." : "Criando rascunho...", false);
         state.pendingUploadedMedia = [];
         Promise.resolve().then(function () {
+            return assertNoManualSemanticDuplicate(db, payload);
+        }).then(function () {
             if (editingId) {
                 base = state.editingBase || normalizeDoc(existing, existing.__id);
                 return ref.get().then(function (snapshot) {
@@ -1830,7 +1897,7 @@
                     existsError.code = "already-exists";
                     throw existsError;
                 }
-                return ref.set(shellPayload(payload.id, uid)).then(function () {
+                return reserveManualDraftShell(db, ref, payload, uid).then(function () {
                     state.draftShellId = payload.id;
                     return ref.get();
                 }).then(function (createdSnapshot) {
@@ -1839,6 +1906,11 @@
             });
         }).then(function () {
             return prepareUploads(storage, uid, payload, mainFile, galleryFiles);
+        }).then(function () {
+            // A edição só reserva a nova identidade depois que uploads foram
+            // reconciliados; falha de mídia não deixa alias de tentativa.
+            if (!editingId) return null;
+            return reserveManualIdentityLock(db, ref, payload, base, uid);
         }).then(function () {
             payload.status = "draft";
             payload.publishing = lifecycleDraft(payload).publishing;
@@ -1956,6 +2028,326 @@
             return load();
         }).catch(function (error) {
             handleWriteError(error, "restaurar empreendimento");
+        });
+    }
+
+    function importCollisionError(message) {
+        var error = new Error(message || "O ID canônico já pertence a outro empreendimento.");
+        error.code = "establishment-import-collision";
+        return error;
+    }
+
+    function completeImportedDraft(raw, submissionId) {
+        var data = raw || {};
+        return data.status === "draft" &&
+            data.schemaVersion === SCHEMA_VERSION &&
+            Number.isInteger(data.revision) &&
+            data.source && data.source.originalId === submissionId &&
+            GROUP_ORDER.every(function (group) {
+                return data.validatedGroups && data.validatedGroups[group] === SCHEMA_VERSION;
+            });
+    }
+
+    function assertImportedGroupsUnchanged(base, desired) {
+        GROUP_ORDER.forEach(function (group) {
+            if (base.validatedGroups && base.validatedGroups[group] === SCHEMA_VERSION &&
+                !semanticGroupsEqual(base, desired, group)) {
+                var error = importCollisionError("O draft foi editado depois do início da importação. Revise o registro manualmente; o retry automático não sobrescreveu a edição.");
+                error.code = "establishment-import-manual-change";
+                throw error;
+            }
+        });
+    }
+
+    function identityLockPayload(lockId, cmsId, submissionId, uid) {
+        // Alias permanente: uma identidade que chegou à reserva validada nunca
+        // pode ser reassociada a outro CMS ID, inclusive após rename/delete.
+        return {
+            id: lockId,
+            cmsEstablishmentId: cmsId,
+            submissionId: submissionId,
+            policy: "permanent_alias_v1",
+            createdAt: serverTimestamp(),
+            createdBy: uid
+        };
+    }
+
+    function reserveSubmissionImport(options) {
+        var config = options || {};
+        var db = config.db || getDb();
+        var uid = clean(config.uid || currentUid());
+        var submission = config.submission || {};
+        var submissionId = clean(config.submissionId || submission.id);
+        var publicSourceId = clean(config.publicSourceId);
+        var cmsId = clean(config.cmsId || makeSlug(submission.name || submission.nome));
+        var expectedFingerprint = clean(config.expectedSubmissionFingerprint);
+        var pendingRef = config.pendingRef;
+        var cmsRef = db && db.collection(COLLECTION).doc(cmsId);
+        var bridge = submissionBridge();
+        var lockId = bridge.semanticIdentityLockId(submission);
+        var lockRef = db && db.collection("cms_establishment_submission_locks").doc(lockId);
+        if (!db || !uid || !submissionId || !publicSourceId || !cmsId || !pendingRef || !lockRef) {
+            return Promise.reject(new Error("Contexto incompleto para reservar a importação."));
+        }
+
+        return db.runTransaction(function (transaction) {
+            return Promise.all([
+                transaction.get(pendingRef),
+                transaction.get(cmsRef),
+                transaction.get(lockRef)
+            ]).then(function (snapshots) {
+                var pendingSnapshot = snapshots[0];
+                var cmsSnapshot = snapshots[1];
+                var lockSnapshot = snapshots[2];
+                if (!pendingSnapshot.exists) throw importCollisionError("A submissão não existe mais.");
+                var pending = pendingSnapshot.data() || {};
+                var pendingStatus = clean(pending.status).toLowerCase();
+                var idempotentFinal = pendingStatus === "aprovado" &&
+                    pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
+                if (pendingStatus !== "pendente" && !idempotentFinal) {
+                    throw importCollisionError("A submissão não está mais pendente para aprovação.");
+                }
+                if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
+                    throw importCollisionError("A submissão mudou durante a aprovação. Recarregue a fila antes de tentar novamente.");
+                }
+                if (pending.cmsEstablishmentId && pending.cmsEstablishmentId !== cmsId) {
+                    throw importCollisionError("A submissão já está vinculada a outro ID canônico.");
+                }
+                if (lockSnapshot.exists) {
+                    var lock = lockSnapshot.data() || {};
+                    if (lock.cmsEstablishmentId !== cmsId || lock.submissionId !== submissionId) {
+                        var duplicateError = importCollisionError("Outra submissão já reservou esta identidade semântica.");
+                        duplicateError.code = "establishment-import-duplicate-lock";
+                        throw duplicateError;
+                    }
+                }
+                var existing = cmsSnapshot.exists ? (cmsSnapshot.data() || {}) : {};
+                if (cmsSnapshot.exists) {
+                    var sameSubmission = existing.source && existing.source.originalId === publicSourceId;
+                    if (pending.cmsEstablishmentId !== cmsId && !sameSubmission) throw importCollisionError();
+                }
+                if (idempotentFinal && !completeImportedDraft(existing, publicSourceId)) {
+                    throw importCollisionError("O draft CMS vinculado à aprovação não está íntegro.");
+                }
+
+                if (!lockSnapshot.exists) {
+                    transaction.set(lockRef, identityLockPayload(lockId, cmsId, submissionId, uid));
+                }
+                if (!cmsSnapshot.exists) transaction.set(cmsRef, shellPayload(cmsId, uid));
+                transaction.update(pendingRef, {
+                    cmsEstablishmentId: cmsId,
+                    cmsImportState: idempotentFinal ? "draft_created" : "media_preparing",
+                    updatedAt: serverTimestamp(),
+                    updatedBy: uid
+                });
+                return {
+                    shellCreated: !cmsSnapshot.exists,
+                    cmsEstablishmentId: cmsId,
+                    lockId: lockId,
+                    idempotentFinal: idempotentFinal,
+                    status: cmsSnapshot.exists ? clean((cmsSnapshot.data() || {}).status) : "draft"
+                };
+            });
+        });
+    }
+
+    function reserveManualDraftShell(db, ref, desired, uid) {
+        var bridge = submissionBridge();
+        var lockId = bridge.semanticIdentityLockId(desired);
+        var lockRef = db.collection("cms_establishment_submission_locks").doc(lockId);
+        var manualSourceId = "manual:" + desired.id;
+        return db.runTransaction(function (transaction) {
+            return Promise.all([transaction.get(ref), transaction.get(lockRef)]).then(function (snapshots) {
+                if (snapshots[0].exists) {
+                    var existsError = new Error("Ja existe um empreendimento com este ID/slug.");
+                    existsError.code = "already-exists";
+                    throw existsError;
+                }
+                if (snapshots[1].exists) {
+                    var duplicateError = new Error("Ja existe um empreendimento com a mesma identidade semantica.");
+                    duplicateError.code = "already-exists";
+                    throw duplicateError;
+                }
+                transaction.set(lockRef, identityLockPayload(lockId, desired.id, manualSourceId, uid));
+                transaction.set(ref, shellPayload(desired.id, uid));
+            });
+        });
+    }
+
+    function assertNoManualSemanticDuplicate(db, desired) {
+        var bridge = submissionBridge();
+        return db.collection(COLLECTION).get().then(function (snapshot) {
+            var candidates = snapshot.docs.map(function (entry) {
+                return { id: entry.id, data: entry.data() || {} };
+            }).filter(function (candidate) {
+                return candidate.id !== desired.id;
+            });
+            var duplicate = bridge.classifyDuplicate(desired, {
+                cms: candidates,
+                pending: [],
+                legacyApproved: [],
+                excludeSubmissionId: desired.id
+            });
+            if (duplicate.kind === "NO_MATCH") return;
+            var error = new Error("Ja existe outro empreendimento com identidade igual ou semelhante. Revise o registro existente antes de salvar.");
+            error.code = "already-exists";
+            error.candidates = duplicate.candidates || [];
+            throw error;
+        });
+    }
+
+    function reserveManualIdentityLock(db, ref, desired, base, uid) {
+        var bridge = submissionBridge();
+        var lockId = bridge.semanticIdentityLockId(desired);
+        var lockRef = db.collection("cms_establishment_submission_locks").doc(lockId);
+        var manualSourceId = "manual:" + desired.id;
+        return db.runTransaction(function (transaction) {
+            return Promise.all([transaction.get(ref), transaction.get(lockRef)]).then(function (snapshots) {
+                var currentSnapshot = snapshots[0];
+                if (!currentSnapshot.exists) throw conflictError();
+                var current = normalizeDoc(currentSnapshot.data() || {}, currentSnapshot.id);
+                if (current.revision !== base.revision) throw conflictError();
+                if (snapshots[1].exists) {
+                    var lock = snapshots[1].data() || {};
+                    if (lock.cmsEstablishmentId !== desired.id) {
+                        var duplicateError = new Error("Ja existe outro empreendimento com a mesma identidade semantica.");
+                        duplicateError.code = "already-exists";
+                        throw duplicateError;
+                    }
+                } else {
+                    transaction.set(lockRef, identityLockPayload(lockId, desired.id, manualSourceId, uid));
+                }
+                return currentSnapshot;
+            });
+        });
+    }
+
+    function importSubmissionDraft(options) {
+        var config = options || {};
+        var db = config.db || getDb();
+        var uid = clean(config.uid || currentUid());
+        var submissionId = clean(config.submissionId || config.submission && config.submission.id);
+        var publicSourceId = clean(config.publicSourceId);
+        var cmsId = clean(config.cmsId || makeSlug(config.submission && (config.submission.name || config.submission.nome)));
+        var pendingRef = config.pendingRef;
+        var ref = db && db.collection(COLLECTION).doc(cmsId);
+        var contracts = window.SMSPublicationContracts;
+        var bridge = submissionBridge();
+        var expectedFingerprint = clean(config.expectedSubmissionFingerprint);
+        if (!db || !uid || !submissionId || !publicSourceId || !cmsId || !pendingRef || !contracts || !contracts.url) {
+            return Promise.reject(new Error("Contexto incompleto para importar a submissão no CMS."));
+        }
+
+        var desired = bridge.mapSubmissionToCmsDraft(config.submission, {
+            id: cmsId,
+            submissionId: submissionId,
+            provenanceId: publicSourceId,
+            uid: uid,
+            createBase: defaultDoc,
+            safeAsset: contracts.url.publicAsset,
+            safeExternalUrl: contracts.url.externalHttps,
+            legacyIds: config.legacyIds || []
+        });
+        var validation = validateDocForSave(desired);
+        if (validation) return Promise.reject(new Error(validation));
+
+        var shellCreated = config.shellCreated === true;
+        return db.runTransaction(function (transaction) {
+            return Promise.all([transaction.get(pendingRef), transaction.get(ref)]).then(function (snapshots) {
+                var pendingSnapshot = snapshots[0];
+                var cmsSnapshot = snapshots[1];
+                if (!pendingSnapshot.exists) throw importCollisionError("A submissão não existe mais.");
+                var pending = pendingSnapshot.data() || {};
+                var pendingStatus = clean(pending.status).toLowerCase();
+                var idempotentFinal = pendingStatus === "aprovado" &&
+                    pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
+                if (pendingStatus !== "pendente" && !idempotentFinal) {
+                    throw importCollisionError("A submissão não está mais pendente para aprovação.");
+                }
+                if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
+                    throw importCollisionError("A submissão mudou durante a aprovação. Recarregue a fila antes de tentar novamente.");
+                }
+                if (!idempotentFinal && pending.cmsImportState !== "media_prepared" && pending.cmsImportState !== "draft_creating") {
+                    throw importCollisionError("O preparo de mídia da submissão não foi confirmado.");
+                }
+                if (pending.cmsEstablishmentId && pending.cmsEstablishmentId !== cmsId) {
+                    throw importCollisionError("A submissão já está vinculada a outro ID canônico.");
+                }
+                if (!cmsSnapshot.exists) throw importCollisionError("A reserva do shell CMS não foi confirmada.");
+                var existing = cmsSnapshot.data() || {};
+                var sameSubmission = existing.source && existing.source.originalId === publicSourceId;
+                if (pending.cmsEstablishmentId !== cmsId && !sameSubmission) throw importCollisionError();
+                transaction.update(pendingRef, {
+                    cmsEstablishmentId: cmsId,
+                    cmsImportState: idempotentFinal ? "draft_created" : "draft_creating",
+                    updatedAt: serverTimestamp(),
+                    updatedBy: uid
+                });
+                return { shellCreated: shellCreated };
+            });
+        }).then(function (shellResult) {
+            shellCreated = shellResult && shellResult.shellCreated === true;
+            return ref.get();
+        }).then(function (snapshot) {
+            if (!snapshot.exists) throw importCollisionError("O shell do draft não foi confirmado.");
+            var raw = snapshot.data() || {};
+            if (raw.source && raw.source.originalId && raw.source.originalId !== publicSourceId) {
+                throw importCollisionError();
+            }
+            var base = normalizeDoc(raw, snapshot.id);
+            desired.createdAt = base.createdAt;
+            desired.createdBy = base.createdBy;
+            desired.updatedAt = base.updatedAt;
+            desired.updatedBy = base.updatedBy;
+            desired.revision = base.revision;
+            desired.validatedGroups = Object.assign({}, base.validatedGroups || {});
+            assertImportedGroupsUnchanged(base, desired);
+            var groups = groupsToWrite(base, desired);
+            if (!groups.length) return null;
+            var saga = buildSaga(ref, desired, base, uid, groups);
+            saga.flow = "establishment-submission-import";
+            saga.resumePhase = "finish";
+            return executeSaga(db, saga);
+        }).then(function () {
+            return db.runTransaction(function (transaction) {
+                return transaction.get(pendingRef).then(function (pendingSnapshot) {
+                    if (!pendingSnapshot.exists) throw importCollisionError("A submissão não existe mais.");
+                    var pending = pendingSnapshot.data() || {};
+                    var pendingStatus = clean(pending.status).toLowerCase();
+                    var idempotentFinal = pendingStatus === "aprovado" &&
+                        pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
+                    if (pendingStatus !== "pendente" && !idempotentFinal) {
+                        throw importCollisionError("A submissão não está mais pendente para finalizar a aprovação.");
+                    }
+                    if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
+                        throw importCollisionError("A submissão mudou durante a aprovação. O draft foi preservado para revisão.");
+                    }
+                    return transaction.get(ref).then(function (cmsSnapshot) {
+                        if (!cmsSnapshot.exists || !completeImportedDraft(cmsSnapshot.data() || {}, publicSourceId)) {
+                            throw importCollisionError("O draft CMS não está íntegro para finalizar a aprovação.");
+                        }
+                        var completedAt = serverTimestamp();
+                        transaction.update(pendingRef, {
+                            status: "aprovado",
+                            reviewedAt: completedAt,
+                            reviewedBy: uid,
+                            reviewNotes: clean(config.reviewNotes),
+                            cmsEstablishmentId: cmsId,
+                            cmsImportState: "draft_created",
+                            cmsImportedAt: completedAt,
+                            updatedAt: completedAt,
+                            updatedBy: uid
+                        });
+                    });
+                });
+            });
+        }).then(function () {
+            return {
+                success: true,
+                code: shellCreated ? "CMS_DRAFT_CREATED" : "CMS_DRAFT_ALREADY_EXISTS",
+                cmsEstablishmentId: cmsId,
+                status: "draft"
+            };
         });
     }
 
@@ -2171,6 +2563,9 @@
         return ref.get().then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
             var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
+            if (Number.isInteger(options.expectedRevision) && base.revision !== options.expectedRevision) {
+                throw conflictError();
+            }
             if (base.status === "archived") {
                 var archived = new Error("Restaure o empreendimento arquivado como rascunho antes de editar.");
                 archived.code = "establishment-archived";
@@ -2199,7 +2594,15 @@
                 initialSaga.resumePhase = resumePublished ? "publish" : "finish";
             }
             initialSaga.flow = clean(options.flow) || "canonical-update";
-            return executeSaga(db, initialSaga).then(function () {
+            initialSaga.workflowProgress = options.workflowProgress || null;
+            var identityBoundary = options.enforceSemanticIdentity === true
+                ? assertNoManualSemanticDuplicate(db, desired).then(function () {
+                    return reserveManualIdentityLock(db, ref, desired, base, uid);
+                })
+                : Promise.resolve();
+            return identityBoundary.then(function () {
+                return executeSaga(db, initialSaga);
+            }).then(function () {
                 return resumeSagaWorkflow(db, initialSaga);
             });
         });
@@ -2307,7 +2710,8 @@
         var next = data.gallery.filter(function (_image, currentIndex) { return currentIndex !== index; });
         next.push(removedImage);
         writeMediaUpdate(id, {
-            "media.gallery": normalizeGalleryForWrite(next)
+            "media.gallery": normalizeGalleryForWrite(next),
+            "media.publicPaths": approvedPublicMediaPaths(data.item.media.mainImage, next, id)
         }, "Imagem removida da galeria ativa sem apagar Storage.", "remover imagem da galeria");
     }
 
@@ -2326,7 +2730,8 @@
         var next = data.gallery.filter(function (_image, currentIndex) { return currentIndex !== index; });
         next.push(restoredImage);
         writeMediaUpdate(id, {
-            "media.gallery": normalizeGalleryForWrite(next)
+            "media.gallery": normalizeGalleryForWrite(next),
+            "media.publicPaths": approvedPublicMediaPaths(data.item.media.mainImage, next, id)
         }, "Imagem restaurada na galeria ativa.", "restaurar imagem da galeria");
     }
 
@@ -2396,6 +2801,8 @@
         removeGalleryImage: removeGalleryImage,
         restoreGalleryImage: restoreGalleryImage,
         refresh: refresh,
+        reserveSubmissionImport: reserveSubmissionImport,
+        importSubmissionDraft: importSubmissionDraft,
         onFilterChange: onFilterChange,
         onMainImageChange: onMainImageChange,
         onGalleryChange: onGalleryChange,
@@ -2405,6 +2812,8 @@
         _validateDocForSave: validateDocForSave,
         _isValidMediaReference: isValidMediaReference,
         _makeSlug: makeSlug,
+        _defaultDoc: defaultDoc,
+        _completeImportedDraft: completeImportedDraft,
         _GROUP_ORDER: GROUP_ORDER,
         _GROUP_FIELDS: GROUP_FIELDS,
         _groupValue: groupValue,
@@ -2418,6 +2827,7 @@
         _lifecyclePublished: lifecyclePublished,
         _hasResumeEditSession: hasResumeEditSession,
         _prepareUploads: prepareUploads,
+        _approvedPublicMediaPaths: approvedPublicMediaPaths,
         _uploadedMediaReferenced: uploadedMediaReferenced,
         _applyCanonicalFields: applyCanonicalFields,
         _groupsForFieldPaths: groupsForFieldPaths,

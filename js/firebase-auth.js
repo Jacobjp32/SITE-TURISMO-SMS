@@ -130,6 +130,54 @@ function requirePublicationContracts() {
     return SMSPublicationContracts;
 }
 
+function requireEstablishmentSubmissionBridge() {
+    var bridge = window.EstablishmentSubmissionBridge;
+    if (!bridge || typeof bridge.makeCanonicalSlug !== 'function' ||
+        typeof bridge.classifyDuplicate !== 'function' ||
+        typeof bridge.approvalFingerprint !== 'function' ||
+        typeof bridge.semanticIdentityLockId !== 'function' ||
+        typeof bridge.isPreferredPendingSubmission !== 'function') {
+        throw new Error('[firebase-auth] Bridge canônica de submissões indisponível.');
+    }
+    return bridge;
+}
+
+function snapshotItems(snapshot) {
+    return snapshot && snapshot.docs ? snapshot.docs.map(function(doc) {
+        return { id: doc.id, data: doc.data() || {} };
+    }) : [];
+}
+
+function existingCmsApprovalResult(candidate) {
+    var status = String(candidate && candidate.status || candidate && candidate.data && candidate.data.status || '').trim();
+    var id = String(candidate && candidate.id || '').trim();
+    if (status === 'published') {
+        return {
+            success: false,
+            code: 'EXISTING_PUBLISHED_ESTABLISHMENT',
+            existingCmsId: id,
+            existingStatus: status,
+            message: 'Este empreendimento já está publicado no catálogo editorial. Use o fluxo de vínculo ou solicitação de atualização; nenhum rascunho foi criado.'
+        };
+    }
+    if (status === 'archived') {
+        return {
+            success: false,
+            code: 'EXISTING_ARCHIVED_ESTABLISHMENT',
+            existingCmsId: id,
+            existingStatus: status,
+            message: 'Este empreendimento já existe arquivado no catálogo editorial. Uma decisão administrativa é necessária antes de restaurá-lo; nenhum rascunho foi criado.'
+        };
+    }
+    return {
+        success: false,
+        code: 'ALREADY_IN_CMS',
+        existingCmsId: id,
+        existingStatus: status || 'draft',
+        message: 'Este empreendimento já existe no catálogo editorial como rascunho. Abra o registro existente em Empreendimentos.'
+    };
+}
+
 function getComparableTimestamp(value) {
     if (!value) return 0;
     if (typeof value.toMillis === 'function') return value.toMillis();
@@ -195,8 +243,7 @@ var ESTABLISHMENT_UPDATE_APPLY_TARGETS = {
     instagram: 'contact.instagram',
     website: 'contact.website',
     address: 'location.address',
-    openingHours: 'content.openingHours',
-    additionalNotes: 'review.lastReviewNotes'
+    openingHours: 'content.openingHours'
 };
 
 function sanitizeSimpleText(value, maxLength) {
@@ -341,13 +388,135 @@ function buildSafeAppliedMedia(items) {
     });
 }
 
-function isImageAlreadyApplied(image, appliedItems, catalogImages) {
+function establishmentUpdateMediaFingerprint(request) {
+    var raw = request || {};
+    var reviewMap = buildSafeMediaReviewMap(raw.mediaReview && raw.mediaReview.images);
+    return JSON.stringify(buildSafeImageMetadata(raw.images).map(function(image, index) {
+        var review = reviewMap[buildMediaReviewKey(image)] || {};
+        return {
+            index: index,
+            path: image.path,
+            url: image.url,
+            contentType: image.contentType,
+            size: image.size,
+            alt: image.alt,
+            status: normalizeMediaReviewStatus(review.status),
+            note: sanitizeLongText(review.note, 240)
+        };
+    }));
+}
+
+function readOpaqueFingerprint(value) {
+    return typeof value === 'string' ? value : '';
+}
+
+function readNestedValue(source, path) {
+    return String(path || '').split('.').reduce(function(value, part) {
+        return value && typeof value === 'object' ? value[part] : undefined;
+    }, source);
+}
+
+function buildEstablishmentTextApplyPlan(requestedChanges) {
+    var changes = requestedChanges || {};
+    var fields = Object.keys(changes).filter(function(field) {
+        return !!ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
+    }).sort();
+    return {
+        fields: fields,
+        fingerprint: JSON.stringify(fields.map(function(field) {
+            return [field, changes[field]];
+        }))
+    };
+}
+
+function buildEstablishmentTextBaseValues(cms, fields) {
+    return ensureArray(fields).reduce(function(values, field) {
+        var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
+        values[field] = String(readNestedValue(cms, targetPath) || '');
+        return values;
+    }, {});
+}
+
+function establishmentTextApplyGroup(field) {
+    var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field] || '';
+    return String(targetPath).split('.')[0];
+}
+
+function workflowProgressHas(progress, key) {
+    return !!(progress && typeof progress === 'object' && progress[key] === true);
+}
+
+function cmsTextValuesRemainResumable(cms, requestedChanges, fields, baseValues, progress) {
+    return ensureArray(fields).every(function(field) {
+        if (!Object.prototype.hasOwnProperty.call(baseValues || {}, field)) return false;
+        var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
+        var currentValue = String(readNestedValue(cms, targetPath) || '');
+        var desiredValue = String(requestedChanges[field] || '');
+        if (workflowProgressHas(progress, establishmentTextApplyGroup(field))) {
+            return currentValue === desiredValue;
+        }
+        return currentValue === String(baseValues[field] || '') || currentValue === desiredValue;
+    });
+}
+
+function allTextApplyGroupsCompleted(fields, progress) {
+    return ensureArray(fields).every(function(field) {
+        return workflowProgressHas(progress, establishmentTextApplyGroup(field));
+    });
+}
+
+function stableWorkflowValue(value) {
+    if (Array.isArray(value)) {
+        return value.map(stableWorkflowValue);
+    }
+    if (value && typeof value === 'object') {
+        return Object.keys(value).sort().reduce(function(result, key) {
+            result[key] = stableWorkflowValue(value[key]);
+            return result;
+        }, {});
+    }
+    return value === undefined ? null : value;
+}
+
+function cmsMediaStateFingerprint(cms) {
+    var media = cms && cms.media || {};
+    return JSON.stringify(stableWorkflowValue({
+        mainImage: media.mainImage || {},
+        gallery: ensureArray(media.gallery),
+        publicPaths: ensureArray(media.publicPaths)
+    }));
+}
+
+function isResumablePublishedLifecycle(cms, baseStatus) {
+    return baseStatus === 'published' &&
+        sanitizeSimpleText(cms && cms.status, 40) === 'draft' &&
+        !!(cms && cms.editSession) &&
+        sanitizeSimpleText(cms.editSession.resumeStatus, 40) === 'published';
+}
+
+function cmsMatchesEstablishmentTextChanges(cms, requestedChanges, fields) {
+    return ensureArray(fields).every(function(field) {
+        var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
+        return targetPath && String(readNestedValue(cms, targetPath) || '') === String(requestedChanges[field] || '');
+    });
+}
+
+function establishmentUpdateConflict(message) {
+    var error = new Error(message || 'A solicitação ou o empreendimento mudou durante a aplicação. Recarregue antes de tentar novamente.');
+    error.code = 'establishment-update/conflict';
+    return error;
+}
+
+function isImageAlreadyApplied(image, appliedItems, catalogImages, destinationPath) {
     var sourcePath = sanitizeSimpleText(image && image.path, 512);
     var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
 
-    return ensureArray(appliedItems).concat(ensureArray(catalogImages)).some(function(item) {
+    var tracked = ensureArray(appliedItems).concat(ensureArray(catalogImages)).some(function(item) {
         return (sourcePath && item && item.sourceImagePath === sourcePath) ||
             (sourceUrl && item && item.sourceImageUrl === sourceUrl);
+    });
+    return tracked || ensureArray(catalogImages).some(function(item) {
+        return destinationPath && item && sanitizeSimpleText(item.path, 512) === destinationPath;
     });
 }
 
@@ -365,20 +534,15 @@ function getSafeFileNameFromPath(value) {
     return safe || 'imagem.jpg';
 }
 
-function buildReviewedCatalogImage(uploadedImage, sourceImage, requestId, appliedAtIso) {
+function buildReviewedCatalogImage(uploadedImage, sourceImage) {
     return {
         url: sanitizeSimpleText(uploadedImage && uploadedImage.url, 2048),
         path: sanitizeSimpleText(uploadedImage && uploadedImage.path, 512),
-        alt: sanitizeSimpleText(sourceImage && (sourceImage.alt || sourceImage.name), 160),
+        alt: sanitizeSimpleText(sourceImage && sourceImage.alt, 160) || 'Imagem do empreendimento',
         caption: '',
         credit: '',
         source: 'portal_request',
-        sourceRequestId: sanitizeSimpleText(requestId, 160),
-        sourceImagePath: sanitizeSimpleText(sourceImage && sourceImage.path, 512),
-        uploadedBy: currentUser && currentUser.uid ? currentUser.uid : '',
-        uploadedAt: appliedAtIso,
-        reviewedBy: currentUser && currentUser.uid ? currentUser.uid : '',
-        reviewedAt: appliedAtIso
+        status: 'active'
     };
 }
 
@@ -391,6 +555,9 @@ function createMediaApplicationError(type, message, cause) {
 }
 
 function getMediaApplicationErrorMessage(error) {
+    if (error && String(error.code || '').indexOf('establishment-update/') === 0) {
+        return sanitizeSimpleText(error.message, 500) || 'A solicitação mudou durante a aplicação de mídia.';
+    }
     if (error && error.cmsMediaType === 'download') {
         if (error.cmsMediaDiagnosis === 'sdk-unsupported') {
             return 'Não foi possível baixar a imagem pelo path do Storage: o SDK carregado não expõe getBlob/getBytes compatível. Use cópia server-side ou configure um SDK modular autenticado.';
@@ -701,59 +868,16 @@ async function downloadReviewedImageBlob(storage, sourcePath, sourceUrl, content
     return downloadStorageBlobFromPath(storage, normalizedPath, contentType);
 }
 
-async function copyReviewedImageToCmsMedia(storage, image, adminUid, establishmentId, requestId, index) {
-    var sourcePath = normalizeStorageSourcePath(image && image.path) ||
-        extractStoragePathFromUrl(image && image.url);
-    var sourceUrl = sanitizeSimpleText(image && image.url, 2048);
-    var sourceName = sanitizeSimpleText(image && image.name, 120) || getSafeFileNameFromPath(sourcePath || sourceUrl);
-    var contentType = sanitizeSimpleText(image && image.contentType, 80) || 'image/jpeg';
-    var blob = null;
-
-    try {
-        blob = await downloadReviewedImageBlob(storage, sourcePath, sourceUrl, contentType);
-    } catch(error) {
-        throw createMediaApplicationError('download', 'Falha ao baixar imagem original para copiar ao CMS.', error);
-    }
-
-    var safeFileName = getSafeFileNameFromPath(sourceName);
-    // O destino e deterministico por solicitacao/imagem. Um retry apos
-    // resposta ambigua reutiliza o mesmo objeto em vez de gerar orfao novo.
-    var destinationPath = [
-        'cms-media',
-        adminUid,
-        'establishments',
+async function copyReviewedImageToCmsMedia(storage, image, ownerUid, establishmentId, requestId, index) {
+    return copySubmissionImageToApprovedMedia(
+        image,
+        'establishment-update',
         establishmentId,
-        'reviewed',
+        ownerUid,
+        index,
         requestId,
-        String(index + 1) + '-' + safeFileName
-    ].join('/');
-    var destinationRef = storage.ref(destinationPath);
-    var destinationUrl = '';
-
-    try {
-        logStorageCopyDiagnostic('info', 'upload:start', {
-            sourcePath: sourcePath,
-            destinationPath: destinationPath,
-            method: 'compat.put'
-        });
-        await destinationRef.put(blob, {
-            contentType: contentType,
-            cacheControl: 'public,max-age=31536000,immutable'
-        });
-        destinationUrl = await destinationRef.getDownloadURL();
-    } catch(error) {
-        logStorageCopyDiagnostic('warn', 'upload:error', Object.assign({
-            sourcePath: sourcePath,
-            destinationPath: destinationPath,
-            method: 'compat.put'
-        }, getErrorLogDetails(error)));
-        throw createMediaApplicationError('upload', 'Falha ao enviar imagem para cms-media.', error);
-    }
-
-    return {
-        url: destinationUrl,
-        path: destinationPath
-    };
+        storage
+    );
 }
 
 function getApprovedMediaEntityConfig(entityKind) {
@@ -761,7 +885,10 @@ function getApprovedMediaEntityConfig(entityKind) {
         return { sourceRoot: 'events', destinationRoot: 'events' };
     }
     if (entityKind === 'establishment') {
-        return { sourceRoot: 'establishments', destinationRoot: 'establishments' };
+        return { sourceRoot: 'establishments', destinationRoot: 'cms-establishments' };
+    }
+    if (entityKind === 'establishment-update') {
+        return { sourceRoot: 'establishment-updates', destinationRoot: 'cms-establishments' };
     }
     throw createMediaApplicationError('download', 'Tipo de mídia de publicação inválido.');
 }
@@ -795,7 +922,40 @@ async function getExistingApprovedMediaUrl(destinationRef) {
     }
 }
 
-async function copySubmissionImageToApprovedMedia(image, entityKind, documentId, ownerUid, index) {
+async function sha256OpaqueToken(material, errorMessage) {
+    var cryptoApi = window.crypto;
+    if (!cryptoApi || !cryptoApi.subtle || typeof cryptoApi.subtle.digest !== 'function' || typeof TextEncoder !== 'function') {
+        throw createMediaApplicationError('upload', errorMessage || 'Não foi possível calcular um identificador opaco com segurança.');
+    }
+    try {
+        var digest = await cryptoApi.subtle.digest('SHA-256', new TextEncoder().encode(String(material || '')));
+        return Array.prototype.map.call(new Uint8Array(digest), function (value) {
+            return value.toString(16).padStart(2, '0');
+        }).join('');
+    } catch(error) {
+        throw createMediaApplicationError('upload', errorMessage || 'Falha ao calcular um identificador opaco.', error);
+    }
+}
+
+async function approvedMediaSourceToken(sourcePath) {
+    return (await sha256OpaqueToken(sourcePath, 'Falha ao calcular a proveniência da mídia aprovada.')).slice(0, 24);
+}
+
+async function establishmentSubmissionProvenanceId(submissionId) {
+    return 'submission-sha256-' + await sha256OpaqueToken(
+        'establishment-submission:' + String(submissionId || ''),
+        'Não foi possível proteger o identificador privado da submissão.'
+    );
+}
+
+function approvedMediaExtension(contentType) {
+    var normalized = sanitizeSimpleText(contentType, 80).toLowerCase();
+    if (normalized === 'image/png') return 'png';
+    if (normalized === 'image/webp') return 'webp';
+    return 'jpg';
+}
+
+async function buildApprovedMediaCopyPlan(image, entityKind, documentId, ownerUid, index, sourceDocumentId) {
     var normalizedImage = typeof image === 'string' ? { url: image } : Object.assign({}, image || {});
     var sourcePath = getSubmissionMediaSourcePath(normalizedImage);
     if (!sourcePath) {
@@ -805,17 +965,39 @@ async function copySubmissionImageToApprovedMedia(image, entityKind, documentId,
         throw sourceError;
     }
 
-    var config = assertOwnedSubmissionMediaPath(sourcePath, entityKind, ownerUid, documentId);
+    var config = assertOwnedSubmissionMediaPath(sourcePath, entityKind, ownerUid, sourceDocumentId || documentId);
     var contentType = sanitizeSimpleText(normalizedImage.contentType, 80) || 'image/jpeg';
     var sourceName = sanitizeSimpleText(normalizedImage.name, 120) || getSafeFileNameFromPath(sourcePath);
     var safeFileName = getSafeFileNameFromPath(sourceName);
+    var sourceToken = await approvedMediaSourceToken(sourcePath);
+    // Para empreendimentos, o nome publico nao carrega UID, request/submission
+    // ID nem filename controlado pelo usuario. O hash vincula o objeto a uma
+    // origem privada create-only sem expor essa origem.
+    var destinationFileName = entityKind === 'event'
+        ? String(index + 1).padStart(2, '0') + '-' + sourceToken + '-' + safeFileName
+        : String(index + 1).padStart(2, '0') + '-' + sourceToken + '.' + approvedMediaExtension(contentType);
     var destinationPath = [
         'approved-media',
         config.destinationRoot,
         documentId,
-        String(index + 1).padStart(2, '0') + '-' + safeFileName
+        destinationFileName
     ].join('/');
-    var storage = firebase.storage();
+
+    return {
+        normalizedImage: normalizedImage,
+        sourcePath: sourcePath,
+        contentType: contentType,
+        destinationPath: destinationPath
+    };
+}
+
+async function copySubmissionImageToApprovedMedia(image, entityKind, documentId, ownerUid, index, sourceDocumentId, storageOverride) {
+    var plan = await buildApprovedMediaCopyPlan(image, entityKind, documentId, ownerUid, index, sourceDocumentId);
+    var normalizedImage = plan.normalizedImage;
+    var storage = storageOverride || firebase.storage();
+    var sourcePath = plan.sourcePath;
+    var contentType = plan.contentType;
+    var destinationPath = plan.destinationPath;
     var destinationRef = storage.ref(destinationPath);
     var destinationUrl = await getExistingApprovedMediaUrl(destinationRef);
 
@@ -833,12 +1015,16 @@ async function copySubmissionImageToApprovedMedia(image, entityKind, documentId,
     }
 
     normalizedImage.url = destinationUrl;
-    delete normalizedImage.path;
+    normalizedImage.path = destinationPath;
     delete normalizedImage.uploadedAt;
+    if (entityKind !== 'event') {
+        delete normalizedImage.name;
+        delete normalizedImage.fileName;
+    }
     return normalizedImage;
 }
 
-async function preparePublicSubmissionMedia(rawDocument, entityKind, documentId) {
+async function preparePublicSubmissionMedia(rawDocument, entityKind, documentId, sourceDocumentId) {
     var raw = rawDocument || {};
     var ownerUid = sanitizeSimpleText(raw.submittedBy, 160);
     var sourceImages = Array.isArray(raw.images) ? raw.images : [];
@@ -849,7 +1035,7 @@ async function preparePublicSubmissionMedia(rawDocument, entityKind, documentId)
         var sourceImage = typeof sourceImages[index] === 'string'
             ? { url: sourceImages[index] }
             : Object.assign({}, sourceImages[index] || {});
-        var publicImage = await copySubmissionImageToApprovedMedia(sourceImage, entityKind, documentId, ownerUid, index);
+        var publicImage = await copySubmissionImageToApprovedMedia(sourceImage, entityKind, documentId, ownerUid, index, sourceDocumentId);
         projectedImages.push(publicImage);
         if (sourceImage.url && publicImage.url) urlMap[String(sourceImage.url)] = publicImage.url;
     }
@@ -858,13 +1044,20 @@ async function preparePublicSubmissionMedia(rawDocument, entityKind, documentId)
     var rawMainImage = sanitizeSimpleText(raw.mainImage || raw.image, 2048);
     if (rawMainImage) {
         var publicMainImage = urlMap[rawMainImage] || '';
+        if (entityKind === 'establishment' && !publicMainImage) {
+            var coverError = createMediaApplicationError('download', 'A imagem principal deve pertencer à galeria verificada da submissão.');
+            coverError.code = 'publication/invalid-field';
+            coverError.field = 'mainImage';
+            throw coverError;
+        }
         if (!publicMainImage) {
             var copiedCover = await copySubmissionImageToApprovedMedia(
                 { url: rawMainImage, contentType: raw.mainImageContentType || '' },
                 entityKind,
                 documentId,
                 ownerUid,
-                projectedImages.length
+                projectedImages.length,
+                sourceDocumentId
             );
             publicMainImage = copiedCover.url || rawMainImage;
         }
@@ -965,8 +1158,8 @@ function initFirebase() {
                 const db   = firebase.firestore();
                 if (localEmulatorRequested && !window.__SMSFirebaseEmulatorsConnected) {
                     db.settings({ host: '127.0.0.1:8080', ssl: false, experimentalForceLongPolling: true });
-                    auth.useEmulator('http://localhost:9099', { disableWarnings: true });
-                    if (firebase.storage) firebase.storage().useEmulator('localhost', 9199);
+                    auth.useEmulator('http://127.0.0.1:9099', { disableWarnings: true });
+                    if (firebase.storage) firebase.storage().useEmulator('127.0.0.1', 9199);
                     window.__SMSFirebaseEmulatorsConnected = true;
                 }
                 if (!localEmulatorRequested) {
@@ -1290,7 +1483,7 @@ const FirebaseSystem = {
                 success: false,
                 message: e && e.code === 'publication/invalid-field'
                     ? e.message
-                    : (e && e.cmsMediaType ? formatMediaApplicationError(e) : 'Erro ao aprovar evento.')
+                    : (e && e.cmsMediaType ? getMediaApplicationErrorMessage(e) : 'Erro ao aprovar evento.')
             };
         }
     },
@@ -1349,52 +1542,199 @@ const FirebaseSystem = {
         } catch(e) { console.error(e); return { success: false, message: 'Erro ao enviar estabelecimento.' }; }
     },
 
+    getUserEstablishments: async function() {
+        if (!this.isLoggedIn()) return [];
+        try {
+            const snap = await withTimeout(
+                firebase.firestore().collection('estabelecimentos_pendentes')
+                    .where('submittedBy', '==', currentUser.uid)
+                    .get(),
+                PROFILE_LOAD_TIMEOUT_MS,
+                'firestore/establishments-timeout'
+            );
+            return sortByTimestampDesc(snap.docs.map(function(doc) {
+                return Object.assign({}, doc.data(), { id: doc.id });
+            }));
+        } catch(error) {
+            console.error('[firebase-auth] Erro ao carregar estabelecimentos do usuário.', error);
+            return [];
+        }
+    },
+
     getPendingEstablishments: async function() {
         if (!this.isModerator()) return [];
+        var result = await this.getPendingEstablishmentsReport();
+        return result.success ? result.items : [];
+    },
+
+    getPendingEstablishmentsReport: async function() {
+        var diagnostics = { collection: 'estabelecimentos_pendentes', filter: 'status == pendente' };
+        if (!this.isModerator()) {
+            return { success: false, items: [], diagnostics: diagnostics, error: new Error('Permissão negada.') };
+        }
         try {
             const snap = await firebase.firestore().collection('estabelecimentos_pendentes')
                 .where('status', '==', 'pendente').get();
-            return snap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
-        } catch(e) { return []; }
+            const items = snap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
+            return { success: true, items: items, diagnostics: Object.assign({ matchedDocs: items.length }, diagnostics) };
+        } catch(e) {
+            console.error('[firebase-auth] Erro ao carregar estabelecimentos pendentes.', {
+                collection: diagnostics.collection,
+                filter: diagnostics.filter,
+                error: e,
+                stack: e && e.stack ? e.stack : null
+            });
+            return { success: false, items: [], diagnostics: diagnostics, error: e };
+        }
     },
 
     approveEstablishment: async function(estId, notes) {
-        if (!this.isModerator()) return { success: false, message: 'Permissão negada.' };
+        if (!this.isAdmin()) {
+            return {
+                success: false,
+                code: 'ADMIN_REQUIRED_FOR_CMS_DRAFT',
+                message: 'Somente administradores podem aprovar e criar o rascunho no catálogo editorial.'
+            };
+        }
         notes = notes || '';
         try {
             const publicationContracts = requirePublicationContracts();
-            const publicEstablishmentId = publicationContracts.publicDocumentId(estId);
-            if (!publicEstablishmentId) return { success: false, message: 'ID de estabelecimento inválido.' };
+            const bridge = requireEstablishmentSubmissionBridge();
+            const submissionId = publicationContracts.publicDocumentId(estId);
+            if (!submissionId) return { success: false, message: 'ID de estabelecimento inválido.' };
             const db  = firebase.firestore();
-            const ref = db.collection('estabelecimentos_pendentes').doc(publicEstablishmentId);
-            const publicRef = db.collection('estabelecimentos_aprovados').doc(publicEstablishmentId);
+            const ref = db.collection('estabelecimentos_pendentes').doc(submissionId);
             const doc = await ref.get();
             if (!doc.exists) return { success: false, message: 'Estabelecimento não encontrado.' };
-            const existingPublicDoc = await publicRef.get();
-            if (existingPublicDoc.exists) {
-                return { success: false, message: 'Já existe um estabelecimento público com este ID; aprovação interrompida.' };
+            const submission = Object.assign({}, doc.data() || {}, { id: submissionId });
+            bridge.validateSubmissionForImport(submission, {
+                safeExternalUrl: publicationContracts.url.externalHttps
+            });
+            const expectedSubmissionFingerprint = bridge.approvalFingerprint(submission);
+            const publicSourceId = await establishmentSubmissionProvenanceId(submissionId);
+            const cmsId = bridge.makeCanonicalSlug(submission.name || submission.nome);
+            const cmsRef = db.collection('cms_establishments').doc(cmsId);
+            const linkedCmsId = String(submission.cmsEstablishmentId || '').trim();
+            const linkedCms = linkedCmsId === cmsId ? await cmsRef.get() : null;
+
+            if (linkedCms && linkedCms.exists && linkedCms.data().status !== 'draft') {
+                return existingCmsApprovalResult({ id: cmsId, status: linkedCms.data().status, data: linkedCms.data() });
             }
-            const publicSource = await preparePublicSubmissionMedia(doc.data(), 'establishment', publicEstablishmentId);
-            const approvedAt = firebase.firestore.FieldValue.serverTimestamp();
-            const batch = db.batch();
-            batch.set(
-                publicRef,
-                publicationContracts.projectPublicEstablishment(publicSource, publicEstablishmentId)
-            );
-            batch.update(ref, {
-                status: 'aprovado',
-                reviewedAt: approvedAt,
-                reviewedBy: currentUser.uid,
+
+            if (!(linkedCms && linkedCms.exists)) {
+                const snapshots = await Promise.all([
+                    db.collection('cms_establishments').get(),
+                    db.collection('estabelecimentos_pendentes').get(),
+                    db.collection('estabelecimentos_aprovados').get()
+                ]);
+                const duplicate = bridge.classifyDuplicate(submission, {
+                    cms: snapshotItems(snapshots[0]),
+                    pending: snapshotItems(snapshots[1]).filter(function(candidate) {
+                        return String(candidate.data && candidate.data.status || '').trim().toLowerCase() === 'pendente';
+                    }),
+                    legacyApproved: snapshotItems(snapshots[2]),
+                    excludeSubmissionId: submissionId
+                });
+                if (duplicate.kind === 'EXACT_CMS_MATCH' || duplicate.kind === 'SEMANTIC_CMS_MATCH') {
+                    return existingCmsApprovalResult(duplicate.candidates[0]);
+                }
+                if (duplicate.kind === 'PENDING_DUPLICATE') {
+                    if (!bridge.isPreferredPendingSubmission(submission, duplicate.candidates)) {
+                        return {
+                            success: false,
+                            code: 'PENDING_DUPLICATE',
+                            message: 'Há uma submissão equivalente mais antiga em análise. Aprove primeiro o cadastro canônico; nenhum rascunho foi criado.',
+                            candidates: duplicate.candidates
+                        };
+                    }
+                }
+                if (duplicate.kind === 'LEGACY_APPROVED_DUPLICATE') {
+                    return {
+                        success: false,
+                        code: 'LEGACY_APPROVED_DUPLICATE',
+                        message: 'Há um registro equivalente no histórico de aprovações. Revise o legado antes de importar; nenhum rascunho foi criado.',
+                        candidates: duplicate.candidates
+                    };
+                }
+                if (duplicate.kind === 'AMBIGUOUS_MATCH') {
+                    return {
+                        success: false,
+                        code: 'POSSIBLE_DUPLICATE_REQUIRES_REVIEW',
+                        message: 'Possível duplicidade encontrada. Compare os candidatos antes de aprovar; nenhum rascunho foi criado.',
+                        candidates: duplicate.candidates
+                    };
+                }
+            }
+
+            const adminEstablishments = window.AdminEstablishmentsModule;
+            if (!adminEstablishments || typeof adminEstablishments.importSubmissionDraft !== 'function') {
+                return { success: false, message: 'Módulo canônico de Empreendimentos indisponível.' };
+            }
+            if (typeof adminEstablishments.reserveSubmissionImport !== 'function') {
+                return { success: false, message: 'Reserva transacional de identidade indisponível.' };
+            }
+
+            const reservation = await adminEstablishments.reserveSubmissionImport({
+                db: db,
+                uid: currentUser.uid,
+                pendingRef: ref,
+                submissionId: submissionId,
+                publicSourceId: publicSourceId,
+                cmsId: cmsId,
+                submission: submission,
+                expectedSubmissionFingerprint: expectedSubmissionFingerprint
+            });
+            if (reservation.idempotentFinal === true) {
+                return {
+                    success: true,
+                    code: 'CMS_DRAFT_ALREADY_EXISTS',
+                    cmsEstablishmentId: cmsId,
+                    status: 'draft',
+                    message: 'Cadastro já aprovado: o rascunho CMS existente foi confirmado. Revise em Empreendimentos antes de publicar no portal.'
+                };
+            }
+            const preparedSubmission = await preparePublicSubmissionMedia(submission, 'establishment', cmsId, submissionId);
+            await ref.update({
+                cmsImportState: 'media_prepared',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedBy: currentUser.uid
+            });
+            const importResult = await adminEstablishments.importSubmissionDraft({
+                db: db,
+                uid: currentUser.uid,
+                pendingRef: ref,
+                submissionId: submissionId,
+                publicSourceId: publicSourceId,
+                cmsId: cmsId,
+                submission: preparedSubmission,
+                expectedSubmissionFingerprint: expectedSubmissionFingerprint,
+                shellCreated: reservation.shellCreated === true,
                 reviewNotes: notes
             });
-            await batch.commit();
-            return { success: true, message: 'Estabelecimento aprovado com sucesso!' };
+            return Object.assign({}, importResult, {
+                message: importResult.code === 'CMS_DRAFT_ALREADY_EXISTS'
+                    ? 'Cadastro já aprovado: o rascunho CMS existente foi confirmado. Revise em Empreendimentos antes de publicar no portal.'
+                    : 'Cadastro aprovado e enviado ao catálogo editorial como rascunho. Revise em Empreendimentos antes de publicar no portal.'
+            });
         } catch(e) {
+            console.error('[firebase-auth] Falha no pipeline de aprovação de estabelecimento.', {
+                code: e && e.code || '',
+                message: sanitizeLogMessage(e && e.message || ''),
+                diagnosis: e && e.cmsMediaDiagnosis || ''
+            });
+            if (e && e.code === 'establishment-import-duplicate-lock') {
+                return {
+                    success: false,
+                    code: 'PENDING_DUPLICATE',
+                    message: 'Outra aprovação já reservou este empreendimento. Nenhum segundo rascunho ou conjunto de mídias foi criado.'
+                };
+            }
             return {
                 success: false,
-                message: e && e.code === 'publication/invalid-field'
+                code: e && e.code || 'ESTABLISHMENT_APPROVAL_FAILED',
+                message: e && (e.code === 'publication/invalid-field' || e.code === 'establishment-bridge/private-media' || e.code === 'establishment-bridge/unknown-category' || e.code === 'establishment-bridge/invalid-content')
                     ? e.message
-                    : (e && e.cmsMediaType ? formatMediaApplicationError(e) : 'Erro ao aprovar estabelecimento.')
+                    : (e && e.cmsMediaType ? getMediaApplicationErrorMessage(e) : 'Não foi possível concluir a aprovação. Nenhuma publicação automática foi feita; tente novamente para retomar o rascunho.')
             };
         }
     },
@@ -1405,14 +1745,28 @@ const FirebaseSystem = {
         try {
             const rejectedEstablishmentId = requirePublicationContracts().publicDocumentId(estId);
             if (!rejectedEstablishmentId) return { success: false, message: 'ID de estabelecimento inválido.' };
-            await firebase.firestore().collection('estabelecimentos_pendentes').doc(rejectedEstablishmentId).update({
-                status:      'rejeitado',
-                reviewedAt:  firebase.firestore.FieldValue.serverTimestamp(),
-                reviewedBy:  currentUser.uid,
-                reviewNotes: reason
+            const db = firebase.firestore();
+            const ref = db.collection('estabelecimentos_pendentes').doc(rejectedEstablishmentId);
+            await db.runTransaction(function(transaction) {
+                return transaction.get(ref).then(function(snapshot) {
+                    if (!snapshot.exists) throw new Error('Estabelecimento não encontrado.');
+                    var pending = snapshot.data() || {};
+                    if (pending.status !== 'pendente') {
+                        throw new Error('A submissão não está mais pendente.');
+                    }
+                    if (pending.cmsImportState) {
+                        throw new Error('A aprovação editorial já foi iniciada; revise o draft antes de rejeitar.');
+                    }
+                    transaction.update(ref, {
+                        status: 'rejeitado',
+                        reviewedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        reviewedBy: currentUser.uid,
+                        reviewNotes: reason
+                    });
+                });
             });
             return { success: true, message: 'Estabelecimento rejeitado.' };
-        } catch(e) { return { success: false, message: 'Erro ao rejeitar estabelecimento.' }; }
+        } catch(e) { return { success: false, message: e && e.message ? e.message : 'Erro ao rejeitar estabelecimento.' }; }
     },
 
     // ========================================
@@ -1810,42 +2164,51 @@ const FirebaseSystem = {
         try {
             var db = firebase.firestore();
             var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
-            var requestSnap = await requestRef.get();
-
-            if (!requestSnap.exists) {
-                return { success: false, message: 'Solicitação não encontrada.' };
-            }
-
-            var request = requestSnap.data() || {};
-            var images = buildSafeImageMetadata(request.images);
-
-            if (!images.length) {
-                return { success: false, message: 'Esta solicitação não possui imagens anexadas.' };
-            }
-
             var reviewMap = buildSafeMediaReviewMap(reviewData && reviewData.images);
             var now = firebase.firestore.FieldValue.serverTimestamp();
             var decidedAt = new Date().toISOString();
-            var reviewedImages = images.map(function(image) {
-                var key = buildMediaReviewKey(image);
-                var review = reviewMap[key] || {};
-                return {
-                    path: image.path,
-                    url: image.url,
-                    status: normalizeMediaReviewStatus(review.status),
-                    note: sanitizeLongText(review.note, 240),
-                    decidedAt: decidedAt,
-                    decidedBy: currentUser.uid
-                };
-            });
-
-            await requestRef.update({
-                mediaReview: {
-                    reviewedAt: now,
-                    reviewedBy: currentUser.uid,
-                    images: reviewedImages
-                },
-                updatedAt: now
+            await db.runTransaction(function(transaction) {
+                return transaction.get(requestRef).then(function(requestSnap) {
+                    if (!requestSnap.exists) {
+                        var missing = new Error('Solicitação não encontrada.');
+                        missing.code = 'establishment-update/not-found';
+                        throw missing;
+                    }
+                    var request = requestSnap.data() || {};
+                    if (sanitizeSimpleText(request.mediaApplyState, 40) === 'applying') {
+                        var applying = new Error('A aplicação de mídia está em andamento. Aguarde a conclusão ou faça retry antes de alterar a revisão.');
+                        applying.code = 'establishment-update/media-applying';
+                        throw applying;
+                    }
+                    var images = buildSafeImageMetadata(request.images);
+                    if (!images.length) {
+                        var empty = new Error('Esta solicitação não possui imagens anexadas.');
+                        empty.code = 'establishment-update/no-images';
+                        throw empty;
+                    }
+                    var reviewedImages = images.map(function(image) {
+                        var key = buildMediaReviewKey(image);
+                        var review = reviewMap[key] || {};
+                        return {
+                            path: image.path,
+                            url: image.url,
+                            status: normalizeMediaReviewStatus(review.status),
+                            note: sanitizeLongText(review.note, 240),
+                            decidedAt: decidedAt,
+                            decidedBy: currentUser.uid
+                        };
+                    });
+                    transaction.update(requestRef, {
+                        mediaReview: {
+                            reviewedAt: now,
+                            reviewedBy: currentUser.uid,
+                            images: reviewedImages
+                        },
+                        mediaApplyState: 'reviewed',
+                        mediaApplyFingerprint: '',
+                        updatedAt: now
+                    });
+                });
             });
 
             return {
@@ -1854,6 +2217,15 @@ const FirebaseSystem = {
             };
         } catch(error) {
             console.error(error);
+            if (error && error.code === 'establishment-update/media-applying') {
+                return { success: false, message: error.message };
+            }
+            if (error && error.code === 'establishment-update/no-images') {
+                return { success: false, message: error.message };
+            }
+            if (error && error.code === 'establishment-update/not-found') {
+                return { success: false, message: error.message };
+            }
             return { success: false, message: 'Erro ao salvar revisão editorial das imagens.' };
         }
     },
@@ -1871,20 +2243,76 @@ const FirebaseSystem = {
             var db = firebase.firestore();
             var storage = firebase.storage();
             var requestRef = db.collection('establishment_update_requests').doc(normalizedRequestId);
-            var requestSnap = await requestRef.get();
-
-            if (!requestSnap.exists) {
-                return { success: false, message: 'Solicitação não encontrada.' };
-            }
-
-            var request = requestSnap.data() || {};
-            if (normalizeUpdateRequestStatus(request.status) !== 'approved') {
-                return { success: false, message: 'Apenas solicitações aprovadas podem aplicar mídia ao catálogo.' };
-            }
+            var reservation = await db.runTransaction(function(transaction) {
+                return transaction.get(requestRef).then(function(requestSnap) {
+                    if (!requestSnap.exists) {
+                        var missing = new Error('Solicitação não encontrada.');
+                        missing.code = 'establishment-update/not-found';
+                        throw missing;
+                    }
+                    var currentRequest = requestSnap.data() || {};
+                    if (normalizeUpdateRequestStatus(currentRequest.status) !== 'approved') {
+                        var statusError = new Error('Apenas solicitações aprovadas podem aplicar mídia ao catálogo.');
+                        statusError.code = 'establishment-update/not-approved';
+                        throw statusError;
+                    }
+                    var fingerprint = establishmentUpdateMediaFingerprint(currentRequest);
+                    var applyState = sanitizeSimpleText(currentRequest.mediaApplyState, 40);
+                    var reservedFingerprint = readOpaqueFingerprint(currentRequest.mediaApplyFingerprint);
+                    if (applyState === 'applying' && reservedFingerprint && reservedFingerprint !== fingerprint) {
+                        var stale = new Error('A revisão de mídia mudou durante uma tentativa anterior. Revise a solicitação antes de tentar novamente.');
+                        stale.code = 'establishment-update/media-review-changed';
+                        throw stale;
+                    }
+                    transaction.update(requestRef, {
+                        mediaApplyState: 'applying',
+                        mediaApplyFingerprint: fingerprint,
+                        mediaApplyBaseRevision: applyState === 'applying' && Number.isInteger(currentRequest.mediaApplyBaseRevision)
+                            ? currentRequest.mediaApplyBaseRevision
+                            : null,
+                        mediaApplyBaseStatus: applyState === 'applying'
+                            ? sanitizeSimpleText(currentRequest.mediaApplyBaseStatus, 40)
+                            : '',
+                        mediaApplyBaseFingerprint: applyState === 'applying'
+                            ? readOpaqueFingerprint(currentRequest.mediaApplyBaseFingerprint)
+                            : '',
+                        mediaApplyProgress: applyState === 'applying' && currentRequest.mediaApplyProgress &&
+                            typeof currentRequest.mediaApplyProgress === 'object'
+                            ? currentRequest.mediaApplyProgress
+                            : {},
+                        mediaApplyStartedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        mediaApplyStartedBy: currentUser.uid,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    return {
+                        request: currentRequest,
+                        fingerprint: fingerprint,
+                        baseRevision: applyState === 'applying' && Number.isInteger(currentRequest.mediaApplyBaseRevision)
+                            ? currentRequest.mediaApplyBaseRevision
+                            : null,
+                        baseStatus: applyState === 'applying'
+                            ? sanitizeSimpleText(currentRequest.mediaApplyBaseStatus, 40)
+                            : '',
+                        baseFingerprint: applyState === 'applying'
+                            ? readOpaqueFingerprint(currentRequest.mediaApplyBaseFingerprint)
+                            : '',
+                        progress: applyState === 'applying' && currentRequest.mediaApplyProgress &&
+                            typeof currentRequest.mediaApplyProgress === 'object'
+                            ? currentRequest.mediaApplyProgress
+                            : {}
+                    };
+                });
+            });
+            var request = reservation.request;
+            var mediaApplyFingerprint = reservation.fingerprint;
 
             var establishmentId = sanitizeSimpleText(request.establishmentId, 160);
             if (!establishmentId) {
                 return { success: false, message: 'Solicitação sem establishmentId. Aplicação de mídia abortada.' };
+            }
+            var ownerUid = sanitizeSimpleText(request.ownerUid, 160);
+            if (!ownerUid) {
+                return { success: false, message: 'Solicitação sem ownerUid verificável. Aplicação de mídia abortada.' };
             }
 
             var establishmentRef = db.collection('cms_establishments').doc(establishmentId);
@@ -1895,30 +2323,107 @@ const FirebaseSystem = {
             }
 
             var establishment = establishmentSnap.data() || {};
+            var mediaApplyBaseRevision = reservation.baseRevision;
+            var mediaApplyBaseStatus = reservation.baseStatus;
+            var mediaApplyBaseFingerprint = reservation.baseFingerprint;
+            var mediaApplyProgress = reservation.progress || {};
+            if (!Number.isInteger(mediaApplyBaseRevision) || !mediaApplyBaseStatus || !mediaApplyBaseFingerprint) {
+                var mediaBase = await db.runTransaction(function(transaction) {
+                    return Promise.all([transaction.get(requestRef), transaction.get(establishmentRef)]).then(function(snapshots) {
+                        var lockedRequest = snapshots[0].exists ? (snapshots[0].data() || {}) : {};
+                        var currentCms = snapshots[1].exists ? (snapshots[1].data() || {}) : {};
+                        if (!snapshots[0].exists || !snapshots[1].exists ||
+                            sanitizeSimpleText(lockedRequest.mediaApplyState, 40) !== 'applying' ||
+                            readOpaqueFingerprint(lockedRequest.mediaApplyFingerprint) !== mediaApplyFingerprint) {
+                            throw establishmentUpdateConflict('A reserva privada de mídia mudou antes da aplicação.');
+                        }
+                        var baseRevision = Number.isInteger(currentCms.revision) ? currentCms.revision : 0;
+                        var baseStatus = sanitizeSimpleText(currentCms.status, 40);
+                        var baseFingerprint = cmsMediaStateFingerprint(currentCms);
+                        transaction.update(requestRef, {
+                            mediaApplyBaseRevision: baseRevision,
+                            mediaApplyBaseStatus: baseStatus,
+                            mediaApplyBaseFingerprint: baseFingerprint
+                        });
+                        return { revision: baseRevision, status: baseStatus, fingerprint: baseFingerprint };
+                    });
+                });
+                mediaApplyBaseRevision = mediaBase.revision;
+                mediaApplyBaseStatus = mediaBase.status;
+                mediaApplyBaseFingerprint = mediaBase.fingerprint;
+                establishmentSnap = await establishmentRef.get();
+                if (!establishmentSnap.exists) {
+                    throw establishmentUpdateConflict('O empreendimento foi removido durante a reserva de mídia.');
+                }
+                establishment = establishmentSnap.data() || {};
+            }
             var media = establishment.media || {};
             var mainImage = media.mainImage || {};
             var gallery = ensureArray(media.gallery);
             var appliedMedia = buildSafeAppliedMedia(request.appliedMedia);
             var catalogImages = [mainImage].concat(gallery);
             var reviewMap = buildSafeMediaReviewMap(request.mediaReview && request.mediaReview.images);
-            var reviewedAcceptedImages = buildSafeImageMetadata(request.images).filter(function(image) {
+            var reviewedAcceptedSelections = buildSafeImageMetadata(request.images).map(function(image, index) {
+                return { image: image, index: index };
+            }).filter(function(selection) {
+                var image = selection.image;
                 var review = reviewMap[buildMediaReviewKey(image)] || {};
                 return normalizeMediaReviewStatus(review.status) === 'accepted';
             });
-            var acceptedImages = reviewedAcceptedImages.filter(function(image) {
-                return !isImageAlreadyApplied(image, appliedMedia, catalogImages);
-            });
 
-            if (!reviewedAcceptedImages.length) {
+            if (!reviewedAcceptedSelections.length) {
+                await requestRef.update({
+                    mediaApplyState: 'reviewed',
+                    mediaApplyFingerprint: '',
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
                 return { success: false, message: 'Não há imagens aceitas para aplicar.' };
             }
 
+            var reviewedAcceptedEntries = await Promise.all(reviewedAcceptedSelections.map(async function(selection) {
+                var image = selection.image;
+                var plan = await buildApprovedMediaCopyPlan(
+                    image,
+                    'establishment-update',
+                    establishmentId,
+                    ownerUid,
+                    selection.index,
+                    normalizedRequestId
+                );
+                return { image: image, index: selection.index, destinationPath: plan.destinationPath };
+            }));
+            var acceptedEntries = reviewedAcceptedEntries.filter(function(entry) {
+                return !isImageAlreadyApplied(entry.image, appliedMedia, catalogImages, entry.destinationPath);
+            });
+            var acceptedImages = acceptedEntries.map(function(entry) { return entry.image; });
+            var currentMediaFingerprint = cmsMediaStateFingerprint(establishment);
+            var currentRevision = Number.isInteger(establishment.revision) ? establishment.revision : 0;
+            var currentStatus = sanitizeSimpleText(establishment.status, 40);
+            var stableBaseStatus = currentStatus === mediaApplyBaseStatus && !establishment.editSession;
+            var resumablePublishedLifecycle = isResumablePublishedLifecycle(establishment, mediaApplyBaseStatus);
+            var mediaExpectedRevision = currentRevision;
+
+            if (acceptedImages.length && currentRevision !== mediaApplyBaseRevision) {
+                if (currentRevision < mediaApplyBaseRevision ||
+                    workflowProgressHas(mediaApplyProgress, 'media') ||
+                    currentMediaFingerprint !== mediaApplyBaseFingerprint ||
+                    (!stableBaseStatus && !(resumablePublishedLifecycle && workflowProgressHas(mediaApplyProgress, 'lifecycleDraft')))) {
+                    throw establishmentUpdateConflict('O empreendimento mudou durante a aplicação de mídia. Nenhuma edição manual foi sobrescrita.');
+                }
+            }
+
             if (!acceptedImages.length) {
-                var reconciledMedia = reviewedAcceptedImages.map(function(sourceImage) {
+                if (!workflowProgressHas(mediaApplyProgress, 'media') ||
+                    (!stableBaseStatus && !(resumablePublishedLifecycle && workflowProgressHas(mediaApplyProgress, 'lifecycleDraft')))) {
+                    throw establishmentUpdateConflict('A aplicação de mídia não concluiu o ciclo editorial; revise o empreendimento manualmente.');
+                }
+                var reconciledMedia = reviewedAcceptedEntries.map(function(entry) {
+                    var sourceImage = entry.image;
                     var sourcePath = sanitizeSimpleText(sourceImage && sourceImage.path, 512);
                     var sourceUrl = sanitizeSimpleText(sourceImage && sourceImage.url, 2048);
                     var catalogImage = catalogImages.find(function(image) {
-                        return image && ((sourcePath && image.sourceImagePath === sourcePath) ||
+                        return image && (sanitizeSimpleText(image.path, 512) === entry.destinationPath ||
+                            (sourcePath && image.sourceImagePath === sourcePath) ||
                             (sourceUrl && image.sourceImageUrl === sourceUrl));
                     });
                     if (!catalogImage) return null;
@@ -1929,19 +2434,41 @@ const FirebaseSystem = {
                         destination: mainImage && catalogImage.path === mainImage.path ? 'mainImage' : 'gallery',
                         url: sanitizeSimpleText(catalogImage.url, 2048),
                         path: sanitizeSimpleText(catalogImage.path, 512),
-                        appliedAt: sanitizeSimpleText(catalogImage.uploadedAt, 80),
-                        appliedBy: sanitizeSimpleText(catalogImage.uploadedBy, 160),
+                        appliedAt: sanitizeSimpleText(catalogImage.uploadedAt, 80) || new Date().toISOString(),
+                        appliedBy: currentUser.uid,
                         establishmentId: establishmentId
                     };
                 }).filter(Boolean);
-                if (reconciledMedia.length === reviewedAcceptedImages.length) {
+                if (reconciledMedia.length === reviewedAcceptedEntries.length) {
+                    if (resumablePublishedLifecycle) {
+                        var resumeAdminEstablishments = window.AdminEstablishmentsModule;
+                        if (!resumeAdminEstablishments || typeof resumeAdminEstablishments._applyCanonicalFields !== 'function') {
+                            throw createMediaApplicationError('document', 'Workflow canonico de empreendimentos indisponivel.');
+                        }
+                        await resumeAdminEstablishments._applyCanonicalFields(establishmentId, {}, {
+                            groups: [],
+                            flow: 'approved-media-request-resume',
+                            expectedRevision: mediaExpectedRevision,
+                            workflowProgress: {
+                                ref: requestRef,
+                                field: 'mediaApplyProgress',
+                                statusValue: 'approved',
+                                stateField: 'mediaApplyState',
+                                stateValue: 'applying',
+                                fingerprintField: 'mediaApplyFingerprint',
+                                fingerprintValue: mediaApplyFingerprint
+                            }
+                        });
+                    }
                     var reconciledAt = firebase.firestore.FieldValue.serverTimestamp();
                     await requestRef.update({
                         updatedAt: reconciledAt,
                         mediaAppliedAt: reconciledAt,
                         mediaAppliedBy: currentUser.uid,
                         mediaAppliedTo: establishmentId,
-                        appliedMedia: reconciledMedia
+                        appliedMedia: reconciledMedia,
+                        mediaApplyState: 'completed',
+                        mediaApplyFingerprint: mediaApplyFingerprint
                     });
                     return { success: true, message: 'Aplicação de mídia já presente no empreendimento e registro da solicitação reconciliado sem novo upload.' };
                 }
@@ -1963,12 +2490,12 @@ const FirebaseSystem = {
                 var uploaded = await copyReviewedImageToCmsMedia(
                     storage,
                     acceptedImages[i],
-                    currentUser.uid,
+                    ownerUid,
                     establishmentId,
                     normalizedRequestId,
-                    i
+                    acceptedEntries[i].index
                 );
-                uploadedCatalogImages.push(buildReviewedCatalogImage(uploaded, acceptedImages[i], normalizedRequestId, appliedAtIso));
+                uploadedCatalogImages.push(buildReviewedCatalogImage(uploaded, acceptedImages[i]));
             }
 
             var nextGallery = gallery.slice();
@@ -1988,7 +2515,7 @@ const FirebaseSystem = {
 
                 newAppliedMedia.push({
                     sourceRequestId: normalizedRequestId,
-                    sourceImagePath: image.sourceImagePath,
+                    sourceImagePath: sanitizeSimpleText(acceptedImages[index] && acceptedImages[index].path, 512),
                     sourceImageUrl: sanitizeSimpleText(acceptedImages[index] && acceptedImages[index].url, 2048),
                     destination: destination,
                     url: image.url,
@@ -2010,26 +2537,46 @@ const FirebaseSystem = {
             establishmentUpdate['media.gallery'] = nextGallery;
             establishmentUpdate.updatedAt = appliedAt;
             establishmentUpdate.updatedBy = currentUser.uid;
-            establishmentUpdate['review.lastAppliedRequestId'] = normalizedRequestId;
-            establishmentUpdate['review.lastAppliedAt'] = appliedAt;
-            establishmentUpdate['review.lastAppliedBy'] = currentUser.uid;
 
             var requestUpdate = {
                 updatedAt: appliedAt,
                 mediaAppliedAt: appliedAt,
                 mediaAppliedBy: currentUser.uid,
                 mediaAppliedTo: establishmentId,
-                appliedMedia: newAppliedMedia
+                appliedMedia: newAppliedMedia,
+                mediaApplyState: 'completed',
+                mediaApplyFingerprint: mediaApplyFingerprint
             };
 
             var adminEstablishments = window.AdminEstablishmentsModule;
             if (!adminEstablishments || typeof adminEstablishments._applyCanonicalFields !== 'function') {
                 throw createMediaApplicationError('document', 'Workflow canonico de empreendimentos indisponivel.');
             }
+            var currentRequestSnap = await requestRef.get();
+            var currentRequest = currentRequestSnap.exists ? (currentRequestSnap.data() || {}) : {};
+            if (!currentRequestSnap.exists ||
+                normalizeUpdateRequestStatus(currentRequest.status) !== 'approved' ||
+                sanitizeSimpleText(currentRequest.mediaApplyState, 40) !== 'applying' ||
+                readOpaqueFingerprint(currentRequest.mediaApplyFingerprint) !== mediaApplyFingerprint ||
+                establishmentUpdateMediaFingerprint(currentRequest) !== mediaApplyFingerprint) {
+                var changed = createMediaApplicationError('document', 'A decisão editorial de mídia mudou durante a aplicação. Nenhuma alteração foi gravada no CMS.');
+                changed.code = 'establishment-update/media-review-changed';
+                throw changed;
+            }
             try {
                 await adminEstablishments._applyCanonicalFields(establishmentId, establishmentUpdate, {
-                    groups: ['media', 'review'],
-                    flow: 'approved-media-request'
+                    groups: ['media'],
+                    flow: 'approved-media-request',
+                    expectedRevision: mediaExpectedRevision,
+                    workflowProgress: {
+                        ref: requestRef,
+                        field: 'mediaApplyProgress',
+                        statusValue: 'approved',
+                        stateField: 'mediaApplyState',
+                        stateValue: 'applying',
+                        fingerprintField: 'mediaApplyFingerprint',
+                        fingerprintValue: mediaApplyFingerprint
+                    }
                 });
             } catch(error) {
                 logStorageCopyDiagnostic('warn', 'document:error', Object.assign({
@@ -2099,15 +2646,15 @@ const FirebaseSystem = {
                 return { success: false, message: 'Empreendimento não encontrado em cms_establishments: ' + establishmentId };
             }
 
+            var establishment = establishmentSnap.data() || {};
             var requestedChanges = buildSafeRequestedChanges(request.requestedChanges);
-            var appliedFields = [];
+            var textApplyPlan = buildEstablishmentTextApplyPlan(requestedChanges);
+            var appliedFields = textApplyPlan.fields;
             var establishmentUpdate = {};
 
-            Object.keys(requestedChanges).forEach(function(field) {
+            appliedFields.forEach(function(field) {
                 var targetPath = ESTABLISHMENT_UPDATE_APPLY_TARGETS[field];
-                if (!targetPath) return;
                 establishmentUpdate[targetPath] = requestedChanges[field];
-                appliedFields.push(field);
             });
 
             if (!appliedFields.length) {
@@ -2120,29 +2667,110 @@ const FirebaseSystem = {
             var appliedAt = firebase.firestore.FieldValue.serverTimestamp();
             establishmentUpdate.updatedAt = appliedAt;
             establishmentUpdate.updatedBy = currentUser.uid;
-            establishmentUpdate['review.lastAppliedRequestId'] = normalizedRequestId;
-            establishmentUpdate['review.lastAppliedAt'] = appliedAt;
-            establishmentUpdate['review.lastAppliedBy'] = currentUser.uid;
 
             var requestUpdate = {
                 updatedAt: appliedAt,
                 appliedAt: appliedAt,
                 appliedBy: currentUser.uid,
                 appliedTo: establishmentId,
-                appliedFields: appliedFields
+                appliedFields: appliedFields,
+                textApplyState: 'completed',
+                textApplyFingerprint: textApplyPlan.fingerprint
             };
 
-            var alreadyAppliedToDocument = establishment.review &&
-                establishment.review.lastAppliedRequestId === normalizedRequestId;
-            if (!alreadyAppliedToDocument) {
-                var adminEstablishments = window.AdminEstablishmentsModule;
-                if (!adminEstablishments || typeof adminEstablishments._applyCanonicalFields !== 'function') {
-                    return { success: false, message: 'Workflow canônico de empreendimentos indisponível.' };
-                }
-                await adminEstablishments._applyCanonicalFields(establishmentId, establishmentUpdate, {
-                    flow: 'approved-text-request'
+            var textReservation = await db.runTransaction(function(transaction) {
+                return Promise.all([transaction.get(requestRef), transaction.get(establishmentRef)]).then(function(snapshots) {
+                    if (!snapshots[0].exists || !snapshots[1].exists) {
+                        throw establishmentUpdateConflict('A solicitação ou o empreendimento não existe mais.');
+                    }
+                    var lockedRequest = snapshots[0].data() || {};
+                    var currentCms = snapshots[1].data() || {};
+                    if (normalizeUpdateRequestStatus(lockedRequest.status) !== 'approved') {
+                        throw establishmentUpdateConflict('A decisão da solicitação mudou antes da aplicação.');
+                    }
+                    if (lockedRequest.appliedAt || lockedRequest.appliedBy || lockedRequest.appliedTo ||
+                        sanitizeSimpleText(lockedRequest.textApplyState, 40) === 'completed') {
+                        return { alreadyApplied: true };
+                    }
+                    var applyState = sanitizeSimpleText(lockedRequest.textApplyState, 40);
+                    var storedFingerprint = readOpaqueFingerprint(lockedRequest.textApplyFingerprint);
+                    if (applyState === 'applying' && storedFingerprint !== textApplyPlan.fingerprint) {
+                        throw establishmentUpdateConflict('Os campos aprovados mudaram durante uma tentativa anterior.');
+                    }
+                    var currentRevision = Number.isInteger(currentCms.revision) ? currentCms.revision : 0;
+                    var baseRevision = applyState === 'applying' && Number.isInteger(lockedRequest.textApplyBaseRevision)
+                        ? lockedRequest.textApplyBaseRevision
+                        : currentRevision;
+                    var baseStatus = applyState === 'applying'
+                        ? sanitizeSimpleText(lockedRequest.textApplyBaseStatus, 40)
+                        : sanitizeSimpleText(currentCms.status, 40);
+                    var baseValues = applyState === 'applying'
+                        ? lockedRequest.textApplyBaseValues
+                        : buildEstablishmentTextBaseValues(currentCms, appliedFields);
+                    var textApplyProgress = applyState === 'applying' && lockedRequest.textApplyProgress &&
+                        typeof lockedRequest.textApplyProgress === 'object'
+                        ? lockedRequest.textApplyProgress
+                        : {};
+                    if (applyState === 'applying') {
+                        var currentCmsStatus = sanitizeSimpleText(currentCms.status, 40);
+                        var stableCompletedState = currentCmsStatus === baseStatus && !currentCms.editSession;
+                        var resumableLifecycle = isResumablePublishedLifecycle(currentCms, baseStatus);
+                        if (currentRevision < baseRevision ||
+                            !cmsTextValuesRemainResumable(currentCms, requestedChanges, appliedFields, baseValues, textApplyProgress) ||
+                            (!stableCompletedState && !(resumableLifecycle && workflowProgressHas(textApplyProgress, 'lifecycleDraft')))) {
+                            throw establishmentUpdateConflict('O empreendimento foi editado depois da tentativa anterior. Nenhuma edição manual foi sobrescrita.');
+                        }
+                        if (stableCompletedState && allTextApplyGroupsCompleted(appliedFields, textApplyProgress) &&
+                            cmsMatchesEstablishmentTextChanges(currentCms, requestedChanges, appliedFields)) {
+                            transaction.update(requestRef, requestUpdate);
+                            return { reconciled: true, expectedRevision: currentRevision };
+                        }
+                    }
+                    transaction.update(requestRef, {
+                        textApplyState: 'applying',
+                        textApplyFingerprint: textApplyPlan.fingerprint,
+                        textApplyBaseRevision: baseRevision,
+                        textApplyBaseStatus: baseStatus,
+                        textApplyBaseValues: baseValues,
+                        textApplyProgress: textApplyProgress,
+                        textApplyStartedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        textApplyStartedBy: currentUser.uid,
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    return { expectedRevision: currentRevision };
                 });
+            });
+
+            if (textReservation.alreadyApplied) {
+                return { success: false, message: 'Esta solicitação já foi aplicada ao catálogo editorial.' };
             }
+            if (textReservation.reconciled) {
+                return {
+                    success: true,
+                    message: 'Alteração já presente no empreendimento e registro privado da solicitação reconciliado.'
+                };
+            }
+
+            var adminEstablishments = window.AdminEstablishmentsModule;
+            if (!adminEstablishments || typeof adminEstablishments._applyCanonicalFields !== 'function') {
+                return { success: false, message: 'Workflow canônico de empreendimentos indisponível.' };
+            }
+            await adminEstablishments._applyCanonicalFields(establishmentId, establishmentUpdate, {
+                flow: 'approved-text-request',
+                expectedRevision: textReservation.expectedRevision,
+                workflowProgress: {
+                    ref: requestRef,
+                    field: 'textApplyProgress',
+                    statusValue: 'approved',
+                    stateField: 'textApplyState',
+                    stateValue: 'applying',
+                    fingerprintField: 'textApplyFingerprint',
+                    fingerprintValue: textApplyPlan.fingerprint
+                },
+                enforceSemanticIdentity: appliedFields.some(function (field) {
+                    return field === 'address' || field === 'phone' || field === 'website';
+                })
+            });
             await requestRef.update(requestUpdate);
 
             return {

@@ -22,6 +22,60 @@ service cloud.firestore {
       return hasRole(['admin', 'moderator']);
     }
 
+    function establishmentSubmissionHasNoWorkflowAuthority(data) {
+      return !data.keys().hasAny(['cmsEstablishmentId', 'cmsImportState', 'cmsImportedAt']) &&
+        (!data.keys().hasAny(['reviewedAt']) || data.reviewedAt == null) &&
+        (!data.keys().hasAny(['reviewedBy']) || data.reviewedBy == null) &&
+        (!data.keys().hasAny(['reviewNotes']) || data.reviewNotes == '');
+    }
+
+    function validModeratorEstablishmentRejection() {
+      return resource.data.status == 'pendente' &&
+        establishmentSubmissionHasNoWorkflowAuthority(resource.data) &&
+        request.resource.data.status == 'rejeitado' &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['status', 'reviewedAt', 'reviewedBy', 'reviewNotes']) &&
+        request.resource.data.reviewedAt == request.time &&
+        request.resource.data.reviewedBy == request.auth.uid &&
+        request.resource.data.reviewNotes is string;
+    }
+
+    function establishmentUpdateApplicationInProgress(data) {
+      return (data.keys().hasAny(['mediaApplyState']) && data.mediaApplyState == 'applying') ||
+        (data.keys().hasAny(['textApplyState']) && data.textApplyState == 'applying');
+    }
+
+    function validModeratorEstablishmentUpdateReview() {
+      return !establishmentUpdateApplicationInProgress(resource.data) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'updatedAt', 'reviewedAt', 'reviewedBy', 'reviewNotes',
+          'rejectionReason', 'changesRequestedNotes', 'mediaReview',
+          'mediaApplyState', 'mediaApplyFingerprint'
+        ]) &&
+        (!request.resource.data.keys().hasAny(['mediaApplyState']) ||
+          request.resource.data.mediaApplyState == 'reviewed') &&
+        (!request.resource.data.keys().hasAny(['mediaApplyFingerprint']) ||
+          request.resource.data.mediaApplyFingerprint == '');
+    }
+
+    function validEstablishmentIdentityLockCreate(lockId) {
+      return isAdmin() &&
+        request.resource.data.keys().hasAll([
+          'id', 'cmsEstablishmentId', 'submissionId', 'policy', 'createdAt', 'createdBy'
+        ]) &&
+        request.resource.data.keys().hasOnly([
+          'id', 'cmsEstablishmentId', 'submissionId', 'policy', 'createdAt', 'createdBy'
+        ]) &&
+        request.resource.data.id == lockId &&
+        request.resource.data.cmsEstablishmentId is string &&
+        request.resource.data.cmsEstablishmentId.size() > 0 &&
+        request.resource.data.submissionId is string &&
+        request.resource.data.submissionId.size() > 0 &&
+        request.resource.data.policy == 'permanent_alias_v1' &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.createdBy == request.auth.uid;
+    }
+
     function validUserAuthorizationProfile(data) {
       return data.role in ['admin', 'moderator', 'user'] &&
         data.ativo is bool;
@@ -481,10 +535,11 @@ service cloud.firestore {
 
     function validEstablishmentMedia(data) {
       return data is map &&
-        data.keys().hasOnly(['mainImage', 'gallery', 'videoUrl', 'sourceCredits']) &&
+        data.keys().hasOnly(['mainImage', 'gallery', 'publicPaths', 'videoUrl', 'sourceCredits']) &&
         validEstablishmentImage(data.mainImage) &&
         data.gallery is list &&
         data.gallery.size() <= 60 &&
+        validStringList(data.get('publicPaths', [])) &&
         data.videoUrl is string &&
         data.sourceCredits is string;
     }
@@ -1405,9 +1460,10 @@ service cloud.firestore {
       allow read: if isModerator() || owns(resource.data);
       allow create: if signedIn() &&
         request.resource.data.submittedBy == request.auth.uid &&
-        request.resource.data.status == 'pendente';
-      allow update: if isModerator();
-      allow delete: if isModerator();
+        request.resource.data.status == 'pendente' &&
+        establishmentSubmissionHasNoWorkflowAuthority(request.resource.data);
+      allow update: if isAdmin() || (isModerator() && validModeratorEstablishmentRejection());
+      allow delete: if isAdmin() && !resource.data.keys().hasAny(['cmsImportState']);
     }
 
     match /eventos_aprovados/{eventId} {
@@ -1418,6 +1474,12 @@ service cloud.firestore {
     match /estabelecimentos_aprovados/{estId} {
       allow read: if true;
       allow write: if isModerator();
+    }
+
+    match /cms_establishment_submission_locks/{lockId} {
+      allow read: if isAdmin();
+      allow create: if validEstablishmentIdentityLockCreate(lockId);
+      allow update, delete: if false;
     }
 
     match /establishment_claims/{claimId} {
@@ -1545,7 +1607,11 @@ service cloud.firestore {
           'rejectionReason',
           'changesRequestedNotes'
         ]);
-      allow update, delete: if isModerator();
+      allow update: if isAdmin() || (isModerator() && validModeratorEstablishmentUpdateReview());
+      allow delete: if isAdmin() || (
+        isModerator() &&
+        !establishmentUpdateApplicationInProgress(resource.data)
+      );
     }
 
     match /cms_establishments/{establishmentId} {

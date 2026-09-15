@@ -86,7 +86,19 @@ service firebase.storage {
     match /approved-media/establishments/{estId}/{fileName} {
       allow read: if isStaff() ||
         firestore.exists(/databases/(default)/documents/estabelecimentos_aprovados/$(estId));
-      allow create: if validApprovedImageUpload();
+      allow create: if false;
+      allow update, delete: if false;
+    }
+
+    match /approved-media/cms-establishments/{estId}/{fileName} {
+      allow read: if isStaff() ||
+        (
+          firestore.exists(/databases/(default)/documents/cms_establishments/$(estId)) &&
+          firestore.get(/databases/(default)/documents/cms_establishments/$(estId)).data.status == 'published' &&
+          ('approved-media/cms-establishments/' + estId + '/' + fileName) in
+            firestore.get(/databases/(default)/documents/cms_establishments/$(estId)).data.media.get('publicPaths', [])
+        );
+      allow create: if isAdmin() && validApprovedImageUpload();
       allow update, delete: if false;
     }
 

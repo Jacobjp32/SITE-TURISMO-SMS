@@ -168,7 +168,7 @@
                     <div class="card-icon">📋</div>
                     <h3 class="card-title">Meus Cadastros</h3>
                     <p class="card-desc">Acompanhe o status de aprovação dos seus eventos e estabelecimentos.</p>
-                    <button class="card-action" onclick="document.getElementById('myEvents').scrollIntoView({behavior:'smooth'})">Ver Status</button>
+                    <button class="card-action" onclick="document.getElementById('myEstablishmentSubmissions').scrollIntoView({behavior:'smooth'})">Ver Status</button>
                 </div>
                 <div class="dashboard-card">
                     <div class="card-icon">🤝</div>
@@ -188,6 +188,22 @@
                         <div class="icon">📭</div>
                         <p>Você ainda não cadastrou nenhum evento.</p>
                         <button class="card-action" style="margin-top:1rem;" onclick="abrirModalEvento()">Cadastrar Primeiro Evento</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section-panel" id="myEstablishmentSubmissions">
+                <div class="section-header">
+                    <h2>🏨 Meus estabelecimentos enviados</h2>
+                    <button class="card-action" onclick="abrirModal('establishmentModal')">+ Novo Estabelecimento</button>
+                </div>
+                <p class="section-copy">
+                    Acompanhe a análise dos seus cadastros. Uma aprovação envia o cadastro ao catálogo editorial como rascunho; a publicação no portal é uma etapa separada, feita pela equipe responsável.
+                </p>
+                <div class="events-list" id="establishmentSubmissionsList">
+                    <div class="empty-state">
+                        <div class="icon">📭</div>
+                        <p>Você ainda não enviou nenhum estabelecimento.</p>
                     </div>
                 </div>
             </section>
@@ -601,6 +617,7 @@
             preencherCatalogoEmpreendimentos();
             preencherContatoSolicitacao(user);
             carregarEventos();
+            carregarEstabelecimentos();
             carregarSolicitacoesVinculo();
             carregarMeusEmpreendimentos();
             carregarSolicitacoesAlteracaoEmpreendimento();
@@ -1228,6 +1245,42 @@
         }).join('');
     }
 
+    async function carregarEstabelecimentos() {
+        var container = document.getElementById('establishmentSubmissionsList');
+        if (!container) return;
+
+        container.innerHTML = '<div style="text-align:center;padding:2rem;color:#888;">Carregando...</div>';
+        var establishments = await FirebaseSystem.getUserEstablishments();
+        if (!establishments || establishments.length === 0) {
+            container.innerHTML =
+                '<div class="empty-state"><div class="icon">📭</div>' +
+                '<p>Você ainda não enviou nenhum estabelecimento.</p>' +
+                '<button class="card-action" style="margin-top:1rem;" onclick="abrirModal(\'establishmentModal\')">Cadastrar Primeiro Estabelecimento</button></div>';
+            return;
+        }
+
+        container.innerHTML = establishments.map(function(establishment) {
+            var status = safeStatus(establishment.status);
+            var approvedHint = status === 'aprovado'
+                ? '<p class="claim-extra claim-success">Cadastro aprovado e enviado ao catálogo editorial como rascunho. Isso ainda não significa que ele foi publicado no portal.</p>'
+                : '';
+            var pendingHint = status === 'pendente'
+                ? '<p class="claim-extra claim-info">Cadastro recebido e aguardando análise da equipe responsável.</p>'
+                : '';
+            var reviewNote = status === 'rejeitado' && establishment.reviewNotes
+                ? '<p class="claim-extra"><strong>Motivo informado pela equipe:</strong> ' + escapeHtml(establishment.reviewNotes) + '</p>'
+                : '';
+
+            return '<div class="event-item claim-item">' +
+                '<div class="event-info"><h4>' + escapeHtml(establishment.name || establishment.nome || 'Estabelecimento') + '</h4>' +
+                '<p>Categoria: ' + escapeHtml(establishment.category || establishment.categoria || 'Não informada') +
+                ' | Enviado em: ' + escapeHtml(formatFirestoreDate(establishment.submittedAt || establishment.createdAt)) + '</p>' +
+                pendingHint + approvedHint + reviewNote + '</div>' +
+                '<span class="event-status status-' + status + '">' + escapeHtml(labelStatus(status)) + '</span>' +
+                '</div>';
+        }).join('');
+    }
+
     function fmtData(d) {
         if (!d) return 'Data não definida';
         return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR');
@@ -1781,6 +1834,7 @@
             mostrarNotif('Estabelecimento enviado para análise com sucesso.', 'success');
             fecharModal('establishmentModal');
             resetEstablishmentForm();
+            carregarEstabelecimentos();
         } catch (error) {
             if (!uploadedImages.length && error && Array.isArray(error.portalPreservedUploads)) {
                 uploadedImages = error.portalPreservedUploads;

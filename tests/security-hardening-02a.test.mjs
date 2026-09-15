@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { runInNewContext } from "node:vm";
@@ -137,6 +138,7 @@ async function loadFirebaseSystem(db, storage) {
     location: { hostname: "localhost", search: "" },
     addEventListener() {},
     dispatchEvent() {},
+    crypto: globalThis.crypto,
   };
   const firebase = { firestore, apps: [] };
   if (storage) firebase.storage = () => storage;
@@ -262,20 +264,22 @@ test("approveEvent grava DTO público e preserva decisão/PII apenas no document
   assert.equal(harness.writes.privatePatch.reviewedBy, "moderator-fixture");
 });
 
-test("approveEstablishment grava DTO público e preserva decisão/PII apenas no documento privado", async () => {
+test("approveEstablishment exige admin e não grava a coleção pública legada", async () => {
   const pending = { ...pendingFixture({ images: [], mainImage: "", image: "" }), name: "Restaurante sintético", address: "Rua de Teste, 50", phone: "(42) 3000-0000" };
   const harness = approvalHarness("estabelecimentos_pendentes", "estabelecimentos_aprovados", pending, "est-runtime");
   const system = await loadFirebaseSystem(harness.db);
   const result = await system.approveEstablishment("est-runtime", "nota privada de revisão");
-  assert.equal(result.success, true);
-  assert.equal(harness.writes.committed, true);
-  assertNoPrivateFields(harness.writes.publicDocument);
-  assert.equal(harness.writes.privatePatch.status, "aprovado");
-  assert.equal(harness.writes.privatePatch.reviewNotes, "nota privada de revisão");
+  assert.equal(result.success, false);
+  assert.equal(result.code, "ADMIN_REQUIRED_FOR_CMS_DRAFT");
+  assert.equal(harness.writes.committed, false);
+  assert.equal(harness.writes.publicDocument, null);
+  assert.equal(harness.writes.privatePatch, null);
 });
 
 test("aprovação republica mídia privada em namespace neutro antes do DTO público", async () => {
   const sourcePath = "submissions/events/uid-private/evt-media/image.png";
+  const sourceToken = createHash("sha256").update(sourcePath).digest("hex").slice(0, 24);
+  const destinationPath = `approved-media/events/evt-media/01-${sourceToken}-image.png`;
   const privateUrl = "https://firebasestorage.googleapis.com/v0/b/demo/o/submissions%2Fevents%2Fuid-private%2Fevt-media%2Fimage.png?alt=media&token=secret";
   const publicUrl = "https://firebasestorage.googleapis.com/v0/b/demo/o/approved-media%2Fevents%2Fevt-media%2F01-image.png?alt=media&token=public";
   const uploads = [];
@@ -296,7 +300,7 @@ test("aprovação republica mídia privada em namespace neutro antes do DTO púb
           return publicUrl;
         },
         async put(blob, metadata) {
-          assert.equal(path, "approved-media/events/evt-media/01-image.png");
+          assert.equal(path, destinationPath);
           assert.equal(blob.type, "image/png");
           assert.equal(metadata.cacheControl, "public,max-age=31536000,immutable");
           uploads.push(path);
@@ -314,7 +318,7 @@ test("aprovação republica mídia privada em namespace neutro antes do DTO púb
   const system = await loadFirebaseSystem(harness.db, storage);
   const result = await system.approveEvent("evt-media", "");
   assert.equal(result.success, true, result.message);
-  assert.deepEqual(uploads, ["approved-media/events/evt-media/01-image.png"]);
+  assert.deepEqual(uploads, [destinationPath]);
   assert.equal(harness.writes.publicDocument.mainImage, publicUrl);
   assert.equal(harness.writes.publicDocument.images[0].url, publicUrl);
   assert.equal(JSON.stringify(harness.writes.publicDocument).includes("uid-private"), false);
@@ -385,7 +389,6 @@ test("proveniência exige que a mídia pertença ao documento aprovado, não ape
 test("aprovação falha antes da mídia quando o ID já existe na collection pública", async () => {
   const cases = [
     ["eventos_pendentes", "eventos_aprovados", "evt-collision", "approveEvent"],
-    ["estabelecimentos_pendentes", "estabelecimentos_aprovados", "est-collision", "approveEstablishment"],
   ];
   for (const [pendingCollection, publicCollection, id, method] of cases) {
     const harness = approvalHarness(
@@ -547,16 +550,17 @@ test("tabela de conteúdo aprovado também remove o caminho inline irmão", asyn
   assert.doesNotMatch(source, /onclick="AdminContentCMS\.(?:previewEvent|openEventModal|duplicateEvent|toggleEventPublish|toggleEventFeatured|deleteEvent)\(\\'/);
 });
 
-test("source fix não copia doc.data integralmente nem exclui a trilha privada aprovada", async () => {
+test("source fix projeta eventos e delega empreendimentos à bridge CMS sem write legado", async () => {
   const source = await read("js/firebase-auth.js");
   const eventBlock = source.slice(source.indexOf("approveEvent:"), source.indexOf("rejectEvent:"));
   const establishmentBlock = source.slice(source.indexOf("approveEstablishment:"), source.indexOf("rejectEstablishment:"));
   assert.match(eventBlock, /preparePublicSubmissionMedia\(doc\.data\(\), 'event', publicEventId\)/);
   assert.match(eventBlock, /projectPublicEvent\(publicSource, publicEventId\)/);
-  assert.match(establishmentBlock, /preparePublicSubmissionMedia\(doc\.data\(\), 'establishment', publicEstablishmentId\)/);
-  assert.match(establishmentBlock, /projectPublicEstablishment\(publicSource, publicEstablishmentId\)/);
+  assert.match(establishmentBlock, /preparePublicSubmissionMedia\(submission, 'establishment', cmsId, submissionId\)/);
+  assert.match(establishmentBlock, /adminEstablishments\.reserveSubmissionImport\(/);
+  assert.match(establishmentBlock, /adminEstablishments\.importSubmissionDraft\(/);
+  assert.doesNotMatch(establishmentBlock, /collection\('estabelecimentos_aprovados'\)\.doc[^\n]*\.set/);
   assert.doesNotMatch(eventBlock, /Object\.assign\(\{\},\s*doc\.data\(\)/);
-  assert.doesNotMatch(establishmentBlock, /Object\.assign\(\{\},\s*doc\.data\(\)/);
   assert.doesNotMatch(eventBlock, /ref\.delete\(\)/);
   assert.doesNotMatch(establishmentBlock, /ref\.delete\(\)/);
 });

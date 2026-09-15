@@ -1584,6 +1584,7 @@
 
     <script src="js/security-utils.js"></script>
     <script src="js/publication-contracts.js?v=security-hardening-02a-20260913"></script>
+    <script src="js/establishment-submission-bridge.js?v=establishment-approval-v2-20260914"></script>
     <script src="js/data/restaurantes.js"></script>
     <script src="js/data/hospedagens.js"></script>
     <script src="js/cms-public-establishments-adapter.js?v=admin-e2e-publication-20260911"></script>
@@ -1595,7 +1596,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
-    <script src="js/firebase-auth.js?v=admin-e2e-publication-20260911"></script>
+    <script src="js/firebase-auth.js?v=establishment-approval-v2-20260914"></script>
     <script src="js/admin-content-cms.js?v=media-reference-safety-20260828"></script>
     <!-- Fundação modular do Admin CMS (Bloco 1 / Etapa 1) — modo passthrough, aditivo e inerte. -->
     <script src="js/admin/admin-context.js?v=admin-modular-20260625"></script>
@@ -1609,7 +1610,7 @@
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
     <script src="js/admin/modules/banners.js?v=admin-banners-4e-20260629"></script>
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
-    <script src="js/admin/modules/empreendimentos.js?v=admin-e2e-publication-20260911"></script>
+    <script src="js/admin/modules/empreendimentos.js?v=establishment-approval-v2-20260914"></script>
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
     <script src="js/admin/modules/rotas.js?v=rotas-v1-1-admin-20260820"></script>
@@ -2140,10 +2141,16 @@
             }
 
             // Estabelecimentos pendentes
-            const estabelecimentos = await FirebaseSystem.getPendingEstablishments();
+            const estabelecimentosResult = typeof FirebaseSystem.getPendingEstablishmentsReport === 'function'
+                ? await FirebaseSystem.getPendingEstablishmentsReport()
+                : { success: true, items: await FirebaseSystem.getPendingEstablishments() };
+            const estabelecimentos = Array.isArray(estabelecimentosResult.items) ? estabelecimentosResult.items : [];
             const estContainer = document.getElementById('estabelecimentos-pendentes-container');
             
-            if (estabelecimentos.length === 0) {
+            if (estabelecimentosResult.success === false) {
+                console.error('[admin-firebase] Falha ao carregar estabelecimentos pendentes.', estabelecimentosResult);
+                estContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar estabelecimentos pendentes. Verifique o console e tente novamente.</p>';
+            } else if (estabelecimentos.length === 0) {
                 estContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum estabelecimento pendente!</p>';
             } else {
                 estContainer.innerHTML = `
@@ -2167,7 +2174,9 @@
                                     <td>${SEC.html(e.submittedByName, '—')}</td>
                                     <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
-                                        <button class="btn-sm btn-approve" type="button" data-admin-action="approve-establishment" data-admin-target-id="${SEC.attr(e.id)}">✅</button>
+                                        ${FirebaseSystem.isAdmin()
+                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="approve-establishment" data-admin-target-id="${SEC.attr(e.id)}" title="Aprovar e criar rascunho no CMS">✅ Aprovar e criar draft</button>`
+                                            : '<button class="btn-sm btn-approve" type="button" disabled title="Somente administradores podem criar drafts no CMS">🔒 Aprovação exige admin</button>'}
                                         <button class="btn-sm btn-reject" type="button" data-admin-action="reject-establishment" data-admin-target-id="${SEC.attr(e.id)}">❌</button>
                                     </td>
                                 </tr>
@@ -2885,11 +2894,17 @@
         }
 
         async function approveEstablishment(estId) {
-            if (!confirm('Aprovar este estabelecimento?')) return;
+            if (!confirm('Aprovar este cadastro e criar/confirmar um rascunho no módulo Empreendimentos? Nada será publicado automaticamente.')) return;
             const result = await FirebaseSystem.approveEstablishment(estId);
             alert(result.message);
             loadPendingData();
             loadDashboardData();
+            if (result.success && result.cmsEstablishmentId && confirm('Rascunho CMS: ' + result.cmsEstablishmentId + ' (Draft). Abrir em Empreendimentos agora?')) {
+                showSection('empreendimentos');
+                if (window.AdminEstablishmentsModule && typeof window.AdminEstablishmentsModule.refresh === 'function') {
+                    window.AdminEstablishmentsModule.refresh();
+                }
+            }
         }
 
         async function rejectEstablishment(estId) {

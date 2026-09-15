@@ -58,6 +58,12 @@ async function seedApprovedDocument(collection, id) {
   });
 }
 
+async function seedDocumentsForStorage(entries) {
+  await testEnv.withSecurityRulesDisabled(async (context) => {
+    await Promise.all(entries.map(([path, data]) => context.firestore().doc(path).set(data)));
+  });
+}
+
 async function seedStorageObject(path) {
   await testEnv.withSecurityRulesDisabled(async (context) => {
     await context
@@ -412,18 +418,24 @@ describe("Retenção create-only de cms-media", () => {
 
 describe("Mídia aprovada em namespace público neutro", () => {
   const eventPath = "approved-media/events/evt-public/image.png";
-  const establishmentPath = "approved-media/establishments/est-public/image.png";
+  const legacyEstablishmentPath = "approved-media/establishments/est-public/image.png";
+  const cmsEstablishmentPath = "approved-media/cms-establishments/est-public/image.png";
 
-  for (const role of ["admin", "moderator"]) {
-    test(`${role} ativo cria mídia aprovada de evento e empreendimento`, async () => {
-      const uid = `${role}-approved-media`;
-      const roleEventPath = `approved-media/events/evt-${role}/image.png`;
-      const roleEstablishmentPath = `approved-media/establishments/est-${role}/image.png`;
-      await seedProfiles([[uid, profileData(role, true)]]);
-      await assertSucceeds(uploadImage(uid, roleEventPath));
-      await assertSucceeds(uploadImage(uid, roleEstablishmentPath));
-    });
-  }
+  test("admin ativo cria mídia aprovada de evento e empreendimento", async () => {
+    const uid = "admin-approved-media";
+    await seedProfiles([[uid, profileData("admin", true)]]);
+    await assertSucceeds(uploadImage(uid, "approved-media/events/evt-admin/image.png"));
+    await assertSucceeds(uploadImage(uid, "approved-media/cms-establishments/est-admin/image.png"));
+    await assertFails(uploadImage(uid, "approved-media/establishments/est-admin/image.png"));
+  });
+
+  test("moderator ativo preserva eventos, mas não pré-semeia mídia de empreendimento", async () => {
+    const uid = "moderator-approved-media";
+    await seedProfiles([[uid, profileData("moderator", true)]]);
+    await assertSucceeds(uploadImage(uid, "approved-media/events/evt-moderator/image.png"));
+    await assertFails(uploadImage(uid, "approved-media/cms-establishments/est-moderator/image.png"));
+    await assertFails(uploadImage(uid, "approved-media/establishments/est-moderator/image.png"));
+  });
 
   test("usuário comum e anônimo não criam mídia aprovada", async () => {
     await seedProfiles([["user-approved-media", profileData("user", true)]]);
@@ -442,10 +454,67 @@ describe("Mídia aprovada em namespace público neutro", () => {
     await assertSucceeds(storageFor().ref(eventPath).getMetadata());
   });
 
-  test("mídia de empreendimento é pública somente após existir empreendimento aprovado", async () => {
-    await seedStorageObject(establishmentPath);
+  test("compatibilidade legada mantém mídia pública após aprovação histórica", async () => {
+    await seedStorageObject(legacyEstablishmentPath);
     await seedApprovedDocument("estabelecimentos_aprovados", "est-public");
-    await assertSucceeds(storageFor().ref(establishmentPath).getMetadata());
+    await assertSucceeds(storageFor().ref(legacyEstablishmentPath).getMetadata());
+  });
+
+  test("draft CMS mantém mídia privada e publish explícito a torna pública", async () => {
+    await seedStorageObject(cmsEstablishmentPath);
+    await seedDocumentsForStorage([
+      ["cms_establishments/est-public", { status: "draft" }],
+    ]);
+    await assertFails(storageFor().ref(cmsEstablishmentPath).getMetadata());
+    await seedDocumentsForStorage([
+      ["cms_establishments/est-public", {
+        status: "published",
+        media: { publicPaths: [cmsEstablishmentPath] },
+      }],
+    ]);
+    await assertSucceeds(storageFor().ref(cmsEstablishmentPath).getMetadata());
+  });
+
+  test("publish não libera objeto órfão fora da projeção de paths", async () => {
+    const orphanPath = "approved-media/cms-establishments/est-public/orphan.png";
+    await Promise.all([seedStorageObject(cmsEstablishmentPath), seedStorageObject(orphanPath)]);
+    await seedDocumentsForStorage([["cms_establishments/est-public", {
+      status: "published",
+      media: { publicPaths: [cmsEstablishmentPath] },
+    }]]);
+    await assertSucceeds(storageFor().ref(cmsEstablishmentPath).getMetadata());
+    await assertFails(storageFor().ref(orphanPath).getMetadata());
+  });
+
+  test("PUBLIC_PATH_OTHER_ESTABLISHMENT_DENY", async () => {
+    const otherPath = "approved-media/cms-establishments/other-establishment/image.png";
+    await seedStorageObject(otherPath);
+    await seedDocumentsForStorage([["cms_establishments/est-public", {
+      status: "published",
+      media: { publicPaths: [otherPath] },
+    }]]);
+    await assertFails(storageFor().ref(otherPath).getMetadata());
+  });
+
+  test("PUBLIC_PATH_SUBMISSIONS_DENY", async () => {
+    const privateSubmissionPath = "submissions/establishments/private-owner/private-submission/image.png";
+    await seedStorageObject(privateSubmissionPath);
+    await assertFails(storageFor().ref(privateSubmissionPath).getMetadata());
+  });
+
+  test("documento legado não libera mídia do namespace CMS", async () => {
+    await seedStorageObject(cmsEstablishmentPath);
+    await seedApprovedDocument("estabelecimentos_aprovados", "est-public");
+    await seedDocumentsForStorage([["cms_establishments/est-public", { status: "draft" }]]);
+    await assertFails(storageFor().ref(cmsEstablishmentPath).getMetadata());
+  });
+
+  test("empreendimento archived não libera mídia anonimamente", async () => {
+    await seedStorageObject(cmsEstablishmentPath);
+    await seedDocumentsForStorage([
+      ["cms_establishments/est-public", { status: "archived" }],
+    ]);
+    await assertFails(storageFor().ref(cmsEstablishmentPath).getMetadata());
   });
 
   test("mídia aprovada permanece create-only", async () => {
