@@ -19,6 +19,12 @@
         ].join(" "));
     }
 
+    function getSearchIndex() {
+        return Array.isArray(window.TURISMO_SEARCH_INDEX)
+            ? window.TURISMO_SEARCH_INDEX
+            : [];
+    }
+
     function scoreItem(item, query, terms) {
         var score = 0;
         var title = normalizeText(item.title);
@@ -96,10 +102,9 @@
         var results = document.getElementById("searchResults");
         var triggers = document.querySelectorAll("[data-search-open]");
         var closeButtons = document.querySelectorAll("[data-search-close]");
-        var index = Array.isArray(window.TURISMO_SEARCH_INDEX) ? window.TURISMO_SEARCH_INDEX : [];
         var previousFocus = null;
 
-        if (!modal || !dialog || !input || !results || !index.length) {
+        if (!modal || !dialog || !input || !results) {
             return;
         }
 
@@ -139,6 +144,7 @@
             }
 
             var terms = normalized.split(/\s+/).filter(Boolean);
+            var index = getSearchIndex();
             var matches = index
                 .map(function (item) {
                     return { item: item, score: scoreItem(item, normalized, terms) };
@@ -226,6 +232,17 @@
                 return;
             }
             runSearch(input.value);
+        });
+
+        window.addEventListener("turismo:data-ready", function () {
+            if (!modal.classList.contains("active") || normalizeText(input.value).length < 2) {
+                return;
+            }
+            window.setTimeout(function () {
+                if (modal.classList.contains("active")) {
+                    runSearch(input.value);
+                }
+            }, 0);
         });
 
         renderIdle();
