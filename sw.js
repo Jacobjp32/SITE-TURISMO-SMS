@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v25';
+const CACHE_NAME = 'turismo-sms-v26';
 const OFFLINE_URL = 'offline.html';
 
 const OFFLINE_CORE_ASSETS = [
@@ -57,6 +57,7 @@ const NEVER_CACHE = [
     'js/data/turismo-data.js',
     'js/public-establishments-renderer.js',
     'js/site-meta.js',
+    'sw.js',
     'favicon.ico',
     'api.open-meteo.com',
     'www.googletagmanager.com'
@@ -119,6 +120,14 @@ self.addEventListener('fetch', event => {
         return;
     }
 
+    // Código local mutável usa network-first para nunca servir silenciosamente
+    // a versão anterior no primeiro carregamento online após um release.
+    if (isMutableCodeAsset(url)) {
+        const completeBackgroundWork = createBestEffortBackground(event);
+        event.respondWith(handleMutableCodeRequest(event.request, completeBackgroundWork));
+        return;
+    }
+
     // JSON e HTML que não são navegações continuam sempre na rede.
     if (NEVER_CACHE_EXT.some(ext => url.pathname.endsWith(ext))) return;
     
@@ -130,7 +139,7 @@ async function handlePublicNavigation(request, completeBackgroundWork) {
     let backgroundWork;
 
     try {
-        const response = await fetch(request);
+        const response = await fetch(request, { cache: 'no-cache' });
 
         if (isCacheablePublicNavigation(request, response)) {
             backgroundWork = putInCurrentCache(request, response.clone());
@@ -177,6 +186,39 @@ async function handleNonNavigationRequest(request, completeBackgroundWork) {
     } finally {
         completeBackgroundWork(backgroundWork);
     }
+}
+
+async function handleMutableCodeRequest(request, completeBackgroundWork) {
+    let backgroundWork;
+
+    try {
+        try {
+            const response = await fetch(request, { cache: 'no-cache' });
+            if (isCacheableMutableCodeResponse(response)) {
+                backgroundWork = putInCurrentCache(request, response.clone());
+            }
+            return response;
+        } catch (_) {
+            return caches.match(request);
+        }
+    } finally {
+        completeBackgroundWork(backgroundWork);
+    }
+}
+
+function isMutableCodeAsset(url) {
+    const pathname = url.pathname.toLowerCase();
+
+    return url.origin === self.location.origin
+        && (pathname.endsWith('.js') || pathname.endsWith('.css'));
+}
+
+function isCacheableMutableCodeResponse(response) {
+    return response
+        && response.status === 200
+        && response.type !== 'opaque'
+        && response.type !== 'opaqueredirect'
+        && !response.redirected;
 }
 
 function isCacheablePublicNavigation(request, response) {

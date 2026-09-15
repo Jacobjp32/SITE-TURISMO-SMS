@@ -4,8 +4,10 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const SW_SOURCE = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
+const HOME_SOURCE = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+const NAV_SOURCE = readFileSync(new URL('../js/nav-shared.js', import.meta.url), 'utf8');
 const ORIGIN = 'https://turismo.test';
-const CACHE_NAME = 'turismo-sms-v25';
+const CACHE_NAME = 'turismo-sms-v26';
 
 class MockResponse {
     constructor(body = '', init = {}) {
@@ -50,6 +52,44 @@ function cacheKey(input) {
     return new URL(value, `${ORIGIN}/`).href;
 }
 
+async function simulateLegacyStaleWhileRevalidate(request, cache, fetchImplementation) {
+    const key = cacheKey(request);
+    const cachedBody = cache.get(key);
+
+    if (cachedBody !== undefined) {
+        const background = fetchImplementation(request).then(response => {
+            cache.set(key, response.body);
+        });
+        return { response: new MockResponse(cachedBody), background };
+    }
+
+    const response = await fetchImplementation(request);
+    cache.set(key, response.body);
+    return { response, background: Promise.resolve() };
+}
+
+function runHasLoadedScript(scriptSrcs, targetSrc) {
+    const start = NAV_SOURCE.indexOf('    function hasLoadedScript(src) {');
+    const end = NAV_SOURCE.indexOf('    function hasLoadedStylesheet', start);
+    assert.notEqual(start, -1, 'hasLoadedScript deve existir');
+    assert.notEqual(end, -1, 'limite de hasLoadedScript deve existir');
+
+    const sandbox = {
+        document: {
+            scripts: scriptSrcs.map(src => ({
+                getAttribute(name) {
+                    return name === 'src' ? src : null;
+                }
+            }))
+        },
+        result: false,
+        targetSrc
+    };
+    const functionSource = NAV_SOURCE.slice(start, end).trim();
+    vm.runInNewContext(`${functionSource}\nresult = hasLoadedScript(targetSrc);`, sandbox);
+    return sandbox.result;
+}
+
 function createHarness(options = {}) {
     const listeners = new Map();
     const cacheObjects = new Map();
@@ -59,6 +99,7 @@ function createHarness(options = {}) {
         cacheMatches: [],
         deletes: [],
         fetches: [],
+        fetchOptions: [],
         puts: []
     };
     let fetchImplementation = options.fetchImplementation
@@ -190,9 +231,10 @@ function createHarness(options = {}) {
         caches,
         clients: { async openWindow() {} },
         console: { error() {}, log() {}, warn() {} },
-        fetch(request) {
+        fetch(request, init) {
             records.fetches.push(request);
-            return fetchImplementation(request);
+            records.fetchOptions.push(init ?? {});
+            return fetchImplementation(request, init);
         },
         self
     };
@@ -300,6 +342,7 @@ test('navegação pública GET same-origin é interceptada uma única vez', asyn
     assert.equal(event.respondWithSynchronous, true);
     await event.responsePromise;
     await event.waitForBackground();
+    assert.equal(harness.records.fetchOptions[0].cache, 'no-cache');
 });
 
 test('URLs públicas reais e bridges limpas passam pelo handler de navegação', async () => {
@@ -419,23 +462,196 @@ test('endpoints Firebase/API permanecem network-only e fora do cache público', 
     assert.equal(harness.records.puts.length, 0);
 });
 
-test('handler não-navigation existente continua servindo e preenchendo cache', async () => {
-    const networkResponse = new MockResponse('asset', { status: 200, type: 'basic' });
+test('precedência mantém não-GET, extensões, sw.js e NEVER_CACHE fora do handler', () => {
+    const harness = createHarness();
+    const requests = [
+        makeRequest('/js/search.js', { method: 'POST', mode: 'same-origin' }),
+        makeRequest('chrome-extension://abc/script.js', { mode: 'same-origin' }),
+        makeRequest('/sw.js', { mode: 'same-origin' }),
+        makeRequest('/js/nav-shared.js?v=release', { mode: 'same-origin' })
+    ];
+
+    for (const request of requests) {
+        const event = harness.dispatchFetch(request);
+        assert.equal(event.respondWithCalls, 0, request.url);
+    }
+
+    assert.equal(harness.records.fetches.length, 0);
+    assert.equal(harness.records.puts.length, 0);
+});
+
+test('baseline legado reproduz stale no primeiro load e atualiza o cache em background', async () => {
+    const request = makeRequest('/js/search.js?v=site-public-b1-20260708', { mode: 'same-origin' });
+    const cache = new Map([[cacheKey(request), 'A']]);
+    const fetchVersionB = () => Promise.resolve(new MockResponse('B'));
+
+    const first = await simulateLegacyStaleWhileRevalidate(request, cache, fetchVersionB);
+    assert.equal(await first.response.text(), 'A');
+    await first.background;
+    assert.equal(cache.get(cacheKey(request)), 'B');
+
+    const second = await simulateLegacyStaleWhileRevalidate(request, cache, fetchVersionB);
+    assert.equal(await second.response.text(), 'B');
+    await second.background;
+});
+
+test('primeiro load online de search.js usa a rede mesmo com versão antiga no cache', async () => {
+    const request = makeRequest('/js/search.js?v=pwa-asset-cache-20260915', { mode: 'same-origin' });
+    const networkResponse = new MockResponse('B', { status: 200, type: 'basic' });
     const harness = createHarness({
         fetchImplementation: () => Promise.resolve(networkResponse)
     });
-    const request = makeRequest('/css/index.css', { mode: 'no-cors' });
+    await harness.cache().put(request, new MockResponse('A'));
+    harness.records.puts.length = 0;
     const event = harness.dispatchFetch(request);
 
     assert.equal(event.respondWithCalls, 1);
     assert.equal(await event.responsePromise, networkResponse);
     await event.waitForBackground();
+    assert.equal(harness.records.fetches.length, 1);
+    assert.equal(harness.records.fetchOptions[0].cache, 'no-cache');
     assert.equal(harness.records.puts.length, 1);
+    assert.equal((await harness.cache().match(request)).body, 'B');
+});
+
+test('search.js usa fallback exato do cache quando offline', async () => {
+    const request = makeRequest('/js/search.js?v=pwa-asset-cache-20260915', { mode: 'same-origin' });
+    const harness = createHarness({
+        fetchImplementation: () => Promise.reject(new Error('offline'))
+    });
+    await harness.cache().put(request, new MockResponse('cached-search'));
+    harness.records.puts.length = 0;
+
+    const event = harness.dispatchFetch(request);
+    assert.equal((await event.responsePromise).body, 'cached-search');
+    await event.waitForBackground();
+
+    assert.equal(harness.records.fetches.length, 1);
+    assert.equal(harness.records.puts.length, 0);
+});
+
+test('versão nova sem entrada exata falha de forma definida quando offline', async () => {
+    const versionA = makeRequest('/js/search.js?v=A', { mode: 'same-origin' });
+    const versionB = makeRequest('/js/search.js?v=B', { mode: 'same-origin' });
+    const harness = createHarness({
+        fetchImplementation: () => Promise.reject(new Error('offline'))
+    });
+    await harness.cache().put(versionA, new MockResponse('body-A'));
+    harness.records.puts.length = 0;
+
+    const event = harness.dispatchFetch(versionB);
+    assert.equal(await event.responsePromise, undefined);
+    await event.waitForBackground();
+    assert.equal(harness.records.puts.length, 0);
+    assert.ok(harness.records.cacheMatches.every(call => call.options.ignoreSearch !== true));
+});
+
+test('somente resposta 200 válida de JS/CSS entra no cache', async () => {
+    const cases = [
+        { name: 'NETWORK_403_NOT_CACHED', response: new MockResponse('forbidden', { status: 403 }), cached: false },
+        { name: 'NETWORK_404_NOT_CACHED', response: new MockResponse('not-found', { status: 404 }), cached: false },
+        { name: 'NETWORK_500_NOT_CACHED', response: new MockResponse('server-error', { status: 500 }), cached: false },
+        { name: 'OPAQUE_NOT_CACHED', response: new MockResponse('opaque', { status: 200, type: 'opaque' }), cached: false },
+        { name: 'REDIRECTED_NOT_CACHED', response: new MockResponse('redirected', { status: 200, redirected: true }), cached: false },
+        { name: 'VALID_200_CACHED', response: new MockResponse('valid', { status: 200, type: 'basic' }), cached: true }
+    ];
+
+    for (const entry of cases) {
+        const harness = createHarness({
+            fetchImplementation: () => Promise.resolve(entry.response)
+        });
+        const event = harness.dispatchFetch(makeRequest('/js/release.js?v=gate', { mode: 'same-origin' }));
+        assert.equal(await event.responsePromise, entry.response, entry.name);
+        await event.waitForBackground();
+        assert.equal(harness.records.puts.length, entry.cached ? 1 : 0, entry.name);
+    }
+});
+
+test('duas requisições concorrentes do mesmo asset recebem a rede e convergem para B', async () => {
+    const request = makeRequest('/js/search.js?v=concurrent', { mode: 'same-origin' });
+    let releaseNetwork;
+    const networkGate = new Promise(resolve => {
+        releaseNetwork = resolve;
+    });
+    const harness = createHarness({
+        fetchImplementation: async () => {
+            await networkGate;
+            return new MockResponse('B');
+        }
+    });
+    await harness.cache().put(request, new MockResponse('A'));
+    harness.records.puts.length = 0;
+
+    const first = harness.dispatchFetch(request);
+    const second = harness.dispatchFetch(request);
+    assert.equal(harness.records.fetches.length, 2);
+    releaseNetwork();
+
+    assert.equal((await first.responsePromise).body, 'B');
+    assert.equal((await second.responsePromise).body, 'B');
+    await Promise.all([first.waitForBackground(), second.waitForBackground()]);
+    assert.equal((await harness.cache().match(request)).body, 'B');
+    assert.equal(harness.records.puts.length, 2);
+});
+
+test('asset JS do precache ainda usa rede antes da cópia instalada', async () => {
+    const request = makeRequest('/translations.js', { mode: 'same-origin' });
+    const harness = createHarness();
+    await harness.dispatchLifecycle('install');
+    assert.equal((await harness.cache().match(request)).body, 'cached:translations.js');
+
+    harness.setFetch(() => Promise.resolve(new MockResponse('translations-B')));
+    harness.records.puts.length = 0;
+    const event = harness.dispatchFetch(request);
+    assert.equal((await event.responsePromise).body, 'translations-B');
+    await event.waitForBackground();
+    assert.equal(harness.records.fetches.length, 1);
+    assert.equal(harness.records.fetchOptions[0].cache, 'no-cache');
+    assert.equal((await harness.cache().match(request)).body, 'translations-B');
+});
+
+test('CSS local usa network-first em cada acesso online sem fetch duplicado', async () => {
+    const request = makeRequest('/css/index.css?v=release', { mode: 'same-origin' });
+    let networkBody = 'css-B';
+    const harness = createHarness({
+        fetchImplementation: () => Promise.resolve(new MockResponse(networkBody))
+    });
+    await harness.cache().put(request, new MockResponse('css-A'));
+    harness.records.puts.length = 0;
+
+    const firstEvent = harness.dispatchFetch(request);
+    assert.equal((await firstEvent.responsePromise).body, 'css-B');
+    await firstEvent.waitForBackground();
+    assert.equal(harness.records.fetches.length, 1);
+    assert.equal((await harness.cache().match(request)).body, 'css-B');
+
+    networkBody = 'css-C';
+    const repeatEvent = harness.dispatchFetch(request);
+    assert.equal((await repeatEvent.responsePromise).body, 'css-C');
+    await repeatEvent.waitForBackground();
+    assert.equal(harness.records.fetches.length, 2);
+    assert.equal((await harness.cache().match(request)).body, 'css-C');
+});
+
+test('query versions de search.js permanecem chaves de cache distintas', async () => {
+    const versionA = makeRequest('/js/search.js?v=A', { mode: 'same-origin' });
+    const versionB = makeRequest('/js/search.js?v=B', { mode: 'same-origin' });
+    const harness = createHarness({
+        fetchImplementation: () => Promise.reject(new Error('offline'))
+    });
+    await harness.cache().put(versionA, new MockResponse('body-A'));
+    await harness.cache().put(versionB, new MockResponse('body-B'));
+
+    const eventA = harness.dispatchFetch(versionA);
+    const eventB = harness.dispatchFetch(versionB);
+    assert.equal((await eventA.responsePromise).body, 'body-A');
+    assert.equal((await eventB.responsePromise).body, 'body-B');
+    assert.ok(harness.records.cacheMatches.every(call => call.options.ignoreSearch !== true));
 });
 
 test('controle positivo same-origin continua cacheável após exclusões Storage', async () => {
     const harness = createHarness();
-    const event = harness.dispatchFetch(makeRequest('/css/index.css', { mode: 'same-origin' }));
+    const event = harness.dispatchFetch(makeRequest('/images/card.webp', { mode: 'same-origin' }));
 
     assert.equal(event.respondWithCalls, 1);
     await event.responsePromise;
@@ -448,12 +664,12 @@ test('revalidação SWR em background fica anexada ao FetchEvent e trata rejeiç
         fetchImplementation: () => Promise.reject(new Error('background offline'))
     });
     await harness.cache().put(
-        makeRequest('/css/index.css', { mode: 'same-origin' }),
+        makeRequest('/images/card.webp', { mode: 'same-origin' }),
         new MockResponse('cached-asset')
     );
     harness.records.puts.length = 0;
 
-    const event = harness.dispatchFetch(makeRequest('/css/index.css', { mode: 'same-origin' }));
+    const event = harness.dispatchFetch(makeRequest('/images/card.webp', { mode: 'same-origin' }));
     assert.equal((await event.responsePromise).body, 'cached-asset');
     assert.equal(event.backgroundPromises.length, 1);
     await event.waitForBackground();
@@ -484,20 +700,20 @@ test('retorno da rede substitui o fallback na navegação seguinte', async () =>
     assert.equal((await onlineEvent.responsePromise).body, 'network-restored');
 });
 
-test('activate mantém v25 e remove caches turismo-sms antigos', async () => {
+test('activate mantém v26 e remove inclusive o cache v25 anterior', async () => {
     const harness = createHarness({
-        initialCacheNames: ['turismo-sms-v20', 'turismo-sms-v21', CACHE_NAME, 'third-party-cache']
+        initialCacheNames: ['turismo-sms-v20', 'turismo-sms-v25', CACHE_NAME, 'third-party-cache']
     });
     await harness.dispatchLifecycle('activate');
 
-    assert.deepEqual(harness.records.deletes.sort(), ['turismo-sms-v20', 'turismo-sms-v21']);
+    assert.deepEqual(harness.records.deletes.sort(), ['turismo-sms-v20', 'turismo-sms-v25']);
     assert.deepEqual((await harness.cacheNames()).sort(), ['third-party-cache', CACHE_NAME]);
     assert.equal(harness.claimCalls, 1);
 });
 
 test('client assumido após upgrade continua sem interceptar Storage Firebase', async () => {
     const harness = createHarness({
-        initialCacheNames: ['turismo-sms-v21', CACHE_NAME]
+        initialCacheNames: ['turismo-sms-v25', CACHE_NAME]
     });
     await harness.dispatchLifecycle('activate');
 
@@ -506,9 +722,19 @@ test('client assumido após upgrade continua sem interceptar Storage Firebase', 
     );
 
     assert.equal(harness.claimCalls, 1);
-    assert.deepEqual(harness.records.deletes, ['turismo-sms-v21']);
+    assert.deepEqual(harness.records.deletes, ['turismo-sms-v25']);
     assert.equal(event.respondWithCalls, 0);
     assert.equal(harness.records.puts.length, 0);
+});
+
+test('ciclo de atualização usa skipWaiting e claim sem recarga forçada', async () => {
+    const harness = createHarness({ initialCacheNames: ['turismo-sms-v25'] });
+    await harness.dispatchLifecycle('install');
+    await harness.dispatchLifecycle('activate');
+
+    assert.equal(harness.skipWaitingCalls, 1);
+    assert.equal(harness.claimCalls, 1);
+    assert.doesNotMatch(SW_SOURCE, /controllerchange|location\.reload|window\.location/);
 });
 
 test('redirect, resposta opaca e erro HTTP não são gravados como navegação pública', async () => {
@@ -564,4 +790,23 @@ test('falha de cache.put não impede a resposta válida da rede', async () => {
     assert.equal(await event.responsePromise, networkResponse);
     assert.equal(event.backgroundPromises.length, 1);
     await event.waitForBackground();
+});
+
+test('Home e loader dinâmico compartilham o token do release de busca', () => {
+    assert.match(HOME_SOURCE, /js\/search-index\.js\?v=pwa-asset-cache-20260915/);
+    assert.match(HOME_SOURCE, /js\/search\.js\?v=pwa-asset-cache-20260915/);
+    assert.ok(NAV_SOURCE.includes("script.src = /js\\/search(?:-index)?\\.js$/.test(src)"));
+    assert.ok(NAV_SOURCE.includes("src + '?v=pwa-asset-cache-20260915'"));
+});
+
+test('loader reconhece tags de busca versionadas e não solicita duplicata', () => {
+    assert.equal(
+        runHasLoadedScript(['js/search-index.js?v=pwa-asset-cache-20260915'], 'js/search-index.js'),
+        true
+    );
+    assert.equal(
+        runHasLoadedScript(['js/search.js?v=pwa-asset-cache-20260915'], 'js/search.js'),
+        true
+    );
+    assert.equal(runHasLoadedScript(['js/outro.js?v=1'], 'js/search.js'), false);
 });
