@@ -503,10 +503,62 @@ body.font-larger{font-size:140%!important;}
         document.body.appendChild(vlibrasScript);
     }
 
-    // Registrar Service Worker
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(function(){});
+    /* SW_BOOTSTRAP_START */
+    function waitForServiceWorkerUpdateWindow() {
+        return new Promise(function(resolve) {
+            if (document.readyState === 'complete') {
+                window.setTimeout(resolve, 0);
+                return;
+            }
+
+            window.addEventListener('load', resolve, { once: true });
+        });
     }
+
+    function bootstrapServiceWorker() {
+        if (!('serviceWorker' in navigator)) return null;
+        if (window.__smsServiceWorkerBootstrapPromise) {
+            return window.__smsServiceWorkerBootstrapPromise;
+        }
+
+        var serviceWorker = navigator.serviceWorker;
+        // Publicar o guard nesta task antes de iniciar a descoberta assíncrona.
+        window.__smsServiceWorkerBootstrapPromise = Promise.resolve()
+            .then(function() {
+                return typeof serviceWorker.getRegistration === 'function'
+                    ? serviceWorker.getRegistration('/')
+                    : undefined;
+            })
+            .then(function(registration) {
+                if (!registration) {
+                    return serviceWorker.register('/sw.js');
+                }
+
+                return waitForServiceWorkerUpdateWindow().then(function() {
+                    if (registration.installing || registration.waiting) {
+                        return registration;
+                    }
+
+                    return registration.update()
+                        .then(function() {
+                            return registration;
+                        })
+                        .catch(function(error) {
+                            console.warn('[PWA] Falha ao verificar atualização do Service Worker.', error);
+                            return registration;
+                        });
+                });
+            })
+            .catch(function(error) {
+                console.warn('[PWA] Falha ao inicializar o Service Worker.', error);
+                return null;
+            });
+
+        return window.__smsServiceWorkerBootstrapPromise;
+    }
+
+    bootstrapServiceWorker();
+    /* SW_BOOTSTRAP_END */
 
     // Carregar animações de scroll (uma vez por página)
     if (!document.getElementById('scroll-anim-script')) {
