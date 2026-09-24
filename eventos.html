@@ -32,8 +32,8 @@
     <link rel="stylesheet" href="css/shared.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/eventos.css?v=agro-05-20260910">
     <script src="js/scroll-animations.js?v=site-public-b1-20260708" defer></script>
-    <script src="js/data/agrosamas.js?v=agro-05-20260910" defer></script>
-    <script src="js/agrosamas-contract-bindings.js?v=agro-05-20260910" defer></script>
+    <script src="js/data/agrosamas.js?v=agro-postponed-20260924" defer></script>
+    <script src="js/agrosamas-contract-bindings.js?v=agro-postponed-20260924" defer></script>
     <style>
     /* ── Mês nav compacto ── */
     .mes-nav { display:flex; flex-wrap:wrap; gap:0.4rem; margin-bottom:1rem; }
@@ -178,15 +178,13 @@
             <!-- AgroSamas destaque -->
             <div class="filter-card agrosamas-highlight">
                 <div class="agrosamas-card-header">
-                    <span class="agrosamas-card-badge"><span data-lang-key="ev-agrosamas-card-badge">⭐ DESTAQUE</span> <span data-agrosamas-bind="year">2026</span></span>
+                    <span class="agrosamas-card-badge"><span data-lang-key="ev-agrosamas-card-badge">ADIADO</span> <span data-agrosamas-bind="year">2026</span></span>
                     <h3 data-agrosamas-bind="name">5º AgroSamas</h3>
                 </div>
-                <p class="agrosamas-card-desc" data-lang-key="ev-agrosamas-desc">A edição já começou a revelar sua programação. Novas atrações serão divulgadas em breve.</p>
-                <p class="agrosamas-card-attraction" data-agrosamas-featured-program hidden><span data-lang-key="agrosamas-featured-label">Primeira atração anunciada</span><strong data-agrosamas-bind="featured-program-title">Roupa Nova</strong><time data-agrosamas-bind="featured-program-date">20 SET</time></p>
+                <p class="agrosamas-card-desc" data-lang-key="ev-agrosamas-desc">O 5º AgroSamas foi adiado preventivamente. A programação será atualizada após a definição da nova data.</p>
                 <div class="agrosamas-card-info">
-                    <span>📅 <span data-agrosamas-bind="date-range-short">18–21 set</span></span>
+                    <span>📅 <span data-lang-key="ev-agrosamas-new-date">Nova data ainda não definida</span></span>
                     <span>📍 <span data-agrosamas-bind="location">Rua do Mathe</span></span>
-                    <span>⏳ <span data-agrosamas-bind="duration-days">4 dias</span></span>
                 </div>
                 <div class="agrosamas-card-actions">
                     <a href="/agrosamas-2026" class="agrosamas-card-btn" data-lang-key="ev-agrosamas-site">Ver edição 2026 →</a>
@@ -573,6 +571,9 @@
     }
 
     function normalizeStaticEvent(evento) {
+        if (window.AgroSamasContract &&
+            window.AgroSamasContract.isSupersededOccurrence &&
+            window.AgroSamasContract.isSupersededOccurrence(evento)) return null;
         const data = normalizeEventDate(evento && evento.data);
         if (!data) return null;
 
@@ -599,6 +600,9 @@
 
     function normalizeFirebaseEvent(doc) {
         const raw = doc && typeof doc.data === 'function' ? doc.data() : (doc || {});
+        if (window.AgroSamasContract &&
+            window.AgroSamasContract.isSupersededOccurrence &&
+            window.AgroSamasContract.isSupersededOccurrence(raw)) return null;
         const data = normalizeEventDate(raw.date || raw.data || raw.dataInicio);
         if (!data) {
             console.warn('[eventos] Evento aprovado ignorado por falta de data válida.', {
@@ -1168,7 +1172,7 @@
         document.addEventListener('translationsApplied', refreshEventLanguage);
     });
     </script>
-    <script src="translations.js?v=agro-05-20260910"></script>
+    <script src="translations.js?v=agro-postponed-20260924"></script>
     <script src="js/cookies.js?v=consent-first-20260913" data-enable-analytics></script>
     <!-- Bloco 4F: carregador público de banners publicados. -->
     <script src="js/public-banners.js?v=site-public-bannerfit-20260805" defer></script>

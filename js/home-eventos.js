@@ -61,6 +61,9 @@
         }
 
         function normalizarEventoHome(rawEvent, runtimeSource, sourceId) {
+            if (window.AgroSamasContract &&
+                window.AgroSamasContract.isSupersededOccurrence &&
+                window.AgroSamasContract.isSupersededOccurrence(rawEvent)) return null;
             const adapterInput = runtimeSource === eventAdapter.RUNTIME_SOURCES.FIRESTORE_APPROVED
                 ? Object.assign({}, rawEvent)
                 : rawEvent;
@@ -180,7 +183,7 @@
 
         try {
             // 1. Carregar JSON estático primeiro (rápido)
-            const jsonRes = await fetch('eventos-2026.json');
+            const jsonRes = await fetch('eventos-2026.json', { cache: 'no-store' });
             const jsonEventos = (await jsonRes.json())
                 .map(evento => normalizarEventoHome(
                     evento,

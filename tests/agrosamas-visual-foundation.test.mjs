@@ -29,6 +29,7 @@ class FakeElement {
         this.className = '';
         this.disabled = false;
         this.hidden = false;
+        this.removed = false;
         this.listeners = new Map();
         this.tabIndex = 0;
         this._textContent = '';
@@ -63,6 +64,10 @@ class FakeElement {
 
     removeAttribute(name) {
         this.attributes.delete(name);
+    }
+
+    remove() {
+        this.removed = true;
     }
 
     addEventListener(type, listener) {
@@ -115,7 +120,8 @@ function browserHarness() {
         countdownAccessible: register('[data-countdown-accessible]'),
         programDays: register('[data-program-days]'),
         programContent: register('[data-program-content]'),
-        programAvailability: register('[data-program-availability]')
+        programAvailability: register('[data-program-availability]'),
+        eventSchema: register('#agrosamas-event-schema', 1, 'script')
     };
 
     const context = vm.createContext({
@@ -133,9 +139,9 @@ function browserHarness() {
 
 test('physical edition route loads the canonical contract before its page controller', () => {
     assert.match(PAGE_SOURCE, /<link rel="canonical" href="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/agrosamas-2026">/);
-    const contractIndex = PAGE_SOURCE.indexOf('js/data/agrosamas.js?v=agro-05-20260910');
-    const bindingsIndex = PAGE_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-05-20260910');
-    const pageIndex = PAGE_SOURCE.indexOf('js/agrosamas-2026.js?v=agro-05-20260910');
+    const contractIndex = PAGE_SOURCE.indexOf('js/data/agrosamas.js?v=agro-postponed-20260924');
+    const bindingsIndex = PAGE_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-postponed-20260924');
+    const pageIndex = PAGE_SOURCE.indexOf('js/agrosamas-2026.js?v=agro-postponed-20260924');
     assert.ok(contractIndex > -1);
     assert.ok(bindingsIndex > contractIndex);
     assert.ok(pageIndex > bindingsIndex);
@@ -199,57 +205,42 @@ test('visual foundation uses destination assets and the byte-identical approved 
     assert.equal(createHash('sha256').update(logoBytes).digest('hex'), '5ceb3d4ffba413d88f2e157d8202916f206c049c04bdb505ee5629043990b839');
 });
 
-test('PRE, LIVE and POST states are resolved by the contract and control countdown and CTA', () => {
+test('postponement remains visible before, during and after the former dates without countdown or scheduled Event schema', () => {
     const { context, document, elements } = browserHarness();
     const page = context.AgroSamas2026Page;
+    assert.equal(page.renderContractBasics(), true);
+    assert.equal(elements.eventSchema.removed, true);
+    assert.match(document.title, /5º AgroSamas adiado/);
 
-    assert.equal(page.renderTemporalState('2026-09-17T23:00:00-03:00'), context.AgroSamasContract.TEMPORAL_STATE.PRE_EVENT);
-    assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'PRE_EVENT');
-    assert.equal(elements.countdown.hidden, false);
-    assert.match(elements.status.textContent, /Vem aí o 5º AgroSamas/);
+    for (const instant of ['2026-09-17T23:00:00-03:00', '2026-09-18T12:00:00-03:00', '2026-09-22T00:00:00-03:00']) {
+        assert.equal(page.renderTemporalState(instant), context.AgroSamasContract.TEMPORAL_STATE.POSTPONED);
+        assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'POSTPONED');
+        assert.equal(elements.countdown.hidden, true);
+        assert.match(elements.heroKicker.textContent, /EVENTO ADIADO/);
+        assert.match(elements.status.textContent, /adiado.*nova data ainda não definida/);
+        assert.doesNotMatch(elements.countdownAccessible.textContent, /Faltam/);
+    }
     assert.equal(elements.primaryAction.getAttribute('href'), '#programacao');
-    assert.match(elements.countdownAccessible.textContent, /Faltam/);
-
-    assert.equal(page.renderTemporalState('2026-09-18T12:00:00-03:00'), context.AgroSamasContract.TEMPORAL_STATE.EVENT_LIVE);
-    assert.equal(elements.countdown.hidden, true);
-    assert.match(elements.status.textContent, /está acontecendo/);
-    assert.equal(elements.primaryAction.textContent, 'AgroSamas agora');
-
-    assert.equal(page.renderTemporalState('2026-09-22T00:00:00-03:00'), context.AgroSamasContract.TEMPORAL_STATE.POST_EVENT);
-    assert.equal(elements.countdown.hidden, true);
-    assert.match(elements.status.textContent, /entrou para a história/);
-    assert.equal(elements.primaryAction.getAttribute('href'), '#planeje');
 });
 
-test('default PARTIAL programming selects 20 SET and renders only Roupa Nova', () => {
+test('postponed edition presents an undated programming update and no old day tabs', () => {
     const { context, elements } = browserHarness();
     const programming = context.AgroSamas2026Page.renderProgramming();
 
-    assert.equal(programming.availability, 'PARTIAL');
-    assert.equal(elements.programDays.children.length, 4);
-    assert.ok(elements.programDays.children.every(tab => !tab.disabled));
-    assert.deepEqual(elements.programDays.children.map(tab => tab.children[0].textContent), ['18', '19', '20', '21']);
-    assert.equal(elements.programDays.children[2].getAttribute('aria-selected'), 'true');
-    assert.match(elements.programContent.textContent, /20 SET/);
-    assert.match(elements.programContent.textContent, /Roupa Nova/);
-    assert.match(elements.programContent.textContent, /Música/);
-    assert.match(elements.programContent.textContent, /Novas atrações serão divulgadas em breve/);
-    assert.doesNotMatch(elements.programContent.textContent, /horário|palco/i);
-    const spotlight = elements.programContent.children[0].children[0];
-    assert.equal(spotlight.classList.contains('is-featured'), true);
-    assert.equal(spotlight.classList.contains('agro-program-item--spotlight'), true);
-    assert.equal(spotlight.children[0].getAttribute('datetime'), '2026-09-20');
-    assert.equal(elements.programAvailability.textContent, 'Anúncios em andamento');
-
-    elements.programDays.children[0].click();
-    assert.match(elements.programContent.textContent, /Novas atrações serão divulgadas em breve/);
+    assert.equal(programming.availability, 'UNAVAILABLE');
+    assert.equal(programming.items.length, 0);
+    assert.equal(elements.programDays.children.length, 0);
+    assert.match(elements.programContent.textContent, /Programação será atualizada após a definição da nova data/);
+    assert.match(elements.programContent.textContent, /nova data ainda não foi definida/);
+    assert.doesNotMatch(elements.programContent.textContent, /20 SET|Roupa Nova|2026-09-20/);
+    assert.equal(elements.programAvailability.textContent, 'Evento adiado');
 });
 
-test('PARTIAL programming selects the live day and supports time, attraction, category, optional venue and highlight', () => {
+test('a supplied old-date attraction cannot be republished while the edition is postponed', () => {
     const { context, elements } = browserHarness();
     const edition = context.AgroSamasContract.contract.edition;
-    const date = edition.startDate;
-    context.AgroSamas2026Page.renderTemporalState(edition.temporal.liveStartAt);
+    const date = edition.originalSchedule.startDate;
+    context.AgroSamas2026Page.renderTemporalState(date + 'T12:00:00-03:00');
     const programming = context.AgroSamas2026Page.renderProgramming({
         availability: 'PARTIAL',
         fallbackKey: edition.programming.fallbackKey,
@@ -268,15 +259,11 @@ test('PARTIAL programming selects the live day and supports time, attraction, ca
         }]
     });
 
-    assert.equal(programming.availability, 'PARTIAL');
-    assert.match(elements.programContent.textContent, /19:00/);
-    assert.match(elements.programContent.textContent, /Atração confirmada/);
-    assert.match(elements.programContent.textContent, /Palco confirmado/);
-    assert.match(elements.programContent.textContent, /Música/);
-    assert.equal(elements.programContent.children[0].children[0].classList.contains('is-featured'), true);
-
-    elements.programDays.children[1].click();
-    assert.match(elements.programContent.textContent, /Novas atrações serão divulgadas em breve/);
+    assert.equal(programming.availability, 'UNAVAILABLE');
+    assert.equal(programming.items.length, 0);
+    assert.equal(elements.programDays.children.length, 0);
+    assert.doesNotMatch(elements.programContent.textContent, /19:00|Atração confirmada|Palco confirmado|Música/);
+    assert.match(elements.programContent.textContent, /Programação será atualizada/);
 });
 
 test('accessibility, responsive and reduced-motion contracts are explicit', () => {

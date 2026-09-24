@@ -36,7 +36,9 @@
             'date-range': api.formatDateRange(languageCode),
             'date-range-short': api.formatDateRange(languageCode, { short: true }),
             location: edition.location.name,
-            'duration-days': edition.durationDays + ' ' + durationSuffix,
+            'duration-days': edition.status === 'POSTPONED'
+                ? api.formatDateRange(languageCode)
+                : edition.durationDays + ' ' + durationSuffix,
             month: api.formatStartMonth(languageCode),
             year: String(edition.year)
         };

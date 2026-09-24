@@ -68,23 +68,35 @@ test('canonical contract has stable, immutable series and edition identities', (
     assert.equal(descriptor.configurable, false);
 });
 
-test('confirmed 2026 facts are 18-21 September, four days, Rua do Mathe and Miss on the 18th', () => {
+test('postponed edition has no current date and retains superseded dates only as history', () => {
     const { api } = loadContract();
     const edition = api.contract.edition;
 
-    assert.equal(edition.startDate, '2026-09-18');
-    assert.equal(edition.endDate, '2026-09-21');
-    assert.equal(edition.durationDays, 4);
+    assert.equal(edition.status, 'POSTPONED');
+    assert.equal(edition.newDate, null);
+    assert.equal(edition.startDate, null);
+    assert.equal(edition.endDate, null);
+    assert.equal(edition.durationDays, null);
+    assert.equal(edition.temporal.liveStartAt, null);
+    assert.equal(edition.temporal.liveEndExclusiveAt, null);
+    assert.equal(edition.originalSchedule.startDate, '2026-09-18');
+    assert.equal(edition.originalSchedule.endDate, '2026-09-21');
+    assert.equal(edition.originalSchedule.durationDays, 4);
     assert.equal(edition.location.name, 'Rua do Mathe');
     assert.equal(edition.location.scope, 'Rua do Mathe e entorno');
     assert.equal(edition.location.city, 'São Mateus do Sul');
     assert.equal(edition.location.state, 'PR');
     assert.equal(edition.facts.missDate.value, '2026-09-18');
+    assert.equal(edition.facts.missDate.status, api.CONTENT_STATUS.LEGACY);
+    assert.equal(edition.facts.missDate.publicForEdition, false);
+    assert.equal(edition.facts.dates.status, api.CONTENT_STATUS.LEGACY);
+    assert.equal(edition.facts.dates.publicForEdition, false);
     assert.equal(edition.facts.anniversaryIntegration.status, 'CONFIRMED');
     assert.equal(edition.facts.anniversaryIntegration.value.years, 118);
-    assert.match(api.formatDateRange('pt'), /18/);
-    assert.match(api.formatDateRange('pt'), /21/);
-    assert.match(api.formatDateRange('pt'), /2026/);
+    assert.equal(api.formatDateRange('pt'), 'Nova data a definir');
+    assert.doesNotMatch(api.formatDateRange('pt'), /18|19|20|21|setembro/i);
+    assert.match(edition.postponement.reason, /Defesa Civil do Paraná e do Simepar/);
+    assert.match(edition.postponement.update, /nova data ainda não foi definida/i);
 });
 
 test('content status distinguishes confirmed, not-yet-announced, legacy and rejected facts', () => {
@@ -101,15 +113,15 @@ test('content status distinguishes confirmed, not-yet-announced, legacy and reje
     assert.equal(api.CONTENT_STATUS.PENDING, undefined);
     assert.equal(api.contract.edition.facts.legacy2025Attractions.publicForEdition, false);
     assert.equal(api.contract.edition.facts.rejectedDateRange.publicForEdition, false);
-    assert.equal(api.contract.edition.facts.programming.status, api.CONTENT_STATUS.CONFIRMED);
-    assert.equal(api.contract.edition.facts.programming.value, api.PROGRAMMING_AVAILABILITY.PARTIAL);
+    assert.equal(api.contract.edition.facts.programming.status, api.CONTENT_STATUS.NOT_YET_ANNOUNCED);
+    assert.equal(api.contract.edition.facts.programming.value, null);
     for (const key of ['admission', 'remainingAttractions', 'exhibitors2026', 'operationalInformation']) {
         assert.equal(api.contract.edition.facts[key].status, api.CONTENT_STATUS.NOT_YET_ANNOUNCED);
         assert.equal(api.contract.edition.facts[key].value, null);
     }
 });
 
-test('approved identity and confirmed Roupa Nova item preserve the exact supplied scope', () => {
+test('approved identity remains while superseded Roupa Nova item is withheld publicly', () => {
     const { api } = loadContract();
     const edition = api.contract.edition;
     const programming = api.getPublicProgramming();
@@ -120,33 +132,25 @@ test('approved identity and confirmed Roupa Nova item preserve the exact supplie
     assert.equal(edition.brand.width, 1287);
     assert.equal(edition.brand.height, 1222);
     assert.equal(edition.brand.sha256, '5ceb3d4ffba413d88f2e157d8202916f206c049c04bdb505ee5629043990b839');
-    assert.equal(programming.availability, api.PROGRAMMING_AVAILABILITY.PARTIAL);
-    assert.equal(programming.items.length, 1);
-    assert.deepEqual({
-        id: programming.items[0].id,
-        title: programming.items[0].title,
-        date: programming.items[0].date,
-        contentStatus: programming.items[0].contentStatus,
-        featured: programming.items[0].featured
-    }, {
-        id: 'roupa-nova-2026-09-20',
-        title: 'Roupa Nova',
-        date: '2026-09-20',
-        contentStatus: 'CONFIRMED',
-        featured: true
-    });
-    assert.equal('time' in programming.items[0], false);
-    assert.equal('venue' in programming.items[0], false);
+    assert.equal(edition.programming.items[0].title, 'Roupa Nova');
+    assert.equal(edition.programming.items[0].date, '2026-09-20');
+    assert.equal(edition.programming.items[0].contentStatus, api.CONTENT_STATUS.LEGACY);
+    assert.equal(programming.availability, api.PROGRAMMING_AVAILABILITY.UNAVAILABLE);
+    assert.equal(programming.items.length, 0);
 });
 
-test('temporal state changes automatically at São Mateus do Sul boundaries', () => {
+test('temporal state stays POSTPONED throughout the superseded schedule', () => {
     const { api } = loadContract();
 
     assert.equal(api.contract.edition.temporal.timezone, 'America/Sao_Paulo');
-    assert.equal(api.resolveTemporalState('2026-09-17T23:59:59-03:00'), api.TEMPORAL_STATE.PRE_EVENT);
-    assert.equal(api.resolveTemporalState('2026-09-18T00:00:00-03:00'), api.TEMPORAL_STATE.EVENT_LIVE);
-    assert.equal(api.resolveTemporalState('2026-09-21T23:59:59-03:00'), api.TEMPORAL_STATE.EVENT_LIVE);
-    assert.equal(api.resolveTemporalState('2026-09-22T00:00:00-03:00'), api.TEMPORAL_STATE.POST_EVENT);
+    for (const instant of [
+        '2026-09-17T23:59:59-03:00',
+        '2026-09-18T00:00:00-03:00',
+        '2026-09-21T23:59:59-03:00',
+        '2026-09-22T00:00:00-03:00'
+    ]) {
+        assert.equal(api.resolveTemporalState(instant), api.TEMPORAL_STATE.POSTPONED);
+    }
     assert.equal(api.resolveTemporalState('invalid'), api.TEMPORAL_STATE.UNKNOWN);
     assert.deepEqual(
         Object.keys(api.contract.edition.temporal.states).sort(),
@@ -154,7 +158,7 @@ test('temporal state changes automatically at São Mateus do Sul boundaries', ()
     );
 });
 
-test('programming contract publishes only confirmed current-edition items', () => {
+test('programming contract withholds even formerly confirmed items while postponed', () => {
     const { api } = loadContract();
     const candidates = [
         {
@@ -188,61 +192,70 @@ test('programming contract publishes only confirmed current-edition items', () =
 
     assert.equal(unavailable.availability, api.PROGRAMMING_AVAILABILITY.UNAVAILABLE);
     assert.equal(unavailable.items.length, 0);
-    assert.deepEqual(Array.from(partial.items, item => item.id), ['confirmed-current']);
-    assert.deepEqual(Array.from(complete.items, item => item.id), ['confirmed-current']);
+    assert.equal(partial.availability, api.PROGRAMMING_AVAILABILITY.UNAVAILABLE);
+    assert.equal(complete.availability, api.PROGRAMMING_AVAILABILITY.UNAVAILABLE);
+    assert.deepEqual(Array.from(partial.items, item => item.id), []);
+    assert.deepEqual(Array.from(complete.items, item => item.id), []);
     assert.equal(Object.isFrozen(partial.items), true);
-    assert.equal(Object.isFrozen(partial.items[0]), true);
     assert.equal(api.contract.edition.programming.fallbackKey, 'agrosamas-programming-fallback');
     assert.equal(api.contract.edition.fallbacks.programmingKey, 'agrosamas-programming-fallback');
 });
 
-test('calendar occurrences share the canonical identity and confirmed dates', () => {
+test('calendar no longer publishes the five superseded AgroSamas occurrences', () => {
     const occurrences = CALENDAR.filter(item => item.seriesId === 'agrosamas');
-    const miss = occurrences.find(item => item.id === 201);
-
-    assert.equal(occurrences.length, 5);
-    assert.ok(occurrences.every(item => item.editionId === 'agrosamas-2026'));
-    assert.deepEqual([...new Set(occurrences.map(item => item.data))].sort(), [
-        '2026-09-18',
-        '2026-09-19',
-        '2026-09-20',
-        '2026-09-21'
-    ]);
-    assert.ok(occurrences.every(item => item.local === 'Rua do Mathe'));
-    assert.ok(occurrences.every(item => item.horario === 'A confirmar'));
-    assert.equal(miss.data, '2026-09-18');
+    assert.equal(occurrences.length, 0);
+    for (const id of [199, 200, 201, 202, 203]) {
+        assert.equal(CALENDAR.some(item => item.id === id), false, `superseded occurrence ${id}`);
+    }
     assert.doesNotMatch(JSON.stringify(occurrences), /show nacional|parque de diversões|dinossaur|premiação/i);
 });
 
-test('Home and Eventos bind canonical values and activate the built hub and edition routes', () => {
+test('superseded occurrence guard blocks old AgroSamas dates without hiding other events', () => {
+    const { api } = loadContract();
+
+    for (const date of ['2026-09-18', '2026-09-19', '2026-09-20', '2026-09-21']) {
+        assert.equal(api.isSupersededOccurrence({ seriesId: 'agrosamas', date }), true, date);
+        assert.equal(api.isSupersededOccurrence({ title: '5º AgroSamas', data: date }), true, `legacy ${date}`);
+        assert.equal(api.isSupersededOccurrence({ title: 'Outro evento', date }), false, `other event ${date}`);
+    }
+    assert.equal(api.isSupersededOccurrence({ editionId: 'agrosamas-2026', dataInicio: '2026-09-20T19:00:00-03:00' }), true);
+    assert.equal(api.isSupersededOccurrence({ seriesId: 'agrosamas', date: '2026-10-01' }), false);
+    assert.equal(api.isSupersededOccurrence(null), false);
+});
+
+test('Home and Eventos show postponed state while preserving both routes and location', () => {
     for (const source of [INDEX_SOURCE, EVENTS_PAGE_SOURCE]) {
-        assert.match(source, /js\/data\/agrosamas\.js\?v=agro-05-20260910/);
-        assert.match(source, /js\/agrosamas-contract-bindings\.js\?v=agro-05-20260910/);
+        assert.match(source, /js\/data\/agrosamas\.js\?v=agro-postponed-20260924/);
+        assert.match(source, /js\/agrosamas-contract-bindings\.js\?v=agro-postponed-20260924/);
         assert.match(source, /data-agrosamas-bind="name"/);
-        assert.match(source, /data-agrosamas-bind="date-range(?:-short)?"/);
         assert.match(source, /data-agrosamas-bind="location"/);
-        assert.match(source, /data-agrosamas-bind="duration-days"/);
         assert.match(source, /href="\/agrosamas-2026"/);
         assert.match(source, /href="\/agrosamas"/);
+        assert.doesNotMatch(source, /data-agrosamas-featured-program|18[–-]21 set|20 SET|Roupa Nova/i);
     }
+    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-status">ADIADO/);
+    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-date-status">Nova data a definir/);
+    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-card-badge">ADIADO/);
+    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-new-date">Nova data ainda não definida/);
 });
 
 test('changed editorial sources have cache-busted references in every active consumer', () => {
-    assert.match(INDEX_SOURCE, /translations\.js\?v=agro-05-20260910/);
+    assert.match(INDEX_SOURCE, /translations\.js\?v=agro-postponed-20260924/);
     assert.match(INDEX_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(INDEX_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(INDEX_SOURCE, /js\/data\/eventos\.js\?v=agro-04-20260909/);
+    assert.match(INDEX_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
     assert.match(INDEX_SOURCE, /js\/event-occurrence-adapter\.js\?v=agro-02-20260909/);
-    assert.match(EVENTS_PAGE_SOURCE, /translations\.js\?v=agro-05-20260910/);
+    assert.match(EVENTS_PAGE_SOURCE, /translations\.js\?v=agro-postponed-20260924/);
     assert.match(EVENTS_PAGE_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(MAP_PAGE_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(MAP_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-04-20260909/);
+    assert.match(MAP_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
     assert.match(LOCAL_PAGE_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(NEWS_PAGE_SOURCE, /js\/cms\.js\?v=agro-02-20260909/);
-    assert.match(NEWS_DETAIL_SOURCE, /js\/cms\.js\?v=agro-02-20260909/);
+    assert.match(LOCAL_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
+    assert.match(NEWS_PAGE_SOURCE, /js\/cms\.js\?v=agro-postponed-20260924/);
+    assert.match(NEWS_DETAIL_SOURCE, /js\/cms\.js\?v=agro-postponed-20260924/);
 });
 
-test('binding adapter renders contract values and localized duration without literal copies', () => {
+test('binding adapter renders postponed date text and withholds superseded programme', () => {
     const elements = [
         bindingElement('name'),
         bindingElement('date-range'),
@@ -282,26 +295,27 @@ test('binding adapter renders contract values and localized duration without lit
 
     assert.equal(context.AgroSamasContractBindings.bind('en-US'), true);
     assert.equal(elements[0].textContent, '5º AgroSamas');
-    assert.match(elements[1].textContent, /18/);
-    assert.match(elements[1].textContent, /21/);
+    assert.equal(elements[1].textContent, 'New date to be announced');
+    assert.equal(elements[2].textContent, 'New date to be announced');
     assert.equal(elements[3].textContent, 'Rua do Mathe');
-    assert.equal(elements[4].textContent, '4 days');
-    assert.equal(elements[5].textContent, 'SEPTEMBER');
+    assert.equal(elements[4].textContent, 'New date to be announced');
+    assert.equal(elements[5].textContent, 'POSTPONED');
     assert.equal(elements[6].textContent, '2026');
     assert.equal(elements[7].textContent, 'AgroSamas');
-    assert.match(elements[8].textContent, /18/);
+    assert.equal(elements[8].textContent, '');
     assert.equal(elements[9].textContent, '118');
-    assert.equal(elements[10].textContent, 'Roupa Nova');
-    assert.equal(elements[11].textContent, '20 SEP');
+    assert.equal(elements[10].textContent, '');
+    assert.equal(elements[11].textContent, '');
     assert.equal(officialLink.attribute('href'), 'https://www.agrosamas.com.br/');
     assert.equal(logo.attribute('src'), '/images/agrosamas/2026/logo-5-agrosamas.png');
     assert.equal(logo.attribute('width'), '1287');
     assert.equal(logo.attribute('height'), '1222');
-    assert.equal(featuredProgram.hidden, false);
-    assert.ok(confirmedFacts.every(element => element.hidden === false));
+    assert.equal(featuredProgram.hidden, true);
+    assert.equal(confirmedFacts[0].hidden, true);
+    assert.equal(confirmedFacts[1].hidden, false);
 
     assert.equal(context.AgroSamasContractBindings.bind('pl'), true);
-    assert.equal(elements[4].textContent, '4 dni');
+    assert.equal(elements[4].textContent, 'Nowy termin zostanie podany');
     assert.ok(listeners.has('DOMContentLoaded'));
     assert.ok(listeners.has('translationsApplied'));
 });
@@ -326,6 +340,8 @@ test('planned routes are permanent metadata while the current event link remains
 
 test('all locales expose the safe programming fallback and no duplicate canonical literals', () => {
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-programming-fallback':/g) || []).length, 4);
+    assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-postponed-title':/g) || []).length, 4);
+    assert.equal((TRANSLATIONS_SOURCE.match(/'ev-agrosamas-new-date':/g) || []).length, 4);
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-badge':/g) || []).length, 0);
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-nome':|'agrosamas-data':|'agrosamas-local':/g) || []).length, 0);
     assert.equal((TRANSLATIONS_SOURCE.match(/'ev-agrosamas-h':|'ev-agrosamas-data':/g) || []).length, 0);
@@ -351,8 +367,27 @@ test('active editorial surfaces contain no catalogued 2026 misinformation', () =
     assert.doesNotMatch(activeSources, /Parque dos Dinossauros|Dinosaur Park|Parque de los Dinosaurios|Parku Dinozaurów/i);
     assert.doesNotMatch(activeSources, /AgroSamas[^\n]{0,220}(?:entrada gratuita|free entry|wstęp wolny)/i);
     assert.doesNotMatch(CONFIG_SOURCE, /CONFIG\.agrosamas|agrosamas-banner-closed|dataInicio:\s*'2026-09-17'/);
-    assert.match(CMS_SOURCE, /Roupa Nova está confirmado para 20 de setembro/);
     assert.doesNotMatch(CMS_SOURCE + CHATBOT_SOURCE, /programação completa será divulgada em breve/i);
+});
+
+test('CMS fallback and formerly published AgroSamas notice state postponement', () => {
+    const context = vm.createContext({ window: {}, document: { addEventListener() {} } });
+    vm.runInContext(CMS_SOURCE, context, { filename: 'js/cms.js' });
+    const cms = context.window.CMS;
+    const notice = cms.getPostsIniciais()[0];
+    const oldPost = {
+        slug: notice.slug,
+        titulo: '5º AgroSamas — 18 a 21 de setembro de 2026',
+        resumo: 'Roupa Nova está confirmado para 20 de setembro',
+        conteudo: 'Programação anterior'
+    };
+    const updated = cms.normalizarAvisoAgroSamas([oldPost])[0];
+
+    assert.match(notice.titulo, /adiado/i);
+    assert.match(updated.titulo, /adiado/i);
+    assert.match(updated.conteudo, /Defesa Civil do Paraná e do Simepar/);
+    assert.match(updated.conteudo, /nova data ainda não foi definida/i);
+    assert.doesNotMatch([updated.titulo, updated.resumo, updated.conteudo].join(' '), /18 a 21 de setembro|Roupa Nova está confirmado/i);
 });
 
 test('staging seed no longer associates AgroSamas with the wrong venue', () => {

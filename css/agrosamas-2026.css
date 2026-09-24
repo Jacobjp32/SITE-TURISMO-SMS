@@ -81,6 +81,37 @@ body.agrosamas-page {
     margin: 0;
 }
 
+.agrosamas-page [hidden],
+.agrosamas-page [data-agro-superseded-date] {
+    display: none !important;
+}
+
+.agro-postponement-notice {
+    background: #fff7e9;
+    border-left: 7px solid var(--agro-rust);
+    box-shadow: 0 12px 32px rgba(12, 25, 18, 0.2);
+    color: var(--agro-ink);
+    margin: 1.35rem 0;
+    max-width: 680px;
+    padding: clamp(1rem, 2vw, 1.45rem);
+}
+
+.agro-postponement-notice strong {
+    color: var(--agro-rust-dark);
+    display: block;
+    font-size: clamp(1.2rem, 2.3vw, 1.65rem);
+    font-weight: 900;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.agro-postponement-notice p {
+    font-size: clamp(0.88rem, 1.2vw, 1rem);
+    line-height: 1.5;
+    margin-top: 0.6rem;
+    overflow-wrap: anywhere;
+}
+
 .agrosamas-page a:focus-visible,
 .agrosamas-page button:focus-visible {
     outline: 3px solid var(--agro-harvest);
@@ -217,6 +248,14 @@ body.agrosamas-page {
     padding: clamp(1.4rem, 2.2vw, 2rem) var(--agro-gutter) clamp(1.6rem, 2.4vw, 2.2rem);
     position: relative;
     z-index: 1;
+}
+
+.agro-postponed-page .agro-hero__inner {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+.agro-postponed-page .agro-hero__copy {
+    max-width: 760px;
 }
 
 .agro-portal-mark,

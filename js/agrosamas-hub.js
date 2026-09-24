@@ -29,6 +29,15 @@
     }
 
     function temporalCopy(state, edition) {
+        if (state === 'POSTPONED') {
+            return {
+                kicker: 'EVENTO ADIADO',
+                copy: edition.postponement.reason + ' ' + edition.postponement.update,
+                primary: 'Entenda o adiamento',
+                editionCta: 'Ver informações da edição adiada',
+                archive: edition.name + ' · adiado'
+            };
+        }
         if (state === 'EVENT_LIVE') {
             return {
                 kicker: 'Acontecendo agora',

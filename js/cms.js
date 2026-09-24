@@ -66,6 +66,7 @@ const CMS = {
             }))
                 .filter(p => p.publicado)
                 .sort((a, b) => new Date(b.dataPublicacao) - new Date(a.dataPublicacao));
+            this.posts = this.normalizarAvisoAgroSamas(this.posts);
             this.source = 'firebase';
             return this.posts;
         } catch (err) {
@@ -73,9 +74,22 @@ const CMS = {
         }
         // Fallback: localStorage ou posts iniciais
         const stored = localStorage.getItem(this.config.storageKey);
-        this.posts = stored ? JSON.parse(stored) : this.getPostsIniciais();
+        const postsIniciais = this.getPostsIniciais();
+        this.posts = this.normalizarAvisoAgroSamas(stored ? JSON.parse(stored) : postsIniciais);
         this.source = stored ? 'localStorage' : 'fallback';
         return this.posts;
+    },
+
+    normalizarAvisoAgroSamas: function(posts) {
+        if (!Array.isArray(posts)) return posts;
+        const aviso = this.getPostsIniciais()[0];
+        return posts.map(post => {
+            const desatualizado = post && post.slug === aviso.slug
+                && /18 a 21 de setembro de 2026|Roupa Nova está confirmado/.test([post.titulo, post.resumo, post.conteudo].join(' '));
+            return desatualizado
+                ? { ...post, titulo: aviso.titulo, resumo: aviso.resumo, conteudo: aviso.conteudo, dataPublicacao: aviso.dataPublicacao }
+                : post;
+        });
     },
     
     // Salvar posts no localStorage (fallback local)
@@ -88,15 +102,15 @@ const CMS = {
         return [
             {
                 id: 1,
-                titulo: '5º AgroSamas será realizado de 18 a 21 de setembro de 2026',
+                titulo: '5º AgroSamas adiado',
                 slug: 'agrosamas-2026-datas-confirmadas',
                 categoria: 'Eventos',
-                resumo: 'A 5ª edição do AgroSamas acontece durante quatro dias, de 18 a 21 de setembro de 2026, na Rua do Mathe e entorno.',
-                conteudo: 'O 5º AgroSamas será realizado de 18 a 21 de setembro de 2026, na Rua do Mathe e entorno, em São Mateus do Sul.\n\nRoupa Nova está confirmado para 20 de setembro. Novas atrações serão divulgadas em breve pelos canais oficiais do evento.',
+                resumo: 'O evento foi adiado preventivamente por recomendação da Defesa Civil. A nova data ainda não foi definida.',
+                conteudo: 'O 5º AgroSamas foi adiado preventivamente por recomendação da Defesa Civil, considerando as orientações da Defesa Civil do Paraná e do Simepar.\n\nA nova data ainda não foi definida e será divulgada posteriormente pelos canais oficiais.',
                 imagem: 'images/RUA_DO_MATHE.jpg',
                 linkOrigem: 'https://www.agrosamas.com.br/',
                 autor: 'Departamento de Turismo',
-                dataPublicacao: '2026-01-15T10:00:00',
+                dataPublicacao: '2026-09-24T00:00:00-03:00',
                 destaque: true,
                 publicado: true
             },

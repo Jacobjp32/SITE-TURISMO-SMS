@@ -33,6 +33,7 @@
     }
 
     function editionDates(edition) {
+        if (edition.status === 'POSTPONED' || !edition.startDate || !edition.endDate) return [];
         var start = toUtcNoon(edition.startDate);
         var end = toUtcNoon(edition.endDate);
         var dates = [];
@@ -79,6 +80,10 @@
     function renderSchema(edition) {
         var schema = one('#agrosamas-event-schema');
         if (!schema) return;
+        if (edition.status === 'POSTPONED') {
+            schema.remove();
+            return;
+        }
         var contractApi = api();
         var publicProgramming = contractApi.getPublicProgramming(edition.programming);
         var endExclusive = Date.parse(edition.temporal.liveEndExclusiveAt);
@@ -120,12 +125,17 @@
         var contractApi = api();
         if (!contractApi || !document) return false;
         var edition = contractApi.contract.edition;
-        document.title = edition.name + ' ' + edition.year + ' | São Mateus do Sul';
+        var pageTitle = edition.status === 'POSTPONED'
+            ? edition.name + ' adiado | São Mateus do Sul'
+            : edition.name + ' ' + edition.year + ' | São Mateus do Sul';
+        document.title = pageTitle;
         all('meta[property="og:title"], meta[name="twitter:title"]').forEach(function (meta) {
-            meta.setAttribute('content', edition.name + ' ' + edition.year + ' | São Mateus do Sul');
+            meta.setAttribute('content', pageTitle);
         });
-        setText('[data-agro-start-day]', dateDay(edition.startDate));
-        setText('[data-agro-end-day]', dateDay(edition.endDate));
+        if (edition.startDate && edition.endDate) {
+            setText('[data-agro-start-day]', dateDay(edition.startDate));
+            setText('[data-agro-end-day]', dateDay(edition.endDate));
+        }
         setText('[data-agro-location-scope]', edition.location.scope);
         setText('[data-agro-city-state]', edition.location.city + ' — ' + edition.location.state);
         all('[data-agro-location-link]').forEach(function (link) {
@@ -137,6 +147,15 @@
     }
 
     function temporalCopy(state, edition, now) {
+        if (state === 'POSTPONED') {
+            return {
+                kicker: 'EVENTO ADIADO',
+                lead: edition.postponement.reason + ' ' + edition.postponement.update,
+                status: edition.name + ' adiado · nova data ainda não definida',
+                action: 'Entenda o adiamento',
+                actionTarget: '#programacao'
+            };
+        }
         var timeZone = edition.temporal.timezone;
         var today = localDateKey(now, timeZone);
         if (state === 'EVENT_LIVE') {
@@ -260,7 +279,7 @@
         var copy = element('div');
         copy.appendChild(element('p', 'agro-kicker', 'Acompanhe as novidades'));
         copy.appendChild(element('h3', '', 'Novas atrações serão divulgadas em breve.'));
-        copy.appendChild(element('p', '', 'Os quatro dias da edição já estão confirmados. Volte para acompanhar os próximos anúncios.'));
+        copy.appendChild(element('p', '', 'A programação será divulgada quando houver confirmação oficial.'));
         var link = element('a', 'agro-button agro-button--dark', 'Visitar site oficial');
         link.setAttribute('href', edition.officialUrl);
         link.setAttribute('target', '_blank');
@@ -325,6 +344,17 @@
         if (!contractApi || !dayContainer || !content) return null;
         var edition = contractApi.contract.edition;
         var programming = contractApi.getPublicProgramming(programmingInput || edition.programming);
+        if (edition.status === 'POSTPONED') {
+            var postponedSection = one('#programacao');
+            if (postponedSection) postponedSection.setAttribute('data-programming-status', 'POSTPONED');
+            setText('[data-program-availability]', 'Evento adiado');
+            dayContainer.replaceChildren();
+            content.replaceChildren(
+                element('h3', '', 'Programação será atualizada após a definição da nova data.'),
+                element('p', '', edition.postponement.update)
+            );
+            return programming;
+        }
         var dates = editionDates(edition);
         var labels = {
             UNAVAILABLE: 'Novidades em breve',

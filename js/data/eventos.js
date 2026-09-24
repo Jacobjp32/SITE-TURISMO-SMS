@@ -5,7 +5,7 @@ window.TURISMO_EVENTOS = [
     activeEditionId: "agrosamas-2026",
     nome: "AgroSamas",
     categoria: "Eventos",
-    descricao: "Evento anual de São Mateus do Sul, com informações da edição vigente publicadas pelos canais oficiais.",
+    descricao: "5º AgroSamas adiado preventivamente. Nova data ainda não definida; será divulgada pelos canais oficiais.",
     imagem: "images/agrosamas-publico-show-noturno.webp",
     galeria: [
       "images/agrosamas-publico-show-noturno.webp",
@@ -18,11 +18,11 @@ window.TURISMO_EVENTOS = [
     editionUrl: "/agrosamas-2026",
     localId: "rua-do-mathe",
     localUrl: "/local?id=rua-do-mathe",
-    periodo: "Setembro",
+    periodo: "Nova data a definir",
     local: "Rua do Mathe",
     recorrencia: "anual",
     coordenadas: { lat: -25.878, lng: -50.385 },
-    tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "setembro"]
+    tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "adiado"]
   },
   {
     id: "natal-ouro-verde",

@@ -16,6 +16,7 @@
         PRE_EVENT: 'PRE_EVENT',
         EVENT_LIVE: 'EVENT_LIVE',
         POST_EVENT: 'POST_EVENT',
+        POSTPONED: 'POSTPONED',
         UNKNOWN: 'UNKNOWN'
     });
     const LOCALE_BY_LANGUAGE = Object.freeze({
@@ -55,6 +56,12 @@
             edition: 5,
             name: '5º AgroSamas',
             year: 2026,
+            status: 'POSTPONED',
+            newDate: null,
+            postponement: {
+                reason: 'O evento foi adiado preventivamente por recomendação da Defesa Civil, considerando as orientações da Defesa Civil do Paraná e do Simepar.',
+                update: 'A nova data ainda não foi definida e será divulgada posteriormente pelos canais oficiais.'
+            },
             route: '/agrosamas-2026',
             canonicalUrl: 'https://turismo.saomateusdosul.pr.gov.br/agrosamas-2026',
             role: 'EDITION_ARCHIVE',
@@ -68,9 +75,16 @@
                 height: 1222,
                 sha256: '5ceb3d4ffba413d88f2e157d8202916f206c049c04bdb505ee5629043990b839'
             },
-            startDate: '2026-09-18',
-            endDate: '2026-09-21',
-            durationDays: 4,
+            startDate: null,
+            endDate: null,
+            durationDays: null,
+            originalSchedule: {
+                startDate: '2026-09-18',
+                endDate: '2026-09-21',
+                durationDays: 4,
+                liveStartAt: '2026-09-18T00:00:00-03:00',
+                liveEndExclusiveAt: '2026-09-22T00:00:00-03:00'
+            },
             location: {
                 id: 'rua-do-mathe',
                 name: 'Rua do Mathe',
@@ -82,8 +96,8 @@
             },
             temporal: {
                 timezone: 'America/Sao_Paulo',
-                liveStartAt: '2026-09-18T00:00:00-03:00',
-                liveEndExclusiveAt: '2026-09-22T00:00:00-03:00',
+                liveStartAt: null,
+                liveEndExclusiveAt: null,
                 states: {
                     PRE_EVENT: {
                         heroMode: 'COUNTDOWN',
@@ -121,8 +135,9 @@
                     sources: [OFFICIAL_SOURCES.event, OFFICIAL_SOURCES.municipality]
                 },
                 dates: {
-                    status: 'CONFIRMED',
+                    status: 'LEGACY',
                     value: ['2026-09-18', '2026-09-21'],
+                    publicForEdition: false,
                     sources: [OFFICIAL_SOURCES.event, OFFICIAL_SOURCES.municipality]
                 },
                 location: {
@@ -131,8 +146,9 @@
                     sources: [OFFICIAL_SOURCES.event]
                 },
                 missDate: {
-                    status: 'CONFIRMED',
+                    status: 'LEGACY',
                     value: '2026-09-18',
+                    publicForEdition: false,
                     sources: [OFFICIAL_SOURCES.miss]
                 },
                 anniversaryIntegration: {
@@ -144,8 +160,8 @@
                     sources: [OFFICIAL_SOURCES.municipality]
                 },
                 programming: {
-                    status: 'CONFIRMED',
-                    value: 'PARTIAL',
+                    status: 'NOT_YET_ANNOUNCED',
+                    value: null,
                     sources: [OFFICIAL_SOURCES.contentOwner]
                 },
                 admission: {
@@ -182,7 +198,7 @@
                 }
             },
             programming: {
-                availability: 'PARTIAL',
+                availability: 'UNAVAILABLE',
                 fallbackKey: 'agrosamas-programming-fallback',
                 source: OFFICIAL_SOURCES.contentOwner,
                 verifiedAt: '2026-09-10',
@@ -195,7 +211,7 @@
                     category: 'Música',
                     featured: true,
                     source: OFFICIAL_SOURCES.contentOwner,
-                    contentStatus: 'CONFIRMED'
+                    contentStatus: 'LEGACY'
                 }]
             },
             fallbacks: {
@@ -228,6 +244,8 @@
 
     function resolveTemporalState(now) {
         const current = asTime(now);
+        if (!Number.isFinite(current)) return TEMPORAL_STATE.UNKNOWN;
+        if (contract.edition.status === 'POSTPONED') return TEMPORAL_STATE.POSTPONED;
         const start = Date.parse(contract.edition.temporal.liveStartAt);
         const end = Date.parse(contract.edition.temporal.liveEndExclusiveAt);
         if (!Number.isFinite(current) || !Number.isFinite(start) || !Number.isFinite(end) || start >= end) {
@@ -244,6 +262,14 @@
     }
 
     function formatDateRange(language, options) {
+        if (contract.edition.status === 'POSTPONED') {
+            return {
+                pt: 'Nova data a definir',
+                en: 'New date to be announced',
+                es: 'Nueva fecha por definir',
+                pl: 'Nowy termin zostanie podany'
+            }[normalizeLanguage(language)];
+        }
         const locale = LOCALE_BY_LANGUAGE[normalizeLanguage(language)];
         const short = Boolean(options && options.short);
         const formatter = new Intl.DateTimeFormat(locale, {
@@ -260,6 +286,14 @@
     }
 
     function formatStartMonth(language) {
+        if (contract.edition.status === 'POSTPONED') {
+            return {
+                pt: 'ADIADO',
+                en: 'POSTPONED',
+                es: 'APLAZADO',
+                pl: 'PRZEŁOŻONE'
+            }[normalizeLanguage(language)];
+        }
         const locale = LOCALE_BY_LANGUAGE[normalizeLanguage(language)];
         const start = new Date(contract.edition.startDate + 'T12:00:00Z');
         return new Intl.DateTimeFormat(locale, {
@@ -269,8 +303,22 @@
     }
 
     function isEditionDate(value) {
-        return typeof value === 'string' &&
+        return contract.edition.status !== 'POSTPONED' &&
+            typeof value === 'string' &&
             value >= contract.edition.startDate && value <= contract.edition.endDate;
+    }
+
+    function isSupersededOccurrence(raw) {
+        if (contract.edition.status !== 'POSTPONED' || !raw || typeof raw !== 'object') return false;
+        const value = raw.date || raw.data || raw.dataInicio;
+        const date = typeof value === 'string' ? value.slice(0, 10) : '';
+        const original = contract.edition.originalSchedule;
+        if (date < original.startDate || date > original.endDate) return false;
+        const identity = [raw.title, raw.titulo, raw.nome, raw.description, raw.descricao]
+            .filter(hasText).join(' ');
+        return raw.seriesId === contract.series.id ||
+            raw.editionId === contract.edition.id ||
+            /agro[\s-]*samas/i.test(identity);
     }
 
     function hasText(value) {
@@ -280,7 +328,9 @@
     function getPublicProgramming(programming) {
         const source = programming || contract.edition.programming;
         const availabilityValues = Object.values(PROGRAMMING_AVAILABILITY);
-        const availability = source && availabilityValues.includes(source.availability)
+        const availability = contract.edition.status === 'POSTPONED'
+            ? PROGRAMMING_AVAILABILITY.UNAVAILABLE
+            : source && availabilityValues.includes(source.availability)
             ? source.availability
             : PROGRAMMING_AVAILABILITY.UNAVAILABLE;
         const items = availability !== PROGRAMMING_AVAILABILITY.UNAVAILABLE && source && Array.isArray(source.items)
@@ -315,6 +365,7 @@
         resolveTemporalState,
         formatDateRange,
         formatStartMonth,
+        isSupersededOccurrence,
         getPublicProgramming
     });
 

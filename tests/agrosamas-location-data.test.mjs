@@ -26,13 +26,7 @@ const OLD_PARK_LOCATION = Object.freeze({
     lng: -50.39
 });
 
-const EXPECTED_CALENDAR_OCCURRENCES = new Map([
-    [199, { date: '2026-09-18', location: 'Rua do Mathe' }],
-    [200, { date: '2026-09-19', location: 'Rua do Mathe' }],
-    [201, { date: '2026-09-18', location: 'Rua do Mathe' }],
-    [202, { date: '2026-09-20', location: 'Rua do Mathe' }],
-    [203, { date: '2026-09-21', location: 'Rua do Mathe' }]
-]);
+const POSTPONED_OCCURRENCE_IDS = [199, 200, 201, 202, 203];
 
 const EXPECTED_PARK_EVENTS = new Map([
     [114, { title: 'Miss Paraná Internacional', date: '2026-06-17' }],
@@ -134,19 +128,14 @@ test('otherEventsUsingParquePreserved=true', () => {
     }
 });
 
-test('calendarOccurrencesPreserved=true; datesPreserved=true; duplicateCalendarIds=0', () => {
+test('postponedCalendarOccurrencesRemoved=true; duplicateCalendarIds=0', () => {
     const calendarIds = CALENDAR.map(item => item.id);
     assert.equal(new Set(calendarIds).size, calendarIds.length);
 
-    for (const [id, expected] of EXPECTED_CALENDAR_OCCURRENCES) {
-        const matches = CALENDAR.filter(item => item.id === id);
-        assert.equal(matches.length, 1, `AgroSamas occurrence ${id}`);
-        assert.equal(matches[0].data, expected.date, `date ${id}`);
-        assert.equal(matches[0].local, expected.location, `location ${id}`);
-        assert.match(matches[0].titulo, /AgroSamas/);
-        assert.equal(matches[0].seriesId, 'agrosamas', `seriesId ${id}`);
-        assert.equal(matches[0].editionId, 'agrosamas-2026', `editionId ${id}`);
+    for (const id of POSTPONED_OCCURRENCE_IDS) {
+        assert.equal(CALENDAR.some(item => item.id === id), false, `postponed occurrence ${id}`);
     }
+    assert.equal(CALENDAR.some(item => item.seriesId === 'agrosamas' && item.editionId === 'agrosamas-2026'), false);
 });
 
 test('eventIdentityPreserved=true', () => {
@@ -158,7 +147,7 @@ test('eventIdentityPreserved=true', () => {
     assert.equal(agrosamas.hubUrl, '/agrosamas');
     assert.equal(agrosamas.editionUrl, '/agrosamas-2026');
     assert.equal(agrosamas.categoria, 'Eventos');
-    assert.equal(agrosamas.periodo, 'Setembro');
+    assert.equal(agrosamas.periodo, 'Nova data a definir');
     assert.equal(agrosamas.recorrencia, 'anual');
 });
 
