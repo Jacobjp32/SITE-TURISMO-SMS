@@ -7,7 +7,7 @@ const HOME_SOURCE = readFileSync(new URL('../index.html', import.meta.url), 'utf
 const INITIALIZER_URL = new URL('../js/home-hero-video.js', import.meta.url);
 const INITIALIZER_EXISTS = existsSync(INITIALIZER_URL);
 const INITIALIZER_SOURCE = INITIALIZER_EXISTS ? readFileSync(INITIALIZER_URL, 'utf8') : '';
-const EXPECTED_VIDEO_PATH = 'videos/ROTA_DO_TURISMO.hero-720p.mp4';
+const EXPECTED_VIDEO_PATH = 'videos/ROTA_DO_TURISMO.hero-720p-opt-v1.mp4';
 
 function parseAttributes(source) {
     const attributes = new Map();
