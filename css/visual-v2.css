@@ -546,3 +546,15 @@ body.nav-menu-open .back-to-top { visibility: hidden !important; }
     background-size: 24px 24px, 24px 24px, auto !important;
     background-position: 0 0, 12px 12px, 0 0 !important;
 }
+
+/* Mapa no celular: ações em linha sob o card (antes empilhavam e dobravam a altura) */
+@media (max-width: 768px) {
+    .v2-mapa .map-list-thumb { grid-row: 1 !important; height: 100% !important; min-height: 92px !important; }
+    .v2-mapa .map-list-card-actions {
+        grid-column: 1 / -1 !important; display: flex !important; flex-direction: row !important; flex-wrap: wrap;
+        align-items: center; gap: 0.25rem 1rem !important; padding: 0.6rem 0.75rem 0.75rem !important;
+        border-top: 1px solid var(--v2-line);
+    }
+    .v2-mapa .map-list-card-actions .map-button.primary { flex: 0 0 auto !important; width: auto !important; min-height: 40px; padding: 0.5rem 1rem !important; }
+    .v2-mapa .map-list-card-actions .map-button:not(.primary) { width: auto !important; flex: 0 0 auto !important; }
+}
