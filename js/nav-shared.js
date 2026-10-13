@@ -472,7 +472,7 @@ body.font-larger{font-size:140%!important;}
 
     if (!hasLoadedScript('js/site-meta.js')) {
         var metaScript = document.createElement('script');
-        metaScript.src = 'js/site-meta.js?v=site-mes-polones-20260805-1417';
+        metaScript.src = 'js/site-meta.js?v=visual-v21-20261013';
         metaScript.defer = true;
         document.body.appendChild(metaScript);
     }
