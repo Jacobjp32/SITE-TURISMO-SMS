@@ -52,14 +52,18 @@
     <script src="js/data/turismo-data.js?v=admin-e2e-publication-20260911" defer></script>
     <script src="js/publication-contracts.js?v=security-hardening-02a-20260913" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js" defer></script>
-    <script src="js/mapa-turistico.js?v=v22-20261013" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/leaflet.markercluster.js" defer></script>
+    <script src="js/mapa-ilustrado.js?v=mapa-ilustrado-20261013" defer></script>
+    <script src="js/mapa-turistico.js?v=mapa-ilustrado-20261013" defer></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/recortes.css?v=v22-20261013">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css">
+    <link rel="stylesheet" href="css/mapa-ilustrado.css?v=mapa-ilustrado-20261013">
 </head>
-<body class="v2-page v2-mapa recortes rc-mapa">
+<body class="v2-page v2-mapa recortes rc-mapa mi-on">
     <script src="js/nav-shared.js?v=nav-v22-release-20261013"></script>
     <script src="js/recortes.js?v=v22-20261013" defer></script>
 
@@ -102,7 +106,7 @@
                             </div>
                             <span class="map-stage-badge" data-map-i18n="stageBadge">OpenStreetMap</span>
                         </div>
-                        <div id="tourismMap" aria-label="Mapa turístico de São Mateus do Sul"></div>
+                        <div class="mi-stage" id="miStage"><div id="tourismMap" aria-label="Mapa turístico de São Mateus do Sul"></div></div>
                         <div class="map-stage-foot">
                             <p data-map-i18n="stageSummary">Use os filtros para destacar categorias turísticas.</p>
                             <p><strong id="mapTotalItems">0</strong> <span id="mapTotalLabel" data-map-i18n="totalItemsLabel">itens catalogados</span></p>
@@ -154,6 +158,13 @@
             </section>
         </div>
     </main>
+    <footer class="footer" id="footer">
+        <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>
+        <p style="margin-top: 0.5rem;">
+            <a href="/">Portal de Turismo</a> |
+            <a href="/transparencia">Transparência</a>
+        </p>
+    </footer>
     <!-- Bloco 4F: carregador público de banners publicados. -->
     <script src="js/public-banners.js?v=site-public-bannerfit-20260805" defer></script>
     <!-- Bloco S12: mascote interativo de turismo. -->

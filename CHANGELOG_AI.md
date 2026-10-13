@@ -6,6 +6,36 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-13 — MAPA ILUSTRADO "Recortes de São Mateus" (mapa-turistico)
+
+**Status:** **A. IMPLEMENTADO E VALIDADO LOCALMENTE — commit local na branch `criativo/mapa-ilustrado`; sem push e sem deploy.**
+
+### O que mudou
+
+- Nova camada ilustrada do mapa (`js/mapa-ilustrado.js`, `css/mapa-ilustrado.css`), ativa por `body.mi-on`: oito famílias de pins SVG com silhueta própria (arco, roseta, araucária, cuia, prato, chaveiro, folhinha, placa) e cinco marcos desenhados a partir das fotos do acervo (Igreja da Água Branca, Igreja Matriz, Ponte do Rio Iguaçu, Casa da Memória, Vapor Pery).
+- Agrupamento com Leaflet.markercluster 1.5.3 (cdnjs, já permitido pela CSP): rosetas com contagem e anel de categorias; o grupo que contém um marco mostra o desenho do marco, sem âncora de coordenada; leque (spiderfy) no zoom máximo.
+- Ficha integrada ao mapa: painel lateral no desktop e ficha inferior recolhível/expansível no celular, com foto real, categoria, título, descrição e as duas ações ("Abrir ficha"/"Ver detalhes" e "Como chegar"). O painel lateral antigo fica oculto no modo ilustrado (substituído pela ficha).
+- Roteiros: barra sobre o mapa (botão único "Roteiros · 6" com grade no celular); paradas destacadas na cor do roteiro com agrupamento próprio, demais lugares esmaecidos, lista numerada de paradas; sem traçado de percurso. `?rota=` passa a destacar o roteiro em vez de esconder os demais lugares.
+- Acessibilidade: Enter/Espaço em marcadores e rosetas (o Leaflet só liga Enter a popups), foco no título da ficha, Esc devolve o foco ao marcador; rótulos acessíveis nas rosetas; textos novos em PT/EN/ES/PL.
+- Página do mapa ganhou o mesmo rodapé simples das demais páginas (`#footer`): o atalho Alt+4 passa a ter destino e a preferência de cookies deixa de flutuar sobre o mapa. Zoom do mapa vai para a borda esquerda no celular (a direita é do VLibras, cuja posição não foi alterada).
+
+### Precisão geográfica (sem alterar dados nem CMS)
+
+- Coordenadas comprovadas aplicadas como correção de apresentação, somente enquanto a fonte ainda trouxer o valor antigo: Ponte do Rio Iguaçu (OSM way 93278826), Igreja Matriz (OSM way 243982311), Casa da Memória (OSM node 5676214480), Rua do Mathe e eventos sediados nela (OSM way 973886282), Igreja da Água Branca (Google Maps "Capela São José" e Plus Code 6MP4+RX informados pela equipe). Link de rota quebrado da Água Branca (HTTP 404) substituído pela coordenada.
+- Localização aproximada marcada no pin (âncora tracejada) e na ficha, com "Como chegar" buscando pelo nome: coordenadas com até duas casas decimais, coordenadas repetidas por lugares diferentes, e Arena Cultural/Ginásio Polacão (sem fonte, na margem do Iguaçu).
+- Notas internas do cadastro ("(confirmar …)", telefone de preenchimento) não aparecem nas fichas do mapa, inclusive na janela de detalhes.
+
+### Validação
+
+- QA com interações reais em 360, 390 e 1440 px; medição automática de sobreposição dos ícones por zoom (12–19) e nos seis roteiros; fallback testado sem markercluster e sem `js/mapa-ilustrado.js`; quatro idiomas.
+- `node --test` público: 434 testes, 432 pass; as 2 falhas são artefato de CRLF do checkout em arquivos não tocados (`js/firebase-auth.js`, admin) e passam com LF. Novo `tests/mapa-ilustrado.test.mjs` (8/8).
+
+### Pendências para o CMS (validação humana)
+
+- Atualizar no CMS as coordenadas comprovadas acima e o `mapsUrl` da Igreja da Água Branca; confirmar posição de Arena Cultural, Ginásio Polacão, Parque de Exposições, Prefeitura/Prédio Histórico/Novo Paço, Ervateira Taquaral e dos grupos com coordenada repetida (Fluviópolis e Vista Alegre).
+
+---
+
 ## 2026-08-21 — POST-V1-ROTAS-V1.1-ROLLOUT-PREP
 
 **Status:** **A. ROLLOUT PREP COMPLETE — plano fail-closed definido; rollout permanece pendente.**

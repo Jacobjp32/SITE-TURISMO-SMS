@@ -1,0 +1,359 @@
+/* ==========================================================================
+   MAPA ILUSTRADO — protótipo local (não publicado)
+   Escopo: body.mi-on (mapa-turistico.html). Depende de css/recortes.css.
+   O mapa continua sendo o Leaflet + OpenStreetMap: aqui só muda a camada
+   de marcadores, os agrupamentos, a ficha e os controles sobrepostos.
+   ========================================================================== */
+
+body.mi-on {
+    --mi-ink: #1b231d;
+    --mi-paper: #fbf8f2;
+    --mi-paper-2: #f4eee3;
+    --mi-line: rgba(27, 35, 29, .16);
+    --mi-red: #b3322a;
+    --mi-sheet-w: 368px;
+}
+
+/* ---------- Palco: o mapa ocupa a largura; a ficha entra dentro dele ---------- */
+body.mi-on .map-layout { grid-template-columns: minmax(0, 1fr) !important; }
+/* O painel lateral antigo ("Resumo" + "Local em destaque") é substituído pela ficha
+   integrada ao mapa; os mesmos números continuam na barra de busca. */
+body.mi-on .map-sidebar { display: none !important; }
+body.mi-on .mi-stage { position: relative; isolation: isolate; }
+body.mi-on #tourismMap { height: clamp(520px, 74vh, 780px) !important; border-radius: 0; }
+body.mi-on .leaflet-container { font-family: var(--rc-text, system-ui) !important; }
+
+/* Controles nativos do Leaflet no vocabulário Recortes */
+body.mi-on .leaflet-control-zoom { border: 1px solid var(--mi-line) !important; border-radius: 10px !important; overflow: hidden; box-shadow: 0 1px 0 rgba(27,35,29,.08) !important; }
+body.mi-on .leaflet-control-zoom a { width: 40px !important; height: 40px !important; line-height: 38px !important; background: var(--mi-paper) !important; color: var(--mi-ink) !important; font: 400 22px/38px var(--rc-display, Georgia) !important; }
+body.mi-on .leaflet-control-zoom a:focus-visible { outline: 3px solid var(--mi-red); outline-offset: -3px; }
+body.mi-on .leaflet-top.leaflet-right { transition: right .2s ease; }
+body.mi-on .leaflet-control-attribution { background: rgba(251, 248, 242, .88) !important; font-size: 11px !important; }
+
+/* ---------- Pins ---------- */
+.mi-icon { background: none !important; border: 0 !important; }
+.mi-icon:focus { outline: none; }
+.mi-pin { position: relative; display: block; width: 100%; height: 100%; transform-origin: 50% 94%; transition: transform .16s ease, opacity .2s ease, filter .2s ease; isolation: isolate; }
+.mi-pin svg { display: block; overflow: visible; filter: drop-shadow(0 0 .7px #fbf8f2) drop-shadow(0 0 .7px #fbf8f2) drop-shadow(1.2px 1.8px 0 rgba(27, 35, 29, .24)); }
+.mi-icon:hover .mi-pin { transform: scale(1.1); }
+.mi-icon:focus-visible .mi-pin { transform: scale(1.12); }
+.mi-icon:focus-visible .mi-pin::after { content: ""; position: absolute; inset: -5px -5px 0; border: 2.5px solid var(--mi-red, #b3322a); border-radius: 12px; }
+
+/* Selecionado: cresce e ganha o anel recortado vermelho no ponto exato */
+.mi-pin.is-selected { transform: scale(1.32); z-index: 2; }
+.mi-pin.is-selected::before {
+    content: ""; position: absolute; left: 50%; bottom: -5px; width: 22px; height: 10px; margin-left: -11px;
+    border-radius: 50%; border: 2px dashed #b3322a; background: rgba(179, 50, 42, .14); z-index: -1;
+}
+.mi-pin.is-landmark.is-selected { transform: scale(1.18); }
+.leaflet-container:not(.mi-z-near) .mi-pin.is-landmark { transform: scale(.72); }
+.leaflet-container:not(.mi-z-near) .mi-icon:hover .mi-pin.is-landmark,
+.leaflet-container:not(.mi-z-near) .mi-icon:focus-visible .mi-pin.is-landmark { transform: scale(.82); }
+.leaflet-container:not(.mi-z-near) .mi-pin.is-landmark.is-selected { transform: scale(.95); }
+.leaflet-container.mi-z-mid .mi-pin.is-landmark { transform: scale(.82); }
+.leaflet-container.mi-z-mid .mi-icon:hover .mi-pin.is-landmark,
+.leaflet-container.mi-z-mid .mi-icon:focus-visible .mi-pin.is-landmark { transform: scale(.9); }
+.leaflet-container.mi-z-mid .mi-pin.is-landmark.is-selected { transform: scale(1); }
+
+/* Roteiro em destaque: halo na cor do roteiro; o restante recua */
+.mi-pin.is-route::before {
+    content: ""; position: absolute; left: 50%; top: 38%; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+    border-radius: 50%; background: color-mix(in srgb, var(--mi-route, #b3322a) 18%, transparent);
+    border: 2px solid var(--mi-route, #b3322a); z-index: -1;
+}
+.mi-pin.is-landmark.is-route::before { top: 44%; width: 62px; height: 62px; margin: -31px 0 0 -31px; }
+.mi-pin.is-dim { opacity: .3; filter: grayscale(.9); }
+.mi-icon:hover .mi-pin.is-dim { opacity: .7; }
+
+/* Rótulos dos marcos (somente de perto) */
+.mi-pin-label {
+    position: absolute; top: calc(100% - 2px); left: 50%; transform: translateX(-50%); display: none;
+    white-space: nowrap; padding: 3px 7px; border-radius: 4px; background: var(--mi-paper, #fbf8f2);
+    border: 1px solid rgba(27, 35, 29, .18); font: 600 11px/1.1 var(--rc-text, system-ui); color: #1b231d;
+    letter-spacing: .01em; pointer-events: none;
+}
+.mi-icon:hover .mi-pin-label, .mi-icon:focus-visible .mi-pin-label { display: block; }
+.mi-pin.is-selected .mi-pin-label { display: block; transform: translateX(-50%) scale(.76); transform-origin: 50% 0; }
+.mi-pin.is-dim .mi-pin-label { display: none; }
+
+/* ---------- Agrupamentos: roseta com contagem e anel de categorias ---------- */
+.mi-cluster { position: relative; display: block; transition: transform .16s ease; }
+.mi-cluster svg { display: block; filter: drop-shadow(1.2px 1.8px 0 rgba(27, 35, 29, .26)); }
+.mi-cluster-count {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    font: 600 16px/1 var(--rc-display, Georgia); color: #1b231d; font-variant-numeric: lining-nums;
+}
+.mi-cluster-icon:hover .mi-cluster, .mi-cluster-icon:focus-visible .mi-cluster { transform: scale(1.08); }
+.mi-cluster-icon:focus-visible { outline: none; }
+.mi-cluster-icon:focus-visible .mi-cluster { outline: 3px solid #b3322a; outline-offset: 2px; border-radius: 50%; }
+.mi-route-active .mi-cluster-icon { opacity: .38; }
+@media (prefers-reduced-motion: reduce) {
+    .mi-pin, .mi-cluster, body.mi-on .leaflet-top.leaflet-right { transition: none !important; }
+}
+
+/* ---------- Barra de roteiros (sobre o mapa, no alto) ---------- */
+.mi-routes {
+    position: absolute; z-index: 650; top: 10px; left: 10px; right: 64px;
+    display: flex; gap: 6px; align-items: center; overflow-x: auto; scrollbar-width: none;
+    padding: 2px; -webkit-overflow-scrolling: touch; transition: right .2s ease;
+}
+.mi-routes::-webkit-scrollbar { display: none; }
+.mi-routes-label {
+    flex: 0 0 auto; padding: 0 10px; min-height: 36px; display: inline-flex; align-items: center;
+    border-radius: 999px; background: #1b231d; color: #fbf8f2;
+    font: 600 .7rem/1 var(--rc-text, system-ui); letter-spacing: .14em; text-transform: uppercase;
+}
+.mi-route-chip {
+    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid rgba(27, 35, 29, .2); background: rgba(251, 248, 242, .97);
+    color: #1b231d; font: 600 .82rem/1 var(--rc-text, system-ui); cursor: pointer; white-space: nowrap;
+    box-shadow: 0 1px 0 rgba(27, 35, 29, .1);
+}
+.mi-route-chip:hover { border-color: #1b231d; }
+.mi-route-chip:focus-visible { outline: 3px solid #b3322a; outline-offset: 2px; }
+.mi-route-dot { width: 10px; height: 10px; flex: 0 0 10px; border-radius: 50%; background: var(--mi-route, #b3322a); box-shadow: 0 0 0 2px rgba(251, 248, 242, .9); }
+.mi-route-chip.is-active { background: var(--mi-route, #b3322a); border-color: var(--mi-route, #b3322a); color: #fff; }
+.mi-route-chip.is-active .mi-route-dot { background: #fff; box-shadow: none; }
+.mi-route-chip.is-small { min-height: 32px; font-size: .78rem; padding: 0 10px; }
+
+/* ---------- Legenda ---------- */
+.mi-legend { position: absolute; z-index: 640; left: 10px; bottom: 26px; max-width: calc(100% - 20px); }
+.mi-legend-toggle {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px;
+    border-radius: 999px; border: 1px solid rgba(27, 35, 29, .2); background: rgba(251, 248, 242, .97);
+    color: #1b231d; font: 600 .78rem/1 var(--rc-text, system-ui); cursor: pointer;
+}
+.mi-legend-toggle::after { content: "▾"; font-size: .7rem; transition: transform .15s; }
+.mi-legend.is-open .mi-legend-toggle::after { transform: rotate(180deg); }
+.mi-legend-toggle:focus-visible { outline: 3px solid #b3322a; outline-offset: 2px; }
+.mi-legend-body {
+    display: none; margin-bottom: 6px; padding: 10px 12px 8px; width: 238px;
+    background: rgba(251, 248, 242, .98); border: 1px solid rgba(27, 35, 29, .16); border-radius: 10px;
+    box-shadow: 0 12px 28px -18px rgba(27, 35, 29, .5);
+}
+.mi-legend.is-open { display: flex; flex-direction: column-reverse; align-items: flex-start; }
+.mi-legend.is-open .mi-legend-body { display: block; }
+.mi-legend ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px; }
+.mi-legend li { display: flex; align-items: center; gap: 6px; font: 500 .78rem/1.2 var(--rc-text, system-ui); color: #1b231d; }
+.mi-legend-pin svg { width: 20px; height: 26px; display: block; }
+.mi-legend-note { display: flex; align-items: center; gap: 8px; margin: 8px 0 0; padding-top: 8px; border-top: 1px solid rgba(27, 35, 29, .12); font: 400 .74rem/1.3 var(--rc-text, system-ui); color: #4b544c; }
+.mi-legend-landmark svg { width: 26px; height: 32px; display: block; }
+
+/* ---------- Ficha (painel editorial no desktop) ---------- */
+.mi-sheet {
+    position: absolute; z-index: 700; top: 12px; right: 12px; bottom: auto; width: var(--mi-sheet-w);
+    max-height: calc(100% - 24px); overflow: auto; overscroll-behavior: contain;
+    background: var(--mi-paper, #fbf8f2); color: #1b231d; border: 1px solid rgba(27, 35, 29, .18);
+    border-radius: 12px; box-shadow: 0 22px 44px -22px rgba(27, 35, 29, .55);
+}
+.mi-sheet[hidden] { display: none; }
+body.mi-on .mi-sheet-open .leaflet-top.leaflet-right { right: calc(var(--mi-sheet-w) + 14px); }
+.mi-sheet-open .mi-routes { right: calc(var(--mi-sheet-w) + 74px); }
+.mi-sheet-handle { display: none; }
+.mi-sheet-close {
+    position: absolute; z-index: 3; top: 10px; right: 10px; width: 40px; height: 40px; border-radius: 50%;
+    border: 1px solid rgba(27, 35, 29, .2); background: rgba(251, 248, 242, .95); color: #1b231d;
+    font: 400 26px/1 var(--rc-display, Georgia); cursor: pointer; display: grid; place-items: center; padding: 0 0 3px;
+}
+.mi-sheet-close:hover { background: #1b231d; color: #fbf8f2; }
+.mi-sheet-close:focus-visible, .mi-sheet-handle:focus-visible { outline: 3px solid #b3322a; outline-offset: 2px; }
+.mi-sheet-media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 11px 11px 0 0; background: #ebe3d4; }
+.mi-sheet-media:empty { display: none; }
+.mi-sheet-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Sem foto cadastrada: o pin da família, ampliado, sobre papel com a cor da família */
+.mi-sheet-art {
+    width: 100%; height: 100%; display: grid; place-items: center;
+    background:
+        radial-gradient(circle at 50% 46%, color-mix(in srgb, var(--mi-fam) 14%, #fbf8f2) 0 34%, transparent 35%),
+        color-mix(in srgb, var(--mi-fam) 7%, #f4eee3);
+}
+.mi-sheet-art svg { width: 96px; height: auto; filter: drop-shadow(2px 3px 0 rgba(27, 35, 29, .18)); }
+.mi-sheet-art .mi-landmark-svg { width: 132px; }
+.mi-sheet-main { padding: 14px 18px 18px; }
+.mi-sheet-kicker { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; font: 600 .72rem/1.2 var(--rc-text, system-ui); letter-spacing: .14em; text-transform: uppercase; color: #2c6445; }
+.mi-sheet-kicker-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--mi-fam, #b3322a); flex: 0 0 10px; }
+.mi-sheet-title { margin: 0 0 12px; font: 400 1.62rem/1.08 var(--rc-display, Georgia) !important; letter-spacing: -.012em; color: #1b231d !important; font-variation-settings: "SOFT" 40, "opsz" 72; }
+.mi-sheet-title:focus { outline: none; }
+.mi-sheet-title:focus-visible { outline: 3px solid #b3322a; outline-offset: 3px; border-radius: 4px; }
+.mi-sheet-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.mi-sheet-actions .map-button { min-height: 44px !important; padding: 0 16px !important; font-size: .86rem !important; display: inline-flex; align-items: center; }
+.mi-sheet-desc { margin: 0 0 12px; font: 400 .92rem/1.55 var(--rc-text, system-ui); color: #33403a; }
+.mi-sheet-note { margin: 0 0 12px; padding: 8px 10px; border-left: 3px solid #c8913f; background: rgba(200, 145, 63, .1); font: 400 .8rem/1.45 var(--rc-text, system-ui); color: #4b544c; }
+.mi-sheet-meta { list-style: none; margin: 0 0 12px; padding: 0; display: grid; gap: 6px; font: 400 .84rem/1.4 var(--rc-text, system-ui); color: #33403a; }
+.mi-sheet-meta li { display: flex; gap: 8px; }
+.mi-sheet-routes { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 12px; font: 600 .72rem/1 var(--rc-text, system-ui); letter-spacing: .12em; text-transform: uppercase; color: #4b544c; }
+.mi-sheet-routes span:first-child { margin-right: 2px; }
+.mi-sheet .map-related-events { margin-top: 4px; }
+.mi-stops { list-style: none; margin: 0; padding: 0; counter-reset: stop; display: grid; gap: 2px; }
+.mi-stops li { counter-increment: stop; }
+.mi-stops button {
+    width: 100%; display: grid; grid-template-columns: 26px 26px minmax(0, 1fr); align-items: center; gap: 8px;
+    min-height: 44px; padding: 4px 6px; border: 0; border-bottom: 1px solid rgba(27, 35, 29, .1);
+    background: transparent; text-align: left; cursor: pointer; color: #1b231d; font: 500 .88rem/1.25 var(--rc-text, system-ui);
+}
+.mi-stops button::before { content: counter(stop, decimal-leading-zero); font: italic 400 .86rem/1 var(--rc-display, Georgia); color: #b3322a; }
+.mi-stops button:hover { background: rgba(27, 35, 29, .05); }
+.mi-stops button:focus-visible { outline: 3px solid #b3322a; outline-offset: -2px; }
+.mi-stops button[disabled] { cursor: default; color: #6f766f; }
+.mi-stops em { font-style: normal; font-size: .76rem; color: #6f766f; }
+.mi-stop-pin svg { width: 22px; height: 28px; display: block; }
+
+/* ---------- Celular e tablet: ficha inferior expansível dentro do mapa ---------- */
+@media (max-width: 968px) {
+    body.mi-on .mi-sheet {
+        top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; max-height: 44%;
+        border-radius: 16px 16px 12px 12px; overflow: hidden; display: flex; flex-direction: column;
+    }
+    body.mi-on .mi-sheet[hidden] { display: none; }
+    body.mi-on .mi-sheet.is-expanded { max-height: 80%; }
+    body.mi-on .mi-sheet-open .leaflet-top.leaflet-right { right: 0; }
+    body.mi-on .mi-sheet-open .mi-routes { right: 64px; }
+    .mi-sheet-handle {
+        display: grid; place-items: center; flex: 0 0 auto; width: 100%; height: 22px; padding: 0;
+        border: 0; background: transparent; cursor: pointer;
+    }
+    .mi-sheet-grip { width: 42px; height: 5px; border-radius: 999px; background: rgba(27, 35, 29, .28); }
+    .mi-sheet-handle-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+    .mi-sheet-close { top: 18px; right: 8px; width: 40px; height: 40px; }
+    .mi-sheet-body { overflow: auto; overscroll-behavior: contain; flex: 1 1 auto; }
+
+    /* Recolhida: miniatura + nome + ações (o mapa continua navegável) */
+    .mi-sheet:not(.is-expanded) .mi-sheet-body { display: grid; grid-template-columns: 76px minmax(0, 1fr); grid-template-rows: auto auto auto; column-gap: 12px; padding: 0 12px 12px; align-items: start; overflow: hidden; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-main { display: contents; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-media { grid-column: 1; grid-row: 1 / span 2; aspect-ratio: 1; border-radius: 10px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-kicker { grid-column: 2; grid-row: 1; padding-right: 44px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-title { grid-column: 2; grid-row: 2; padding-right: 36px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-actions { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: 1fr 1fr; margin-top: 10px !important; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-actions .map-button { justify-content: center; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-media:empty { display: block; background: color-mix(in srgb, #2c6445 10%, #f4eee3); }
+    .mi-sheet:not(.is-expanded) .mi-sheet-art svg { width: 44px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-art .mi-landmark-svg { width: 62px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-title { font-size: 1.2rem !important; margin-bottom: 0; min-width: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-kicker { font-size: .66rem; margin-bottom: 4px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-actions { margin: 0; gap: 6px; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-actions .map-button { min-height: 44px !important; padding: 0 12px !important; font-size: .8rem !important; }
+    .mi-sheet:not(.is-expanded) .mi-sheet-more { display: none; }
+
+    /* Expandida: foto larga e conteúdo completo, com rolagem interna */
+    .mi-sheet.is-expanded .mi-sheet-media { margin: 0 12px; border-radius: 10px; aspect-ratio: 16 / 9; }
+    .mi-sheet.is-expanded .mi-sheet-main { padding: 12px 14px 16px; }
+    .mi-sheet.is-expanded .mi-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; }
+    .mi-sheet-actions > .map-button { justify-content: center; }
+    .mi-sheet-actions > :only-child { grid-column: 1 / -1; }
+    .mi-sheet.is-expanded .mi-sheet-close { top: 30px; right: 20px; }
+
+    body.mi-on .mi-sheet-open .mi-legend { display: none; }
+}
+
+@media (max-width: 768px) {
+    /* Busca, categorias e mapa no primeiro gesto; o restante do cabeçalho da página recua */
+    body.mi-on .map-page { padding-top: .5rem !important; }
+    body.mi-on .map-intro { margin-bottom: .45rem !important; }
+    body.mi-on .map-intro .map-kicker,
+    body.mi-on .map-intro-description,
+    body.mi-on .map-search-help,
+    body.mi-on .map-toolbar-stats,
+    body.mi-on .map-action-link,
+    body.mi-on .map-stage-head,
+    body.mi-on .map-stage-foot { display: none !important; }
+    body.mi-on .map-intro h1 { font-size: 1.85rem !important; }
+    body.mi-on .map-toolbar { padding: .6rem !important; gap: .5rem !important; }
+    body.mi-on .map-filters { flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+    body.mi-on .map-filters::-webkit-scrollbar { display: none; }
+    body.mi-on .map-filter-btn { flex: 0 0 auto; min-height: 44px !important; }
+    body.mi-on .map-view-toggle { margin: .5rem 0 .5rem !important; }
+    body.mi-on .map-stage-card { border-radius: 12px !important; overflow: hidden; }
+    /* Cabe na tela junto do cabeçalho fixo e do seletor Mapa/Lista */
+    body.mi-on #tourismMap { height: calc(100svh - 212px) !important; min-height: 420px; max-height: 760px; }
+    body.mi-on .mi-route-chip, body.mi-on .mi-routes-label { min-height: 40px; }
+    /* Zoom vai para a esquerda, sob a barra de roteiros: a borda direita do celular
+       é do botão do VLibras (posição definida pelo widget oficial, não alterada aqui). */
+    body.mi-on .mi-stage .leaflet-top.leaflet-right { right: auto !important; left: 0; top: 52px; }
+    body.mi-on .mi-stage .leaflet-top.leaflet-right .leaflet-control { margin: 0 0 0 10px; }
+    body.mi-on .mi-routes { right: 10px; }
+    body.mi-on .mi-sheet-open .mi-routes { right: 10px; }
+    /* Com a ficha aberta, "voltar ao topo" e a pílula de cookies não disputam o rodapé da tela
+       com as ações da ficha (a página do mapa não tem rodapé onde a pílula possa morar). */
+    body.mi-sheet-visible .back-to-top,
+    body.mi-sheet-visible #sms-cookie-preferences:not(.sms-cookie-preferences--inline) { display: none !important; }
+}
+
+/* Ícones das categorias e dos cartões: os mesmos pins do mapa */
+body.mi-on .mi-filter-pin { width: 22px !important; height: 26px !important; border: 0 !important; background: none !important; display: inline-grid; place-items: center; }
+body.mi-on .mi-filter-pin svg { width: 20px; height: 26px; display: block; }
+body.mi-on .map-filter-btn.is-active .mi-filter-pin svg { filter: drop-shadow(0 0 1px #fbf8f2) drop-shadow(0 0 1px #fbf8f2); }
+body.mi-on .mi-badge-pin { display: inline-block; vertical-align: -6px; margin-right: 4px; }
+body.mi-on .mi-badge-pin svg { width: 16px; height: 20px; display: block; }
+
+/* Grupo com marco emblemático: o desenho do marco + contagem em roseta escura */
+.mi-cluster.is-emblem { width: 64px; height: 66px; transform: scale(.78); transform-origin: 50% 60%; }
+.mi-cluster-icon:hover .mi-cluster.is-emblem, .mi-cluster-icon:focus-visible .mi-cluster.is-emblem { transform: scale(.86); }
+.mi-cluster.is-emblem > svg { filter: drop-shadow(0 0 .7px #fbf8f2) drop-shadow(0 0 .7px #fbf8f2) drop-shadow(1.2px 1.8px 0 rgba(27, 35, 29, .24)); }
+.mi-cluster-badge { position: absolute; top: 14px; right: -12px; width: 30px; height: 30px; }
+.mi-cluster-badge svg { display: block; filter: drop-shadow(0 0 1px #fbf8f2) drop-shadow(0 0 1px #fbf8f2); }
+.mi-cluster-badge .mi-cluster-count { color: #fbf8f2; font-size: 13px; }
+
+/* Roseta das paradas do roteiro em destaque: mesmo desenho, com halo na cor do roteiro */
+.mi-cluster.is-route::before {
+    content: ""; position: absolute; inset: -6px; border-radius: 50%; z-index: -1;
+    background: color-mix(in srgb, var(--mi-route, #b3322a) 18%, transparent);
+    border: 2px solid var(--mi-route, #b3322a);
+}
+.mi-route-active .mi-cluster-icon:has(.mi-cluster.is-route) { opacity: 1; }
+
+/* ---------- Consolidação: roteiros compactos, aviso de localização, rodapé ---------- */
+/* Desktop: as seis opções seguem visíveis em linha; o botão-resumo só existe no celular. */
+.mi-routes-toggle { display: none; }
+.mi-routes-list { display: contents; }
+
+.mi-sheet-approx {
+    margin: 0 0 12px; padding: 7px 10px; border-radius: 6px; border: 1px dashed rgba(27, 35, 29, .35);
+    font: 500 .8rem/1.4 var(--rc-text, system-ui); color: #4b544c; background: rgba(244, 238, 227, .7);
+}
+
+@media (max-width: 768px) {
+    /* Um único botão "Roteiros · 6" no alto do mapa; ao tocar, as seis opções em grade. */
+    body.mi-on .mi-routes { right: auto !important; max-width: calc(100% - 20px); overflow: visible; flex-direction: column; align-items: flex-start; gap: 6px; }
+    body.mi-on .mi-routes-label { display: none; }
+    .mi-routes-toggle {
+        display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px;
+        border-radius: 999px; border: 1px solid rgba(27, 35, 29, .25); background: rgba(251, 248, 242, .97);
+        color: #1b231d; font: 600 .86rem/1 var(--rc-text, system-ui); cursor: pointer; box-shadow: 0 1px 0 rgba(27, 35, 29, .1);
+        max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .mi-routes-toggle::after { content: "▾"; font-size: .7rem; }
+    .mi-routes.is-open .mi-routes-toggle::after { transform: rotate(180deg); }
+    .mi-routes-toggle.has-active { border-color: var(--mi-route); box-shadow: inset 0 0 0 1px var(--mi-route); }
+    .mi-routes-toggle:focus-visible { outline: 3px solid #b3322a; outline-offset: 2px; }
+    .mi-routes-count { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 999px; background: #1b231d; color: #fbf8f2; font-size: .74rem; }
+    .mi-routes-list {
+        display: none; grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; width: min(320px, calc(100vw - 92px));
+        background: rgba(251, 248, 242, .99); border: 1px solid rgba(27, 35, 29, .18); border-radius: 12px;
+        box-shadow: 0 14px 30px -16px rgba(27, 35, 29, .55);
+    }
+    .mi-routes.is-open .mi-routes-list { display: grid; }
+    body.mi-on .mi-routes-list .mi-route-chip { min-height: 44px; padding: 4px 10px; white-space: normal; text-align: left; line-height: 1.15; box-shadow: none; }
+    /* Zoom logo abaixo do botão de roteiros, sempre na borda esquerda (a direita é do VLibras). */
+    body.mi-on .mi-stage .leaflet-top.leaflet-right { top: 58px; }
+    body.mi-on .mi-routes.is-open { z-index: 1100; }
+    /* No modo Mapa, a página é curta: o "voltar ao topo" não disputa o canto com a legenda. */
+    body.mi-on.map-view-map .back-to-top { display: none !important; }
+}
+
+/* Com a ficha aberta no desktop, o "voltar ao topo" não cobre o rodapé da ficha. */
+body.mi-sheet-visible .back-to-top { display: none !important; }
+
+/* Sem a biblioteca de agrupamento (CDN fora), os pins seguem utilizáveis e um pouco menores. */
+body.mi-no-cluster .mi-pin:not(.is-selected) { transform: scale(.86); }
+
+/* Rodapé da página do mapa (igual ao das demais páginas: dá endereço ao atalho Alt+4 e
+   à preferência de cookies, que deixa de flutuar sobre o mapa). */
+body.mi-on .footer { background: var(--rc-mate, #1f4a33) !important; color: #fbf8f2; text-align: center; padding: 1.6rem 1rem; font: 400 .9rem/1.5 var(--rc-text, system-ui); }
+body.mi-on .footer p { margin: 0; }
+body.mi-on .footer a { color: #fbf8f2; text-decoration: underline; text-underline-offset: 3px; }
+body.mi-on .footer a:focus-visible, body.mi-on .footer button:focus-visible { outline: 3px solid #c8913f; outline-offset: 2px; }
+
+/* Com um lugar selecionado, os demais marcos ilustrados recuam (vizinhos reais como Matriz e
+   Casa da Memória ficam a ~60 m e se tocam de perto); o selecionado fica inteiro por cima. */
+.mi-stage.mi-sheet-open .mi-pin.is-landmark:not(.is-selected):not(.is-route) { opacity: .45; }
+.mi-stage.mi-sheet-open .mi-icon:hover .mi-pin.is-landmark { opacity: 1; }

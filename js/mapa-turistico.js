@@ -400,6 +400,55 @@
     }
   };
 
+  // Textos da camada ilustrada (pins, agrupamentos, ficha e roteiros).
+  var MI_TEXT = {
+    pt: {
+      routesLabel: "Roteiros", routeStops: "{count} paradas no mapa", routeStopsSingle: "1 parada no mapa",
+      routeNote: "As paradas do roteiro ficam em destaque no mapa. Não desenhamos trajeto: use “Como chegar” em cada parada.",
+      routeKicker: "Roteiro", routeClear: "Mostrar todos os lugares", partOfRoute: "Faz parte de",
+      noLocation: "sem localização", close: "Fechar", expand: "Ver mais", collapse: "Ver menos",
+      legend: "Legenda", legendLandmarks: "Desenhos especiais marcam lugares emblemáticos.",
+      clusterLabel: "{count} lugares aqui. Ampliar o mapa", sheetRegion: "Lugar selecionado",
+      approx: "Localização aproximada no mapa: confira o endereço antes de sair.",
+      routesToggle: "Roteiros", routesClose: "Fechar roteiros",
+      families: { history: "Patrimônio", culture: "Cultura", nature: "Natureza", mate: "Erva-mate", gastronomy: "Gastronomia", lodging: "Hospedagem", events: "Eventos", services: "Serviços" }
+    },
+    en: {
+      routesLabel: "Routes", routeStops: "{count} stops on the map", routeStopsSingle: "1 stop on the map",
+      routeNote: "Route stops are highlighted on the map. No path is drawn: use “Directions” at each stop.",
+      routeKicker: "Route", routeClear: "Show all places", partOfRoute: "Part of",
+      noLocation: "no location", close: "Close", expand: "Show more", collapse: "Show less",
+      legend: "Legend", legendLandmarks: "Special drawings mark landmark places.",
+      clusterLabel: "{count} places here. Zoom in", sheetRegion: "Selected place",
+      approx: "Approximate location on the map: check the address before you go.",
+      routesToggle: "Routes", routesClose: "Close routes",
+      families: { history: "Heritage", culture: "Culture", nature: "Nature", mate: "Yerba mate", gastronomy: "Food", lodging: "Lodging", events: "Events", services: "Services" }
+    },
+    es: {
+      routesLabel: "Rutas", routeStops: "{count} paradas en el mapa", routeStopsSingle: "1 parada en el mapa",
+      routeNote: "Las paradas de la ruta se destacan en el mapa. No se dibuja el trayecto: usa “Cómo llegar” en cada parada.",
+      routeKicker: "Ruta", routeClear: "Mostrar todos los lugares", partOfRoute: "Forma parte de",
+      noLocation: "sin ubicación", close: "Cerrar", expand: "Ver más", collapse: "Ver menos",
+      legend: "Leyenda", legendLandmarks: "Dibujos especiales señalan lugares emblemáticos.",
+      clusterLabel: "{count} lugares aquí. Ampliar el mapa", sheetRegion: "Lugar seleccionado",
+      approx: "Ubicación aproximada en el mapa: verifica la dirección antes de salir.",
+      routesToggle: "Rutas", routesClose: "Cerrar rutas",
+      families: { history: "Patrimonio", culture: "Cultura", nature: "Naturaleza", mate: "Yerba mate", gastronomy: "Gastronomía", lodging: "Hospedaje", events: "Eventos", services: "Servicios" }
+    },
+    pl: {
+      routesLabel: "Trasy", routeStops: "Przystanki na mapie: {count}", routeStopsSingle: "1 przystanek na mapie",
+      routeNote: "Przystanki trasy są wyróżnione na mapie. Trasa nie jest rysowana: przy każdym przystanku użyj „Dojazd”.",
+      routeKicker: "Trasa", routeClear: "Pokaż wszystkie miejsca", partOfRoute: "Należy do",
+      noLocation: "brak lokalizacji", close: "Zamknij", expand: "Pokaż więcej", collapse: "Pokaż mniej",
+      legend: "Legenda", legendLandmarks: "Specjalne rysunki oznaczają charakterystyczne miejsca.",
+      clusterLabel: "Miejsca tutaj: {count}. Przybliż mapę", sheetRegion: "Wybrane miejsce",
+      approx: "Przybliżona lokalizacja na mapie: sprawdź adres przed wyjazdem.",
+      routesToggle: "Trasy", routesClose: "Zamknij trasy",
+      families: { history: "Dziedzictwo", culture: "Kultura", nature: "Przyroda", mate: "Yerba mate", gastronomy: "Gastronomia", lodging: "Noclegi", events: "Wydarzenia", services: "Usługi" }
+    }
+  };
+  Object.keys(MI_TEXT).forEach(function (lang) { if (MAP_TEXT[lang]) MAP_TEXT[lang].mi = MI_TEXT[lang]; });
+
   var CATEGORY_CONFIG = {
     all: { color: "#0a3d2e", accent: "#d4a574", icon: "SM" },
     history: { color: "#8a6b49", accent: "#f0d3ad", icon: "HI" },
@@ -431,7 +480,12 @@
   var state = {
     map: null,
     markersLayer: null,
+    pinLayer: null,
+    routeLayer: null,
     markerIndex: {},
+    highlightRoute: "",
+    sheetOpen: false,
+    sheetExpanded: false,
     items: [],
     approvedEvents: [],
     filteredItems: [],
@@ -977,6 +1031,87 @@
     }
   }
 
+  /* Correções geográficas comprovadas por fonte externa. Aplicadas somente enquanto a
+     fonte (CMS ou dados locais) ainda trouxer exatamente o valor antigo: quando o cadastro
+     for corrigido no CMS, a regra deixa de agir sozinha. Os dados originais não são alterados. */
+  var GEO_CORRECTIONS = [
+    { ids: ["ponte-rio-iguacu"], from: [-25.87, -50.378], to: [-25.8776, -50.3844],
+      source: "OpenStreetMap way 93278826 (ponte da BR-476 sobre o Rio Iguaçu)" },
+    { ids: ["igreja-matriz"], from: [-25.8769, -50.3838], to: [-25.874335, -50.3837],
+      source: "OpenStreetMap way 243982311 (Paróquia de São Mateus, building=church)" },
+    { ids: ["casa-da-memoria"], from: [-25.877, -50.3835], to: [-25.873802, -50.383818],
+      source: "OpenStreetMap node 5676214480 (Casa da Memória)" },
+    { ids: ["rua-do-mathe", "agrosamas", "polskie-smaki", "feira-gastronomica", "feira-do-produtor"],
+      from: [-25.878, -50.385], to: [-25.874104, -50.384168],
+      source: "OpenStreetMap way 973886282 (Rua do Mathe, via de pedestres)" },
+    { ids: ["igreja-agua-branca"], from: [-25.91, -50.42], to: [-25.763148, -50.34269],
+      source: "Google Maps \"Capela São José\" e Plus Code 6MP4+RX São Mateus do Sul (informados pela equipe)" }
+  ];
+  // Link de rota cadastrado que não abre (HTTP 404 em 2026-10-13): usa-se a coordenada.
+  var BROKEN_MAPS_URLS = { "https://maps.app.goo.gl/uBoWdk": true };
+
+  function applyGeoCorrection(item, coordinates) {
+    if (!coordinates || !item) return coordinates;
+    var id = String(item.id || "");
+    for (var i = 0; i < GEO_CORRECTIONS.length; i += 1) {
+      var fix = GEO_CORRECTIONS[i];
+      if (fix.ids.indexOf(id) === -1) continue;
+      if (Math.abs(coordinates.lat - fix.from[0]) < 1e-6 && Math.abs(coordinates.lng - fix.from[1]) < 1e-6) {
+        return { lat: fix.to[0], lng: fix.to[1], corrected: true };
+      }
+    }
+    return coordinates;
+  }
+
+  // Posição não confirmada por fonte externa e que cai na margem/leito do Rio Iguaçu
+  // na cartografia do OpenStreetMap (conferência de 2026-10-13).
+  var UNVERIFIED_LOCATION_IDS = { "arena-cultural": true, "ginasio-polacao": true };
+
+  function coordinateDecimals(value) {
+    var text = String(value);
+    var dot = text.indexOf(".");
+    return dot === -1 ? 0 : text.length - dot - 1;
+  }
+
+  /* Localização aproximada: precisão declarada de ~1 km (até 2 casas decimais) ou a mesma
+     coordenada repetida para lugares diferentes (marcador de preenchimento). Nesses casos a
+     ficha avisa e "Como chegar" busca pelo nome em vez de levar a um ponto falso. */
+  function markApproximateLocations(items) {
+    var groups = {};
+    items.forEach(function (item) {
+      if (!item.possuiCoordenadas) return;
+      var key = item.coordenadas.lat.toFixed(6) + "," + item.coordenadas.lng.toFixed(6);
+      (groups[key] = groups[key] || []).push(item);
+    });
+    items.forEach(function (item) {
+      if (!item.possuiCoordenadas || item.coordenadas.corrected) return;
+      var key = item.coordenadas.lat.toFixed(6) + "," + item.coordenadas.lng.toFixed(6);
+      var places = {};
+      groups[key].forEach(function (other) {
+        if (other.tipo !== "evento") places[normalizeText(other.nome)] = true;
+      });
+      var lowPrecision = coordinateDecimals(item.coordenadas.lat) <= 2 || coordinateDecimals(item.coordenadas.lng) <= 2;
+      if (!lowPrecision && Object.keys(places).length < 2 && !UNVERIFIED_LOCATION_IDS[item.id]) return;
+      item.localizacaoAproximada = true;
+      if (!item.mapsUrlFromData) {
+        item.mapsUrl = "https://www.google.com/maps/search/?api=1&query="
+          + encodeURIComponent(item.nome + ", São Mateus do Sul - PR");
+      }
+    });
+    return items;
+  }
+
+  // Notas internas do cadastro não aparecem ao visitante (mesma regra de
+  // js/public-establishments-renderer.js): "(confirmar …)" e o telefone de preenchimento.
+  function publicText(value) {
+    return String(value || "").replace(/\s*\((?:a\s+)?confirmar[^)]*\)/gi, "").replace(/\s{2,}/g, " ").trim();
+  }
+
+  function publicPhone(value) {
+    var phone = publicText(value);
+    return /^\(?42\)?\s*3532-?0000$/.test(phone) ? "" : phone;
+  }
+
   function getCoordinates(item) {
     var lat = item && item.coordenadas ? item.coordenadas.lat : item && item.lat;
     var lng = item && item.coordenadas ? item.coordenadas.lng : item && item.lng;
@@ -1090,7 +1225,7 @@
   }
 
   function createGoogleMapsLink(item, coordinates) {
-    if (coordinates && item.mapsUrl) {
+    if (coordinates && item.mapsUrl && !BROKEN_MAPS_URLS[item.mapsUrl]) {
       return item.mapsUrl;
     }
     if (coordinates) {
@@ -1102,7 +1237,7 @@
   function normalizeItem(item, itemType) {
     if (!item || !item.nome) return null;
 
-    var coordinates = getCoordinates(item);
+    var coordinates = applyGeoCorrection(item, getCoordinates(item));
     var broadCategory = classifyCategory(itemType, item.categoria, item.tags, item.descricao);
     var panelGroup = getPanelGroup(itemType);
     var gallery = normalizeImages(item);
@@ -1147,6 +1282,8 @@
       coordenadas: coordinates,
       possuiCoordenadas: !!coordinates,
       mapsUrl: createGoogleMapsLink(item, coordinates),
+      mapsUrlFromData: !!(coordinates && item.mapsUrl && !BROKEN_MAPS_URLS[item.mapsUrl]),
+      localizacaoAproximada: false,
       searchText: normalizeText([
         item.nome,
         item.categoria,
@@ -1192,7 +1329,7 @@
     var events = (data.eventos || []).map(function (item) { return normalizeItem(item, "evento"); });
     var services = (data.informacoesEssenciais || []).map(function (item) { return normalizeItem(item, "servico"); });
 
-    return points.concat(routes, lodging, restaurants, events, services).filter(Boolean);
+    return markApproximateLocations(points.concat(routes, lodging, restaurants, events, services).filter(Boolean));
   }
 
   function resolveFilterAlias(value) {
@@ -1312,7 +1449,9 @@
     } else {
       params.delete("grupo");
     }
-    if (state.requestedRoute) {
+    if (isIllustrated() && state.highlightRoute) {
+      params.set("rota", state.highlightRoute);
+    } else if (!isIllustrated() && state.requestedRoute) {
       params.set("rota", state.requestedRoute);
     } else {
       params.delete("rota");
@@ -1500,7 +1639,9 @@
       // Categoria sem itens no conjunto atual não vira chip clicável com "0".
       if (!count && filterId !== "all" && state.activeFilter !== filterId) return "";
       return '<button type="button" class="map-filter-btn' + activeClass + '" data-filter="' + filterId + '" aria-pressed="' + (state.activeFilter === filterId ? "true" : "false") + '" aria-label="' + t("categories." + filterId, filterId) + '">'
-        + '<span class="map-filter-icon" style="--filter-color:' + config.color + ';--filter-accent:' + config.accent + ';">' + config.icon + '</span>'
+        + (isIllustrated()
+          ? (filterId === "all" ? "" : '<span class="map-filter-icon mi-filter-pin" aria-hidden="true">' + window.MAPA_ILUSTRADO.pinSvg(filterId) + "</span>")
+          : '<span class="map-filter-icon" style="--filter-color:' + config.color + ';--filter-accent:' + config.accent + ';">' + config.icon + '</span>')
         + '<span class="map-filter-text">' + t("categories." + filterId, filterId) + "</span>"
         + '<span class="map-filter-count">' + count + "</span></button>";
     }).join("");
@@ -1544,6 +1685,10 @@
   }
 
   function updateMarkerSelection() {
+    if (isIllustrated()) {
+      updateIllustratedMarkers();
+      return;
+    }
     Object.keys(state.markerIndex).forEach(function (itemId) {
       var marker = state.markerIndex[itemId];
       var item = getItemById(itemId);
@@ -1555,6 +1700,10 @@
 
   function renderMarkers() {
     if (!state.map || !state.markersLayer) return;
+    if (isIllustrated()) {
+      renderIllustratedMarkers();
+      return;
+    }
 
     state.markersLayer.clearLayers();
     state.markerIndex = {};
@@ -1678,9 +1827,9 @@
       + (isRouteItem(item) ? '<p class="map-detail-support">' + escapeHtml(t("routeSupport")) + '</p>' : "")
       + '</div>'
       + '<dl class="map-details-info">'
-      + renderMetaRow(t("address"), item.endereco || item.localizacao)
-      + renderMetaRow(t("contact"), item.telefone)
-      + renderMetaRow(t("hours"), item.horario)
+      + renderMetaRow(t("address"), publicText(item.endereco || item.localizacao))
+      + renderMetaRow(t("contact"), publicPhone(item.telefone))
+      + renderMetaRow(t("hours"), publicText(item.horario))
       + renderMetaRow(t("relatedRoute"), routeLabel)
       + '</dl>'
       + (tags.length ? '<section class="map-details-tags"><h3>' + escapeHtml(t("services")) + '</h3><div>' + tags.map(function (tag) { return '<span>' + escapeHtml(tag) + '</span>'; }).join("") + '</div></section>' : "")
@@ -1764,6 +1913,10 @@
 
   function renderSelectedItem() {
     var container = document.getElementById("mapSelectedItem");
+    if (isIllustrated()) {
+      renderSheet();
+      return;
+    }
     if (!container) return;
 
     var item = getSelectedItem();
@@ -1776,9 +1929,9 @@
 
     var meta = [];
     var localDetailUrl = getLocalDetailUrl(item);
-    if (item.localizacao) meta.push('<span class="map-meta-chip">📍 ' + escapeHtml(item.localizacao) + "</span>");
-    if (item.telefone) meta.push('<span class="map-meta-chip">📞 ' + escapeHtml(item.telefone) + "</span>");
-    if (item.periodo) meta.push('<span class="map-meta-chip">📅 ' + escapeHtml(item.periodo) + "</span>");
+    if (publicText(item.localizacao)) meta.push('<span class="map-meta-chip">📍 ' + escapeHtml(publicText(item.localizacao)) + "</span>");
+    if (publicPhone(item.telefone)) meta.push('<span class="map-meta-chip">📞 ' + escapeHtml(publicPhone(item.telefone)) + "</span>");
+    if (publicText(item.periodo)) meta.push('<span class="map-meta-chip">📅 ' + escapeHtml(publicText(item.periodo)) + "</span>");
     if (item.categoriaOriginal && item.panelGroup === "routes") meta.push('<span class="map-meta-chip">🗺️ ' + escapeHtml(item.categoriaOriginal) + "</span>");
     if (isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("routeBadge") + "</span>");
     if (!item.possuiCoordenadas && !isRouteItem(item)) meta.push('<span class="map-meta-chip">' + t("noCoordinates") + "</span>");
@@ -1819,7 +1972,10 @@
     var tags = [];
     var localDetailUrl = getLocalDetailUrl(item);
 
-    tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + config.icon + " " + escapeHtml(item.categoriaLabel) + "</span>");
+    var badgeIcon = isIllustrated() && !isRouteItem(item)
+      ? '<span class="mi-badge-pin" aria-hidden="true">' + window.MAPA_ILUSTRADO.pinSvg(window.MAPA_ILUSTRADO.familyFor(item)) + "</span>"
+      : config.icon + " ";
+    tags.push('<span class="map-list-badge" style="--badge-color:' + config.color + ';--badge-accent:' + config.accent + ';">' + badgeIcon + escapeHtml(item.categoriaLabel) + "</span>");
     if (item.panelGroup === "routes" && item.categoriaOriginal) {
       tags.push('<span class="map-list-badge is-route">' + t("routeBadge") + "</span>");
       tags.push('<span class="map-list-badge is-neutral">RO ' + escapeHtml(item.categoriaOriginal) + "</span>");
@@ -1930,12 +2086,16 @@
     }
   }
 
-  function selectItem(id, centerOnMap) {
+  function selectItem(id, centerOnMap, options) {
     var item = getItemById(id);
     if (!item) return;
 
     syncSelectedItemVisibility(item);
     state.selectedItemId = id;
+    if (isIllustrated()) {
+      selectIllustratedItem(item, centerOnMap, options);
+      return;
+    }
     renderPanelGroups();
     renderSelectedItem();
     renderList();
@@ -2058,6 +2218,11 @@
       renderList();
       renderMobileViewToggle();
       renderMarkers();
+      if (isIllustrated()) {
+        renderRouteBar();
+        renderLegend();
+        renderSheet();
+      }
       updateSearchUi();
     });
   }
@@ -2119,6 +2284,613 @@
     }
   }
 
+  /* ==========================================================================
+     CAMADA ILUSTRADA (protótipo "Mapa ilustrado")
+     Ativa somente com <body class="mi-on"> e js/mapa-ilustrado.js carregado.
+     Coordenadas, filtros, busca e dados continuam vindo das mesmas fontes;
+     esta camada troca apenas a apresentação: pins, agrupamentos, ficha e
+     destaque de roteiros. Sem a classe, o mapa anterior segue intacto.
+     ========================================================================== */
+  var REDUCED_MOTION = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var WIDE_QUERY = window.matchMedia ? window.matchMedia("(min-width: 969px)") : null;
+
+  function isIllustrated() {
+    return !!(window.MAPA_ILUSTRADO && document.body && document.body.classList.contains("mi-on"));
+  }
+
+  function isWideViewport() {
+    return !WIDE_QUERY || WIDE_QUERY.matches;
+  }
+
+  function mi(key, fallback) {
+    return t("mi." + key, fallback);
+  }
+
+  function getRouteRecords() {
+    return state.items.filter(isRouteItem);
+  }
+
+  function getRouteRecord(routeId) {
+    return getRouteRecords().find(function (route) { return route.id === routeId; }) || null;
+  }
+
+  function getRouteColor(routeId) {
+    var raw = ((window.TURISMO_DATA || {}).rotas || []).find(function (route) { return route && route.id === routeId; });
+    var color = raw && /^#[0-9a-f]{3,8}$/i.test(String(raw.cor || "")) ? raw.cor : "#b3322a";
+    return color;
+  }
+
+  function itemInRoute(item, routeId) {
+    if (!item || !routeId || isRouteItem(item)) return false;
+    if (window.TURISMO_PUBLIC_DATA_UTILS && window.TURISMO_PUBLIC_DATA_UTILS.itemMatchesRoute) {
+      return !!window.TURISMO_PUBLIC_DATA_UTILS.itemMatchesRoute(item, routeId);
+    }
+    return item.routeIds.indexOf(routeId) !== -1;
+  }
+
+  function getRouteStops(routeId) {
+    var seen = {};
+    return state.items.filter(function (item) {
+      if (!itemInRoute(item, routeId) || seen[item.id]) return false;
+      seen[item.id] = true;
+      return true;
+    });
+  }
+
+  function illustratedIconFor(item) {
+    var inRoute = state.highlightRoute ? itemInRoute(item, state.highlightRoute) : false;
+    return window.MAPA_ILUSTRADO.createIcon(item, {
+      selected: item.id === state.selectedItemId,
+      dim: !!state.highlightRoute && !inRoute,
+      approx: !!item.localizacaoAproximada,
+      route: inRoute,
+      routeColor: inRoute ? getRouteColor(state.highlightRoute) : ""
+    });
+  }
+
+  // O marcador selecionado sai do agrupamento (nunca fica escondido numa roseta);
+  // as paradas do roteiro em destaque têm agrupamento próprio, na cor do roteiro.
+  function targetLayerFor(item) {
+    if (item.id === state.selectedItemId) return state.pinLayer;
+    if (state.highlightRoute && itemInRoute(item, state.highlightRoute)) return state.routeLayer;
+    return state.markersLayer;
+  }
+
+  function paneFor(target) {
+    if (target === state.pinLayer) return "miSelectedPane";
+    if (target === state.routeLayer) return "miRoutePane";
+    return "markerPane";
+  }
+
+  function placeIllustratedMarker(item, marker) {
+    var target = targetLayerFor(item);
+    if (marker._miLayer === target) return;
+    if (marker._miLayer) marker._miLayer.removeLayer(marker);
+    marker.options.pane = paneFor(target);
+    target.addLayer(marker);
+    marker._miLayer = target;
+  }
+
+  function markerZIndex(item) {
+    if (item.id === state.selectedItemId) return 1200;
+    if (state.highlightRoute && itemInRoute(item, state.highlightRoute)) return 800;
+    return window.MAPA_ILUSTRADO.isLandmark(item) ? 400 : 0;
+  }
+
+  function ensureMarkerPanes() {
+    [["miRoutePane", 640], ["miSelectedPane", 660]].forEach(function (pane) {
+      if (!state.map.getPane(pane[0])) {
+        state.map.createPane(pane[0]);
+        state.map.getPane(pane[0]).style.zIndex = pane[1];
+      }
+    });
+  }
+
+  function initIllustratedLayers() {
+    ensureMarkerPanes();
+    var clusterOptions = {
+      showCoverageOnHover: false,
+      spiderfyOnMaxZoom: true,
+      zoomToBoundsOnClick: true,
+      animate: !REDUCED_MOTION,
+      // Raio menor de perto; no zoom máximo, o que ainda se sobrepõe abre em leque (spiderfy).
+      // Raio acompanha o tamanho dos desenhos (rosetas-emblema têm ~50 px) para não haver sobreposição.
+      maxClusterRadius: function (zoom) { return zoom <= 11 ? 64 : zoom <= 14 ? 80 : zoom <= 16 ? 52 : zoom <= 17 ? 40 : 30; },
+      spiderfyDistanceMultiplier: 1.7,
+      spiderLegPolylineOptions: { weight: 1.2, color: "#1b231d", opacity: 0.5 },
+      iconCreateFunction: function (cluster) { return window.MAPA_ILUSTRADO.clusterIcon(cluster); }
+    };
+    var hasClusters = typeof L.markerClusterGroup === "function";
+    state.markersLayer = hasClusters ? L.markerClusterGroup(clusterOptions) : L.layerGroup();
+    state.markersLayer.addTo(state.map);
+    state.routeLayer = hasClusters
+      ? L.markerClusterGroup(Object.assign({}, clusterOptions, {
+        clusterPane: "miRoutePane",
+        iconCreateFunction: function (cluster) {
+          return window.MAPA_ILUSTRADO.clusterIcon(cluster, { routeColor: getRouteColor(state.highlightRoute) });
+        }
+      }))
+      : L.layerGroup();
+    state.routeLayer.addTo(state.map);
+    state.pinLayer = L.layerGroup().addTo(state.map);
+    L.control.zoom({ position: "topright" }).addTo(state.map);
+
+    state.map.on("zoomend", syncZoomClasses);
+    state.map.on("zoomend moveend", labelClusters);
+    // Enter/Espaço numa roseta: aproxima (ou abre em leque no zoom máximo).
+    [state.markersLayer, state.routeLayer].forEach(function (group) {
+      if (!group.on) return;
+      group.on("animationend spiderfied", labelClusters);
+      group.on("clusterkeypress", function (event) {
+        var code = event.originalEvent && event.originalEvent.keyCode;
+        if (code !== 13 && code !== 32) return;
+        if (event.originalEvent.preventDefault) event.originalEvent.preventDefault();
+        if (state.map.getZoom() >= state.map.getMaxZoom()) event.layer.spiderfy();
+        else event.layer.zoomToBounds({ padding: [40, 40] });
+      });
+    });
+    syncZoomClasses();
+  }
+
+  function syncZoomClasses() {
+    var container = state.map && state.map.getContainer();
+    if (!container) return;
+    // Marcos ilustrados ficam menores até o zoom 16, quando vizinhos (Matriz, Casa da
+    // Memória, Vapor Pery) ainda estão a poucos pixels uns dos outros.
+    container.classList.toggle("mi-z-mid", state.map.getZoom() >= 16 && state.map.getZoom() < 18);
+    container.classList.toggle("mi-z-near", state.map.getZoom() >= 18);
+  }
+
+  // Rosetas de agrupamento são marcadores focáveis do Leaflet; damos nome acessível a elas.
+  function labelClusters() {
+    window.requestAnimationFrame(function () {
+      Array.prototype.forEach.call(document.querySelectorAll("#tourismMap .mi-cluster-icon"), function (el) {
+        var count = el.querySelector(".mi-cluster-count");
+        if (!count) return;
+        el.setAttribute("aria-label", replaceCount(mi("clusterLabel"), count.textContent));
+        el.setAttribute("role", "button");
+      });
+    });
+  }
+
+  function renderIllustratedMarkers() {
+    state.markersLayer.clearLayers();
+    state.routeLayer.clearLayers();
+    state.pinLayer.clearLayers();
+    state.markerIndex = {};
+
+    var bounds = [];
+    var routeBounds = [];
+    var markers = [];
+    state.filteredItems.forEach(function (item) {
+      if (!item.possuiCoordenadas || state.markerIndex[item.id]) return;
+      var latLng = [item.coordenadas.lat, item.coordenadas.lng];
+      var marker = L.marker(latLng, {
+        icon: illustratedIconFor(item),
+        title: item.nome,
+        alt: item.nome,
+        keyboard: true,
+        riseOnHover: true,
+        zIndexOffset: markerZIndex(item),
+        miFamily: window.MAPA_ILUSTRADO.familyFor(item),
+        miLandmark: window.MAPA_ILUSTRADO.isLandmark(item) ? item.id : ""
+      });
+      marker.on("click", function () {
+        var icon = marker.getElement && marker.getElement();
+        var viaKeyboard = !!(icon && document.activeElement === icon);
+        selectItem(item.id, false, { focusSheet: viaKeyboard });
+      });
+      // Sem popup, o Leaflet não liga Enter ao marcador: Enter e Espaço abrem a ficha.
+      marker.on("keypress", function (event) {
+        var code = event.originalEvent && event.originalEvent.keyCode;
+        if (code !== 13 && code !== 32) return;
+        if (event.originalEvent.preventDefault) event.originalEvent.preventDefault();
+        selectItem(item.id, false, { focusSheet: true });
+      });
+      state.markerIndex[item.id] = marker;
+      markers.push({ item: item, marker: marker });
+      bounds.push(latLng);
+      if (state.highlightRoute && itemInRoute(item, state.highlightRoute)) routeBounds.push(latLng);
+    });
+
+    // Cadastro em lote no agrupamento (mais rápido que um por um).
+    var batches = [[state.markersLayer, []], [state.routeLayer, []], [state.pinLayer, []]];
+    markers.forEach(function (entry) {
+      var target = targetLayerFor(entry.item);
+      entry.marker._miLayer = target;
+      entry.marker.options.pane = paneFor(target);
+      batches.forEach(function (batch) { if (batch[0] === target) batch[1].push(entry.marker); });
+    });
+    batches.forEach(function (batch) {
+      if (batch[0].addLayers) batch[0].addLayers(batch[1]);
+      else batch[1].forEach(function (m) { batch[0].addLayer(m); });
+    });
+
+    var fitTo = routeBounds.length ? routeBounds : bounds;
+    if (fitTo.length) {
+      // Margem superior: barra de roteiros + altura dos desenhos acima da âncora.
+      state.map.fitBounds(fitTo, { paddingTopLeft: [40, 120], paddingBottomRight: mapFitPaddingBR(), maxZoom: 14, animate: false });
+    } else {
+      state.map.setView([-25.8775, -50.3822], 12);
+    }
+    labelClusters();
+  }
+
+  function mapFitPaddingBR() {
+    if (!state.sheetOpen) return [40, 40];
+    return isWideViewport() ? [400, 40] : [40, 200];
+  }
+
+  function updateIllustratedMarkers() {
+    Object.keys(state.markerIndex).forEach(function (itemId) {
+      var marker = state.markerIndex[itemId];
+      var item = getItemById(itemId);
+      if (!marker || !item) return;
+      marker.setIcon(illustratedIconFor(item));
+      marker.setZIndexOffset(markerZIndex(item));
+      placeIllustratedMarker(item, marker);
+    });
+    [state.markersLayer, state.routeLayer].forEach(function (group) {
+      if (group.refreshClusters) group.refreshClusters();
+    });
+    labelClusters();
+  }
+
+  // Centraliza o ponto na área do mapa que continua visível ao lado/acima da ficha.
+  function revealOnMap(item, zoomIn) {
+    if (!item.possuiCoordenadas || !state.map) return;
+    var latLng = L.latLng(item.coordenadas.lat, item.coordenadas.lng);
+    var zoom = zoomIn ? Math.max(state.map.getZoom(), 16) : state.map.getZoom();
+    var size = state.map.getSize();
+    var offset = L.point(0, 0);
+    if (state.sheetOpen) {
+      if (isWideViewport()) {
+        offset = L.point(Math.min(200, size.x * 0.2), 0);
+      } else {
+        var sheet = document.getElementById("miSheet");
+        var sheetHeight = sheet ? sheet.getBoundingClientRect().height : 0;
+        offset = L.point(0, Math.min(sheetHeight / 2, size.y * 0.3));
+      }
+    }
+    var point = state.map.project(latLng, zoom).add(offset);
+    var target = state.map.unproject(point, zoom);
+    if (!zoomIn) {
+      var visible = state.map.getBounds().pad(-0.12);
+      var pixel = state.map.latLngToContainerPoint(latLng);
+      var hiddenBySheet = state.sheetOpen && (isWideViewport()
+        ? pixel.x > size.x - 400
+        : pixel.y > size.y - (document.getElementById("miSheet") || { offsetHeight: 0 }).offsetHeight - 30);
+      if (visible.contains(latLng) && !hiddenBySheet) return;
+    }
+    state.map.setView(target, zoom, { animate: !REDUCED_MOTION });
+  }
+
+  function selectIllustratedItem(item, centerOnMap, options) {
+    options = options || {};
+    state.sheetOpen = true;
+    state.sheetExpanded = false;
+    renderPanelGroups();
+    renderList();
+    renderSheet();
+    updateIllustratedMarkers();
+    syncUrlState();
+    if (item.possuiCoordenadas && state.map) {
+      revealOnMap(item, centerOnMap !== false);
+    }
+    keepSheetInViewport();
+    if (options.focusSheet) focusSheetTitle();
+  }
+
+  // No celular a ficha mora no rodapé do mapa: se esse rodapé estiver abaixo da tela,
+  // a página sobe o necessário para a ficha aparecer inteira.
+  function keepSheetInViewport() {
+    if (isWideViewport()) return;
+    var stage = document.getElementById("miStage");
+    if (!stage) return;
+    var overflow = stage.getBoundingClientRect().bottom - window.innerHeight;
+    if (overflow > 0) window.scrollBy({ top: overflow + 8, behavior: REDUCED_MOTION ? "auto" : "smooth" });
+  }
+
+  function focusSheetTitle() {
+    window.setTimeout(function () {
+      var title = document.getElementById("miSheetTitle");
+      if (title) title.focus({ preventScroll: true });
+    }, 30);
+  }
+
+  function closeSheet(returnFocus) {
+    var previousId = state.selectedItemId;
+    state.sheetOpen = false;
+    state.sheetExpanded = false;
+    state.selectedItemId = null;
+    if (state.highlightRoute && !previousId) {
+      setHighlightRoute("");
+      return;
+    }
+    renderSheet();
+    renderList();
+    updateIllustratedMarkers();
+    if (returnFocus && previousId && state.markerIndex[previousId]) {
+      var el = state.markerIndex[previousId].getElement && state.markerIndex[previousId].getElement();
+      if (el) el.focus({ preventScroll: true });
+    }
+  }
+
+  function setHighlightRoute(routeId) {
+    state.highlightRoute = routeId || "";
+    state.selectedItemId = null;
+    state.sheetOpen = !!state.highlightRoute;
+    state.sheetExpanded = false;
+    renderRouteBar();
+    renderMarkers();
+    renderSheet();
+    renderList();
+    syncUrlState();
+    var stage = document.getElementById("miStage");
+    if (stage) stage.classList.toggle("mi-route-active", !!state.highlightRoute);
+  }
+
+  function initIllustratedUi() {
+    var stage = document.getElementById("miStage");
+    if (!stage) return;
+
+    // ?rota= continua funcionando: no modo ilustrado o roteiro é destacado (demais lugares ficam visíveis).
+    if (state.requestedRoute) {
+      state.highlightRoute = state.selectedRouteCanonical || state.requestedRoute;
+      state.requestedRoute = "";
+      state.sheetOpen = true;
+      if (state.panelGroup === "routes") state.panelGroup = "all";
+      stage.classList.add("mi-route-active");
+    }
+
+    var routes = document.createElement("div");
+    routes.className = "mi-routes";
+    routes.id = "miRoutes";
+    routes.setAttribute("role", "group");
+    stage.appendChild(routes);
+    routes.addEventListener("click", function (event) {
+      if (event.target.closest("[data-mi-routes-toggle]")) {
+        setRoutesMenu(!routes.classList.contains("is-open"));
+        return;
+      }
+      var button = event.target.closest("[data-mi-route]");
+      if (!button) return;
+      var routeId = button.getAttribute("data-mi-route");
+      setRoutesMenu(false);
+      setHighlightRoute(routeId === state.highlightRoute ? "" : routeId);
+    });
+    routes.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && routes.classList.contains("is-open")) {
+        event.preventDefault();
+        setRoutesMenu(false, true);
+      }
+    });
+
+    var legend = document.createElement("div");
+    legend.className = "mi-legend";
+    legend.id = "miLegend";
+    stage.appendChild(legend);
+    legend.addEventListener("click", function (event) {
+      if (!event.target.closest(".mi-legend-toggle")) return;
+      var open = legend.classList.toggle("is-open");
+      event.target.closest(".mi-legend-toggle").setAttribute("aria-expanded", String(open));
+    });
+    // A legenda começa recolhida: os filtros já mostram os mesmos pins com nome.
+
+    var sheet = document.createElement("aside");
+    sheet.className = "mi-sheet";
+    sheet.id = "miSheet";
+    sheet.setAttribute("hidden", "");
+    stage.appendChild(sheet);
+    sheet.addEventListener("click", handleSheetClick);
+    sheet.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closeSheet(true);
+      }
+    });
+    bindSheetSwipe(sheet);
+
+    // Evita que cliques/rolagem na ficha e nos controles sobrepostos arrastem o mapa.
+    [routes, legend, sheet].forEach(function (el) {
+      if (L.DomEvent) {
+        L.DomEvent.disableClickPropagation(el);
+        L.DomEvent.disableScrollPropagation(el);
+      }
+    });
+
+    renderLegend();
+    renderRouteBar();
+  }
+
+  function handleSheetClick(event) {
+    var target = event.target;
+    if (target.closest("[data-mi-close]")) {
+      closeSheet(true);
+      return;
+    }
+    if (target.closest("[data-mi-expand]")) {
+      state.sheetExpanded = !state.sheetExpanded;
+      renderSheet();
+      return;
+    }
+    var stop = target.closest("[data-mi-stop]");
+    if (stop) {
+      selectItem(stop.getAttribute("data-mi-stop"), true, { focusSheet: true });
+      return;
+    }
+    var routeLink = target.closest("[data-mi-route-link]");
+    if (routeLink) {
+      setHighlightRoute(routeLink.getAttribute("data-mi-route-link"));
+      focusSheetTitle();
+    }
+  }
+
+  // Ficha inferior no celular: arrastar a alça para cima expande, para baixo recolhe/fecha.
+  function bindSheetSwipe(sheet) {
+    var startY = null;
+    sheet.addEventListener("touchstart", function (event) {
+      if (!event.target.closest(".mi-sheet-handle")) return;
+      startY = event.touches[0].clientY;
+    }, { passive: true });
+    sheet.addEventListener("touchend", function (event) {
+      if (startY === null) return;
+      var delta = event.changedTouches[0].clientY - startY;
+      startY = null;
+      if (Math.abs(delta) < 28) return;
+      if (delta < 0 && !state.sheetExpanded) { state.sheetExpanded = true; renderSheet(); }
+      else if (delta > 0 && state.sheetExpanded) { state.sheetExpanded = false; renderSheet(); }
+      else if (delta > 0) closeSheet(false);
+    }, { passive: true });
+  }
+
+  // No celular a barra vira um único botão "Roteiros" que abre as seis opções em grade.
+  function setRoutesMenu(open, returnFocus) {
+    var bar = document.getElementById("miRoutes");
+    if (!bar) return;
+    bar.classList.toggle("is-open", !!open);
+    var toggle = bar.querySelector("[data-mi-routes-toggle]");
+    if (toggle) toggle.setAttribute("aria-expanded", String(!!open));
+    if (open) {
+      var first = bar.querySelector(".mi-route-chip.is-active") || bar.querySelector(".mi-route-chip");
+      if (first && !isWideViewport()) first.focus({ preventScroll: true });
+    } else if (returnFocus && toggle) {
+      toggle.focus({ preventScroll: true });
+    }
+  }
+
+  function renderRouteBar() {
+    var bar = document.getElementById("miRoutes");
+    if (!bar) return;
+    var routes = getRouteRecords();
+    var active = state.highlightRoute ? getRouteRecord(state.highlightRoute) : null;
+    var open = bar.classList.contains("is-open");
+    bar.setAttribute("aria-label", mi("routesLabel"));
+    bar.innerHTML = '<button type="button" class="mi-routes-toggle' + (active ? " has-active" : "") + '" data-mi-routes-toggle aria-expanded="' + open + '" aria-controls="miRoutesList"'
+      + (active ? ' style="--mi-route:' + getRouteColor(active.id) + '"' : "") + ">"
+      + (active ? '<span class="mi-route-dot" aria-hidden="true"></span>' + escapeHtml(active.nome) : escapeHtml(mi("routesToggle")) + ' <span class="mi-routes-count">' + routes.length + "</span>")
+      + "</button>"
+      + '<span class="mi-routes-label" aria-hidden="true">' + escapeHtml(mi("routesLabel")) + "</span>"
+      + '<div class="mi-routes-list" id="miRoutesList">'
+      + routes.map(function (route) {
+        var active = route.id === state.highlightRoute;
+        return '<button type="button" class="mi-route-chip' + (active ? " is-active" : "") + '" data-mi-route="' + escapeHtml(route.id) + '" aria-pressed="' + active + '" style="--mi-route:' + getRouteColor(route.id) + '">'
+          + '<span class="mi-route-dot" aria-hidden="true"></span>' + escapeHtml(route.nome) + "</button>";
+      }).join("")
+      + "</div>";
+  }
+
+  function renderLegend() {
+    var legend = document.getElementById("miLegend");
+    if (!legend) return;
+    var open = legend.classList.contains("is-open");
+    legend.innerHTML = '<button type="button" class="mi-legend-toggle" aria-expanded="' + open + '" aria-controls="miLegendList">'
+      + escapeHtml(mi("legend")) + "</button>"
+      + '<div class="mi-legend-body" id="miLegendList"><ul>' + window.MAPA_ILUSTRADO.legendHtml(MI_TEXT[state.lang] ? MI_TEXT[state.lang].families : MI_TEXT.pt.families) + "</ul>"
+      + '<p class="mi-legend-note"><span class="mi-legend-landmark" aria-hidden="true">' + window.MAPA_ILUSTRADO.landmarkSvg("igreja-agua-branca") + "</span>" + escapeHtml(mi("legendLandmarks")) + "</p></div>";
+  }
+
+  function renderSheetMedia(item, family) {
+    if (item.imagem) {
+      return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" loading="lazy" decoding="async" width="640" height="400">';
+    }
+    // Sem foto real cadastrada: o próprio pin ilustrado, em papel — nunca uma foto inventada.
+    var art = window.MAPA_ILUSTRADO.isLandmark(item)
+      ? window.MAPA_ILUSTRADO.landmarkSvg(item.id)
+      : window.MAPA_ILUSTRADO.pinSvg(family);
+    return '<div class="mi-sheet-art" style="--mi-fam:' + window.MAPA_ILUSTRADO.familyColor(family) + '" aria-hidden="true">' + art + "</div>";
+  }
+
+  function renderItemSheet(item) {
+    var family = window.MAPA_ILUSTRADO.familyFor(item);
+    var familyLabel = (MI_TEXT[state.lang] || MI_TEXT.pt).families[family] || item.categoriaLabel;
+    var localDetailUrl = getLocalDetailUrl(item);
+    // Mesmas regras públicas da V2.2 (js/public-establishments-renderer.js): lembretes
+    // internos "(confirmar …)" e o telefone de preenchimento (42) 3532-0000 não aparecem.
+    var address = publicText(item.localizacao);
+    var phone = publicPhone(item.telefone);
+    var hours = publicText(item.horario || item.periodo);
+    var meta = [];
+    if (address) meta.push('<li><span aria-hidden="true">📍</span> ' + escapeHtml(address) + "</li>");
+    if (hours) meta.push('<li><span aria-hidden="true">🕒</span> ' + escapeHtml(hours) + "</li>");
+    if (phone) meta.push('<li><span aria-hidden="true">📞</span> ' + escapeHtml(phone) + "</li>");
+
+    var memberOf = getRouteRecords().filter(function (route) { return itemInRoute(item, route.id); });
+    var routeChips = memberOf.length
+      ? '<div class="mi-sheet-routes"><span>' + escapeHtml(mi("partOfRoute")) + "</span>"
+        + memberOf.map(function (route) {
+          return '<button type="button" class="mi-route-chip is-small" data-mi-route-link="' + escapeHtml(route.id) + '" style="--mi-route:' + getRouteColor(route.id) + '"><span class="mi-route-dot" aria-hidden="true"></span>' + escapeHtml(route.nome) + "</button>";
+        }).join("") + "</div>"
+      : "";
+
+    return '<div class="mi-sheet-media">' + renderSheetMedia(item, family) + "</div>"
+      + '<div class="mi-sheet-main">'
+      + '<p class="mi-sheet-kicker" style="--mi-fam:' + window.MAPA_ILUSTRADO.familyColor(family) + '"><span class="mi-sheet-kicker-dot" aria-hidden="true"></span>' + escapeHtml(familyLabel) + "</p>"
+      + '<h2 class="mi-sheet-title" id="miSheetTitle" tabindex="-1">' + escapeHtml(item.nome) + "</h2>"
+      + '<div class="mi-sheet-actions">'
+      + renderPrimaryInfoAction(item, localDetailUrl)
+      + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("directions")) + "</a>" : "")
+      + "</div>"
+      + '<div class="mi-sheet-more">'
+      + (item.localizacaoAproximada ? '<p class="mi-sheet-approx">' + escapeHtml(mi("approx")) + "</p>" : "")
+      + '<p class="mi-sheet-desc">' + escapeHtml(publicText(item.descricao) || t("noDescription")) + "</p>"
+      + (meta.length ? '<ul class="mi-sheet-meta">' + meta.join("") + "</ul>" : "")
+      + routeChips
+      + renderApprovedEventsSection(item, "panel")
+      + "</div>"
+      + "</div>";
+  }
+
+  function renderRouteSheet(route) {
+    var stops = getRouteStops(route.id);
+    var located = stops.filter(function (stop) { return stop.possuiCoordenadas; });
+    var countLabel = located.length === 1 ? mi("routeStopsSingle") : replaceCount(mi("routeStops"), located.length);
+    return '<div class="mi-sheet-media">' + (route.imagem ? '<img src="' + escapeHtml(route.imagem) + '" alt="' + escapeHtml(route.nome) + '" loading="lazy" decoding="async" width="640" height="400">' : "") + "</div>"
+      + '<div class="mi-sheet-main">'
+      + '<p class="mi-sheet-kicker" style="--mi-fam:' + getRouteColor(route.id) + '"><span class="mi-sheet-kicker-dot" aria-hidden="true"></span>' + escapeHtml(mi("routeKicker")) + " · " + escapeHtml(countLabel) + "</p>"
+      + '<h2 class="mi-sheet-title" id="miSheetTitle" tabindex="-1">' + escapeHtml(route.nome) + "</h2>"
+      + '<div class="mi-sheet-actions"><button type="button" class="map-button" data-mi-close>' + escapeHtml(mi("routeClear")) + "</button></div>"
+      + '<div class="mi-sheet-more">'
+      + '<p class="mi-sheet-desc">' + escapeHtml(route.descricao || "") + "</p>"
+      + '<p class="mi-sheet-note">' + escapeHtml(mi("routeNote")) + "</p>"
+      + '<ol class="mi-stops">' + stops.map(function (stop) {
+        var family = window.MAPA_ILUSTRADO.familyFor(stop);
+        return '<li><button type="button" data-mi-stop="' + escapeHtml(stop.id) + '"' + (stop.possuiCoordenadas ? "" : " disabled") + ">"
+          + '<span class="mi-stop-pin" aria-hidden="true">' + window.MAPA_ILUSTRADO.pinSvg(family) + "</span>"
+          + '<span class="mi-stop-name">' + escapeHtml(stop.nome) + (stop.possuiCoordenadas ? "" : ' <em>(' + escapeHtml(mi("noLocation")) + ")</em>") + "</span></button></li>";
+      }).join("") + "</ol>"
+      + "</div>"
+      + "</div>";
+  }
+
+  function renderSheet() {
+    var sheet = document.getElementById("miSheet");
+    if (!sheet) return;
+    var item = state.sheetOpen && state.selectedItemId ? getItemById(state.selectedItemId) : null;
+    var route = !item && state.sheetOpen && state.highlightRoute ? getRouteRecord(state.highlightRoute) : null;
+    var stage = document.getElementById("miStage");
+
+    if (!item && !route) {
+      sheet.setAttribute("hidden", "");
+      sheet.innerHTML = "";
+      if (stage) stage.classList.remove("mi-sheet-open");
+      document.body.classList.remove("mi-sheet-visible");
+      return;
+    }
+
+    sheet.removeAttribute("hidden");
+    sheet.classList.toggle("is-expanded", !!state.sheetExpanded);
+    sheet.classList.toggle("is-route", !!route);
+    sheet.setAttribute("aria-label", route ? mi("routeKicker") + ": " + route.nome : mi("sheetRegion") + ": " + item.nome);
+    sheet.innerHTML = ''
+      + '<button type="button" class="mi-sheet-handle" data-mi-expand aria-expanded="' + (!!state.sheetExpanded) + '">'
+      + '<span class="mi-sheet-grip" aria-hidden="true"></span><span class="mi-sheet-handle-text">' + escapeHtml(state.sheetExpanded ? mi("collapse") : mi("expand")) + "</span></button>"
+      + '<button type="button" class="mi-sheet-close" data-mi-close aria-label="' + escapeHtml(mi("close")) + '">×</button>'
+      + '<div class="mi-sheet-body">' + (route ? renderRouteSheet(route) : renderItemSheet(item)) + "</div>";
+    if (stage) stage.classList.add("mi-sheet-open");
+    document.body.classList.add("mi-sheet-visible");
+  }
+
   function refreshView() {
     filterItems();
     renderFilters();
@@ -2128,6 +2900,7 @@
     renderSelectedItem();
     renderList();
     renderMobileViewToggle();
+    if (isIllustrated()) renderRouteBar();
     updateSearchUi();
     syncUrlState();
   }
@@ -2139,10 +2912,15 @@
     applyInitialStateFromUrl();
 
     state.map = L.map("tourismMap", {
-      zoomControl: true,
+      zoomControl: !isIllustrated(),
+      maxZoom: 19,
       scrollWheelZoom: true
     });
-    state.markersLayer = L.layerGroup().addTo(state.map);
+    if (isIllustrated()) {
+      initIllustratedLayers();
+    } else {
+      state.markersLayer = L.layerGroup().addTo(state.map);
+    }
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -2152,6 +2930,7 @@
     state.map.setView([-25.8775, -50.3822], 12);
     applyPageText();
     bindEvents();
+    if (isIllustrated()) initIllustratedUi();
     setMobileView("map", false);
     refreshView();
 
@@ -2174,7 +2953,13 @@
   }
 
   function bootstrap() {
+    // Sem js/mapa-ilustrado.js a página volta inteira ao layout anterior (painel lateral incluso).
+    if (document.body && document.body.classList.contains("mi-on") && !window.MAPA_ILUSTRADO) {
+      document.body.classList.remove("mi-on");
+    }
     if (!window.L || !window.TURISMO_DATA || !document.getElementById("tourismMap")) return;
+    // Sem o agrupamento (CDN indisponível) os pins continuam, sem rosetas; marca-se a página.
+    if (typeof L.markerClusterGroup !== "function") document.body.classList.add("mi-no-cluster");
     initMap();
   }
 
