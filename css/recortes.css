@@ -431,3 +431,7 @@ body.rc-local .sms-breadcrumb, body.rc-local .sms-breadcrumb * { background: non
     body.rc-local .col-left > .mapa-section { order: 8; }
     body.rc-local .col-left > .relacionados { order: 9; }
 }
+body.recortes .rc-festa-links .festa-btn,
+body.recortes .rc-festa-links .festa-secondary-link { all: unset; cursor: pointer; color: var(--rc-mate); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+body.recortes .rc-festa-links .festa-btn:focus-visible,
+body.recortes .rc-festa-links .festa-secondary-link:focus-visible { outline: 3px solid var(--rc-red); outline-offset: 3px; }
