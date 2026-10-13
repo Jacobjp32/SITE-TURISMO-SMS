@@ -66,7 +66,7 @@
     function initDeferredHeroVideo() {
         var video = document.querySelector('video.hero-video');
 
-        if (video && video.hasAttribute('data-on-demand')) {
+        if (video && typeof video.hasAttribute === 'function' && video.hasAttribute('data-on-demand')) {
             if (video.dataset.deferredHeroInitialized !== 'true') {
                 video.dataset.deferredHeroInitialized = 'true';
                 initOnDemandHeroVideo(video);

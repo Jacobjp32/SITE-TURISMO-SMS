@@ -316,7 +316,7 @@
     button.addEventListener('click', function () { showBanner(button); });
     // Com rodapé disponível, o controle vira um link discreto no rodapé em vez de
     // uma pílula fixa sobre o conteúdo (no mobile ela cobria CTAs e cards).
-    var footerHost = document.querySelector('footer');
+    var footerHost = typeof document.querySelector === 'function' ? document.querySelector('footer') : null;
     if (footerHost) {
       button.className = 'sms-cookie-preferences--inline';
       footerHost.appendChild(button);
