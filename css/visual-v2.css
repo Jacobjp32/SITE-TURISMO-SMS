@@ -1,0 +1,517 @@
+/* ==========================================================================
+   visual-v2.css — Evolução visual V2 (protótipo local)
+   Camada aditiva sobre os estilos existentes. Não altera tokens antigos:
+   define tokens próprios (--v2-*) e componentes com prefixos novos
+   (hv2-, page-hero-v2, card-media-typographic) ou escopo em body.v2-page.
+   ========================================================================== */
+
+:root {
+    --v2-forest: #0a3d2e;
+    --v2-forest-2: #145441;
+    --v2-forest-ink: #0d2a20;
+    --v2-gold: #d4a574;
+    --v2-gold-text: #8a5a2b;        /* dourado para TEXTO sobre fundos claros (AA) */
+    --v2-cream: #f8f6f0;
+    --v2-paper: #fffdf8;
+    --v2-ink: #17241e;
+    --v2-muted: #4b5a53;
+    --v2-line: rgba(10, 61, 46, 0.12);
+    --v2-polish-red: #b3122e;
+    --v2-radius: 14px;
+    --v2-radius-lg: 22px;
+    --v2-shadow: 0 10px 30px rgba(10, 61, 46, 0.10);
+    --v2-shadow-lg: 0 24px 60px rgba(10, 61, 46, 0.18);
+    --v2-display: 'Cormorant Garamond', Georgia, serif;
+    --v2-body: 'Raleway', system-ui, sans-serif;
+    --v2-header: var(--sms-header-offset, 180px);
+}
+
+/* --------------------------------------------------------------------------
+   1. HERO DA HOME — duas composições sobre a mesma marcação
+   A (padrão): fotografia real em tela cheia, texto sobre a imagem.
+   B (?hero=b): editorial em papel creme, mosaico de quatro fotos reais.
+   -------------------------------------------------------------------------- */
+#map-hero.hv2 {
+    position: relative;
+    isolation: isolate;
+    color: #fff;
+    background: var(--v2-forest-ink) !important;
+    font-family: var(--v2-body);
+    /* neutraliza regras antigas de #map-hero (altura fixa, grid editorial, overflow) */
+    height: auto !important;
+    max-height: none !important;
+    margin: 0 !important;
+    gap: 0 !important;
+    overflow: hidden !important;
+    border-radius: 0 !important;
+}
+#map-hero.hv2::before { display: none; }
+#map-hero.hv2 figure { margin: 0; }
+.hv2-shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* — Composição A — */
+#map-hero.hv2[data-hero-variant="a"] {
+    min-height: clamp(600px, 94vh, 880px) !important;
+    padding: var(--v2-header) 0 0 !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: 1fr auto !important;
+}
+#map-hero.hv2[data-hero-variant="a"] .hv2-media { position: absolute; inset: 0; z-index: -1; }
+#map-hero.hv2[data-hero-variant="a"] .hv2-shot--main { position: absolute; inset: 0; }
+#map-hero.hv2[data-hero-variant="a"] .hv2-shot--main img { object-position: 50% 58%; }
+#map-hero.hv2[data-hero-variant="a"] .hv2-shot--2,
+#map-hero.hv2[data-hero-variant="a"] .hv2-shot--3,
+#map-hero.hv2[data-hero-variant="a"] .hv2-shot--4 { display: none; }
+#map-hero.hv2[data-hero-variant="a"] .hv2-media::after {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+        linear-gradient(180deg, rgba(8, 30, 23, 0.55) 0%, rgba(8, 30, 23, 0) 26%),
+        linear-gradient(90deg, rgba(8, 30, 23, 0.78) 0%, rgba(8, 30, 23, 0.38) 46%, rgba(8, 30, 23, 0) 70%),
+        linear-gradient(0deg, rgba(8, 30, 23, 0.86) 0%, rgba(8, 30, 23, 0) 42%);
+    pointer-events: none;
+}
+#map-hero.hv2[data-hero-variant="a"] .hv2-content {
+    align-self: end;
+    width: min(1240px, 100% - 3rem);
+    margin: 0 auto;
+    padding: 3rem 0 2.25rem;
+    max-width: 1240px;
+}
+#map-hero.hv2[data-hero-variant="a"] .hv2-content > * { max-width: 640px; }
+#map-hero.hv2[data-hero-variant="a"] .hv2-caption {
+    position: absolute; right: 1.25rem; bottom: 1rem;
+    padding: 0.25rem 0.6rem; border-radius: 999px; background: rgba(8, 30, 23, 0.55);
+    font-size: 0.76rem; letter-spacing: 0.02em; color: #fff;
+}
+
+.hv2-kicker {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    margin: 0 0 0.9rem;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--v2-gold);
+}
+.hv2-kicker::before { content: ""; width: 34px; height: 2px; background: currentColor; border-radius: 2px; }
+.hv2-title {
+    margin: 0;
+    font-family: var(--v2-display);
+    font-weight: 600;
+    font-size: clamp(2.9rem, 7.2vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+}
+.hv2-lead {
+    margin: 1.1rem 0 0;
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.92);
+    text-wrap: pretty;
+}
+.hv2-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.75rem; }
+.hv2-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.45rem;
+    min-height: 48px; padding: 0.8rem 1.4rem;
+    border-radius: 999px; border: 1.5px solid transparent;
+    font: 700 0.98rem/1.1 var(--v2-body);
+    text-decoration: none; cursor: pointer;
+    transition: background-color .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+}
+.hv2-btn:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 3px; }
+.hv2-btn--primary { background: var(--v2-gold); color: var(--v2-forest-ink); }
+.hv2-btn--primary:hover { background: #e6bd8f; transform: translateY(-1px); }
+.hv2-btn--ghost { color: #fff; border-color: rgba(255, 255, 255, 0.7); background: rgba(255, 255, 255, 0.06); }
+.hv2-btn--ghost:hover { background: rgba(255, 255, 255, 0.16); }
+.hv2-btn--text { background: none; color: #fff; padding-inline: 0.6rem; text-decoration: underline; text-underline-offset: 4px; }
+
+.hv2-video { position: relative; z-index: 2; }
+.hv2-video video { display: block; width: 100%; height: auto; max-height: 70vh; background: #000; border-radius: var(--v2-radius); }
+#map-hero.hv2[data-hero-variant="a"] .hv2-video {
+    position: fixed; inset: auto 1rem 1rem auto; z-index: 10030;
+    width: min(720px, calc(100vw - 2rem));
+    box-shadow: var(--v2-shadow-lg);
+}
+.hv2-video[hidden] { display: none !important; }
+
+/* Portas de intenção (ex-chips do hero) */
+.hv2-portals {
+    position: relative; z-index: 1;
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0.75rem;
+    width: min(1240px, 100% - 3rem);
+    margin: 0 auto;
+    padding-bottom: 2rem;
+}
+.hv2-portal {
+    position: relative; overflow: hidden; isolation: isolate;
+    display: flex; align-items: flex-end;
+    min-height: 96px; padding: 0.85rem 1rem;
+    border-radius: var(--v2-radius);
+    color: #fff; text-decoration: none;
+    font-weight: 700; font-size: 1rem;
+    background: var(--v2-forest);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.hv2-portal img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform .5s ease; }
+.hv2-portal::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(0deg, rgba(8, 30, 23, 0.82) 0%, rgba(8, 30, 23, 0.15) 70%); }
+.hv2-portal span::after { content: " →"; color: var(--v2-gold); }
+.hv2-portal:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28); }
+.hv2-portal:hover img { transform: scale(1.05); }
+.hv2-portal:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 3px; }
+
+/* — Composição B — */
+#map-hero.hv2[data-hero-variant="b"] {
+    color: var(--v2-ink);
+    background: var(--v2-cream) !important;
+    min-height: 0 !important;
+    padding: calc(var(--v2-header) + 2.5rem) max(1.5rem, calc((100% - 1240px) / 2)) 2.5rem !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr) !important;
+    grid-template-rows: auto auto !important;
+    grid-template-areas: "content media" "portals portals";
+    column-gap: clamp(1.5rem, 4vw, 4rem) !important;
+}
+#map-hero.hv2[data-hero-variant="b"]::before {
+    /* faixa fina de wycinanki, motivo já usado no Mês Polonês */
+    content: ""; position: absolute; left: 0; right: 0; top: var(--v2-header); height: 6px;
+    background: linear-gradient(90deg, var(--v2-polish-red) 0 33%, var(--v2-gold) 33% 66%, var(--v2-forest) 66%);
+    opacity: 0.85;
+}
+#map-hero.hv2[data-hero-variant="b"] .hv2-content { grid-area: content; align-self: center; padding: 1rem 0; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-kicker { color: var(--v2-gold-text); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-title { color: var(--v2-forest); font-size: clamp(2.8rem, 5.6vw, 5.2rem); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-lead { color: var(--v2-muted); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-btn--primary { background: var(--v2-forest); color: #fff; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-btn--primary:hover { background: var(--v2-forest-2); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-btn--ghost { color: var(--v2-forest); border-color: rgba(10, 61, 46, 0.4); background: transparent; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-btn--ghost:hover { background: rgba(10, 61, 46, 0.06); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-btn--text { color: var(--v2-forest); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-media {
+    grid-area: media;
+    display: grid; gap: 0.75rem;
+    grid-template-columns: 1.5fr 1fr;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    height: clamp(420px, 58vh, 600px);
+}
+#map-hero.hv2[data-hero-variant="b"] .hv2-shot { position: relative; overflow: hidden; border-radius: var(--v2-radius); box-shadow: var(--v2-shadow); background: #ddd; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-shot--main { grid-row: 1 / 4; border-radius: var(--v2-radius-lg); }
+#map-hero.hv2[data-hero-variant="b"] .hv2-shot--main img { object-position: 50% 55%; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-shot--2 img { object-position: 50% 40%; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-shot--4 img { object-position: 62% 50%; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-caption {
+    position: absolute; left: 0.9rem; bottom: 0.75rem;
+    padding: 0.3rem 0.65rem; border-radius: 999px;
+    background: rgba(8, 30, 23, 0.72); color: #fff; font-size: 0.78rem;
+}
+#map-hero.hv2[data-hero-variant="b"] .hv2-video { grid-column: 1 / -1; grid-row: 1 / 4; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-video:not([hidden]) ~ * { visibility: hidden; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-portals { grid-area: portals; width: auto; padding: 2rem 0 0; }
+#map-hero.hv2[data-hero-variant="b"] .hv2-portal { min-height: 84px; box-shadow: none; }
+
+/* Slot sazonal (season-theme.js monta em #map-hero): canto superior direito, sem cobrir o título */
+#map-hero.hv2 > [data-season-mascot] { position: absolute !important; top: calc(var(--v2-header) + 1rem); right: max(1rem, calc((100% - 1240px) / 2)); left: auto !important; bottom: auto !important; z-index: 3; }
+#map-hero.hv2[data-hero-variant="b"] > [data-season-mascot] { top: calc(var(--v2-header) + 1.1rem) !important; left: max(1.5rem, calc((100% - 1240px) / 2)) !important; right: auto !important; }
+@media (max-width: 768px) {
+    #map-hero.hv2[data-hero-variant="b"] > [data-season-mascot] { position: static !important; grid-row: 4; justify-self: start; margin-top: 1rem; transform: none; }
+}
+
+/* Hero responsivo */
+@media (max-width: 1100px) {
+    .hv2-portals { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #map-hero.hv2[data-hero-variant="b"] { grid-template-columns: minmax(0, 1fr) !important; grid-template-rows: auto auto auto !important; grid-template-areas: "content" "media" "portals"; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-media { height: clamp(340px, 52vw, 520px); }
+}
+@media (max-width: 768px) {
+    #map-hero.hv2[data-hero-variant="a"] { min-height: 0 !important; padding-top: 0 !important; grid-template-rows: auto auto auto !important; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-media { position: relative; inset: auto; height: min(62vh, 520px); }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-shot--main img { object-position: 42% 55%; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-media::after {
+        background: linear-gradient(0deg, rgba(8, 30, 23, 0.95) 0%, rgba(8, 30, 23, 0.45) 45%, rgba(8, 30, 23, 0.1) 75%);
+    }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-content {
+        position: relative; margin-top: -11.5rem; width: calc(100% - 2rem); padding: 0 0 1.25rem;
+    }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-caption { top: 0.75rem; bottom: auto; left: 0.75rem; right: auto; max-width: 55%; font-size: 0.72rem; }
+    #map-hero.hv2 > [data-season-mascot] { top: 0.6rem !important; right: 0.6rem !important; transform: scale(0.85); transform-origin: top right; }
+    .hv2-title { font-size: clamp(2.6rem, 12vw, 3.4rem); }
+    .hv2-lead { font-size: 1.02rem; margin-top: 0.75rem; }
+    .hv2-actions { margin-top: 1.1rem; gap: 0.5rem; }
+    .hv2-actions .hv2-btn--primary, .hv2-actions .hv2-btn--ghost { flex: 1 1 100%; }
+    .hv2-btn--text { min-height: 44px; }
+    .hv2-portals {
+        display: flex; gap: 0.6rem; overflow-x: auto; scroll-snap-type: x mandatory;
+        width: auto; padding: 0.25rem 1rem 1.5rem; scrollbar-width: none;
+    }
+    .hv2-portals::-webkit-scrollbar { display: none; }
+    .hv2-portal { flex: 0 0 42%; min-height: 84px; scroll-snap-align: start; font-size: 0.95rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-video { inset: auto 0.5rem 0.5rem 0.5rem; width: auto; }
+
+    #map-hero.hv2[data-hero-variant="b"] { padding: 1.5rem 1rem 1.5rem !important; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-content { padding: 0 0 1rem; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-media { grid-template-columns: 1fr 1fr; grid-template-rows: 2fr 1fr; height: 420px; gap: 0.5rem; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-shot--main { grid-row: 1; grid-column: 1 / 3; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-shot--4 { display: none; }
+    #map-hero.hv2[data-hero-variant="b"] .hv2-portals { padding: 1.25rem 0 0; margin-inline: -1rem; padding-inline: 1rem; }
+}
+
+/* --------------------------------------------------------------------------
+   2. ORGANIZAÇÃO DA HOME
+   -------------------------------------------------------------------------- */
+/* Contadores: fora da primeira dobra, em faixa compacta abaixo da prévia do mapa */
+.home-trust-strip--compact { padding: 0 0 2.5rem !important; background: transparent !important; margin-top: -1rem; }
+.home-trust-strip--compact .home-trust-grid {
+    display: flex !important; flex-wrap: wrap; justify-content: center; gap: 0.5rem 1.5rem !important;
+    max-width: 960px; margin: 0 auto; padding: 0.9rem 1.25rem;
+    border-top: 1px solid var(--v2-line); border-bottom: 1px solid var(--v2-line);
+}
+.home-trust-strip--compact .stat-item {
+    display: flex !important; align-items: baseline; gap: 0.4rem;
+    padding: 0 !important; background: none !important; box-shadow: none !important; border: 0 !important; min-height: 0 !important;
+}
+.home-trust-strip--compact .stat-number { font-size: 1.35rem !important; color: var(--v2-forest) !important; font-family: var(--v2-display); font-weight: 700; }
+.home-trust-strip--compact .stat-label { font-size: 0.82rem !important; letter-spacing: 0.06em; color: var(--v2-muted) !important; }
+html.site-stats-pending [data-site-stat]:not([data-site-stat="foundingYear"]):not([data-site-stat="yearsSinceFoundation"]) { visibility: hidden; }
+
+/* "Três pilares": de linha do tempo em zigue-zague (≈2.400 px) para três capítulos lado a lado.
+   Todo o texto e as imagens permanecem; muda só a composição. */
+.home-page .pilares-timeline { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 1.25rem !important; max-width: 1240px; margin-inline: auto; padding: 0 !important; }
+.home-page .pilares-timeline::before, .home-page .pilares-timeline::after, .home-page .pilar-item::before, .home-page .pilar-item::after { display: none !important; }
+.home-page .pilar-item {
+    display: flex !important; flex-direction: column !important; grid-template-columns: none !important;
+    margin: 0 !important; padding: 0 !important; gap: 0 !important;
+    background: var(--v2-paper); border: 1px solid var(--v2-line); border-radius: var(--v2-radius-lg); overflow: hidden; box-shadow: var(--v2-shadow);
+}
+.home-page .pilar-visual { order: 0 !important; height: 200px !important; min-height: 0 !important; border-radius: 0 !important; margin: 0 !important; }
+.home-page .pilar-image { height: 100% !important; width: 100% !important; object-fit: cover; }
+.home-page .pilar-content { order: 1 !important; padding: 1.15rem 1.3rem 1.4rem !important; text-align: left !important; }
+.home-page .pilar-title { font-size: 1.55rem !important; line-height: 1.12 !important; margin: 0.35rem 0 0.25rem !important; }
+.home-page .pilar-description { font-size: 0.95rem !important; line-height: 1.6 !important; }
+.home-page .pilar-highlights { gap: 0.4rem !important; margin-top: 0.75rem !important; }
+.home-page .highlight-item { padding: 0.45rem 0.6rem !important; font-size: 0.86rem !important; line-height: 1.45 !important; border-left-width: 2px !important; }
+.home-page .highlight-icon { font-size: 0.95rem !important; }
+
+/* Atrações: trilho horizontal em todas as larguras (12 cards deixam de ocupar ≈3.000 px) */
+.home-page .attractions-grid {
+    display: flex !important; gap: 1rem !important; overflow-x: auto; scroll-snap-type: x mandatory;
+    grid-template-columns: none !important; padding: 0.25rem 0.25rem 1.25rem !important; scrollbar-width: thin;
+}
+.home-page .attractions-grid > * { flex: 0 0 min(300px, 78%) !important; max-width: min(300px, 78%) !important; scroll-snap-align: start; margin: 0 !important; }
+.home-page .attraction-image { height: 190px !important; object-fit: cover; }
+
+@media (max-width: 1024px) {
+    .home-page .pilares-timeline { display: flex !important; overflow-x: auto; scroll-snap-type: x mandatory; padding: 0.25rem 1rem 1rem !important; margin-inline: -1rem; }
+    .home-page .pilar-item { flex: 0 0 min(340px, 84%); scroll-snap-align: start; }
+}
+
+/* Ritmo vertical mais curto entre seções da home */
+.home-page main > section:not(.hv2) { scroll-margin-top: calc(var(--v2-header) + 12px); }
+@media (max-width: 768px) {
+    .home-page main > section:not(.hv2):not(.home-trust-strip) { padding-top: 2.75rem !important; padding-bottom: 2.75rem !important; }
+    .home-page .section-title { font-size: clamp(1.75rem, 7vw, 2.2rem) !important; line-height: 1.12 !important; }
+    .home-page .section-subtitle { font-size: 0.98rem !important; }
+
+    /* Corredores de cards viram trilhos horizontais (mesmo conteúdo, menos rolagem) */
+    .home-page .attractions-grid,
+    .home-page .hotels-grid,
+    .home-page .home-recurring-grid,
+    .home-page .experience-links-grid,
+    .home-page .blog-grid {
+        display: flex !important; gap: 0.85rem !important;
+        overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: 1rem;
+        margin-inline: -1rem !important; padding: 0.25rem 1rem 1rem !important;
+        grid-template-columns: none !important; scrollbar-width: thin;
+    }
+    .home-page .attractions-grid > *,
+    .home-page .hotels-grid > *,
+    .home-page .experience-links-grid > *,
+    .home-page .blog-grid > * { flex: 0 0 78% !important; max-width: 78% !important; scroll-snap-align: start; margin: 0 !important; }
+    .home-page .home-recurring-grid > * { flex: 0 0 62% !important; scroll-snap-align: start; }
+    .home-page .attraction-image, .home-page .hotel-media { height: 170px !important; }
+    .home-page .attraction-desc { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+
+    /* Linha do tempo "Três pilares": imagens menores no mobile */
+    .home-page .pilares-section img { max-height: 190px; object-fit: cover; }
+}
+
+/* --------------------------------------------------------------------------
+   3. SISTEMA DE CARDS — mídia real ou tile tipográfico
+   -------------------------------------------------------------------------- */
+.card-media-typographic {
+    position: relative;
+    display: flex !important; flex-direction: column; justify-content: space-between;
+    min-height: 150px; padding: 1rem 1.1rem;
+    background:
+        radial-gradient(120% 90% at 100% 0%, rgba(212, 165, 116, 0.28) 0%, rgba(212, 165, 116, 0) 55%),
+        linear-gradient(150deg, var(--v2-forest) 0%, var(--v2-forest-2) 100%);
+    color: #fff; overflow: hidden;
+}
+.card-media-typographic::after {
+    /* ornamento discreto inspirado no recorte wycinanki (forma geométrica, não ilustração) */
+    content: ""; position: absolute; right: -18px; bottom: -18px; width: 96px; height: 96px;
+    border: 2px solid rgba(212, 165, 116, 0.35); border-radius: 50%;
+    box-shadow: 0 0 0 10px rgba(212, 165, 116, 0.08), 0 0 0 22px rgba(212, 165, 116, 0.05);
+}
+.card-media-initial { font-family: var(--v2-display); font-size: 3.2rem; line-height: 1; font-weight: 600; color: var(--v2-gold); }
+.card-media-category { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.85); }
+.hotel-media { display: block; width: 100%; height: 180px; object-fit: cover; border-radius: 12px 12px 0 0; margin-bottom: 0.9rem; }
+.hotel-card .card-media-typographic { border-radius: 12px 12px 0 0; margin-bottom: 0.9rem; min-height: 120px; }
+.attraction-card .card-media-typographic.attraction-image { height: 200px; }
+
+/* Mapa: tile tipográfico (sem "Sem imagem") e ações hierarquizadas */
+.map-image-fallback.is-typographic {
+    display: flex !important; align-items: center; justify-content: center;
+    background: linear-gradient(150deg, var(--fallback-color, var(--v2-forest)) 0%, rgba(10, 61, 46, 0.92) 140%) !important;
+    color: #fff !important;
+}
+.map-image-fallback.is-typographic span {
+    font-family: var(--v2-display); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.04em;
+    color: #fff !important; background: none !important; border: 0 !important; width: auto !important; height: auto !important;
+    opacity: 0.92;
+}
+.map-list-card-actions { gap: 0.25rem 0.9rem !important; align-items: center; }
+.map-list-card-actions .map-button:not(.primary) {
+    background: none !important; border: 0 !important; box-shadow: none !important;
+    padding: 0.35rem 0.1rem !important; min-height: 36px;
+    color: var(--v2-forest) !important; text-decoration: underline; text-underline-offset: 3px; font-weight: 700;
+}
+.map-popup-actions { display: flex; flex-wrap: wrap; gap: 0.5rem 0.9rem; align-items: center; margin-top: 0.5rem; }
+
+/* --------------------------------------------------------------------------
+   4. CABEÇALHO COMPARTILHADO DAS PÁGINAS INTERNAS
+   Uso: <section class="hero page-hero-v2" style="--page-hero-image:url('...')">
+   -------------------------------------------------------------------------- */
+.page-hero-v2 {
+    position: relative; isolation: isolate; overflow: hidden;
+    display: flex !important; flex-direction: column; justify-content: flex-end; align-items: flex-start !important;
+    min-height: clamp(260px, 38vh, 380px);
+    padding: 2.5rem max(1.5rem, calc((100% - 1200px) / 2)) 2.25rem !important;
+    text-align: left !important;
+    color: #fff !important;
+    background: var(--v2-forest-ink) !important;
+}
+.page-hero-v2::before {
+    content: ""; position: absolute; inset: 0; z-index: -2;
+    background: var(--page-hero-image) var(--page-hero-position, 50% 50%) / cover no-repeat !important;
+    inset: 0 !important; width: auto !important; height: auto !important; transform: none !important; opacity: 1 !important; border-radius: 0 !important; filter: none !important;
+}
+.page-hero-v2::after {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(0deg, rgba(8, 30, 23, 0.9) 0%, rgba(8, 30, 23, 0.45) 55%, rgba(8, 30, 23, 0.2) 100%) !important;
+    inset: 0 !important; width: auto !important; height: auto !important; transform: none !important; opacity: 1 !important; border-radius: 0 !important;
+}
+.page-hero-v2 h1 {
+    margin: 0 !important; font-family: var(--v2-display) !important; font-weight: 600 !important;
+    font-size: clamp(2.3rem, 5vw, 3.8rem) !important; line-height: 1.02 !important; color: #fff !important; text-wrap: balance;
+}
+.page-hero-v2 p { margin: 0.75rem 0 0 !important; max-width: 640px; font-size: clamp(1rem, 1.5vw, 1.15rem) !important; color: rgba(255, 255, 255, 0.9) !important; line-height: 1.55; text-align: left !important; }
+.page-hero-v2 .page-hero-v2__caption { position: absolute; right: 1rem; top: 1rem; padding: 0.25rem 0.6rem; border-radius: 999px; background: rgba(8, 30, 23, 0.62); font-size: 0.74rem; color: #fff; }
+.page-hero-v2 .hero-mascote { position: absolute; right: max(1rem, calc((100% - 1200px) / 2)); bottom: 0; height: 78%; max-height: 260px; width: auto; opacity: 1; }
+.page-hero-v2 .tabs { margin-top: 1.25rem !important; justify-content: flex-start !important; }
+@media (max-width: 768px) {
+    .page-hero-v2 { min-height: 230px; padding: 1.5rem 1rem 1.4rem !important; }
+    .page-hero-v2 .hero-mascote { height: 46%; opacity: 0.95; }
+    .page-hero-v2 .tabs { flex-wrap: nowrap !important; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+}
+
+/* Pratos típicos: as fotos atuais não mostram os pratos (desfiles, trajes, uvas).
+   Até haver fotografia real de cada prato, o card é tipográfico. */
+.v2-sabores .dish-card-image {
+    background-image:
+        radial-gradient(120% 90% at 100% 0%, rgba(212, 165, 116, 0.3) 0%, rgba(212, 165, 116, 0) 55%),
+        linear-gradient(150deg, var(--v2-forest) 0%, var(--v2-forest-2) 100%) !important;
+    min-height: 96px !important; height: 96px !important;
+}
+.v2-sabores .restaurant-icon {
+    width: 44px !important; height: 44px !important; min-width: 44px; border-radius: 50% !important;
+    background: var(--v2-cream) !important; border: 1px solid var(--v2-line);
+    font-size: 1.1rem !important; display: flex !important; align-items: center; justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   5. RODAPÉ — as páginas internas com rodapé mínimo passam a seguir a marca
+   -------------------------------------------------------------------------- */
+.v2-page > footer.footer,
+.v2-page > footer:not([class]) {
+    background: var(--v2-forest-ink) !important;
+    color: rgba(255, 255, 255, 0.86) !important;
+    padding: 2.25rem 1.5rem calc(2rem + env(safe-area-inset-bottom)) !important;
+    text-align: center; border-top: 4px solid var(--v2-gold);
+    font-size: 0.92rem;
+}
+.v2-page > footer a { color: var(--v2-gold) !important; font-weight: 600; }
+.v2-page > footer::before {
+    content: "São Mateus do Sul · Capital Polonesa do Paraná";
+    display: block; margin-bottom: 0.75rem;
+    font-family: var(--v2-display); font-size: 1.35rem; color: #fff;
+}
+
+/* --------------------------------------------------------------------------
+   6. CABEÇALHO MOBILE — mesmas funções, menos altura (≈164px → ≈118px)
+   O nav-shared mede as alturas reais e recalcula o deslocamento do conteúdo.
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    html body .accessibility-bar { padding: 0.1rem 0.5rem !important; }
+    html body .accessibility-bar .container { min-height: 28px !important; }
+    html body .accessibility-bar .font-controls button { width: 32px !important; height: 26px !important; }
+    html body .nav { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
+    html body .nav-logo img { height: 52px !important; max-width: 112px !important; padding: 3px !important; border-radius: 9px !important; }
+    html body .nav-mobile-shortcuts { padding-top: 0.3rem !important; padding-bottom: 0.3rem !important; }
+    html body .nav-mobile-shortcuts a { min-height: 34px !important; padding: 0.3rem 0.8rem !important; font-size: 0.82rem !important; }
+}
+@media (max-width: 480px) {
+    /* Estação/clima repetem informação que a home já mostra; o restante da barra eMAG fica. */
+    html body .accessibility-bar [class*="season"],
+    html body .accessibility-bar [class*="weather"],
+    html body .accessibility-bar [data-weather-chip],
+    html body .accessibility-bar [data-season-chip] { display: none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   7. FLUTUANTES — um lado para cada função, sem sobreposição
+   esquerda: mascote · direita: voltar ao topo + VLibras
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    html body #sms-mascot { left: 12px !important; right: auto !important; top: auto !important; bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important; }
+    html body #sms-mascot .sms-mascot-launcher { width: 52px; height: 52px; }
+    html body .back-to-top { left: auto !important; right: 12px !important; bottom: calc(12px + env(safe-area-inset-bottom)) !important; width: 44px !important; height: 44px !important; }
+    html body div[vw].enabled [vw-access-button],
+    html body div[vw] [vw-access-button] { left: auto !important; right: 8px !important; bottom: calc(66px + env(safe-area-inset-bottom)) !important; transform: scale(0.82) !important; transform-origin: right bottom !important; }
+    html body div[vw] [vw-plugin-wrapper] { left: auto !important; right: 0 !important; }
+    .sms-mascot-bubble { max-width: 200px; }
+}
+body.nav-menu-open #sms-mascot,
+body.nav-menu-open div[vw],
+body.nav-menu-open .back-to-top { visibility: hidden !important; }
+
+/* --------------------------------------------------------------------------
+   8. LEITURA — tamanhos mínimos e dourado de texto com contraste AA
+   -------------------------------------------------------------------------- */
+.v2-page .map-list-card p, .home-page .attraction-desc, .home-page .hotel-description,
+.v2-page .event-meta, .v2-page .post-meta, .v2-page .where-to-find, .v2-page .hotel-contact, .v2-page .contact span { font-size: max(0.84rem, 13px) !important; }
+.home-page .public-establishment-cta, .home-page .experience-link-cta,
+.v2-page .read-more, .v2-page .post-link, .home-page .featured-experience-body small { color: var(--v2-gold-text) !important; font-size: max(0.88rem, 14px) !important; }
+.v2-page .map-meta-chip, .v2-page .map-list-badge, .v2-page .amenity { font-size: max(0.76rem, 12px) !important; }
+
+/* --------------------------------------------------------------------------
+   9. MAPA NO CELULAR — o mapa aparece na primeira tela
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+    .v2-mapa .map-intro { padding-top: 0.75rem !important; padding-bottom: 0.25rem !important; }
+    .v2-mapa .map-intro h1 { font-size: 1.7rem !important; }
+    .v2-mapa .map-intro-description, .v2-mapa .map-kicker, .v2-mapa .map-search-help, .v2-mapa .map-toolbar-stats, .v2-mapa .map-action-link { display: none !important; }
+    .v2-mapa .map-toolbar { padding: 0.75rem !important; gap: 0.6rem !important; }
+    .v2-mapa .map-stage-head p, .v2-mapa .map-stage-badge { display: none !important; }
+    .v2-mapa .map-overview-card { display: none !important; }
+    .v2-mapa .map-list-card { display: grid; grid-template-columns: 84px 1fr; }
+    .v2-mapa .map-list-card-select { display: contents; }
+    .v2-mapa .map-list-thumb { width: 84px !important; height: 100% !important; min-height: 96px; border-radius: 12px 0 0 12px !important; grid-row: 1 / 3; }
+    .v2-mapa .map-list-card-actions { grid-column: 2; padding: 0 0.75rem 0.75rem !important; }
+    .v2-mapa .map-list-content p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+    .hv2-portal, .hv2-portal img, .hv2-btn { transition: none !important; }
+}

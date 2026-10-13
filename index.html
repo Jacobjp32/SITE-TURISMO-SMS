@@ -140,6 +140,7 @@
     <link rel="stylesheet" href="css/index.css?v=admin-e2e-publication-20260911">
     <link rel="stylesheet" href="css/season-theme.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
+    <link rel="stylesheet" href="css/visual-v2.css?v=visual-v2-local">
 
     <!-- Sistema de Traduções -->
     <script src="translations.js?v=agro-postponed-20260924"></script>
@@ -174,66 +175,65 @@
 
     <main id="main-content" tabindex="-1">
     <!-- Map Hero -->
-    <section id="map-hero" class="home-hero-editorial" aria-labelledby="home-hero-title">
-        <div class="home-hero-inner">
-            <div class="map-info-panel">
-                <h1 id="home-hero-title" data-lang-key="hero-title">Planeje sua visita a São Mateus do Sul</h1>
-                <p data-lang-key="hero-map-desc">Encontre pontos turísticos, rotas, gastronomia, hospedagem e eventos em um só lugar.</p>
-
-                <div class="hero-actions" aria-label="Ações principais">
-                    <a href="/mapa-turistico" class="explore-btn hero-primary-cta" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
-                    <a href="/eventos/" class="hero-secondary-cta" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
-                </div>
-
-                <div class="hero-quick-links" aria-label="Atalhos para planejar a visita">
-                    <a href="/mapa-turistico?grupo=pontos-turisticos" data-lang-key="hero-chip-atracoes">Atrações</a>
-                    <a href="/mapa-turistico?grupo=roteiros" data-lang-key="hero-chip-rotas">Rotas</a>
-                    <a href="/sabores" data-lang-key="hero-chip-gastronomia">Gastronomia</a>
-                    <a href="/onde-ficar" data-lang-key="hero-chip-ficar">Onde Ficar</a>
-                    <a href="/mapa-turistico" data-lang-key="hero-chip-chegar">Como Chegar</a>
-                </div>
-            </div>
-
-            <div id="map" class="hero-video-frame" role="group" aria-label="São Mateus do Sul em imagens" data-lang-key-aria-label="hero-media-label">
-                <div class="hero-media-label" data-lang-key="hero-media-label">São Mateus do Sul em imagens</div>
-                <video
-                    class="hero-video"
-                    muted
-                    loop
-                    playsinline
-                    preload="none"
-                    width="1920"
-                    height="1080"
-                    aria-label="Vídeo panorâmico de São Mateus do Sul"
-                    data-lang-key-aria-label="hero-media-video-label"
-                    poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
-                    <source data-src="videos/ROTA_DO_TURISMO.hero-720p-opt-v1.mp4" type="video/mp4">
-                    Sua navegacao nao suporta video em HTML5.
-                </video>
+    <section id="map-hero" class="hv2" data-hero-variant="a" aria-labelledby="home-hero-title">
+        <div class="hv2-media">
+            <figure class="hv2-shot hv2-shot--main">
+                <img src="images/PONTE_ENTRADA_CIDADE_1_2.jpg" alt="Rio Iguaçu e a ponte de entrada de São Mateus do Sul vistos do alto" width="1920" height="1080" fetchpriority="high" decoding="async">
+                <figcaption class="hv2-caption" data-lang-key="hv2-caption">Rio Iguaçu e a ponte de entrada da cidade</figcaption>
+            </figure>
+            <figure class="hv2-shot hv2-shot--2">
+                <img src="images/IGREJA_AGUA_BRANCA_5.jpg" alt="Altar e paredes pintadas da Igreja da Água Branca, de herança polonesa" width="1200" height="900" loading="lazy" decoding="async">
+            </figure>
+            <figure class="hv2-shot hv2-shot--3">
+                <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Grupo folclórico com trajes poloneses no festival Polskie Smaki" width="1200" height="794" loading="lazy" decoding="async">
+            </figure>
+            <figure class="hv2-shot hv2-shot--4">
+                <img src="images/CUIA_1.JPG" alt="Caixa-d'água em forma de cuia, símbolo da erva-mate, no centro da cidade" width="1920" height="1080" loading="lazy" decoding="async">
+            </figure>
+            <div class="hv2-video" hidden>
+                <video data-on-demand controls
+                        class="hero-video"
+                        muted
+                        loop
+                        playsinline
+                        preload="none"
+                        width="1920"
+                        height="1080"
+                        aria-label="Vídeo panorâmico de São Mateus do Sul"
+                        data-lang-key-aria-label="hero-media-video-label"
+                        poster="images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg">
+                        <source data-src="videos/ROTA_DO_TURISMO.hero-720p-opt-v1.mp4" type="video/mp4">
+                        Sua navegacao nao suporta video em HTML5.
+                        </video>
             </div>
         </div>
-    </section>
 
-    <section class="home-trust-strip" aria-label="Resumo do mapa turístico">
-        <div class="home-trust-grid">
-            <div class="stat-item">
-                <span class="stat-number" data-site-stat="withCoordinates">66</span>
-                <span class="stat-label" data-lang-key="stat-pontos-mapa">Pontos no mapa</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" data-site-stat="totalItems">83</span>
-                <span class="stat-label" data-lang-key="stat-locais-cadastrados">Locais cadastrados</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" data-site-stat="categoryCount">7</span>
-                <span class="stat-label" data-lang-key="stat-categorias">Categorias</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" data-site-stat="routes">6</span>
-                <span class="stat-label" data-lang-key="stat-rotas">Rotas Temáticas</span>
+        <div class="hv2-content">
+            <p class="hv2-kicker" data-lang-key="hv2-kicker">Capital Polonesa do Paraná · Terra da Erva-Mate</p>
+            <h1 id="home-hero-title" class="hv2-title" data-lang-key="hv2-title">São Mateus do Sul</h1>
+            <p class="hv2-lead" data-lang-key="hv2-lead">Herança polonesa, erva-mate e o Rio Iguaçu em uma cidade para conhecer sem pressa.</p>
+            <div class="hv2-actions" aria-label="Ações principais">
+                <a href="/mapa-turistico" class="hv2-btn hv2-btn--primary" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
+                <a href="/eventos/" class="hv2-btn hv2-btn--ghost" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
+                <button type="button" class="hv2-btn hv2-btn--text" data-hero-video-play><span aria-hidden="true">▶</span> <span data-lang-key="hv2-watch">Assistir ao vídeo</span></button>
             </div>
         </div>
-    </section>
+
+        <nav class="hv2-portals" aria-label="Comece pelo que você procura" data-lang-key-aria-label="hv2-portals-label">
+            <a href="/mapa-turistico?grupo=pontos-turisticos" class="hv2-portal"><img src="images/IGREJA_MATRIZ_1.png" alt="" width="1920" height="1280" loading="lazy" decoding="async"><span data-lang-key="hero-chip-atracoes">Atrações</span></a>
+            <a href="/mapa-turistico?grupo=roteiros" class="hv2-portal"><img src="images/WEBP/PONTE-ENTRADA-CIDADE-1-_3_.webp" alt="" width="1200" height="675" loading="lazy" decoding="async"><span data-lang-key="hero-chip-rotas">Rotas</span></a>
+            <a href="/sabores" class="hv2-portal"><img src="images/WEBP/RUA-DO-MATHE-_1_.webp" alt="" width="1920" height="1280" loading="lazy" decoding="async"><span data-lang-key="hero-chip-gastronomia">Gastronomia</span></a>
+            <a href="/onde-ficar" class="hv2-portal"><img src="images/PONTE_ENTRADA_CIDADE_1.JPG" alt="" width="1920" height="1080" loading="lazy" decoding="async"><span data-lang-key="hero-chip-ficar">Onde Ficar</span></a>
+            <a href="/mapa-turistico" class="hv2-portal"><img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="" width="1200" height="675" loading="lazy" decoding="async"><span data-lang-key="hero-chip-chegar">Como Chegar</span></a>
+        </nav>
+    </section>
+    <script>
+    // Prévia de comparação: ?hero=b mostra a composição editorial; sem o parâmetro vale a composição A.
+    (function () {
+        var m = /[?&]hero=(a|b)(?:&|$)/.exec(window.location.search);
+        if (m) document.getElementById("map-hero").setAttribute("data-hero-variant", m[1]);
+    })();
+    </script>
 
     <!-- Experiências em destaque -->
     <section class="featured-experiences-section" aria-labelledby="featured-experiences-title">
@@ -395,6 +395,147 @@
         </div>
     </section>
 
+
+    <!-- ============================================================
+         FESTAS EM DESTAQUE - AGROSAMAS E NATAL OURO VERDE
+         Seção permanente destacando as duas principais festas
+    ============================================================ -->
+    <section class="festas-destaque-section" id="festas-destaque">
+        <div class="festas-container">
+            <div class="festas-header">
+                <span class="festas-label" data-lang-key="festas-badge">🎉 Festas Imperdíveis</span>
+                <h2 class="festas-title" data-lang-key="festas-titulo">Eventos que Movem a <strong>Cidade</strong></h2>
+                <p class="festas-subtitle" data-lang-key="festas-desc">Conheça as duas maiores celebrações de São Mateus do Sul</p>
+            </div>
+
+            <div class="festas-grid">
+                <!-- AgroSamas -->
+                <div class="festa-card festa-agrosamas">
+                    <div class="festa-badge" data-lang-key="agrosamas-status">ADIADO</div>
+                    <div class="festa-icon">🚜</div>
+                    <h3 class="festa-nome" data-agrosamas-bind="name">5º AgroSamas</h3>
+                    <p class="festa-descricao" data-lang-key="agrosamas-desc">O 5º AgroSamas foi adiado. A nova data ainda não foi definida e será divulgada pelos canais oficiais.</p>
+                    <div class="festa-info">
+                        <span>📅 <span data-lang-key="agrosamas-date-status">Nova data a definir</span></span>
+                        <span>📍 <span data-agrosamas-bind="location">Rua do Mathe</span></span>
+                    </div>
+                    <div class="festa-destaques">
+                        <span data-lang-key="agrosamas-tag2">🚜 AgroSamas</span>
+                        <span data-lang-key="agrosamas-tag3">📍 São Mateus do Sul</span>
+                    </div>
+                    <div class="festa-actions">
+                        <a href="/agrosamas-2026" class="festa-btn" data-lang-key="agrosamas-btn">Explorar a edição 2026 →</a>
+                        <a href="/agrosamas" class="festa-secondary-link" data-lang-key="agrosamas-hub-btn">Conheça o AgroSamas</a>
+                    </div>
+                </div>
+
+                <!-- Natal Ouro Verde -->
+                <div class="festa-card festa-natal">
+                    <div class="festa-badge" data-lang-key="natal-badge">DEZEMBRO</div>
+                    <div class="festa-icon">🎄</div>
+                    <h3 class="festa-nome" data-lang-key="natal-nome">Natal Ouro Verde 2026</h3>
+                    <p class="festa-descricao" data-lang-key="natal-desc">A magia do Natal na Capital Polonesa! Desfiles temáticos, apresentações culturais, shows, decoração especial e a tradicional chegada do Papai Noel em família.</p>
+                    <div class="festa-info">
+                        <span data-lang-key="natal-data">📅 05 a 19 de Dezembro</span>
+                        <span data-lang-key="natal-local">📍 Centro da Cidade</span>
+                        <span data-lang-key="natal-entrada">🆓 Entrada Gratuita</span>
+                    </div>
+                    <div class="festa-destaques">
+                        <span data-lang-key="natal-tag1">🎅 Papai Noel</span>
+                        <span data-lang-key="natal-tag2">🎭 Desfiles</span>
+                        <span data-lang-key="natal-tag3">✨ Iluminação</span>
+                        <span data-lang-key="natal-tag4">🎵 Coral</span>
+                    </div>
+                    <a href="/eventos/" class="festa-btn" data-lang-key="natal-btn-ver">
+                        Ver Programação →
+                    </a>
+                </div>
+            </div>
+
+            <div class="festas-cta">
+                <a href="/eventos" class="festas-ver-mais" data-lang-key="btn-calendario">
+                    📅 Ver Calendário Completo de Eventos 2026
+                </a>
+            </div>
+        </div>
+    </section>
+
+    
+    
+    
+
+
+
+    <!-- Attractions -->
+    <section id="attractions" class="section">
+        <div class="section-header">
+            <h2 class="section-title" data-lang-key="section-atracoes">Principais <strong>Atrações</strong></h2>
+            <p class="section-subtitle" data-lang-key="section-atracoes-desc">Conheça os pontos turísticos que fazem de São Mateus do Sul um destino único</p>
+        </div>
+
+        <div class="attractions-grid" data-public-establishments="attractions" aria-live="polite">
+            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-matriz'" style="cursor:pointer">
+                <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="attraction-content">
+                    <div class="attraction-icon">⛪</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-igreja-matriz">Igreja Matriz</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-igreja-matriz-desc">Arquitetura neogótica preservada há mais de século.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+
+            <div class="attraction-card" onclick="window.location.href='/local?id=ponte-rio-iguacu'" style="cursor:pointer">
+                <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="attraction-content">
+                    <div class="attraction-icon">🌊</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-rio-iguacu">Rio Iguaçu</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-rio-iguacu-desc">Paisagens de tirar o fôlego e passeios de barco.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+
+            <div class="attraction-card" onclick="window.location.href='/local?id=praca-rio-iguacu'" style="cursor:pointer">
+                <img src="images/WEBP/PRACA-DO-IGUACU_1.webp" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="attraction-content">
+                    <div class="attraction-icon">🌳</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-praca-rio">Praça do Rio</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-praca-rio-desc">Deck, playground e contemplação da natureza.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+
+            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-agua-branca'" style="cursor:pointer">
+                <img src="images/IGREJA_AGUA_BRANCA.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="677">
+                <div class="attraction-content">
+                    <div class="attraction-icon">⛪</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-igreja-agua-branca">Igreja Água Branca</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-igreja-agua-branca-desc">Joia da arquitetura polonesa rural.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+
+            <div class="attraction-card" onclick="window.location.href='/local?id=prefeitura-municipal'" style="cursor:pointer">
+                <img src="images/PREFEITURA_MUNICIPAL.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="attraction-content">
+                    <div class="attraction-icon">🏛️</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-centro-historico">Centro Histórico</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-centro-historico-desc">Elegância do início do século XX.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+
+            <div class="attraction-card" onclick="window.location.href='/local?id=rua-do-mathe'" style="cursor:pointer">
+                <img src="images/WEBP/RUA-DO-MATHE-_1_.webp" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="attraction-content">
+                    <div class="attraction-icon">🌿</div>
+                    <h3 class="attraction-title" data-lang-key="atracao-rota-mate">Rua do Mathe</h3>
+                    <p class="attraction-desc" data-lang-key="atracao-rota-mate-desc">Capital da erva-mate.</p>
+                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Prévia do mapa turístico -->
     <section class="reviews-section home-map-preview" aria-labelledby="home-map-preview-title">
         <div class="reviews-container">
@@ -466,6 +607,27 @@
         </div>
     </section>
 
+    <section class="home-trust-strip home-trust-strip--compact" aria-label="Resumo do mapa turístico">
+        <div class="home-trust-grid">
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="withCoordinates">66</span>
+                <span class="stat-label" data-lang-key="stat-pontos-mapa">Pontos no mapa</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="totalItems">83</span>
+                <span class="stat-label" data-lang-key="stat-locais-cadastrados">Locais cadastrados</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="categoryCount">7</span>
+                <span class="stat-label" data-lang-key="stat-categorias">Categorias</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number" data-site-stat="routes">6</span>
+                <span class="stat-label" data-lang-key="stat-rotas">Rotas Temáticas</span>
+            </div>
+        </div>
+    </section>
+
     <!-- Guia do Visitante - combina descoberta visual e informações essenciais -->
     <section class="visitor-guide-section" aria-labelledby="visitor-guide-title">
         <div class="visitor-guide-container">
@@ -529,71 +691,6 @@
     </section>
 
 
-    <!-- ============================================================
-         FESTAS EM DESTAQUE - AGROSAMAS E NATAL OURO VERDE
-         Seção permanente destacando as duas principais festas
-    ============================================================ -->
-    <section class="festas-destaque-section" id="festas-destaque">
-        <div class="festas-container">
-            <div class="festas-header">
-                <span class="festas-label" data-lang-key="festas-badge">🎉 Festas Imperdíveis</span>
-                <h2 class="festas-title" data-lang-key="festas-titulo">Eventos que Movem a <strong>Cidade</strong></h2>
-                <p class="festas-subtitle" data-lang-key="festas-desc">Conheça as duas maiores celebrações de São Mateus do Sul</p>
-            </div>
-
-            <div class="festas-grid">
-                <!-- AgroSamas -->
-                <div class="festa-card festa-agrosamas">
-                    <div class="festa-badge" data-lang-key="agrosamas-status">ADIADO</div>
-                    <div class="festa-icon">🚜</div>
-                    <h3 class="festa-nome" data-agrosamas-bind="name">5º AgroSamas</h3>
-                    <p class="festa-descricao" data-lang-key="agrosamas-desc">O 5º AgroSamas foi adiado. A nova data ainda não foi definida e será divulgada pelos canais oficiais.</p>
-                    <div class="festa-info">
-                        <span>📅 <span data-lang-key="agrosamas-date-status">Nova data a definir</span></span>
-                        <span>📍 <span data-agrosamas-bind="location">Rua do Mathe</span></span>
-                    </div>
-                    <div class="festa-destaques">
-                        <span data-lang-key="agrosamas-tag2">🚜 AgroSamas</span>
-                        <span data-lang-key="agrosamas-tag3">📍 São Mateus do Sul</span>
-                    </div>
-                    <div class="festa-actions">
-                        <a href="/agrosamas-2026" class="festa-btn" data-lang-key="agrosamas-btn">Explorar a edição 2026 →</a>
-                        <a href="/agrosamas" class="festa-secondary-link" data-lang-key="agrosamas-hub-btn">Conheça o AgroSamas</a>
-                    </div>
-                </div>
-
-                <!-- Natal Ouro Verde -->
-                <div class="festa-card festa-natal">
-                    <div class="festa-badge" data-lang-key="natal-badge">DEZEMBRO</div>
-                    <div class="festa-icon">🎄</div>
-                    <h3 class="festa-nome" data-lang-key="natal-nome">Natal Ouro Verde 2026</h3>
-                    <p class="festa-descricao" data-lang-key="natal-desc">A magia do Natal na Capital Polonesa! Desfiles temáticos, apresentações culturais, shows, decoração especial e a tradicional chegada do Papai Noel em família.</p>
-                    <div class="festa-info">
-                        <span data-lang-key="natal-data">📅 05 a 19 de Dezembro</span>
-                        <span data-lang-key="natal-local">📍 Centro da Cidade</span>
-                        <span data-lang-key="natal-entrada">🆓 Entrada Gratuita</span>
-                    </div>
-                    <div class="festa-destaques">
-                        <span data-lang-key="natal-tag1">🎅 Papai Noel</span>
-                        <span data-lang-key="natal-tag2">🎭 Desfiles</span>
-                        <span data-lang-key="natal-tag3">✨ Iluminação</span>
-                        <span data-lang-key="natal-tag4">🎵 Coral</span>
-                    </div>
-                    <a href="/eventos/" class="festa-btn" data-lang-key="natal-btn-ver">
-                        Ver Programação →
-                    </a>
-                </div>
-            </div>
-
-            <div class="festas-cta">
-                <a href="/eventos" class="festas-ver-mais" data-lang-key="btn-calendario">
-                    📅 Ver Calendário Completo de Eventos 2026
-                </a>
-            </div>
-        </div>
-    </section>
-
-
     <div id="sobre"></div>
     <!-- Hero Section -->
     <section class="about-hero">
@@ -639,35 +736,6 @@
                     <span class="stat-number">⚡</span>
                     <span class="stat-label" data-lang-key="badge-terra-xisto">Terra do Xisto</span>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Mascotes Section -->
-    <section class="mascotes-teaser-section">
-        <div class="mascotes-teaser-inner">
-            <div class="mascotes-teaser-text">
-                <span class="section-label">Identidade Visual</span>
-                <h2>Conheça os Mascotes<br>de São Mateus do Sul</h2>
-                <p>Personagens criados para representar a riqueza cultural, natural e econômica da nossa cidade — da herança polonesa ao pinhão, da erva-mate ao xisto.</p>
-                <a href="/galeria#mascotes" class="mascotes-teaser-btn">Ver todos os mascotes →</a>
-                <small class="mascotes-disclaimer">Versões provisórias — nomes e designs em definição</small>
-            </div>
-            <div class="mascotes-teaser-figures">
-                <picture class="mascotes-teaser-picture">
-                    <source
-                        type="image/webp"
-                        srcset="images/mascotes/mascotes-sao-mateus-do-sul-1200.webp 1200w, images/mascotes/mascotes-sao-mateus-do-sul-1600.webp 1600w"
-                        sizes="(max-width: 1024px) 92vw, 56vw">
-                    <img
-                        src="images/mascotes/mascotes-sao-mateus-do-sul.png"
-                        alt="Conjunto de mascotes de São Mateus do Sul representando a cultura polonesa, a erva-mate, o xisto, o Rio Iguaçu e a fauna local"
-                        class="mascotes-teaser-group"
-                        loading="lazy"
-                        decoding="async"
-                        width="2048"
-                        height="1365">
-                </picture>
             </div>
         </div>
     </section>
@@ -794,140 +862,32 @@
         </div>
     </section>
 
-    
-    
-    
-
-
-
-    <!-- Attractions -->
-    <section id="attractions" class="section">
-        <div class="section-header">
-            <h2 class="section-title" data-lang-key="section-atracoes">Principais <strong>Atrações</strong></h2>
-            <p class="section-subtitle" data-lang-key="section-atracoes-desc">Conheça os pontos turísticos que fazem de São Mateus do Sul um destino único</p>
-        </div>
-
-        <div class="attractions-grid" data-public-establishments="attractions" aria-live="polite">
-            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-matriz'" style="cursor:pointer">
-                <img src="images/IGREJA_MATRIZ_FRONTAL.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="attraction-content">
-                    <div class="attraction-icon">⛪</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-igreja-matriz">Igreja Matriz</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-igreja-matriz-desc">Arquitetura neogótica preservada há mais de século.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
+    <!-- Mascotes Section -->
+    <section class="mascotes-teaser-section">
+        <div class="mascotes-teaser-inner">
+            <div class="mascotes-teaser-text">
+                <span class="section-label">Identidade Visual</span>
+                <h2>Conheça os Mascotes<br>de São Mateus do Sul</h2>
+                <p>Personagens criados para representar a riqueza cultural, natural e econômica da nossa cidade — da herança polonesa ao pinhão, da erva-mate ao xisto.</p>
+                <a href="/galeria#mascotes" class="mascotes-teaser-btn">Ver todos os mascotes →</a>
+                <small class="mascotes-disclaimer">Versões provisórias — nomes e designs em definição</small>
             </div>
-
-            <div class="attraction-card" onclick="window.location.href='/local?id=ponte-rio-iguacu'" style="cursor:pointer">
-                <img src="images/PONTE_SOB_O_RIO_IGUACU.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="attraction-content">
-                    <div class="attraction-icon">🌊</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-rio-iguacu">Rio Iguaçu</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-rio-iguacu-desc">Paisagens de tirar o fôlego e passeios de barco.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
+            <div class="mascotes-teaser-figures">
+                <picture class="mascotes-teaser-picture">
+                    <source
+                        type="image/webp"
+                        srcset="images/mascotes/mascotes-sao-mateus-do-sul-1200.webp 1200w, images/mascotes/mascotes-sao-mateus-do-sul-1600.webp 1600w"
+                        sizes="(max-width: 1024px) 92vw, 56vw">
+                    <img
+                        src="images/mascotes/mascotes-sao-mateus-do-sul.png"
+                        alt="Conjunto de mascotes de São Mateus do Sul representando a cultura polonesa, a erva-mate, o xisto, o Rio Iguaçu e a fauna local"
+                        class="mascotes-teaser-group"
+                        loading="lazy"
+                        decoding="async"
+                        width="2048"
+                        height="1365">
+                </picture>
             </div>
-
-            <div class="attraction-card" onclick="window.location.href='/local?id=praca-rio-iguacu'" style="cursor:pointer">
-                <img src="images/WEBP/PRACA-DO-IGUACU_1.webp" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="attraction-content">
-                    <div class="attraction-icon">🌳</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-praca-rio">Praça do Rio</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-praca-rio-desc">Deck, playground e contemplação da natureza.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
-            </div>
-
-            <div class="attraction-card" onclick="window.location.href='/local?id=igreja-agua-branca'" style="cursor:pointer">
-                <img src="images/IGREJA_AGUA_BRANCA.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="677">
-                <div class="attraction-content">
-                    <div class="attraction-icon">⛪</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-igreja-agua-branca">Igreja Água Branca</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-igreja-agua-branca-desc">Joia da arquitetura polonesa rural.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
-            </div>
-
-            <div class="attraction-card" onclick="window.location.href='/local?id=prefeitura-municipal'" style="cursor:pointer">
-                <img src="images/PREFEITURA_MUNICIPAL.jpg" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="attraction-content">
-                    <div class="attraction-icon">🏛️</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-centro-historico">Centro Histórico</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-centro-historico-desc">Elegância do início do século XX.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
-            </div>
-
-            <div class="attraction-card" onclick="window.location.href='/local?id=rua-do-mathe'" style="cursor:pointer">
-                <img src="images/WEBP/RUA-DO-MATHE-_1_.webp" class="attraction-image" alt="" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="attraction-content">
-                    <div class="attraction-icon">🌿</div>
-                    <h3 class="attraction-title" data-lang-key="atracao-rota-mate">Rua do Mathe</h3>
-                    <p class="attraction-desc" data-lang-key="atracao-rota-mate-desc">Capital da erva-mate.</p>
-                    <p style="font-size:0.78rem;color:#d4a574;font-weight:600;margin-top:0.5rem;" data-lang-key="btn-ver-local">Ver mais →</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Seção Blog/Eventos -->
-    <section class="blog-section">
-        <div class="section-header">
-            <span class="section-label" data-lang-key="blog-label">Novidades</span>
-            <h2 class="section-title">
-                <span data-lang-key="blog-titulo-html">Eventos & <strong>Notícias</strong></span>
-            </h2>
-            <p class="section-subtitle" data-lang-key="blog-desc">
-                Fique por dentro das festas tradicionais, eventos culturais e novidades do turismo
-            </p>
-        </div>
-
-        <div class="blog-grid">
-            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3548/agosto-e-polones-em-sao-mateus-do-sul-confira-a-programacao-do-32-mes-polones" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre a programação do 32º Mês Polonês">
-                <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Festival Polskie Smaki em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="794">
-                <div class="blog-content">
-                    <span class="blog-category" data-lang-key="blog-cat-cultura">Cultura</span>
-                    <h3 class="blog-title">Agosto é Polonês em São Mateus do Sul: confira a programação do 32º Mês Polonês</h3>
-                    <p class="blog-excerpt">De 18 de julho a 30 de agosto, o 32º Mês Polonês reúne atividades religiosas, culturais, folclóricas e gastronômicas em São Mateus do Sul.</p>
-                    <div class="blog-meta">
-                        <span class="blog-date">📅 06 de julho de 2026</span>
-                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3495/sao-mateus-do-sul-tera-investimento-de-r-75-mil-para-fortalecer-fanfarras-municipais/" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre o investimento nas fanfarras municipais">
-                <img src="images/RUA_DO_MATHE.jpg" alt="Programação cultural em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="blog-content">
-                    <span class="blog-category" data-lang-key="blog-cat-cultura">Cultura</span>
-                    <h3 class="blog-title">Município terá investimento para fortalecer fanfarras municipais</h3>
-                    <p class="blog-excerpt">O recurso anunciado amplia a estrutura das fanfarras e fortalece a formação musical e a participação comunitária.</p>
-                    <div class="blog-meta">
-                        <span class="blog-date">📅 26 de maio de 2026</span>
-                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3444/municipio-alinha-acoes-e-avanca-na-estruturacao-do-turismo-local/" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre a estruturação do turismo local">
-                <img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="Turismo local em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="675">
-                <div class="blog-content">
-                    <span class="blog-category" data-lang-key="blog-cat-turismo">Turismo</span>
-                    <h3 class="blog-title">Município avança na estruturação do turismo local</h3>
-                    <p class="blog-excerpt">Ações articuladas na Incubadora Inova alinham prioridades e consolidam a organização da agenda turística do município.</p>
-                    <div class="blog-meta">
-                        <span class="blog-date">📅 26 de março de 2026</span>
-                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
-                    </div>
-                </div>
-            </a>
-
-
-        </div>
-
-        <!-- CTA notícias -->
-        <div style="text-align:center; margin-top: 3rem;">
-            <a href="/noticias" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="blog-ver-todas">📰 Ver todas as notícias</a>
         </div>
     </section>
 
@@ -1003,6 +963,67 @@
             <div style="text-align:center; margin-top: 2.5rem;">
                 <a href="/onde-ficar" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="hospedagem-ver-todas">🛏️ Ver todas as opções de hospedagem</a>
             </div>
+        </div>
+    </section>
+
+    <!-- Seção Blog/Eventos -->
+    <section class="blog-section">
+        <div class="section-header">
+            <span class="section-label" data-lang-key="blog-label">Novidades</span>
+            <h2 class="section-title">
+                <span data-lang-key="blog-titulo-html">Eventos & <strong>Notícias</strong></span>
+            </h2>
+            <p class="section-subtitle" data-lang-key="blog-desc">
+                Fique por dentro das festas tradicionais, eventos culturais e novidades do turismo
+            </p>
+        </div>
+
+        <div class="blog-grid">
+            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3548/agosto-e-polones-em-sao-mateus-do-sul-confira-a-programacao-do-32-mes-polones" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre a programação do 32º Mês Polonês">
+                <img src="images/POLSKIE_SMAKI__1_.jpg" alt="Festival Polskie Smaki em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="794">
+                <div class="blog-content">
+                    <span class="blog-category" data-lang-key="blog-cat-cultura">Cultura</span>
+                    <h3 class="blog-title">Agosto é Polonês em São Mateus do Sul: confira a programação do 32º Mês Polonês</h3>
+                    <p class="blog-excerpt">De 18 de julho a 30 de agosto, o 32º Mês Polonês reúne atividades religiosas, culturais, folclóricas e gastronômicas em São Mateus do Sul.</p>
+                    <div class="blog-meta">
+                        <span class="blog-date">📅 06 de julho de 2026</span>
+                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3495/sao-mateus-do-sul-tera-investimento-de-r-75-mil-para-fortalecer-fanfarras-municipais/" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre o investimento nas fanfarras municipais">
+                <img src="images/RUA_DO_MATHE.jpg" alt="Programação cultural em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="blog-content">
+                    <span class="blog-category" data-lang-key="blog-cat-cultura">Cultura</span>
+                    <h3 class="blog-title">Município terá investimento para fortalecer fanfarras municipais</h3>
+                    <p class="blog-excerpt">O recurso anunciado amplia a estrutura das fanfarras e fortalece a formação musical e a participação comunitária.</p>
+                    <div class="blog-meta">
+                        <span class="blog-date">📅 26 de maio de 2026</span>
+                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3444/municipio-alinha-acoes-e-avanca-na-estruturacao-do-turismo-local/" target="_blank" rel="noopener noreferrer" class="blog-card" aria-label="Leia mais sobre a estruturação do turismo local">
+                <img src="images/PRACA_DO_RIO_IGUACU.jpg" alt="Turismo local em São Mateus do Sul" class="blog-image" loading="lazy" decoding="async" width="1200" height="675">
+                <div class="blog-content">
+                    <span class="blog-category" data-lang-key="blog-cat-turismo">Turismo</span>
+                    <h3 class="blog-title">Município avança na estruturação do turismo local</h3>
+                    <p class="blog-excerpt">Ações articuladas na Incubadora Inova alinham prioridades e consolidam a organização da agenda turística do município.</p>
+                    <div class="blog-meta">
+                        <span class="blog-date">📅 26 de março de 2026</span>
+                        <span class="blog-read-more" data-lang-key="blog-read-more">Leia no portal →</span>
+                    </div>
+                </div>
+            </a>
+
+
+        </div>
+
+        <!-- CTA notícias -->
+        <div style="text-align:center; margin-top: 3rem;">
+            <a href="/noticias" style="display:inline-block; background:#0a3d2e; color:#fff; padding:1rem 2.5rem; border-radius:30px; font-family:Raleway,sans-serif; font-weight:600; font-size:0.95rem; text-decoration:none; transition:background .2s;" data-lang-key="blog-ver-todas">📰 Ver todas as notícias</a>
         </div>
     </section>
 

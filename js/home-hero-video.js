@@ -15,8 +15,48 @@
             && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     }
 
+    // Hero v2: o vídeo (com títulos e colagens editoriais) não é fundo automático;
+    // só carrega quando o visitante pede, pelo botão [data-hero-video-play].
+    function initOnDemandHeroVideo(video) {
+        var trigger = document.querySelector('[data-hero-video-play]');
+        var wrapper = video.closest('.hv2-video');
+        if (!trigger || !wrapper) return;
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.addEventListener('click', function () {
+            var opening = wrapper.hasAttribute('hidden');
+            if (!opening) {
+                video.pause();
+                wrapper.setAttribute('hidden', '');
+                trigger.setAttribute('aria-expanded', 'false');
+                return;
+            }
+            var source = video.querySelector('source[data-src]');
+            if (source) {
+                source.setAttribute('src', source.getAttribute('data-src'));
+                source.removeAttribute('data-src');
+                video.load();
+            }
+            video.muted = false;
+            wrapper.removeAttribute('hidden');
+            trigger.setAttribute('aria-expanded', 'true');
+            try {
+                var attempt = video.play();
+                if (attempt && typeof attempt.catch === 'function') attempt.catch(function () {});
+            } catch (erro) {}
+            try { video.focus({ preventScroll: true }); } catch (erro) {}
+        });
+    }
+
     function initDeferredHeroVideo() {
         var video = document.querySelector('video.hero-video');
+
+        if (video && video.hasAttribute('data-on-demand')) {
+            if (video.dataset.deferredHeroInitialized !== 'true') {
+                video.dataset.deferredHeroInitialized = 'true';
+                initOnDemandHeroVideo(video);
+            }
+            return;
+        }
 
         if (!video || video.dataset.deferredHeroInitialized === 'true') return;
         if (hasReducedMotionPreference()) return;
