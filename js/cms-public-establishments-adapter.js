@@ -435,6 +435,12 @@
       ctx.fs.where("status", "==", STATUS)
     );
     var snapshot = await ctx.fs.getDocs(q);
+    // Sem servidor (rede bloqueada, offline, erro), o SDK devolve o cache local — vazio
+    // nesta página. Isso não prova ausência de registros publicados: tratar como falha
+    // técnica preserva o snapshot oficial estático em vez de esvaziar o catálogo.
+    if (snapshot && snapshot.metadata && snapshot.metadata.fromCache === true) {
+      throw { code: "unavailable", message: "Resultado apenas do cache local; servidor inacessivel." };
+    }
     var documents = [];
     snapshot.forEach(function (doc) {
       documents.push({ id: doc.id, data: doc.data() });
