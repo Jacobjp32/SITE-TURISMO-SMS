@@ -81,17 +81,17 @@ test("links de âncora internos possuem destinos", () => {
 });
 
 test("home preserva policy e não restaura destaque temporário", () => {
-  assert.match(home, /js\/home-eventos\.js\?v=events-home-adapter-v1-20260902/);
+  assert.match(home, /js\/home-eventos\.js\?v=agro-postponed-20260924/);
   assert.doesNotMatch(home, /id="mes-polones-feature"|temporary-polish-month-feature/i);
 });
 
 test("consumidores usam geração coerente de cache", () => {
   for (const path of htmlFilesWithNav) {
-    assert.match(read(path), /js\/nav-shared\.js\?v=site-agrosamas-hub-20260909-r2/, path);
+    assert.match(read(path), /js\/nav-shared\.js\?v=nav-v22-20261013/, path);
   }
-  assert.match(read("index.html"), /js\/search-index\.js\?v=site-agrosamas-hub-20260909-r2/);
-  assert.match(nav, /js\/search-index\.js[\s\S]*?site-agrosamas-hub-20260909-r2/);
+  assert.match(read("index.html"), /js\/search-index\.js\?v=search-v22-20261013/);
+  assert.match(nav, /js\/search-index\.js[\s\S]*?search-v22-20261013/);
   for (const path of htmlFilesWithNav) {
-    assert.doesNotMatch(read(path), /js\/nav-shared\.js\?v=(?!site-agrosamas-hub-20260909-r2)/, path);
+    assert.doesNotMatch(read(path), /js\/nav-shared\.js\?v=(?!nav-v22-20261013)/, path);
   }
 });

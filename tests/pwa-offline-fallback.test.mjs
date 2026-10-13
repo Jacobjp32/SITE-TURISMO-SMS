@@ -793,10 +793,10 @@ test('falha de cache.put não impede a resposta válida da rede', async () => {
 });
 
 test('Home e loader dinâmico compartilham o token do release de busca', () => {
-    assert.match(HOME_SOURCE, /js\/search-index\.js\?v=pwa-asset-cache-20260915/);
-    assert.match(HOME_SOURCE, /js\/search\.js\?v=pwa-asset-cache-20260915/);
+    assert.match(HOME_SOURCE, /js\/search-index\.js\?v=search-v22-20261013/);
+    assert.match(HOME_SOURCE, /js\/search\.js\?v=search-v22-20261013/);
     assert.ok(NAV_SOURCE.includes("script.src = /js\\/search(?:-index)?\\.js$/.test(src)"));
-    assert.ok(NAV_SOURCE.includes("src + '?v=pwa-asset-cache-20260915'"));
+    assert.ok(NAV_SOURCE.includes("src + '?v=search-v22-20261013'"));
 });
 
 test('loader reconhece tags de busca versionadas e não solicita duplicata', () => {
