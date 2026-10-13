@@ -134,14 +134,13 @@
     
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/variables.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/index.css?v=admin-e2e-publication-20260911">
     <link rel="stylesheet" href="css/season-theme.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..700,0..100&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/recortes.css?v=recortes-proposta-20261013">
 
     <!-- Sistema de Traduções -->
@@ -171,6 +170,7 @@
 </head>
 <body class="home-page recortes">
     <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
+    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
 
     <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
     <div id="public-banners-slot" hidden></div>
@@ -188,8 +188,8 @@
             </h1>
             <p class="rc-hero-lead" data-lang-key="rc-hero-lead">Uma cidade do Sul do Paraná feita de rio, erva-mate e memória polonesa — para conhecer devagar, como quem lê um caderno de viagem.</p>
             <div class="rc-hero-actions">
-                <a href="/mapa-turistico" class="rc-btn rc-btn--solid" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</a>
-                <a href="/eventos/" class="rc-btn rc-btn--line" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</a>
+                <a href="/mapa-turistico" class="rc-btn rc-btn--solid"><span class="rc-cta-long" data-lang-key="hero-primary-cta">Abrir Mapa Turístico</span><span class="rc-cta-short" data-lang-key="rc-cta-map-short">Abrir o mapa</span></a>
+                <a href="/eventos/" class="rc-btn rc-btn--line"><span class="rc-cta-long" data-lang-key="hero-secondary-cta">Ver Próximos Eventos</span><span class="rc-cta-short" data-lang-key="rc-cta-events-short">Ver a agenda</span></a>
                 <button type="button" class="rc-btn rc-btn--text" data-hero-video-play><span class="rc-play" aria-hidden="true"></span><span data-lang-key="hv2-watch">Assistir ao vídeo</span></button>
             </div>
         </div>
@@ -202,7 +202,7 @@
                 <img src="images/PONTE_ENTRADA_CIDADE_1_3.jpg" alt="O Rio Iguaçu ao entardecer, junto à ponte de entrada da cidade" data-lang-key-alt="rc-hero-medal-alt" width="1920" height="1080" decoding="async">
             </figure>
             <svg class="rc-hero-rosette" aria-hidden="true" focusable="false"><use href="#rc-rosette"></use></svg>
-            <p class="rc-hero-caption"><span class="rc-fig">fig. 1</span> <span data-lang-key="rc-hero-caption">Igreja São José, Comunidade da Água Branca — o arco pintado traz uma inscrição em polonês.</span></p>
+            <p class="rc-hero-caption"><span class="rc-fig">fig. 1</span> <span class="rc-hero-caption-long" data-lang-key="rc-hero-caption">Igreja São José, Comunidade da Água Branca — o arco pintado traz uma inscrição em polonês.</span><span class="rc-hero-caption-short" data-lang-key="rc-hero-caption-short">Igreja São José, Água Branca</span></p>
         </div>
 
         <div class="hv2-video" hidden>
@@ -213,7 +213,7 @@
     </section>
 
     <!-- SUMÁRIO — cinco recortes, como o índice de uma revista -->
-    <nav class="rc-index" aria-labelledby="rc-index-title">
+    <nav id="sobre" class="rc-index" aria-labelledby="rc-index-title">
         <div class="rc-wrap">
             <div class="rc-index-head">
                 <h2 id="rc-index-title" class="rc-eyebrow" data-lang-key="rc-index-title">Neste caderno</h2>
@@ -516,7 +516,7 @@
     <!-- 05 — PLANEJE -->
     <section id="rc-planeje" class="rc-chapter rc-chapter--plan" aria-labelledby="rc-ch5-title">
         <div class="rc-wrap">
-            <div class="rc-plan-head">
+            <div class="rc-plan-head" id="visitor-guide-title">
                 <p class="rc-chapter-num" aria-hidden="true">05</p>
                 <h2 id="rc-ch5-title" class="rc-chapter-title" data-lang-key="rc-ch5-title">Planeje a visita</h2>
             </div>

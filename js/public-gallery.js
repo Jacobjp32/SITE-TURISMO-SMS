@@ -39,6 +39,21 @@
         });
     }
 
+    // Proveniência: imagens geradas por IA nunca podem parecer fotografia documental.
+    // O CMS pode marcar `aiGenerated: true`; enquanto o campo não existe, os arquivos
+    // ilustrativos já conhecidos do acervo são reconhecidos pelo nome.
+    var KNOWN_GENERATED = /diorama_sao_mateus|IMIGRANTES_IA_|portal-gastronomia|hero-reservas/i;
+    function isGenerated(item) {
+        if (item && item.aiGenerated === true) return true;
+        return KNOWN_GENERATED.test(String(item && item.url || "") + " " + String(item && item.storagePath || ""));
+    }
+    function aiLabel() {
+        var lang = "pt";
+        try { lang = (localStorage.getItem("sms-lang") || "pt").slice(0, 2); } catch (e) {}
+        var dict = window.translations && (window.translations[lang] || window.translations.pt);
+        return (dict && dict["rc-gal-ai-label"]) || "Ilustração gerada por IA — não é fotografia";
+    }
+
     function render(items) {
         var normalized = normalize(items);
         var firstStatic = document.querySelector("section.sec");
@@ -69,6 +84,14 @@
                 heading.textContent = item.caption || item.alt || "Imagem da galeria";
                 card.appendChild(image);
                 card.appendChild(heading);
+                if (isGenerated(item)) {
+                    card.classList.add("card--ai");
+                    var label = document.createElement("span");
+                    label.className = "rc-ai-label";
+                    label.setAttribute("data-lang-key", "rc-gal-ai-label");
+                    label.textContent = aiLabel();
+                    card.appendChild(label);
+                }
                 var open = function () { if (typeof window.lbOpen === "function") window.lbOpen([{ src: item.url, title: heading.textContent, desc: "" }], 0); };
                 card.addEventListener("click", open);
                 card.addEventListener("keydown", function (event) { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); } });

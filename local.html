@@ -29,7 +29,6 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a3d2e">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/variables.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
     <style>
@@ -358,11 +357,12 @@
     <script src="js/breadcrumbs.js?v=visual-v21-20261013"></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..700,0..100&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/recortes.css?v=recortes-proposta-20261013">
 </head>
 <body class="v2-page v2-local recortes rc-local">
     <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
+    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
 
 <!-- Lightbox -->
 <div class="lb" id="lb" onclick="lbClose()">
@@ -498,6 +498,12 @@
     var lastSignature = null;
     var mapInstance = null;
 
+    function sameText(a, b) {
+        var norm = function (v) { return String(v || "").replace(/\s+/g, " ").trim().toLowerCase(); };
+        var x = norm(a), y = norm(b);
+        return !!x && !!y && (x === y || y.indexOf(x) === 0 || x.indexOf(y) === 0);
+    }
+
     function render(publicData, phase) {
     publicData = publicData || {};
     var publicLocals = []
@@ -536,6 +542,12 @@
         return "missing";
     }
 
+    // Notas internas do cadastro não vão ao visitante: telefone de preenchimento
+    // (42) 3532-0000 e lembretes "(confirmar …)" no endereço.
+    local = Object.assign({}, local, {
+        telefone: /^\(?42\)?\s*3532-?0000$/.test(String(local.telefone || "").trim()) ? "" : local.telefone,
+        endereco: String(local.endereco || "").replace(/\s*\(confirmar[^)]*\)/gi, "").trim()
+    });
     var signature = JSON.stringify(local);
     if (signature === lastSignature) return "unchanged";
     lastSignature = signature;
@@ -640,24 +652,60 @@
     }
 
     // ── Tags de rota (guardado: rota pode faltar) ──
-    var rotaTags = SEC.value(local.rota, "")
-        ? String(local.rota).split("·").map(function (r) {
-            return '<span class="tag-rota">' + SEC.html(r.trim()) + '</span>';
-        }).join("")
+    // O CMS às vezes guarda slugs ("rota-polonesa-turismo-de-fe"): traduz para o nome
+    // público da rota cadastrada e descarta o que não corresponder a nenhuma rota real.
+    function routeNames(raw) {
+        var known = Array.isArray(window.TURISMO_ROTAS) ? window.TURISMO_ROTAS : [];
+        var parts = Array.isArray(raw) ? raw : String(raw || "").split(/[·,|]/);
+        var seen = {};
+        return parts.map(function (p) { return String(p || "").trim(); }).filter(Boolean).map(function (p) {
+            if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(p)) return p;
+            var hit = known.filter(function (r) { return p === r.id || p.indexOf(r.id + "-") === 0; })[0];
+            return hit ? hit.nome : "";
+        }).filter(function (name) {
+            if (!name || seen[name.toLowerCase()]) return false;
+            seen[name.toLowerCase()] = true;
+            return true;
+        });
+    }
+    var rotaList = routeNames(local.rota);
+    var rotaTags = rotaList.length
+        ? rotaList.map(function (r) { return '<span class="tag-rota">' + SEC.html(r) + '</span>'; }).join("")
         : '<span class="info-unavailable">' + SEC.html(t("unavailable")) + '</span>';
 
     // ── Relacionados (até 3, exceto o atual) ──
+    // Relacionados: mesma rota primeiro, depois mesma categoria; foto própria do lugar
+    // ou cartão tipográfico — nunca a foto geral da cidade fingindo ser o estabelecimento.
+    var myRoutes = rotaList.map(function (r) { return r.toLowerCase(); });
+    var myCategory = SEC.value(local.categoria, "").toLowerCase();
+    function ownImage(item) {
+        var src = SEC.value(item && item.imagem, "");
+        return src && src.indexOf("FOTO_GERAL_SAO_MATEUS_DO_SUL") === -1 ? src : "";
+    }
+    function relScore(item) {
+        var score = 0;
+        routeNames(item.rota).forEach(function (r) { if (myRoutes.indexOf(r.toLowerCase()) !== -1) score += 4; });
+        if (myCategory && SEC.value(item.categoria, "").toLowerCase() === myCategory) score += 2;
+        if (ownImage(item)) score += 1;
+        return score;
+    }
     var relacionados = publicLocals
-        .filter(function (item) { return item && String(item.id || item.slug || "") !== id; })
+        .filter(function (item) { return item && String(item.id || item.slug || "") !== id && SEC.value(item.nome, ""); })
+        .map(function (item, index) { return { item: item, score: relScore(item), index: index }; })
+        .sort(function (a, b) { return (b.score - a.score) || (a.index - b.index); })
         .slice(0, 3)
-        .map(function (l) {
+        .map(function (entry) {
+            var l = entry.item;
             var key = l.id || l.slug;
-            var relImg = SEC.url(l.imagem, FALLBACK_IMG) || FALLBACK_IMG;
-            return '<a href="/local?id=' + encodeURIComponent(l.id || key) + '" class="rel-card">' +
-                '<img src="' + relImg + '" alt="' + SEC.attr(SEC.value(l.nome, "")) + '" onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">' +
+            var relSrc = ownImage(l);
+            var relMedia = relSrc
+                ? '<img src="' + (SEC.url(relSrc, FALLBACK_IMG) || FALLBACK_IMG) + '" alt="' + SEC.attr(SEC.value(l.nome, "")) + '" onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">'
+                : '<span class="rel-card-type" aria-hidden="true">' + SEC.html(SEC.value(l.nome, "?").charAt(0)) + '</span>';
+            return '<a href="/local?id=' + encodeURIComponent(l.id || key) + '" class="rel-card' + (relSrc ? '' : ' rel-card--type') + '">' +
+                relMedia +
                 '<div class="rel-card-body">' +
                     '<h4>' + SEC.html(l.nome, "") + '</h4>' +
-                    '<p>' + SEC.html(l.subtitulo, "") + '</p>' +
+                    '<p>' + SEC.html(sameText(l.subtitulo, l.descricao) ? "" : l.subtitulo, "") + '</p>' +
                 '</div>' +
             '</a>';
         }).join("");
@@ -675,7 +723,9 @@
     infoRows += infoRow("🗺️", t("route"), '<div style="margin-top:0.3rem">' + rotaTags + '</div>');
 
     var badge = SEC.value(local.badge, "");
+    // Subtítulo é linha curta; quando o cadastro repete a descrição, não duplica no topo.
     var subtitulo = SEC.value(local.subtitulo, "");
+    if (sameText(subtitulo, local.descricao) || subtitulo.length > 180) subtitulo = "";
     var categoria = SEC.value(local.categoria, "");
 
     root.innerHTML =

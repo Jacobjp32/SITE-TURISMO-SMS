@@ -26,7 +26,6 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a3d2e">
     <title>O Que Fazer em São Mateus do Sul</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/shared.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/o-que-fazer.css?v=site-public-b1-20260708">
     <script src="js/site-meta.js?v=visual-v21-20261013" defer></script>
@@ -34,64 +33,125 @@
     <script src="js/breadcrumbs.js?v=visual-v21-20261013"></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/recortes.css?v=recortes-r2-20261013">
 </head>
-<body class="v2-page">
+<body class="v2-page recortes rc-oqf-page">
     <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
+    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
 
-    <section class="hero hero--oqfazer bridge-hero page-hero-v2" style="--page-hero-image:url('/images/vapor-pery.webp');--page-hero-position:50% 50%">
-        <span class="page-hero-v2__caption">Monumento Vapor Pery</span>
-        <h1 data-lang-key="page-oqfazer-titulo">🧭 O Que Fazer</h1>
-        <p data-lang-key="page-oqfazer-subtitulo">Atrações, roteiros, gastronomia e hospedagem reunidos no Mapa Turístico Interativo.</p>
-    </section>
+    <!-- Recortes · O que fazer: índice de experiências — a bússola do caderno. -->
+    <main class="main-content bridge-main rc-main rc-oqf" id="main-content">
+        <header class="rc-oqf-hero">
+            <div>
+                <p class="rc-kicker"><span class="rc-fig">cap. 4</span> <span data-lang-key="oqf-bridge-kicker">Exploração consolidada</span></p>
+                <h1 class="rc-oqf-title" data-lang-key="rc-oqf-title">O que fazer</h1>
+                <p class="rc-oqf-lead" data-lang-key="page-oqfazer-subtitulo">Atrações, roteiros, gastronomia e hospedagem reunidos no Mapa Turístico Interativo.</p>
+                <p class="rc-oqf-note" data-lang-key="oqf-bridge-desc">Use o mapa como porta de entrada para atrações, roteiros, gastronomia, hospedagem e serviços, sem depender de catálogos paralelos.</p>
+                <a href="/mapa-turistico" class="rc-btn rc-btn--solid" data-lang-key="rc-cta-map-short">Abrir o mapa</a>
+            </div>
+            <figure class="rc-porthole">
+                <div class="rc-porthole-ring"><img src="images/vapor-pery.webp" alt="O Vapor Pery, antiga embarcação a vapor preservada em terra" data-lang-key-alt="rc-ch2-inset-alt" width="1600" height="900" fetchpriority="high" decoding="async"></div>
+                <figcaption><span class="rc-fig">fig. 1</span> <span data-lang-key="rc-ch2-fig">Vapor Pery, memória da navegação no Iguaçu.</span></figcaption>
+            </figure>
+        </header>
 
-    <main class="main-content bridge-main" id="main-content">
-        <section class="bridge-intro">
-            <span class="bridge-kicker" data-lang-key="oqf-bridge-kicker">Exploração consolidada</span>
-            <h2 data-lang-key="oqf-bridge-title">Tudo agora parte do mapa turístico</h2>
-            <p data-lang-key="oqf-bridge-desc">Use o mapa como porta de entrada para atrações, roteiros, gastronomia, hospedagem e serviços, sem depender de catálogos paralelos.</p>
-        </section>
-
-        <section class="bridge-grid" aria-label="Atalhos para o mapa turístico">
-            <article class="bridge-card">
-                <span class="bridge-card-icon">🗺️</span>
-                <h3 data-lang-key="oqf-bridge-card-1-title">Mapa Turístico</h3>
-                <p data-lang-key="oqf-bridge-card-1-desc">Visualização geral dos pontos, filtros e resumo do destino em uma única página.</p>
-                <a href="/mapa-turistico" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
-            </article>
-
-            <article class="bridge-card">
-                <span class="bridge-card-icon">🧭</span>
-                <h3 data-lang-key="oqf-bridge-card-2-title">Roteiros</h3>
-                <p data-lang-key="oqf-bridge-card-2-desc">Rotas temáticas e experiências organizadas como ponto de partida para explorar a cidade.</p>
-                <a href="/mapa-turistico?grupo=roteiros" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
-            </article>
-
-            <article class="bridge-card">
-                <span class="bridge-card-icon">🍽️</span>
-                <h3 data-lang-key="oqf-bridge-card-3-title">Gastronomia</h3>
-                <p data-lang-key="oqf-bridge-card-3-desc">Restaurantes, sabores locais e experiências ligadas ao mate e à culinária regional.</p>
-                <a href="/mapa-turistico?categoria=Gastronomia" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
-            </article>
-
-            <article class="bridge-card">
-                <span class="bridge-card-icon">🛏️</span>
-                <h3 data-lang-key="oqf-bridge-card-4-title">Hospedagem</h3>
-                <p data-lang-key="oqf-bridge-card-4-desc">Hotéis, pousadas e opções para planejar a estadia junto do restante da jornada.</p>
-                <a href="/mapa-turistico?categoria=Hospedagem" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
-            </article>
-
-            <article class="bridge-card">
-                <span class="bridge-card-icon">📅</span>
-                <h3 data-lang-key="oqf-bridge-card-5-title">Eventos</h3>
-                <p data-lang-key="oqf-bridge-card-5-desc">Feiras, festas e programação cultural integradas à exploração turística do município.</p>
-                <a href="/mapa-turistico?categoria=Eventos" class="bridge-card-link" data-lang-key="oqf-bridge-card-cta">Acessar mapa →</a>
-            </article>
-        </section>
-
-        <section class="bridge-note">
-            <p data-lang-key="oqf-compatibility-note">Todos os atrativos, roteiros e serviços estão reunidos no mapa, com filtros por categoria e indicação de como chegar.</p>
+        <section class="rc-oqf-index" aria-labelledby="rc-oqf-index-title">
+            <div class="rc-wrap">
+                <h2 id="rc-oqf-index-title" class="rc-section-title" data-lang-key="oqf-bridge-title">Tudo agora parte do mapa turístico</h2>
+                <ol class="rc-oqf-list">
+                    <li class="rc-oqf-item">
+                        <span class="rc-oqf-num" aria-hidden="true">i</span>
+                        <div class="rc-oqf-body">
+                            <h3 data-lang-key="oqf-bridge-card-1-title">Mapa Turístico</h3>
+                            <p data-lang-key="oqf-bridge-card-1-desc">Visualização geral dos pontos, filtros e resumo do destino em uma única página.</p>
+                            <p class="rc-oqf-sample" data-rc-sample="pontos"></p>
+                        </div>
+                        <a href="/mapa-turistico" class="rc-oqf-link"><span class="rc-oqf-count" data-rc-count="pontos"></span><span data-lang-key="oqf-bridge-card-cta">Acessar mapa →</span></a>
+                    </li>
+                    <li class="rc-oqf-item">
+                        <span class="rc-oqf-num" aria-hidden="true">ii</span>
+                        <div class="rc-oqf-body">
+                            <h3 data-lang-key="oqf-bridge-card-2-title">Roteiros</h3>
+                            <p data-lang-key="oqf-bridge-card-2-desc">Rotas temáticas e experiências organizadas como ponto de partida para explorar a cidade.</p>
+                            <p class="rc-oqf-sample" data-rc-sample="rotas"></p>
+                        </div>
+                        <a href="/mapa-turistico?grupo=roteiros" class="rc-oqf-link"><span class="rc-oqf-count" data-rc-count="rotas"></span><span data-lang-key="oqf-bridge-card-cta">Acessar mapa →</span></a>
+                    </li>
+                    <li class="rc-oqf-item">
+                        <span class="rc-oqf-num" aria-hidden="true">iii</span>
+                        <div class="rc-oqf-body">
+                            <h3 data-lang-key="oqf-bridge-card-3-title">Gastronomia</h3>
+                            <p data-lang-key="oqf-bridge-card-3-desc">Restaurantes, sabores locais e experiências ligadas ao mate e à culinária regional.</p>
+                            <p class="rc-oqf-sample" data-rc-sample="restaurantes"></p>
+                        </div>
+                        <a href="/mapa-turistico?categoria=Gastronomia" class="rc-oqf-link"><span class="rc-oqf-count" data-rc-count="restaurantes"></span><span data-lang-key="oqf-bridge-card-cta">Acessar mapa →</span></a>
+                    </li>
+                    <li class="rc-oqf-item">
+                        <span class="rc-oqf-num" aria-hidden="true">iv</span>
+                        <div class="rc-oqf-body">
+                            <h3 data-lang-key="oqf-bridge-card-4-title">Hospedagem</h3>
+                            <p data-lang-key="oqf-bridge-card-4-desc">Hotéis, pousadas e opções para planejar a estadia junto do restante da jornada.</p>
+                            <p class="rc-oqf-sample" data-rc-sample="hospedagens"></p>
+                        </div>
+                        <a href="/mapa-turistico?categoria=Hospedagem" class="rc-oqf-link"><span class="rc-oqf-count" data-rc-count="hospedagens"></span><span data-lang-key="oqf-bridge-card-cta">Acessar mapa →</span></a>
+                    </li>
+                    <li class="rc-oqf-item">
+                        <span class="rc-oqf-num" aria-hidden="true">v</span>
+                        <div class="rc-oqf-body">
+                            <h3 data-lang-key="oqf-bridge-card-5-title">Eventos</h3>
+                            <p data-lang-key="oqf-bridge-card-5-desc">Feiras, festas e programação cultural integradas à exploração turística do município.</p>
+                            <p class="rc-oqf-sample" data-rc-sample="eventos"></p>
+                        </div>
+                        <a href="/mapa-turistico?categoria=Eventos" class="rc-oqf-link"><span class="rc-oqf-count" data-rc-count="eventos"></span><span data-lang-key="oqf-bridge-card-cta">Acessar mapa →</span></a>
+                    </li>
+                </ol>
+                <p class="rc-oqf-foot" data-lang-key="oqf-compatibility-note">Todos os atrativos, roteiros e serviços estão reunidos no mapa, com filtros por categoria e indicação de como chegar.</p>
+            </div>
         </section>
     </main>
+
+    <script>
+    // Amostras e contagens vêm do cadastro público (ou do fallback oficial) — nada é escrito à mão.
+    (function () {
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+        function pick(list, n) { return list.filter(function (x) { return x && x.nome; }).slice(0, n); }
+        function fill(data) {
+            data = data || {};
+            var sets = {
+                pontos: (data.pontos || []).filter(function (p) { return p.imagem && p.imagem.indexOf('FOTO_GERAL') === -1; }),
+                rotas: window.TURISMO_ROTAS || data.rotas || [],
+                restaurantes: data.restaurantes || [],
+                hospedagens: (data.hospedagens || []).filter(function (h) { return !/canil/i.test(h.nome || ''); }),
+                eventos: []
+            };
+            var seen = {};
+            (window.TURISMO_EVENTOS || data.eventos || []).forEach(function (e) { var n = e && (e.nome || e.titulo); if (n && !seen[n]) { seen[n] = 1; sets.eventos.push({ nome: n, id: e.id }); } });
+            var totals = { pontos: (data.pontos || []).length, rotas: sets.rotas.length, restaurantes: sets.restaurantes.length, hospedagens: (data.hospedagens || []).length, eventos: sets.eventos.length };
+            Object.keys(sets).forEach(function (k) {
+                var el = document.querySelector('[data-rc-sample="' + k + '"]');
+                var items = pick(sets[k], 4);
+                if (el && items.length) el.innerHTML = items.map(function (x) {
+                    var href = k === 'rotas' ? '/mapa-turistico?grupo=roteiros' : k === 'eventos' ? '/eventos/' : '/local?id=' + encodeURIComponent(x.id || '');
+                    return '<a href="' + href + '">' + esc(x.nome) + '</a>';
+                }).join('<span aria-hidden="true"> · </span>');
+                var c = document.querySelector('[data-rc-count="' + k + '"]');
+                if (c && totals[k]) c.textContent = totals[k];
+            });
+        }
+        var tries = 0, done = 0;
+        if (window.TURISMO_DATA) fill(window.TURISMO_DATA);
+        (function wait() {
+            if (window.TURISMO_DATA && !done) { done = 1; fill(window.TURISMO_DATA); }
+            if (window.TURISMO_DATA_READY || tries > 40) {
+                Promise.resolve(window.TURISMO_DATA_READY || window.TURISMO_DATA).then(function (d) { fill(d || window.TURISMO_DATA); }, function () { fill(window.TURISMO_DATA); });
+                return;
+            }
+            tries++; setTimeout(wait, 200);
+        })();
+    })();
+    </script>
 
     <footer class="footer bridge-footer" id="footer">
         <p data-lang-key="oqf-footer-note">Mapa, roteiros e categorias agora estão centralizados no Mapa Turístico Interativo.</p>

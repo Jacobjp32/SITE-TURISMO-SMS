@@ -11,17 +11,17 @@ window.TURISMO_PONTOS = [
   },
   {
     id: "igreja-agua-branca",
-    nome: "Igreja Centenária da Água Branca",
+    nome: "Igreja São José — Comunidade da Água Branca",
     categoria: "Cultura",
-    descricao: "Capela centenária ligada à imigração polonesa e às rotas de turismo de fé do município.",
+    descricao: "Igreja de herança polonesa ligada à imigração e às rotas de turismo de fé do município.",
     imagem: "images/IGREJA_AGUA_BRANCA.jpg",
     url: "/local?id=igreja-agua-branca",
     coordenadas: { lat: -25.91, lng: -50.42 },
-    tags: ["igreja", "água branca", "capela centenária", "cultura polonesa", "turismo de fé", "imigração"]
+    tags: ["igreja", "água branca", "igreja são josé", "cultura polonesa", "turismo de fé", "imigração"]
   },
   {
     id: "ponte-rio-iguacu",
-    nome: "Rio Iguaçu",
+    nome: "Ponte do Rio Iguaçu",
     categoria: "Natureza",
     descricao: "Paisagem emblemática do destino, com contemplação, navegação e conexão com a história local.",
     imagem: "images/PONTE_SOB_O_RIO_IGUACU.jpg",

@@ -106,12 +106,15 @@
     return clean(item && (item.categoria || item.category && item.category.label)) || "Turismo";
   }
 
+  // Notas internas do cadastro não aparecem ao visitante: lembretes "(confirmar …)"
+  // no endereço e o telefone de preenchimento (42) 3532-0000.
   function itemAddress(item) {
-    return clean(item && (item.endereco || item.localizacao || item.address));
+    return clean(item && (item.endereco || item.localizacao || item.address)).replace(/\s*\(confirmar[^)]*\)/gi, "").trim();
   }
 
   function itemPhone(item) {
-    return clean(item && (item.telefone || item.contact && item.contact.phone));
+    var phone = clean(item && (item.telefone || item.contact && item.contact.phone));
+    return /^\(?42\)?\s*3532-?0000$/.test(phone) ? "" : phone;
   }
 
   function itemHours(item) {

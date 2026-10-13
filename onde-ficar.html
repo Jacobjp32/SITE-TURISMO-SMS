@@ -81,7 +81,6 @@
     <title>Onde Ficar em São Mateus do Sul | Hospedagem</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/shared.css?v=admin-e2e-publication-20260911">
     <link rel="stylesheet" href="css/onde-ficar.css?v=site-public-b1-20260708">
@@ -89,200 +88,146 @@
     <script src="js/breadcrumbs.js?v=visual-v21-20261013"></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/recortes.css?v=recortes-r2-20261013">
 </head>
-<body class="v2-page v2-ondeficar">
+<body class="v2-page v2-ondeficar recortes rc-ondeficar">
     <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
+    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
 
-    <!-- Hero -->
-    <section class="hero page-hero-v2" style="--page-hero-image:url('/images/visual-v2/hero-onde-ficar.webp');--page-hero-position:50% 62%">
-        <span class="page-hero-v2__caption">Apartamento do Hotel São Mateus</span>
-        <h1 data-lang-key="page-ondeficar-titulo">Onde Ficar</h1>
-        <p data-lang-key="page-ondeficar-subtitulo">Hospedagem com conforto e a calorosa hospitalidade polonesa</p>
-    </section>
+    <!-- Recortes · Onde Ficar: fichas de hospedagem. Confiança antes de decoração. -->
+    <main id="main-content" class="main-content rc-main rc-stay">
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="intro">
-            <h2 data-lang-key="of-hero-h">Escolha Sua Estadia</h2>
-            <p data-lang-key="of-sub">São Mateus do Sul oferece diversas opções de hospedagem, desde hotéis tradicionais no centro até pousadas aconchegantes no interior. Sinta-se em casa!</p>
-        </div>
+        <header class="rc-stay-hero">
+            <div class="rc-stay-hero-text">
+                <p class="rc-kicker"><span class="rc-fig">cap. 3</span> <span data-lang-key="rc-stay-kicker">Fichas de hospedagem</span></p>
+                <h1 class="rc-stay-title" data-lang-key="page-ondeficar-titulo">Onde Ficar</h1>
+                <p class="rc-stay-lead" data-lang-key="of-sub">São Mateus do Sul oferece diversas opções de hospedagem, desde hotéis tradicionais no centro até pousadas aconchegantes no interior. Sinta-se em casa!</p>
+                <div class="rc-stay-trust">
+                    <p class="rc-stay-trust-title" data-lang-key="rc-stay-trust-title">Como esta lista é feita</p>
+                    <p data-lang-key="rc-stay-trust-p">Aparecem aqui apenas os estabelecimentos do cadastro oficial de turismo da Prefeitura. Preços e vagas mudam: confirme sempre diretamente com a hospedagem.</p>
+                </div>
+            </div>
+            <figure class="rc-keytag">
+                <div class="rc-keytag-body">
+                    <span class="rc-keytag-hole" aria-hidden="true"></span>
+                    <img src="images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg" alt="Quarto do Hotel São Mateus com duas camas de solteiro" data-lang-key-alt="rc-stay-hero-alt" width="1066" height="1600" fetchpriority="high" decoding="async">
+                </div>
+                <figcaption><span class="rc-fig">fig. 1</span> <span data-lang-key="rc-stay-hero-fig">Apartamento do Hotel São Mateus, no centro.</span> <a class="rc-credit" href="/local?id=hotel-sao-mateus" data-lang-key="rc-stay-credit">Foto: acervo do hotel</a></figcaption>
+            </figure>
+        </header>
 
-        <!-- Filter -->
-        <div class="filter-tabs">
-            <button class="filter-btn active" data-filter="all" data-lang-key="of-btn-todos">Todos</button>
-            <button class="filter-btn" data-filter="hotel" data-lang-key="of-btn-hoteis">Hotéis</button>
-            <button class="filter-btn" data-filter="pousada" data-lang-key="of-btn-pousadas">Pousadas</button>
-            <button class="filter-btn" data-filter="rural" data-lang-key="of-btn-rural">Turismo Rural</button>
-        </div>
-
-        <!-- Hotels Grid -->
-        <div class="hotels-grid" id="hotelsGrid" data-public-establishments="lodging" aria-live="polite">
-            
-            <!-- Hotel São Mateus -->
-            <div class="hotel-card" data-category="hotel">
-                <img class="hotel-image hotel-image--photo" src="images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg" alt="Hotel São Mateus" loading="lazy" decoding="async" width="1066" height="1600">
-                <div class="hotel-content">
-                    <span class="hotel-category">Hotel</span>
-                    <h3 data-lang-key="of-h1-nome">Hotel São Mateus</h3>
-                    <p class="description" data-lang-key="of-h1-desc">Hotel tradicional localizado no coração da cidade, próximo à Igreja Matriz e principais pontos turísticos.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
-                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
-                        <span class="amenity" data-lang-key="of-cafe">☕ Café da manhã</span>
-                        <span class="amenity" data-lang-key="of-ar">❄️ Ar condicionado</span>
+        <section class="rc-stay-list" aria-labelledby="rc-stay-list-title">
+            <div class="rc-wrap">
+                <div class="rc-stay-list-head">
+                    <h2 id="rc-stay-list-title" class="rc-section-title" data-lang-key="of-hero-h">Escolha Sua Estadia</h2>
+                    <div class="filter-tabs rc-filter" role="group" aria-label="Filtrar hospedagens" data-lang-key-aria-label="rc-stay-filter-aria">
+                        <button class="filter-btn active" data-filter="all" data-lang-key="of-btn-todos">Todos</button>
+                        <button class="filter-btn" data-filter="hotel" data-lang-key="of-btn-hoteis">Hotéis</button>
+                        <button class="filter-btn" data-filter="pousada" data-lang-key="of-btn-pousadas">Pousadas</button>
+                        <button class="filter-btn" data-filter="rural" data-lang-key="of-btn-rural">Turismo Rural</button>
                     </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554235321802">📞 (42) 3532-1802</a>
-                        <a href="https://maps.google.com/maps?q=Hotel+Sao+Mateus+Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Centro, São Mateus do Sul</a>
+                </div>
+
+                <!-- Fallback estático (substituído pelo cadastro público quando ele carrega).
+                     V2.2: removidos "Pousada da Colônia", "Sítio Morango Feliz" e "Chalés do Iguaçu" —
+                     cards ilustrativos do commit 901769e (telefones 99999-xxxx), ausentes do cadastro oficial. -->
+                <div class="hotels-grid" id="hotelsGrid" data-public-establishments="lodging" aria-live="polite">
+                    <div class="hotel-card" data-category="hotel">
+                        <img class="hotel-image hotel-image--photo" src="images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-01.jpeg" alt="Hotel São Mateus" loading="lazy" decoding="async" width="1066" height="1600">
+                        <div class="hotel-content">
+                            <span class="hotel-category">Hotel</span>
+                            <h3 data-lang-key="of-h1-nome">Hotel São Mateus</h3>
+                            <p class="description" data-lang-key="of-h1-desc">Hotel tradicional localizado no coração da cidade, próximo à Igreja Matriz e principais pontos turísticos.</p>
+                            <div class="hotel-contact">
+                                <a href="tel:+554235321802">(42) 3532-1802</a>
+                                <span>Centro, São Mateus do Sul</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hotel-card" data-category="hotel">
+                        <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">H</span><span class="card-media-category">Hotel</span></div>
+                        <div class="hotel-content">
+                            <span class="hotel-category">Hotel</span>
+                            <h3 data-lang-key="of-h2-nome">Hotel Nora</h3>
+                            <p class="description" data-lang-key="of-h2-desc">Acomodações aconchegantes com excelente custo-benefício. Ideal para famílias e viajantes de negócios.</p>
+                            <div class="hotel-contact">
+                                <a href="tel:+554232821500">(42) 3282-1500</a>
+                                <span>Centro, São Mateus do Sul</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hotel-card" data-category="hotel">
+                        <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">H</span><span class="card-media-category">Hotel</span></div>
+                        <div class="hotel-content">
+                            <span class="hotel-category">Hotel</span>
+                            <h3 data-lang-key="of-h3-nome">Hotel Dom Leopoldo</h3>
+                            <p class="description" data-lang-key="of-h3-desc">Charme polonês em cada detalhe. Decoração temática que celebra a herança cultural da cidade.</p>
+                            <div class="hotel-contact">
+                                <a href="tel:+554232823000">(42) 3282-3000</a>
+                                <span>Centro, São Mateus do Sul</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Hotel Nora -->
-            <div class="hotel-card" data-category="hotel">
-                <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">H</span><span class="card-media-category">Hotel</span></div>
-                <div class="hotel-content">
-                    <span class="hotel-category">Hotel</span>
-                    <h3 data-lang-key="of-h2-nome">Hotel Nora</h3>
-                    <p class="description" data-lang-key="of-h2-desc">Acomodações aconchegantes com excelente custo-benefício. Ideal para famílias e viajantes de negócios.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
-                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
-                        <span class="amenity" data-lang-key="of-cafe">☕ Café da manhã</span>
-                        <span class="amenity">📺 TV</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554232821500">📞 (42) 3282-1500</a>
-                        <a href="https://maps.google.com/maps?q=Hotel+Nora+Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Centro, São Mateus do Sul</a>
-                    </div>
+        <section class="rc-stay-tips" aria-labelledby="rc-stay-tips-title">
+            <div class="rc-wrap rc-stay-tips-grid">
+                <div>
+                    <p class="rc-chapter-num" aria-hidden="true">✳</p>
+                    <h2 id="rc-stay-tips-title" class="rc-section-title" data-lang-key="rc-stay-tips-title">Antes de reservar</h2>
+                </div>
+                <ol class="rc-tips">
+                    <li><h3 data-lang-key="of-dica1-h">Reserve com Antecedência</h3><p data-lang-key="of-dica1-p">Consulte as datas oficiais antes de reservar. O 5º AgroSamas foi adiado e ainda não tem nova data definida.</p></li>
+                    <li><h3 data-lang-key="of-dica2-h">Fins de Semana</h3><p data-lang-key="rc-stay-tip2">A Feira Gastronômica acontece às quartas e a Feira do Produtor aos sábados, na Rua do Mathe.</p></li>
+                    <li><h3 data-lang-key="of-dica3-h">Localização</h3><p data-lang-key="of-dica3-p">Hotéis no centro facilitam acesso a pé às principais atrações.</p></li>
+                    <li><h3 data-lang-key="of-dica4-h">Contato Direto</h3><p data-lang-key="of-dica4-p">Ligue diretamente para melhores preços e disponibilidade.</p></li>
+                </ol>
+            </div>
+        </section>
+
+        <section class="rc-stay-next">
+            <div class="rc-wrap rc-stay-next-inner">
+                <div>
+                    <h2 class="rc-subhead" data-lang-key="of-cta-h">Planeje Sua Visita</h2>
+                    <p data-lang-key="of-cta-p">Confira os eventos e monte seu roteiro personalizado pela Capital Polonesa do Paraná.</p>
+                </div>
+                <div class="rc-stay-next-links">
+                    <a href="/eventos/" class="rc-btn rc-btn--solid" data-lang-key="rc-stay-cta-events">Ver a agenda</a>
+                    <a href="/mapa-turistico" class="rc-btn rc-btn--line" data-lang-key="rc-cta-map-short">Abrir o mapa</a>
                 </div>
             </div>
-
-            <!-- Hotel Dom Leopoldo -->
-            <div class="hotel-card" data-category="hotel">
-                <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">H</span><span class="card-media-category">Hotel</span></div>
-                <div class="hotel-content">
-                    <span class="hotel-category">Hotel</span>
-                    <h3 data-lang-key="of-h3-nome">Hotel Dom Leopoldo</h3>
-                    <p class="description" data-lang-key="of-h3-desc">Charme polonês em cada detalhe. Decoração temática que celebra a herança cultural da cidade.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-wifi">📶 Wi-Fi</span>
-                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
-                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
-                        <span class="amenity" data-lang-key="of-hidro">🛁 Hidromassagem</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554232823000">📞 (42) 3282-3000</a>
-                        <a href="https://maps.google.com/maps?q=Hotel+Dom+Leopoldo+Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Centro, São Mateus do Sul</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pousada da Colônia -->
-            <div class="hotel-card" data-category="pousada">
-                <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">P</span><span class="card-media-category">Pousada</span></div>
-                <div class="hotel-content">
-                    <span class="hotel-category">Pousada</span>
-                    <h3 data-lang-key="of-p1-nome">Pousada da Colônia</h3>
-                    <p class="description" data-lang-key="of-p1-desc">Experiência autêntica nas colônias polonesas. Café da manhã com produtos caseiros da região.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-area-verde">🌳 Área verde</span>
-                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
-                        <span class="amenity" data-lang-key="of-estac">🅿️ Estacionamento</span>
-                        <span class="amenity" data-lang-key="of-prod-caseiros">🐔 Produtos caseiros</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554235324163">📞 (42) 3532-4163 — Departamento de Cultura e Turismo</a>
-                        <a href="https://maps.google.com/maps?q=Colonia+Agua+Branca+Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Colônia Água Branca</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Turismo Rural Morango -->
-            <div class="hotel-card" data-category="rural">
-                <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">S</span><span class="card-media-category">Turismo Rural</span></div>
-                <div class="hotel-content">
-                    <span class="hotel-category">Turismo Rural</span>
-                    <h3 data-lang-key="of-s1-nome">Sítio Morango Feliz</h3>
-                    <p class="description" data-lang-key="of-s1-desc">Hospedagem na propriedade rural com colheita de morangos. Perfeito para famílias com crianças.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-colha-pague">🍓 Colha e pague</span>
-                        <span class="amenity" data-lang-key="of-trilhas">🌳 Trilhas</span>
-                        <span class="amenity" data-lang-key="of-vivencia">👨‍🌾 Vivência rural</span>
-                        <span class="amenity" data-lang-key="of-cafe-colonial">☕ Café colonial</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554235324163">📞 (42) 3532-4163 — Departamento de Cultura e Turismo</a>
-                        <a href="https://maps.google.com/maps?q=Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Interior de São Mateus do Sul</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chalés do Iguaçu -->
-            <div class="hotel-card" data-category="pousada">
-                <div class="hotel-image card-media-typographic" aria-hidden="true"><span class="card-media-initial">C</span><span class="card-media-category">Chalés</span></div>
-                <div class="hotel-content">
-                    <span class="hotel-category">Chalés</span>
-                    <h3 data-lang-key="of-c1-nome">Chalés do Iguaçu</h3>
-                    <p class="description" data-lang-key="of-c1-desc">Chalés privativos às margens do Rio Iguaçu. Contato direto com a natureza e tranquilidade.</p>
-                    <div class="hotel-amenities">
-                        <span class="amenity" data-lang-key="of-beira-rio">🌊 Beira-rio</span>
-                        <span class="amenity" data-lang-key="of-pesca">🎣 Pesca</span>
-                        <span class="amenity" data-lang-key="of-churras">🔥 Churrasqueira</span>
-                        <span class="amenity" data-lang-key="of-canoagem">🛶 Canoagem</span>
-                    </div>
-                    <div class="hotel-contact">
-                        <a href="tel:+554235324163">📞 (42) 3532-4163 — Departamento de Cultura e Turismo</a>
-                        <a href="https://maps.google.com/maps?q=Rio+Iguacu+Sao+Mateus+do+Sul+PR" target="_blank" rel="noopener noreferrer">📍 Às margens do Rio Iguaçu</a>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Booking Tips -->
-        <div class="booking-tips">
-            <h3 data-lang-key="of-dicas-h">💡 Dicas para sua Reserva</h3>
-            <div class="tips-grid">
-                <div class="tip-item">
-                    <span class="tip-icon">📅</span>
-                    <div>
-                        <h4 data-lang-key="of-dica1-h">Reserve com Antecedência</h4>
-                        <p data-lang-key="of-dica1-p">Consulte as datas oficiais antes de reservar. O 5º AgroSamas foi adiado e ainda não tem nova data definida.</p>
-                    </div>
-                </div>
-                <div class="tip-item">
-                    <span class="tip-icon">🗓️</span>
-                    <div>
-                        <h4 data-lang-key="of-dica2-h">Fins de Semana</h4>
-                        <p data-lang-key="of-dica2-p">As feiras gastronômicas acontecem quartas, sextas e sábados.</p>
-                    </div>
-                </div>
-                <div class="tip-item">
-                    <span class="tip-icon">🚗</span>
-                    <div>
-                        <h4 data-lang-key="of-dica3-h">Localização</h4>
-                        <p data-lang-key="of-dica3-p">Hotéis no centro facilitam acesso a pé às principais atrações.</p>
-                    </div>
-                </div>
-                <div class="tip-item">
-                    <span class="tip-icon">☎️</span>
-                    <div>
-                        <h4 data-lang-key="of-dica4-h">Contato Direto</h4>
-                        <p data-lang-key="of-dica4-p">Ligue diretamente para melhores preços e disponibilidade.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- CTA -->
-        <div class="cta-section">
-            <h3 data-lang-key="of-cta-h">Planeje Sua Visita</h3>
-            <p data-lang-key="of-cta-p">Confira os eventos e monte seu roteiro personalizado pela Capital Polonesa do Paraná.</p>
-            <a href="/eventos" class="cta-btn">📅 Ver Calendário de Eventos</a>
-        </div>
+        </section>
     </main>
 
+    <script>
+    // Quando o cadastro público vier sem foto, usa a foto oficial que o próprio
+    // estabelecimento enviou ao portal (acervo images/empreendimentos/<id>/), se houver.
+    (function () {
+        var grid = document.getElementById('hotelsGrid');
+        if (!grid || !window.MutationObserver) return;
+        function enrich() {
+            var known = {};
+            (window.TURISMO_HOSPEDAGENS || []).forEach(function (h) {
+                if (h && h.id && /^images\/empreendimentos\//.test(h.imagem || '')) known[h.id] = h;
+            });
+            grid.querySelectorAll('[data-establishment-id]').forEach(function (card) {
+                var rec = known[card.getAttribute('data-establishment-id')];
+                var media = card.querySelector('.card-media-typographic');
+                if (!rec || !media) return;
+                var img = document.createElement('img');
+                img.className = 'hotel-image hotel-image--photo';
+                img.src = rec.imagem; img.alt = rec.nome || ''; img.loading = 'lazy'; img.decoding = 'async';
+                media.replaceWith(img);
+            });
+        }
+        new MutationObserver(enrich).observe(grid, { childList: true });
+        enrich();
+    })();
+    </script>
     <!-- Footer -->
     <footer class="footer">
         <p>© 2026 Secretaria Municipal de Turismo de São Mateus do Sul</p>

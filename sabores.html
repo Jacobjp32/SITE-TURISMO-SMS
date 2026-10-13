@@ -85,7 +85,6 @@
     <title>Gastronomia em São Mateus do Sul | Sabores Locais</title>
     
     <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/shared.css?v=admin-e2e-publication-20260911">
     <link rel="stylesheet" href="css/sabores.css?v=site-public-b1-20260708">
@@ -93,53 +92,45 @@
     <script src="js/breadcrumbs.js?v=visual-v21-20261013"></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/recortes.css?v=recortes-r2-20261013">
 </head>
-<body class="v2-page v2-sabores">
+<body class="v2-page v2-sabores recortes rc-sabores">
     <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
+    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
 
-    <!-- Hero -->
-    <section class="hero hero--sabores page-hero-v2" style="--page-hero-image:url('/images/WEBP/RUA-DO-MATHE-_1_.webp');--page-hero-position:50% 62%">
-        <span class="page-hero-v2__caption">Rua do Mathe, onde acontecem as feiras gastronômicas</span>
-        <h1 data-lang-key="page-sabores-titulo">Sabores de São Mateus</h1>
-        <p data-lang-key="page-sabores-subtitulo">Da tradição polonesa aos sabores do campo. Descubra a gastronomia autêntica da Capital Polonesa do Paraná.</p>
-        <img src="images/mascotes/MASCOTE_MENINO_POLONES_1.png" class="hero-mascote" alt="" aria-hidden="true">
-    </section>
+    <!-- Recortes · Sabores: o caderno vira receituário. Fotos só de pratos reais, com crédito. -->
+    <main id="main-content" class="main-content rc-main rc-sab">
 
-    <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
-    <div id="public-banners-slot" hidden></div>
+        <header class="rc-sab-hero">
+            <div class="rc-sab-hero-text">
+                <p class="rc-kicker"><span class="rc-fig">cap. 2</span> <span data-lang-key="rc-sab-kicker">Receituário da cidade</span></p>
+                <h1 class="rc-sab-title" data-lang-key="page-sabores-titulo">Sabores de São Mateus</h1>
+                <p class="rc-sab-lead" data-lang-key="page-sabores-subtitulo">Da tradição polonesa aos sabores do campo. Descubra a gastronomia autêntica da Capital Polonesa do Paraná.</p>
 
-    <!-- Main -->
-    <main class="main-content">
-
-        <!-- Bloco S4B: atalhos internos (herdam os antigos itens do menu Sabores) -->
-        <nav class="sabores-atalhos" aria-labelledby="sabores-atalhos-titulo">
-            <h2 id="sabores-atalhos-titulo" class="sabores-atalhos-titulo" data-lang-key="sab-atalhos-titulo">Explore os sabores</h2>
-            <div class="sabores-atalhos-grid">
-                <a class="sabores-atalho-card" href="#polonesa">
-                    <span class="sabores-atalho-icon" aria-hidden="true">🥟</span>
-                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-polonesa">Culinária Polonesa</span>
-                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-polonesa-desc">Pierogi, bigos e mais</span>
-                </a>
-                <a class="sabores-atalho-card" href="#erva-mate">
-                    <span class="sabores-atalho-icon" aria-hidden="true">🧉</span>
-                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-ervamate">Erva-mate</span>
-                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-ervamate-desc">Ouro verde com IG própria</span>
-                </a>
-                <a class="sabores-atalho-card" href="#feiras">
-                    <span class="sabores-atalho-icon" aria-hidden="true">🛒</span>
-                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-feiras">Feiras e Produtores</span>
-                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-feiras-desc">Compre direto do campo</span>
-                </a>
-                <a class="sabores-atalho-card" href="#restaurantes">
-                    <span class="sabores-atalho-icon" aria-hidden="true">🍴</span>
-                    <span class="sabores-atalho-nome" data-lang-key="sab-atalho-restaurantes">Restaurantes</span>
-                    <span class="sabores-atalho-desc" data-lang-key="sab-atalho-restaurantes-desc">Onde comer na cidade</span>
-                </a>
+                <nav class="sabores-atalhos rc-menu" aria-labelledby="sabores-atalhos-titulo">
+                    <h2 id="sabores-atalhos-titulo" class="sabores-atalhos-titulo rc-menu-title" data-lang-key="sab-atalhos-titulo">Explore os sabores</h2>
+                    <ol class="rc-menu-list">
+                        <li><a href="#polonesa"><span data-lang-key="sab-atalho-polonesa">Culinária Polonesa</span><span class="rc-menu-dots" aria-hidden="true"></span><span class="rc-menu-num">01</span></a></li>
+                        <li><a href="#erva-mate"><span data-lang-key="sab-atalho-ervamate">Erva-mate</span><span class="rc-menu-dots" aria-hidden="true"></span><span class="rc-menu-num">02</span></a></li>
+                        <li><a href="#feiras"><span data-lang-key="sab-atalho-feiras">Feiras e Produtores</span><span class="rc-menu-dots" aria-hidden="true"></span><span class="rc-menu-num">03</span></a></li>
+                        <li><a href="#restaurantes"><span data-lang-key="sab-atalho-restaurantes">Restaurantes</span><span class="rc-menu-dots" aria-hidden="true"></span><span class="rc-menu-num">04</span></a></li>
+                    </ol>
+                </nav>
             </div>
-        </nav>
+            <figure class="rc-plate">
+                <div class="rc-plate-rim">
+                    <img src="images/empreendimentos/dona-bernardina/dona-bernardina-05.jpg" alt="Travessa de pierogi com molho de tomate, servida por uma cozinheira" data-lang-key-alt="rc-sab-plate-alt" width="1200" height="900" fetchpriority="high" decoding="async">
+                </div>
+                <figcaption><span class="rc-fig">fig. 1</span> <span data-lang-key="rc-sab-plate-fig">Pierogi servido na Delícias da Bernardina, Colônia Taquaral.</span> <a class="rc-credit" href="/local?id=delicias-da-bernardina" data-lang-key="rc-sab-credit-bernardina">Foto: acervo do estabelecimento</a></figcaption>
+            </figure>
+        </header>
 
-        <!-- Filter nav -->
-        <nav class="filter-nav" aria-label="Filtrar seção" data-lang-key-aria-label="sab-filtro-aria">
+        <!-- Bloco 4F: slot de banners publicados (preenchido por js/public-banners.js). -->
+        <div id="public-banners-slot" hidden></div>
+
+        <nav class="filter-nav rc-filter" aria-label="Filtrar seção" data-lang-key-aria-label="sab-filtro-aria">
             <button class="fnav-btn fnav-btn--active" type="button" data-filter="" aria-pressed="true" data-lang-key="sab-filtro-tudo">Tudo</button>
             <button class="fnav-btn" type="button" data-filter="polonesa" aria-pressed="false" data-lang-key="sab-filtro-polonesa">🥟 Culinária Polonesa</button>
             <button class="fnav-btn" type="button" data-filter="erva-mate" aria-pressed="false" data-lang-key="sab-filtro-erva-mate">🧉 Erva-mate</button>
@@ -147,410 +138,206 @@
             <button class="fnav-btn" type="button" data-filter="restaurantes" aria-pressed="false" data-lang-key="sab-filtro-restaurantes">🍴 Restaurantes</button>
         </nav>
 
-        <!-- Pratos Típicos Poloneses -->
-        <section id="polonesa">
-            <div class="section-header">
-                <h2 data-lang-key="sab-pratos-h">🥟 Pratos Típicos Poloneses</h2>
-                <p data-lang-key="sab-pratos-sub">A herança culinária dos imigrantes preservada com amor</p>
-            </div>
-
-            <div class="dishes-grid">
-                
-                <!-- Pierogi -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/WEBP/POLONES-POLSKIE-SMAKI-1-_26_.webp');">
-                        <span class="origin-badge" data-lang-key="sab-tag-polones">🇵🇱 Polonês</span>
+        <!-- 01 · Receituário polonês -->
+        <section id="polonesa" class="rc-sab-chapter rc-recipes" aria-labelledby="rc-recipes-title">
+            <div class="rc-wrap">
+                <div class="rc-sab-head">
+                    <p class="rc-chapter-num" aria-hidden="true">01</p>
+                    <div>
+                        <h2 id="rc-recipes-title" class="rc-section-title" data-lang-key="rc-sab-recipes-title">Receituário polonês</h2>
+                        <p class="rc-sab-head-note" data-lang-key="sab-pratos-sub">A herança culinária dos imigrantes preservada com amor</p>
                     </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-pierogi-h">Pierogi</h3>
-                        <span class="polish-name" data-lang-key="sab-pierogi-nome">Pierogi Ruskie</span>
-                        <p data-lang-key="sab-pierogi-desc">Massa recheada com batata e requeijão, servida com cebola dourada e nata. O prato mais emblemático da culinária polonesa.</p>
-                        <div class="where-to-find">
-                            <strong data-lang-key="sab-onde-provar">Onde provar:</strong> Polskie Smaki, Feira Gastronômica, Baile do Pierogi
-                        </div>
+                </div>
+
+                <article class="rc-recipe rc-recipe--feature">
+                    <figure class="rc-recipe-photo">
+                        <img src="images/empreendimentos/dona-bernardina/dona-bernardina-06.jpg" alt="Mulher com traje típico polonês segura um prato de pierogi" data-lang-key-alt="rc-sab-pierogi-alt" width="900" height="1200" loading="lazy" decoding="async">
+                        <figcaption><span class="rc-fig">fig. 2</span> <span data-lang-key="rc-sab-pierogi-fig">Pierogi com traje típico, na Delícias da Bernardina.</span></figcaption>
+                    </figure>
+                    <div class="rc-recipe-text">
+                        <p class="rc-recipe-pl" lang="pl" data-lang-key="sab-pierogi-nome">Pierogi Ruskie</p>
+                        <h3 class="rc-recipe-name" data-lang-key="sab-pierogi-h">Pierogi</h3>
+                        <p class="rc-dropcap" data-lang-key="sab-pierogi-desc">Massa recheada com batata e requeijão, servida com cebola dourada e nata. O prato mais emblemático da culinária polonesa.</p>
+                        <p class="rc-recipe-where"><strong data-lang-key="rc-sab-where">Onde provar</strong> <span data-lang-key="rc-sab-pierogi-where">Polskie Smaki, Feira Gastronômica e Baile do Pierogi (CEPOM)</span></p>
                     </div>
                 </article>
 
-                <!-- Bigos -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__5_.jpg');">
-                        <span class="origin-badge">🇵🇱 Polonês</span>
-                    </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-bigos-h">Bigos</h3>
-                        <span class="polish-name" data-lang-key="sab-bigos-nome">Bigos - Caçador Polonês</span>
+                <ol class="rc-recipe-list">
+                    <li class="rc-recipe">
+                        <span class="rc-recipe-index" aria-hidden="true">ii</span>
+                        <h3 class="rc-recipe-name" data-lang-key="sab-bigos-h">Bigos</h3>
                         <p data-lang-key="sab-bigos-desc">Ensopado de repolho fermentado (chucrute) com carnes variadas. Conhecido como "o prato do caçador".</p>
-                        <div class="where-to-find">
-                            <strong>Onde provar:</strong> Festas das comunidades, Mês Polonês
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Repolho Recheado -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/POLSKIE_SMAKI__6_.jpg');">
-                        <span class="origin-badge">🇵🇱 Polonês</span>
-                    </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-golabki-h">Repolho Recheado</h3>
-                        <span class="polish-name" data-lang-key="sab-golabki-pl">Gołąbki</span>
+                        <p class="rc-recipe-where"><strong data-lang-key="rc-sab-where">Onde provar</strong> <span data-lang-key="rc-sab-bigos-where">Festas das comunidades e Mês Polonês</span></p>
+                    </li>
+                    <li class="rc-recipe">
+                        <span class="rc-recipe-index" aria-hidden="true">iii</span>
+                        <p class="rc-recipe-pl" lang="pl" data-lang-key="sab-golabki-pl">Gołąbki</p>
+                        <h3 class="rc-recipe-name" data-lang-key="sab-golabki-h">Repolho Recheado</h3>
                         <p data-lang-key="sab-golabki-desc">Folhas de repolho recheadas com carne e arroz, cobertas com molho de tomate. Tradição em todas as festas.</p>
-                        <div class="where-to-find">
-                            <strong>Onde provar:</strong> Restaurantes típicos, Festas religiosas
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Kielbasa -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/PARRERAL__4_.jpg');">
-                        <span class="origin-badge">🇵🇱 Polonês</span>
-                    </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-kielbasa-h">Kielbasa</h3>
-                        <span class="polish-name" data-lang-key="sab-kielbasa-pl">Kiełbasa</span>
+                        <p class="rc-recipe-where"><strong data-lang-key="rc-sab-where">Onde provar</strong> <span data-lang-key="rc-sab-golabki-where">Restaurantes típicos e festas religiosas</span></p>
+                    </li>
+                    <li class="rc-recipe">
+                        <span class="rc-recipe-index" aria-hidden="true">iv</span>
+                        <p class="rc-recipe-pl" lang="pl" data-lang-key="sab-kielbasa-pl">Kiełbasa</p>
+                        <h3 class="rc-recipe-name" data-lang-key="sab-kielbasa-h">Kielbasa</h3>
                         <p data-lang-key="sab-kielbasa-desc">Linguiça polonesa defumada artesanalmente. Servida grelhada com mostarda e pão preto.</p>
-                        <div class="where-to-find">
-                            <strong>Onde provar:</strong> Feira do Produtor, Açougues locais
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Pães Artesanais -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/PARRERAL__6_.jpg');">
-                        <span class="origin-badge">🇵🇱 Polonês</span>
-                    </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-paes-h">Pães e Cucas</h3>
-                        <span class="polish-name" data-lang-key="sab-paes-pl">Chleb, Kołacz</span>
+                        <p class="rc-recipe-where"><strong data-lang-key="rc-sab-where">Onde provar</strong> <span data-lang-key="rc-sab-kielbasa-where">Feira do Produtor e açougues locais</span></p>
+                    </li>
+                    <li class="rc-recipe">
+                        <span class="rc-recipe-index" aria-hidden="true">v</span>
+                        <p class="rc-recipe-pl" lang="pl" data-lang-key="sab-paes-pl">Chleb, Kołacz</p>
+                        <h3 class="rc-recipe-name" data-lang-key="sab-paes-h">Pães e Cucas</h3>
                         <p data-lang-key="sab-paes-desc">Pães de fermentação natural e cucas doces com farofa. Receitas centenárias passadas de geração em geração.</p>
-                        <div class="where-to-find">
-                            <strong>Onde provar:</strong> Padarias locais, Feira do Produtor
-                        </div>
-                    </div>
-                </article>
-
-                <!-- Chimarrão -->
-                <article class="dish-card">
-                    <div class="dish-card-image" style="background-image: url('images/WEBP/RUA-DO-MATHE-_1_.webp');">
-                        <span class="origin-badge" data-lang-key="sab-tag-regional">🧉 Regional</span>
-                    </div>
-                    <div class="dish-card-content">
-                        <h3 data-lang-key="sab-chimarrao-h">Chimarrão</h3>
-                        <span class="polish-name" data-lang-key="sab-chimarrao-ig">Erva-mate IG São Matheus</span>
-                        <p data-lang-key="sab-chimarrao-desc">A erva-mate com Indicação Geográfica, símbolo da cidade. Tradição que une culturas gaúcha e polonesa.</p>
-                        <div class="where-to-find">
-                            <strong>Onde provar:</strong> Chimarródromo, Roda de Mathe (1º domingo)
-                        </div>
-                    </div>
-                </article>
-
+                        <p class="rc-recipe-where"><strong data-lang-key="rc-sab-where">Onde provar</strong> <span data-lang-key="rc-sab-paes-where">Padarias locais e Feira do Produtor</span></p>
+                    </li>
+                </ol>
+                <p class="rc-sab-note" data-lang-key="rc-sab-photo-note">Só mostramos fotografias de pratos feitos aqui. Os demais esperam suas fotos — se você é cozinheiro ou produtor local, fale com a Secretaria.</p>
             </div>
         </section>
 
-        <!-- Feiras -->
-        <section class="fairs-section" id="feiras">
-            <div class="section-header" style="text-align: left;">
-                <h2 data-lang-key="sab-feiras-h">🛒 Feiras e Mercados</h2>
-                <p data-lang-key="sab-feiras-sub">Compre direto do produtor e viva a experiência gastronômica local</p>
-            </div>
-
-            <div class="fairs-grid">
-                
-                <div class="fair-card">
-                    <h4 data-lang-key="sab-feira1-h">🍽️ Feira Gastronômica</h4>
-                    <div class="schedule">
-                        <span data-lang-key="sab-feira1-dias">📅 Quartas e Sextas-feiras</span>
-                        <span data-lang-key="sab-feira1-hora">🕐 17h às 22h</span>
-                        <span data-lang-key="sab-feira1-local">📍 Rua do Mathe</span>
-                    </div>
-                    <p data-lang-key="sab-feira1-desc">Pratos típicos, doces artesanais, bebidas e música ao vivo. O point gastronômico da cidade.</p>
+        <!-- 02 · Erva-mate -->
+        <section id="erva-mate" class="rc-sab-chapter rc-sab-erva" aria-labelledby="rc-sab-erva-title">
+            <div class="rc-wrap rc-sab-erva-grid">
+                <figure class="rc-sab-erva-photo">
+                    <img src="images/CUIA_3.JPG" alt="Caixa-d'água em forma de cuia de chimarrão, vista do alto sobre a cidade" data-lang-key-alt="rc-ch3-alt" width="1920" height="1080" loading="lazy" decoding="async">
+                    <figcaption><span class="rc-fig">fig. 3</span> <span data-lang-key="rc-sab-erva-fig">A caixa-d'água em forma de cuia, marco da cidade.</span></figcaption>
+                </figure>
+                <div>
+                    <p class="rc-chapter-num" aria-hidden="true">02</p>
+                    <h2 id="rc-sab-erva-title" class="rc-section-title" data-lang-key="sab-chimarrao-h">Chimarrão</h2>
+                    <p class="rc-recipe-pl" data-lang-key="sab-chimarrao-ig">Erva-mate IG São Matheus</p>
+                    <p class="rc-dropcap" data-lang-key="sab-chimarrao-desc">A erva-mate com Indicação Geográfica, símbolo da cidade. Tradição que une culturas gaúcha e polonesa.</p>
+                    <h3 class="rc-subhead" data-lang-key="rc-sab-erva-producers">Ervateiras e casas do mate</h3>
+                    <ul class="rc-ledger" data-rc-producers="erva" aria-live="polite"><li class="rc-ledger-empty" data-lang-key="rc-sab-loading">Carregando cadastro oficial…</li></ul>
                 </div>
-
-                <div class="fair-card">
-                    <h4 data-lang-key="sab-feira2-h">🥬 Feira do Produtor</h4>
-                    <div class="schedule">
-                        <span data-lang-key="sab-feira2-dias">📅 Sábados</span>
-                        <span data-lang-key="sab-feira2-hora">🕐 7h às 12h</span>
-                        <span>📍 Rua do Mathe</span>
-                    </div>
-                    <p data-lang-key="sab-feira2-desc">Frutas, hortaliças, queijos, embutidos, erva-mate e produtos coloniais direto do campo.</p>
-                </div>
-
-                <div class="fair-card">
-                    <h4 data-lang-key="sab-feira3-h">🌙 Feira da Lua</h4>
-                    <div class="schedule">
-                        <span data-lang-key="sab-feira3-dias">📅 2ª Terça-feira do mês</span>
-                        <span>🕐 17h às 22h</span>
-                        <span data-lang-key="sab-feira3-local">📍 Vila Pinheirinho</span>
-                    </div>
-                    <p data-lang-key="sab-feira3-desc">Produtos artesanais do bairro: pastéis, xixo, kafta e delícias caseiras.</p>
-                </div>
-
-                <div class="fair-card">
-                    <h4 data-lang-key="sab-feira4-h">🎉 Polskie Smaki</h4>
-                    <div class="schedule">
-                        <span data-lang-key="sab-feira4-dias">📅 Último sábado de agosto</span>
-                        <span data-lang-key="sab-feira4-hora">🕐 10h às 22h</span>
-                        <span>📍 Rua do Mathe</span>
-                    </div>
-                    <p data-lang-key="sab-feira4-desc">Festival de comida polonesa com desfile folclórico e concurso Papa Pierogi.</p>
-                </div>
-
             </div>
         </section>
 
-        <!-- Restaurantes -->
-        <section id="restaurantes">
-            <div class="section-header">
-                <h2 data-lang-key="sab-rest-h">🍴 Onde Comer</h2>
-                <p data-lang-key="sab-rest-sub">Restaurantes e estabelecimentos gastronômicos</p>
-            </div>
-
-            <div class="restaurants-grid" data-public-establishments="restaurants" aria-live="polite">
-                
-                <div class="restaurant-card">
-                    <div class="restaurant-icon">🍽️</div>
-                    <div class="restaurant-info">
-                        <h4 data-lang-key="sab-rest1-h">Porto Gastronômico</h4>
-                        <span class="cuisine" data-lang-key="sab-rest1-tipo">Contemporânea • Bar</span>
-                        <div class="contact">
-                            <span data-lang-key="sab-rest1-local">📍 Às margens do Rio Iguaçu</span>
-                            <span data-lang-key="sab-rest1-hora">🕐 Ter-Dom: 18h às 00h</span>
-                        </div>
+        <!-- 03 · Feiras: almanaque -->
+        <section class="fairs-section rc-sab-chapter rc-fairs" id="feiras" aria-labelledby="rc-fairs-title">
+            <div class="rc-wrap">
+                <div class="rc-sab-head">
+                    <p class="rc-chapter-num" aria-hidden="true">03</p>
+                    <div>
+                        <h2 id="rc-fairs-title" class="rc-section-title" data-lang-key="rc-sab-fairs-title">Feiras e mercados</h2>
+                        <p class="rc-sab-head-note" data-lang-key="sab-feiras-sub">Compre direto do produtor e viva a experiência gastronômica local</p>
                     </div>
                 </div>
-
-                <div class="restaurant-card">
-                    <div class="restaurant-icon">🥟</div>
-                    <div class="restaurant-info">
-                        <h4 data-lang-key="sab-rest2-h">Restaurante Polonês</h4>
-                        <span class="cuisine" data-lang-key="sab-rest2-tipo">Polonesa Tradicional</span>
-                        <div class="contact">
-                            <span data-lang-key="sab-rest2-local">📍 Centro</span>
-                            <span data-lang-key="sab-rest2-hora">🕐 Almoço e Jantar</span>
-                        </div>
-                    </div>
+                <div class="rc-almanac-grid">
+                    <article class="rc-fair">
+                        <p class="rc-fair-when" data-lang-key="rc-sab-fair1-when">Quartas</p>
+                        <h3 data-lang-key="rc-sab-fair1-name">Feira Gastronômica</h3>
+                        <p class="rc-fair-meta"><span data-lang-key="rc-sab-fair1-time">17h às 22h</span> · <a href="/local?id=rua-do-mathe">Rua do Mathe</a></p>
+                        <p data-lang-key="sab-feira1-desc">Pratos típicos, doces artesanais, bebidas e música ao vivo. O point gastronômico da cidade.</p>
+                    </article>
+                    <article class="rc-fair">
+                        <p class="rc-fair-when" data-lang-key="rc-sab-fair2-when">Sábados</p>
+                        <h3 data-lang-key="rc-sab-fair2-name">Feira do Produtor</h3>
+                        <p class="rc-fair-meta"><span data-lang-key="rc-sab-fair2-time">7h às 12h</span> · <a href="/local?id=rua-do-mathe">Rua do Mathe</a></p>
+                        <p data-lang-key="sab-feira2-desc">Frutas, hortaliças, queijos, embutidos, erva-mate e produtos coloniais direto do campo.</p>
+                    </article>
+                    <article class="rc-fair">
+                        <p class="rc-fair-when" data-lang-key="rc-sab-fair3-when">Mensal</p>
+                        <h3 data-lang-key="rc-sab-fair3-name">Feira da Lua</h3>
+                        <p class="rc-fair-meta"><span data-lang-key="rc-sab-fair3-time">17h às 22h</span> · <span data-lang-key="rc-sab-fair3-place">Vila Pinheirinho</span></p>
+                        <p data-lang-key="sab-feira3-desc">Produtos artesanais do bairro: pastéis, xixo, kafta e delícias caseiras.</p>
+                        <p class="rc-fair-check" data-lang-key="rc-sab-fair3-check">Data do mês a confirmar na agenda.</p>
+                    </article>
+                    <article class="rc-fair rc-fair--polish">
+                        <p class="rc-fair-when" data-lang-key="rc-sab-fair4-when">Agosto</p>
+                        <h3>Polskie Smaki</h3>
+                        <p class="rc-fair-meta"><span data-lang-key="rc-sab-fair4-time">Último sábado, a partir das 10h</span> · <a href="/local?id=rua-do-mathe">Rua do Mathe</a></p>
+                        <p data-lang-key="sab-feira4-desc">Festival de comida polonesa com desfile folclórico e concurso Papa Pierogi.</p>
+                    </article>
                 </div>
-
-                <div class="restaurant-card">
-                    <div class="restaurant-icon">🍖</div>
-                    <div class="restaurant-info">
-                        <h4 data-lang-key="sab-rest3-h">Churrascarias Locais</h4>
-                        <span class="cuisine" data-lang-key="sab-rest3-tipo">Churrasco • Regional</span>
-                        <div class="contact">
-                            <span data-lang-key="sab-rest3-local">📍 Diversos pontos</span>
-                            <span data-lang-key="sab-rest3-hora">🕐 Almoço: 11h às 14h</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="restaurant-card">
-                    <div class="restaurant-icon">☕</div>
-                    <div class="restaurant-info">
-                        <h4 data-lang-key="sab-rest4-h">Cafés e Confeitarias</h4>
-                        <span class="cuisine" data-lang-key="sab-rest4-tipo">Café Colonial • Doces</span>
-                        <div class="contact">
-                            <span data-lang-key="sab-rest4-local">📍 Centro e bairros</span>
-                            <span data-lang-key="sab-rest4-hora">🕐 Manhã e tarde</span>
-                        </div>
-                    </div>
-                </div>
-
+                <p class="rc-sab-source" data-lang-key="rc-sab-fairs-source">Dias e horários conforme o calendário oficial de eventos de 2026. Confira a <a href="/eventos/">agenda</a> antes de ir.</p>
             </div>
         </section>
 
-    <!-- Bloco S4B: âncora Erva-mate aponta para os produtores de erva-mate (IG São Matheus). -->
-    <div id="erva-mate" class="sabores-anchor" aria-hidden="true"></div>
+        <!-- 04 · Onde comer (cadastro do CMS) -->
+        <section id="restaurantes" class="rc-sab-chapter rc-sab-eat" aria-labelledby="rc-eat-title">
+            <div class="rc-wrap">
+                <div class="rc-sab-head">
+                    <p class="rc-chapter-num" aria-hidden="true">04</p>
+                    <div>
+                        <h2 id="rc-eat-title" class="rc-section-title" data-lang-key="rc-sab-eat-title">Onde comer</h2>
+                        <p class="rc-sab-head-note" data-lang-key="sab-rest-sub">Restaurantes e estabelecimentos gastronômicos</p>
+                    </div>
+                </div>
+                <div class="restaurants-grid" data-public-establishments="restaurants" aria-live="polite">
+                    <p class="rc-ledger-empty" data-lang-key="rc-sab-loading">Carregando cadastro oficial…</p>
+                </div>
+            </div>
+        </section>
 
-    <!-- DIRETO DO PRODUTOR - Seção Interativa -->
-    <section class="produtor-section" id="produtor" style="margin-top:3rem">
-        <div class="produtor-container">
-            <div class="produtor-header">
-                <span>🌱</span>
-                <h2 data-lang-key="produtor-titulo">Direto do Produtor</h2>
+        <!-- Direto do produtor: somente propriedades do cadastro oficial (lista antiga era ilustrativa). -->
+        <section class="produtor-section rc-sab-chapter rc-sab-farm" id="produtor" aria-labelledby="rc-farm-title">
+            <div class="rc-wrap">
+                <div class="rc-sab-head">
+                    <p class="rc-chapter-num" aria-hidden="true">05</p>
+                    <div>
+                        <h2 id="rc-farm-title" class="rc-section-title" data-lang-key="produtor-titulo">Direto do Produtor</h2>
+                        <p class="rc-sab-head-note" data-lang-key="produtor-intro">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
+                    </div>
+                </div>
+                <div class="rc-farm-cols">
+                    <div>
+                        <h3 class="rc-subhead" data-lang-key="rc-sab-farm-colonial">Queijos, defumados e coloniais</h3>
+                        <ul class="rc-ledger" data-rc-producers="colonial" aria-live="polite"><li class="rc-ledger-empty" data-lang-key="rc-sab-loading">Carregando cadastro oficial…</li></ul>
+                    </div>
+                    <div>
+                        <h3 class="rc-subhead" data-lang-key="rc-sab-farm-rural">Propriedades de turismo rural</h3>
+                        <ul class="rc-ledger" data-rc-producers="rural" aria-live="polite"><li class="rc-ledger-empty" data-lang-key="rc-sab-loading">Carregando cadastro oficial…</li></ul>
+                    </div>
+                </div>
+                <p class="rc-sab-source"><a class="rc-link" href="/mapa-turistico" data-lang-key="rc-sab-farm-map">Ver todas no mapa turístico</a></p>
             </div>
-            <p class="produtor-intro" data-lang-key="produtor-intro">Visite as propriedades rurais e leve para casa produtos frescos e artesanais.</p>
-            <div class="produtor-grid">
-                <div class="produtor-item" data-categoria="morangos" onclick="toggleProdutorDetails('morangos')">
-                    <div class="produtor-item-icon">🍓</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-morango">Morangos</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-morango-desc">Colheita própria nas propriedades</div>
-                </div>
-                <div class="produtor-item" data-categoria="vinhos" onclick="toggleProdutorDetails('vinhos')">
-                    <div class="produtor-item-icon">🍷</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-vinho">Vinhos</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-vinho-desc">Vinícolas artesanais</div>
-                </div>
-                <div class="produtor-item" data-categoria="queijos" onclick="toggleProdutorDetails('queijos')">
-                    <div class="produtor-item-icon">🧀</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-queijo">Queijos</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-queijo-desc">Queijarias coloniais</div>
-                </div>
-                <div class="produtor-item" data-categoria="mel" onclick="toggleProdutorDetails('mel')">
-                    <div class="produtor-item-icon">🍯</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-mel">Mel</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-mel-desc">Apiários locais</div>
-                </div>
-                <div class="produtor-item" data-categoria="ervamate" onclick="toggleProdutorDetails('ervamate')">
-                    <div class="produtor-item-icon">🧉</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-ervamate">Erva-mate</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-ervamate-desc">Ervateiras certificadas IG</div>
-                </div>
-                <div class="produtor-item" data-categoria="conservas" onclick="toggleProdutorDetails('conservas')">
-                    <div class="produtor-item-icon">🥒</div>
-                    <div class="produtor-item-name" data-lang-key="prod-nome-conservas">Conservas</div>
-                    <div class="produtor-item-desc" data-lang-key="prod-conservas-desc">Picles e compotas caseiras</div>
-                </div>
-            </div>
-            <div class="produtor-details" id="produtorDetails"></div>
-        </div>
-    </section>
+        </section>
 
     </main>
 
-    <!-- Footer -->
     <script>
-    // ===== PRODUTOR INTERATIVO =====
-    var currentProdutor = null;
-
-    var produtoresData = {
-        morangos: {
-            titulo: 'Morangos da Colheita',
-            icon: '🍓',
-            locais: [
-                { nome: 'Colônia Esperança', endereco: 'Linha São Luís, zona rural', telefone: '(42) 3532-0000', horario: 'Jul-Set: 8h-17h', coords: [-25.88, -50.38] },
-                { nome: 'Sítio Moranguinho', endereco: 'Estrada da Colônia, km 12', telefone: '(42) 3532-0000', horario: 'Ago-Out: 8h-17h', coords: [-25.90, -50.40] }
-            ]
-        },
-        vinhos: {
-            titulo: 'Vinícolas Artesanais',
-            icon: '🍷',
-            locais: [
-                { nome: 'Vinícola Colonial Wojcik', endereco: 'Linha Polonêsa, zona rural', telefone: '(42) 3532-0000', horario: 'Seg-Sáb: 8h-18h', coords: [-25.85, -50.42] }
-            ]
-        },
-        queijos: {
-            titulo: 'Queijarias Coloniais',
-            icon: '🧀',
-            locais: [
-                { nome: 'Queijaria Kowalski', endereco: 'Colônia Água Branca', telefone: '(42) 3532-0000', horario: 'Ter-Dom: 8h-12h', coords: [-25.87, -50.36] }
-            ]
-        },
-        mel: {
-            titulo: 'Apiários Locais',
-            icon: '🍯',
-            locais: [
-                { nome: 'Apiário Flores do Iguaçu', endereco: 'Zona Rural - Linha Boa Vista', telefone: '(42) 3532-0000', horario: 'Seg-Sáb: 7h-17h', coords: [-25.92, -50.35] }
-            ]
-        },
-        ervamate: {
-            titulo: 'Ervateiras IG São Matheus',
-            icon: '🧉',
-            locais: [
-                { nome: 'Ervateira São Matheus', endereco: 'Rua do Mathe, Centro', telefone: '(42) 3532-1234', horario: 'Seg-Sex: 8h-18h | Sáb: 8h-12h', coords: [-25.87, -50.39] },
-                { nome: 'Chimarródromo Municipal', endereco: 'Praça do Rio Iguaçu', telefone: '(42) 3532-4163', horario: '1º Dom do mês: 9h-13h', coords: [-25.87, -50.38] }
-            ]
-        },
-        conservas: {
-            titulo: 'Conservas e Compotas',
-            icon: '🥒',
-            locais: [
-                { nome: 'Feira do Produtor', endereco: 'Rua do Mathe', telefone: '(42) 3532-4163', horario: 'Sábados: 7h-12h', coords: [-25.87, -50.39] }
-            ]
+    // Direto do produtor: lista apenas estabelecimentos publicados no cadastro (CMS ou fallback oficial).
+    (function () {
+        var GROUPS = {
+            erva: function (l) { return /erva|\bmate\b|chimarr/i.test(((l.id || '').replace(/-/g, ' ')) + ' ' + (l.nome || '')) && !/^rua-do-mathe$|chimarrodromo/.test(l.id || ''); },
+            colonial: function (l) { return /queij|colonia|armaz|frigor|defum|dalety/i.test((l.id || '') + ' ' + (l.nome || '')) && !/restaurante|churrascaria/i.test(l.nome || ''); },
+            rural: function (l) { return /turismo rural/i.test(l.categoria || ''); }
+        };
+        function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+        function place(l) {
+            var e = String(l.endereco || '');
+            var m = e.match(/(Col[oô]nia|Localidade|Linha|Vila|Distrito|Fluvi[oó]polis|Centro)[^,—–-]*/i);
+            return m ? m[0].trim() : '';
         }
-    };
-
-    function toggleProdutorDetails(categoria) {
-        var items = document.querySelectorAll('.produtor-item');
-        var detailsPanel = document.getElementById('produtorDetails');
-        var data = produtoresData[categoria];
-        items.forEach(function(item) {
-            if (item.dataset.categoria === categoria) item.classList.toggle('active');
-            else item.classList.remove('active');
-        });
-        if (currentProdutor === categoria) {
-            detailsPanel.classList.remove('active');
-            currentProdutor = null;
-            return;
-        }
-        currentProdutor = categoria;
-        var locaisHTML = data.locais.map(function(local) {
-            return '<div class="local-card"><div class="local-icon">' + data.icon + '</div><div class="local-info"><h4>' + local.nome + '</h4><p>📍 ' + local.endereco + '</p><p>📞 ' + local.telefone + ' | 🕐 ' + local.horario + '</p></div></div>';
-        }).join('');
-        detailsPanel.innerHTML = '<h3>' + data.icon + ' ' + data.titulo + '</h3><div class="produtor-locais">' + locaisHTML + '</div>';
-        detailsPanel.classList.add('active');
-        setTimeout(function() { detailsPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
-    }
-
-    // ===== SELETOR DE IDIOMA =====
-    (function() {
-        var flags = { pt: '🇧🇷', en: '🇺🇸', es: '🇪🇸', pl: '🇵🇱' };
-        var currentLang = localStorage.getItem('smsLang') || 'pt';
-        var btn = document.getElementById('smsCurrentLang');
-        var dropdown = document.getElementById('smsDropdown');
-        var flagEl = document.getElementById('smsFlag');
-        var codeEl = document.getElementById('smsCode');
-
-        if (!btn || !dropdown || !flagEl || !codeEl) return;
-
-        function applyLang(lang) {
-            currentLang = lang;
-            localStorage.setItem('smsLang', lang);
-            flagEl.textContent = flags[lang];
-            codeEl.textContent = lang.toUpperCase();
-            dropdown.style.display = 'none';
-
-            // Aplicar traduções via translations.js
-            if (window.translations && window.translations[lang]) {
-                var t = window.translations[lang];
-                document.querySelectorAll('[data-lang-key]').forEach(function(el) {
-                    var key = el.getAttribute('data-lang-key');
-                    if (t[key] !== undefined) {
-                        el.innerHTML = t[key];
-                    }
-                });
-            }
-            // Aplicar via translationsComplete se disponível
-            if (window.translationsComplete) {
-                Object.keys(window.translationsComplete).forEach(function(key) {
-                    var obj = window.translationsComplete[key];
-                    if (obj && obj[lang] !== undefined) {
-                        document.querySelectorAll('[data-lang-key="' + key + '"]').forEach(function(el) {
-                            el.innerHTML = obj[lang];
-                        });
-                    }
-                });
-            }
-        }
-
-        // Toggle dropdown
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-        });
-
-        // Fechar ao clicar fora
-        document.addEventListener('click', function() {
-            dropdown.style.display = 'none';
-        });
-
-        dropdown.addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-
-        // Selecionar idioma
-        document.querySelectorAll('.sms-lang-opt').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                applyLang(this.getAttribute('data-lang'));
+        function render(data) {
+            data = data || {};
+            var all = [].concat(data.pontos || [], data.restaurantes || [], data.hospedagens || []);
+            var used = {};
+            document.querySelectorAll('[data-rc-producers]').forEach(function (ul) {
+                var test = GROUPS[ul.getAttribute('data-rc-producers')];
+                var items = all.filter(function (l) { return l && l.id && l.nome && !used[l.id] && test(l); });
+                items.sort(function (a, b) { return String(a.nome).localeCompare(String(b.nome), 'pt'); });
+                if (!items.length) return;
+                ul.innerHTML = items.map(function (l) {
+                    used[l.id] = true;
+                    var where = place(l);
+                    return '<li><a href="/local?id=' + encodeURIComponent(l.id) + '"><span class="rc-ledger-name">' + esc(l.nome) + '</span>' +
+                        (where ? '<span class="rc-ledger-place">' + esc(where) + '</span>' : '') + '</a></li>';
+                }).join('');
             });
-        });
-
-        // Aplicar idioma salvo ao carregar
-        if (currentLang !== 'pt') {
-            applyLang(currentLang);
         }
+        var tries = 0, done = 0;
+        if (window.TURISMO_DATA) render(window.TURISMO_DATA);
+        (function wait() {
+            if (window.TURISMO_DATA && !done) { done = 1; render(window.TURISMO_DATA); }
+            if (window.TURISMO_DATA_READY || tries > 40) {
+                Promise.resolve(window.TURISMO_DATA_READY || window.TURISMO_DATA).then(function (d) { render(d || window.TURISMO_DATA); }, function () { render(window.TURISMO_DATA); });
+                if (window.TURISMO_DATA) render(window.TURISMO_DATA);
+                return;
+            }
+            tries++; setTimeout(wait, 200);
+        })();
     })();
     </script>
     <footer class="footer">
