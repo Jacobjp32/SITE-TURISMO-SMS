@@ -63,10 +63,10 @@
     if (source.indexOf("historia") !== -1 || source.indexOf("historico") !== -1 || source.indexOf("patrimonio") !== -1 || source.indexOf("memoria") !== -1 || source.indexOf("vapor") !== -1) {
       return "history";
     }
-    if (source.indexOf("natureza") !== -1 || source.indexOf("rio") !== -1 || source.indexOf("iguacu") !== -1 || source.indexOf("lazer") !== -1 || source.indexOf("parque") !== -1 || source.indexOf("mirante") !== -1) {
+    if (source.indexOf("natureza") !== -1 || /\brio\b/.test(source) || source.indexOf("iguacu") !== -1 || source.indexOf("lazer") !== -1 || source.indexOf("parque") !== -1 || source.indexOf("mirante") !== -1) {
       return "nature";
     }
-    if (source.indexOf("gastronomia") !== -1 || source.indexOf("erva-mate") !== -1 || source.indexOf("mate") !== -1 || source.indexOf("chimarrao") !== -1 || source.indexOf("culinaria") !== -1 || source.indexOf("sabores") !== -1) {
+    if (source.indexOf("gastronomia") !== -1 || source.indexOf("erva-mate") !== -1 || /\bmate\b/.test(source) || source.indexOf("chimarrao") !== -1 || source.indexOf("culinaria") !== -1 || source.indexOf("sabores") !== -1) {
       return "gastronomy";
     }
     if (source.indexOf("evento") !== -1 || source.indexOf("agenda") !== -1 || source.indexOf("festa") !== -1) {

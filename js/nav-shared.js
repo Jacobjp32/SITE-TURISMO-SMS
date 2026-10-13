@@ -606,9 +606,9 @@ body.font-larger{font-size:140%!important;}
             if (!hasLoadedScript(src)) {
                 var script = document.createElement('script');
                 script.src = /js\/search(?:-index)?\.js$/.test(src)
-                    ? src + '?v=pwa-asset-cache-20260915'
+                    ? src + '?v=search-v22-20261013'
                     : src === 'js/data/eventos.js'
-                        ? src + '?v=agro-04-20260909'
+                        ? src + '?v=agro-postponed-20260924'
                         : /cms-public|turismo-data\.js|public-establishments-renderer/.test(src)
                             ? src + '?v=admin-e2e-publication-20260911'
                             : src;
