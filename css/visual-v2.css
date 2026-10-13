@@ -558,3 +558,84 @@ body.nav-menu-open .back-to-top { visibility: hidden !important; }
     .v2-mapa .map-list-card-actions .map-button.primary { flex: 0 0 auto !important; width: auto !important; min-height: 40px; padding: 0.5rem 1rem !important; }
     .v2-mapa .map-list-card-actions .map-button:not(.primary) { width: auto !important; flex: 0 0 auto !important; }
 }
+
+/* ==========================================================================
+   V2.1 — refinamentos após a revisão do comparativo
+   ========================================================================== */
+
+/* 1. Hero A no celular — "A Mobile Refinada": a foto continua abrindo a página,
+   mas com altura menor; título, chamada e as duas ações cabem na primeira dobra
+   e os atalhos fotográficos já despontam abaixo (390×844: tudo antes de 720 px). */
+@media (max-width: 768px) {
+    #map-hero.hv2[data-hero-variant="a"] .hv2-media { height: clamp(250px, 40vh, 360px); }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-shot--main img { object-position: 46% 62%; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-media::after {
+        background: linear-gradient(0deg, rgba(8, 30, 23, 1) 0%, rgba(8, 30, 23, 0.55) 34%, rgba(8, 30, 23, 0) 64%),
+                    linear-gradient(180deg, rgba(8, 30, 23, 0.45) 0%, rgba(8, 30, 23, 0) 22%);
+    }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-content { margin-top: -6.25rem; padding-bottom: 1rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-kicker { font-size: 0.7rem; letter-spacing: 0.12em; margin-bottom: 0.45rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-kicker::before { width: 22px; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-title { font-size: clamp(2.3rem, 10.6vw, 3rem); }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-lead { font-size: 0.98rem; line-height: 1.5; margin-top: 0.55rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-actions { margin-top: 0.9rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-actions .hv2-btn--text { flex: 1 1 100%; min-height: 40px; padding-block: 0.35rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-caption { font-size: 0.68rem; max-width: 52%; line-height: 1.25; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-portals { padding-top: 0.15rem; padding-bottom: 1.1rem; }
+    #map-hero.hv2[data-hero-variant="a"] .hv2-portal { flex-basis: 38%; min-height: 76px; }
+}
+@media (max-width: 380px) {
+    #map-hero.hv2[data-hero-variant="a"] .hv2-media { height: clamp(230px, 36vh, 300px); }
+}
+
+/* 2. Selo sazonal no Hero B: o estilo de origem (texto branco sobre vidro) some no fundo creme */
+#map-hero.hv2[data-hero-variant="b"] > [data-season-mascot],
+#map-hero.hv2[data-hero-variant="b"] .season-mascot {
+    background: var(--v2-forest) !important;
+    border-color: var(--v2-forest) !important;
+    color: #fff !important;
+    backdrop-filter: none !important;
+    box-shadow: 0 6px 16px rgba(10, 61, 46, 0.18);
+}
+
+/* 3. Cards: tile tipográfico também nos destaques e link transparente para o catálogo */
+.featured-experience-card .card-media-typographic { height: var(--featured-media-height); min-height: 0; }
+.v2-catalog-link-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.35rem 1rem; max-width: 1240px; margin: 0.5rem auto 0; padding: 0 1rem; }
+.v2-catalog-link { color: var(--v2-forest); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+.v2-catalog-link:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 3px; border-radius: 4px; }
+.v2-catalog-count:not(:empty)::before { content: "("; }
+.v2-catalog-count:not(:empty)::after { content: ")"; }
+.v2-catalog-link-row small { color: var(--v2-muted); font-size: 0.86rem; }
+
+/* 4. Flutuantes — VLibras sai do meio do hero e fica no canto, acima do "voltar ao topo";
+   com o menu aberto, os flutuantes ficam temporariamente atrás (inclusive os filhos do
+   VLibras, que reativavam a própria visibilidade) e o aviso de cookies espera o menu fechar. */
+/* O widget atual do VLibras é desenhado dentro de um shadow root (#vlibras-access-wrapper):
+   a posição do botão pertence ao widget oficial e não é sobrescrita aqui. Ocultar o
+   hospedeiro com o menu aberto funciona porque "visibility" é herdada pelo shadow DOM. */
+body.nav-menu-open #vlibras-access-wrapper,
+body.nav-menu-open div[vw],
+body.nav-menu-open div[vw] *,
+body.nav-menu-open #sms-mascot,
+body.nav-menu-open #sms-mascot *,
+body.nav-menu-open .back-to-top,
+body.nav-menu-open #sms-cookie-banner,
+body.nav-menu-open #sms-cookie-banner * { visibility: hidden !important; pointer-events: none !important; }
+
+/* 5. Galeria no celular — todas as categorias visíveis (quebra em linhas) e legenda da foto
+   fora do título */
+@media (max-width: 768px) {
+    .v2-galeria .page-hero-v2 .tabs {
+        flex-wrap: wrap !important; overflow: visible !important; gap: 0.45rem !important;
+        justify-content: flex-start !important;
+    }
+    .v2-galeria .page-hero-v2 .tab {
+        flex: 0 0 auto !important; min-height: 40px; padding: 0.45rem 0.8rem !important;
+        font-size: 0.88rem !important; border-radius: 999px !important;
+    }
+    .page-hero-v2 .page-hero-v2__caption {
+        position: static; order: 99; align-self: flex-start; margin-top: 0.85rem;
+        font-size: 0.7rem; background: rgba(8, 30, 23, 0.55);
+    }
+}
+.hv2-kicker { text-wrap: balance; }

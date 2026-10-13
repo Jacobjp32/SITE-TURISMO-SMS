@@ -45,12 +45,39 @@
     return safeImage(item && (item.imagem || item.media && item.media.mainImage && item.media.mainImage.url));
   }
 
-  // Foto própria do item (sem o fallback genérico da cidade).
+  // Foto própria do item (sem o fallback genérico da cidade). Ordem: capa oficial →
+  // primeira foto da galeria do próprio registro. Registros do CMS podem ter galeria
+  // sem capa (ex.: Hotel São Mateus), e a galeria é do mesmo empreendimento.
   function ownImage(item) {
-    var raw = clean(item && (item.imagem || item.media && item.media.mainImage && item.media.mainImage.url));
-    if (!raw) return "";
-    var safe = safeImage(raw);
-    return safe === FALLBACK_IMAGE ? "" : safe;
+    var candidates = [
+      item && item.imagem,
+      item && item.media && item.media.mainImage && item.media.mainImage.url
+    ];
+    ensureArray(item && item.media && item.media.gallery).forEach(function (entry) {
+      candidates.push(entry && (typeof entry === "string" ? entry : entry.url));
+    });
+    ensureArray(item && item.galeria).forEach(function (entry) {
+      candidates.push(entry && (typeof entry === "string" ? entry : entry.url));
+    });
+    for (var i = 0; i < candidates.length; i += 1) {
+      var raw = clean(candidates[i]);
+      if (!raw) continue;
+      var safe = safeImage(raw);
+      if (safe !== FALLBACK_IMAGE) return safe;
+    }
+    return "";
+  }
+
+  // Apresentação editorial (vitrine da home): mesma ordem oficial, mas registros com
+  // fotografia própria abrem a seção. Nenhum registro é removido do catálogo; os demais
+  // completam as vagas e continuam no mapa com o mesmo critério do catálogo oficial.
+  function photoFirst(items) {
+    var withPhoto = [];
+    var withoutPhoto = [];
+    ensureArray(items).forEach(function (item) {
+      (ownImage(item) ? withPhoto : withoutPhoto).push(item);
+    });
+    return withPhoto.concat(withoutPhoto);
   }
 
   // Bloco de mídia: foto real quando existir; senão, tile tipográfico com a inicial e a categoria.
@@ -123,9 +150,11 @@
   }
 
   function renderFeatured(target, data) {
-    var items = allEstablishments(data).filter(function (item) {
-      return item && item.display && item.display.featured === true && ownImage(item);
-    });
+    // Todos os registros marcados como destaque no CMS são exibidos (decisão editorial
+    // oficial); os que têm foto própria vêm primeiro, preservando a prioridade do CMS.
+    var items = photoFirst(allEstablishments(data).filter(function (item) {
+      return item && item.display && item.display.featured === true;
+    }));
     if (!items.length) {
       // O HTML já traz uma seleção editorial estática; não trocá-la por estado vazio.
       if (target.children.length) return;
@@ -134,7 +163,7 @@
       var name = itemName(item);
       return '<article class="featured-experience-card" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
         '<a href="' + itemUrl(item) + '">' +
-          '<img src="' + itemImage(item) + '" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async" width="640" height="360">' +
+          mediaMarkup(item, "featured-experience-media") +
           '<div class="featured-experience-body"><span>' + escapeHtml(itemCategory(item)) + '</span><h3>' + escapeHtml(name) + '</h3><small>Conhecer</small></div>' +
         '</a>' +
       '</article>';
@@ -142,7 +171,11 @@
   }
 
   function renderAttractions(target, data) {
-    var items = sortEditorial(data && data.pontos).slice(0, 12);
+    var all = sortEditorial(data && data.pontos);
+    var items = photoFirst(all).slice(0, 12);
+    target.setAttribute("data-catalog-total", String(all.length));
+    var totalEl = document.querySelector("[data-attractions-total]");
+    if (totalEl && all.length) totalEl.textContent = String(all.length);
     target.innerHTML = items.length ? items.map(function (item) {
       var name = itemName(item);
       return '<a class="attraction-card public-establishment-card-link" href="' + itemUrl(item) + '" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
