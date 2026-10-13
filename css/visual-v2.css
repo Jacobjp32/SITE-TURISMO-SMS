@@ -127,10 +127,12 @@
 
 .hv2-video { position: relative; z-index: 2; }
 .hv2-video video { display: block; width: 100%; height: auto; max-height: 70vh; background: #000; border-radius: var(--v2-radius); }
-#map-hero.hv2[data-hero-variant="a"] .hv2-video {
-    position: fixed; inset: auto 1rem 1rem auto; z-index: 10030;
-    width: min(720px, calc(100vw - 2rem));
-    box-shadow: var(--v2-shadow-lg);
+/* Vídeo sob demanda: modal centralizado com fundo escurecido (o visitante pediu para assistir) */
+#map-hero.hv2 .hv2-video {
+    position: fixed; z-index: 10030; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(960px, calc(100vw - 2rem));
+    box-shadow: 0 0 0 100vmax rgba(5, 18, 14, 0.78), var(--v2-shadow-lg);
+    border-radius: var(--v2-radius);
 }
 .hv2-video[hidden] { display: none !important; }
 
@@ -205,8 +207,7 @@
     padding: 0.3rem 0.65rem; border-radius: 999px;
     background: rgba(8, 30, 23, 0.72); color: #fff; font-size: 0.78rem;
 }
-#map-hero.hv2[data-hero-variant="b"] .hv2-video { grid-column: 1 / -1; grid-row: 1 / 4; }
-#map-hero.hv2[data-hero-variant="b"] .hv2-video:not([hidden]) ~ * { visibility: hidden; }
+
 #map-hero.hv2[data-hero-variant="b"] .hv2-portals { grid-area: portals; width: auto; padding: 2rem 0 0; }
 #map-hero.hv2[data-hero-variant="b"] .hv2-portal { min-height: 84px; box-shadow: none; }
 
@@ -246,7 +247,7 @@
     }
     .hv2-portals::-webkit-scrollbar { display: none; }
     .hv2-portal { flex: 0 0 42%; min-height: 84px; scroll-snap-align: start; font-size: 0.95rem; }
-    #map-hero.hv2[data-hero-variant="a"] .hv2-video { inset: auto 0.5rem 0.5rem 0.5rem; width: auto; }
+
 
     #map-hero.hv2[data-hero-variant="b"] { padding: 1.5rem 1rem 1.5rem !important; }
     #map-hero.hv2[data-hero-variant="b"] .hv2-content { padding: 0 0 1rem; }
@@ -448,17 +449,19 @@ html.site-stats-pending [data-site-stat]:not([data-site-stat="foundingYear"]):no
 }
 
 /* --------------------------------------------------------------------------
-   6. CABEÇALHO MOBILE — mesmas funções, menos altura (≈164px → ≈118px)
+   6. CABEÇALHO MOBILE — mesmas funções, menos altura (164px → ≈136px no 390)
    O nav-shared mede as alturas reais e recalcula o deslocamento do conteúdo.
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-    html body .accessibility-bar { padding: 0.1rem 0.5rem !important; }
+    html body .accessibility-bar { padding: 0.1rem 0.5rem !important; min-height: 0 !important; }
+    html body .nav { min-height: 0 !important; height: auto !important; }
+    html body .nav-mobile-shortcuts { min-height: 0 !important; height: auto !important; }
     html body .accessibility-bar .container { min-height: 28px !important; }
     html body .accessibility-bar .font-controls button { width: 32px !important; height: 26px !important; }
     html body .nav { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
-    html body .nav-logo img { height: 52px !important; max-width: 112px !important; padding: 3px !important; border-radius: 9px !important; }
-    html body .nav-mobile-shortcuts { padding-top: 0.3rem !important; padding-bottom: 0.3rem !important; }
-    html body .nav-mobile-shortcuts a { min-height: 34px !important; padding: 0.3rem 0.8rem !important; font-size: 0.82rem !important; }
+    html body .nav-logo img { height: 46px !important; max-width: 104px !important; padding: 3px !important; border-radius: 9px !important; }
+    html body .nav-mobile-shortcuts { padding-top: 0.2rem !important; padding-bottom: 0.25rem !important; }
+    html body .nav-mobile-shortcuts a { min-height: 32px !important; padding: 0.3rem 0.8rem !important; font-size: 0.82rem !important; }
 }
 @media (max-width: 480px) {
     /* Estação/clima repetem informação que a home já mostra; o restante da barra eMAG fica. */
@@ -515,3 +518,13 @@ body.nav-menu-open .back-to-top { visibility: hidden !important; }
 @media (prefers-reduced-motion: reduce) {
     .hv2-portal, .hv2-portal img, .hv2-btn { transition: none !important; }
 }
+
+
+/* Onde Ficar (fallback estático): foto oficial quando existe, tile tipográfico quando não */
+.v2-ondeficar .hotel-image { height: 200px !important; min-height: 0 !important; font-size: 0 !important; }
+.v2-ondeficar .hotel-image--photo { display: block; width: 100%; object-fit: cover; object-position: 50% 45%; }
+.v2-ondeficar .hotel-image.card-media-typographic { font-size: inherit !important; }
+
+.hv2-video-close { position: absolute; top: -18px; right: -18px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; background: var(--v2-forest); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; }
+.hv2-video-close:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 2px; }
+@media (max-width: 768px) { .hv2-video-close { top: -46px; right: 0; } }

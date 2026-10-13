@@ -22,12 +22,28 @@
         var wrapper = video.closest('.hv2-video');
         if (!trigger || !wrapper) return;
         trigger.setAttribute('aria-expanded', 'false');
+        var closeButton = document.createElement('button');
+        closeButton.type = 'button';
+        closeButton.className = 'hv2-video-close';
+        closeButton.setAttribute('aria-label', 'Fechar vídeo');
+        closeButton.textContent = '×';
+        wrapper.insertBefore(closeButton, wrapper.firstChild);
+
+        function closeVideo() {
+            video.pause();
+            wrapper.setAttribute('hidden', '');
+            trigger.setAttribute('aria-expanded', 'false');
+            try { trigger.focus({ preventScroll: true }); } catch (erro) {}
+        }
+        closeButton.addEventListener('click', closeVideo);
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && !wrapper.hasAttribute('hidden')) closeVideo();
+        });
+
         trigger.addEventListener('click', function () {
             var opening = wrapper.hasAttribute('hidden');
             if (!opening) {
-                video.pause();
-                wrapper.setAttribute('hidden', '');
-                trigger.setAttribute('aria-expanded', 'false');
+                closeVideo();
                 return;
             }
             var source = video.querySelector('source[data-src]');
