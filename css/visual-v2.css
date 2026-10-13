@@ -658,3 +658,6 @@ body.nav-menu-open #sms-cookie-banner * { visibility: hidden !important; pointer
     body.v2-mapa.map-view-list .map-layout { display: none !important; }
     body.v2-mapa.map-view-map .map-explore-section { display: none !important; }
 }
+
+/* Foco visível no botão de busca do cabeçalho compartilhado (era o único item do menu sem indicador) */
+html body .nav-search-btn:focus-visible { outline: 3px solid var(--v2-gold) !important; outline-offset: 2px; }
