@@ -435,3 +435,12 @@ body.recortes .rc-festa-links .festa-btn,
 body.recortes .rc-festa-links .festa-secondary-link { all: unset; cursor: pointer; color: var(--rc-mate); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
 body.recortes .rc-festa-links .festa-btn:focus-visible,
 body.recortes .rc-festa-links .festa-secondary-link:focus-visible { outline: 3px solid var(--rc-red); outline-offset: 3px; }
+/* Tablet: o arco não pode ocupar a tela inteira — título volta para a primeira dobra. */
+@media (min-width: 600px) and (max-width: 900px) {
+    body.recortes .rc-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: end; }
+    body.recortes .rc-hero-visual { order: 0; padding: 0; }
+    body.recortes .rc-hero-arch { aspect-ratio: 3 / 4; }
+    body.recortes .rc-hero-caption { padding-right: 36%; }
+    body.recortes .rc-hero-title-a, body.recortes .rc-hero-title-b { font-size: clamp(3rem, 8.5vw, 4.6rem); }
+    body.recortes .rc-hero-actions .rc-btn--solid, body.recortes .rc-hero-actions .rc-btn--line { flex: 0 1 auto; }
+}
