@@ -1408,7 +1408,8 @@
       }
       var fallbackConfig = getCategoryConfig(item.categoriaMapa);
       // Sem foto real: tile tipográfico na cor da categoria (não simula fotografia nem anuncia ausência).
-      return '<div class="' + className + ' map-image-fallback is-typographic" aria-hidden="true" style="--fallback-color:' + fallbackConfig.color + ';--fallback-accent:' + fallbackConfig.accent + ';"><span>' + fallbackConfig.icon + "</span></div>";
+      var initial = String(item.nome || "").trim().charAt(0) || fallbackConfig.icon;
+      return '<div class="' + className + ' map-image-fallback is-typographic" aria-hidden="true" style="--fallback-color:' + fallbackConfig.color + ';--fallback-accent:' + fallbackConfig.accent + ';"><span>' + escapeHtml(initial) + "</span></div>";
     }
     return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '" loading="lazy" decoding="async" width="640" height="360">';
   }

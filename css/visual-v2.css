@@ -528,3 +528,21 @@ body.nav-menu-open .back-to-top { visibility: hidden !important; }
 .hv2-video-close { position: absolute; top: -18px; right: -18px; z-index: 2; width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; background: var(--v2-forest); color: #fff; font-size: 1.4rem; line-height: 1; cursor: pointer; }
 .hv2-video-close:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 2px; }
 @media (max-width: 768px) { .hv2-video-close { top: -46px; right: 0; } }
+
+/* Acabamento — atrações: o pin decorativo deixa de abrir um vão entre foto e título */
+.home-page .attraction-card .attraction-icon { display: none !important; }
+.home-page .attraction-card .attraction-content { padding-top: 1.1rem !important; }
+.home-page .attraction-title { margin-top: 0 !important; font-size: 1.45rem !important; }
+.home-page .pilar-visual { padding: 0 !important; width: 100% !important; }
+.home-page .pilar-visual img, .home-page .pilar-image { border-radius: 0 !important; width: 100% !important; }
+
+/* Pratos típicos sem foto: faixa baixa com padrão geométrico inspirado no recorte wycinanki */
+.v2-sabores .dish-card-image {
+    height: 64px !important; min-height: 64px !important;
+    background-image:
+        radial-gradient(circle at 12px 12px, rgba(212, 165, 116, 0.55) 0 3px, transparent 3.5px),
+        radial-gradient(circle at 0 0, rgba(179, 18, 46, 0.35) 0 5px, transparent 5.5px),
+        linear-gradient(150deg, var(--v2-forest) 0%, var(--v2-forest-2) 100%) !important;
+    background-size: 24px 24px, 24px 24px, auto !important;
+    background-position: 0 0, 12px 12px, 0 0 !important;
+}
