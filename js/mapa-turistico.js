@@ -31,6 +31,10 @@
       listEmptySearch: "Nenhum local corresponde a essa busca no momento.",
       details: "Ver detalhes",
       localDetail: "Abrir ficha",
+      viewMap: "Mapa",
+      viewList: "Lista",
+      viewToggle: "Alternar entre mapa e lista",
+      showOnMap: "Mostrar no mapa",
       directions: "Como chegar",
       noCoordinates: "Sem localização cadastrada",
       noImage: "Sem imagem",
@@ -126,6 +130,10 @@
       listEmptySearch: "No places match this search right now.",
       details: "View details",
       localDetail: "Open page",
+      viewMap: "Map",
+      viewList: "List",
+      viewToggle: "Switch between map and list",
+      showOnMap: "Show on the map",
       directions: "Directions",
       noCoordinates: "Location not registered",
       noImage: "No image",
@@ -221,6 +229,10 @@
       listEmptySearch: "Ningun lugar coincide con esta busqueda.",
       details: "Ver detalles",
       localDetail: "Abrir ficha",
+      viewMap: "Mapa",
+      viewList: "Lista",
+      viewToggle: "Alternar entre mapa y lista",
+      showOnMap: "Mostrar en el mapa",
       directions: "Como llegar",
       noCoordinates: "Sin ubicacion registrada",
       noImage: "Sin imagen",
@@ -316,6 +328,10 @@
       listEmptySearch: "Zadne miejsce nie pasuje do tego wyszukiwania.",
       details: "Zobacz szczegoly",
       localDetail: "Otworz karte",
+      viewMap: "Mapa",
+      viewList: "Lista",
+      viewToggle: "Przełącz między mapą a listą",
+      showOnMap: "Pokaż na mapie",
       directions: "Jak dojechac",
       noCoordinates: "Brak zapisanej lokalizacji",
       noImage: "Brak zdjecia",
@@ -1770,11 +1786,19 @@
       + '<div class="map-detail-meta">' + meta.join("") + "</div>"
       + renderApprovedEventsSection(item, "panel")
       + '<div class="map-detail-actions">'
-      + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
-      + (localDetailUrl ? '<a class="map-button" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
+      + renderPrimaryInfoAction(item, localDetailUrl)
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</div>";
+  }
+
+  // Uma ação de informação por card: a ficha completa (/local) quando existe; caso
+  // contrário, o resumo em janela. Antes "Ver detalhes" e "Abrir ficha" levavam ao mesmo conteúdo.
+  function renderPrimaryInfoAction(item, localDetailUrl) {
+    if (localDetailUrl) {
+      return '<a class="map-button primary" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + "</a>";
+    }
+    return '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>";
   }
 
   function renderListCard(item) {
@@ -1794,7 +1818,7 @@
 
     return ""
       + '<article class="map-list-card' + selectedClass + '">'
-      + '<button type="button" class="map-list-card-select" data-item-id="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(item.nome) + '">'
+      + '<button type="button" class="map-list-card-select" data-item-id="' + escapeHtml(item.id) + '" aria-label="' + escapeHtml(t("showOnMap") + ": " + item.nome) + '">'
       + getImageHtml(item, "map-list-thumb")
       + '<div class="map-list-content">'
       + "<h4>" + escapeHtml(item.nome) + "</h4>"
@@ -1804,8 +1828,7 @@
       + "</div>"
       + "</button>"
       + '<div class="map-list-card-actions">'
-      + '<button type="button" class="map-button primary" data-map-details-id="' + escapeHtml(item.id) + '">' + t("details") + "</button>"
-      + (localDetailUrl ? '<a class="map-button" href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
+      + renderPrimaryInfoAction(item, localDetailUrl)
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("directions") + "</a>" : "")
       + "</div>"
       + "</article>";
@@ -1997,6 +2020,8 @@
       list.addEventListener("click", function (event) {
         var card = event.target.closest("[data-item-id]");
         if (!card) return;
+        // No celular, escolher um local na lista leva de volta ao mapa, já centralizado nele.
+        if (isCompactViewport() && state.mobileView === "list") setMobileView("map", true);
         selectItem(card.getAttribute("data-item-id"), true);
       });
     }
@@ -2019,9 +2044,67 @@
       renderStats();
       renderSelectedItem();
       renderList();
+      renderMobileViewToggle();
       renderMarkers();
       updateSearchUi();
     });
+  }
+
+  // Alternância Mapa / Lista (somente no celular). No desktop mapa e lista seguem lado a
+  // lado; no celular a página deixa de empilhar o mapa sobre um catálogo longo.
+  var COMPACT_QUERY = window.matchMedia ? window.matchMedia("(max-width: 768px)") : null;
+
+  function isCompactViewport() {
+    return !!(COMPACT_QUERY && COMPACT_QUERY.matches);
+  }
+
+  function ensureMobileViewToggle() {
+    var existing = document.querySelector("[data-map-view-toggle]");
+    if (existing) return existing;
+    var layout = document.querySelector(".map-layout");
+    if (!layout || !layout.parentNode) return null;
+    var wrapper = document.createElement("div");
+    wrapper.className = "map-view-toggle";
+    wrapper.setAttribute("data-map-view-toggle", "");
+    wrapper.setAttribute("role", "group");
+    wrapper.innerHTML = ''
+      + '<button type="button" data-map-view="map" aria-controls="tourismMap"></button>'
+      + '<button type="button" data-map-view="list" aria-controls="mapItemList"></button>';
+    layout.parentNode.insertBefore(wrapper, layout);
+    wrapper.addEventListener("click", function (event) {
+      var button = event.target.closest("[data-map-view]");
+      if (button) setMobileView(button.getAttribute("data-map-view"), true);
+    });
+    return wrapper;
+  }
+
+  function renderMobileViewToggle() {
+    var wrapper = ensureMobileViewToggle();
+    if (!wrapper) return;
+    var count = (state.filteredItems || []).length;
+    wrapper.setAttribute("aria-label", t("viewToggle"));
+    Array.prototype.forEach.call(wrapper.querySelectorAll("[data-map-view]"), function (button) {
+      var view = button.getAttribute("data-map-view");
+      button.textContent = view === "list" ? t("viewList") + " (" + count + ")" : t("viewMap");
+      button.setAttribute("aria-pressed", String(state.mobileView === view));
+    });
+  }
+
+  function setMobileView(view, fromUser) {
+    state.mobileView = view === "list" ? "list" : "map";
+    document.body.classList.toggle("map-view-list", state.mobileView === "list");
+    document.body.classList.toggle("map-view-map", state.mobileView === "map");
+    renderMobileViewToggle();
+    if (state.mobileView === "map" && state.map) {
+      window.setTimeout(function () { state.map.invalidateSize(); }, 60);
+    }
+    if (fromUser) {
+      var anchor = document.querySelector("[data-map-view-toggle]");
+      if (anchor) {
+        var offset = parseFloat(getComputedStyle(document.body).paddingTop) || 0;
+        window.scrollTo(0, Math.max(0, anchor.getBoundingClientRect().top + window.pageYOffset - offset - 8));
+      }
+    }
   }
 
   function refreshView() {
@@ -2032,6 +2115,7 @@
     renderMarkers();
     renderSelectedItem();
     renderList();
+    renderMobileViewToggle();
     updateSearchUi();
     syncUrlState();
   }
@@ -2056,6 +2140,7 @@
     state.map.setView([-25.8775, -50.3822], 12);
     applyPageText();
     bindEvents();
+    setMobileView("map", false);
     refreshView();
 
     window.setTimeout(function () {

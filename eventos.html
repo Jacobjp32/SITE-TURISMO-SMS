@@ -74,6 +74,12 @@
 
     /* ── Seção mês ── */
     .mes-secao { margin-bottom:2rem; }
+    .meses-anteriores { margin: 1rem 0 2rem; border: 1px solid rgba(10,61,46,0.15); border-radius: 12px; background: #fff; }
+    .meses-anteriores > summary { cursor: pointer; padding: 0.9rem 1.1rem; font-weight: 700; color: #0a3d2e; min-height: 44px; }
+    .meses-anteriores > summary:focus-visible { outline: 3px solid #d4a574; outline-offset: 2px; border-radius: 12px; }
+    .meses-anteriores[open] > summary { border-bottom: 1px solid rgba(10,61,46,0.12); margin-bottom: 1rem; }
+    .meses-anteriores > .mes-secao { padding: 0 1rem; opacity: 0.92; }
+    .mes-btn.mes-atual:not(.ativo) { box-shadow: inset 0 0 0 2px #d4a574; }
     .mes-titulo {
         font-family:'Cormorant Garamond',serif; font-size:1.5rem; color:#0a3d2e;
         border-bottom:2px solid #f0ede5; padding-bottom:0.5rem; margin-bottom:1rem;
@@ -866,9 +872,22 @@
 
     function atualizarTitulo() {
         let t = tr('ev-section-all', 'Todos os Eventos');
+        if (mesFiltro === 'all' && catFiltro === 'all' && temEventosAnterioresAoMesAtual()) t = tr('ev-section-upcoming', 'Próximos eventos');
         if (catFiltro === 'destaque') t = tr('ev-section-featured-title', 'Eventos em Destaque');
         else if (mesFiltro !== 'all') t = tpl('ev-section-month', 'Eventos de {month}', { month: monthName(parseInt(mesFiltro)) });
         document.getElementById('tituloSecao').textContent = t;
+    }
+
+    // Referência do mês corrente. Eventos de anos diferentes do atual não são
+    // reclassificados (o recorte só vale para o ano em curso).
+    function mesCorrenteReferencia() {
+        const agora = new Date();
+        return { mes: agora.getMonth() + 1, ano: agora.getFullYear() };
+    }
+
+    function temEventosAnterioresAoMesAtual() {
+        const ref = mesCorrenteReferencia();
+        return filtrados.some(ev => String(ev.data).substring(0,4) === String(ref.ano) && parseInt(String(ev.data).substring(5,7)) < ref.mes);
     }
 
     // ── Vista lista ──────────────────────────────────────────────────
@@ -892,8 +911,15 @@
         });
 
         let html = '';
+        let htmlAnteriores = '';
+        let totalAnteriores = 0;
+        const mesAtualRef = mesCorrenteReferencia();
 
         Object.keys(porMes).sort((a,b) => a-b).forEach(m => {
+            const anterior = mesFiltro === 'all' && mesAtualRef && parseInt(m) < mesAtualRef.mes &&
+                porMes[m].every(ev => String(ev.data).substring(0,4) === String(mesAtualRef.ano));
+            const destino = anterior ? 'anteriores' : 'proximos';
+            let bloco = '';
             const evs = porMes[m];
             const mesNome = monthName(parseInt(m));
 
@@ -913,14 +939,14 @@
             // Mostrar seção de mês apenas se tiver conteúdo
             if (totalNoMes === 0 && Object.keys(grupos).length === 0) return;
 
-            html += `<div class="mes-secao">
+            bloco += `<div class="mes-secao">
                 <h3 class="mes-titulo">
                     ${escapeHtml(mesNome)} <span class="mes-count">(${evs.length} ${escapeHtml(eventCountLabel(evs.length))})</span>
                 </h3>`;
 
             // Cards de eventos únicos (não recorrentes ou destaques)
             unicos.forEach(ev => {
-                html += cardEvento(ev);
+                bloco += cardEvento(ev);
             });
 
             // Cards resumo das feiras/recorrentes
@@ -930,7 +956,7 @@
                 const freq  = titulo.includes('Gastronômica') ? tr('ev-frequency-wed-fri', 'Quarta e sexta') :
                               titulo.includes('Produtor')      ? tr('ev-frequency-saturday', 'Todo sábado') : tpl('ev-frequency-month', '{count}x no mês', { count: ocorr });
 
-                html += `<div class="feira-resumo">
+                bloco += `<div class="feira-resumo">
                     <span style="font-size:1.3rem;">🏪</span>
                     <div>
                         <strong>${escapeHtml(titulo)}</strong>
@@ -940,8 +966,15 @@
                 </div>`;
             });
 
-            html += '</div>';
+            bloco += '</div>';
+            if (destino === 'anteriores') { htmlAnteriores += bloco; totalAnteriores += evs.length; }
+            else html += bloco;
         });
+
+        if (htmlAnteriores) {
+            const resumo = tpl('ev-past-summary', 'Meses anteriores de {year} ({count} eventos)', { year: mesAtualRef.ano, count: totalAnteriores });
+            html += `<details class="meses-anteriores"><summary>${escapeHtml(resumo)}</summary>${htmlAnteriores}</details>`;
+        }
 
         container.innerHTML = html || '<div class="sem-resultados"><div class="ic">🔍</div><p>' + escapeHtml(tr('ev-empty-short', 'Nenhum evento encontrado.')) + '</p></div>';
     }
@@ -1120,6 +1153,14 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         carregarEventos();
+
+        const refAtual = mesCorrenteReferencia();
+        const botaoMesAtual = document.querySelector('.mes-btn[data-mes="' + refAtual.mes + '"]');
+        if (botaoMesAtual && refAtual.ano === calAno) {
+            botaoMesAtual.classList.add('mes-atual');
+            botaoMesAtual.setAttribute('aria-current', 'date');
+            botaoMesAtual.setAttribute('title', tr('ev-month-current', 'mês atual'));
+        }
 
         // Filtros mês
         document.querySelectorAll('.mes-btn').forEach(btn => {

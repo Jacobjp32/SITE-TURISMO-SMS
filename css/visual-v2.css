@@ -639,3 +639,22 @@ body.nav-menu-open #sms-cookie-banner * { visibility: hidden !important; pointer
     }
 }
 .hv2-kicker { text-wrap: balance; }
+
+/* 6. Mapa no celular — alternância Mapa / Lista (o desktop mantém os dois lado a lado) */
+.map-view-toggle { display: none; }
+@media (max-width: 768px) {
+    .map-view-toggle {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.25rem;
+        margin: 0.25rem 0 0.75rem; padding: 0.25rem;
+        background: var(--v2-paper); border: 1px solid var(--v2-line); border-radius: 999px;
+    }
+    .map-view-toggle button {
+        min-height: 44px; border: 0; border-radius: 999px; background: transparent;
+        font: 700 0.95rem/1 var(--v2-body); color: var(--v2-forest); cursor: pointer;
+    }
+    .map-view-toggle button[aria-pressed="true"] { background: var(--v2-forest); color: #fff; }
+    .map-view-toggle button:focus-visible { outline: 3px solid var(--v2-gold); outline-offset: 2px; }
+    body.map-view-list .v2-mapa .map-layout,
+    body.v2-mapa.map-view-list .map-layout { display: none !important; }
+    body.v2-mapa.map-view-map .map-explore-section { display: none !important; }
+}
