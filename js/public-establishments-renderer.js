@@ -215,11 +215,16 @@
     }).join("") : emptyMarkup("Nenhum estabelecimento gastronômico publicado no momento.");
   }
 
+  // Subtipo usado pelos filtros de Onde Ficar. Antes, tudo que não era pousada/rural caía
+  // em "Hotéis" (ex.: Canil e CT São José — hotel de animais — e Pesqueiro do Luizão).
+  // Agora "hotel" exige o termo no nome/tags; o restante aparece somente em "Todos".
   function lodgingSubtype(item) {
     var source = clean([itemName(item), itemCategory(item), ensureArray(item && item.tags).join(" ")].join(" ")).toLowerCase();
     if (/pousada|chale|chalé/.test(source)) return "pousada";
     if (/rural|sitio|sítio|fazenda|colonia|colônia/.test(source)) return "rural";
-    return "hotel";
+    var nameAndTags = clean([itemName(item), ensureArray(item && item.tags).join(" ")].join(" ")).toLowerCase();
+    if (/\bhot[eé]is\b|\bhotel\b/.test(nameAndTags) && !/\bpet\b|canil|c[aã]es/.test(nameAndTags)) return "hotel";
+    return "outros";
   }
 
   function renderLodging(target, data) {
