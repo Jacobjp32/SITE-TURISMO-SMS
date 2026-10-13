@@ -1175,7 +1175,19 @@
     }
     var points = publicMapItems(data.pontos).map(function (item) { return normalizeItem(item, "ponto"); });
     var routes = (data.rotas || []).map(function (item) { return normalizeItem(item, "rota"); });
-    var lodging = publicMapItems(data.hospedagens).map(function (item) { return normalizeItem(item, "hospedagem"); });
+    // Hotel/creche de animais vai para Serviços; registro genérico sem contato
+    // ("Pousadas Rurais") não vira marcador de empreendimento específico.
+    var lodging = publicMapItems(data.hospedagens).filter(function (item) {
+      var hasContact = item && (item.telefone || item.whatsapp || item.email || item.site || item.instagram ||
+        (item.contact && (item.contact.phone || item.contact.whatsapp || item.contact.email || item.contact.website || item.contact.instagram)));
+      return !(item && !hasContact && /^(pousadas|hoteis|opcoes)(\s|$)/.test(normalizeText(item.nome)));
+    }).map(function (item) {
+      var source = normalizeText([item.nome, item.descricao, Array.isArray(item.tags) ? item.tags.join(" ") : item.tags].join(" "));
+      if (/(^|[^a-z])pet([^a-z]|$)|canil|caes de pastoreio/.test(source)) {
+        return normalizeItem(Object.assign({}, item, { categoria: "Serviços" }), "servico");
+      }
+      return normalizeItem(item, "hospedagem");
+    });
     var restaurants = publicMapItems(data.restaurantes).map(function (item) { return normalizeItem(item, "restaurante"); });
     var events = (data.eventos || []).map(function (item) { return normalizeItem(item, "evento"); });
     var services = (data.informacoesEssenciais || []).map(function (item) { return normalizeItem(item, "servico"); });

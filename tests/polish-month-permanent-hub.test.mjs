@@ -87,11 +87,11 @@ test("home preserva policy e não restaura destaque temporário", () => {
 
 test("consumidores usam geração coerente de cache", () => {
   for (const path of htmlFilesWithNav) {
-    assert.match(read(path), /js\/nav-shared\.js\?v=nav-v22-20261013/, path);
+    assert.match(read(path), /js\/nav-shared\.js\?v=nav-v22-release-20261013/, path);
   }
   assert.match(read("index.html"), /js\/search-index\.js\?v=search-v22-20261013/);
   assert.match(nav, /js\/search-index\.js[\s\S]*?search-v22-20261013/);
   for (const path of htmlFilesWithNav) {
-    assert.doesNotMatch(read(path), /js\/nav-shared\.js\?v=(?!nav-v22-20261013)/, path);
+    assert.doesNotMatch(read(path), /js\/nav-shared\.js\?v=(?!nav-v22-release-20261013)/, path);
   }
 });

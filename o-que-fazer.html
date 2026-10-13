@@ -29,17 +29,17 @@
     <link rel="stylesheet" href="css/shared.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/o-que-fazer.css?v=site-public-b1-20260708">
     <script src="js/site-meta.js?v=visual-v21-20261013" defer></script>
-    <script src="translations.js?v=site-public-b1-20260708"></script>
+    <script src="translations.js?v=v22-20261013"></script>
     <script src="js/breadcrumbs.js?v=visual-v21-20261013"></script>
     <link rel="stylesheet" href="css/tourism-mascot.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/recortes.css?v=recortes-r2-20261013">
+    <link rel="stylesheet" href="css/recortes.css?v=v22-20261013">
 </head>
 <body class="v2-page recortes rc-oqf-page">
-    <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
-    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
+    <script src="js/nav-shared.js?v=nav-v22-release-20261013"></script>
+    <script src="js/recortes.js?v=v22-20261013" defer></script>
 
     <!-- Recortes · O que fazer: índice de experiências — a bússola do caderno. -->
     <main class="main-content bridge-main rc-main rc-oqf" id="main-content">
@@ -123,12 +123,12 @@
                 pontos: (data.pontos || []).filter(function (p) { return p.imagem && p.imagem.indexOf('FOTO_GERAL') === -1; }),
                 rotas: window.TURISMO_ROTAS || data.rotas || [],
                 restaurantes: data.restaurantes || [],
-                hospedagens: (data.hospedagens || []).filter(function (h) { return !/canil/i.test(h.nome || ''); }),
+                hospedagens: (data.hospedagens || []).filter(function (h) { var r = window.PublicEstablishmentsRenderer; return r && r.isPeopleLodging ? r.isPeopleLodging(h) : !/canil/i.test(h.nome || ''); }),
                 eventos: []
             };
             var seen = {};
             (window.TURISMO_EVENTOS || data.eventos || []).forEach(function (e) { var n = e && (e.nome || e.titulo); if (n && !seen[n]) { seen[n] = 1; sets.eventos.push({ nome: n, id: e.id }); } });
-            var totals = { pontos: (data.pontos || []).length, rotas: sets.rotas.length, restaurantes: sets.restaurantes.length, hospedagens: (data.hospedagens || []).length, eventos: sets.eventos.length };
+            var totals = { pontos: (data.pontos || []).length, rotas: sets.rotas.length, restaurantes: sets.restaurantes.length, hospedagens: sets.hospedagens.length, eventos: sets.eventos.length };
             Object.keys(sets).forEach(function (k) {
                 var el = document.querySelector('[data-rc-sample="' + k + '"]');
                 var items = pick(sets[k], 4);

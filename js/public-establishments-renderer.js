@@ -230,8 +230,27 @@
     return "outros";
   }
 
+  // Hospedagem para pessoas: hotel/creche de animais não entra (o registro continua no
+  // mapa, em Serviços), nem registro genérico sem nenhum contato ("Pousadas Rurais"),
+  // que não é um empreendimento específico.
+  function isPetService(item) {
+    var source = clean([itemName(item), itemDescription(item), ensureArray(item && item.tags).join(" ")].join(" ")).toLowerCase();
+    return /\bpet\b|canil|c[aã]es de pastoreio/.test(source);
+  }
+
+  function isGenericListing(item) {
+    var contact = (item && item.contact) || {};
+    var hasContact = itemPhone(item) || clean(item && (item.whatsapp || item.email || item.site || item.instagram)) ||
+      clean(contact.whatsapp || contact.email || contact.website || contact.instagram);
+    return !hasContact && /^(pousadas|hot[eé]is|op[cç][oõ]es)\b/i.test(itemName(item));
+  }
+
+  function isPeopleLodging(item) {
+    return !!item && !isPetService(item) && !isGenericListing(item);
+  }
+
   function renderLodging(target, data) {
-    var items = sortEditorial(data && data.hospedagens);
+    var items = sortEditorial(data && data.hospedagens).filter(isPeopleLodging);
     target.innerHTML = items.length ? items.map(function (item) {
       var tags = ensureArray(item && item.tags).slice(0, 4);
       var phone = itemPhone(item);
@@ -277,6 +296,7 @@
   window.PublicEstablishmentsRenderer = {
     allEstablishments: allEstablishments,
     itemUrl: itemUrl,
+    isPeopleLodging: isPeopleLodging,
     renderAll: renderAll,
     renderers: renderers
   };

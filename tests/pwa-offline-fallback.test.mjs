@@ -7,7 +7,7 @@ const SW_SOURCE = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const HOME_SOURCE = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const NAV_SOURCE = readFileSync(new URL('../js/nav-shared.js', import.meta.url), 'utf8');
 const ORIGIN = 'https://turismo.test';
-const CACHE_NAME = 'turismo-sms-v26';
+const CACHE_NAME = 'turismo-sms-v27';
 
 class MockResponse {
     constructor(body = '', init = {}) {
@@ -700,20 +700,20 @@ test('retorno da rede substitui o fallback na navegação seguinte', async () =>
     assert.equal((await onlineEvent.responsePromise).body, 'network-restored');
 });
 
-test('activate mantém v26 e remove inclusive o cache v25 anterior', async () => {
+test('activate mantém v27 e remove inclusive o cache v26 anterior', async () => {
     const harness = createHarness({
-        initialCacheNames: ['turismo-sms-v20', 'turismo-sms-v25', CACHE_NAME, 'third-party-cache']
+        initialCacheNames: ['turismo-sms-v20', 'turismo-sms-v26', CACHE_NAME, 'third-party-cache']
     });
     await harness.dispatchLifecycle('activate');
 
-    assert.deepEqual(harness.records.deletes.sort(), ['turismo-sms-v20', 'turismo-sms-v25']);
+    assert.deepEqual(harness.records.deletes.sort(), ['turismo-sms-v20', 'turismo-sms-v26']);
     assert.deepEqual((await harness.cacheNames()).sort(), ['third-party-cache', CACHE_NAME]);
     assert.equal(harness.claimCalls, 1);
 });
 
 test('client assumido após upgrade continua sem interceptar Storage Firebase', async () => {
     const harness = createHarness({
-        initialCacheNames: ['turismo-sms-v25', CACHE_NAME]
+        initialCacheNames: ['turismo-sms-v26', CACHE_NAME]
     });
     await harness.dispatchLifecycle('activate');
 
@@ -722,7 +722,7 @@ test('client assumido após upgrade continua sem interceptar Storage Firebase', 
     );
 
     assert.equal(harness.claimCalls, 1);
-    assert.deepEqual(harness.records.deletes, ['turismo-sms-v25']);
+    assert.deepEqual(harness.records.deletes, ['turismo-sms-v26']);
     assert.equal(event.respondWithCalls, 0);
     assert.equal(harness.records.puts.length, 0);
 });

@@ -29,7 +29,7 @@
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a3d2e">
     <title>Notícias de Turismo | São Mateus do Sul</title>
-    <script src="translations.js?v=site-public-b1-20260708"></script>
+    <script src="translations.js?v=v22-20261013"></script>
     <script src="config.js?v=site-public-b1-20260708"></script>
     <link rel="stylesheet" href="css/shared.css?v=site-public-b1-20260708">
     <link rel="stylesheet" href="css/noticias.css?v=site-public-b1-20260708">
@@ -60,11 +60,11 @@
     <link rel="stylesheet" href="css/visual-v2.css?v=visual-v21-20261013">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/recortes.css?v=recortes-r2-20261013">
+    <link rel="stylesheet" href="css/recortes.css?v=v22-20261013">
 </head>
 <body class="v2-page v2-noticias recortes rc-noticias">
-    <script src="js/nav-shared.js?v=nav-v22-20261013"></script>
-    <script src="js/recortes.js?v=recortes-r2-20261013" defer></script>
+    <script src="js/nav-shared.js?v=nav-v22-release-20261013"></script>
+    <script src="js/recortes.js?v=v22-20261013" defer></script>
 
     <!-- Hero -->
     <section class="hero page-hero-v2" style="--page-hero-image:url('/images/PRACA_DO_RIO_IGUACU.jpg');--page-hero-position:50% 55%">
@@ -89,11 +89,11 @@
                 </div>
             </div>
 
-            <!-- POST DESTAQUE -->
-            <article class="post-card featured">
+            <!-- Fallback estático: sem destaque fixo (a chamada do 32º Mês Polonês já encerrou). -->
+            <article class="post-card">
                 <div class="post-image" style="background-image: url('images/POLSKIE_SMAKI__1_.jpg'); background-color:#0a3d2e;"></div>
                 <div class="post-content">
-                    <span class="post-category">Destaque · Cultura e Gastronomia</span>
+                    <span class="post-category">Cultura e Gastronomia</span>
                     <h2 class="post-title">Agosto é Polonês em São Mateus do Sul: confira a programação do 32º Mês Polonês</h2>
                     <p class="post-excerpt">
                         De 18 de julho a 30 de agosto, o 32º Mês Polonês reúne atividades religiosas, culturais, folclóricas e gastronômicas em São Mateus do Sul.
@@ -354,8 +354,15 @@
 
             const SEC = window.SMSecurity;
             const grid = document.getElementById('postsGrid');
-            const featured = posts.find(post => post.destaque) || posts[0];
-            const ordered = [featured].concat(posts.filter(post => post.id !== featured.id));
+            // Destaque só vale por 30 dias: chamada de evento já encerrado não fica no topo.
+            // Sem destaque recente, a lista segue em ordem cronológica, sem matéria ampliada.
+            const DESTAQUE_DIAS = 30;
+            const recente = function(post) {
+                const t = new Date(post.dataPublicacao).getTime();
+                return isFinite(t) && (Date.now() - t) <= DESTAQUE_DIAS * 86400000;
+            };
+            const featured = posts.find(post => post.destaque && recente(post)) || null;
+            const ordered = featured ? [featured].concat(posts.filter(post => post.id !== featured.id)) : posts;
 
             grid.innerHTML = `
                 <div class="fonte-banner" style="grid-column: 1 / -1;">
@@ -366,10 +373,10 @@
                     const link = post.linkOrigem || ('/noticia?slug=' + encodeURIComponent(post.slug));
                     const external = post.linkOrigem ? ' target="_blank" rel="noopener noreferrer"' : '';
                     return `
-                        <article class="post-card ${index === 0 ? 'featured' : ''}">
+                        <article class="post-card ${featured && index === 0 ? 'featured' : ''}">
                             <div class="post-image" style="background-image: url('${SEC.url(post.imagem, 'images/FOTO_GERAL_SAO_MATEUS_DO_SUL.jpg')}'); background-color:#0a3d2e;"></div>
                             <div class="post-content">
-                                <span class="post-category">${SEC.html(post.categoria, 'Notícia')}${post.destaque ? ' · Destaque' : ''}</span>
+                                <span class="post-category">${SEC.html(post.categoria, 'Notícia')}${post === featured ? ' · Destaque' : ''}</span>
                                 ${index === 0 ? '<h2 class="post-title">' : '<h3 class="post-title">'}${SEC.html(post.titulo, 'Sem título')}${index === 0 ? '</h2>' : '</h3>'}
                                 <p class="post-excerpt">${SEC.html(post.resumo, '')}</p>
                                 <div class="post-meta">

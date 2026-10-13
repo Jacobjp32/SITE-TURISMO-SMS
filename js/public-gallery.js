@@ -103,7 +103,15 @@
         });
         if (!root.children.length) return false;
         firstStatic.parentNode.insertBefore(root, firstStatic);
-        document.querySelectorAll("section.sec").forEach(function (section) { if (!root.contains(section)) section.hidden = true; });
+        // Só some a seção estática que o CMS substituiu (mesmo id); Natureza, Eventos e
+        // Fluviópolis não têm categoria no CMS e continuam visíveis para as abas da galeria.
+        document.querySelectorAll("section.sec").forEach(function (section) {
+            if (root.contains(section) || !section.id) return;
+            if (root.querySelector("#" + section.id)) {
+                section.hidden = true;
+                section.removeAttribute("id");
+            }
+        });
         return true;
     }
 

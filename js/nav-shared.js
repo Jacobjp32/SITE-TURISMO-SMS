@@ -609,7 +609,9 @@ body.font-larger{font-size:140%!important;}
                     ? src + '?v=search-v22-20261013'
                     : src === 'js/data/eventos.js'
                         ? src + '?v=agro-postponed-20260924'
-                        : /cms-public|turismo-data\.js|public-establishments-renderer/.test(src)
+                        : /public-establishments-renderer|turismo-data-adapter|pontos-turisticos/.test(src)
+                            ? src + '?v=v22-20261013'
+                            : /cms-public|turismo-data\.js/.test(src)
                             ? src + '?v=admin-e2e-publication-20260911'
                             : src;
                 script.async = false;

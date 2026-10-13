@@ -1109,3 +1109,5 @@ body.recortes #sms-mascot .sms-mascot-title { font-family: var(--rc-display) !im
     body.rc-local .hero-content { grid-column: 1 !important; grid-row: 2 !important; }
     body.rc-local .hero-title { font-size: clamp(2.2rem, 5.6vw, 3rem) !important; }
 }
+body.rc-ondeficar .rc-stay-rural { margin: 22px 0 0 !important; padding: 14px 18px; border: 1px dashed var(--rc-line); border-radius: 6px; max-width: 70ch; font-size: .95rem !important; color: var(--rc-ink-2); }
+body.rc-ondeficar .rc-stay-rural a { color: var(--rc-mate); }
