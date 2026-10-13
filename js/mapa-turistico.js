@@ -8,41 +8,41 @@
       pageKicker: "Explore o destino",
       actionGuide: "Voltar ao guia do visitante",
       searchPlaceholder: "Busque por igreja, hotel, erva-mate...",
-      searchHint: "Busque por igreja, hotel, erva-mate, praca, evento ou servico.",
+      searchHint: "Busque por igreja, hotel, erva-mate, praça, evento ou serviço.",
       clearSearch: "Limpar",
-      resultsCount: "itens visiveis",
-      locatedCount: "com localizacao",
-      stageTitle: "Exploracao no mapa",
+      resultsCount: "itens visíveis",
+      locatedCount: "com localização",
+      stageTitle: "Exploração no mapa",
       stageSubtitle: "Clique em um marcador ou card para ver detalhes.",
       stageBadge: "OpenStreetMap",
-      stageSummary: "Use os filtros para destacar categorias turisticas.",
+      stageSummary: "Use os filtros para destacar categorias turísticas.",
       totalItemsLabel: "itens catalogados",
-      summaryTitle: "Resumo da exploracao",
-      summaryVisible: "visiveis",
-      summaryMarkers: "com marker",
+      summaryTitle: "Resumo da exploração",
+      summaryVisible: "visíveis",
+      summaryMarkers: "com marcador",
       summaryGroups: "grupos ativos",
-      summaryNote: "Use os grupos abaixo do mapa para alternar entre roteiros, servicos e demais experiencias.",
+      summaryNote: "Use os grupos abaixo do mapa para alternar entre roteiros, serviços e demais experiências.",
       selectedTitle: "Local em destaque",
-      selectedEmpty: "Selecione um ponto no mapa ou nos cards para ver imagem, categoria, descricao e acoes rapidas.",
-      listTitle: "Locais e experiencias",
-      listIntro: "Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir acoes rapidas.",
+      selectedEmpty: "Selecione um ponto no mapa ou nos cards para ver imagem, categoria, descrição e ações rápidas.",
+      listTitle: "Locais e experiências",
+      listIntro: "Os cards abaixo acompanham a busca e os filtros. Clique em um local para destacar no mapa e abrir ações rápidas.",
       listEmpty: "Nenhum item encontrado com os filtros atuais.",
       listEmptyFiltered: "Nenhum resultado neste filtro. Tente buscar em Todos.",
       listEmptySearch: "Nenhum local corresponde a essa busca no momento.",
       details: "Ver detalhes",
       localDetail: "Abrir ficha",
       directions: "Como chegar",
-      noCoordinates: "Sem localizacao cadastrada",
+      noCoordinates: "Sem localização cadastrada",
       noImage: "Sem imagem",
-      noDescription: "Descricao em atualizacao.",
-      routeBadge: "Roteiro tematico",
-      routeSupport: "Pontos relacionados disponiveis no mapa.",
+      noDescription: "Descrição em atualização.",
+      routeBadge: "Roteiro temático",
+      routeSupport: "Pontos relacionados disponíveis no mapa.",
       closeDetails: "Fechar detalhes",
       contact: "Contato",
       whatsapp: "WhatsApp",
-      address: "Endereco",
-      hours: "Horario",
-      services: "Servicos e tags",
+      address: "Endereço",
+      hours: "Horário",
+      services: "Serviços e tags",
       relatedRoute: "Rota relacionada",
       externalLink: "Link externo",
       gallery: "Galeria",
@@ -51,16 +51,16 @@
       groupItemsSingle: "1 item",
       groupItemsMany: "{count} itens",
       missingTitle: "Itens reais ainda sem coordenada",
-      missingDescription: "Esta lista mostra apenas locais fisicos que ainda precisam de latitude e longitude confirmadas. Nao e erro do site: e uma pendencia de dados. Paginas informativas nao entram nesta lista.",
+      missingDescription: "Esta lista mostra apenas locais físicos que ainda precisam de latitude e longitude confirmadas. Não é erro do site: é uma pendência de dados. Páginas informativas não entram nesta lista.",
       missingSummarySingle: "1 item real ainda sem coordenada",
       missingSummaryMany: "{count} itens reais ainda sem coordenada",
-      thematicRoutesTitle: "Rotas tematicas sem ponto unico",
-      thematicRoutesDescription: "Estas rotas representam percursos ou colecoes tematicas. Elas ficam disponiveis para consulta, mas nao entram na contagem de itens sem localizacao exata.",
-      thematicRoutesSummarySingle: "1 rota tematica sem ponto unico",
-      thematicRoutesSummaryMany: "{count} rotas tematicas sem ponto unico",
+      thematicRoutesTitle: "Rotas temáticas sem ponto único",
+      thematicRoutesDescription: "Estas rotas representam percursos ou coleções temáticas. Elas ficam disponíveis para consulta, mas não entram na contagem de itens sem localização exata.",
+      thematicRoutesSummarySingle: "1 rota temática sem ponto único",
+      thematicRoutesSummaryMany: "{count} rotas temáticas sem ponto único",
       popupDetails: "Ver detalhes",
       popupDirections: "Como chegar",
-      upcomingEventsTitle: "Proximos eventos neste local",
+      upcomingEventsTitle: "Próximos eventos neste local",
       upcomingEventsSingle: "1 evento futuro",
       upcomingEventsMany: "{count} eventos futuros",
       upcomingEventsMore: "+{count} outros eventos",
@@ -70,31 +70,31 @@
       searchResultsFiltered: "{count} locais neste filtro.",
       categories: {
         all: "Todos",
-        history: "Historia",
+        history: "História",
         culture: "Cultura",
         nature: "Natureza",
         gastronomy: "Gastronomia",
         lodging: "Hospedagem",
         events: "Eventos",
-        services: "Servicos"
+        services: "Serviços"
       },
       categoryLabels: {
-        history: "Historia",
+        history: "História",
         culture: "Cultura",
         nature: "Natureza",
         gastronomy: "Gastronomia",
         lodging: "Hospedagem",
         events: "Eventos",
-        services: "Servicos"
+        services: "Serviços"
       },
       panelGroups: {
         all: "Todos",
-        points: "Pontos Turisticos",
+        points: "Pontos Turísticos",
         routes: "Roteiros",
         gastronomy: "Gastronomia",
         lodging: "Hospedagem",
         events: "Eventos",
-        services: "Servicos"
+        services: "Serviços"
       }
     },
     en: {
@@ -193,7 +193,7 @@
       }
     },
     es: {
-      pageTitle: "Mapa Turistico Interactivo",
+      pageTitle: "Mapa Turístico Interactivo",
       pageSubtitle: "Encuentra atractivos, gastronomia, hospedaje, rutas y servicios de Sao Mateus do Sul.",
       pageKicker: "Explorar el Destino",
       actionGuide: "Volver a la guia del visitante",
@@ -1406,7 +1406,9 @@
       if (isRouteItem(item)) {
         return '<div class="' + className + ' map-image-fallback is-route" aria-hidden="true"><span>RO</span><small>' + t("routeBadge") + '</small><em>' + t("routeSupport") + "</em></div>";
       }
-      return '<div class="' + className + ' map-image-fallback" aria-hidden="true"><span>' + getCategoryConfig(item.categoriaMapa).icon + '</span><small>' + t("noImage") + "</small></div>";
+      var fallbackConfig = getCategoryConfig(item.categoriaMapa);
+      // Sem foto real: tile tipográfico na cor da categoria (não simula fotografia nem anuncia ausência).
+      return '<div class="' + className + ' map-image-fallback is-typographic" aria-hidden="true" style="--fallback-color:' + fallbackConfig.color + ';--fallback-accent:' + fallbackConfig.accent + ';"><span>' + fallbackConfig.icon + "</span></div>";
     }
     return '<img src="' + escapeHtml(item.imagem) + '" alt="' + escapeHtml(item.nome) + '" class="' + className + '" loading="lazy" decoding="async" width="640" height="360">';
   }
@@ -1466,6 +1468,8 @@
       var count = getFilterCount(filterId);
       var activeClass = state.activeFilter === filterId ? " is-active" : "";
       var config = getCategoryConfig(filterId);
+      // Categoria sem itens no conjunto atual não vira chip clicável com "0".
+      if (!count && filterId !== "all" && state.activeFilter !== filterId) return "";
       return '<button type="button" class="map-filter-btn' + activeClass + '" data-filter="' + filterId + '" aria-pressed="' + (state.activeFilter === filterId ? "true" : "false") + '" aria-label="' + t("categories." + filterId, filterId) + '">'
         + '<span class="map-filter-icon" style="--filter-color:' + config.color + ';--filter-accent:' + config.accent + ';">' + config.icon + '</span>'
         + '<span class="map-filter-text">' + t("categories." + filterId, filterId) + "</span>"
@@ -1541,9 +1545,11 @@
           + '<strong>' + escapeHtml(item.nome) + '</strong>'
           + '<span>' + escapeHtml(item.categoriaLabel) + '</span>'
           + '<p>' + escapeHtml(item.descricao || t("noDescription")) + '</p>'
+          + '<div class="map-popup-actions">'
           + '<button type="button" class="map-popup-detail-button" data-map-details-id="' + escapeHtml(item.id) + '">' + t("popupDetails") + '</button>'
           + (localDetailUrl ? '<a href="' + escapeHtml(localDetailUrl) + '">' + escapeHtml(t("localDetail")) + '</a>' : "")
           + (item.possuiCoordenadas ? '<a href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + t("popupDirections") + "</a>" : "")
+          + "</div>"
           + "</div>"
       );
 

@@ -122,6 +122,17 @@
 #sms-cookie-preferences:hover {
   background: #145744;
 }
+#sms-cookie-preferences.sms-cookie-preferences--inline {
+  position: static;
+  display: block;
+  margin: 0.75rem auto 0;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid rgba(212,165,116,0.55);
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+  font-size: 0.8rem;
+}
 .sms-cookie-btn--reject:hover {
   color: #fff;
   border-color: rgba(255,255,255,0.7);
@@ -303,7 +314,15 @@
     button.textContent = 'Gerenciar cookies';
     button.setAttribute('aria-haspopup', 'dialog');
     button.addEventListener('click', function () { showBanner(button); });
-    document.body.appendChild(button);
+    // Com rodapé disponível, o controle vira um link discreto no rodapé em vez de
+    // uma pílula fixa sobre o conteúdo (no mobile ela cobria CTAs e cards).
+    var footerHost = document.querySelector('footer');
+    if (footerHost) {
+      button.className = 'sms-cookie-preferences--inline';
+      footerHost.appendChild(button);
+    } else {
+      document.body.appendChild(button);
+    }
     return button;
   }
 

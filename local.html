@@ -539,6 +539,9 @@
     root.setAttribute("data-source", phase === "initial" ? "static" : "public");
 
     var nome = SEC.value(local.nome, id);
+    window.SMS_BREADCRUMB_LABEL = nome;
+    var bcCurrent = document.querySelector(".sms-breadcrumb .bc-current");
+    if (bcCurrent) bcCurrent.textContent = nome;
     var descricao = SEC.value(local.descricao, "");
 
     // ── SEO dinâmico por id (canonical/robots/OG). Não colapsa as fichas numa só URL. ──

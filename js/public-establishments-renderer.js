@@ -45,6 +45,28 @@
     return safeImage(item && (item.imagem || item.media && item.media.mainImage && item.media.mainImage.url));
   }
 
+  // Foto própria do item (sem o fallback genérico da cidade).
+  function ownImage(item) {
+    var raw = clean(item && (item.imagem || item.media && item.media.mainImage && item.media.mainImage.url));
+    if (!raw) return "";
+    var safe = safeImage(raw);
+    return safe === FALLBACK_IMAGE ? "" : safe;
+  }
+
+  // Bloco de mídia: foto real quando existir; senão, tile tipográfico com a inicial e a categoria.
+  // Evita que a foto aérea genérica represente lugares diferentes como se fosse deles.
+  function mediaMarkup(item, imgClass, width, height) {
+    var own = ownImage(item);
+    var name = itemName(item);
+    if (own) {
+      return '<img src="' + own + '" class="' + imgClass + '" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async" width="' + (width || 640) + '" height="' + (height || 360) + '">';
+    }
+    return '<div class="' + imgClass + ' card-media-typographic" aria-hidden="true">' +
+      '<span class="card-media-initial">' + escapeHtml(name.charAt(0)) + '</span>' +
+      '<span class="card-media-category">' + escapeHtml(itemCategory(item)) + '</span>' +
+    '</div>';
+  }
+
   function itemName(item) {
     return clean(item && (item.nome || item.name)) || "Empreendimento";
   }
@@ -102,8 +124,12 @@
 
   function renderFeatured(target, data) {
     var items = allEstablishments(data).filter(function (item) {
-      return item && item.display && item.display.featured === true;
+      return item && item.display && item.display.featured === true && ownImage(item);
     });
+    if (!items.length) {
+      // O HTML já traz uma seleção editorial estática; não trocá-la por estado vazio.
+      if (target.children.length) return;
+    }
     target.innerHTML = items.length ? items.map(function (item) {
       var name = itemName(item);
       return '<article class="featured-experience-card" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
@@ -120,7 +146,7 @@
     target.innerHTML = items.length ? items.map(function (item) {
       var name = itemName(item);
       return '<a class="attraction-card public-establishment-card-link" href="' + itemUrl(item) + '" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
-        '<img src="' + itemImage(item) + '" class="attraction-image" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async" width="640" height="360">' +
+        mediaMarkup(item, "attraction-image") +
         '<div class="attraction-content"><div class="attraction-icon" aria-hidden="true">📍</div><h3 class="attraction-title">' + escapeHtml(name) + '</h3>' +
         '<p class="attraction-desc">' + escapeHtml(itemDescription(item)) + '</p><p class="public-establishment-cta">Ver mais →</p></div>' +
       '</a>';
@@ -134,7 +160,7 @@
       var address = itemAddress(item);
       return '<article class="hotel-card" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
         '<a class="public-establishment-card-link" href="' + itemUrl(item) + '">' +
-          '<div class="hotel-icon" aria-hidden="true">🏨</div><h3 class="hotel-name">' + escapeHtml(itemName(item)) + '</h3>' +
+          mediaMarkup(item, "hotel-media") + '<h3 class="hotel-name">' + escapeHtml(itemName(item)) + '</h3>' +
           '<p class="hotel-description">' + escapeHtml(itemDescription(item)) + '</p>' +
           '<div class="hotel-contact">' + (phone ? '<span>📞 ' + escapeHtml(phone) + '</span>' : '') + (address ? '<span>📍 ' + escapeHtml(address) + '</span>' : '') + '</div>' +
         '</a>' +
@@ -169,10 +195,9 @@
       var tags = ensureArray(item && item.tags).slice(0, 4);
       var phone = itemPhone(item);
       var address = itemAddress(item);
-      var image = itemImage(item);
       return '<article class="hotel-card" data-category="' + lodgingSubtype(item) + '" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
         '<a class="public-establishment-card-link" href="' + itemUrl(item) + '">' +
-          '<img class="hotel-image" src="' + image + '" alt="' + escapeHtml(itemName(item)) + '" loading="lazy" decoding="async" width="640" height="360">' +
+          mediaMarkup(item, "hotel-image") +
           '<div class="hotel-content"><span class="hotel-category">' + escapeHtml(itemCategory(item)) + '</span><h3>' + escapeHtml(itemName(item)) + '</h3>' +
           '<p class="description">' + escapeHtml(itemDescription(item)) + '</p>' +
           '<div class="hotel-amenities">' + tags.map(function (tag) { return '<span class="amenity">✓ ' + escapeHtml(tag) + '</span>'; }).join("") + '</div>' +

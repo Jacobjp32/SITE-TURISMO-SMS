@@ -476,8 +476,16 @@
             bubble.classList.add('show');
             root.classList.add('dot-seen');
             writePref(STORAGE_TEASER, 'true');
-            // Auto-esconde após alguns segundos.
-            window.setTimeout(function () { hideTeaser(root); }, 9000);
+            // Auto-esconde após alguns segundos ou na primeira rolagem/toque:
+            // o balão não deve acompanhar a leitura cobrindo conteúdo.
+            window.setTimeout(function () { hideTeaser(root); }, 6000);
+            var dismissOnInteraction = function () {
+                hideTeaser(root);
+                window.removeEventListener('scroll', dismissOnInteraction);
+                window.removeEventListener('touchstart', dismissOnInteraction);
+            };
+            window.addEventListener('scroll', dismissOnInteraction, { passive: true });
+            window.addEventListener('touchstart', dismissOnInteraction, { passive: true });
         }, 3500);
     }
 

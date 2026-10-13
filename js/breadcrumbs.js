@@ -90,7 +90,10 @@
     if (path === '/local') {
       var params = new URLSearchParams(window.location.search);
       var id = params.get('id');
-      if (id) {
+      if (window.SMS_BREADCRUMB_LABEL) {
+        // Nome oficial do local, definido por local.html (com acentos e grafia corretos).
+        currentLabel = String(window.SMS_BREADCRUMB_LABEL);
+      } else if (id) {
         currentLabel = id.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
       }
     }
@@ -126,10 +129,13 @@
 
     var sep = '<span class="bc-sep" aria-hidden="true">›</span>';
     wrapper.innerHTML = '<nav aria-label="breadcrumb">' +
-      '<a href="/">' + homeLabel + '</a>' +
+      '<a href="/"></a>' +
       sep +
-      '<span class="bc-current" aria-current="page">' + currentLabel + '</span>' +
+      '<span class="bc-current" aria-current="page"></span>' +
       '</nav>';
+    // textContent: o rótulo de /local vem do query string e não pode virar HTML.
+    wrapper.querySelector('a').textContent = homeLabel;
+    wrapper.querySelector('.bc-current').textContent = currentLabel;
 
     // Shared header: imediatamente após o wrapper completo. Legado: antes de #main-content.
     body.insertBefore(wrapper, insertionReference);

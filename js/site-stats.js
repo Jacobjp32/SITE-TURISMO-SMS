@@ -85,12 +85,34 @@
     refresh: refreshSiteStats
   };
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", refreshSiteStats);
-  } else {
+  // Os contadores dependem da fonte resolvida (CMS ou fallback estático). Antes disso,
+  // o HTML, o snapshot estático e o CMS mostravam três números diferentes em sequência.
+  // Mantemos os números ocultos (classe no <html>) até TURISMO_DATA_READY assentar.
+  var root = document.documentElement;
+  var ready = window.TURISMO_DATA_READY;
+  var settled = !(ready && typeof ready.then === "function");
+
+  function settle() {
+    settled = true;
+    root.classList.remove("site-stats-pending");
     refreshSiteStats();
   }
 
-  window.addEventListener("load", refreshSiteStats);
-  window.addEventListener("turismo:data-ready", refreshSiteStats);
+  function refreshWhenSettled() {
+    if (settled) refreshSiteStats();
+  }
+
+  if (!settled) {
+    root.classList.add("site-stats-pending");
+    ready.then(settle, settle);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", refreshWhenSettled);
+  } else {
+    refreshWhenSettled();
+  }
+
+  window.addEventListener("load", refreshWhenSettled);
+  window.addEventListener("turismo:data-ready", refreshWhenSettled);
 })();

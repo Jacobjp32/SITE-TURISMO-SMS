@@ -43,7 +43,7 @@ const translations = {
 
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 O Que Fazer',
-    'page-oqfazer-subtitulo': 'Esta página foi mantida por compatibilidade. A exploração principal agora acontece no Mapa Turístico.',
+    'page-oqfazer-subtitulo': 'Atrações, roteiros, gastronomia e hospedagem reunidos no Mapa Turístico Interativo.',
     'oqf-rotas-h': '🗺️ Rotas Temáticas',
     'oqf-rotas-sub': 'Escolha sua experiência e mergulhe na cultura de São Mateus do Sul',
     'oqf-badge-ig': 'Indicação Geográfica',
@@ -106,7 +106,7 @@ const translations = {
     'oqf-bridge-card-5-title': 'Eventos',
     'oqf-bridge-card-5-desc': 'Feiras, festas e programação cultural integradas à exploração turística do município.',
     'oqf-bridge-card-cta': 'Acessar mapa →',
-    'oqf-compatibility-note': 'Esta página foi mantida por compatibilidade, mas a experiência principal de exploração turística agora acontece no mapa.',
+    'oqf-compatibility-note': 'Todos os atrativos, roteiros e serviços estão reunidos no mapa, com filtros por categoria e indicação de como chegar.',
     'oqf-footer-note': 'Mapa, roteiros e categorias agora estão centralizados no Mapa Turístico Interativo.',
     'oqf-footer-map': 'Abrir mapa',
     'oqf-footer-routes': 'Ver roteiros',
@@ -1047,7 +1047,7 @@ const translations = {
     'oqf-bridge-card-5-title': 'Events',
     'oqf-bridge-card-5-desc': 'Fairs, festivals and cultural programming integrated into the destination exploration.',
     'oqf-bridge-card-cta': 'Open map →',
-    'oqf-compatibility-note': 'This page remains available for compatibility, but the main tourism exploration now happens on the map.',
+    'oqf-compatibility-note': 'All attractions, routes and services are gathered on the map, with category filters and directions.',
     'oqf-footer-note': 'Map, routes and categories are now centralized in the Interactive Tourism Map.',
     'oqf-footer-map': 'Open map',
     'oqf-footer-routes': 'View routes',
@@ -1988,7 +1988,7 @@ const translations = {
     'oqf-bridge-card-5-title': 'Eventos',
     'oqf-bridge-card-5-desc': 'Ferias, fiestas y programación cultural integradas en la exploración del destino.',
     'oqf-bridge-card-cta': 'Abrir mapa →',
-    'oqf-compatibility-note': 'Esta página se mantiene por compatibilidad, pero la exploración turística principal ahora ocurre en el mapa.',
+    'oqf-compatibility-note': 'Todos los atractivos, rutas y servicios están reunidos en el mapa, con filtros por categoría e indicaciones para llegar.',
     'oqf-footer-note': 'Mapa, rutas y categorías ahora están centralizados en el Mapa Turístico Interactivo.',
     'oqf-footer-map': 'Abrir mapa',
     'oqf-footer-routes': 'Ver rutas',
@@ -2866,7 +2866,7 @@ const translations = {
 
     // ── O QUE FAZER ──
     'page-oqfazer-titulo': '🧭 Co Zwiedzić',
-    'page-oqfazer-subtitulo': 'Doswiadczenia, trasy i atrakcje sa teraz zebrane na Interaktywnej Mapie Turystycznej.',
+    'page-oqfazer-subtitulo': 'Doświadczenia, trasy i atrakcje są teraz zebrane na Interaktywnej Mapie Turystycznej.',
     'oqf-rotas-h': '🗺️ Trasy Tematyczne',
     'oqf-rotas-sub': 'Wybierz swoje doświadczenie i pogrubuj się w kulturze São Mateus do Sul',
     'oqf-badge-ig': 'Oznaczenie Geograficzne',
@@ -2929,7 +2929,7 @@ const translations = {
     'oqf-bridge-card-5-title': 'Wydarzenia',
     'oqf-bridge-card-5-desc': 'Targi, swieta i program kulturalny zintegrowane z glownym przeplywem eksploracji.',
     'oqf-bridge-card-cta': 'Otworz mape →',
-    'oqf-compatibility-note': 'Ta strona pozostaje dostepna dla zgodnosci, ale glowna eksploracja turystyczna odbywa sie teraz na mapie.',
+    'oqf-compatibility-note': 'Wszystkie atrakcje, trasy i usługi są zebrane na mapie, z filtrami kategorii i wskazówkami dojazdu.',
     'oqf-footer-note': 'Mapa, trasy i kategorie sa teraz scentralizowane na Interaktywnej Mapie Turystycznej.',
     'oqf-footer-map': 'Otworz mape',
     'oqf-footer-routes': 'Zobacz trasy',
