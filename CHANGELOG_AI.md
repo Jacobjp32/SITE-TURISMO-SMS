@@ -6,6 +6,12 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-14 — MAPA ILUSTRADO: Arena Cultural confirmada
+
+- `js/mapa-turistico.js`: a equipe confirmou a localização da Arena Cultural no complexo do Parque de Exposições; ela saiu de `UNVERIFIED_LOCATION_IDS` e o "Como chegar" passa a usar a coordenada confirmada. `mapa-turistico.html`: token `?v=mapa-ilustrado-20261014b`.
+- Morangos da Mary: fora do portal por decisão da equipe. Já havia sido retirada da experiência pública em 2026-05-26 (`docs/auditoria-dados.md`); nenhum arquivo público a referencia, então nada foi removido. Sai da lista de pendências do mapa.
+- Validação: 9/9 no teste do mapa; ficha da Arena conferida na prévia local. CMS não alterado.
+
 ## 2026-10-14 — MAPA ILUSTRADO: correções geográficas por fichas do Google Maps
 
 - `js/mapa-turistico.js`: `GEO_CORRECTIONS` ganhou 15 entradas (Pitayas, Posto Pelanda, Viveiro Fluviópolis, Ervateira Taquaral, Arena, Parque de Exposições, Ginásio Polacão, Chimarródromo/Roda de Mathe, Praça do Rio Iguaçu, Prefeitura, Novo Paço e, com `from: null`, Hotel Dom Leopoldo, Hotel São Mateus, Hotel Nora e Chess Choperia). Cada uma cita a ficha do Google Maps conferida por nome e endereço; só agem sobre o valor antigo do cadastro (ou sobre coordenada vazia). Link de rota da Água Branca trocado pelo link completo do PDF "Turismo Rural" (`MAPS_URL_FIXES`).

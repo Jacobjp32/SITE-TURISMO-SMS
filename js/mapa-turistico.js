@@ -1056,7 +1056,7 @@
     { ids: ["ervateira-taquaral"], from: [-25.82, -50.35], to: [-25.7827358, -50.3951301],
       source: "Google Maps \"Ervateira Taquaral\" (Taquaral do Bugre)" },
     { ids: ["arena-cultural"], from: [-25.8785, -50.386], to: [-25.8373319, -50.3825099],
-      source: "Google Maps \"Arena Cultural e Esportiva - Cancha Coberta\" (PR-151, Col. Taquaral); associação a confirmar, exibida como aproximada" },
+      source: "Google Maps \"Arena Cultural e Esportiva - Cancha Coberta\" (PR-151, Col. Taquaral); localização confirmada pela equipe em 2026-10-14" },
     { ids: ["parque-exposicoes"], from: [-25.88, -50.39], to: [-25.8372433, -50.3822846],
       source: "Google Maps \"Parque de Exposições de São Mateus do Sul\" (Col. Taquaral)" },
     { ids: ["ginasio-polacao"], from: [-25.879, -50.387], to: [-25.869593, -50.3898514],
@@ -1104,9 +1104,8 @@
     return coordinates;
   }
 
-  // Tratados como localização aproximada: Arena (associação à "Arena Cultural e Esportiva"
-  // ainda a confirmar com a equipe) e Pedrão (coordenada sem fonte; "potencial" no PDF rural).
-  var UNVERIFIED_LOCATION_IDS = { "arena-cultural": true, "pesqueiro-do-pedrao": true };
+  // Tratado como localização aproximada: Pedrão (coordenada sem fonte; "potencial" no PDF rural).
+  var UNVERIFIED_LOCATION_IDS = { "pesqueiro-do-pedrao": true };
 
   function coordinateDecimals(value) {
     var text = String(value);
