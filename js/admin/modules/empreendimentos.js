@@ -186,6 +186,31 @@
         return new Date().toISOString();
     }
 
+    // Confirmações (js/admin/admin-feedback.js) com fallback nativo.
+    function ask(options) {
+        if (window.AdminFeedback && typeof window.AdminFeedback.confirm === "function") {
+            return window.AdminFeedback.confirm(options);
+        }
+        var text = [options.title, options.message].concat(options.details || []).filter(Boolean).join("\n\n");
+        if (options.requireText) {
+            var typed = window.prompt(text + '\n\nDigite "' + options.requireText + '" para confirmar.');
+            if (typed === null) return Promise.resolve(false);
+            var ok = clean(typed) === clean(options.requireText) || (options.alsoAcceptText && clean(typed) === clean(options.alsoAcceptText));
+            if (!ok) {
+                toast("Exclusao cancelada: confirmacao nao confere com o slug ou nome.", "error");
+                return Promise.resolve(false);
+            }
+        }
+        return Promise.resolve(window.confirm(text));
+    }
+
+    function askText(options) {
+        if (window.AdminFeedback && typeof window.AdminFeedback.prompt === "function") {
+            return window.AdminFeedback.prompt(options);
+        }
+        return Promise.resolve(window.prompt([options.title, options.message].filter(Boolean).join("\n\n"), options.value || ""));
+    }
+
     function toast(message, type) {
         if (window.AdminUI && typeof window.AdminUI.showToast === "function") {
             return window.AdminUI.showToast(message, type);
@@ -1010,7 +1035,14 @@
             mapsUrl: document.getElementById("est_mapsUrl"),
             coordStatus: document.getElementById("est_coordStatus"),
             name: document.getElementById("est_name"),
-            reference: MUNICIPIO_REF
+            reference: MUNICIPIO_REF,
+            // Outros cadastros, para avisar sobre coordenadas copiadas.
+            neighbors: state.items.filter(function (other) {
+                return other.__id !== state.editingId && other.status !== "archived";
+            }).map(function (other) {
+                var coords = (other.location && other.location.coordinates) || {};
+                return { name: other.name || other.__id, lat: coords.lat, lng: coords.lng };
+            })
         });
     }
 
@@ -2057,7 +2089,7 @@
         return false;
     }
 
-    function archive(id) {
+    async function archive(id) {
         var item = findItem(id);
         if (!item) return;
         if (item.status === "archived") {
@@ -2068,7 +2100,16 @@
             toast("Conclua primeiro a edicao publicada interrompida antes de arquivar.", "error");
             return;
         }
-        var reason = window.prompt('Motivo do arquivamento de "' + (item.name || item.__id) + '"?', item.publishing.archiveReason || "");
+        var reason = await askText({
+            title: "Arquivar empreendimento?",
+            message: '"' + (item.name || item.__id) + '"' + (item.status === "published" ? " sai do portal e" : "") + " fica guardado como arquivado. Pode ser restaurado como rascunho depois.",
+            label: "Motivo do arquivamento",
+            value: item.publishing.archiveReason || "",
+            hint: "Fica registrado no histórico editorial.",
+            maxLength: 500,
+            confirmLabel: "Arquivar",
+            tone: "warning"
+        });
         if (reason === null) return;
         var uid = currentUid();
         var db = getDb();
@@ -2090,14 +2131,19 @@
         });
     }
 
-    function restore(id) {
+    async function restore(id) {
         var item = findItem(id);
         if (!item) return;
         if (item.status !== "archived") {
             toast("Apenas registros arquivados podem ser restaurados.", "info");
             return;
         }
-        if (!window.confirm('Restaurar "' + (item.name || item.__id) + '" como rascunho privado?')) return;
+        if (!(await ask({
+            title: "Restaurar como rascunho?",
+            message: '"' + (item.name || item.__id) + '" volta para a lista como rascunho privado.',
+            details: ["Nada é publicado automaticamente."],
+            confirmLabel: "Restaurar rascunho"
+        }))) return;
         var uid = currentUid();
         var db = getDb();
         if (!db || !uid) {
@@ -2432,7 +2478,7 @@
         });
     }
 
-    function publish(id) {
+    async function publish(id) {
         var item = findItem(id);
         var db = getDb();
         var uid = currentUid();
@@ -2444,7 +2490,17 @@
             toast("Apenas rascunhos podem ser publicados.", "info");
             return;
         }
-        if (!window.confirm('Publicar "' + (item.name || item.__id) + '" no portal?')) return;
+        var quality = geoQuality(item);
+        var publishDetails = ["Ele passa a aparecer no mapa e nas páginas do portal."];
+        if (quality.group !== "ok") publishDetails.push("Atenção: " + quality.label.toLowerCase() + ". Confira o pin no editor antes, se possível.");
+        if (!(item.media && item.media.mainImage && item.media.mainImage.url)) publishDetails.push("Sem foto principal: o cartão aparece sem imagem.");
+        if (!(await ask({
+            title: "Publicar empreendimento?",
+            message: '"' + (item.name || item.__id) + '" ficará visível para os visitantes do portal.',
+            details: publishDetails,
+            confirmLabel: "Publicar no portal",
+            tone: quality.group === "fix" ? "warning" : "primary"
+        }))) return;
         var ref = db.collection(COLLECTION).doc(item.__id);
         return ref.get().then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
@@ -2477,14 +2533,20 @@
         });
     }
 
-    function unpublish(id) {
+    async function unpublish(id) {
         var item = findItem(id);
         if (!item) return;
         if (item.status !== "published") {
             toast("Apenas documentos publicados podem ser despublicados.", "info");
             return;
         }
-        if (!window.confirm('Despublicar "' + (item.name || item.__id) + '"? Ele deixara de aparecer no portal e permanecera como rascunho.')) return;
+        if (!(await ask({
+            title: "Despublicar empreendimento?",
+            message: '"' + (item.name || item.__id) + '" deixa de aparecer no portal e permanece como rascunho.',
+            details: ["Você pode publicar de novo quando quiser."],
+            confirmLabel: "Despublicar",
+            tone: "warning"
+        }))) return;
         return runLifecycleAction(item.__id, lifecycleDraft).then(function () {
             toast("Empreendimento despublicado e preservado como rascunho.", "success");
             return load();
@@ -2524,18 +2586,22 @@
                 return false;
             }
             var label = current.slug || current.__id || current.name;
-            var typed = window.prompt(
-                'Esta ação é definitiva e remove o documento editorial. Se ele estava arquivado, continuará ausente do portal. O arquivo de mídia não será apagado.\n\nDigite "' +
-                label +
-                '" para confirmar a exclusão.'
-            );
-            if (typed === null) return false;
-            if (clean(typed) !== clean(label) && clean(typed) !== clean(current.name)) {
-                toast("Exclusao cancelada: confirmacao nao confere com o slug ou nome.", "error");
-                return false;
-            }
-            if (!window.confirm('Excluir definitivamente "' + (current.name || current.__id) + '" do CMS?')) return false;
-            return ref.delete();
+            return ask({
+                title: "Excluir empreendimento do CMS?",
+                message: '"' + (current.name || current.__id) + '" será removido definitivamente do catálogo editorial.',
+                details: [
+                    "Esta ação não pode ser desfeita.",
+                    "Se estava arquivado, continua ausente do portal.",
+                    "As fotos no armazenamento não são apagadas."
+                ],
+                requireText: label,
+                alsoAcceptText: current.name,
+                requireTextLabel: 'Digite "' + label + '" para confirmar',
+                confirmLabel: "Excluir definitivamente",
+                tone: "danger"
+            }).then(function (confirmed) {
+                return confirmed ? ref.delete() : false;
+            });
         }).then(function (deleted) {
             if (deleted === false) return null;
             toast("Empreendimento excluido do CMS.", "success");
@@ -2726,16 +2792,38 @@
         return image ? { item: item, gallery: gallery, image: image } : null;
     }
 
-    function editGalleryImage(id, index) {
+    async function editGalleryImage(id, index) {
         var data = getGalleryItem(id, index);
         if (!data || isRemovedImage(data.image)) return;
-        var alt = window.prompt("Alt recomendado para acessibilidade. Descreva o conteudo relevante da imagem:", data.image.alt || "");
-        if (alt === null) return;
-        if (!clean(alt) && !window.confirm("Salvar sem alt? O texto alternativo e recomendado para acessibilidade no portal.")) return;
-        var caption = window.prompt("Legenda opcional da imagem:", data.image.caption || "");
-        if (caption === null) return;
-        var credit = window.prompt("Credito opcional da imagem:", data.image.credit || "");
-        if (credit === null) return;
+        var alt, caption, credit;
+        if (window.AdminFeedback && typeof window.AdminFeedback.form === "function") {
+            var values = await window.AdminFeedback.form({
+                title: "Informações da imagem",
+                message: "Esses textos aparecem no portal junto da foto.",
+                fields: [
+                    { name: "alt", label: "Texto alternativo", value: data.image.alt || "", multiline: true, rows: 2, maxLength: 160, hint: "Descreva o que aparece na foto para quem usa leitor de tela." },
+                    { name: "caption", label: "Legenda", value: data.image.caption || "", maxLength: 240 },
+                    { name: "credit", label: "Crédito", value: data.image.credit || "", maxLength: 160 }
+                ],
+                confirmLabel: "Salvar informações"
+            });
+            if (!values) return;
+            alt = values.alt; caption = values.caption; credit = values.credit;
+        } else {
+            alt = window.prompt("Alt recomendado para acessibilidade. Descreva o conteudo relevante da imagem:", data.image.alt || "");
+            if (alt === null) return;
+            caption = window.prompt("Legenda opcional da imagem:", data.image.caption || "");
+            if (caption === null) return;
+            credit = window.prompt("Credito opcional da imagem:", data.image.credit || "");
+            if (credit === null) return;
+        }
+        if (!clean(alt) && !(await ask({
+            title: "Salvar sem texto alternativo?",
+            message: "O texto alternativo é recomendado para acessibilidade no portal.",
+            confirmLabel: "Salvar mesmo assim",
+            cancelLabel: "Voltar",
+            tone: "warning"
+        }))) return;
         var uid = currentUid();
         data.gallery[index] = Object.assign({}, data.image, {
             alt: limit(alt, 160),
@@ -2749,10 +2837,15 @@
         }, "Metadados da imagem atualizados.", "editar metadados de imagem da galeria");
     }
 
-    function setMainImageFromGallery(id, index) {
+    async function setMainImageFromGallery(id, index) {
         var data = getGalleryItem(id, index);
         if (!data || isRemovedImage(data.image)) return;
-        if (!window.confirm("Definir esta imagem como principal? Se o empreendimento estiver publicado, a alteracao sera republicada no portal.")) return;
+        if (!(await ask({
+            title: "Usar como foto principal?",
+            message: "Esta imagem passa a ser a capa do empreendimento.",
+            details: [data.item.status === "published" ? "O empreendimento está publicado: a nova capa aparece no portal." : "O empreendimento é rascunho: nada muda no portal."],
+            confirmLabel: "Definir como principal"
+        }))) return;
         writeMediaUpdate(id, {
             "media.mainImage": imageForMainImage(data.image, currentUid())
         }, "Imagem principal atualizada.", "definir imagem principal pela galeria");
@@ -2776,10 +2869,16 @@
         }, "Ordem da galeria atualizada.", "ordenar galeria");
     }
 
-    function removeGalleryImage(id, index) {
+    async function removeGalleryImage(id, index) {
         var data = getGalleryItem(id, index);
         if (!data || isRemovedImage(data.image)) return;
-        if (!window.confirm("Remover esta imagem da galeria ativa? O arquivo no Storage nao sera apagado. Se o empreendimento estiver publicado, a galeria sera republicada.")) return;
+        if (!(await ask({
+            title: "Tirar imagem da galeria?",
+            message: "A imagem sai da galeria ativa e pode ser restaurada depois.",
+            details: ["O arquivo no armazenamento não é apagado.", data.item.status === "published" ? "O empreendimento está publicado: a galeria do portal é atualizada." : "O empreendimento é rascunho: nada muda no portal."],
+            confirmLabel: "Tirar da galeria",
+            tone: "warning"
+        }))) return;
         var uid = currentUid();
         var removedImage = Object.assign({}, data.image, {
             status: "removed",
@@ -2796,10 +2895,15 @@
         }, "Imagem removida da galeria ativa sem apagar Storage.", "remover imagem da galeria");
     }
 
-    function restoreGalleryImage(id, index) {
+    async function restoreGalleryImage(id, index) {
         var data = getGalleryItem(id, index);
         if (!data || !isRemovedImage(data.image)) return;
-        if (!window.confirm("Restaurar esta imagem para a galeria ativa? Se o empreendimento estiver publicado, a galeria sera republicada.")) return;
+        if (!(await ask({
+            title: "Restaurar imagem na galeria?",
+            message: "A imagem volta para a galeria ativa.",
+            details: [data.item.status === "published" ? "O empreendimento está publicado: a galeria do portal é atualizada." : "O empreendimento é rascunho: nada muda no portal."],
+            confirmLabel: "Restaurar imagem"
+        }))) return;
         var uid = currentUid();
         var restoredImage = Object.assign({}, data.image, {
             status: "active",

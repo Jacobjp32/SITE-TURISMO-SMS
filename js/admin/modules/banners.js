@@ -173,6 +173,11 @@
         return millis ? new Date(millis).toLocaleDateString("pt-BR") : "";
     }
 
+    function ask(options) {
+        if (window.AdminFeedback && typeof window.AdminFeedback.confirm === "function") return window.AdminFeedback.confirm(options);
+        return Promise.resolve(window.confirm([options.title, options.message].concat(options.details || []).filter(Boolean).join("\n\n")));
+    }
+
     function toast(message, type) {
         if (window.AdminUI && typeof window.AdminUI.showToast === "function") {
             return window.AdminUI.showToast(message, type);
@@ -1093,7 +1098,7 @@
     // Arquivar / duplicar / detalhes
     // ======================================================================
 
-    function archive(id) {
+    async function archive(id) {
         var item = findItem(id);
         if (!item) return;
         if (clean(item.status) === "archived") {
@@ -1101,11 +1106,13 @@
             return;
         }
         var wasPublished = clean(item.status) === "published";
-        var confirmMsg = wasPublished
-            ? 'Este banner está PUBLICADO. Arquivar vai retirá-lo de publicação imediatamente. ' +
-              'Arquivar "' + (clean(item.title) || "este banner") + '"?'
-            : 'Arquivar "' + (clean(item.title) || "este banner") + '"? Ele sai de circulação mas não é apagado.';
-        if (!window.confirm(confirmMsg)) return;
+        if (!(await ask({
+            title: "Arquivar banner?",
+            message: '"' + (clean(item.title) || "Este banner") + '" sai de circulação' + (wasPublished ? " imediatamente — ele está publicado agora." : "."),
+            details: ["Nada é apagado: o banner e a imagem ficam guardados."],
+            confirmLabel: "Arquivar banner",
+            tone: wasPublished ? "danger" : "warning"
+        }))) return;
 
         var db = getDb();
         if (!db) { toast("Firebase indisponível.", "error"); return; }
@@ -1215,7 +1222,7 @@
         return payload;
     }
 
-    function publish(id) {
+    async function publish(id) {
         var item = findItem(id);
         if (!item) return;
 
@@ -1226,9 +1233,13 @@
         }
 
         var warnings = getPublishWarnings(item);
-        var msg = 'Publicar "' + (clean(item.title) || "este banner") + '"? O status passará a “Publicado”.';
-        if (warnings.length) msg += "\n\nRecomendação: " + warnings.join(" ");
-        if (!window.confirm(msg)) return;
+        if (!(await ask({
+            title: "Publicar banner?",
+            message: '"' + (clean(item.title) || "Este banner") + '" passa a aparecer nas páginas e no período configurados.',
+            details: warnings.map(function (warning) { return "Recomendação: " + warning; }),
+            confirmLabel: "Publicar banner",
+            tone: warnings.length ? "warning" : "primary"
+        }))) return;
 
         var db = getDb();
         if (!db) { toast("Firebase indisponível.", "error"); return; }
@@ -1244,15 +1255,20 @@
         });
     }
 
-    function unpublish(id) {
+    async function unpublish(id) {
         var item = findItem(id);
         if (!item) return;
         if (clean(item.status) !== "published") {
             toast("Este banner não está publicado.", "info");
             return;
         }
-        if (!window.confirm('Despublicar "' + (clean(item.title) || "este banner") +
-            '"? Ele volta para rascunho e sai de circulação. A imagem é preservada.')) return;
+        if (!(await ask({
+            title: "Despublicar banner?",
+            message: '"' + (clean(item.title) || "Este banner") + '" volta para rascunho e sai de circulação.',
+            details: ["A imagem é preservada."],
+            confirmLabel: "Despublicar",
+            tone: "warning"
+        }))) return;
 
         var db = getDb();
         if (!db) { toast("Firebase indisponível.", "error"); return; }
