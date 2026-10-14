@@ -509,13 +509,8 @@ body.recortes .rc-cta-short, body.recortes .rc-hero-caption-short { display: non
    O balão e o painel abrem para baixo, a partir da faixa do menu. */
 @media (max-width: 768px) {
     body.recortes #sms-mascot { z-index: 10001 !important; left: auto !important; bottom: auto !important; top: calc(var(--sms-main-nav-top) + (var(--sms-main-nav-height) - 44px) / 2) !important; right: calc(var(--rc-gutter) + 104px) !important; }
-    body.recortes #sms-mascot .sms-mascot-launcher,
-    body.recortes #sms-mascot .sms-mascot-reopen { width: 44px !important; height: 44px !important; box-shadow: none !important; border: 1px solid var(--rc-line) !important; background: var(--rc-card) !important; }
-    body.recortes #sms-mascot .sms-mascot-launcher img { width: 38px !important; height: 38px !important; }
-    body.recortes #sms-mascot .sms-mascot-dot { top: -3px !important; right: -3px !important; }
-    body.recortes #sms-mascot .sms-mascot-bubble,
-    body.recortes #sms-mascot .sms-mascot-panel { left: auto !important; right: -96px !important; bottom: auto !important; top: 54px !important; max-height: calc(100dvh - var(--sms-header-offset) - 24px); overflow: auto; }
-    body.recortes #sms-mascot .sms-mascot-bubble::after { left: auto !important; right: 110px !important; bottom: auto !important; top: -7px !important; transform: rotate(180deg); }
+    /* O guia (Capivarense) abre como folha inferior: ver css/tourism-mascot.css. */
+    body.recortes #sms-mascot.is-open { z-index: 2147482000 !important; }
 }
 @media (max-width: 599px) {
     body.recortes .rc-hero { align-items: stretch; text-align: left; }
@@ -1090,10 +1085,10 @@ body.recortes.font-large, body.recortes.font-larger { font-size: 1rem !important
 
 /* Uma família de texto e uma de títulos: componentes herdados (cookies, mascote,
    rodapé, modais) deixam de puxar Raleway/Cormorant só para si. */
-body.recortes :is(.sms-cookie-banner, [class*="sms-cookie"], #sms-mascot, .footer, .modal, .search-modal, .language-dropdown, .nav, .accessibility-bar, .map-page, .main-content, .sec, .vsec, .hdr) :where(*:not(i):not([class*="icon"])) { font-family: var(--rc-text); }
-body.recortes :is(.footer, .modal, #sms-mascot, .sec, .vsec, .map-page, .main-content) :is(h1, h2, h3, h4) { font-family: var(--rc-display); font-weight: 400; }
-body.recortes #sms-cookie-banner, body.recortes #sms-cookie-banner *, body.recortes #sms-mascot, body.recortes #sms-mascot :not(.sms-mascot-title) { font-family: var(--rc-text) !important; }
-body.recortes #sms-mascot .sms-mascot-title { font-family: var(--rc-display) !important; }
+body.recortes :is(.sms-cookie-banner, [class*="sms-cookie"], .footer, .modal, .search-modal, .language-dropdown, .nav, .accessibility-bar, .map-page, .main-content, .sec, .vsec, .hdr) :where(*:not(i):not([class*="icon"])) { font-family: var(--rc-text); }
+body.recortes :is(.footer, .modal, .sec, .vsec, .map-page, .main-content) :is(h1, h2, h3, h4) { font-family: var(--rc-display); font-weight: 400; }
+body.recortes #sms-cookie-banner, body.recortes #sms-cookie-banner * { font-family: var(--rc-text) !important; }
+/* A Capivarense (#sms-mascot) define a própria tipografia em css/tourism-mascot.css. */
 
 /* Tablet (600–900): aberturas internas continuam em duas colunas — título na primeira dobra. */
 @media (min-width: 600px) and (max-width: 900px) {

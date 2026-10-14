@@ -1,411 +1,591 @@
 /**
  * ============================================================
- * MASCOTE INTERATIVO DE TURISMO — São Mateus do Sul
- * Bloco S12 — primeira versão leve (sem chatbot / sem IA)
+ * CAPIVARENSE — anfitriã digital (linguagem "Recortes de São Mateus")
  * ------------------------------------------------------------
- * Componente discreto, fixo no canto inferior ESQUERDO
- * (o canto inferior direito é ocupado pelo chatbot "Mathe").
- * Sem bibliotecas externas, sem vídeo, apenas 1 imagem webp.
+ * Vocabulário: o ARCO da Igreja da Água Branca emoldura a capivara,
+ * o PAPEL do caderno de viagem é o fundo, o LAMBREQUIM recortado fecha
+ * o cabeçalho e a ROSETA polonesa aparece uma única vez, como selo.
+ * Tokens próprios em #sms-mascot: funciona também nas páginas de
+ * campanha (Mês Polonês), que não usam body.recortes.
+ * Desktop: cartão ancorado no canto inferior esquerdo.
+ * Celular: folha inferior (bottom sheet); a capivara mora no cabeçalho.
  * ============================================================ */
 
 #sms-mascot {
+    --cv-paper: #f4eee3;
+    --cv-paper-2: #ebe3d4;
+    --cv-card: #fbf8f2;
+    --cv-ink: #1b231d;
+    --cv-ink-2: #4b544c;
+    --cv-line: rgba(27, 35, 29, 0.14);
+    --cv-mate: #1f4a33;
+    --cv-mate-2: #2c6445;
+    --cv-red: #b3322a;
+    --cv-ochre: #c8913f;
+    --cv-display: "Fraunces", "Cormorant Garamond", Georgia, serif;
+    --cv-text: "Instrument Sans", "Raleway", system-ui, sans-serif;
+    --cv-shadow: 0 30px 60px -28px rgba(27, 35, 29, 0.55), 0 2px 6px rgba(27, 35, 29, 0.08);
     position: fixed;
     left: 22px;
     bottom: calc(22px + env(safe-area-inset-bottom, 0px));
-    z-index: 9990; /* abaixo do nav (9999), back-to-top (9998) e chatbot (999999) */
-    font-family: 'Raleway', system-ui, sans-serif;
-    /* Falha silenciosa: se escondido por preferência, o JS aplica [hidden] */
+    z-index: 9990; /* abaixo do nav (9999) e do botão "voltar ao topo" */
+    font-family: var(--cv-text);
+    color: var(--cv-ink);
+    -webkit-font-smoothing: antialiased;
 }
+#sms-mascot.is-open { z-index: 2147482000; } /* aberto pelo visitante: acima do VLibras e dos flutuantes */
+#sms-mascot [hidden] { display: none !important; }
+#sms-mascot *, #sms-mascot *::before, #sms-mascot *::after { box-sizing: border-box; }
+#sms-mascot .cv-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#sms-mascot .cv-ico { width: 20px; height: 20px; flex: none; }
+#sms-mascot .cv-ico--arrow { width: 16px; height: 16px; transition: transform .2s ease; }
 
-#sms-mascot[hidden] { display: none !important; }
-
-/* ── Botão/ícone do mascote (launcher) ── */
-.sms-mascot-launcher {
+/* ── Lançador: a capivara num arco, como as fotos do portal ── */
+#sms-mascot .cv-launcher {
     position: relative;
-    width: 60px;
-    height: 60px;
-    padding: 0;
-    border: 2px solid rgba(212, 165, 116, 0.9);
-    border-radius: 50%;
-    background: linear-gradient(160deg, #ffffff 0%, #f8f6f0 100%);
-    box-shadow: 0 6px 22px rgba(10, 61, 46, 0.28);
-    cursor: pointer;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: visible;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    align-items: flex-end;
+    gap: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
 }
-.sms-mascot-launcher:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 10px 28px rgba(10, 61, 46, 0.34); }
-.sms-mascot-launcher:focus-visible { outline: 3px solid #0a3d2e; outline-offset: 3px; }
-
-.sms-mascot-launcher img {
-    width: 46px;
-    height: 46px;
+#sms-mascot .cv-launcher-frame {
+    position: relative;
+    display: block;
+    width: 64px;
+    height: 76px;
+    border-radius: 999px 999px 12px 12px;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 120%, rgba(200, 145, 63, 0.35), transparent 60%),
+        var(--cv-card);
+    border: 1.5px solid var(--cv-ink);
+    box-shadow: var(--cv-shadow);
+    transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease;
+}
+#sms-mascot .cv-launcher-frame img {
+    position: absolute;
+    left: 50%;
+    bottom: -18px;
+    width: 104px;
+    height: 104px;
+    max-width: none;
+    transform: translateX(-46%);
     object-fit: contain;
     pointer-events: none;
-    -webkit-user-drag: none;
     user-select: none;
+    -webkit-user-drag: none;
+    transition: transform .3s cubic-bezier(.2, .7, .2, 1);
 }
-
-/* Fallback visual simples caso a imagem não carregue (emoji) */
-.sms-mascot-launcher .sms-mascot-fallback {
-    font-size: 1.9rem;
-    line-height: 1;
-}
-
-/* Selo "!" discreto para indicar dica disponível */
-.sms-mascot-launcher .sms-mascot-dot {
+/* Neutraliza o tamanho fixo herdado do componente antigo (visual-v2.css). */
+html body #sms-mascot .cv-launcher.sms-mascot-launcher { width: auto; height: auto; }
+#sms-mascot .cv-launcher:hover .cv-launcher-frame,
+#sms-mascot .cv-launcher:focus-visible .cv-launcher-frame { transform: translateY(-3px); }
+#sms-mascot .cv-launcher:hover .cv-launcher-frame img { transform: translateX(-46%) translateY(-4px) rotate(-3deg); }
+#sms-mascot .cv-launcher:focus-visible { outline: none; }
+#sms-mascot .cv-launcher:focus-visible .cv-launcher-frame { outline: 3px solid var(--cv-red); outline-offset: 3px; }
+/* Aberto no desktop: o lançador vira o botão "fechar" (o retrato fica só no cabeçalho). */
+#sms-mascot .cv-launcher-x {
     position: absolute;
-    top: -3px;
-    right: -3px;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: #0a3d2e;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    line-height: 18px;
-    text-align: center;
-    border: 2px solid #fff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-}
-#sms-mascot.is-open .sms-mascot-dot,
-#sms-mascot.dot-seen .sms-mascot-dot { display: none; }
-
-/* ── Balão de fala curto (teaser) ── */
-.sms-mascot-bubble {
-    position: absolute;
-    left: 0;
-    bottom: 74px;
-    max-width: 240px;
-    background: #0a3d2e;
-    color: #fff;
-    padding: 0.7rem 2rem 0.7rem 0.9rem;
-    border-radius: 14px 14px 14px 4px;
-    font-size: 0.85rem;
-    line-height: 1.4;
-    box-shadow: 0 8px 24px rgba(10, 61, 46, 0.32);
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-.sms-mascot-bubble.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.sms-mascot-bubble::after {
-    content: '';
-    position: absolute;
-    left: 18px;
-    bottom: -7px;
-    width: 0; height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #0a3d2e;
-}
-.sms-mascot-bubble .sms-bubble-close {
-    position: absolute;
-    top: 4px;
-    right: 6px;
-    background: none;
-    border: none;
-    color: rgba(255, 255, 255, 0.85);
-    font-size: 1.1rem;
-    line-height: 1;
-    cursor: pointer;
-    padding: 2px 4px;
-    border-radius: 6px;
-}
-.sms-mascot-bubble .sms-bubble-close:hover { color: #fff; background: rgba(255, 255, 255, 0.15); }
-.sms-mascot-bubble .sms-bubble-close:focus-visible { outline: 2px solid #d4a574; outline-offset: 1px; }
-
-/* ── Painel de atalhos/dicas ── */
-.sms-mascot-panel {
-    position: absolute;
-    left: 0;
-    bottom: 74px;
-    width: min(300px, calc(100vw - 44px));
-    background: #ffffff;
-    border: 1px solid rgba(10, 61, 46, 0.12);
-    border-radius: 18px;
-    box-shadow: 0 18px 50px rgba(10, 61, 46, 0.28);
-    overflow-x: hidden;
-    overflow-y: auto;
-    max-height: calc(100vh - 130px);
-    max-height: calc(100dvh - 130px);
-    -webkit-overflow-scrolling: touch;
+    inset: 0;
     display: none;
-    flex-direction: column;
+    place-items: center;
+    color: var(--cv-paper);
+    pointer-events: none;
 }
-#sms-mascot.is-open .sms-mascot-panel { display: flex; animation: smsMascotUp 0.28s ease; }
-@keyframes smsMascotUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+#sms-mascot .cv-launcher-x .cv-ico { width: 26px; height: 26px; }
+#sms-mascot.is-open .cv-launcher-frame { background: var(--cv-mate); border-color: var(--cv-mate); }
+#sms-mascot.is-open .cv-launcher-frame img { opacity: 0; }
+#sms-mascot.is-open .cv-launcher-x { display: grid; }
+@media (min-width: 769px) {
+    #sms-mascot .cv-head .cv-close { display: none; } /* um único "fechar": o lançador */
+    #sms-mascot .cv-head-text { padding-right: 2.4rem; }
+}
 
-.sms-mascot-panel-header {
+/* Etiqueta com o nome: aparece no hover/foco e durante a apresentação. */
+#sms-mascot .cv-launcher-tag {
+    position: absolute;
+    left: calc(100% + 10px);
+    bottom: 10px;
+    padding: .35rem .8rem .4rem;
+    border-radius: 999px;
+    background: var(--cv-ink);
+    color: var(--cv-paper);
+    font: italic 400 1rem/1 var(--cv-display);
+    letter-spacing: -.01em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+}
+#sms-mascot .cv-launcher:hover .cv-launcher-tag,
+#sms-mascot .cv-launcher:focus-visible .cv-launcher-tag { opacity: 1; transform: none; }
+#sms-mascot.is-open .cv-launcher-tag,
+#sms-mascot.cv-peeking .cv-launcher-tag { opacity: 0; }
+
+/* ── Apresentação (bilhete) ── */
+#sms-mascot .cv-peek {
+    position: absolute;
+    left: 78px;
+    bottom: 4px;
     display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.85rem 0.9rem;
-    background: linear-gradient(135deg, #0a3d2e 0%, #0d5540 100%);
-    color: #fff;
+    align-items: flex-start;
+    width: max-content;
+    max-width: 260px;
+    background: var(--cv-card);
+    border: 1px solid var(--cv-line);
+    border-radius: 14px 14px 14px 4px;
+    box-shadow: var(--cv-shadow);
+    animation: cvPeek .45s cubic-bezier(.2, .7, .2, 1);
 }
-.sms-mascot-panel-header img {
-    width: 38px; height: 38px; object-fit: contain;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    padding: 2px;
-}
-.sms-mascot-panel-header .sms-mascot-title { font-weight: 700; font-size: 0.95rem; display: block; }
-.sms-mascot-panel-header .sms-mascot-subtitle { font-size: 0.72rem; opacity: 0.85; display: block; }
-.sms-mascot-panel-header .sms-mascot-close {
-    margin-left: auto;
-    background: rgba(255, 255, 255, 0.18);
-    border: none;
-    color: #fff;
-    width: 30px; height: 30px;
-    border-radius: 50%;
-    font-size: 1.3rem;
-    line-height: 1;
+#sms-mascot .cv-peek-open {
+    display: grid;
+    gap: .15rem;
+    padding: .75rem .25rem .8rem .95rem;
+    border: 0;
+    background: none;
+    text-align: left;
     cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    flex: 0 0 auto;
+    color: var(--cv-ink);
+    font: 400 .9rem/1.35 var(--cv-text);
 }
-.sms-mascot-panel-header .sms-mascot-close:hover { background: rgba(255, 255, 255, 0.32); }
-.sms-mascot-panel-header .sms-mascot-close:focus-visible { outline: 2px solid #d4a574; outline-offset: 2px; }
-
-.sms-mascot-message {
-    padding: 0.9rem 1rem 0.4rem;
-    color: #0a3d2e;
-    font-size: 0.9rem;
-    line-height: 1.5;
+#sms-mascot .cv-peek-open strong { font: 400 1.08rem/1.15 var(--cv-display); color: var(--cv-mate); }
+#sms-mascot .cv-peek-open:hover span { text-decoration: underline; text-underline-offset: 3px; }
+#sms-mascot .cv-peek-close {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    margin: 4px 4px 0 0;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--cv-ink-2);
+    cursor: pointer;
 }
+#sms-mascot .cv-peek-close .cv-ico { width: 16px; height: 16px; }
+#sms-mascot .cv-peek-close:hover { background: var(--cv-paper-2); color: var(--cv-ink); }
+#sms-mascot .cv-peek :focus-visible { outline: 3px solid var(--cv-red); outline-offset: 2px; border-radius: 10px; }
+@keyframes cvPeek { from { opacity: 0; transform: translateX(-8px) scale(.97); } to { opacity: 1; transform: none; } }
 
-.sms-mascot-shortcuts-label {
-    display: block;
-    padding: 0.4rem 1rem 0.3rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #8b6a47;
-    font-weight: 700;
-}
-
-.sms-mascot-links {
-    list-style: none;
-    margin: 0;
-    padding: 0 0.6rem 0.6rem;
+/* ── O caderno (painel) ── */
+#sms-mascot .cv-panel {
+    position: absolute;
+    left: 0;
+    bottom: 92px;
+    width: min(372px, calc(100vw - 44px));
+    max-height: min(640px, calc(100vh - 130px));
+    max-height: min(640px, calc(100dvh - 130px));
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    background: var(--cv-paper);
+    border: 1px solid var(--cv-line);
+    border-radius: 18px;
+    box-shadow: var(--cv-shadow);
+    overflow: hidden;
+    animation: cvOpen .32s cubic-bezier(.2, .7, .2, 1);
+    transform-origin: 30px 100%;
 }
-.sms-mascot-links a {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.6rem 0.7rem;
-    border-radius: 12px;
-    text-decoration: none;
-    color: #0a3d2e;
-    font-size: 0.86rem;
-    font-weight: 500;
-    background: #f8f6f0;
-    transition: background 0.18s ease, transform 0.18s ease;
-}
-.sms-mascot-links a:hover { background: #efe7d8; transform: translateX(2px); }
-.sms-mascot-links a:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; }
-.sms-mascot-links a .sms-link-icon { font-size: 1.1rem; line-height: 1; flex: 0 0 auto; }
+@keyframes cvOpen { from { opacity: 0; transform: translateY(12px) scale(.98); } to { opacity: 1; transform: none; } }
 
-/* ── "Ajuda rápida" (accordion estático — sem chat/IA/API) ── */
-.sms-mascot-help {
-    border-top: 1px solid rgba(10, 61, 46, 0.08);
-    padding: 0.5rem 0.6rem 0.2rem;
+#sms-mascot .cv-sheet-grip { display: none; }
+
+#sms-mascot .cv-head {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: .85rem;
+    padding: 1rem 1rem 1.15rem 1rem;
+    background: var(--cv-mate);
+    color: var(--cv-paper);
+    flex: none;
 }
-.sms-mascot-help-label {
-    display: block;
-    padding: 0.15rem 0.4rem 0.35rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #8b6a47;
-    font-weight: 700;
+/* Lambrequim: o beiral recortado fecha o cabeçalho. */
+#sms-mascot .cv-head::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -11px;
+    height: 12px;
+    background: radial-gradient(circle at 11px 0, var(--cv-mate) 10px, transparent 10.5px) 0 0 / 22px 12px repeat-x;
+    pointer-events: none;
 }
-.sms-mascot-help-list {
-    list-style: none;
+#sms-mascot .cv-portrait {
+    position: relative;
+    flex: none;
+    width: 62px;
+    height: 74px;
+    margin-bottom: -6px;
+    border-radius: 999px 999px 10px 10px;
+    overflow: hidden;
+    background: var(--cv-paper);
+    border: 2px solid var(--cv-paper);
+}
+#sms-mascot .cv-portrait img {
+    position: absolute;
+    left: 50%;
+    bottom: -20px;
+    width: 104px;
+    height: 104px;
+    max-width: none;
+    transform: translateX(-46%);
+    object-fit: contain;
+}
+#sms-mascot .cv-head-text { min-width: 0; flex: 1; padding: 0 2.9rem .2rem 0; }
+#sms-mascot .cv-role {
+    margin: .3rem 0 0;
+    font: italic 400 .9rem/1.2 var(--cv-display);
+    color: rgba(244, 238, 227, 0.82);
+}
+#sms-mascot .cv-name {
     margin: 0;
+    font: 400 1.9rem/0.95 var(--cv-display);
+    letter-spacing: -.02em;
+    color: var(--cv-paper);
+    font-variation-settings: "SOFT" 50, "opsz" 72;
+}
+#sms-mascot .cv-name:focus,
+#sms-mascot .cv-name:focus-visible { outline: none; } /* foco programático ao abrir: o leitor anuncia o nome, sem anel visual */
+#sms-mascot .cv-rosette {
+    position: absolute;
+    right: 14px;
+    bottom: 12px;
+    width: 30px;
+    height: 30px;
+    opacity: .95;
+    --cv-red: #e06a5c;
+    --cv-mate: #8fbf9a;
+    --cv-paper: #1f4a33;
+}
+#sms-mascot .cv-close {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
     padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+    border: 1px solid rgba(244, 238, 227, 0.3);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--cv-paper);
+    cursor: pointer;
+    transition: background .2s ease;
 }
-.sms-help-q {
-    width: 100%;
+#sms-mascot .cv-close:hover { background: rgba(244, 238, 227, 0.14); }
+#sms-mascot .cv-close:focus-visible { outline: 3px solid var(--cv-ochre); outline-offset: 2px; }
+
+#sms-mascot .cv-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    /* O corpo rolável começa abaixo das pontas do beiral recortado (11px):
+       entre um recorte e outro aparece só o papel, nunca o conteúdo rolando. */
+    margin-top: 11px;
+    padding: .8rem 1.1rem .4rem;
+}
+#sms-mascot .cv-say {
+    margin: 0 0 .9rem;
+    font: 400 1.12rem/1.38 var(--cv-display);
+    color: var(--cv-ink);
+    letter-spacing: -.005em;
+}
+#sms-mascot .cv-say strong { font-style: italic; font-weight: 400; color: var(--cv-red); }
+
+#sms-mascot .cv-suggest { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 0 1.2rem; }
+#sms-mascot .cv-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    min-height: 40px;
+    padding: .45rem .95rem;
+    border-radius: 999px;
+    background: var(--cv-mate);
+    color: #fff;
+    font: 600 .9rem/1.2 var(--cv-text);
+    text-decoration: none;
+    transition: background .2s ease;
+}
+#sms-mascot .cv-pill + .cv-pill { background: transparent; color: var(--cv-ink); box-shadow: inset 0 0 0 1.5px var(--cv-ink); }
+#sms-mascot .cv-pill:hover { background: var(--cv-ink); color: var(--cv-paper); }
+#sms-mascot .cv-pill:hover .cv-ico--arrow,
+#sms-mascot .cv-link:hover .cv-ico--arrow,
+#sms-mascot .cv-more:hover .cv-ico--arrow { transform: translateX(3px); }
+
+#sms-mascot .cv-block { padding: 1rem 0 .4rem; border-top: 1px solid var(--cv-line); }
+#sms-mascot .cv-label-row { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+#sms-mascot .cv-label {
+    margin: 0 0 .7rem;
+    font: 600 .7rem/1.3 var(--cv-text);
+    letter-spacing: .15em;
+    text-transform: uppercase;
+    color: var(--cv-mate-2);
+}
+#sms-mascot .cv-more {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font: 600 .82rem var(--cv-text);
+    color: var(--cv-mate);
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+    white-space: nowrap;
+}
+#sms-mascot .cv-more .cv-ico--arrow { width: 14px; height: 14px; }
+
+/* Seis intenções de visita — azulejos com ícone de traço. */
+#sms-mascot .cv-intents { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; }
+#sms-mascot .cv-intent {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: .35rem;
+    min-height: 74px;
+    padding: .6rem .3rem .55rem;
+    border: 1px solid var(--cv-line);
+    border-radius: 12px;
+    background: var(--cv-card);
+    color: var(--cv-ink);
+    font: 600 .82rem/1.15 var(--cv-text);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s ease, background .2s ease, color .2s ease;
+}
+#sms-mascot .cv-ico--intent { width: 24px; height: 24px; color: var(--cv-mate); }
+#sms-mascot .cv-intent:hover { border-color: var(--cv-mate); }
+#sms-mascot .cv-intent.is-active { background: var(--cv-ink); border-color: var(--cv-ink); color: var(--cv-paper); }
+#sms-mascot .cv-intent.is-active .cv-ico--intent { color: var(--cv-ochre); }
+
+#sms-mascot .cv-answer {
+    position: relative;
+    margin: .7rem 0 .2rem;
+    padding: .9rem 1rem .8rem;
+    border-radius: 12px;
+    background: var(--cv-card);
+    border: 1px solid var(--cv-line);
+    animation: cvOpen .25s ease;
+}
+#sms-mascot .cv-answer::before { /* a "orelha" do bilhete aponta para a intenção */
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: calc(var(--cv-ear, 16.66%) - 5px);
+    width: 10px;
+    height: 10px;
+    background: var(--cv-card);
+    border-left: 1px solid var(--cv-line);
+    border-top: 1px solid var(--cv-line);
+    transform: rotate(45deg);
+}
+#sms-mascot .cv-answer-say { margin: 0 0 .55rem; font: 400 .98rem/1.45 var(--cv-text); color: var(--cv-ink-2); }
+#sms-mascot .cv-answer-links { display: grid; }
+#sms-mascot .cv-link {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
-    text-align: left;
-    padding: 0.55rem 0.7rem;
-    border: none;
-    border-radius: 12px;
-    background: #f8f6f0;
-    color: #0a3d2e;
-    font-family: inherit;
-    font-size: 0.84rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.18s ease;
+    gap: .75rem;
+    min-height: 44px;
+    padding: .55rem 0;
+    border-top: 1px dashed var(--cv-line);
+    color: var(--cv-mate);
+    font: 600 .95rem/1.25 var(--cv-text);
+    text-decoration: none;
 }
-.sms-help-q:hover { background: #efe7d8; }
-.sms-help-q:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; }
-.sms-help-q-text { flex: 1; min-width: 0; }
-.sms-help-chevron {
-    flex: 0 0 auto;
-    width: 8px;
-    height: 8px;
-    border-right: 2px solid #8b6a47;
-    border-bottom: 2px solid #8b6a47;
-    transform: rotate(45deg);
-    transition: transform 0.2s ease;
-    margin-top: -3px;
+#sms-mascot .cv-link:hover { color: var(--cv-red); }
+
+/* Agenda: folhinha de calendário, como a página de eventos. */
+#sms-mascot .cv-week-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+#sms-mascot .cv-week-item { display: flex; gap: .8rem; align-items: flex-start; }
+#sms-mascot .cv-date {
+    flex: none;
+    width: 46px;
+    display: grid;
+    justify-items: center;
+    padding: .3rem 0 .35rem;
+    border-radius: 8px 8px 6px 6px;
+    background: var(--cv-card);
+    border: 1px solid var(--cv-line);
+    border-top: 4px solid var(--cv-red);
 }
-.sms-help-q[aria-expanded="true"] .sms-help-chevron { transform: rotate(-135deg); margin-top: 2px; }
-.sms-help-a {
-    padding: 0.5rem 0.7rem 0.4rem;
-    color: #3a4a44;
-    font-size: 0.82rem;
-    line-height: 1.5;
+#sms-mascot .cv-date-day { font: 400 1.35rem/1 var(--cv-display); color: var(--cv-ink); }
+#sms-mascot .cv-date-month { font: 600 .62rem/1.2 var(--cv-text); letter-spacing: .08em; text-transform: uppercase; color: var(--cv-ink-2); }
+#sms-mascot .cv-week-text { display: grid; gap: .1rem; min-width: 0; padding-top: .1rem; }
+#sms-mascot .cv-week-when { font: 600 .72rem/1.3 var(--cv-text); letter-spacing: .04em; text-transform: uppercase; color: var(--cv-red); }
+#sms-mascot .cv-week-time { text-transform: none; letter-spacing: 0; }
+#sms-mascot .cv-week-title { font: 600 .95rem/1.25 var(--cv-text); color: var(--cv-ink); }
+#sms-mascot .cv-week-where { font-size: .84rem; line-height: 1.3; color: var(--cv-ink-2); }
+#sms-mascot .cv-week-note { margin: 0 0 .4rem; font-size: .9rem; line-height: 1.45; color: var(--cv-ink-2); }
+
+#sms-mascot .cv-foot {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .6rem 1rem .65rem;
+    border-top: 1px solid var(--cv-line);
+    background: var(--cv-paper-2);
 }
-.sms-help-a[hidden] { display: none; }
-.sms-help-a p { margin: 0 0 0.4rem; }
-.sms-help-link {
+#sms-mascot .cv-foot-btn {
     display: inline-flex;
     align-items: center;
-    gap: 0.2rem;
-    color: #0a3d2e;
-    font-weight: 600;
+    justify-content: center;
+    gap: .4rem;
+    flex: 1 1 auto;
+    min-height: 42px;
+    padding: .35rem .75rem;
+    border: 1px solid var(--cv-line);
+    border-radius: 999px;
+    background: var(--cv-card);
+    color: var(--cv-ink);
+    font: 600 .84rem/1.2 var(--cv-text);
     text-decoration: none;
-    font-size: 0.82rem;
+    white-space: nowrap;
+    cursor: pointer;
 }
-.sms-help-link:hover { text-decoration: underline; }
-.sms-help-link:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; border-radius: 4px; }
-.sms-mascot-help-note {
-    margin: 0.4rem 0.4rem 0.2rem;
-    font-size: 0.74rem;
+#sms-mascot .cv-foot-btn .cv-ico { width: 17px; height: 17px; color: var(--cv-mate); }
+#sms-mascot .cv-foot-btn:hover { border-color: var(--cv-ink); }
+#sms-mascot .cv-bye {
+    margin: .4rem 0 .6rem;
+    padding-top: .8rem;
+    border-top: 1px solid var(--cv-line);
+    font-size: .84rem;
     line-height: 1.4;
-    color: #8b6a47;
+    color: var(--cv-ink-2);
 }
-
-.sms-mascot-footer {
-    padding: 0.35rem 1rem 0.8rem;
-    text-align: center;
-}
-.sms-mascot-hide-btn {
+#sms-mascot .cv-hide {
+    display: inline;
+    padding: .5rem 0;
+    border: 0;
     background: none;
-    border: none;
-    color: #8b6a47;
-    font-size: 0.75rem;
-    cursor: pointer;
+    color: var(--cv-mate);
+    font: 600 .84rem var(--cv-text);
     text-decoration: underline;
-    padding: 0.25rem;
-    font-family: inherit;
-}
-.sms-mascot-hide-btn:hover { color: #0a3d2e; }
-.sms-mascot-hide-btn:focus-visible { outline: 2px solid #0a3d2e; outline-offset: 2px; border-radius: 4px; }
-
-/* ── Mini botão de "reabrir" (quando o visitante oculta o mascote) ── */
-.sms-mascot-reopen {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: 1px solid rgba(10, 61, 46, 0.25);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 4px 14px rgba(10, 61, 46, 0.2);
+    text-underline-offset: 3px;
     cursor: pointer;
-    font-size: 1.15rem;
-    line-height: 1;
-    opacity: 0.72;
-    transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.sms-mascot-reopen:hover { opacity: 1; transform: scale(1.08); }
-.sms-mascot-reopen:focus-visible { outline: 3px solid #0a3d2e; outline-offset: 3px; opacity: 1; }
+#sms-mascot .cv-hide:hover { color: var(--cv-red); }
+#sms-mascot .cv-panel a:focus-visible,
+#sms-mascot .cv-panel button:focus-visible { outline: 3px solid var(--cv-red); outline-offset: 2px; }
 
-/* ── Mobile: reduz tamanho e sobe acima do botão "voltar ao topo" ── */
-@media (max-width: 600px) {
-    #sms-mascot {
-        left: 12px;
-        bottom: calc(74px + env(safe-area-inset-bottom, 0px));
-    }
-    .sms-mascot-launcher { width: 50px; height: 50px; }
-    .sms-mascot-launcher img { width: 38px; height: 38px; }
-    .sms-mascot-bubble, .sms-mascot-panel { bottom: 62px; }
-    .sms-mascot-panel { width: min(280px, calc(100vw - 28px)); }
+/* ── Escondida: só um selinho com o rosto, que devolve o guia ── */
+#sms-mascot .cv-reopen {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1.5px solid var(--cv-ink);
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--cv-card);
+    cursor: pointer;
+    box-shadow: 0 8px 18px -10px rgba(27, 35, 29, .5);
+    opacity: .9;
+}
+#sms-mascot .cv-reopen img { position: absolute; left: 50%; top: -2px; width: 74px; height: 74px; max-width: none; transform: translateX(-46%); object-fit: contain; }
+#sms-mascot .cv-reopen:hover { opacity: 1; }
+#sms-mascot .cv-reopen:focus-visible { outline: 3px solid var(--cv-red); outline-offset: 3px; }
+
+/* Aceno único no celular (a capivara do cabeçalho se apresenta sem cobrir nada). */
+#sms-mascot.cv-wave .cv-launcher-frame img { animation: cvWave 1.2s ease-in-out 2; transform-origin: 50% 90%; }
+@keyframes cvWave {
+    0%, 100% { transform: translateX(-46%) rotate(0); }
+    25% { transform: translateX(-46%) rotate(-7deg) translateY(-2px); }
+    60% { transform: translateX(-46%) rotate(5deg); }
 }
 
-/* Mapa mobile: deixa o mascote visivel sem cobrir cards, filtros ou a visao rapida. */
+/* ── Celular: folha inferior ── */
+#sms-mascot .cv-scrim { display: none; }
 @media (max-width: 768px) {
-    body.map-page-body #sms-mascot {
-        left: auto;
-        right: 12px;
-        top: 150px;
-        bottom: auto;
-        z-index: 9989;
-    }
+    #sms-mascot { left: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
+    #sms-mascot .cv-launcher-frame { width: 54px; height: 64px; }
+    #sms-mascot .cv-launcher-frame img { width: 90px; height: 90px; bottom: -16px; }
+    #sms-mascot .cv-launcher-tag,
+    #sms-mascot .cv-peek { display: none !important; }
 
-    body.map-page-body .sms-mascot-launcher {
+    #sms-mascot .cv-scrim {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(27, 35, 29, 0.38);
+        animation: cvFade .25s ease;
+    }
+    #sms-mascot .cv-panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-height: min(82vh, 640px);
+        max-height: min(82dvh, 640px);
+        border-radius: 20px 20px 0 0;
+        border-bottom: 0;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+        animation: cvSheet .34s cubic-bezier(.2, .7, .2, 1);
+    }
+    #sms-mascot .cv-sheet-grip {
+        display: block;
+        position: absolute;
+        top: 7px;
+        left: 50%;
+        z-index: 2;
+        width: 40px;
+        height: 4px;
+        margin-left: -20px;
+        border-radius: 4px;
+        background: rgba(244, 238, 227, 0.45);
+    }
+    #sms-mascot .cv-head { padding: 1.25rem 1rem 1.05rem; }
+    #sms-mascot .cv-name { font-size: 1.75rem; }
+    #sms-mascot .cv-body { padding: .75rem 1rem .4rem; }
+    #sms-mascot .cv-intent { min-height: 70px; }
+    #sms-mascot .cv-foot { padding: .6rem 1rem calc(.7rem + env(safe-area-inset-bottom, 0px)); }
+}
+@media (max-width: 380px) {
+    #sms-mascot .cv-say { font-size: 1.04rem; }
+    #sms-mascot .cv-intent { font-size: .78rem; min-height: 66px; }
+    #sms-mascot .cv-rosette { display: none; }
+    #sms-mascot .cv-foot-btn { padding: .35rem .55rem; font-size: .8rem; }
+}
+/* Folha aberta: o "fechar" fica só na folha; o lançador do cabeçalho sai de cena. */
+body.cv-sheet-open #sms-mascot .cv-launcher { visibility: hidden; }
+body.cv-sheet-open #vlibras-access-wrapper,
+body.cv-sheet-open div[vw],
+body.cv-sheet-open div[vw] *,
+body.cv-sheet-open .back-to-top { visibility: hidden !important; pointer-events: none !important; }
+@keyframes cvSheet { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes cvFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Cabeçalho Recortes no celular: a capivara já mora ao lado do "Aa" (ver recortes.css). */
+@media (max-width: 768px) {
+    body.recortes #sms-mascot .cv-launcher-frame,
+    body.recortes #sms-mascot .cv-reopen {
         width: 44px;
         height: 44px;
-        border-width: 1px;
-        box-shadow: 0 5px 16px rgba(10, 61, 46, 0.22);
+        border-radius: 50%;
+        border: 1px solid var(--cv-line);
+        box-shadow: none;
+        background: var(--cv-card);
     }
-
-    body.map-page-body .sms-mascot-launcher img {
-        width: 34px;
-        height: 34px;
-    }
-
-    body.map-page-body .sms-mascot-launcher .sms-mascot-dot {
-        width: 15px;
-        height: 15px;
-        font-size: 9px;
-        line-height: 15px;
-    }
-
-    body.map-page-body .sms-mascot-bubble,
-    body.map-page-body .sms-mascot-panel {
-        left: auto;
-        right: 0;
-        bottom: 54px;
-    }
-
-    body.map-page-body .sms-mascot-bubble {
-        max-width: min(220px, calc(100vw - 28px));
-        border-radius: 14px 14px 4px 14px;
-        font-size: 0.78rem;
-    }
-
-    body.map-page-body .sms-mascot-bubble::after {
-        left: auto;
-        right: 15px;
-    }
-
-    body.map-page-body .sms-mascot-panel {
-        width: min(270px, calc(100vw - 28px));
-        /* No mapa o mascote fica no alto: painel abre para baixo, sem estourar o topo. */
-        top: 56px;
-        bottom: auto;
-        max-height: calc(100vh - 220px);
-        max-height: calc(100dvh - 220px);
-    }
+    body.recortes #sms-mascot .cv-launcher-frame img { width: 74px; height: 74px; bottom: auto; top: -3px; }
+    body.recortes #sms-mascot.is-open .cv-launcher-frame { background: var(--cv-mate); border-color: var(--cv-mate); }
 }
 
-/* ── Respeitar preferência de movimento reduzido ── */
+/* Alto contraste do portal */
+body.high-contrast #sms-mascot { --cv-paper: #fff; --cv-paper-2: #fff; --cv-card: #fff; --cv-ink: #000; --cv-ink-2: #000; --cv-line: #000; --cv-mate: #000; --cv-mate-2: #000; --cv-red: #000; }
+body.high-contrast #sms-mascot .cv-head,
+body.high-contrast #sms-mascot .cv-head * { color: #fff; }
+
 @media (prefers-reduced-motion: reduce) {
-    .sms-mascot-launcher,
-    .sms-mascot-bubble,
-    .sms-mascot-links a,
-    .sms-help-q,
-    .sms-help-chevron,
-    .sms-mascot-reopen { transition: none !important; }
-    #sms-mascot.is-open .sms-mascot-panel { animation: none !important; }
-    .sms-mascot-launcher:hover { transform: none; }
+    #sms-mascot *, #sms-mascot *::before, #sms-mascot *::after { animation: none !important; transition: none !important; }
 }
+@media print { #sms-mascot { display: none !important; } }
