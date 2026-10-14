@@ -135,11 +135,13 @@
             if (Math.abs(lng) <= 90 && distanceKm(reference, swapped) <= radius) {
                 result.errors.push("Latitude e longitude parecem invertidas.");
                 result.swap = swapped;
+                result.fixKind = "swap";
                 return result;
             }
             if ((lat > 0 || lng > 0) && distanceKm(reference, flipped) <= radius) {
                 result.errors.push("Falta o sinal de menos: em São Mateus do Sul latitude e longitude são negativas.");
                 result.swap = flipped;
+                result.fixKind = "sign";
                 return result;
             }
             result.warnings.push("Fora da região do município (" + formatKm(km) + " do centro). Confira se o endereço é mesmo aqui.");
@@ -382,7 +384,20 @@
                 var point = current();
                 if (map) map.setView(point ? [point.lat, point.lng] : [reference.lat, reference.lng], point ? 17 : 12);
             } else if (action === "fix" && lastCheck.swap) {
-                writePoint(lastCheck.swap, true);
+                // Corrige o texto digitado (sem arredondar), para que voltar ao
+                // ponto original seja reconhecido e o status seja devolvido.
+                var latText = String(fields.lat.value).trim();
+                var lngText = String(fields.lng.value).trim();
+                if (lastCheck.fixKind === "swap") {
+                    setInput(fields.lat, lngText);
+                    setInput(fields.lng, latText);
+                } else {
+                    setInput(fields.lat, latText.charAt(0) === "-" ? latText : "-" + latText);
+                    setInput(fields.lng, lngText.charAt(0) === "-" ? lngText : "-" + lngText);
+                }
+                demoteIfMoved();
+                placeMarker(current(), true);
+                describe();
             } else if (action === "verify") {
                 var target = current();
                 if (!target || lastCheck.errors.length) {
