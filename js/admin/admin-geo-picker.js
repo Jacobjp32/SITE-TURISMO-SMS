@@ -86,6 +86,93 @@
         return null;
     }
 
+    function decimals(input) {
+        var raw = String(input && input.value || "").trim();
+        var dot = raw.indexOf(".");
+        return dot === -1 ? 0 : raw.length - dot - 1;
+    }
+
+    function formatKm(km) {
+        return km < 1 ? Math.round(km * 1000) + " m" : km.toFixed(1).replace(".", ",") + " km";
+    }
+
+    /**
+     * Valida o par lat/lng do formulário.
+     * errors   → impedem salvar (campo recebe setCustomValidity)
+     * warnings → não impedem, mas aparecem em destaque
+     */
+    function validatePoint(fields, reference, neighbors) {
+        var result = { errors: [], warnings: [], swap: null, point: null };
+        var latIn = fields.lat;
+        var lngIn = fields.lng;
+        var latBad = latIn && latIn.validity && latIn.validity.badInput;
+        var lngBad = lngIn && lngIn.validity && lngIn.validity.badInput;
+        var lat = readNumber(latIn);
+        var lng = readNumber(lngIn);
+        if (latBad || lngBad) {
+            result.errors.push("Use somente números com ponto decimal, por exemplo -25.874123.");
+            return result;
+        }
+        if (lat == null && lng == null) return result;
+        if (lat == null || lng == null) {
+            result.errors.push("Preencha latitude e longitude juntas (ou deixe as duas vazias).");
+            return result;
+        }
+        if (Math.abs(lat) > 90 || Math.abs(lng) > 180) {
+            result.errors.push("Fora dos limites possíveis: latitude vai de -90 a 90 e longitude de -180 a 180.");
+            return result;
+        }
+        if (lat === 0 && lng === 0) {
+            result.errors.push("0, 0 não é uma localização real (fica no oceano Atlântico).");
+            return result;
+        }
+        var radius = reference.raioKm || 45;
+        var point = { lat: lat, lng: lng };
+        var km = distanceKm(reference, point);
+        if (km > radius) {
+            var swapped = { lat: lng, lng: lat };
+            var flipped = { lat: -Math.abs(lat), lng: -Math.abs(lng) };
+            if (Math.abs(lng) <= 90 && distanceKm(reference, swapped) <= radius) {
+                result.errors.push("Latitude e longitude parecem invertidas.");
+                result.swap = swapped;
+                return result;
+            }
+            if ((lat > 0 || lng > 0) && distanceKm(reference, flipped) <= radius) {
+                result.errors.push("Falta o sinal de menos: em São Mateus do Sul latitude e longitude são negativas.");
+                result.swap = flipped;
+                return result;
+            }
+            result.warnings.push("Fora da região do município (" + formatKm(km) + " do centro). Confira se o endereço é mesmo aqui.");
+        }
+        result.point = point;
+        var precision = Math.min(decimals(latIn), decimals(lngIn));
+        if (precision < 4) {
+            result.warnings.push("Pouca precisão (" + precision + " casa" + (precision === 1 ? "" : "s") + " decimal" + (precision === 1 ? "" : "is") + " ≈ " +
+                (precision <= 2 ? "1 km" : "100 m") + " de erro). Use ao menos 5 casas ou ajuste o pin no mapa.");
+        }
+        if (distanceKm(DEFAULT_CENTER, point) < 0.03) {
+            result.warnings.push("Ponto igual ao centro da cidade — costuma ser um valor provisório.");
+        }
+        (neighbors || []).some(function (other) {
+            if (distanceKm(other, point) <= 0.015) {
+                result.warnings.push("Mesmo ponto de “" + other.name + "”. Confira se a coordenada não foi copiada de outro cadastro.");
+                return true;
+            }
+            return false;
+        });
+        return result;
+    }
+
+    function isVerifiedStatus(value) {
+        var status = String(value || "").trim().toLowerCase();
+        return status === "ok" || status === "verified" || status === "verificada";
+    }
+
+    function askConfirm(options) {
+        if (window.AdminFeedback && typeof window.AdminFeedback.confirm === "function") return window.AdminFeedback.confirm(options);
+        return Promise.resolve(window.confirm(options.title + "\n\n" + options.message));
+    }
+
     function setInput(input, value) {
         if (!input) return;
         input.value = value;
@@ -110,7 +197,8 @@
                 '<span class="geo-status" data-geo-status data-tone="neutral">Carregando mapa…</span>' +
                 '<span data-geo-detail></span>' +
                 '<span class="geo-picker-changed" data-geo-changed hidden>Ponto alterado — salve o empreendimento para aplicar.</span>' +
-            '</div>';
+            '</div>' +
+            '<div class="geo-issues" data-geo-issues aria-live="polite"></div>';
     }
 
     function mount(host, fields) {
@@ -151,20 +239,58 @@
             undoBtn.hidden = !changed;
         }
 
+        var issuesEl = q("[data-geo-issues]");
+        var verifyBtn = q('[data-geo="verify"]');
+        var neighbors = (fields.neighbors || []).filter(function (item) {
+            return item && Number.isFinite(item.lat) && Number.isFinite(item.lng);
+        });
+        var lastCheck = { errors: [], warnings: [] };
+        var demotedNotice = false;
+
+        function renderIssues(check) {
+            var items = check.errors.map(function (text) { return { tone: "bad", text: text }; })
+                .concat(check.warnings.map(function (text) { return { tone: "warn", text: text }; }));
+            if (demotedNotice) {
+                items.push({ tone: "info", text: "O ponto foi movido, então a marcação “verificada” foi retirada. Confira no satélite e marque de novo se estiver certo." });
+            }
+            var html = items.length
+                ? '<ul class="geo-issue-list">' + items.map(function (item) {
+                    return '<li data-tone="' + item.tone + '">' + esc(item.text) + "</li>";
+                }).join("") + "</ul>" +
+                (check.swap ? '<button type="button" class="btn-secondary geo-fix-btn" data-geo="fix">Corrigir para ' +
+                    esc(round6(check.swap.lat) + ", " + round6(check.swap.lng)) + "</button>" : "")
+                : "";
+            // Redesenhar só quando muda: o blur do campo dispara "change" no meio
+            // do clique e trocaria o botão "Corrigir" antes de o clique chegar.
+            if (issuesEl.getAttribute("data-html") === html) return;
+            issuesEl.setAttribute("data-html", html);
+            issuesEl.innerHTML = html;
+        }
+
         function describe() {
+            var check = validatePoint(fields, reference, neighbors);
+            lastCheck = check;
+            var message = check.errors[0] || "";
+            if (fields.lat && typeof fields.lat.setCustomValidity === "function") fields.lat.setCustomValidity(message);
+            if (fields.lng && typeof fields.lng.setCustomValidity === "function") fields.lng.setCustomValidity(message ? " " : "");
+            [fields.lat, fields.lng].forEach(function (input) { if (input) input.setAttribute("aria-invalid", message ? "true" : "false"); });
+
             var point = current();
             var status = String(fields.coordStatus ? fields.coordStatus.value : "").trim().toLowerCase();
-            if (!point) {
+            if (check.errors.length) {
+                statusEl.dataset.tone = "bad";
+                statusEl.textContent = "Coordenadas inválidas";
+                detailEl.textContent = "Corrija antes de salvar.";
+            } else if (!point) {
                 statusEl.dataset.tone = "bad";
                 statusEl.textContent = "Sem coordenadas";
                 detailEl.textContent = "Clique no mapa para posicionar o empreendimento.";
             } else {
                 var km = distanceKm(reference, point);
-                var far = km > (reference.raioKm || 45);
-                if (far) {
+                if (km > (reference.raioKm || 45)) {
                     statusEl.dataset.tone = "bad";
                     statusEl.textContent = "Fora da região do município";
-                } else if (status === "ok" || status === "verified" || status === "verificada") {
+                } else if (isVerifiedStatus(status)) {
                     statusEl.dataset.tone = "ok";
                     statusEl.textContent = "Verificada";
                 } else if (status === "aproximada") {
@@ -174,10 +300,31 @@
                     statusEl.dataset.tone = "neutral";
                     statusEl.textContent = "Não verificada";
                 }
-                detailEl.textContent = point.lat.toFixed(6) + ", " + point.lng.toFixed(6) +
-                    " · " + (km < 1 ? Math.round(km * 1000) + " m" : km.toFixed(1).replace(".", ",") + " km") + " do centro";
+                detailEl.textContent = point.lat.toFixed(6) + ", " + point.lng.toFixed(6) + " · " + formatKm(km) + " do centro";
             }
+            if (verifyBtn) {
+                var canVerify = Boolean(point) && !check.errors.length && distanceKm(reference, point) <= (reference.raioKm || 45);
+                verifyBtn.disabled = !canVerify || isVerifiedStatus(status);
+                verifyBtn.textContent = isVerifiedStatus(status) ? "Verificada" : "Marcar como verificada";
+            }
+            renderIssues(check);
             markChanged();
+        }
+
+        // Mover o ponto nunca mantém o selo “verificada”: a conferência precisa
+        // ser refeita por uma pessoa (botão “Marcar como verificada”).
+        function demoteIfMoved() {
+            if (!fields.coordStatus) return;
+            var moved = (fields.lat && fields.lat.value !== original.lat) || (fields.lng && fields.lng.value !== original.lng);
+            if (!moved && demotedNotice) {
+                // Voltou exatamente ao ponto conferido: devolve o status original.
+                setInput(fields.coordStatus, original.status);
+                demotedNotice = false;
+                return;
+            }
+            if (!moved || !isVerifiedStatus(fields.coordStatus.value)) return;
+            setInput(fields.coordStatus, "");
+            demotedNotice = true;
         }
 
         function placeMarker(point, pan) {
@@ -201,12 +348,15 @@
         function writePoint(point, pan) {
             setInput(fields.lat, String(round6(point.lat)));
             setInput(fields.lng, String(round6(point.lng)));
+            demoteIfMoved();
             placeMarker(point, pan);
             describe();
         }
 
-        function onFieldEdit() {
-            placeMarker(current(), true);
+        function onFieldEdit(event) {
+            demoteIfMoved();
+            var check = validatePoint(fields, reference, neighbors);
+            if (event && event.type === "change") placeMarker(check.errors.length ? null : current(), true);
             describe();
         }
 
@@ -231,24 +381,42 @@
             } else if (action === "center") {
                 var point = current();
                 if (map) map.setView(point ? [point.lat, point.lng] : [reference.lat, reference.lng], point ? 17 : 12);
+            } else if (action === "fix" && lastCheck.swap) {
+                writePoint(lastCheck.swap, true);
             } else if (action === "verify") {
-                if (!current()) {
-                    detailEl.textContent = "Posicione o ponto antes de marcá-lo como verificado.";
+                var target = current();
+                if (!target || lastCheck.errors.length) {
+                    detailEl.textContent = "Posicione um ponto válido antes de marcá-lo como verificado.";
                     return;
                 }
-                setInput(fields.coordStatus, "ok");
-                describe();
+                askConfirm({
+                    title: "Marcar localização como verificada?",
+                    message: "Confirme somente se você conferiu o ponto (de preferência na imagem de satélite) e ele está na entrada do local.",
+                    details: lastCheck.warnings.length ? lastCheck.warnings : ["Coordenada: " + target.lat.toFixed(6) + ", " + target.lng.toFixed(6)],
+                    confirmLabel: "Sim, conferi o ponto",
+                    cancelLabel: "Ainda não"
+                }).then(function (confirmed) {
+                    if (!confirmed || destroyed) return;
+                    setInput(fields.coordStatus, "ok");
+                    demotedNotice = false;
+                    describe();
+                });
             } else if (action === "undo") {
                 setInput(fields.lat, original.lat);
                 setInput(fields.lng, original.lng);
                 setInput(fields.coordStatus, original.status);
+                demotedNotice = false;
                 placeMarker(current(), true);
                 describe();
             }
         }
 
         host.addEventListener("click", onTool);
-        [fields.lat, fields.lng].forEach(function (input) { if (input) input.addEventListener("change", onFieldEdit); });
+        [fields.lat, fields.lng].forEach(function (input) {
+            if (!input) return;
+            input.addEventListener("change", onFieldEdit);
+            input.addEventListener("input", onFieldEdit);
+        });
         if (fields.coordStatus) fields.coordStatus.addEventListener("input", describe);
 
         loadLeaflet().then(function (L) {
@@ -285,7 +453,12 @@
             destroy: function () {
                 destroyed = true;
                 host.removeEventListener("click", onTool);
-                [fields.lat, fields.lng].forEach(function (input) { if (input) input.removeEventListener("change", onFieldEdit); });
+                [fields.lat, fields.lng].forEach(function (input) {
+                    if (!input) return;
+                    input.removeEventListener("change", onFieldEdit);
+                    input.removeEventListener("input", onFieldEdit);
+                    if (typeof input.setCustomValidity === "function") input.setCustomValidity("");
+                });
                 if (fields.coordStatus) fields.coordStatus.removeEventListener("input", describe);
                 if (map) { map.remove(); map = null; }
             }
@@ -296,6 +469,7 @@
     window.AdminGeoPicker = {
         mount: mount,
         parseMapsUrl: parseMapsUrl,
+        validatePoint: validatePoint,
         _distanceKm: distanceKm
     };
 })();
