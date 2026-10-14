@@ -125,16 +125,23 @@
 
             this.openModal(eventItem && eventItem.id ? "Editar evento" : "Novo evento", buildEventForm(eventItem, this.media));
             this.syncEventCoverPreview();
+            this.bindEditorForm("eventCmsForm");
         },
 
         saveEvent: async function (event) {
             event.preventDefault();
-            if (!this.db) return alert("Firestore não inicializado.");
+            if (!this.db) return notify("Firestore não inicializado.", "error");
 
             var form = event.target;
             var id = form.eventId.value || ("evt_" + Date.now());
             var publish = form.publicado.value === "true";
             var existingItem = this.events.find(function (item) { return item.id === id; }) || null;
+            if (publish && form.dataset.publishReviewed !== "true" && window.AdminContentPreview) {
+                if (!clean(form.title.value) || !clean(form.date.value)) return notify("Título e data são obrigatórios.", "error");
+                this.showEditorPreview("event", true);
+                return;
+            }
+            setBusy(form, true);
             var now = window.firebase.firestore.FieldValue.serverTimestamp();
             var manualCoverUrl = clean(form.mainImage.value);
             var selectedMediaItem = getMediaById(this.media, form.eventMediaId.value);
@@ -158,7 +165,7 @@
 
             try {
                 if (uploadedFile) {
-                    if (!this.storage) return alert("Firebase Storage não inicializado.");
+                    if (!this.storage) return notify("Firebase Storage não inicializado.", "error");
                     validateImageFile(uploadedFile);
 
                     var uploadResult = await uploadImageToCms(this.storage, uploadedFile);
@@ -180,7 +187,8 @@
                 }
             } catch (error) {
                 console.error("[admin-content-cms] Falha ao processar capa do evento.", error);
-                alert(error && error.message ? error.message : "Erro ao processar a imagem de capa.");
+                notify(error && error.message ? error.message : "Erro ao processar a imagem de capa.", "error");
+                setBusy(form, false);
                 return;
             }
 
@@ -207,7 +215,8 @@
             };
 
             if (!payload.title || !payload.date) {
-                alert("Título e data são obrigatórios.");
+                notify("Título e data são obrigatórios.", "error");
+                setBusy(form, false);
                 return;
             }
 
@@ -236,21 +245,34 @@
 
             payload.imageCount = Array.isArray(payload.images) ? payload.images.length : 0;
 
-            await this.db.collection("eventos_aprovados").doc(id).set(payload, { merge: true });
+            try {
+                await this.db.collection("eventos_aprovados").doc(id).set(payload, { merge: true });
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao salvar evento.", error);
+                notify("Não foi possível salvar o evento. Suas alterações continuam no formulário.", "error");
+                setBusy(form, false);
+                return;
+            }
             this.closeModal();
             await this.loadApprovedEvents();
-            alert("Evento salvo.");
+            notify(publish ? "Evento salvo e publicado na agenda do portal." : "Evento salvo como rascunho (fora do portal).", "success");
         },
 
         previewEvent: function (eventId) {
             var eventItem = this.events.find(function (item) { return item.id === eventId; });
-            if (!eventItem) return alert("Evento não encontrado.");
-            this.openModal("Pré-visualizar evento", buildApprovedEventPreview(eventItem));
+            if (!eventItem) return notify("Evento não encontrado.", "error");
+            if (!window.AdminContentPreview) return this.openModal("Pré-visualizar evento", buildApprovedEventPreview(eventItem));
+            var cover = getPrimaryEventImage(eventItem);
+            var data = AdminContentPreview.eventFromItem(eventItem, cover && cover.url);
+            this.openModal("Prévia do evento",
+                '<div class="admin-modal-body">' + AdminContentPreview.renderChecks(AdminContentPreview.checks("event", data)) + AdminContentPreview.render("event", data) + '</div>' +
+                '<div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button>' +
+                '<button class="btn-primary" type="button" data-admin-action="close-modal-open-event" data-admin-target-id="' + escapeHtml(eventItem.id) + '">Editar este evento</button></div>');
         },
 
         duplicateEvent: function (eventId) {
             var eventItem = this.events.find(function (item) { return item.id === eventId; });
-            if (!eventItem) return alert("Evento não encontrado.");
+            if (!eventItem) return notify("Evento não encontrado.", "error");
 
             this.openEventModal("", Object.assign({}, eventItem, {
                 id: "",
@@ -267,33 +289,76 @@
             }));
         },
 
-        toggleEventPublish: async function (eventId) {
+        toggleEventPublish: async function (eventId, confirmedFromReview) {
             var eventItem = this.events.find(function (item) { return item.id === eventId; });
             if (!eventItem) return;
             var publish = !isPublished(eventItem);
-            await this.db.collection("eventos_aprovados").doc(eventId).set({
-                publicado: publish,
-                status: publish ? "aprovado" : "rascunho",
-                updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
-                updatedBy: currentAdminId()
-            }, { merge: true });
+            if (publish && !confirmedFromReview) {
+                var cover = getPrimaryEventImage(eventItem);
+                this.openPublishReview("event", eventItem.id, window.AdminContentPreview
+                    ? AdminContentPreview.eventFromItem(eventItem, cover && cover.url)
+                    : null);
+                return;
+            }
+            if (!publish && !(await ask({
+                title: "Despublicar evento?",
+                message: "\"" + (getTitle(eventItem) || "Este evento") + "\" sai da agenda do portal e fica salvo como rascunho.",
+                details: ["Você pode publicar de novo quando quiser."],
+                confirmLabel: "Despublicar",
+                tone: "warning"
+            }))) return;
+            try {
+                await this.db.collection("eventos_aprovados").doc(eventId).set({
+                    publicado: publish,
+                    status: publish ? "aprovado" : "rascunho",
+                    updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentAdminId()
+                }, { merge: true });
+                notify(publish ? "Evento publicado na agenda do portal." : "Evento despublicado.", "success");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao alterar publicação do evento.", error);
+                notify("Não foi possível alterar a publicação do evento.", "error");
+            }
             this.loadApprovedEvents();
         },
 
         toggleEventFeatured: async function (eventId) {
             var eventItem = this.events.find(function (item) { return item.id === eventId; });
             if (!eventItem) return;
-            await this.db.collection("eventos_aprovados").doc(eventId).set({
-                destaque: !eventItem.destaque,
-                updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
-                updatedBy: currentAdminId()
-            }, { merge: true });
+            try {
+                await this.db.collection("eventos_aprovados").doc(eventId).set({
+                    destaque: !eventItem.destaque,
+                    updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentAdminId()
+                }, { merge: true });
+                notify(eventItem.destaque ? "Destaque removido." : "Evento marcado como destaque.", "success");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao alterar destaque.", error);
+                notify("Não foi possível alterar o destaque.", "error");
+            }
             this.loadApprovedEvents();
         },
 
         deleteEvent: async function (eventId) {
-            if (!confirm("Excluir este evento aprovado?")) return;
-            await this.db.collection("eventos_aprovados").doc(eventId).delete();
+            var eventItem = this.events.find(function (item) { return item.id === eventId; }) || {};
+            var title = getTitle(eventItem) || "este evento";
+            var confirmed = await ask({
+                title: "Excluir evento?",
+                message: "\"" + title + "\" será apagado da lista de eventos aprovados e sai da agenda do portal.",
+                details: ["Esta ação não pode ser desfeita.", "Para tirar do ar temporariamente, use Despublicar."],
+                requireText: "EXCLUIR",
+                requireTextLabel: "Digite EXCLUIR para confirmar",
+                confirmLabel: "Excluir definitivamente",
+                tone: "danger"
+            });
+            if (!confirmed) return;
+            try {
+                await this.db.collection("eventos_aprovados").doc(eventId).delete();
+                notify("Evento excluído.", "success");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao excluir evento.", error);
+                notify("Não foi possível excluir o evento. Nada foi alterado.", "error");
+            }
             this.loadApprovedEvents();
         },
 
@@ -348,7 +413,7 @@
                 validateImageFile(file);
             } catch (error) {
                 console.error("[admin-content-cms] Arquivo de capa inválido.", error);
-                alert(error.message);
+                notify(error.message, "error");
                 inputEvent.target.value = "";
                 this.syncEventCoverPreview();
                 return;
@@ -383,7 +448,7 @@
             this.syncEventCoverPreview();
         },
 
-        removeEventCover: function () {
+        removeEventCover: async function () {
             var removeField = document.getElementById("eventRemoveCover");
             var removeFallbackField = document.getElementById("eventRemoveGalleryCoverFallback");
             var urlField = document.getElementById("mainImage");
@@ -393,7 +458,13 @@
 
             if (removeField) removeField.value = "true";
             if (removeFallbackField) {
-                removeFallbackField.value = hasImages && hasImages.value === "true" && confirm("Este evento tem galeria salva. Deseja remover também a primeira imagem usada como fallback de capa? A galeria restante será preservada.")
+                removeFallbackField.value = hasImages && hasImages.value === "true" && await ask({
+                    title: "Remover também a imagem de reserva?",
+                    message: "Este evento tem galeria salva. A primeira imagem da galeria é usada como capa quando não há capa definida.",
+                    details: ["O restante da galeria é preservado.", "Nada é gravado até você salvar o evento."],
+                    confirmLabel: "Remover também",
+                    cancelLabel: "Manter a galeria inteira"
+                })
                     ? "true"
                     : "false";
             }
@@ -438,6 +509,7 @@
                             '</td><td><span class="badge ' + (published ? 'badge-success">Publicado' : 'badge-warning">Rascunho') + '</span>' +
                             (item.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>' +
                             SEC.html(formatAdminDate(item.updatedAt || item.publishedAt || item.data), "—") + '<br>' + SEC.html(item.updatedBy || "—") + '</small></td><td>' +
+                            '<button class="btn-sm btn-edit" type="button" data-admin-action="content-preview-news" data-admin-target-id="' + SEC.attr(item.id) + '">Prévia</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-news" data-admin-target-id="' + SEC.attr(item.id) + '">Editar</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-toggle-news-publish" data-admin-target-id="' + SEC.attr(item.id) + '">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
                             originAction +
@@ -456,15 +528,81 @@
                 item = Object.assign({}, presetItem);
             }
             this.openModal(item && item.id ? "Editar notícia" : "Nova notícia", buildNewsForm(item));
+            this.bindEditorForm("newsCmsForm");
+        },
+
+        bindEditorForm: function (formId) {
+            var form = document.getElementById(formId);
+            if (!form) return;
+            // Qualquer edição depois da revisão exige revisar de novo.
+            form.addEventListener("input", function () { delete form.dataset.publishReviewed; });
+            form.addEventListener("change", function () { delete form.dataset.publishReviewed; });
+        },
+
+        currentEventCoverUrl: function () {
+            var removeField = document.getElementById("eventRemoveCover");
+            if (removeField && removeField.value === "true") return "";
+            if (this._eventPreviewObjectUrl) return this._eventPreviewObjectUrl;
+            var mediaSelect = document.getElementById("eventMediaId");
+            var selected = getMediaById(this.media, mediaSelect && mediaSelect.value);
+            if (selected && selected.url) return selected.url;
+            var urlField = document.getElementById("mainImage");
+            return urlField ? clean(urlField.value) : "";
+        },
+
+        // Alterna o editor entre "Editar" e "Prévia". review=true mostra o passo de
+        // confirmação antes de gravar algo que vai ao ar.
+        showEditorPreview: function (kind, review) {
+            var form = document.getElementById(kind === "news" ? "newsCmsForm" : "eventCmsForm");
+            if (!form || !window.AdminContentPreview) return;
+            var existing = kind === "news"
+                ? this.news.find(function (post) { return post.id === form.newsId.value; })
+                : this.events.find(function (item) { return item.id === form.eventId.value; });
+            var data = kind === "news"
+                ? AdminContentPreview.newsFromForm(form, existing)
+                : AdminContentPreview.eventFromForm(form, existing, this.currentEventCoverUrl());
+            var checks = AdminContentPreview.checks(kind, data);
+            var blocked = checks.some(function (item) { return item.tone === "bad"; });
+            var wasLive = existing && (kind === "news" ? (existing.publicado === true || existing.status === "publicado") : isPublished(existing));
+            form.querySelector("[data-editor-checks]").innerHTML = AdminContentPreview.renderChecks(checks);
+            form.querySelector("[data-editor-preview]").innerHTML = AdminContentPreview.render(kind, data);
+            var lead = form.querySelector("[data-editor-review-lead]");
+            lead.hidden = !review;
+            lead.textContent = wasLive
+                ? "Este conteúdo já está no ar: ao confirmar, o portal passa a mostrar exatamente esta versão."
+                : "Ao confirmar, o conteúdo é publicado no portal assim como aparece abaixo.";
+            var confirmBtn = form.querySelector("[data-editor-confirm]");
+            confirmBtn.textContent = wasLive ? "Confirmar e atualizar no portal" : "Confirmar e publicar";
+            confirmBtn.disabled = blocked;
+            confirmBtn.title = blocked ? "Corrija os itens em vermelho antes de publicar" : "";
+            setEditorMode(form, "preview", review);
+        },
+
+        showEditorEdit: function (kind) {
+            var form = document.getElementById(kind === "news" ? "newsCmsForm" : "eventCmsForm");
+            if (form) setEditorMode(form, "edit", false);
+        },
+
+        confirmEditorPublish: function (kind) {
+            var form = document.getElementById(kind === "news" ? "newsCmsForm" : "eventCmsForm");
+            if (!form) return;
+            form.dataset.publishReviewed = "true";
+            if (typeof form.requestSubmit === "function") form.requestSubmit();
+            else form.dispatchEvent(new Event("submit", { cancelable: true }));
         },
 
         saveNews: async function (event) {
             event.preventDefault();
-            if (!this.db) return alert("Firestore não inicializado.");
+            if (!this.db) return notify("Firestore não inicializado.", "error");
 
             var form = event.target;
             var title = clean(form.titulo.value);
-            if (!title) return alert("Título é obrigatório.");
+            if (!title) return notify("Título é obrigatório.", "error");
+            if (form.publicado.value === "true" && form.dataset.publishReviewed !== "true" && window.AdminContentPreview) {
+                this.showEditorPreview("news", true);
+                return;
+            }
+            setBusy(form, true);
 
             var id = form.newsId.value || ("noticia_" + Date.now());
             var slug = clean(form.slug.value) || makeSlug(title);
@@ -493,35 +631,111 @@
 
             if (!form.newsId.value) payload.createdAt = now;
 
-            await this.db.collection("noticias").doc(id).set(payload, { merge: true });
+            try {
+                await this.db.collection("noticias").doc(id).set(payload, { merge: true });
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao salvar notícia.", error);
+                notify("Não foi possível salvar a notícia. Suas alterações continuam no formulário.", "error");
+                setBusy(form, false);
+                return;
+            }
             this.closeModal();
             await this.loadNews();
-            alert("Notícia salva.");
+            notify(publish ? "Notícia salva e publicada no portal." : "Notícia salva como rascunho (fora do portal).", "success");
         },
 
-        toggleNewsPublish: async function (newsId) {
+        toggleNewsPublish: async function (newsId, confirmedFromReview) {
             var item = this.news.find(function (post) { return post.id === newsId; });
             if (!item) return;
             var publish = !(item.publicado === true || item.status === "publicado");
-            await this.db.collection("noticias").doc(newsId).set({
-                publicado: publish,
-                status: publish ? "publicado" : "rascunho",
-                publishedAt: publish ? (item.publishedAt || new Date().toISOString()) : item.publishedAt || null,
-                updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
-                updatedBy: currentAdminId()
-            }, { merge: true });
+            if (publish && !confirmedFromReview) {
+                this.openPublishReview("news", item.id, window.AdminContentPreview ? AdminContentPreview.newsFromItem(item) : null);
+                return;
+            }
+            if (!publish && !(await ask({
+                title: "Despublicar notícia?",
+                message: "\"" + (item.titulo || "Esta notícia") + "\" sai do portal e volta a ser rascunho.",
+                details: ["Você pode publicar de novo quando quiser."],
+                confirmLabel: "Despublicar",
+                tone: "warning"
+            }))) return;
+            try {
+                await this.db.collection("noticias").doc(newsId).set({
+                    publicado: publish,
+                    status: publish ? "publicado" : "rascunho",
+                    publishedAt: publish ? (item.publishedAt || new Date().toISOString()) : item.publishedAt || null,
+                    updatedAt: window.firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentAdminId()
+                }, { merge: true });
+                notify(publish ? "Notícia publicada no portal." : "Notícia despublicada.", "success");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao alterar publicação da notícia.", error);
+                notify("Não foi possível alterar a publicação da notícia.", "error");
+            }
             this.loadNews();
         },
 
+        // Prévia a partir da lista (sem editar): mostra como ficará e pede confirmação.
+        openPublishReview: function (kind, id, data) {
+            if (!window.AdminContentPreview || !data) {
+                return kind === "news" ? this.toggleNewsPublish(id, true) : this.toggleEventPublish(id, true);
+            }
+            var checks = AdminContentPreview.checks(kind, data);
+            var blocked = checks.some(function (item) { return item.tone === "bad"; });
+            this.openModal(kind === "news" ? "Revisar antes de publicar a notícia" : "Revisar antes de publicar o evento",
+                '<div class="admin-modal-body">' +
+                    '<p class="pv-review-lead">É assim que o conteúdo vai aparecer no portal. Confira foto, título, data e texto.</p>' +
+                    AdminContentPreview.renderChecks(checks) +
+                    AdminContentPreview.render(kind, data) +
+                '</div>' +
+                '<div class="admin-modal-footer">' +
+                    '<button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button>' +
+                    '<button class="btn-secondary" type="button" data-admin-action="' + (kind === "news" ? "content-open-news" : "content-open-event") + '" data-admin-target-id="' + escapeHtml(id) + '">Editar antes</button>' +
+                    '<button class="btn-primary" type="button" data-admin-action="' + (kind === "news" ? "content-confirm-news-publish" : "content-confirm-event-publish") + '" data-admin-target-id="' + escapeHtml(id) + '"' + (blocked ? " disabled title=\"Corrija os itens em vermelho antes de publicar\"" : "") + '>Publicar agora</button>' +
+                '</div>');
+        },
+
+        previewNews: function (newsId) {
+            var item = this.news.find(function (post) { return post.id === newsId; });
+            if (!item) return notify("Notícia não encontrada.", "error");
+            if (!window.AdminContentPreview) return this.openNewsModal(newsId);
+            var data = AdminContentPreview.newsFromItem(item);
+            this.openModal("Prévia da notícia",
+                '<div class="admin-modal-body">' + AdminContentPreview.renderChecks(AdminContentPreview.checks("news", data)) + AdminContentPreview.render("news", data) + '</div>' +
+                '<div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Fechar</button>' +
+                '<button class="btn-primary" type="button" data-admin-action="content-open-news" data-admin-target-id="' + escapeHtml(item.id) + '">Editar esta notícia</button></div>');
+        },
+
         deleteNews: async function (newsId) {
-            if (!confirm("Excluir esta notícia?")) return;
-            await this.db.collection("noticias").doc(newsId).delete();
+            var item = this.news.find(function (post) { return post.id === newsId; }) || {};
+            var confirmed = await ask({
+                title: "Excluir notícia?",
+                message: "\"" + (item.titulo || "Esta notícia") + "\" será apagada do CMS" + ((item.publicado === true || item.status === "publicado") ? " e sai do portal." : "."),
+                details: ["Esta ação não pode ser desfeita.", "Para tirar do ar temporariamente, use Despublicar."],
+                requireText: "EXCLUIR",
+                requireTextLabel: "Digite EXCLUIR para confirmar",
+                confirmLabel: "Excluir definitivamente",
+                tone: "danger"
+            });
+            if (!confirmed) return;
+            try {
+                await this.db.collection("noticias").doc(newsId).delete();
+                notify("Notícia excluída.", "success");
+            } catch (error) {
+                console.error("[admin-content-cms] Erro ao excluir notícia.", error);
+                notify("Não foi possível excluir a notícia. Nada foi alterado.", "error");
+            }
             this.loadNews();
         },
 
         importStaticNews: async function () {
-            if (!this.db) return alert("Firestore não inicializado.");
-            if (!confirm("Importar as notícias estáticas atuais para o CMS? Notícias já importadas por slug, link de origem ou título + data serão ignoradas.")) {
+            if (!this.db) return notify("Firestore não inicializado.", "error");
+            if (!(await ask({
+                title: "Importar notícias estáticas?",
+                message: "As notícias publicadas hoje em noticias.html serão copiadas para o CMS como publicadas.",
+                details: ["Notícias já importadas (mesmo slug, link de origem ou título + data) são ignoradas.", "Nenhuma notícia existente é alterada."],
+                confirmLabel: "Importar"
+            }))) {
                 return;
             }
 
@@ -535,7 +749,7 @@
                 var staticPosts = extractStaticPosts(documentSource);
 
                 if (!staticPosts.length) {
-                    alert("Nenhuma notícia estática foi encontrada para importação.");
+                    notify("Nenhuma notícia estática foi encontrada para importação.", "info");
                     return;
                 }
 
@@ -605,16 +819,16 @@
                 }, this);
 
                 if (!importedCount) {
-                    alert("Nenhuma notícia nova foi importada. As notícias estáticas já parecem estar vinculadas ao CMS.");
+                    notify("Nenhuma notícia nova foi importada. As notícias estáticas já parecem estar vinculadas ao CMS.", "info");
                     return;
                 }
 
                 await batch.commit();
                 await this.loadNews();
-                alert(importedCount + " notícia(s) importada(s) do conteúdo estático. " + skippedCount + " duplicada(s) foram ignorada(s).");
+                notify(importedCount + " notícia(s) importada(s) do conteúdo estático. " + skippedCount + " duplicada(s) foram ignorada(s).", "success");
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao importar notícias estáticas.", error);
-                alert("Erro ao importar notícias estáticas.");
+                notify("Erro ao importar notícias estáticas.", "error");
             }
         },
 
@@ -694,7 +908,7 @@
 
         saveMedia: async function (event) {
             event.preventDefault();
-            if (!this.db) return alert("Firestore não inicializado.");
+            if (!this.db) return notify("Firestore não inicializado.", "error");
 
             var form = event.target;
             var title = clean(form.title.value);
@@ -703,12 +917,12 @@
             var mediaId = clean(form.mediaId.value);
             var existingItem = mediaId ? getMediaById(this.media, mediaId) : null;
 
-            if (!title) return alert("Título é obrigatório.");
-            if (!url && !file && !(existingItem && existingItem.url)) return alert("Informe uma URL ou selecione um arquivo.");
+            if (!title) return notify("Título é obrigatório.", "error");
+            if (!url && !file && !(existingItem && existingItem.url)) return notify("Informe uma URL ou selecione um arquivo.", "error");
 
             try {
                 if (file) {
-                    if (!this.storage) return alert("Firebase Storage não inicializado.");
+                    if (!this.storage) return notify("Firebase Storage não inicializado.", "error");
                     validateImageFile(file);
                     var uploadResult = await uploadImageToCms(this.storage, file);
                     url = uploadResult.url;
@@ -738,21 +952,21 @@
                 }, { merge: true });
                 this.closeModal();
                 await this.loadMedia();
-                alert(mediaId ? "Mídia atualizada." : "Mídia cadastrada.");
+                notify(mediaId ? "Mídia atualizada." : "Mídia cadastrada na biblioteca.", "success");
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao salvar mídia.", error);
-                alert(error && error.message ? error.message : "Erro ao salvar mídia.");
+                notify(error && error.message ? error.message : "Erro ao salvar mídia.", "error");
             }
         },
 
         copyMediaUrl: async function (mediaId) {
             var item = getMediaById(this.media, mediaId);
-            if (!item || !item.url) return alert("URL da mídia não encontrada.");
+            if (!item || !item.url) return notify("URL da mídia não encontrada.", "error");
 
             try {
                 if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
                     await navigator.clipboard.writeText(item.url);
-                    alert("URL copiada.");
+                    notify("URL copiada para a área de transferência.", "success");
                     return;
                 }
             } catch (error) {
@@ -765,12 +979,12 @@
             input.select();
             document.execCommand("copy");
             document.body.removeChild(input);
-            alert("URL copiada.");
+            notify("URL copiada para a área de transferência.", "success");
         },
 
         useMediaInNewEvent: function (mediaId) {
             var item = getMediaById(this.media, mediaId);
-            if (!item) return alert("Mídia não encontrada.");
+            if (!item) return notify("Mídia não encontrada.", "error");
 
             this.openEventModal("", {
                 title: "",
@@ -789,7 +1003,7 @@
 
         useMediaInNewNews: function (mediaId) {
             var item = getMediaById(this.media, mediaId);
-            if (!item) return alert("Mídia não encontrada.");
+            if (!item) return notify("Mídia não encontrada.", "error");
 
             this.openNewsModal("", {
                 titulo: "",
@@ -805,21 +1019,35 @@
             if (!item) return;
             var usage = getMediaUsageInfo(item, this.mediaUsageMap);
             if (usage.routeCount) {
-                alert("Esta mídia está em uso como capa de rota e não pode ser excluída.");
+                notify("Esta mídia está em uso como capa de rota e não pode ser removida da biblioteca.", "warning");
                 return;
             }
-            var confirmMessage = usage.total
-                ? "Esta mídia parece estar em uso em " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "") + ". Remover somente o item da biblioteca? O arquivo físico e as referências existentes serão preservados."
-                : "Remover esta mídia da biblioteca? O arquivo físico será preservado.";
-            if (!confirm(confirmMessage)) return;
+            var confirmed = await ask(usage.total ? {
+                title: "Remover da biblioteca uma mídia em uso?",
+                message: "\"" + (item.title || "Esta imagem") + "\" " + formatMediaUsageSummary(usage).replace(/^Em uso em /, "aparece em ").replace(/\.$/, "") + ".",
+                details: [
+                    "Somente o item do catálogo é removido.",
+                    "O arquivo físico e as páginas que já usam a imagem continuam funcionando.",
+                    "A imagem deixa de aparecer para seleção nos editores."
+                ],
+                confirmLabel: "Remover do catálogo",
+                tone: "warning"
+            } : {
+                title: "Remover da biblioteca?",
+                message: "\"" + (item.title || "Esta imagem") + "\" deixa de aparecer na biblioteca de mídia.",
+                details: ["O arquivo físico é preservado."],
+                confirmLabel: "Remover do catálogo",
+                tone: "warning"
+            });
+            if (!confirmed) return;
 
             try {
                 await this.db.collection("media_library").doc(mediaId).delete();
                 await this.loadMedia();
-                alert("Mídia removida da biblioteca. O arquivo físico foi preservado.");
+                notify("Mídia removida da biblioteca. O arquivo físico foi preservado.", "success");
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao remover mídia da biblioteca.", error);
-                alert("Erro ao remover mídia da biblioteca.");
+                notify("Erro ao remover mídia da biblioteca.", "error");
             }
         }
     };
@@ -1082,8 +1310,9 @@
         var selectedMediaId = getMatchingMediaId(mediaItems, currentCover && currentCover.url);
         var eventIsPublished = Boolean(item.id) && isPublished(item);
 
-        return '<form id="eventCmsForm" onsubmit="AdminContentCMS.saveEvent(event)">' +
-            '<div class="admin-modal-body">' +
+        return '<form id="eventCmsForm" class="editor-form" data-editor-mode="edit" onsubmit="AdminContentCMS.saveEvent(event)">' +
+            editorTabs("event") +
+            '<div class="admin-modal-body" data-editor-pane="edit">' +
                 '<input type="hidden" name="eventId" value="' + escapeHtml(item.id || "") + '">' +
                 '<input type="hidden" id="eventRemoveCover" name="removeCover" value="false">' +
                 '<input type="hidden" id="eventRemoveGalleryCoverFallback" name="removeGalleryCoverFallback" value="false">' +
@@ -1130,7 +1359,8 @@
                     textarea("description", "Descrição", item.description || item.descricao || "") +
                 '</div>' +
             '</div>' +
-            '<div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar evento</button></div>' +
+            editorPreviewPane() +
+            editorFooters("event", "Salvar evento") +
         '</form>';
     }
 
@@ -1169,10 +1399,79 @@
         this.syncEventCoverPreview();
     };
 
+    function editorTabs(kind) {
+        return '<div class="editor-tabs" role="tablist" aria-label="Modo do editor">' +
+            '<button type="button" role="tab" data-editor-tab="edit" aria-selected="true" onclick="AdminContentCMS.showEditorEdit(\'' + kind + '\')">Editar</button>' +
+            '<button type="button" role="tab" data-editor-tab="preview" aria-selected="false" onclick="AdminContentCMS.showEditorPreview(\'' + kind + '\', false)">Prévia no portal</button>' +
+        '</div>';
+    }
+
+    function editorPreviewPane() {
+        return '<div class="admin-modal-body editor-preview-pane" data-editor-pane="preview" hidden>' +
+            '<p class="pv-review-lead" data-editor-review-lead hidden></p>' +
+            '<div data-editor-checks></div>' +
+            '<div data-editor-preview></div>' +
+        '</div>';
+    }
+
+    function editorFooters(kind, saveLabel) {
+        return '<div class="admin-modal-footer" data-editor-footer="edit">' +
+                '<button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button>' +
+                '<button class="btn-secondary" type="button" onclick="AdminContentCMS.showEditorPreview(\'' + kind + '\', false)">Pré-visualizar</button>' +
+                '<button class="btn-primary" type="submit">' + saveLabel + '</button>' +
+            '</div>' +
+            '<div class="admin-modal-footer" data-editor-footer="review" hidden>' +
+                '<button class="btn-secondary" type="button" onclick="AdminContentCMS.showEditorEdit(\'' + kind + '\')">Voltar e editar</button>' +
+                '<button class="btn-primary" type="button" data-editor-confirm onclick="AdminContentCMS.confirmEditorPublish(\'' + kind + '\')">Confirmar e publicar</button>' +
+            '</div>';
+    }
+
+    function setEditorMode(form, mode, review) {
+        form.setAttribute("data-editor-mode", mode);
+        Array.prototype.forEach.call(form.querySelectorAll("[data-editor-pane]"), function (pane) {
+            pane.hidden = pane.getAttribute("data-editor-pane") !== mode;
+        });
+        Array.prototype.forEach.call(form.querySelectorAll("[data-editor-tab]"), function (tab) {
+            tab.setAttribute("aria-selected", String(tab.getAttribute("data-editor-tab") === mode));
+        });
+        var footerMode = mode === "preview" && review ? "review" : "edit";
+        Array.prototype.forEach.call(form.querySelectorAll("[data-editor-footer]"), function (footer) {
+            footer.hidden = footer.getAttribute("data-editor-footer") !== footerMode;
+        });
+        var dialog = form.closest(".admin-modal-dialog");
+        if (dialog) dialog.scrollTop = 0;
+    }
+
+    function setBusy(form, busy) {
+        Array.prototype.forEach.call(form.querySelectorAll('[type="submit"], [data-editor-confirm]'), function (button) {
+            if (busy) {
+                button.setAttribute("data-label", button.textContent);
+                button.textContent = "Salvando…";
+                button.disabled = true;
+            } else {
+                button.textContent = button.getAttribute("data-label") || button.textContent;
+                button.disabled = false;
+            }
+        });
+        if (!busy) delete form.dataset.publishReviewed;
+    }
+
+    function notify(message, type) {
+        if (!message) return;
+        if (window.AdminFeedback) return window.AdminFeedback.toast(message, type);
+        alert(message);
+    }
+
+    function ask(options) {
+        if (window.AdminFeedback) return window.AdminFeedback.confirm(options);
+        return Promise.resolve(confirm([options.title, options.message].concat(options.details || []).filter(Boolean).join("\n\n")));
+    }
+
     function buildNewsForm(item) {
         item = item || {};
-        return '<form id="newsCmsForm" onsubmit="AdminContentCMS.saveNews(event)">' +
-            '<div class="admin-modal-body"><input type="hidden" name="newsId" value="' + escapeHtml(item.id || "") + '">' +
+        return '<form id="newsCmsForm" class="editor-form" data-editor-mode="edit" onsubmit="AdminContentCMS.saveNews(event)">' +
+            editorTabs("news") +
+            '<div class="admin-modal-body" data-editor-pane="edit"><input type="hidden" name="newsId" value="' + escapeHtml(item.id || "") + '">' +
             '<div class="admin-modal-grid">' +
             field("titulo", "Título", item.titulo || "", true) +
             field("slug", "Slug", item.slug || "") +
@@ -1186,7 +1485,7 @@
             textarea("resumo", "Resumo", item.resumo || "") +
             textarea("conteudo", "Conteúdo", item.conteudo || "") +
             textarea("galeria", "Galeria opcional (uma URL por linha)", Array.isArray(item.galeria) ? item.galeria.join("\n") : "") +
-            '</div></div><div class="admin-modal-footer"><button class="btn-secondary" type="button" onclick="AdminContentCMS.closeModal()">Cancelar</button><button class="btn-primary" type="submit">Salvar notícia</button></div></form>';
+            '</div></div>' + editorPreviewPane() + editorFooters("news", "Salvar notícia") + '</form>';
     }
 
     function buildMediaForm(item) {
