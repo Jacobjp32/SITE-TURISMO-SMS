@@ -20,6 +20,7 @@
   );
   var currentState = readConsentLevel();
   var returnFocusTo = null;
+  var bannerOpenedByUser = false;
 
   // ── Estilos ────────────────────────────────────────────────────────────────
   var css = `
@@ -331,13 +332,20 @@
     window.setTimeout(function () {
       banner.remove();
       var preferences = ensurePreferencesButton();
-      if (restoreFocus) {
+      // Só devolve o foco quando o visitante abriu o banner por um controle
+      // ("Gerenciar cookies"). No aviso automático da primeira visita não há
+      // controle de origem: mover o foco para o botão do rodapé fazia a página
+      // rolar até o fim logo após a escolha.
+      if (restoreFocus && bannerOpenedByUser) {
         var focusTarget = returnFocusTo && returnFocusTo.isConnected
           ? returnFocusTo
           : preferences;
-        if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
+        if (focusTarget && typeof focusTarget.focus === 'function') {
+          try { focusTarget.focus({ preventScroll: true }); } catch (e) { focusTarget.focus(); }
+        }
       }
       returnFocusTo = null;
+      bannerOpenedByUser = false;
     }, 450);
   }
 
@@ -367,6 +375,7 @@
 
     ensureStyles();
     returnFocusTo = opener || null;
+    bannerOpenedByUser = Boolean(opener);
 
     var banner = document.createElement('div');
     banner.id = 'sms-cookie-banner';
@@ -426,6 +435,7 @@
       var existingBanner = document.getElementById('sms-cookie-banner');
       if (existingBanner) existingBanner.remove();
       returnFocusTo = null;
+      bannerOpenedByUser = false;
       ensureStyles();
       ensurePreferencesButton();
     }

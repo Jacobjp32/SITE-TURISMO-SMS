@@ -321,7 +321,7 @@ test('HOME_USES_SHARED_CONSENT and required public pages share the same authorit
   ];
   for (const page of requiredPages) {
     const html = readFileSync(join(root, page), 'utf8');
-    assert.match(html, /<script src="js\/cookies\.js\?v=consent-first-20260913" data-enable-analytics><\/script>/, `${page} lacks shared consent`);
+    assert.match(html, /<script src="js\/cookies\.js\?v=cookie-foco-20261014" data-enable-analytics><\/script>/, `${page} lacks shared consent`);
     assert.doesNotMatch(html, /googletagmanager\.com\/gtag\/js|gtag\s*\(\s*['"]config['"]/, `${page} has a pre-consent GA path`);
   }
 });
@@ -337,5 +337,21 @@ test('the shared authority is the only runtime source allowed to load or configu
   for (const page of formerInlinePages) {
     const html = readFileSync(join(root, page), 'utf8');
     assert.doesNotMatch(html, /googletagmanager\.com\/gtag\/js|gtag\s*\(\s*['"]config['"]/, `${page} retains a direct GA sink`);
+  }
+});
+
+test('AUTO_SHOWN_BANNER_DOES_NOT_MOVE_FOCUS_TO_FOOTER after first-visit choice', () => {
+  for (const buttonId of ['smsCookieReject', 'smsCookieAccept']) {
+    const env = createEnvironment();
+    assert.ok(env.document.getElementById('sms-cookie-banner'));
+    const button = env.document.getElementById(buttonId);
+    button.focus();
+    button.click();
+
+    const preferences = env.document.getElementById('sms-cookie-preferences');
+    assert.equal(preferences.isConnected, true);
+    // Mover o foco para o controle do rodapé rolava a página até o fim.
+    assert.notEqual(env.document.activeElement, preferences);
+    assert.equal(env.document.getElementById('sms-cookie-banner'), null);
   }
 });
