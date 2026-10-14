@@ -64,7 +64,7 @@
             var container = document.getElementById("eventos-aprovados-container");
             if (!container) return;
             if (!this.db) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Firestore não inicializado.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Não foi possível conectar ao banco de dados. Recarregue o painel.</p>';
                 return;
             }
 
@@ -130,7 +130,7 @@
 
         saveEvent: async function (event) {
             event.preventDefault();
-            if (!this.db) return notify("Firestore não inicializado.", "error");
+            if (!this.db) return notify("Não foi possível conectar ao banco de dados. Recarregue o painel.", "error");
 
             var form = event.target;
             var id = form.eventId.value || ("evt_" + Date.now());
@@ -165,7 +165,7 @@
 
             try {
                 if (uploadedFile) {
-                    if (!this.storage) return notify("Firebase Storage não inicializado.", "error");
+                    if (!this.storage) return notify("Envio de imagens indisponível no momento. Recarregue o painel e tente novamente.", "error");
                     validateImageFile(uploadedFile);
 
                     var uploadResult = await uploadImageToCms(this.storage, uploadedFile);
@@ -479,7 +479,7 @@
             var container = document.getElementById("noticias-admin-container");
             if (!container) return;
             if (!this.db) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Firestore não inicializado.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Não foi possível conectar ao banco de dados. Recarregue o painel.</p>';
                 return;
             }
 
@@ -593,7 +593,7 @@
 
         saveNews: async function (event) {
             event.preventDefault();
-            if (!this.db) return notify("Firestore não inicializado.", "error");
+            if (!this.db) return notify("Não foi possível conectar ao banco de dados. Recarregue o painel.", "error");
 
             var form = event.target;
             var title = clean(form.titulo.value);
@@ -729,7 +729,7 @@
         },
 
         importStaticNews: async function () {
-            if (!this.db) return notify("Firestore não inicializado.", "error");
+            if (!this.db) return notify("Não foi possível conectar ao banco de dados. Recarregue o painel.", "error");
             if (!(await ask({
                 title: "Importar notícias estáticas?",
                 message: "As notícias publicadas hoje em noticias.html serão copiadas para o CMS como publicadas.",
@@ -836,7 +836,7 @@
             var container = document.getElementById("midia-admin-container");
             if (!container) return;
             if (!this.db) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Firestore não inicializado.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Não foi possível conectar ao banco de dados. Recarregue o painel.</p>';
                 return;
             }
 
@@ -908,7 +908,7 @@
 
         saveMedia: async function (event) {
             event.preventDefault();
-            if (!this.db) return notify("Firestore não inicializado.", "error");
+            if (!this.db) return notify("Não foi possível conectar ao banco de dados. Recarregue o painel.", "error");
 
             var form = event.target;
             var title = clean(form.title.value);
@@ -922,7 +922,7 @@
 
             try {
                 if (file) {
-                    if (!this.storage) return notify("Firebase Storage não inicializado.", "error");
+                    if (!this.storage) return notify("Envio de imagens indisponível no momento. Recarregue o painel e tente novamente.", "error");
                     validateImageFile(file);
                     var uploadResult = await uploadImageToCms(this.storage, file);
                     url = uploadResult.url;

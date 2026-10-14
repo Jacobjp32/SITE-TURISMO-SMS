@@ -1233,7 +1233,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-r2-20261014">
+    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-20261014-final">
 </head>
 <body>
     <!-- Login Screen -->
@@ -1501,7 +1501,7 @@
                         <h2>Vínculos já aprovados ou cadastrados manualmente</h2>
                     </div>
                     <p class="admin-helper-text">
-                        Use esta área para adicionar, corrigir, desativar ou reativar registros em <code>establishment_managers</code>.
+                        Use esta área para adicionar, corrigir, desativar ou reativar quem gerencia cada empreendimento no Portal do Usuário.
                         Isso não altera a permissão global do usuário no sistema.
                     </p>
                     <div id="establishment-managers-container">
@@ -1522,8 +1522,8 @@
                         <h2>Lista de Usuários</h2>
                     </div>
                     <p class="admin-helper-text">
-                        Permissão define acesso global ao sistema. Para liberar um usuário a gerenciar um empreendimento específico, use a seção <strong>Gerenciar Vínculos</strong>.
-                        <code>user</code> atende turistas e empreendedores, <code>moderator</code> é moderação global e <code>admin</code> é administração global. Os papéis do vínculo do empreendimento aparecem separados nesta tabela.
+                        Permissão define acesso global ao sistema. Para liberar um usuário a gerenciar um empreendimento específico, use <strong>Vínculos ativos</strong>.
+                        “Usuário” atende turistas e empreendedores, “Moderador” é moderação global e “Admin” é administração global. Quem gerencia cada empreendimento aparece em “Empreendimentos vinculados”.
                     </p>
                     <div id="usuarios-container">
                         <div class="loading">Carregando...</div>
@@ -1542,7 +1542,7 @@
                 
                 <div class="card">
                     <p class="admin-helper-text">
-                        Eventos aprovados podem ser revisados, duplicados, destacados e publicados ou despublicados daqui. A edição mantém compatibilidade com <code>mainImage</code>, <code>image</code>, <code>coverImage</code> e <code>images</code>.
+                        Eventos aprovados podem ser revisados, duplicados, destacados e publicados ou despublicados daqui. Use “Prévia” para ver como o evento aparece no portal.
                     </p>
                     <div id="eventos-aprovados-container">
                         <div class="loading">Carregando...</div>
@@ -1561,7 +1561,7 @@
 
                 <div class="card">
                     <p class="admin-helper-text">
-                        Notícias publicadas aparecem em <code>/noticias</code> e <code>/noticia?slug=...</code>. Rascunhos ficam restritos ao admin. A importação das notícias já existentes é manual e ignora duplicações por slug, link de origem ou título + data.
+                        Notícias publicadas aparecem na página Notícias do portal. Rascunhos ficam visíveis só no painel. A importação das notícias já existentes é manual e ignora as que já estão no painel.
                     </p>
                     <div id="noticias-admin-container">
                         <div class="loading">Carregando...</div>
@@ -1579,7 +1579,7 @@
 
                 <div class="card">
                     <p class="admin-helper-text">
-                        Base simples para reutilizar imagens em eventos e notícias. Imagens enviadas ficam no Storage em <code>cms-media/{uid}/...</code>. Quando uma mídia parece estar em uso no CMS, o admin recebe esse contexto antes de excluir.
+                        Imagens para reutilizar em eventos e notícias. Antes de remover uma imagem da biblioteca, o painel mostra onde ela está em uso; o arquivo original nunca é apagado.
                     </p>
                     <div id="midia-admin-container">
                         <div class="loading">Carregando...</div>
@@ -1685,9 +1685,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
     <script src="js/firebase-auth.js?v=establishment-approval-v2-20260914"></script>
-    <script src="js/admin/admin-feedback.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin/admin-content-preview.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin-content-cms.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/admin-feedback.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/admin-content-preview.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin-content-cms.js?v=admin-painel-20261014-final"></script>
     <!-- Fundação modular do Admin CMS (Bloco 1 / Etapa 1) — modo passthrough, aditivo e inerte. -->
     <script src="js/admin/admin-context.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-ui.js?v=admin-modular-20260625"></script>
@@ -1695,19 +1695,19 @@
     <script src="js/admin/admin-router.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
     <!-- Módulos do painel. -->
-    <script src="js/admin/modules/dashboard.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/dashboard.js?v=admin-painel-20261014-final"></script>
     <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
-    <script src="js/admin/modules/banners.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/banners.js?v=admin-painel-20261014-final"></script>
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
-    <script src="js/admin/admin-geo-picker.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin/modules/empreendimentos.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/admin-geo-picker.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/modules/empreendimentos.js?v=admin-painel-20261014-final"></script>
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
-    <script src="js/admin/modules/rotas.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin/modules/gallery.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin/modules/site-config.js?v=admin-painel-r2-20261014"></script>
-    <script src="js/admin/modules/audit-logs.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/rotas.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/modules/gallery.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/modules/site-config.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/modules/audit-logs.js?v=admin-painel-20261014-final"></script>
     <script src="js/admin/modules/placeholder.js?v=site-admin-finalization-20260903"></script>
     <script>
         const SEC = window.SMSecurity;
@@ -2424,7 +2424,7 @@
                                         <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
                                         <button class="btn-sm btn-approve" type="button" data-admin-action="approve-claim" data-admin-target-id="${SEC.attr(claim.id)}">Aprovar</button>
                                         <button class="btn-sm btn-reject" type="button" data-admin-action="reject-claim" data-admin-target-id="${SEC.attr(claim.id)}">Rejeitar</button>
-                                        <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
+                                        <span class="claim-admin-note">Aprovar cria o vínculo (ou reativa um antigo) sem duplicar.</span>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -3788,7 +3788,6 @@
                     return `
                         <p class="update-request-field">
                             <strong>${SEC.html(getUpdateRequestFieldLabel(field))}</strong>
-                            → <code>${SEC.html(UPDATE_REQUEST_APPLY_TARGETS[field])}</code><br>
                             <span>${SEC.html(requestedChanges[field], '—')}</span>
                         </p>
                     `;
@@ -3819,7 +3818,7 @@
             if (!unapplied.length) {
                 return `
                     <div class="update-request-callout">
-                        Todas as imagens aceitas desta solicitação já foram registradas em <code>appliedMedia</code>.
+                        Todas as imagens aceitas desta solicitação já foram aplicadas ao cadastro.
                     </div>
                     ${applied.length ? `<p class="update-request-field"><strong>Mídias aplicadas:</strong> ${SEC.html(String(applied.length))}</p>` : ''}
                 `;
@@ -3843,7 +3842,7 @@
 
             return `
                 <div class="update-request-callout">
-                    ${SEC.html(String(unapplied.length))} imagem(ns) aceita(s) ainda não aplicada(s). A ação copia para <code>cms-media</code>, atualiza <code>cms_establishments.media</code> e preserva os arquivos originais em <code>submissions</code>.
+                    ${SEC.html(String(unapplied.length))} imagem(ns) aceita(s) ainda não aplicada(s). Ao aplicar, elas entram nas fotos do cadastro; os arquivos enviados pelo empreendedor são preservados.
                     Regra deste bloco: primeira aceita vira imagem principal somente se o catálogo ainda não tiver capa; as demais entram na galeria.
                 </div>
                 <div class="page-actions" style="margin-top:0.75rem;">
@@ -3880,7 +3879,7 @@
                         <h4>Aplicação no catálogo</h4>
                         <p class="update-request-field"><strong>Já aplicada em:</strong> ${SEC.html(formatFirestoreDate(request.appliedAt))}</p>
                         <p class="update-request-field"><strong>Aplicada por:</strong> ${SEC.html(request.appliedBy || '—')}</p>
-                        <p class="update-request-field"><strong>Destino:</strong> <code>cms_establishments/${SEC.html(request.appliedTo || request.establishmentId || '—')}</code></p>
+                        <p class="update-request-field"><strong>Aplicado ao cadastro:</strong> ${SEC.html(request.establishmentName || request.appliedTo || request.establishmentId || '—')}</p>
                         <p class="update-request-field"><strong>Campos aplicados:</strong> ${SEC.html((request.appliedFields || []).map(getUpdateRequestFieldLabel).join(', ') || '—')}</p>
                         <div class="update-request-callout">
                             A solicitação foi aplicada ao catálogo editorial. Em documento publicado, o portal consome a alteração; em rascunho, ela permanece privada.
@@ -4020,6 +4019,6 @@
             return document.getElementById(prefix + claimId)?.value.trim() || '';
         }
     </script>
-    <script src="js/admin/admin-nav.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/admin-nav.js?v=admin-painel-20261014-final"></script>
 </body>
 </html>

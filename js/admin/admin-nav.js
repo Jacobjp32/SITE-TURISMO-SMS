@@ -185,12 +185,20 @@
         var askedEmulator = new URLSearchParams(window.location.search).get("emulator") === "1";
         var emulator = window.__SMSFirebaseEmulatorsConnected === true;
         tag.classList.remove("is-emulator", "is-real");
+        // Texto longo no computador; no celular o CSS mostra só a forma curta
+        // ("TESTE" / "REAL"), sempre com cor e rótulo acessível próprios.
+        function label(long, short) {
+            tag.innerHTML = '<span class="env-long"></span><span class="env-short" aria-hidden="true"></span>';
+            tag.firstChild.textContent = long;
+            tag.lastChild.textContent = short;
+            tag.setAttribute("aria-label", long);
+        }
         if (emulator) {
-            tag.textContent = "Ambiente local · dados de teste";
+            label("Ambiente local · dados de teste", "TESTE");
             tag.title = "Conectado ao Firebase Emulator (projeto demo): nada do que você fizer aqui altera o portal real.";
             tag.classList.add("is-emulator");
         } else if (isLocal || askedEmulator) {
-            tag.textContent = "Dados reais";
+            label("Dados reais", "REAL");
             tag.title = askedEmulator && !isLocal
                 ? "O modo de teste só funciona em localhost. Este painel está conectado ao Firebase real."
                 : "Servidor local conectado ao Firebase real: as alterações valem para o portal.";

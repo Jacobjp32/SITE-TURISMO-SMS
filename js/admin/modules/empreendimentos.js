@@ -1077,13 +1077,12 @@
                 '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;margin-bottom:0.5rem;">' +
                     '<span class="badge badge-info">Origem: ' + escapeHtml(sourceLabel(image.source)) + '</span>' +
                     '<span class="badge ' + (removed ? "badge-danger" : "badge-success") + '">' + (removed ? "Removida" : "Ativa") + '</span>' +
-                    '<span class="badge badge-secondary">Posicao: ' + escapeHtml(positionText) + '</span>' +
+                    '<span class="badge badge-secondary">Posição: ' + escapeHtml(positionText) + '</span>' +
                 '</div>' +
-                '<p style="margin:0 0 0.35rem;"><strong>Alt:</strong> ' + escapeHtml(image.alt || "Sem alt cadastrado") + '</p>' +
+                '<p style="margin:0 0 0.35rem;"><strong>Texto alternativo:</strong> ' + escapeHtml(image.alt || "Sem texto alternativo") + '</p>' +
                 '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(image.caption || "Sem legenda") + '</p>' +
-                '<p style="margin:0 0 0.35rem;"><strong>Credito:</strong> ' + escapeHtml(image.credit || "Sem credito") + '</p>' +
-                '<p style="margin:0 0 0.35rem;"><strong>Path:</strong> <code>' + escapeHtml(image.path || "sem path") + '</code></p>' +
-                (image.sourceRequestId ? '<p style="margin:0 0 0.35rem;"><strong>Solicitacao:</strong> <code>' + escapeHtml(image.sourceRequestId) + '</code></p>' : '') +
+                '<p style="margin:0 0 0.35rem;"><strong>Crédito:</strong> ' + escapeHtml(image.credit || "Sem crédito") + '</p>' +
+                (image.sourceRequestId ? '<p style="margin:0 0 0.35rem;"><strong>Origem:</strong> enviada pelo empreendedor</p>' : '') +
                 '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">' + actions + '</div>' +
             '</div>' +
         '</article>';
@@ -1099,10 +1098,10 @@
                 '<img src="' + escapeAttr(mainImage.url) + '" alt="' + escapeAttr(mainImage.alt || item.name || "Imagem principal") + '" style="width:100%;max-height:180px;object-fit:contain;border:1px solid #ddd;border-radius:4px;background:#fafafa;">' +
                 '<div>' +
                     '<p style="margin:0 0 0.35rem;"><strong>Origem:</strong> ' + escapeHtml(sourceLabel(mainImage.source)) + '</p>' +
-                    '<p style="margin:0 0 0.35rem;"><strong>Alt:</strong> ' + escapeHtml(mainImage.alt || "Sem alt cadastrado") + '</p>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Texto alternativo:</strong> ' + escapeHtml(mainImage.alt || "Sem texto alternativo") + '</p>' +
                     '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(mainImage.caption || "Sem legenda") + '</p>' +
-                    '<p style="margin:0 0 0.35rem;"><strong>Credito:</strong> ' + escapeHtml(mainImage.credit || "Sem credito") + '</p>' +
-                    '<p style="margin:0;"><strong>Path:</strong> <code>' + escapeHtml(mainImage.path || "sem path") + '</code></p>' +
+                    '<p style="margin:0 0 0.35rem;"><strong>Crédito:</strong> ' + escapeHtml(mainImage.credit || "Sem crédito") + '</p>' +
+
                 '</div>' +
             '</div>'
             : '<p><em>Sem imagem principal definida.</em></p>';
@@ -1125,7 +1124,7 @@
 
         return '<div class="card" style="margin-top:1rem;">' +
             '<div class="card-header"><h2>Gestao editorial da galeria</h2><span class="badge badge-info">Fonte publica</span></div>' +
-            '<p class="admin-helper-text">Em documentos publicados, alteracoes confirmadas sao republicadas no portal. Remover uma imagem da galeria nao apaga o arquivo do Storage.</p>' +
+            '<p class="admin-helper-text">Em empreendimentos publicados, as alterações confirmadas aparecem no portal. Tirar uma imagem da galeria não apaga o arquivo original.</p>' +
             '<h3 style="margin:1rem 0 0.75rem;font-size:1rem;">Imagem principal atual</h3>' +
             mainHtml +
             '<h3 style="margin:1.25rem 0 0.75rem;font-size:1rem;">Galeria ativa</h3>' +
@@ -2963,7 +2962,7 @@
     function handleWriteError(error, action) {
         var code = error && error.code ? error.code : "";
         if (code === "permission-denied") {
-            toast("Permissao negada ao " + action + ". Verifique as Firestore/Storage Rules do CMS-2B e sua permissao admin.", "error");
+            toast("Sem permissão para " + action + ". Confirme que sua conta continua como administradora ativa.", "error");
         } else if (code === "already-exists") {
             toast(error.message || "Ja existe um registro com este ID/slug.", "error");
         } else {

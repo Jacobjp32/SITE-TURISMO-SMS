@@ -77,7 +77,10 @@ test("rótulo de ambiente segue a conexão real, não só o parâmetro da URL", 
   assert.match(fn, /window\.__SMSFirebaseEmulatorsConnected === true/);
   assert.match(fn, /"Dados reais"/);
   const make = (hostname, search, connected) => {
-    const tag = { hidden: true, textContent: "", title: "", classList: { set: new Set(), add(...c) { c.forEach((x) => this.set.add(x)); }, remove(...c) { c.forEach((x) => this.set.delete(x)); } } };
+    const tag = { hidden: true, title: "", attrs: {}, setAttribute(k, v) { this.attrs[k] = v; },
+      set innerHTML(_v) { this.firstChild = { textContent: "" }; this.lastChild = { textContent: "" }; },
+      get textContent() { return this.attrs["aria-label"] || ""; },
+      get shortText() { return this.lastChild ? this.lastChild.textContent : ""; }, classList: { set: new Set(), add(...c) { c.forEach((x) => this.set.add(x)); }, remove(...c) { c.forEach((x) => this.set.delete(x)); } } };
     const window = { location: { hostname, search }, __SMSFirebaseEmulatorsConnected: connected };
     runInNewContext(fn + "\nrenderEnvironment();", { window, URLSearchParams, $: () => tag });
     return tag;
@@ -87,5 +90,7 @@ test("rótulo de ambiente segue a conexão real, não só o parâmetro da URL", 
   assert.equal(prodWithParam.textContent, "Dados reais");
   assert.equal(make("turismo.saomateusdosul.pr.gov.br", "", undefined).hidden, true);
   assert.equal(make("127.0.0.1", "?emulator=1", true).textContent, "Ambiente local · dados de teste");
+  assert.equal(make("127.0.0.1", "?emulator=1", true).shortText, "TESTE");
+  assert.equal(prodWithParam.shortText, "REAL");
   assert.equal(make("127.0.0.1", "", undefined).textContent, "Dados reais");
 });

@@ -6,6 +6,16 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-14 — PAINEL ADMIN: fechamento da candidata a publicação
+
+**Status:** branch `admin/painel-evolucao` rebaseada sobre `origin/main` (c80c5e5, com Mapa Ilustrado, hero aéreo, Capivarense e cookies); somente arquivos do painel e seus testes/scripts mudam. Sem push, sem deploy, sem alteração de Rules, permissões ou dados reais. Rollback: tag `admin-painel-rollback` (= c80c5e5).
+
+- Textos técnicos retirados da interface (nomes de campos como `mainImage`/`coverImage`, coleções e caminhos do Storage); mensagens de erro de conexão e permissão reescritas para o usuário. Dados e compatibilidade inalterados.
+- Selo de ambiente compacto no celular: "● TESTE" (âmbar) ou "● REAL" (vermelho), com o texto completo como rótulo acessível.
+- Usuários e Biblioteca de mídia carregam em menos de 300 ms; as capturas anteriores tinham sido tiradas antes do fim do carregamento. O aviso de URL de imagem inválida no verificador vinha do passo anterior do roteiro de testes (erro proposital na mídia), não de falha real.
+- Cache: token `?v=admin-painel-20261014-final` nos scripts e no CSS do painel. O HTML do painel não entra no cache do service worker; `CACHE_NAME` do site público inalterado.
+- Validação: testes direcionados 76/78 (2 falhas preexistentes); E2E isolado 48/48.
+
 ## 2026-10-14 — PAINEL ADMIN rodada 2: celular, prévia, confirmações e coordenadas
 
 **Status:** commits locais na branch `admin/painel-evolucao`; sem push, sem deploy, sem alteração de Rules, Storage, contas, `firebase-auth.js` ou dados de produção.
@@ -15,7 +25,7 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 - **Prévia de notícia e evento** (`js/admin/admin-content-preview.js`, novo; `js/admin-content-cms.js`): editor com abas Editar | Prévia no portal reproduzindo o cartão da lista e a página da notícia, o cartão da agenda, o "Acontece em breve" da home e o detalhe do evento, em computador ou celular, com checagem editorial (capa, resumo, data passada, imagem inválida). Salvar algo que vai ao ar (publicar ou editar conteúdo publicado) passa pela tela "Confirmar e publicar"; rascunhos salvam direto. "Publicar" na lista abre a mesma revisão. Modelo de dados inalterado.
 - **Verificador de coordenadas** (`js/admin/admin-geo-picker.js`): bloqueia salvar com coordenada inválida (não numérica, fora dos limites, 0,0, latitude/longitude invertidas, sinal de menos ausente — as duas últimas com botão de correção); avisa sobre fora da região, pouca precisão, centro da cidade e ponto igual ao de outro cadastro. Mover o pin retira o selo "verificada"; marcar como verificada pede confirmação humana; voltar ao ponto original devolve o status.
 - **Modo demonstração** (`js/admin/admin-nav.js`): o selo de ambiente segue a conexão real (`__SMSFirebaseEmulatorsConnected`), não o parâmetro da URL — `?emulator=1` fora de localhost mostra "Dados reais". `tests/admin-emulator-guard.test.mjs` comprova: ativação só em localhost, projeto `demo-*`, App Check pulado só no modo demo, nenhuma credencial demo no runtime, seed recusando projeto real, servidor de desenvolvimento só em loopback.
-- Títulos e botões sem emoji (exceto o olho do campo de senha); tokens `?v=admin-painel-r2-20261014`.
+- Títulos e botões sem emoji (exceto o olho do campo de senha); tokens `?v=admin-painel-r2-20261014` (depois substituídos pelo token final).
 - **E2E:** `npm run test:admin-public-e2e` em emuladores limpos: 48/48. As 4 falhas anteriores vinham de rodar a suíte contra o emulador da prévia, que usa o mesmo projeto demo e as mesmas portas; não rodar os dois ao mesmo tempo.
 - Validação: suíte sem emulador 446/448 (2 falhas preexistentes: CRLF em `firebase-auth.js` e "portal acompanha eventos aprovados", que já falha na `origin/main`); novos testes de coordenadas 8/8 e de isolamento 5/5; fluxos no emulador sem nenhum diálogo nativo restante.
 

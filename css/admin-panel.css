@@ -246,6 +246,7 @@ body {
 }
 .admin-env-tag.is-emulator { background: var(--adm-warn-soft); color: var(--adm-warn); }
 .admin-env-tag.is-real { background: var(--adm-danger-soft); color: var(--adm-danger); font-weight: 700; }
+.admin-env-tag .env-short { display: none; }
 .admin-user-chip { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--adm-ink-2); }
 .admin-user-avatar {
     display: inline-grid;
@@ -615,7 +616,10 @@ select, .admin-field input, .admin-field textarea { border-radius: var(--adm-rad
     .dash-header .page-actions { width: 100%; justify-content: space-between; }
     .page-header h1 { font-size: 1.3rem; }
     .admin-breadcrumb-group, .admin-breadcrumb-sep { display: none; }
-    .admin-env-tag { font-size: 0.7rem; padding: 0.2rem 0.5rem; max-width: 44vw; overflow: hidden; text-overflow: ellipsis; }
+    .admin-env-tag { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; padding: 0.25rem 0.55rem; white-space: nowrap; }
+    .admin-env-tag .env-long { display: none; }
+    .admin-env-tag .env-short { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .admin-env-tag .env-short::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
     .dash-panel { padding: 0.95rem; }
     .dash-task { grid-template-columns: 36px minmax(0, 1fr); }
     .dash-task-icon { width: 36px; height: 36px; }
