@@ -6,6 +6,19 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-14 — PAINEL ADMIN rodada 2: celular, prévia, confirmações e coordenadas
+
+**Status:** commits locais na branch `admin/painel-evolucao`; sem push, sem deploy, sem alteração de Rules, Storage, contas, `firebase-auth.js` ou dados de produção.
+
+- **Confirmações e avisos** (`js/admin/admin-feedback.js`, novo): `<dialog>` acessível para confirmar, pedir motivo e editar informações de imagem; avisos (sucesso/erro/atenção) em região `aria-live`. Todos os `alert/confirm/prompt` do painel, do CMS de conteúdo, de empreendimentos, banners e rotas passam por ele, com texto que explica a consequência. Exclusões definitivas exigem digitar EXCLUIR (ou o slug, em empreendimentos); ações perigosas começam com o foco em "Cancelar". Mudança de permissão e ativação/desativação de usuário — que não pediam confirmação — passaram a pedir, e cancelar devolve o seletor ao valor anterior. Fallback nativo mantido quando o componente não carrega (harness de testes).
+- **Tabelas no celular** (`js/admin/admin-nav.js`, `css/admin-panel.css`): até 720 px cada linha vira cartão com rótulos por campo e ações com alvo de toque de 40 px, sem mexer nos renderizadores; usuários aparecem em cartões também no desktop (7 colunas não cabiam).
+- **Prévia de notícia e evento** (`js/admin/admin-content-preview.js`, novo; `js/admin-content-cms.js`): editor com abas Editar | Prévia no portal reproduzindo o cartão da lista e a página da notícia, o cartão da agenda, o "Acontece em breve" da home e o detalhe do evento, em computador ou celular, com checagem editorial (capa, resumo, data passada, imagem inválida). Salvar algo que vai ao ar (publicar ou editar conteúdo publicado) passa pela tela "Confirmar e publicar"; rascunhos salvam direto. "Publicar" na lista abre a mesma revisão. Modelo de dados inalterado.
+- **Verificador de coordenadas** (`js/admin/admin-geo-picker.js`): bloqueia salvar com coordenada inválida (não numérica, fora dos limites, 0,0, latitude/longitude invertidas, sinal de menos ausente — as duas últimas com botão de correção); avisa sobre fora da região, pouca precisão, centro da cidade e ponto igual ao de outro cadastro. Mover o pin retira o selo "verificada"; marcar como verificada pede confirmação humana; voltar ao ponto original devolve o status.
+- **Modo demonstração** (`js/admin/admin-nav.js`): o selo de ambiente segue a conexão real (`__SMSFirebaseEmulatorsConnected`), não o parâmetro da URL — `?emulator=1` fora de localhost mostra "Dados reais". `tests/admin-emulator-guard.test.mjs` comprova: ativação só em localhost, projeto `demo-*`, App Check pulado só no modo demo, nenhuma credencial demo no runtime, seed recusando projeto real, servidor de desenvolvimento só em loopback.
+- Títulos e botões sem emoji (exceto o olho do campo de senha); tokens `?v=admin-painel-r2-20261014`.
+- **E2E:** `npm run test:admin-public-e2e` em emuladores limpos: 48/48. As 4 falhas anteriores vinham de rodar a suíte contra o emulador da prévia, que usa o mesmo projeto demo e as mesmas portas; não rodar os dois ao mesmo tempo.
+- Validação: suíte sem emulador 446/448 (2 falhas preexistentes: CRLF em `firebase-auth.js` e "portal acompanha eventos aprovados", que já falha na `origin/main`); novos testes de coordenadas 8/8 e de isolamento 5/5; fluxos no emulador sem nenhum diálogo nativo restante.
+
 ## 2026-10-14 — PAINEL ADMIN v2: navegação, fila de trabalho e verificador de mapa
 
 **Status:** commits locais na branch `admin/painel-evolucao` (worktree `.worktrees/admin-painel`, base `origin/main` 0822d37); sem push, sem deploy, sem alteração de Rules, Storage, contas ou dados de produção.
