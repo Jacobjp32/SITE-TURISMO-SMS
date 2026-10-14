@@ -7,18 +7,19 @@ const root = new URL("../", import.meta.url);
 const read = (path) => readFile(new URL(path, root), "utf8");
 
 const VISIBLE_MODULES = [
+  // Ordem do menu agrupado (shell v2): Visão geral, Moderação, Conteúdo, Mídia, Portal, Sistema.
   { id: "home", source: "js/admin/modules/dashboard.js", idPattern: /SECTION_ID\s*=\s*["']home["']/ },
   { id: "aprovacoes", dispatch: /section\s*===\s*["']aprovacoes["'][\s\S]*?loadPendingData\(\)/, implementation: /(?:async\s+)?function\s+loadPendingData\s*\(/ },
   { id: "vinculos", dispatch: /section\s*===\s*["']vinculos["'][\s\S]*?loadEstablishmentClaims\(\)/, implementation: /(?:async\s+)?function\s+loadEstablishmentClaims\s*\(/ },
   { id: "gerenciar-vinculos", dispatch: /section\s*===\s*["']gerenciar-vinculos["'][\s\S]*?loadEstablishmentManagers\(\)/, implementation: /(?:async\s+)?function\s+loadEstablishmentManagers\s*\(/ },
   { id: "usuarios", dispatch: /section\s*===\s*["']usuarios["'][\s\S]*?loadUsers\(\)/, implementation: /(?:async\s+)?function\s+loadUsers\s*\(/ },
+  { id: "empreendimentos", source: "js/admin/modules/empreendimentos.js", idPattern: /SECTION_ID\s*=\s*["']empreendimentos["']/ },
   { id: "eventos", dispatch: /section\s*===\s*["']eventos["'][\s\S]*?loadApprovedEvents\(\)/, implementation: /(?:async\s+)?function\s+loadApprovedEvents\s*\(/ },
   { id: "noticias", dispatch: /section\s*===\s*["']noticias["'][\s\S]*?AdminContentCMS\.loadNews\(\)/, implementationSource: "js/admin-content-cms.js", implementation: /loadNews\s*:/ },
-  { id: "midia", dispatch: /section\s*===\s*["']midia["'][\s\S]*?AdminContentCMS\.loadMedia\(\)/, implementationSource: "js/admin-content-cms.js", implementation: /loadMedia\s*:/ },
-  { id: "banners", source: "js/admin/modules/banners.js", idPattern: /SECTION_ID\s*=\s*["']banners["']/ },
-  { id: "empreendimentos", source: "js/admin/modules/empreendimentos.js", idPattern: /SECTION_ID\s*=\s*["']empreendimentos["']/ },
   { id: "rotas", source: "js/admin/modules/rotas.js", idPattern: /SECTION_ID\s*=\s*["']rotas["']/ },
+  { id: "midia", dispatch: /section\s*===\s*["']midia["'][\s\S]*?AdminContentCMS\.loadMedia\(\)/, implementationSource: "js/admin-content-cms.js", implementation: /loadMedia\s*:/ },
   { id: "galeria", source: "js/admin/modules/gallery.js", idPattern: /id\s*:\s*["']galeria["']/ },
+  { id: "banners", source: "js/admin/modules/banners.js", idPattern: /SECTION_ID\s*=\s*["']banners["']/ },
   { id: "sazonal", source: "js/admin/modules/site-config.js", idPattern: /register\(["']sazonal["']/ },
   { id: "mascote", source: "js/admin/modules/site-config.js", idPattern: /register\(["']mascote["']/ },
   { id: "audit-logs", source: "js/admin/modules/audit-logs.js", idPattern: /id\s*:\s*["']audit-logs["']/ }

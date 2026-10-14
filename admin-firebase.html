@@ -1232,6 +1232,8 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-v2-20261014">
 </head>
 <body>
     <!-- Login Screen -->
@@ -1261,89 +1263,175 @@
     
     <!-- Dashboard -->
     <div class="dashboard" id="dashboard">
+        <!-- Ícones do painel (sprite SVG inline, traço 2px, 24x24) -->
+        <svg class="admin-icon-sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+            <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h5v-6h4v6h5V9.5"/></symbol>
+            <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5.5 5h13L21 13v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-6z"/></symbol>
+            <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.1.4l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.1-.4l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7"/></symbol>
+            <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m10.8 12.2 9.2-9.2"/><path d="m17 6 3 3"/><path d="m15 8 2 2"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14a6.5 6.5 0 0 1 3.5 6"/></symbol>
+            <symbol id="i-store" viewBox="0 0 24 24"><path d="M4 9.5V20h16V9.5"/><path d="M3 4h18l-1.5 5.5a2.5 2.5 0 0 1-4.5.5 2.5 2.5 0 0 1-5 0 2.5 2.5 0 0 1-4.5-.5z"/><path d="M10 20v-5h4v5"/></symbol>
+            <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+            <symbol id="i-news" viewBox="0 0 24 24"><path d="M4 5h13v14a2 2 0 0 0 2 2H6a2 2 0 0 1-2-2z"/><path d="M17 9h3v10a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 17h3"/></symbol>
+            <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H16a3.5 3.5 0 0 0 0-7H8a3.5 3.5 0 0 1 0-7h7.5"/></symbol>
+            <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></symbol>
+            <symbol id="i-gallery" viewBox="0 0 24 24"><rect x="7" y="3" width="14" height="14" rx="2"/><path d="M3 7v12a2 2 0 0 0 2 2h12"/><path d="m21 13-4-4-7 7"/></symbol>
+            <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="M3 11v3a1 1 0 0 0 1 1h3l6 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/><path d="M19 6a8.5 8.5 0 0 1 0 12"/></symbol>
+            <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+            <symbol id="i-paw" viewBox="0 0 24 24"><circle cx="6" cy="10" r="2"/><circle cx="10" cy="5.5" r="2"/><circle cx="14" cy="5.5" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 11c-3 0-5.5 4-5.5 6.5 0 1.5 1.2 2.5 2.7 2.5 1 0 1.8-.5 2.8-.5s1.8.5 2.8.5c1.5 0 2.7-1 2.7-2.5C17.5 15 15 11 12 11z"/></symbol>
+            <symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/></symbol>
+            <symbol id="i-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="m20 4-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+            <symbol id="i-logout" viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></symbol>
+            <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+            <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+            <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.3-4.9L4 8"/><path d="M4 3v5h5"/><path d="M4 13a8 8 0 0 0 14.3 4.9L20 16"/><path d="M20 21v-5h-5"/></symbol>
+            <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3 2 20h20z"/><path d="M12 10v4M12 17h.01"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+            <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+        </svg>
+
+        <div class="admin-nav-overlay" id="adminNavOverlay" hidden></div>
+
         <!-- Sidebar -->
-        <aside class="sidebar">
+        <aside class="sidebar" id="adminSidebar" aria-label="Navegação do painel">
             <div class="sidebar-logo">
-                <img src="images/logo_pin_turismo_3d.png" alt="Logo">
-                <span>Admin</span>
+                <img src="images/logo_pin_turismo_3d.png" alt="" width="36" height="36">
+                <div class="sidebar-brand">
+                    <span class="sidebar-brand-title">Turismo SMS</span>
+                    <span class="sidebar-brand-sub">Painel administrativo</span>
+                </div>
+                <button class="admin-nav-close" type="button" id="adminNavClose" aria-label="Fechar menu">
+                    <svg class="ico" aria-hidden="true"><use href="#i-close"/></svg>
+                </button>
             </div>
-            
-            <ul class="sidebar-menu">
-                <li><a class="active" data-section="home">📊 <span>Dashboard</span></a></li>
-                <li><a data-section="aprovacoes">✅ <span>Aprovações</span></a></li>
-                <li><a data-section="vinculos">🤝 <span>Solicitações de vínculo</span></a></li>
-                <li><a data-section="gerenciar-vinculos">🗂️ <span>Gerenciar Vínculos</span></a></li>
-                <li><a data-section="usuarios">👥 <span>Usuários</span></a></li>
-                <!-- Conteúdo / CMS -->
-                <li class="sidebar-group-label"><span>Conteúdo</span></li>
-                <li><a data-section="eventos">📅 <span>Eventos</span></a></li>
-                <li><a data-section="noticias">📰 <span>Notícias</span></a></li>
-                <li><a data-section="midia">🖼️ <span>Mídia</span></a></li>
-                <li><a data-section="banners">📢 <span>Banners / Pop-ups</span></a></li>
-                <li><a data-section="empreendimentos">🏨 <span>Empreendimentos</span></a></li>
-                <li><a data-section="rotas">🗺️ <span>Rotas</span></a></li>
-                <li><a data-section="galeria">🖼️ <span>Galeria</span></a></li>
-                <li><a data-section="sazonal">🌦️ <span>Sazonal / Clima</span></a></li>
-                <li><a data-section="mascote">🐾 <span>Mascote</span></a></li>
-                <li><a data-section="audit-logs">📜 <span>Logs / Auditoria</span></a></li>
-                <li><a href="/" target="_blank" rel="noopener noreferrer">🌐 <span>Ver Site</span></a></li>
-            </ul>
-            
+
+            <nav class="sidebar-nav">
+                <ul class="sidebar-menu">
+                    <li><a href="#home" class="active" data-section="home"><svg class="ico" aria-hidden="true"><use href="#i-home"/></svg><span>Painel</span></a></li>
+
+                    <li class="sidebar-group-label"><span>Moderação</span></li>
+                    <li><a href="#aprovacoes" data-section="aprovacoes"><svg class="ico" aria-hidden="true"><use href="#i-inbox"/></svg><span>Aprovações</span><span class="nav-badge" data-nav-badge="aprovacoes" hidden></span></a></li>
+                    <li><a href="#vinculos" data-section="vinculos"><svg class="ico" aria-hidden="true"><use href="#i-link"/></svg><span>Pedidos de vínculo</span><span class="nav-badge" data-nav-badge="vinculos" hidden></span></a></li>
+                    <li><a href="#gerenciar-vinculos" data-section="gerenciar-vinculos"><svg class="ico" aria-hidden="true"><use href="#i-key"/></svg><span>Vínculos ativos</span></a></li>
+                    <li><a href="#usuarios" data-section="usuarios"><svg class="ico" aria-hidden="true"><use href="#i-users"/></svg><span>Usuários</span></a></li>
+
+                    <li class="sidebar-group-label"><span>Conteúdo</span></li>
+                    <li><a href="#empreendimentos" data-section="empreendimentos"><svg class="ico" aria-hidden="true"><use href="#i-store"/></svg><span>Empreendimentos</span><span class="nav-badge is-soft" data-nav-badge="empreendimentos" hidden></span></a></li>
+                    <li><a href="#eventos" data-section="eventos"><svg class="ico" aria-hidden="true"><use href="#i-calendar"/></svg><span>Eventos</span><span class="nav-badge is-soft" data-nav-badge="eventos" hidden></span></a></li>
+                    <li><a href="#noticias" data-section="noticias"><svg class="ico" aria-hidden="true"><use href="#i-news"/></svg><span>Notícias</span><span class="nav-badge is-soft" data-nav-badge="noticias" hidden></span></a></li>
+                    <li><a href="#rotas" data-section="rotas"><svg class="ico" aria-hidden="true"><use href="#i-route"/></svg><span>Rotas</span></a></li>
+
+                    <li class="sidebar-group-label"><span>Mídia</span></li>
+                    <li><a href="#midia" data-section="midia"><svg class="ico" aria-hidden="true"><use href="#i-image"/></svg><span>Biblioteca de mídia</span></a></li>
+                    <li><a href="#galeria" data-section="galeria"><svg class="ico" aria-hidden="true"><use href="#i-gallery"/></svg><span>Galeria pública</span></a></li>
+
+                    <li class="sidebar-group-label"><span>Portal</span></li>
+                    <li><a href="#banners" data-section="banners"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg><span>Banners e pop-ups</span></a></li>
+                    <li><a href="#sazonal" data-section="sazonal"><svg class="ico" aria-hidden="true"><use href="#i-sun"/></svg><span>Sazonal e clima</span></a></li>
+                    <li><a href="#mascote" data-section="mascote"><svg class="ico" aria-hidden="true"><use href="#i-paw"/></svg><span>Mascote</span></a></li>
+
+                    <li class="sidebar-group-label"><span>Sistema</span></li>
+                    <li><a href="#audit-logs" data-section="audit-logs"><svg class="ico" aria-hidden="true"><use href="#i-history"/></svg><span>Registro de atividades</span></a></li>
+                </ul>
+            </nav>
+
             <div class="sidebar-footer">
-                <button class="btn-logout" onclick="handleLogout()">🚪 Sair</button>
+                <a class="sidebar-ext-link" href="/" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-external"/></svg><span>Ver o portal</span></a>
+                <a class="sidebar-ext-link" href="/portal-usuario" target="_blank" rel="noopener noreferrer"><svg class="ico" aria-hidden="true"><use href="#i-external"/></svg><span>Portal do Usuário</span></a>
+                <button class="btn-logout" type="button" onclick="handleLogout()"><svg class="ico" aria-hidden="true"><use href="#i-logout"/></svg><span>Sair</span></button>
             </div>
         </aside>
-        
+
         <!-- Main Content -->
-        <main class="main-content">
+        <main class="main-content" id="adminMain">
+            <header class="admin-topbar">
+                <button class="admin-nav-toggle" type="button" id="adminNavToggle" aria-controls="adminSidebar" aria-expanded="false" aria-label="Abrir menu">
+                    <svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>
+                </button>
+                <nav class="admin-breadcrumb" aria-label="Você está em">
+                    <span class="admin-breadcrumb-group" id="adminCrumbGroup">Visão geral</span>
+                    <span class="admin-breadcrumb-sep" aria-hidden="true">/</span>
+                    <span class="admin-breadcrumb-current" id="adminCrumbCurrent" aria-current="page">Painel</span>
+                </nav>
+                <div class="admin-topbar-meta">
+                    <span class="admin-env-tag" id="adminEnvTag" hidden></span>
+                    <span class="admin-user-chip" id="adminUserChip" hidden>
+                        <span class="admin-user-avatar" id="adminUserAvatar" aria-hidden="true"></span>
+                        <span class="admin-user-name" id="adminUserName"></span>
+                    </span>
+                </div>
+            </header>
             <!-- Home Section -->
-            <section class="admin-section active" id="section-home">
-                <div class="page-header">
-                    <h1>Dashboard</h1>
-                    <span id="currentDate"></span>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="icon">👥</div>
-                        <div class="number" id="stat-usuarios">-</div>
-                        <div class="label">Usuários cadastrados</div>
+            <section class="admin-section active" id="section-home" aria-labelledby="dashTitle">
+                <div class="page-header dash-header">
+                    <div>
+                        <p class="dash-eyebrow" id="currentDate"></p>
+                        <h1 id="dashTitle">O que precisa da sua atenção</h1>
                     </div>
-                    <div class="stat-card">
-                        <div class="icon">⏳</div>
-                        <div class="number" id="stat-pendentes">-</div>
-                        <div class="label">Eventos pendentes</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">✅</div>
-                        <div class="number" id="stat-aprovados">-</div>
-                        <div class="label">Eventos aprovados</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="icon">🏨</div>
-                        <div class="number" id="stat-estabelecimentos">-</div>
-                        <div class="label">Estab. pendentes</div>
+                    <div class="page-actions">
+                        <span class="dash-updated" id="dashUpdated" aria-live="polite"></span>
+                        <button class="btn-secondary btn-icon" type="button" id="dashRefresh"><svg class="ico" aria-hidden="true"><use href="#i-refresh"/></svg><span>Atualizar</span></button>
                     </div>
                 </div>
-                
-                <div class="card">
-                    <div class="card-header">
-                        <h2>⚡ Ações Rápidas</h2>
+
+                <div class="dash-grid">
+                    <section class="dash-panel dash-attention" aria-labelledby="dashAttentionTitle">
+                        <div class="dash-panel-head">
+                            <h2 id="dashAttentionTitle">Fila de trabalho</h2>
+                            <span class="dash-panel-hint">Ordenada por urgência</span>
+                        </div>
+                        <ul class="dash-tasks" id="dashTasks" aria-live="polite">
+                            <li class="dash-task is-loading"><span class="skeleton"></span></li>
+                            <li class="dash-task is-loading"><span class="skeleton"></span></li>
+                            <li class="dash-task is-loading"><span class="skeleton"></span></li>
+                        </ul>
+                    </section>
+
+                    <div class="dash-side">
+                    <section class="dash-panel" aria-labelledby="dashPortalTitle">
+                        <div class="dash-panel-head">
+                            <h2 id="dashPortalTitle">No portal agora</h2>
+                        </div>
+                        <div class="dash-kpis" id="dashKpis">
+                            <div class="dash-kpi"><span class="dash-kpi-value" id="stat-estab-publicados">–</span><span class="dash-kpi-label">Empreendimentos publicados</span></div>
+                            <div class="dash-kpi"><span class="dash-kpi-value" id="stat-eventos-proximos">–</span><span class="dash-kpi-label">Eventos nos próximos 30 dias</span></div>
+                            <div class="dash-kpi"><span class="dash-kpi-value" id="stat-noticias-publicadas">–</span><span class="dash-kpi-label">Notícias publicadas</span></div>
+                            <div class="dash-kpi"><span class="dash-kpi-value" id="stat-midias">–</span><span class="dash-kpi-label">Imagens na biblioteca</span></div>
+                        </div>
+                    </section>
+
+                    <section class="dash-panel dash-health" aria-labelledby="dashHealthTitle">
+                        <div class="dash-panel-head">
+                            <h2 id="dashHealthTitle">Qualidade do catálogo</h2>
+                            <span class="dash-panel-hint" id="dashHealthScope">Empreendimentos publicados</span>
+                        </div>
+                        <ul class="dash-meters" id="dashMeters"></ul>
+                    </section>
+
+                    <section class="dash-panel" aria-labelledby="dashAgendaTitle">
+                        <div class="dash-panel-head">
+                            <h2 id="dashAgendaTitle">Próximos eventos publicados</h2>
+                            <a class="dash-link" href="#eventos" data-goto="eventos">Ver todos</a>
+                        </div>
+                        <ul class="dash-agenda" id="dashAgenda"></ul>
+                    </section>
                     </div>
-                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                        <button class="btn-primary" onclick="showSection('aprovacoes')">✅ Ver Aprovações</button>
-                        <button class="btn-primary" onclick="showSection('vinculos')">🤝 Ver Vínculos</button>
-                        <button class="btn-primary" onclick="showSection('gerenciar-vinculos')">🗂️ Gerenciar Vínculos</button>
-                        <button class="btn-primary" onclick="showSection('usuarios')">👥 Gerenciar Usuários</button>
-                        <a href="/portal-usuario" target="_blank" rel="noopener noreferrer" class="btn-primary" style="text-decoration:none;">🎪 Portal do Usuário</a>
-                    </div>
+                </div>
+
+                <!-- Contadores legados mantidos para o fallback de loadDashboardData -->
+                <div class="stats-grid dash-legacy-stats" hidden>
+                    <div class="stat-card"><div class="number" id="stat-usuarios">-</div><div class="label">Usuários cadastrados</div></div>
+                    <div class="stat-card"><div class="number" id="stat-pendentes">-</div><div class="label">Eventos pendentes</div></div>
+                    <div class="stat-card"><div class="number" id="stat-aprovados">-</div><div class="label">Eventos aprovados</div></div>
+                    <div class="stat-card"><div class="number" id="stat-estabelecimentos">-</div><div class="label">Estab. pendentes</div></div>
                 </div>
             </section>
 
             <!-- Aprovações Section -->
             <section class="admin-section" id="section-aprovacoes">
                 <div class="page-header">
-                    <h1>✅ Aprovações Pendentes</h1>
+                    <h1>Aprovações pendentes</h1>
                     <button class="btn-primary" onclick="loadPendingData()">🔄 Atualizar</button>
                 </div>
                 
@@ -1381,7 +1469,7 @@
             <!-- Vínculos Section -->
             <section class="admin-section" id="section-vinculos">
                 <div class="page-header">
-                    <h1>🤝 Solicitações de vínculo</h1>
+                    <h1>Pedidos de vínculo</h1>
                     <button class="btn-primary" onclick="loadEstablishmentClaims()">🔄 Atualizar</button>
                 </div>
 
@@ -1401,7 +1489,7 @@
             <!-- Gerenciar Vínculos Section -->
             <section class="admin-section" id="section-gerenciar-vinculos">
                 <div class="page-header">
-                    <h1>🗂️ Gerenciar Vínculos</h1>
+                    <h1>Vínculos ativos</h1>
                     <div class="page-actions">
                         <button class="btn-primary" onclick="loadEstablishmentManagers()">🔄 Atualizar</button>
                         <button class="btn-primary" onclick="openAddManagerModal()">➕ Adicionar vínculo</button>
@@ -1425,7 +1513,7 @@
             <!-- Usuários Section -->
             <section class="admin-section" id="section-usuarios">
                 <div class="page-header">
-                    <h1>👥 Gerenciar Usuários</h1>
+                    <h1>Usuários</h1>
                     <button class="btn-primary" onclick="loadUsers()">🔄 Atualizar</button>
                 </div>
                 
@@ -1446,7 +1534,7 @@
             <!-- Eventos Section -->
             <section class="admin-section" id="section-eventos">
                 <div class="page-header">
-                    <h1>📅 Eventos Aprovados</h1>
+                    <h1>Eventos</h1>
                     <div class="page-actions">
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.openEventModal()">Novo evento</button>
                     </div>
@@ -1464,7 +1552,7 @@
 
             <section class="admin-section" id="section-noticias">
                 <div class="page-header">
-                    <h1>📰 Notícias</h1>
+                    <h1>Notícias</h1>
                     <div class="page-actions">
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.openNewsModal()">Nova notícia</button>
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.importStaticNews()">Importar notícias estáticas</button>
@@ -1483,7 +1571,7 @@
 
             <section class="admin-section" id="section-midia">
                 <div class="page-header">
-                    <h1>🖼️ Biblioteca de Mídia</h1>
+                    <h1>Biblioteca de mídia</h1>
                     <div class="page-actions">
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.openMediaModal()">Adicionar mídia</button>
                     </div>
@@ -1597,7 +1685,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
     <script src="js/firebase-auth.js?v=establishment-approval-v2-20260914"></script>
-    <script src="js/admin-content-cms.js?v=media-reference-safety-20260828"></script>
+    <script src="js/admin-content-cms.js?v=admin-painel-v2-20261014"></script>
     <!-- Fundação modular do Admin CMS (Bloco 1 / Etapa 1) — modo passthrough, aditivo e inerte. -->
     <script src="js/admin/admin-context.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-ui.js?v=admin-modular-20260625"></script>
@@ -1605,18 +1693,19 @@
     <script src="js/admin/admin-router.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
     <!-- Módulos do painel. -->
-    <script src="js/admin/modules/dashboard.js?v=admin-modular-20260625"></script>
+    <script src="js/admin/modules/dashboard.js?v=admin-painel-v2-20261014"></script>
     <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
-    <script src="js/admin/modules/banners.js?v=admin-banners-4e-20260629"></script>
+    <script src="js/admin/modules/banners.js?v=admin-painel-v2-20261014"></script>
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
-    <script src="js/admin/modules/empreendimentos.js?v=establishment-approval-v2-20260914"></script>
+    <script src="js/admin/admin-geo-picker.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/empreendimentos.js?v=admin-painel-v2-20261014"></script>
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
-    <script src="js/admin/modules/rotas.js?v=rotas-v1-1-admin-20260820"></script>
-    <script src="js/admin/modules/gallery.js?v=site-admin-finalization-20260903"></script>
-    <script src="js/admin/modules/site-config.js?v=site-admin-finalization-20260903"></script>
-    <script src="js/admin/modules/audit-logs.js?v=site-admin-finalization-20260903"></script>
+    <script src="js/admin/modules/rotas.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/gallery.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/site-config.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/audit-logs.js?v=admin-painel-v2-20261014"></script>
     <script src="js/admin/modules/placeholder.js?v=site-admin-finalization-20260903"></script>
     <script>
         const SEC = window.SMSecurity;
@@ -3784,5 +3873,6 @@
             return document.getElementById(prefix + claimId)?.value.trim() || '';
         }
     </script>
+    <script src="js/admin/admin-nav.js?v=admin-painel-v2-20261014"></script>
 </body>
 </html>

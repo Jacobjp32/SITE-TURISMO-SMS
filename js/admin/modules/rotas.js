@@ -21,7 +21,7 @@
     function associationCount(routeId) { return state.establishments.filter(function (item) { return selectedRouteIdsFor(item.__id).includes(routeId); }).length; }
     function render(container) {
         var target = container && container.nodeType === 1 ? container : section(); if (!target) return null;
-        target.innerHTML = '<div class="page-header"><h1>🗺️ Rotas</h1><span class="badge badge-info">Admin V1.1</span></div>' +
+        target.innerHTML = '<div class="page-header"><h1>Rotas</h1><span class="badge badge-info">Admin V1.1</span></div>' +
           '<div class="card"><p class="admin-helper-text">Gerencie rotas temáticas em rascunho. A relação com empreendimentos é N:N e fica somente no catálogo interno.</p>' +
           '<div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:end"><div class="admin-field" style="margin:0"><label for="routesStatus">Status</label><select class="admin-input" id="routesStatus" onchange="AdminRoutesModule.onFilterChange()"><option value="all">Todos</option><option value="draft">Rascunho</option><option value="published">Publicada</option><option value="archived">Arquivada</option></select></div>' +
           '<div class="admin-field" style="margin:0;min-width:14rem"><label for="routesSearch">Buscar por nome ou slug</label><input class="admin-input" id="routesSearch" type="search" oninput="AdminRoutesModule.onFilterChange()"></div><div style="margin-left:auto;display:flex;gap:.5rem"><button class="btn-secondary" type="button" onclick="AdminRoutesModule.refresh()">↻ Atualizar</button><button class="btn-primary" type="button" onclick="AdminRoutesModule.openForm()">➕ Nova rota</button></div></div></div><div class="card"><div id="routes-list"></div></div>';

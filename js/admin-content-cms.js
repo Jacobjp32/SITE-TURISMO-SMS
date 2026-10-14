@@ -631,7 +631,11 @@
                     this.ensureMediaLoaded(true),
                     this.db.collection("eventos_aprovados").get(),
                     this.db.collection("noticias").get(),
-                    this.db.collection("rotas").get()
+                    this.db.collection("rotas").get(),
+                    this.db.collection("cms_establishments").get().catch(function (error) {
+                        console.warn("[admin-content-cms] Uso em empreendimentos indisponível.", error);
+                        return { docs: [] };
+                    })
                 ]);
                 this.events = results[1].docs.map(function (doc) {
                     return Object.assign({}, doc.data(), { id: doc.id });
@@ -641,6 +645,8 @@
                 }).sort(compareAdminDateDesc);
                 this.mediaUsageMap = buildMediaUsageMap(this.events, this.news, results[3].docs.map(function (doc) {
                     return Object.assign({}, doc.data(), { id: doc.id });
+                }), results[4].docs.map(function (doc) {
+                    return Object.assign({}, doc.data(), { id: doc.id });
                 }));
 
                 if (!this.media.length) {
@@ -649,9 +655,10 @@
                 }
 
                 var SEC = this.SEC;
-                container.innerHTML = '<div class="media-admin-grid">' + this.media.map(function (item) {
+                container.innerHTML = buildMediaToolbar(this.media.length) + '<div class="media-admin-grid" id="mediaAdminGrid">' + this.media.map(function (item) {
                     var usage = getMediaUsageInfo(item, this.mediaUsageMap);
-                    return '<article class="media-admin-card">' +
+                    var searchText = [item.title, item.category, item.alt, item.url].join(" ").toLowerCase();
+                    return '<article class="media-admin-card" data-media-search="' + SEC.attr(searchText) + '" data-media-usage="' + (usage.total ? 'used' : 'unused') + '" data-media-alt="' + (clean(item.alt) ? 'yes' : 'no') + '">' +
                         '<div class="media-admin-thumb">' +
                             '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\\\'.media-admin-thumb\\\').classList.add(\\\'is-error\\\');this.remove();">' +
                         '</div>' +
@@ -671,7 +678,9 @@
                             '</div>' +
                         '</div>' +
                     '</article>';
-                }, this).join("") + '</div>';
+                }, this).join("") + '</div>' +
+                    '<p class="media-filter-empty" id="mediaFilterEmpty" hidden>Nenhuma imagem corresponde aos filtros.</p>';
+                bindMediaToolbar(container);
             } catch (error) {
                 console.error("[admin-content-cms] Erro ao carregar mídia.", error);
                 container.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar mídia.</p>';
@@ -1328,7 +1337,7 @@
         });
     }
 
-    function buildMediaUsageMap(events, news, routes) {
+    function buildMediaUsageMap(events, news, routes, establishments) {
         var usageMap = {};
 
         (events || []).forEach(function (eventItem) {
@@ -1351,6 +1360,17 @@
             registerMediaUsage(usageMap, { mediaId: cover.mediaId, path: cover.path, url: cover.url }, "route", title);
         });
 
+        (establishments || []).forEach(function (item) {
+            if (!item || item.status === "archived") return;
+            var media = item.media || {};
+            var title = clean(item.name) || "Empreendimento sem nome";
+            var images = [media.mainImage].concat(Array.isArray(media.gallery) ? media.gallery : []);
+            images.forEach(function (image) {
+                if (!image || image.status === "removed") return;
+                registerMediaUsage(usageMap, { mediaId: image.mediaId, path: image.path, url: image.url }, "establishment", title);
+            });
+        });
+
         return usageMap;
     }
 
@@ -1369,9 +1389,11 @@
                 eventCount: 0,
                 newsCount: 0,
                 routeCount: 0,
+                establishmentCount: 0,
                 eventTitles: [],
                 newsTitles: [],
-                routeTitles: []
+                routeTitles: [],
+                establishmentTitles: []
             };
         }
 
@@ -1387,6 +1409,10 @@
             if (target.routeTitles.indexOf(title) !== -1) return;
             target.routeTitles.push(title); target.routeCount += 1; target.total += 1; return;
         }
+        if (type === "establishment") {
+            if (target.establishmentTitles.indexOf(title) !== -1) return;
+            target.establishmentTitles.push(title); target.establishmentCount += 1; target.total += 1; return;
+        }
         if (target.newsTitles.indexOf(title) !== -1) return;
         target.newsTitles.push(title); target.newsCount += 1; target.total += 1;
         });
@@ -1397,35 +1423,79 @@
         var keys = [clean(media.id || media.mediaId) ? "id:" + clean(media.id || media.mediaId) : "", clean(media.storagePath || media.path) ? "path:" + clean(media.storagePath || media.path) : "", normalizeComparableUrl(media.url) ? "url:" + normalizeComparableUrl(media.url) : ""].filter(Boolean);
         var matches = keys.map(function (key) { return usageMap && usageMap[key]; }).filter(Boolean);
         if (matches.length) {
-            var titles = { events: {}, news: {}, routes: {} };
+            var titles = { events: {}, news: {}, routes: {}, establishments: {} };
             matches.forEach(function (match) {
                 (match.eventTitles || []).forEach(function (title) { titles.events[title] = true; });
                 (match.newsTitles || []).forEach(function (title) { titles.news[title] = true; });
                 (match.routeTitles || []).forEach(function (title) { titles.routes[title] = true; });
+                (match.establishmentTitles || []).forEach(function (title) { titles.establishments[title] = true; });
             });
-            var eventTitles = Object.keys(titles.events), newsTitles = Object.keys(titles.news), routeTitles = Object.keys(titles.routes);
-            return { total: eventTitles.length + newsTitles.length + routeTitles.length, eventCount: eventTitles.length, newsCount: newsTitles.length, routeCount: routeTitles.length, eventTitles: eventTitles, newsTitles: newsTitles, routeTitles: routeTitles };
+            var eventTitles = Object.keys(titles.events), newsTitles = Object.keys(titles.news), routeTitles = Object.keys(titles.routes), establishmentTitles = Object.keys(titles.establishments);
+            return { total: eventTitles.length + newsTitles.length + routeTitles.length + establishmentTitles.length, eventCount: eventTitles.length, newsCount: newsTitles.length, routeCount: routeTitles.length, establishmentCount: establishmentTitles.length, eventTitles: eventTitles, newsTitles: newsTitles, routeTitles: routeTitles, establishmentTitles: establishmentTitles };
         }
         return {
             total: 0,
             eventCount: 0,
             newsCount: 0,
             routeCount: 0,
+            establishmentCount: 0,
             eventTitles: [],
             newsTitles: [],
-            routeTitles: []
+            routeTitles: [],
+            establishmentTitles: []
         };
+    }
+
+    // Busca e filtros da biblioteca (somente na tela; não altera dados).
+    function buildMediaToolbar(total) {
+        return '<div class="media-toolbar" role="search">' +
+            '<label class="media-toolbar-search"><span class="sr-only">Buscar imagens</span>' +
+            '<input type="search" id="mediaFilterQuery" placeholder="Buscar por título, categoria, texto alternativo ou arquivo"></label>' +
+            '<select id="mediaFilterUsage" aria-label="Filtrar por uso">' +
+                '<option value="all">Todas</option><option value="used">Em uso</option><option value="unused">Sem uso detectado</option>' +
+            '</select>' +
+            '<select id="mediaFilterAlt" aria-label="Filtrar por texto alternativo">' +
+                '<option value="all">Com ou sem texto alternativo</option><option value="no">Sem texto alternativo</option>' +
+            '</select>' +
+            '<span class="media-toolbar-count" id="mediaFilterCount" aria-live="polite">' + total + ' imagens</span>' +
+        '</div>';
+    }
+
+    function bindMediaToolbar(container) {
+        var query = container.querySelector("#mediaFilterQuery");
+        var usage = container.querySelector("#mediaFilterUsage");
+        var alt = container.querySelector("#mediaFilterAlt");
+        var count = container.querySelector("#mediaFilterCount");
+        var empty = container.querySelector("#mediaFilterEmpty");
+        if (!query || !usage || !alt) return;
+        function apply() {
+            var q = String(query.value || "").trim().toLowerCase();
+            var shown = 0;
+            Array.prototype.forEach.call(container.querySelectorAll(".media-admin-card"), function (card) {
+                var visible = (!q || (card.getAttribute("data-media-search") || "").indexOf(q) !== -1) &&
+                    (usage.value === "all" || card.getAttribute("data-media-usage") === usage.value) &&
+                    (alt.value === "all" || card.getAttribute("data-media-alt") === alt.value);
+                card.hidden = !visible;
+                if (visible) shown += 1;
+            });
+            if (count) count.textContent = shown + (shown === 1 ? " imagem" : " imagens");
+            if (empty) empty.hidden = shown > 0;
+        }
+        query.addEventListener("input", apply);
+        usage.addEventListener("change", apply);
+        alt.addEventListener("change", apply);
     }
 
     function formatMediaUsageSummary(usage) {
         if (!usage || !usage.total) {
-            return "Sem uso detectado em eventos ou notícias do CMS.";
+            return "Sem uso detectado em eventos, notícias, rotas ou empreendimentos do CMS.";
         }
 
         var parts = [];
         if (usage.eventCount) parts.push(usage.eventCount + " evento(s)");
         if (usage.newsCount) parts.push(usage.newsCount + " notícia(s)");
         if (usage.routeCount) parts.push(usage.routeCount + " rota(s)");
+        if (usage.establishmentCount) parts.push(usage.establishmentCount + " empreendimento(s)");
         return "Em uso em " + parts.join(" e ") + ".";
     }
 

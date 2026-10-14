@@ -11,7 +11,7 @@
     }
 
     function seasonalShell(container) {
-        container.innerHTML = '<div class="page-header"><h1>🌦️ Sazonal / Clima</h1></div><div class="card"><form id="seasonal-form">' +
+        container.innerHTML = '<div class="page-header"><h1>Sazonal e clima</h1></div><div class="card"><form id="seasonal-form">' +
             '<label><input type="checkbox" name="enabled"> Ativado</label>' +
             '<label>Modo<select name="mode"><option value="AUTO">Automático</option><option value="MANUAL">Manual</option></select></label>' +
             '<label>Estação manual<select name="seasonOverride"><option value="">Selecione</option><option value="summer">Verão</option><option value="autumn">Outono</option><option value="winter">Inverno</option><option value="spring">Primavera</option></select></label>' +
@@ -50,7 +50,7 @@
     }
 
     function mascotShell(container) {
-        container.innerHTML = '<div class="page-header"><h1>🐾 Mascote</h1></div><div class="card"><form id="mascot-form"><p class="admin-helper-text">Controla a exibição pública do guia de turismo existente.</p>' +
+        container.innerHTML = '<div class="page-header"><h1>Mascote</h1></div><div class="card"><form id="mascot-form"><p class="admin-helper-text">Controla a exibição pública do guia de turismo existente.</p>' +
             '<label><input type="checkbox" name="enabled"> Ativado</label><p role="status" aria-live="polite"></p><button class="btn-primary" type="submit">Salvar</button></form></div>';
         container.querySelector("form").addEventListener("submit", saveMascot);
     }

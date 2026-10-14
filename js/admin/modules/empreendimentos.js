@@ -71,6 +71,7 @@
         error: "",
         filterStatus: "all",
         filterCategory: "all",
+        filterGeo: "all",
         query: "",
         editingId: "",
         mainPreviewUrl: "",
@@ -726,19 +727,19 @@
     function buildShell() {
         return '' +
             '<div class="page-header">' +
-                '<h1>🏨 Empreendimentos</h1>' +
+                '<h1>Empreendimentos</h1>' +
                 '<div class="page-actions">' +
                     '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.refresh()">Atualizar</button>' +
                     '<button class="btn-primary" type="button" onclick="AdminEstablishmentsModule.openForm()">Novo empreendimento</button>' +
                 '</div>' +
             '</div>' +
             '<div class="card">' +
-                '<div class="card-header"><h2>Catalogo editorial publico</h2></div>' +
-                '<p class="admin-helper-text">Rascunhos ficam privados. Documentos publicados sao consumidos pelo portal sem editar arquivos estaticos; arquivados deixam de aparecer. Solicitacoes de terceiros continuam exigindo revisao e aplicacao administrativa.</p>' +
+                '<div class="card-header"><h2>Catálogo editorial público</h2></div>' +
+                '<p class="admin-helper-text">Rascunhos ficam privados. Documentos publicados são consumidos pelo portal sem editar arquivos estáticos; arquivados deixam de aparecer. Solicitações de terceiros continuam exigindo revisão e aplicação administrativa.</p>' +
                 '<div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:flex-end;margin-top:0.75rem;">' +
                     '<div class="admin-field" style="margin:0;min-width:220px;">' +
                         '<label for="establishmentSearch">Pesquisa</label>' +
-                        '<input class="admin-input" id="establishmentSearch" type="search" placeholder="Nome, categoria, endereco..." value="' + escapeAttr(state.query) + '" oninput="AdminEstablishmentsModule.onFilterChange()">' +
+                        '<input class="admin-input" id="establishmentSearch" type="search" placeholder="Nome, categoria, endereço..." value="' + escapeAttr(state.query) + '" oninput="AdminEstablishmentsModule.onFilterChange()">' +
                     '</div>' +
                     '<div class="admin-field" style="margin:0;min-width:160px;">' +
                         '<label for="establishmentStatusFilter">Status</label>' +
@@ -754,6 +755,15 @@
                         buildSelect("establishmentCategoryFilter", [{ value: "all", label: "Todas" }].concat(CATEGORIES.map(function (cat) {
                             return { value: cat.id, label: cat.label };
                         })), state.filterCategory, "AdminEstablishmentsModule.onFilterChange()") +
+                    '</div>' +
+                    '<div class="admin-field" style="margin:0;min-width:200px;">' +
+                        '<label for="establishmentGeoFilter">Localização no mapa</label>' +
+                        buildSelect("establishmentGeoFilter", [
+                            { value: "all", label: "Todas" },
+                            { value: "fix", label: "A corrigir (sem ponto ou fora da região)" },
+                            { value: "review", label: "Aproximada ou não verificada" },
+                            { value: "ok", label: "Verificada" }
+                        ], state.filterGeo, "AdminEstablishmentsModule.onFilterChange()") +
                     '</div>' +
                 '</div>' +
             '</div>' +
@@ -814,6 +824,7 @@
         return state.items.filter(function (item) {
             if (state.filterStatus !== "all" && item.status !== state.filterStatus) return false;
             if (state.filterCategory !== "all" && item.categoryId !== state.filterCategory) return false;
+            if (state.filterGeo !== "all" && geoQuality(item).group !== state.filterGeo) return false;
             if (!q) return true;
             var haystack = normalizeText([
                 item.name,
@@ -854,7 +865,7 @@
                 '<th>Status</th>' +
                 '<th>Contato/local</th>' +
                 '<th>Atualizado</th>' +
-                '<th>Acoes</th>' +
+                '<th>Ações</th>' +
             '</tr></thead><tbody>' +
             items.map(renderRow).join("") +
             '</tbody></table></div>';
@@ -875,7 +886,7 @@
                 '<small style="color:#666;">' + escapeHtml(item.__id) + '</small></div></div></td>' +
             '<td>' + escapeHtml(item.categoryLabel || item.categoryId) + '</td>' +
             '<td>' + statusBadge(item.status) + '</td>' +
-            '<td><small>' + (contact ? contact : "—") + '</small></td>' +
+            '<td><small>' + (contact ? contact : "—") + '</small>' + geoBadge(item) + '</td>' +
             '<td><small>' + escapeHtml(formatDateTime(item.updatedAt || item.createdAt) || "—") + '</small></td>' +
             '<td><div style="display:flex;gap:0.35rem;flex-wrap:wrap;">' +
                 '<button class="btn-secondary" type="button" onclick="AdminEstablishmentsModule.viewDetails(\'' + jsId + '\')">Ver</button>' +
@@ -923,6 +934,36 @@
         return '<span class="badge badge-warning">Rascunho</span>';
     }
 
+    // Qualidade da localização usada pelo filtro, pela listagem e pelo painel.
+    var MUNICIPIO_REF = { lat: -25.874, lng: -50.383, raioKm: 45 };
+
+    function distanceFromCityKm(lat, lng) {
+        var toRad = Math.PI / 180;
+        var dLat = (lat - MUNICIPIO_REF.lat) * toRad;
+        var dLng = (lng - MUNICIPIO_REF.lng) * toRad;
+        var x = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(MUNICIPIO_REF.lat * toRad) * Math.cos(lat * toRad) * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        return 2 * 6371 * Math.asin(Math.sqrt(x));
+    }
+
+    function geoQuality(item) {
+        var loc = (item && item.location) || {};
+        var coords = loc.coordinates || {};
+        var lat = coords.lat;
+        var lng = coords.lng;
+        if (typeof lat !== "number" || typeof lng !== "number") return { group: "fix", tone: "danger", label: "Sem coordenadas" };
+        if (distanceFromCityKm(lat, lng) > MUNICIPIO_REF.raioKm) return { group: "fix", tone: "danger", label: "Fora da região" };
+        var status = clean(loc.coordStatus).toLowerCase();
+        if (status === "ok" || status === "verified" || status === "verificada") return { group: "ok", tone: "success", label: "Localização verificada" };
+        if (status === "aproximada" || status === "approximate") return { group: "review", tone: "warning", label: "Localização aproximada" };
+        return { group: "review", tone: "info", label: "Localização não verificada" };
+    }
+
+    function geoBadge(item) {
+        var quality = geoQuality(item);
+        return '<br><span class="badge badge-' + quality.tone + ' geo-badge-cell">' + escapeHtml(quality.label) + '</span>';
+    }
+
     function findItem(id) {
         return state.items.find(function (item) { return item.__id === id || item.id === id; }) || null;
     }
@@ -946,6 +987,31 @@
         target.scrollIntoView({ behavior: "smooth", block: "start" });
         updateMainImagePreview(item.media.mainImage.url, item.media.mainImage.path || item.media.mainImage.source);
         renderGalleryPreview();
+        mountGeoPicker(target);
+        var form = document.getElementById("establishmentForm");
+        if (form) {
+            // Campo inválido dentro de bloco recolhido: abre o bloco para o navegador focar o campo.
+            form.addEventListener("invalid", function (event) {
+                var block = event.target && event.target.closest ? event.target.closest("details") : null;
+                if (block) block.open = true;
+            }, true);
+        }
+    }
+
+    function mountGeoPicker(root) {
+        var host = root && root.querySelector ? root.querySelector("[data-geo-picker]") : null;
+        if (!host || !window.AdminGeoPicker || typeof window.AdminGeoPicker.mount !== "function") {
+            if (host) host.hidden = true;
+            return;
+        }
+        window.AdminGeoPicker.mount(host, {
+            lat: document.getElementById("est_lat"),
+            lng: document.getElementById("est_lng"),
+            mapsUrl: document.getElementById("est_mapsUrl"),
+            coordStatus: document.getElementById("est_coordStatus"),
+            name: document.getElementById("est_name"),
+            reference: MUNICIPIO_REF
+        });
     }
 
     function sourceLabel(source) {
@@ -1047,51 +1113,58 @@
             resumeNotice +
             '<form id="establishmentForm" onsubmit="AdminEstablishmentsModule.submitForm(event)">' +
                 '<input type="hidden" id="est_form_editingId" value="' + escapeAttr(item.__id || "") + '">' +
-                '<div class="admin-modal-grid">' +
+                group("Identificação",
                     field("Nome", "est_name", item.name, "text", true) +
-                    field("ID / slug canonico", "est_slug", item.slug || item.id, "text", true, editing ? "readonly" : "") +
+                    field("ID / slug canônico", "est_slug", item.slug || item.id, "text", true, editing ? "readonly" : "") +
                     selectField("Categoria", "est_categoryId", CATEGORIES, item.categoryId) +
-                    readonlyStatusField(item.status) +
+                    readonlyStatusField(item.status)) +
+                group("Conteúdo para o visitante",
                     textareaField("Resumo", "est_summary", item.content.summary, true) +
-                    textareaField("Descricao", "est_description", item.content.description, false) +
-                    textareaField("Descricao longa", "est_longDescription", item.content.longDescription, false) +
+                    textareaField("Descrição", "est_description", item.content.description, false) +
+                    textareaField("Descrição longa", "est_longDescription", item.content.longDescription, false) +
+                    textareaField("Horário de funcionamento", "est_openingHours", item.content.openingHours, false) +
+                    textareaField("Acessibilidade", "est_accessibility", item.content.accessibility, false) +
+                    textareaField("Tags (uma por linha ou separadas por vírgula)", "est_tags", joinList(item.content.tags), false)) +
+                group("Contato",
                     field("Telefone", "est_phone", item.contact.phone, "text") +
                     field("WhatsApp", "est_whatsapp", item.contact.whatsapp, "text") +
                     field("E-mail", "est_email", item.contact.email, "email") +
                     field("Site", "est_website", item.contact.website, "url") +
                     field("Instagram", "est_instagram", item.contact.instagram, "text") +
-                    field("Facebook", "est_facebook", item.contact.facebook, "text") +
-                    field("Endereco/localizacao", "est_address", item.location.address, "text") +
+                    field("Facebook", "est_facebook", item.contact.facebook, "text")) +
+                group("Localização",
+                    field("Endereço/localização", "est_address", item.location.address, "text") +
                     field("Bairro", "est_neighborhood", item.location.neighborhood, "text") +
                     field("Cidade", "est_city", item.location.city, "text") +
                     field("Estado", "est_state", item.location.state, "text") +
                     field("CEP", "est_postalCode", item.location.postalCode, "text") +
+                    field("Google Maps URL", "est_mapsUrl", item.location.mapsUrl, "url") +
+                    '<div class="geo-picker" data-geo-picker></div>' +
                     field("Latitude", "est_lat", item.location.coordinates.lat == null ? "" : item.location.coordinates.lat, "number", false, 'step="any"') +
                     field("Longitude", "est_lng", item.location.coordinates.lng == null ? "" : item.location.coordinates.lng, "number", false, 'step="any"') +
-                    field("Google Maps URL", "est_mapsUrl", item.location.mapsUrl, "url") +
-                    field("Status da coordenada", "est_coordStatus", item.location.coordStatus, "text") +
-                    textareaField("Observacao da coordenada", "est_coordNote", item.location.coordNote, false) +
-                    textareaField("Horario", "est_openingHours", item.content.openingHours, false) +
-                    textareaField("Acessibilidade", "est_accessibility", item.content.accessibility, false) +
-                    textareaField("Tags (uma por linha ou separadas por virgula)", "est_tags", joinList(item.content.tags), false) +
-                    textareaField("Rotas relacionadas (IDs)", "est_routeIds", joinList(item.relationships.routeIds), false) +
-                    field("Rota legada", "est_legacyRoute", item.relationships.legacyRoute, "text") +
-                    field("Nome da rota legada", "est_legacyRouteName", item.relationships.legacyRouteName, "text") +
+                    field("Status da coordenada", "est_coordStatus", item.location.coordStatus, "text", false, 'list="est_coordStatusOptions"') +
+                    '<datalist id="est_coordStatusOptions"><option value="ok">ok (verificada)</option><option value="aproximada">aproximada</option></datalist>' +
+                    textareaField("Observação da coordenada", "est_coordNote", item.location.coordNote, false)) +
+                group("Exibição no portal",
                     checkboxField("Destaque na Home", "est_featured", item.display.featured) +
                     field("Prioridade", "est_priority", item.display.priority, "number") +
-                    checkboxField("Visivel no mapa", "est_mapVisible", item.display.mapVisible) +
-                    checkboxField("Reivindicavel no Portal", "est_claimable", item.display.claimable) +
-                    field("Titulo SEO", "est_seoTitle", item.seo.title, "text") +
-                    textareaField("Descricao SEO", "est_seoDescription", item.seo.description, false) +
-                    field("Canonical path", "est_canonicalPath", item.seo.canonicalPath, "text") +
+                    checkboxField("Visível no mapa", "est_mapVisible", item.display.mapVisible) +
+                    checkboxField("Reivindicável no Portal do Usuário", "est_claimable", item.display.claimable) +
+                    textareaField("Rotas relacionadas (IDs)", "est_routeIds", joinList(item.relationships.routeIds), false) +
+                    field("Rota legada", "est_legacyRoute", item.relationships.legacyRoute, "text") +
+                    field("Nome da rota legada", "est_legacyRouteName", item.relationships.legacyRouteName, "text")) +
+                group("SEO e compartilhamento",
+                    field("Título SEO", "est_seoTitle", item.seo.title, "text") +
+                    textareaField("Descrição SEO", "est_seoDescription", item.seo.description, false) +
+                    field("Canonical path", "est_canonicalPath", item.seo.canonicalPath, "text"), true) +
+                group("Origem e notas internas",
                     field("Origem", "est_sourceOrigin", item.source.origin || "admin", "text") +
                     field("Arquivo de origem", "est_sourceFile", item.source.sourceFile, "text") +
                     field("ID original", "est_originalId", item.source.originalId, "text") +
                     field("Categoria original", "est_originalCategory", item.source.originalCategory, "text") +
                     textareaField("Aliases/IDs legados", "est_legacyIds", joinList(item.source.legacyIds), false) +
                     textareaField("Notas internas", "est_notesInternal", item.content.notesInternal, false) +
-                    textareaField("Notas de revisao", "est_reviewNotes", item.review.lastReviewNotes, false) +
-                '</div>' +
+                    textareaField("Notas de revisão", "est_reviewNotes", item.review.lastReviewNotes, false), true) +
                 '<div class="card" style="margin-top:1rem;">' +
                     '<div class="card-header"><h2>Imagem principal</h2></div>' +
                     '<div class="admin-modal-grid">' +
@@ -1129,6 +1202,14 @@
                 '</div>' +
             '</form>' +
         '</div>';
+    }
+
+    // Bloco do formulário. Os IDs dos campos não mudam: readForm continua igual.
+    function group(title, content, collapsed) {
+        return '<details class="est-group"' + (collapsed ? '' : ' open') + '>' +
+            '<summary class="est-group-title">' + escapeHtml(title) + '</summary>' +
+            '<div class="admin-modal-grid">' + content + '</div>' +
+        '</details>';
     }
 
     function field(label, id, value, type, required, extraAttrs) {
@@ -2753,7 +2834,22 @@
         state.query = search ? search.value : "";
         state.filterStatus = status ? status.value : "all";
         state.filterCategory = category ? category.value : "all";
+        var geo = document.getElementById ? document.getElementById("establishmentGeoFilter") : null;
+        state.filterGeo = geo ? geo.value : "all";
         renderList();
+    }
+
+    // Pré-filtros vindos do Painel (ex.: “Corrigir localização”, “Ver rascunhos”).
+    function presetFilters(filters) {
+        var next = filters || {};
+        state.query = "";
+        state.filterStatus = next.status || "all";
+        state.filterCategory = "all";
+        state.filterGeo = next.geo || "all";
+        if (document.getElementById && document.getElementById("establishments-admin-list")) {
+            var section = getSection();
+            if (section) render(section);
+        }
     }
 
     function refresh() {
@@ -2804,6 +2900,8 @@
         reserveSubmissionImport: reserveSubmissionImport,
         importSubmissionDraft: importSubmissionDraft,
         onFilterChange: onFilterChange,
+        presetFilters: presetFilters,
+        _geoQuality: geoQuality,
         onMainImageChange: onMainImageChange,
         onGalleryChange: onGalleryChange,
         _state: state,

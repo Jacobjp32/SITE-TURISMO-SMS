@@ -6,6 +6,19 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-14 — PAINEL ADMIN v2: navegação, fila de trabalho e verificador de mapa
+
+**Status:** commits locais na branch `admin/painel-evolucao` (worktree `.worktrees/admin-painel`, base `origin/main` 0822d37); sem push, sem deploy, sem alteração de Rules, Storage, contas ou dados de produção.
+
+- **Navegação** (`admin-firebase.html`, `js/admin/admin-nav.js`, `css/admin-panel.css`): menu agrupado por tarefa (Moderação, Conteúdo, Mídia, Portal, Sistema) com ícones SVG próprios; itens agora são links focáveis por teclado (antes `<a>` sem `href`); barra superior com breadcrumb, usuário e selo de ambiente local; links profundos `#seção` com botão Voltar do navegador; gaveta lateral no celular (Esc, overlay, foco). `showSection` legado preservado — o novo script só o envolve.
+- **Painel “O que precisa da sua atenção”** (`js/admin/modules/dashboard.js`): fila de trabalho ordenada por urgência (eventos/cadastros/atualizações/vínculos pendentes, eventos encerrados ainda publicados, localizações a corrigir, rascunhos, imagens sem texto alternativo), KPIs do portal, qualidade do catálogo publicado e próximos eventos. Somente leitura, sobre as coleções que o admin já lê; falha de uma fonte é declarada em vez de exibir número. Alimenta contadores no menu. Atalhos abrem a seção já filtrada.
+- **Empreendimentos** (`js/admin/modules/empreendimentos.js`, `js/admin/admin-geo-picker.js`): filtro e selo de qualidade da localização (sem coordenadas, fora da região, aproximada, não verificada, verificada); formulário organizado em blocos recolhíveis (IDs e `readForm` inalterados); verificador de mapa Leaflet com satélite, marcador arrastável, leitura de coordenadas de links completos do Google Maps, “marcar como verificada” e “desfazer”. O mapa só preenche os campos — a gravação continua no fluxo existente e nas Rules.
+- **Biblioteca de mídia** (`js/admin-content-cms.js`): o indicador de uso passa a considerar capa e galeria de empreendimentos (antes, imagens usadas só em empreendimentos apareciam como “sem uso”); busca e filtros por uso e por texto alternativo. A exclusão continua removendo só o item do catálogo, preservando o arquivo físico.
+- Títulos de seção sem emoji e alinhados ao menu (banners, galeria, rotas, sazonal, mascote, auditoria); acentuação corrigida nos textos do editor de empreendimentos tocados. Tokens `?v=admin-painel-v2-20261014`.
+- **Ambiente de teste local:** `scripts/admin-painel-dev-server.mjs` (servidor 127.0.0.1 que acrescenta os emuladores ao `connect-src` só na resposta local) e `scripts/admin-painel-demo-seed.mjs` (seed recusado fora de projeto `demo-*`; empreendimentos do próprio repositório + fixtures `[Demo]`).
+- `tests/admin-finalization.structure.test.mjs`: ordem esperada do menu atualizada para os grupos novos (mesmos 15 itens).
+- Validação: suíte sem emulador 132/134 (2 falhas preexistentes/CRLF em `firebase-auth.js`, não alterado); fluxos no Firebase Emulator: login, fila, atalho filtrado, editor com mapa, gravação de coordenada pelas Rules, link profundo, Voltar, gaveta móvel; 15 seções sem rolagem horizontal a 390 px.
+
 ## 2026-10-14 — MAPA ILUSTRADO: Arena Cultural confirmada
 
 - `js/mapa-turistico.js`: a equipe confirmou a localização da Arena Cultural no complexo do Parque de Exposições; ela saiu de `UNVERIFIED_LOCATION_IDS` e o "Como chegar" passa a usar a coordenada confirmada. `mapa-turistico.html`: token `?v=mapa-ilustrado-20261014b`.

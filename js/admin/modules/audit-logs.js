@@ -5,7 +5,7 @@
 
     function esc(value) { return window.AdminUI.escapeHtml(value == null ? "" : value); }
     function shell(container) {
-        container.innerHTML = '<div class="page-header"><h1>📜 Logs / Auditoria</h1></div><div class="card"><p class="admin-helper-text">Histórico somente leitura das ações administrativas registradas pelo backend.</p>' +
+        container.innerHTML = '<div class="page-header"><h1>Registro de atividades</h1></div><div class="card"><p class="admin-helper-text">Histórico somente leitura das ações administrativas registradas pelo backend.</p>' +
             '<div id="audit-items"><div class="loading">Carregando...</div></div><button id="audit-more" class="btn-primary" type="button" hidden>Carregar mais</button></div>';
         container.querySelector("#audit-more").addEventListener("click", function () { load(true); });
     }

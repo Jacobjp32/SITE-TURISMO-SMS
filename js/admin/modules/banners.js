@@ -430,7 +430,7 @@
     function buildShell() {
         return '' +
             '<div class="page-header">' +
-                '<h1>📢 Banners / Pop-ups</h1>' +
+                '<h1>Banners e pop-ups</h1>' +
                 '<span class="badge badge-info">Faixas e janelas do site</span>' +
             '</div>' +
 

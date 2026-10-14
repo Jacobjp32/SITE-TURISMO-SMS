@@ -10,7 +10,7 @@
 
     function shell(container) {
         container.innerHTML =
-            '<div class="page-header"><h1>🖼️ Galeria</h1><button type="button" class="btn-primary" id="gallery-reload">Atualizar</button></div>' +
+            '<div class="page-header"><h1>Galeria pública</h1><button type="button" class="btn-primary" id="gallery-reload">Atualizar</button></div>' +
             '<div class="card"><p class="admin-helper-text">Gerencie as imagens públicas existentes. Esta versão não envia nem exclui arquivos.</p>' +
             '<div id="gallery-feedback" role="status" aria-live="polite"></div><div id="gallery-items"><div class="loading">Carregando...</div></div></div>';
         container.querySelector("#gallery-reload").addEventListener("click", load);
