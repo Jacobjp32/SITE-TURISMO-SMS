@@ -7,7 +7,7 @@ const SW_SOURCE = readFileSync(new URL('../sw.js', import.meta.url), 'utf8');
 const HOME_SOURCE = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const NAV_SOURCE = readFileSync(new URL('../js/nav-shared.js', import.meta.url), 'utf8');
 const ORIGIN = 'https://turismo.test';
-const CACHE_NAME = 'turismo-sms-v27';
+const CACHE_NAME = 'turismo-sms-v28';
 
 class MockResponse {
     constructor(body = '', init = {}) {

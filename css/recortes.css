@@ -107,7 +107,7 @@ body.recortes .rc-hero-actions { display: flex; flex-wrap: wrap; gap: .75rem 1re
 body.recortes .rc-hero-visual { position: relative; justify-self: center; width: min(100%, 520px); padding: 0 0 0 40px; }
 /* O arco: mesma proporção do arco pintado da igreja. */
 body.recortes .rc-hero-arch { margin: 0; aspect-ratio: 3 / 4; border-radius: 999px 999px 6px 6px; overflow: hidden; background: var(--rc-paper-2); box-shadow: 0 30px 60px -30px rgba(27, 35, 29, .45); }
-body.recortes .rc-hero-arch img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; }
+body.recortes .rc-hero-arch img { width: 100%; height: 100%; object-fit: cover; object-position: 96% 50%; }
 body.recortes .rc-hero-medal { position: absolute; left: 0; bottom: 9%; width: 38%; aspect-ratio: 1; margin: 0; border-radius: 50%; overflow: hidden; border: 6px solid var(--rc-paper); box-shadow: 0 16px 30px -18px rgba(27, 35, 29, .5); }
 body.recortes .rc-hero-medal img { width: 100%; height: 100%; object-fit: cover; object-position: 60% 55%; }
 body.recortes .rc-hero-rosette { position: absolute; right: -34px; top: -26px; width: 128px; height: 128px; animation: rc-spin 120s linear infinite; }
@@ -490,7 +490,7 @@ body.recortes .rc-cta-short, body.recortes .rc-hero-caption-short { display: non
     body.recortes .rc-hero-title-b { padding-left: 1.6em; margin-top: -.08em; }
     body.recortes .rc-hero-visual { order: 3; width: 100%; padding: 0; }
     body.recortes .rc-hero-arch { aspect-ratio: 6 / 5; border-radius: 999px 999px 4px 4px; }
-    body.recortes .rc-hero-arch img { object-position: 50% 30%; }
+    body.recortes .rc-hero-arch img { object-position: 96% 50%; }
     body.recortes .rc-hero-medal { width: 27%; right: -4px; left: auto; bottom: 26px; border-width: 4px; }
     body.recortes .rc-hero-rosette { width: 54px; height: 54px; left: auto; right: -6px; top: -16px; }
     body.recortes .rc-hero-caption { position: static; padding: 0; margin-top: .5rem; text-align: left; font-size: .78rem !important; }

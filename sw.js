@@ -7,7 +7,7 @@
  */
 
 // Incrementar versão sempre que houver mudanças de conteúdo
-const CACHE_NAME = 'turismo-sms-v27';
+const CACHE_NAME = 'turismo-sms-v28';
 const OFFLINE_URL = 'offline.html';
 
 const OFFLINE_CORE_ASSETS = [

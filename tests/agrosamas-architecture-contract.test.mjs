@@ -240,12 +240,12 @@ test('Home and Eventos show postponed state while preserving both routes and loc
 });
 
 test('changed editorial sources have cache-busted references in every active consumer', () => {
-    assert.match(INDEX_SOURCE, /translations\.js\?v=v22-20261013/);
+    assert.match(INDEX_SOURCE, /translations\.js\?v=hero-aereo-20261014/);
     assert.match(INDEX_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(INDEX_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
     assert.match(INDEX_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
     assert.match(INDEX_SOURCE, /js\/event-occurrence-adapter\.js\?v=agro-02-20260909/);
-    assert.match(EVENTS_PAGE_SOURCE, /translations\.js\?v=v22-20261013/);
+    assert.match(EVENTS_PAGE_SOURCE, /translations\.js\?v=hero-aereo-20261014/);
     assert.match(EVENTS_PAGE_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(MAP_PAGE_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
     assert.match(MAP_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
