@@ -1233,7 +1233,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-v2-20261014">
+    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-r2-20261014">
 </head>
 <body>
     <!-- Login Screen -->
@@ -1432,12 +1432,12 @@
             <section class="admin-section" id="section-aprovacoes">
                 <div class="page-header">
                     <h1>Aprovações pendentes</h1>
-                    <button class="btn-primary" onclick="loadPendingData()">🔄 Atualizar</button>
+                    <button class="btn-primary" onclick="loadPendingData()">Atualizar</button>
                 </div>
                 
                 <div class="card">
                     <div class="card-header">
-                        <h2>🎪 Eventos Aguardando Aprovação</h2>
+                        <h2>Eventos aguardando aprovação</h2>
                     </div>
                     <div id="eventos-pendentes-container">
                         <div class="loading">Carregando...</div>
@@ -1446,7 +1446,7 @@
                 
                 <div class="card">
                     <div class="card-header">
-                        <h2>🏨 Estabelecimentos Aguardando Aprovação</h2>
+                        <h2>Empreendimentos aguardando aprovação</h2>
                     </div>
                     <div id="estabelecimentos-pendentes-container">
                         <div class="loading">Carregando...</div>
@@ -1455,7 +1455,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h2>🛠️ Alterações de empreendimentos</h2>
+                        <h2>Alterações de empreendimentos</h2>
                     </div>
                     <p class="admin-helper-text">
                         Esta fila registra a revisão administrativa das alterações solicitadas. Aprovar aqui <strong>não altera o empreendimento automaticamente</strong>; a aplicação posterior usa o fluxo editorial e preserva o status: publicados são republicados, rascunhos continuam privados e arquivados precisam ser restaurados antes.
@@ -1470,7 +1470,7 @@
             <section class="admin-section" id="section-vinculos">
                 <div class="page-header">
                     <h1>Pedidos de vínculo</h1>
-                    <button class="btn-primary" onclick="loadEstablishmentClaims()">🔄 Atualizar</button>
+                    <button class="btn-primary" onclick="loadEstablishmentClaims()">Atualizar</button>
                 </div>
 
                 <div class="card">
@@ -1491,8 +1491,8 @@
                 <div class="page-header">
                     <h1>Vínculos ativos</h1>
                     <div class="page-actions">
-                        <button class="btn-primary" onclick="loadEstablishmentManagers()">🔄 Atualizar</button>
-                        <button class="btn-primary" onclick="openAddManagerModal()">➕ Adicionar vínculo</button>
+                        <button class="btn-primary" onclick="loadEstablishmentManagers()">Atualizar</button>
+                        <button class="btn-primary" onclick="openAddManagerModal()">Adicionar vínculo</button>
                     </div>
                 </div>
 
@@ -1514,7 +1514,7 @@
             <section class="admin-section" id="section-usuarios">
                 <div class="page-header">
                     <h1>Usuários</h1>
-                    <button class="btn-primary" onclick="loadUsers()">🔄 Atualizar</button>
+                    <button class="btn-primary" onclick="loadUsers()">Atualizar</button>
                 </div>
                 
                 <div class="card">
@@ -1685,7 +1685,9 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
     <script src="js/firebase-auth.js?v=establishment-approval-v2-20260914"></script>
-    <script src="js/admin-content-cms.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/admin-feedback.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/admin-content-preview.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin-content-cms.js?v=admin-painel-r2-20261014"></script>
     <!-- Fundação modular do Admin CMS (Bloco 1 / Etapa 1) — modo passthrough, aditivo e inerte. -->
     <script src="js/admin/admin-context.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-ui.js?v=admin-modular-20260625"></script>
@@ -1693,19 +1695,19 @@
     <script src="js/admin/admin-router.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-shell.js?v=admin-modular-20260625"></script>
     <!-- Módulos do painel. -->
-    <script src="js/admin/modules/dashboard.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/dashboard.js?v=admin-painel-r2-20261014"></script>
     <!-- Bloco 4C: módulo real Banners / Pop-ups (CRUD rascunho). Carregar ANTES
          do placeholder.js para que o módulo real vença o placeholder de mesmo id. -->
-    <script src="js/admin/modules/banners.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/banners.js?v=admin-painel-r2-20261014"></script>
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
-    <script src="js/admin/admin-geo-picker.js?v=admin-painel-v2-20261014"></script>
-    <script src="js/admin/modules/empreendimentos.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/admin-geo-picker.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/empreendimentos.js?v=admin-painel-r2-20261014"></script>
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
-    <script src="js/admin/modules/rotas.js?v=admin-painel-v2-20261014"></script>
-    <script src="js/admin/modules/gallery.js?v=admin-painel-v2-20261014"></script>
-    <script src="js/admin/modules/site-config.js?v=admin-painel-v2-20261014"></script>
-    <script src="js/admin/modules/audit-logs.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/modules/rotas.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/gallery.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/site-config.js?v=admin-painel-r2-20261014"></script>
+    <script src="js/admin/modules/audit-logs.js?v=admin-painel-r2-20261014"></script>
     <script src="js/admin/modules/placeholder.js?v=site-admin-finalization-20260903"></script>
     <script>
         const SEC = window.SMSecurity;
@@ -1738,7 +1740,7 @@
                 case 'view-event': result = viewEvent(targetId); break;
                 case 'approve-establishment': result = approveEstablishment(targetId); break;
                 case 'reject-establishment': result = rejectEstablishment(targetId); break;
-                case 'change-user-role': result = changeUserRole(targetId, actionElement.value); break;
+                case 'change-user-role': result = changeUserRole(targetId, actionElement.value, actionElement); break;
                 case 'copy-user-email': result = copyUserEmail(actionElement.getAttribute('data-admin-value') || ''); break;
                 case 'focus-user-managers': result = focusUserManagers(targetId); break;
                 case 'open-add-manager': result = openAddManagerModal(targetId); break;
@@ -1769,6 +1771,9 @@
                 case 'content-delete-event': result = AdminContentCMS.deleteEvent(targetId); break;
                 case 'content-open-news': result = AdminContentCMS.openNewsModal(targetId); break;
                 case 'content-toggle-news-publish': result = AdminContentCMS.toggleNewsPublish(targetId); break;
+                case 'content-preview-news': result = AdminContentCMS.previewNews(targetId); break;
+                case 'content-confirm-news-publish': AdminContentCMS.closeModal(); result = AdminContentCMS.toggleNewsPublish(targetId, true); break;
+                case 'content-confirm-event-publish': AdminContentCMS.closeModal(); result = AdminContentCMS.toggleEventPublish(targetId, true); break;
                 case 'content-delete-news': result = AdminContentCMS.deleteNews(targetId); break;
                 case 'content-copy-media-url': result = AdminContentCMS.copyMediaUrl(targetId); break;
                 case 'content-open-media': result = AdminContentCMS.openMediaModal(targetId); break;
@@ -1785,6 +1790,7 @@
             if (result && typeof result.catch === 'function') {
                 result.catch(function(error) {
                     console.error('[admin-firebase] Falha em ação delegada.', { action: action, error: error });
+                    notify('A ação não pôde ser concluída. Tente novamente; se o erro continuar, recarregue o painel.', 'error');
                 });
             }
         }
@@ -2176,7 +2182,7 @@
 
                     eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar eventos pendentes. Verifique o console e tente novamente.</p>';
                 } else if (eventos.length === 0) {
-                    eventosContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum evento pendente!</p>';
+                    eventosContainer.innerHTML = '<p class="admin-empty">Nenhum evento aguardando aprovação.</p>';
                 } else {
                     eventosContainer.innerHTML = `
                         <table class="data-table">
@@ -2208,9 +2214,9 @@
                                         </td>
                                         <td>${renderPendingEventImages(e)}</td>
                                         <td>
-                                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-event" data-admin-target-id="${SEC.attr(e.id)}">✅ Aprovar</button>
-                                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-event" data-admin-target-id="${SEC.attr(e.id)}">❌ Rejeitar</button>
-                                            <button class="btn-sm btn-edit" type="button" data-admin-action="view-event" data-admin-target-id="${SEC.attr(e.id)}">👁️ Revisar</button>
+                                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-event" data-admin-target-id="${SEC.attr(e.id)}">Aprovar</button>
+                                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-event" data-admin-target-id="${SEC.attr(e.id)}">Rejeitar</button>
+                                            <button class="btn-sm btn-edit" type="button" data-admin-action="view-event" data-admin-target-id="${SEC.attr(e.id)}">Revisar</button>
                                         </td>
                                     </tr>
                                 `).join('')}
@@ -2240,7 +2246,7 @@
                 console.error('[admin-firebase] Falha ao carregar estabelecimentos pendentes.', estabelecimentosResult);
                 estContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#b42318;">Erro ao carregar estabelecimentos pendentes. Verifique o console e tente novamente.</p>';
             } else if (estabelecimentos.length === 0) {
-                estContainer.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhum estabelecimento pendente!</p>';
+                estContainer.innerHTML = '<p class="admin-empty">Nenhum cadastro de empreendimento aguardando aprovação.</p>';
             } else {
                 estContainer.innerHTML = `
                     <table class="data-table">
@@ -2264,9 +2270,9 @@
                                     <td>${SEC.html(String(e.imageCount || (Array.isArray(e.images) ? e.images.length : 0)))}</td>
                                     <td>
                                         ${FirebaseSystem.isAdmin()
-                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="approve-establishment" data-admin-target-id="${SEC.attr(e.id)}" title="Aprovar e criar rascunho no CMS">✅ Aprovar e criar draft</button>`
-                                            : '<button class="btn-sm btn-approve" type="button" disabled title="Somente administradores podem criar drafts no CMS">🔒 Aprovação exige admin</button>'}
-                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-establishment" data-admin-target-id="${SEC.attr(e.id)}">❌</button>
+                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="approve-establishment" data-admin-target-id="${SEC.attr(e.id)}" title="Aprovar e criar rascunho no CMS">Aprovar e criar draft</button>`
+                                            : '<button class="btn-sm btn-approve" type="button" disabled title="Somente administradores podem criar rascunhos no CMS">Aprovação exige admin</button>'}
+                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-establishment" data-admin-target-id="${SEC.attr(e.id)}">Rejeitar</button>
                                     </td>
                                 </tr>
                             `).join('')}
@@ -2356,7 +2362,7 @@
                                                 ${u.id !== window.currentUser?.uid ? `
                                                     <button class="btn-sm ${u.ativo !== false ? 'btn-reject' : 'btn-approve'}" type="button"
                                                             data-admin-action="toggle-user-status" data-admin-target-id="${SEC.attr(u.id)}" data-admin-next-active="${u.ativo === false}">
-                                                        ${u.ativo !== false ? '🚫 Desativar' : '✅ Ativar'}
+                                                        ${u.ativo !== false ? 'Desativar' : 'Ativar'}
                                                     </button>
                                                 ` : '<small style="color:#888;">Você</small>'}
                                             </div>
@@ -2381,7 +2387,7 @@
             if (!filteredClaims.length) {
                 container.innerHTML = (adminClaimUserFilterId
                     ? renderFilterBannerHtml('solicitações', adminClaimUserFilterId, 0, 'clear-user-claims-filter')
-                    : '') + '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de vínculo pendente.</p>';
+                    : '') + '<p style="text-align:center;padding:2rem;color:#888;">Nenhuma solicitação de vínculo pendente.</p>';
                 return;
             }
 
@@ -2416,8 +2422,8 @@
                                     <td class="claim-admin-actions">
                                         <textarea class="admin-textarea" id="claim-note-${SEC.attr(claim.id)}" placeholder="Observação interna (opcional)"></textarea>
                                         <input class="admin-input" id="claim-reason-${SEC.attr(claim.id)}" type="text" maxlength="240" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
-                                        <button class="btn-sm btn-approve" type="button" data-admin-action="approve-claim" data-admin-target-id="${SEC.attr(claim.id)}">✅ Aprovar</button>
-                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-claim" data-admin-target-id="${SEC.attr(claim.id)}">❌ Rejeitar</button>
+                                        <button class="btn-sm btn-approve" type="button" data-admin-action="approve-claim" data-admin-target-id="${SEC.attr(claim.id)}">Aprovar</button>
+                                        <button class="btn-sm btn-reject" type="button" data-admin-action="reject-claim" data-admin-target-id="${SEC.attr(claim.id)}">Rejeitar</button>
                                         <span class="claim-admin-note">Aprovação cria ou reativa um vínculo em <code>establishment_managers</code> sem duplicar vínculo ativo.</span>
                                     </td>
                                 </tr>
@@ -2435,7 +2441,7 @@
             const requests = await FirebaseSystem.listAllEstablishmentUpdateRequests(['pending', 'approved']);
 
             if (!requests.length) {
-                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">✅ Nenhuma solicitação de alteração pendente ou aprovada aguardando aplicação.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:2rem;color:#888;">Nenhuma solicitação de alteração pendente ou aprovada aguardando aplicação.</p>';
                 return;
             }
 
@@ -2555,10 +2561,10 @@
                                     </td>
                                     <td>${SEC.html(formatFirestoreDate(manager.approvedAt))}</td>
                                     <td class="manager-actions">
-                                        <button class="btn-sm btn-edit" type="button" data-admin-action="edit-manager" data-admin-target-id="${SEC.attr(manager.id)}">✏️ Editar</button>
+                                        <button class="btn-sm btn-edit" type="button" data-admin-action="edit-manager" data-admin-target-id="${SEC.attr(manager.id)}">Editar</button>
                                         ${manager.active === false
-                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="reactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">✅ Reativar</button>`
-                                            : `<button class="btn-sm btn-reject" type="button" data-admin-action="deactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">🚫 Desativar</button>`}
+                                            ? `<button class="btn-sm btn-approve" type="button" data-admin-action="reactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">Reativar</button>`
+                                            : `<button class="btn-sm btn-reject" type="button" data-admin-action="deactivate-manager" data-admin-target-id="${SEC.attr(manager.id)}">Desativar</button>`}
                                     </td>
                                 </tr>
                             `).join('')}
@@ -2642,6 +2648,34 @@
             select.appendChild(tempOption);
         }
 
+        // Confirmações e avisos do painel (js/admin/admin-feedback.js).
+        // Sem o componente, cai no comportamento nativo do navegador.
+        function notify(message, type) {
+            if (!message) return;
+            if (window.AdminFeedback) return AdminFeedback.toast(message, type);
+            window.alert(message);
+        }
+
+        function notifyResult(result) {
+            notify(result && result.message ? result.message : 'Operação sem resposta.', result && result.success ? 'success' : 'error');
+        }
+
+        function askConfirm(options) {
+            if (window.AdminFeedback) return AdminFeedback.confirm(options);
+            return Promise.resolve(window.confirm([options.title, options.message].concat(options.details || []).filter(Boolean).join('\n\n')));
+        }
+
+        function askText(options) {
+            if (window.AdminFeedback) return AdminFeedback.prompt(options);
+            const value = window.prompt([options.title, options.message].filter(Boolean).join('\n\n'), options.value || '');
+            return Promise.resolve(value === null ? null : value);
+        }
+
+        function findPendingEventTitle(eventId) {
+            const item = (adminPendingEventsCache || []).find(function(entry) { return entry.id === eventId; });
+            return item ? getEventDisplayTitle(item) : '';
+        }
+
         function closeManagerModal() {
             document.getElementById('managerModal').hidden = true;
             document.getElementById('managerForm').reset();
@@ -2659,12 +2693,12 @@
             await ensureManagerFormSources();
 
             if (!adminUsersCache.length) {
-                alert('Não foi possível carregar a lista de usuários.');
+                notify('Não foi possível carregar a lista de usuários.', 'error');
                 return;
             }
 
             if (!adminEstablishmentCatalog.length) {
-                alert('Não foi possível carregar o catálogo de empreendimentos.');
+                notify('Não foi possível carregar o catálogo de empreendimentos.', 'error');
                 return;
             }
 
@@ -2690,7 +2724,7 @@
             });
 
             if (!manager) {
-                alert('Vínculo não encontrado na lista atual.');
+                notify('Vínculo não encontrado na lista atual.', 'error');
                 return;
             }
 
@@ -2750,17 +2784,17 @@
             }
 
             if (!selectedEstablishment) {
-                alert('Selecione um empreendimento válido.');
+                notify('Selecione um empreendimento válido.', 'error');
                 return;
             }
 
             if (mode === 'edit' && !originalUserId) {
-                alert('Este vínculo não possui usuário associado. Desative este registro e crie um novo vínculo.');
+                notify('Este vínculo não possui usuário associado. Desative este registro e crie um novo vínculo.', 'error');
                 return;
             }
 
             if (mode === 'create' && !selectedUser) {
-                alert('Selecione um usuário e um empreendimento válidos.');
+                notify('Selecione um usuário e um empreendimento válidos.', 'error');
                 return;
             }
 
@@ -2788,11 +2822,17 @@
 
                     if (existingManager && existingManager.active === false) {
                         if (!active) {
-                            alert('Já existe um vínculo inativo para este usuário e empreendimento. Edite ou reative o registro existente.');
+                            notify('Já existe um vínculo inativo para este usuário e empreendimento. Edite ou reative o registro existente.', 'error');
                             return;
                         }
 
-                        if (!confirm('Já existe um vínculo inativo para este usuário e empreendimento. Deseja reativá-lo e atualizar os dados?')) {
+                        const reactivate = await askConfirm({
+                            title: 'Reativar vínculo existente?',
+                            message: 'Já existe um vínculo inativo entre este usuário e este empreendimento.',
+                            details: ['O vínculo antigo será reativado com a função e as observações informadas agora.', 'Nenhum vínculo duplicado será criado.'],
+                            confirmLabel: 'Reativar vínculo'
+                        });
+                        if (!reactivate) {
                             return;
                         }
 
@@ -2803,7 +2843,7 @@
                             active: true,
                             notes: notes
                         });
-                        alert(reactivateResult.message);
+                        notifyResult(reactivateResult);
                         if (reactivateResult.success) {
                             closeManagerModal();
                             loadEstablishmentManagers();
@@ -2812,7 +2852,7 @@
                     }
 
                     const result = await FirebaseSystem.createEstablishmentManager(payload);
-                    alert(result.message);
+                    notifyResult(result);
                     if (result.success) {
                         closeManagerModal();
                         loadEstablishmentManagers();
@@ -2827,7 +2867,7 @@
                     active: active,
                     notes: notes
                 });
-                alert(updateResult.message);
+                notifyResult(updateResult);
                 if (updateResult.success) {
                     closeManagerModal();
                     loadEstablishmentManagers();
@@ -2839,23 +2879,35 @@
         }
 
         async function deactivateManager(managerId) {
-            const reason = prompt('Motivo da desativação (opcional):');
+            const manager = adminManagersCache.find(function(item) { return item.id === managerId; });
+            const reason = await askText({
+                title: 'Desativar vínculo?',
+                message: (manager ? (manager.userName || manager.userEmail || 'O usuário') + ' deixa de gerenciar "' + (manager.establishmentName || 'este empreendimento') + '" no Portal do Usuário.' : 'O usuário deixa de gerenciar este empreendimento no Portal do Usuário.') +
+                    '\n\nO histórico é preservado e o vínculo pode ser reativado depois.',
+                label: 'Motivo da desativação',
+                hint: 'Fica registrado no vínculo para consulta da equipe.',
+                maxLength: 240,
+                confirmLabel: 'Desativar vínculo',
+                tone: 'danger'
+            });
             if (reason === null) return;
 
-            if (!confirm('Desativar este vínculo?')) return;
-
             const result = await FirebaseSystem.deactivateEstablishmentManager(managerId, reason);
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentManagers();
             }
         }
 
         async function reactivateManager(managerId) {
-            if (!confirm('Reativar este vínculo?')) return;
+            if (!(await askConfirm({
+                title: 'Reativar vínculo?',
+                message: 'O usuário volta a gerenciar este empreendimento no Portal do Usuário.',
+                confirmLabel: 'Reativar vínculo'
+            }))) return;
 
             const result = await FirebaseSystem.reactivateEstablishmentManager(managerId);
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentManagers();
             }
@@ -2908,18 +2960,33 @@
 
         // Ações
         async function approveEvent(eventId) {
-            if (!confirm('Aprovar este evento?')) return;
+            const eventTitle = findPendingEventTitle(eventId);
+            if (!(await askConfirm({
+                title: 'Aprovar evento?',
+                message: (eventTitle ? '"' + eventTitle + '" ' : 'O evento ') + 'será copiado para a lista de eventos aprovados e passa a aparecer na agenda pública do portal.',
+                details: ['As imagens enviadas são copiadas para a biblioteca do CMS.', 'Depois de aprovado, ele pode ser editado ou despublicado em Conteúdo › Eventos.'],
+                confirmLabel: 'Aprovar e publicar'
+            }))) return;
             const result = await FirebaseSystem.approveEvent(eventId);
-            alert(result.message);
+            notifyResult(result);
             loadPendingData();
             loadDashboardData();
         }
 
         async function rejectEvent(eventId) {
-            const reason = prompt('Motivo da rejeição (opcional):');
+            const eventTitle = findPendingEventTitle(eventId);
+            const reason = await askText({
+                title: 'Rejeitar evento?',
+                message: (eventTitle ? '"' + eventTitle + '" ' : 'O evento ') + 'não será publicado e sai da fila de aprovação.',
+                label: 'Motivo da rejeição',
+                hint: 'Ajuda o solicitante a entender o que corrigir antes de reenviar.',
+                maxLength: 500,
+                confirmLabel: 'Rejeitar evento',
+                tone: 'danger'
+            });
             if (reason === null) return;
             const result = await FirebaseSystem.rejectEvent(eventId, reason);
-            alert(result.message);
+            notifyResult(result);
             loadPendingData();
             if (result.success) {
                 loadDashboardData();
@@ -2932,7 +2999,7 @@
             });
 
             if (!eventItem) {
-                alert('Evento pendente não encontrado na lista atual.');
+                notify('Evento pendente não encontrado na lista atual.', 'error');
                 return;
             }
 
@@ -2983,12 +3050,22 @@
         }
 
         async function approveEstablishment(estId) {
-            if (!confirm('Aprovar este cadastro e criar/confirmar um rascunho no módulo Empreendimentos? Nada será publicado automaticamente.')) return;
+            if (!(await askConfirm({
+                title: 'Aprovar cadastro de empreendimento?',
+                message: 'Será criado (ou confirmado) um rascunho privado no módulo Empreendimentos.',
+                details: ['Nada será publicado automaticamente no portal.', 'Revise localização, fotos e textos no rascunho antes de publicar.'],
+                confirmLabel: 'Aprovar e criar rascunho'
+            }))) return;
             const result = await FirebaseSystem.approveEstablishment(estId);
-            alert(result.message);
+            notifyResult(result);
             loadPendingData();
             loadDashboardData();
-            if (result.success && result.cmsEstablishmentId && confirm('Rascunho CMS: ' + result.cmsEstablishmentId + ' (Draft). Abrir em Empreendimentos agora?')) {
+            if (result.success && result.cmsEstablishmentId && await askConfirm({
+                title: 'Rascunho criado',
+                message: 'O rascunho "' + result.cmsEstablishmentId + '" está pronto para revisão em Empreendimentos.',
+                confirmLabel: 'Abrir em Empreendimentos',
+                cancelLabel: 'Agora não'
+            })) {
                 showSection('empreendimentos');
                 if (window.AdminEstablishmentsModule && typeof window.AdminEstablishmentsModule.refresh === 'function') {
                     window.AdminEstablishmentsModule.refresh();
@@ -2997,18 +3074,31 @@
         }
 
         async function rejectEstablishment(estId) {
-            const reason = prompt('Motivo da rejeição (opcional):');
+            const reason = await askText({
+                title: 'Rejeitar cadastro de empreendimento?',
+                message: 'O cadastro não será aprovado e sai da fila de pendências.',
+                label: 'Motivo da rejeição',
+                hint: 'Ajuda o solicitante a corrigir o envio.',
+                maxLength: 500,
+                confirmLabel: 'Rejeitar cadastro',
+                tone: 'danger'
+            });
             if (reason === null) return;
             const result = await FirebaseSystem.rejectEstablishment(estId, reason);
-            alert(result.message);
+            notifyResult(result);
             loadPendingData();
         }
 
         async function approveClaim(claimId) {
             const notes = getClaimInputValue('claim-note-', claimId);
-            if (!confirm('Aprovar este vínculo?')) return;
+            if (!(await askConfirm({
+                title: 'Aprovar pedido de vínculo?',
+                message: 'O usuário passa a gerenciar este empreendimento no Portal do Usuário.',
+                details: ['Se já existir um vínculo inativo, ele é reativado — nunca duplicado.'],
+                confirmLabel: 'Aprovar vínculo'
+            }))) return;
             const result = await FirebaseSystem.approveEstablishmentClaim(claimId, notes);
-            alert(result.message);
+            notifyResult(result);
             loadEstablishmentClaims();
             if (result.success) {
                 loadEstablishmentManagers();
@@ -3020,26 +3110,37 @@
             const notes = getClaimInputValue('claim-note-', claimId);
 
             if (!reason) {
-                alert('Informe o motivo da rejeição antes de continuar.');
+                notify('Informe o motivo da rejeição antes de continuar.', 'warning');
                 return;
             }
 
-            if (!confirm('Rejeitar esta solicitação de vínculo?')) return;
+            if (!(await askConfirm({
+                title: 'Rejeitar pedido de vínculo?',
+                message: 'O pedido é encerrado com o motivo informado e o usuário não recebe acesso ao empreendimento.',
+                details: ['Motivo: ' + reason],
+                confirmLabel: 'Rejeitar pedido',
+                tone: 'danger'
+            }))) return;
 
             const result = await FirebaseSystem.rejectEstablishmentClaim(claimId, reason, notes);
-            alert(result.message);
+            notifyResult(result);
             loadEstablishmentClaims();
         }
 
         async function approveEstablishmentUpdateRequest(requestId) {
             const reviewNotes = getClaimInputValue('update-review-note-', requestId);
-            if (!confirm('Aprovar esta solicitação e marcar como aguardando publicação/atualização controlada? Isso não publica nada automaticamente no site público.')) return;
+            if (!(await askConfirm({
+                title: 'Aprovar solicitação de alteração?',
+                message: 'A solicitação fica marcada como aprovada, aguardando aplicação controlada.',
+                details: ['Nada será publicado automaticamente.', 'A aplicação no catálogo é um passo separado ("Aplicar ao catálogo").'],
+                confirmLabel: 'Aprovar solicitação'
+            }))) return;
 
             const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
                 status: 'approved',
                 reviewNotes: reviewNotes
             });
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
@@ -3050,18 +3151,24 @@
             const rejectionReason = getClaimInputValue('update-rejection-reason-', requestId);
 
             if (!rejectionReason) {
-                alert('Informe o motivo da rejeição antes de continuar.');
+                notify('Informe o motivo da rejeição antes de continuar.', 'warning');
                 return;
             }
 
-            if (!confirm('Rejeitar esta solicitação de alteração?')) return;
+            if (!(await askConfirm({
+                title: 'Rejeitar solicitação de alteração?',
+                message: 'Os dados do empreendimento permanecem como estão.',
+                details: ['Motivo: ' + rejectionReason],
+                confirmLabel: 'Rejeitar solicitação',
+                tone: 'danger'
+            }))) return;
 
             const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
                 status: 'rejected',
                 reviewNotes: reviewNotes,
                 rejectionReason: rejectionReason
             });
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
@@ -3072,35 +3179,44 @@
             const changesRequestedNotes = getClaimInputValue('update-changes-requested-', requestId);
 
             if (!changesRequestedNotes) {
-                alert('Descreva quais ajustes precisam ser feitos antes de continuar.');
+                notify('Descreva quais ajustes precisam ser feitos antes de continuar.', 'warning');
                 return;
             }
 
-            if (!confirm('Marcar esta solicitação como ajustes necessários?')) return;
+            if (!(await askConfirm({
+                title: 'Pedir ajustes ao solicitante?',
+                message: 'A solicitação volta para o empreendedor com as orientações informadas.',
+                details: ['Ajustes: ' + changesRequestedNotes],
+                confirmLabel: 'Pedir ajustes',
+                tone: 'warning'
+            }))) return;
 
             const result = await FirebaseSystem.reviewEstablishmentUpdateRequest(requestId, {
                 status: 'changes_requested',
                 reviewNotes: reviewNotes,
                 changesRequestedNotes: changesRequestedNotes
             });
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
         }
 
         async function applyEstablishmentUpdateRequest(requestId) {
-            const confirmation = [
-                'Aplicar esta solicitação aprovada ao catálogo editorial cms_establishments?',
-                '',
-                'Se o empreendimento estiver publicado, as alterações serão republicadas no portal.',
-                'Rascunhos continuam privados; arquivados precisam ser restaurados antes.'
-            ].join('\n');
-
-            if (!confirm(confirmation)) return;
+            if (!(await askConfirm({
+                title: 'Aplicar alterações ao catálogo?',
+                message: 'As alterações aprovadas serão gravadas no cadastro editorial do empreendimento.',
+                details: [
+                    'Se o empreendimento estiver publicado, as alterações aparecem no portal.',
+                    'Rascunhos continuam privados.',
+                    'Arquivados precisam ser restaurados antes.'
+                ],
+                confirmLabel: 'Aplicar alterações',
+                tone: 'warning'
+            }))) return;
 
             const result = await FirebaseSystem.applyApprovedEstablishmentUpdateRequest(requestId);
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
@@ -3110,56 +3226,87 @@
             const images = collectMediaReviewImages(requestId);
 
             if (!images.length) {
-                alert('Esta solicitação não possui imagens para revisar.');
+                notify('Esta solicitação não possui imagens para revisar.', 'error');
                 return;
             }
 
             const result = await FirebaseSystem.reviewEstablishmentUpdateMedia(requestId, {
                 images: images
             });
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
         }
 
         async function applyAcceptedEstablishmentUpdateMedia(requestId) {
-            const confirmation = [
-                'Esta ação copia as imagens aceitas para cms-media e atualiza o catálogo editorial.',
-                'Se o empreendimento estiver publicado, a mídia será republicada no portal.',
-                '',
-                'Regra deste bloco:',
-                '- se o catálogo não tiver imagem principal, a primeira aceita vira imagem principal;',
-                '- as demais imagens aceitas entram na galeria;',
-                '- se já houver imagem principal, nenhuma capa será sobrescrita e todas entram na galeria.',
-                '',
-                'Os arquivos originais em submissions serão preservados.'
-            ].join('\n');
-
-            if (!confirm(confirmation)) return;
+            if (!(await askConfirm({
+                title: 'Aplicar imagens aceitas?',
+                message: 'As imagens aceitas são copiadas para a biblioteca do CMS e entram no cadastro do empreendimento. Se ele estiver publicado, aparecem no portal.',
+                details: [
+                    'Sem imagem principal: a primeira aceita vira a principal.',
+                    'Com imagem principal: nada é sobrescrito; todas entram na galeria.',
+                    'Os arquivos originais enviados pelo empreendedor são preservados.'
+                ],
+                confirmLabel: 'Aplicar imagens',
+                tone: 'warning'
+            }))) return;
 
             const result = await FirebaseSystem.applyAcceptedEstablishmentUpdateMedia(requestId);
-            alert(result.message);
+            notifyResult(result);
             if (result.success) {
                 loadEstablishmentUpdateRequests();
             }
         }
 
-        async function changeUserRole(userId, newRole) {
+        async function changeUserRole(userId, newRole, selectElement) {
+            const user = adminUsersCache.find(function(item) { return item.id === userId; }) || {};
+            const previousRole = user.role || 'user';
+            const labels = { user: 'Usuário', moderator: 'Moderador', admin: 'Administrador' };
+            const who = user.nome || user.email || 'este usuário';
+            const restore = function() { if (selectElement) selectElement.value = previousRole; };
+            if (newRole === previousRole) return;
+            const details = newRole === 'admin'
+                ? ['Administradores acessam todo o painel: usuários, publicações, mídia e configurações.', 'Conceda somente a pessoas da equipe de Turismo.']
+                : (previousRole === 'admin' ? ['A pessoa perde o acesso ao painel administrativo no próximo carregamento.'] : []);
+            const confirmed = await askConfirm({
+                title: 'Alterar permissão?',
+                message: who + ': ' + (labels[previousRole] || previousRole) + ' → ' + (labels[newRole] || newRole) + '.',
+                details: details,
+                confirmLabel: 'Alterar para ' + (labels[newRole] || newRole),
+                tone: newRole === 'admin' || previousRole === 'admin' ? 'danger' : 'warning'
+            });
+            if (!confirmed) { restore(); return; }
             const result = await FirebaseSystem.setUserRole(userId, newRole);
-            alert(result.message);
+            notifyResult(result);
+            if (result && result.success) user.role = newRole;
+            else restore();
         }
 
         async function toggleUserStatus(userId, ativar) {
+            const user = adminUsersCache.find(function(item) { return item.id === userId; }) || {};
+            const who = user.nome || user.email || 'este usuário';
+            const confirmed = await askConfirm(ativar ? {
+                title: 'Ativar usuário?',
+                message: who + ' volta a acessar o Portal do Usuário com as permissões atuais.',
+                confirmLabel: 'Ativar usuário'
+            } : {
+                title: 'Desativar usuário?',
+                message: who + ' perde o acesso às funções protegidas enquanto estiver inativo.',
+                details: ['Os dados e vínculos são preservados.', 'A conta pode ser reativada a qualquer momento.'],
+                confirmLabel: 'Desativar usuário',
+                tone: 'danger'
+            });
+            if (!confirmed) return;
             const result = await FirebaseSystem.toggleUserStatus(userId, ativar);
-            alert(result.message);
+            notifyResult(result);
             loadUsers();
         }
 
         async function copyUserEmail(email) {
             const safeEmail = String(email || '').trim();
             if (!safeEmail) {
-                alert('Usuário sem e-mail cadastrado.');
+                notify('Usuário sem e-mail cadastrado.', 'error');
                 return;
             }
 
@@ -3174,10 +3321,10 @@
                     document.execCommand('copy');
                     document.body.removeChild(input);
                 }
-                alert('E-mail copiado.');
+                notify('E-mail copiado para a área de transferência.', 'success');
             } catch (error) {
                 console.error('[admin-firebase] Falha ao copiar e-mail.', error);
-                alert('Não foi possível copiar o e-mail.');
+                notify('Não foi possível copiar o e-mail.', 'error');
             }
         }
 
@@ -3716,9 +3863,9 @@
                         <input class="admin-input" id="update-rejection-reason-${SEC.attr(request.id)}" type="text" maxlength="500" placeholder="Motivo da rejeição (obrigatório ao rejeitar)">
                         <textarea class="admin-textarea" id="update-changes-requested-${SEC.attr(request.id)}" maxlength="1500" placeholder="Quais ajustes o solicitante precisa fazer? (obrigatório ao pedir ajustes)"></textarea>
                         <div class="page-actions">
-                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-update-request" data-admin-target-id="${SEC.attr(request.id)}">✅ Aprovar para revisão</button>
-                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-update-request" data-admin-target-id="${SEC.attr(request.id)}">❌ Rejeitar</button>
-                            <button class="btn-sm btn-edit" type="button" data-admin-action="request-update-changes" data-admin-target-id="${SEC.attr(request.id)}">🛠️ Pedir ajustes</button>
+                            <button class="btn-sm btn-approve" type="button" data-admin-action="approve-update-request" data-admin-target-id="${SEC.attr(request.id)}">Aprovar para revisão</button>
+                            <button class="btn-sm btn-reject" type="button" data-admin-action="reject-update-request" data-admin-target-id="${SEC.attr(request.id)}">Rejeitar</button>
+                            <button class="btn-sm btn-edit" type="button" data-admin-action="request-update-changes" data-admin-target-id="${SEC.attr(request.id)}">Pedir ajustes</button>
                         </div>
                         <div class="update-request-callout">
                             Aprovar não aplica no catálogo e não publica no site público. A aplicação fica em uma ação separada.
@@ -3873,6 +4020,6 @@
             return document.getElementById(prefix + claimId)?.value.trim() || '';
         }
     </script>
-    <script src="js/admin/admin-nav.js?v=admin-painel-v2-20261014"></script>
+    <script src="js/admin/admin-nav.js?v=admin-painel-r2-20261014"></script>
 </body>
 </html>
