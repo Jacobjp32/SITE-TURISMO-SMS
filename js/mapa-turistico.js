@@ -1045,17 +1045,58 @@
       from: [-25.878, -50.385], to: [-25.874104, -50.384168],
       source: "OpenStreetMap way 973886282 (Rua do Mathe, via de pedestres)" },
     { ids: ["igreja-agua-branca"], from: [-25.91, -50.42], to: [-25.763148, -50.34269],
-      source: "Google Maps \"Capela São José\" e Plus Code 6MP4+RX São Mateus do Sul (informados pela equipe)" }
+      source: "Google Maps \"Capela São José\" e Plus Code 6MP4+RX São Mateus do Sul (informados pela equipe)" },
+    // Ficha do Google Maps de cada lugar, conferida por nome e endereço em 2026-10-14.
+    { ids: ["pitayas-dragao"], from: [-25.9660091, -50.5398216], to: [-26.0209768, -50.6017149],
+      source: "Google Maps \"Pitayas Dragão do Iguaçu\" (R. Principal, Fluviópolis)" },
+    { ids: ["posto-pelanda"], from: [-25.9660091, -50.5398216], to: [-25.9740068, -50.5447583],
+      source: "Google Maps \"Petrobras Posto Pelanda\" (BR-476 km 298) e OpenStreetMap way 684884859" },
+    { ids: ["viveiro-fluviopolis"], from: [-25.9660091, -50.5398216], to: [-26.0179574, -50.6115719],
+      source: "Google Maps \"Viveiro Fluviópolis\" (Fluviópolis)" },
+    { ids: ["ervateira-taquaral"], from: [-25.82, -50.35], to: [-25.7827358, -50.3951301],
+      source: "Google Maps \"Ervateira Taquaral\" (Taquaral do Bugre)" },
+    { ids: ["arena-cultural"], from: [-25.8785, -50.386], to: [-25.8373319, -50.3825099],
+      source: "Google Maps \"Arena Cultural e Esportiva - Cancha Coberta\" (PR-151, Col. Taquaral); associação a confirmar, exibida como aproximada" },
+    { ids: ["parque-exposicoes"], from: [-25.88, -50.39], to: [-25.8372433, -50.3822846],
+      source: "Google Maps \"Parque de Exposições de São Mateus do Sul\" (Col. Taquaral)" },
+    { ids: ["ginasio-polacao"], from: [-25.879, -50.387], to: [-25.869593, -50.3898514],
+      source: "Google Maps \"Ginásio do Polacão\" (R. Agenor Nascimento, 1057)" },
+    { ids: ["chimarrodromo", "roda-de-mathe"], from: [-25.8762, -50.3856], to: [-25.8744988, -50.3844369],
+      source: "Google Maps \"Chimarródromo de São Mateus do Sul\"" },
+    { ids: ["praca-rio-iguacu"], from: [-25.876, -50.3855], to: [-25.8767299, -50.3860571],
+      source: "Google Maps \"Praça do Iguaçu\" (R. João Gabriel Martins, 1)" },
+    { ids: ["prefeitura-municipal"], from: [-25.8775, -50.384], to: [-25.8731807, -50.3855377],
+      source: "Google Maps \"Prefeitura Municipal de São Mateus do Sul\" (R. Barão do Rio Branco, 431)" },
+    { ids: ["paco-municipal"], from: [-25.8776, -50.3841], to: [-25.8674637, -50.3835272],
+      source: "Google Maps \"Paço Municipal Francisco Luiz Ulbrich\" (Av. Ulisses Faria, 550)" },
+    // Cadastrados sem coordenada (from: null): só preenche quando o dado vier vazio.
+    { ids: ["hotel-dom-leopoldo"], from: null, to: [-25.8705024, -50.3843536],
+      source: "Google Maps \"Hotel Dom Leopoldo\" (Av. Ozy Mendonça de Lima, 587)" },
+    { ids: ["hotel-sao-mateus"], from: null, to: [-25.8716253, -50.3834274],
+      source: "Google Maps \"Hotel São Mateus\" (R. Theodoro Toppel, 535)" },
+    { ids: ["hotel-nora"], from: null, to: [-25.8725235, -50.3931416],
+      source: "Google Maps \"Nora Hotel\" (R. Rodolfo Wolf)" },
+    { ids: ["chess-choperia"], from: null, to: [-25.8660792, -50.3854312],
+      source: "Google Maps \"Chess Choperia\" (R. Barão do Rio Branco, 1085)" }
   ];
-  // Link de rota cadastrado que não abre (HTTP 404 em 2026-10-13): usa-se a coordenada.
-  var BROKEN_MAPS_URLS = { "https://maps.app.goo.gl/uBoWdk": true };
+  // Link de rota cadastrado incompleto (HTTP 404): link completo do PDF "Turismo Rural".
+  var MAPS_URL_FIXES = { "https://maps.app.goo.gl/uBoWdk": "https://maps.app.goo.gl/uBoWdkPR5Q4BRLMo9" };
+
+  function dataMapsUrl(item) {
+    return item.mapsUrl ? (MAPS_URL_FIXES[item.mapsUrl] || item.mapsUrl) : "";
+  }
 
   function applyGeoCorrection(item, coordinates) {
-    if (!coordinates || !item) return coordinates;
+    if (!item) return coordinates;
     var id = String(item.id || "");
     for (var i = 0; i < GEO_CORRECTIONS.length; i += 1) {
       var fix = GEO_CORRECTIONS[i];
       if (fix.ids.indexOf(id) === -1) continue;
+      if (!fix.from) {
+        if (!coordinates) return { lat: fix.to[0], lng: fix.to[1], corrected: true };
+        continue;
+      }
+      if (!coordinates) continue;
       if (Math.abs(coordinates.lat - fix.from[0]) < 1e-6 && Math.abs(coordinates.lng - fix.from[1]) < 1e-6) {
         return { lat: fix.to[0], lng: fix.to[1], corrected: true };
       }
@@ -1063,9 +1104,9 @@
     return coordinates;
   }
 
-  // Posição não confirmada por fonte externa e que cai na margem/leito do Rio Iguaçu
-  // na cartografia do OpenStreetMap (conferência de 2026-10-13).
-  var UNVERIFIED_LOCATION_IDS = { "arena-cultural": true, "ginasio-polacao": true };
+  // Tratados como localização aproximada: Arena (associação à "Arena Cultural e Esportiva"
+  // ainda a confirmar com a equipe) e Pedrão (coordenada sem fonte; "potencial" no PDF rural).
+  var UNVERIFIED_LOCATION_IDS = { "arena-cultural": true, "pesqueiro-do-pedrao": true };
 
   function coordinateDecimals(value) {
     var text = String(value);
@@ -1084,7 +1125,8 @@
       (groups[key] = groups[key] || []).push(item);
     });
     items.forEach(function (item) {
-      if (!item.possuiCoordenadas || item.coordenadas.corrected) return;
+      if (!item.possuiCoordenadas) return;
+      if (item.coordenadas.corrected && !UNVERIFIED_LOCATION_IDS[item.id]) return;
       var key = item.coordenadas.lat.toFixed(6) + "," + item.coordenadas.lng.toFixed(6);
       var places = {};
       groups[key].forEach(function (other) {
@@ -1225,8 +1267,8 @@
   }
 
   function createGoogleMapsLink(item, coordinates) {
-    if (coordinates && item.mapsUrl && !BROKEN_MAPS_URLS[item.mapsUrl]) {
-      return item.mapsUrl;
+    if (coordinates && item.mapsUrl) {
+      return dataMapsUrl(item);
     }
     if (coordinates) {
       return "https://www.google.com/maps/search/?api=1&query=" + coordinates.lat + "," + coordinates.lng;
@@ -1282,7 +1324,7 @@
       coordenadas: coordinates,
       possuiCoordenadas: !!coordinates,
       mapsUrl: createGoogleMapsLink(item, coordinates),
-      mapsUrlFromData: !!(coordinates && item.mapsUrl && !BROKEN_MAPS_URLS[item.mapsUrl]),
+      mapsUrlFromData: !!(coordinates && item.mapsUrl),
       localizacaoAproximada: false,
       searchText: normalizeText([
         item.nome,

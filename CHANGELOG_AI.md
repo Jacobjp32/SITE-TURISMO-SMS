@@ -6,6 +6,13 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-14 — MAPA ILUSTRADO: correções geográficas por fichas do Google Maps
+
+- `js/mapa-turistico.js`: `GEO_CORRECTIONS` ganhou 15 entradas (Pitayas, Posto Pelanda, Viveiro Fluviópolis, Ervateira Taquaral, Arena, Parque de Exposições, Ginásio Polacão, Chimarródromo/Roda de Mathe, Praça do Rio Iguaçu, Prefeitura, Novo Paço e, com `from: null`, Hotel Dom Leopoldo, Hotel São Mateus, Hotel Nora e Chess Choperia). Cada uma cita a ficha do Google Maps conferida por nome e endereço; só agem sobre o valor antigo do cadastro (ou sobre coordenada vazia). Link de rota da Água Branca trocado pelo link completo do PDF "Turismo Rural" (`MAPS_URL_FIXES`).
+- Arena Cultural (associação à "Arena Cultural e Esportiva" a confirmar) e Pesqueiro do Pedrão seguem como localização aproximada; os demais sem fonte (Pica-pau Vermelho, Seu Luiz, Ludevico, Sapopema, Beto, Antonia e Gabriel, Tico) continuam aproximados por coordenada repetida.
+- `mapa-turistico.html`: token `?v=mapa-ilustrado-20261014` no script do mapa. `tests/mapa-ilustrado.test.mjs`: +1 teste.
+- Validação: 9/9 no teste do mapa; 433/435 na suíte sem emulador (2 falhas CRLF preexistentes). CMS não alterado.
+
 ## 2026-10-13 — MAPA ILUSTRADO "Recortes de São Mateus" (mapa-turistico)
 
 **Status:** **A. IMPLEMENTADO E VALIDADO LOCALMENTE — commit local na branch `criativo/mapa-ilustrado`; sem push e sem deploy.**

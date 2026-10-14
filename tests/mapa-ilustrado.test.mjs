@@ -67,6 +67,13 @@ test('correções geográficas citam fonte e só agem sobre o valor antigo', () 
     assert.match(MAP_SOURCE, /Math\.abs\(coordinates\.lat - fix\.from\[0\]\) < 1e-6/);
 });
 
+test('correções de 2026-10-14: fichas do Google Maps, preenchimento só de coordenada vazia e link completo da Água Branca', () => {
+    assert.match(MAP_SOURCE, /Google Maps \\"Pitayas Dragão do Iguaçu\\"/);
+    assert.match(MAP_SOURCE, /Google Maps \\"Ervateira Taquaral\\"/);
+    assert.match(MAP_SOURCE, /if \(!fix\.from\) \{\s*if \(!coordinates\) return/);
+    assert.match(MAP_SOURCE, /"https:\/\/maps\.app\.goo\.gl\/uBoWdk": "https:\/\/maps\.app\.goo\.gl\/uBoWdkPR5Q4BRLMo9"/);
+});
+
 test('fichas não exibem notas internas do cadastro', () => {
     const match = MAP_SOURCE.match(/function publicText\(value\) \{[\s\S]*?\n  \}/);
     assert.ok(match, 'publicText ausente');
