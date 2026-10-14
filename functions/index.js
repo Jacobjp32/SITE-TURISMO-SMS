@@ -49,3 +49,23 @@ exports.writeAdminAuditLog = onDocumentWrittenWithAuthContext({
     throw error;
   }
 });
+
+// Importador de notícias da Prefeitura: leitura de caminhos públicos fixos para admin ativo.
+const { onCall, HttpsError } = require("firebase-functions/v2/https");
+const prefeituraFeed = require("./prefeitura-feed");
+
+exports.prefeituraFeed = onCall({
+  region: "southamerica-east1",
+  timeoutSeconds: 60,
+  memory: "256MiB",
+  maxInstances: 2
+}, async (request) => {
+  if (!request.auth || !request.auth.uid) throw new HttpsError("unauthenticated", "Entre no painel para consultar a Prefeitura.");
+  const profile = await getFirestore().collection("usuarios").doc(request.auth.uid).get();
+  if (!prefeituraFeed.isActiveAdmin(profile.exists ? profile.data() : null)) {
+    throw new HttpsError("permission-denied", "Somente administradores ativos podem consultar a Prefeitura.");
+  }
+  const checked = prefeituraFeed.validatePaths(request.data);
+  if (checked.error) throw new HttpsError("invalid-argument", checked.error);
+  return { fetchedAt: new Date().toISOString(), results: await prefeituraFeed.fetchPaths(checked.paths, fetch) };
+});

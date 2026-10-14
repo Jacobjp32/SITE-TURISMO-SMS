@@ -1234,3 +1234,38 @@ select, .admin-field input, .admin-field textarea { border-radius: var(--adm-rad
     .data-table--cards td { grid-template-columns: minmax(104px, 36%) minmax(0, 1fr); }
     .data-table--cards td::before { font-size: 0.68rem; letter-spacing: 0.02em; }
 }
+
+/* Importador de notícias da Prefeitura */
+.pn-root { display: grid; gap: 0.85rem; }
+.pn-origin { margin: 0; font-size: 0.9rem; }
+.pn-warn { color: #b54708; font-weight: 600; }
+.pn-error { margin: 0; padding: 0.75rem 1rem; border-radius: 10px; background: #fef3f2; color: #b42318; }
+.pn-metrics { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.5rem 0 0; padding: 0; list-style: none; }
+.pn-metrics li { padding: 0.35rem 0.7rem; border-radius: 999px; background: #f2f4f7; font-size: 0.85rem; }
+.pn-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.pn-tab { border: 1px solid #d0d5dd; background: #fff; border-radius: 999px; padding: 0.35rem 0.8rem; font: inherit; font-size: 0.85rem; cursor: pointer; }
+.pn-tab span { display: inline-block; min-width: 1.4em; margin-left: 0.2rem; font-weight: 700; }
+.pn-tab.is-active { background: #1d3b2a; border-color: #1d3b2a; color: #fff; }
+.pn-tab-tool { margin-left: auto; border-style: dashed; }
+.pn-list { display: grid; gap: 0.6rem; }
+.pn-item { display: grid; grid-template-columns: auto 96px minmax(0, 1fr); gap: 0.75rem; align-items: start; padding: 0.75rem; border: 1px solid #eaecf0; border-left-width: 4px; border-radius: 10px; background: #fff; }
+.pn-elegivel { border-left-color: #12b76a; }
+.pn-revisao { border-left-color: #f79009; }
+.pn-descartada { border-left-color: #98a2b3; opacity: 0.85; }
+.pn-pick { padding-top: 0.2rem; }
+.pn-pick input { width: 1.15rem; height: 1.15rem; }
+.pn-thumb { width: 96px; height: 72px; object-fit: cover; border-radius: 8px; background: #f2f4f7; }
+.pn-thumb-empty { display: grid; place-items: center; font-size: 0.75rem; color: #667085; }
+.pn-main h3 { margin: 0 0 0.2rem; font-size: 1rem; line-height: 1.3; }
+.pn-meta, .pn-detail { margin: 0; font-size: 0.8rem; color: #667085; }
+.pn-summary { margin: 0.35rem 0; font-size: 0.88rem; }
+.pn-main details { font-size: 0.82rem; }
+.pn-main details ul { margin: 0.3rem 0 0; padding-left: 1.1rem; }
+.pn-badges { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.4rem 0 0.2rem; font-size: 0.82rem; }
+.pn-overwrite { display: block; margin: 0.3rem 0; font-size: 0.82rem; color: #b54708; }
+.pn-footer-count { margin-right: auto; font-size: 0.85rem; color: #667085; }
+@media (max-width: 640px) {
+    .pn-item { grid-template-columns: auto minmax(0, 1fr); }
+    .pn-thumb { display: none; }
+    .pn-tab-tool { margin-left: 0; }
+}

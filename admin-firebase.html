@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; img-src 'self' data: https: blob: https://firebasestorage.googleapis.com https://storage.googleapis.com https://*.firebasestorage.app https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://firebaseappcheck.googleapis.com https://firebasestorage.googleapis.com https://storage.googleapis.com https://*.firebasestorage.app https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://www.gstatic.com https://www.gstatic.com/recaptcha/ https://www.google.com/recaptcha/ https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://vlibras.gov.br https://www.youtube.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' data:; img-src 'self' data: https: blob: https://firebasestorage.googleapis.com https://storage.googleapis.com https://*.firebasestorage.app https://*.tile.openstreetmap.org; frame-src https://www.google.com https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://www.youtube.com https://felt.com https://turismo-sms.firebaseapp.com; connect-src 'self' https://southamerica-east1-turismo-sms.cloudfunctions.net https://turismo-sms-chatbot.jacobpimentel32.workers.dev https://graph.instagram.com https://www.google-analytics.com https://firestore.googleapis.com https://www.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://firebaseinstallations.googleapis.com https://content-firebaseappcheck.googleapis.com https://firebaseappcheck.googleapis.com https://firebasestorage.googleapis.com https://storage.googleapis.com https://*.firebasestorage.app https://www.google.com/recaptcha/ https://www.gstatic.com/recaptcha/ https://*.firebaseio.com https://*.tile.openstreetmap.org; media-src 'self' https:; object-src 'none'; base-uri 'self';">
     <meta name="robots" content="noindex, nofollow">
     
     <link rel="icon" type="image/x-icon" href="images/logo_pin_turismo_3d.png">
@@ -1233,7 +1233,7 @@
         }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
-    <link rel="stylesheet" href="css/admin-panel.css?v=admin-painel-20261014-final">
+    <link rel="stylesheet" href="css/admin-panel.css?v=prefeitura-news-20261014">
 </head>
 <body>
     <!-- Login Screen -->
@@ -1555,7 +1555,8 @@
                     <h1>Notícias</h1>
                     <div class="page-actions">
                         <button class="btn-primary" type="button" onclick="AdminContentCMS.openNewsModal()">Nova notícia</button>
-                        <button class="btn-primary" type="button" onclick="AdminContentCMS.importStaticNews()">Importar notícias estáticas</button>
+                        <button class="btn-primary" type="button" onclick="PrefeituraNewsImporter.open()">Buscar notícias da Prefeitura</button>
+                        <button class="btn-secondary" type="button" onclick="AdminContentCMS.importStaticNews()">Importar notícias estáticas</button>
                     </div>
                 </div>
 
@@ -1684,10 +1685,13 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-functions-compat.js"></script>
     <script src="js/firebase-auth.js?v=establishment-approval-v2-20260914"></script>
     <script src="js/admin/admin-feedback.js?v=admin-painel-20261014-final"></script>
     <script src="js/admin/admin-content-preview.js?v=admin-painel-20261014-final"></script>
     <script src="js/admin-content-cms.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/prefeitura-news.js?v=prefeitura-news-20261014"></script>
+    <script src="js/admin/prefeitura-news-importer.js?v=prefeitura-news-20261014"></script>
     <!-- Fundação modular do Admin CMS (Bloco 1 / Etapa 1) — modo passthrough, aditivo e inerte. -->
     <script src="js/admin/admin-context.js?v=admin-modular-20260625"></script>
     <script src="js/admin/admin-ui.js?v=admin-modular-20260625"></script>

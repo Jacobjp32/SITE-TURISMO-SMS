@@ -1,6 +1,6 @@
 // Servidor estático de DESENVOLVIMENTO para testar o painel contra o Firebase Emulator.
 // Escuta somente em 127.0.0.1. Nas páginas HTML, acrescenta ao connect-src da meta CSP
-// os endereços locais dos emuladores (Auth 9099, Firestore 8080, Storage 9199).
+// os endereços locais dos emuladores (Auth 9099, Firestore 8080, Storage 9199, Functions 5001).
 // Nenhum arquivo do repositório é alterado: a reescrita acontece só na resposta local.
 //   node scripts/admin-painel-dev-server.mjs [porta]
 import { createServer } from "node:http";
@@ -10,7 +10,7 @@ import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const PORT = Number(process.argv[2] || 4173);
-const EMULATOR_ORIGINS = "http://127.0.0.1:9099 http://127.0.0.1:8080 http://127.0.0.1:9199 http://localhost:9099 http://localhost:8080 http://localhost:9199";
+const EMULATOR_ORIGINS = "http://127.0.0.1:9099 http://127.0.0.1:8080 http://127.0.0.1:9199 http://127.0.0.1:5001 http://localhost:9099 http://localhost:8080 http://localhost:9199 http://localhost:5001";
 const TYPES = {
   ".html": "text/html; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".mjs": "text/javascript; charset=utf-8",
   ".css": "text/css; charset=utf-8", ".json": "application/json; charset=utf-8", ".svg": "image/svg+xml",
