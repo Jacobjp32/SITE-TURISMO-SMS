@@ -174,18 +174,31 @@
         chip.hidden = false;
     }
 
+    // O rótulo segue o que o firebase-auth.js de fato conectou, nunca só o
+    // parâmetro da URL: "?emulator=1" fora de localhost é ignorado pelo runtime
+    // e o painel continua falando com o Firebase real.
     function renderEnvironment() {
         var tag = $("adminEnvTag");
         if (!tag) return;
         var host = window.location.hostname;
         var isLocal = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(host);
-        if (!isLocal) { tag.hidden = true; return; }
-        var emulator = new URLSearchParams(window.location.search).get("emulator") === "1";
-        tag.textContent = emulator ? "Ambiente local · dados de teste" : "Ambiente local";
-        tag.title = emulator
-            ? "Conectado ao Firebase Emulator: nada do que você fizer aqui altera o portal real."
-            : "Servidor local conectado ao Firebase real.";
-        tag.classList.toggle("is-emulator", emulator);
+        var askedEmulator = new URLSearchParams(window.location.search).get("emulator") === "1";
+        var emulator = window.__SMSFirebaseEmulatorsConnected === true;
+        tag.classList.remove("is-emulator", "is-real");
+        if (emulator) {
+            tag.textContent = "Ambiente local · dados de teste";
+            tag.title = "Conectado ao Firebase Emulator (projeto demo): nada do que você fizer aqui altera o portal real.";
+            tag.classList.add("is-emulator");
+        } else if (isLocal || askedEmulator) {
+            tag.textContent = "Dados reais";
+            tag.title = askedEmulator && !isLocal
+                ? "O modo de teste só funciona em localhost. Este painel está conectado ao Firebase real."
+                : "Servidor local conectado ao Firebase real: as alterações valem para o portal.";
+            tag.classList.add("is-real");
+        } else {
+            tag.hidden = true;
+            return;
+        }
         tag.hidden = false;
     }
 
@@ -253,14 +266,74 @@
         }).observe(dashboard, { attributes: true, attributeFilter: ["class"] });
     }
 
+    /* ---------- Tabelas → cartões no celular ----------
+       Cada célula ganha o rótulo da coluna (data-label) e o conteúdo é
+       envolvido em .cell-body; o CSS decide a apresentação por largura.
+       Nada muda nos dados nem nos handlers (delegação por closest()). */
+    var ACTIONS_HEADER = /^(a[çc][õo]es|acoes)$/i;
+
+    function enhanceTable(table) {
+        if (!table || table.getAttribute("data-cards") === "ready") return;
+        var head = table.tHead;
+        if (!head || !head.rows.length) return;
+        var labels = Array.prototype.map.call(head.rows[0].cells, function (cell) {
+            return String(cell.textContent || "").replace(/\s+/g, " ").trim();
+        });
+        Array.prototype.forEach.call(table.tBodies, function (tbody) {
+            Array.prototype.forEach.call(tbody.rows, function (row) {
+                Array.prototype.forEach.call(row.cells, function (cell, index) {
+                    if (cell.getAttribute("data-label") !== null) return;
+                    var label = labels[index] || "";
+                    cell.setAttribute("data-label", label);
+                    if (index === 0) cell.classList.add("cell-primary");
+                    if (ACTIONS_HEADER.test(label)) cell.classList.add("cell-actions");
+                    var text = String(cell.textContent || "").replace(/\s+/g, "");
+                    if ((!text || text === "—") && !cell.querySelector("img, button, select, input, textarea, a")) {
+                        cell.classList.add("cell-empty");
+                    }
+                    if (!cell.classList.contains("cell-primary") && !cell.classList.contains("cell-actions") &&
+                        !(cell.children.length === 1 && cell.firstElementChild.classList.contains("cell-body"))) {
+                        var body = document.createElement("div");
+                        body.className = "cell-body";
+                        while (cell.firstChild) body.appendChild(cell.firstChild);
+                        cell.appendChild(body);
+                    }
+                });
+            });
+        });
+        table.classList.add("data-table--cards");
+        table.setAttribute("data-cards", "ready");
+    }
+
+    function enhanceTables(root) {
+        Array.prototype.forEach.call((root || document).querySelectorAll("table.data-table"), enhanceTable);
+    }
+
+    function watchTables() {
+        var main = $("adminMain") || document.body;
+        var pending = false;
+        enhanceTables(main);
+        if (typeof MutationObserver !== "function") return;
+        new MutationObserver(function () {
+            if (pending) return;
+            pending = true;
+            (window.requestAnimationFrame || setTimeout)(function () {
+                pending = false;
+                enhanceTables(main);
+            });
+        }).observe(main, { childList: true, subtree: true });
+    }
+
     function init() {
         wrapShowSection();
+        watchTables();
         renderEnvironment();
         document.addEventListener("click", onDocumentClick, true);
         document.addEventListener("keydown", onKeydown);
         window.addEventListener("popstate", onHistory);
         window.addEventListener("hashchange", onHistory);
         window.addEventListener("authStateChanged", renderUser);
+        window.addEventListener("authStateChanged", renderEnvironment);
 
         var toggle = $("adminNavToggle");
         var close = $("adminNavClose");
@@ -286,7 +359,8 @@
         setBadge: setBadge,
         openDrawer: function () { setDrawer(true); },
         closeDrawer: function () { setDrawer(false); },
-        getCurrentSection: function () { return currentSection; }
+        getCurrentSection: function () { return currentSection; },
+        enhanceTables: enhanceTables
     };
 
     if (document.readyState === "loading") {
