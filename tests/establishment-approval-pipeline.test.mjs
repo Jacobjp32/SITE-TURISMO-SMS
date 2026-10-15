@@ -317,3 +317,104 @@ test("fingerprint ignora workflow e PII, mas cobre metadados editoriais que afet
     images: base.images.map((image, index) => index === 0 ? { ...image, alt: "Alt alterado" } : image),
   }));
 });
+
+// ---- Regressão: endereço genérico não bloqueia cadastros legítimos ----
+function cmsRecord(id, name, address, phone = "", website = "") {
+  return { id, data: { id, slug: id, name, status: "published", location: { address }, contact: { phone, website } } };
+}
+
+function classifyEdit(id, catalog) {
+  const self = catalog.find((entry) => entry.id === id);
+  return bridge.classifyDuplicate({ ...self.data, id }, {
+    cms: catalog.filter((entry) => entry.id !== id), pending: [], legacyApproved: [], excludeSubmissionId: id,
+  });
+}
+
+test("endereço sem número (bairro, localidade, cidade) com nomes e telefones diferentes não é duplicidade", () => {
+  const catalog = [
+    cmsRecord("hotel-sao-mateus", "Hotel São Mateus", "Centro", "(42) 3532-1802"),
+    cmsRecord("hotel-dom-leopoldo", "Hotel Dom Leopoldo", "Centro", "(42) 3282-3000"),
+    cmsRecord("hotel-nora", "Hotel Nora", "Centro", "(42) 3532-1111"),
+    cmsRecord("ervateira-rei-verde", "Ervateira Rei Verde", "Localidade de Fluviópolis", "(42) 99111-0001"),
+    cmsRecord("canil-sao-jose", "Canil São José", "Localidade de Fluviópolis", "(42) 99111-0002"),
+    cmsRecord("ginasio-polacao", "Ginásio Polacão", "São Mateus do Sul, PR", "(42) 3532-0000"),
+  ];
+  for (const { id } of catalog) assert.equal(classifyEdit(id, catalog).kind, "NO_MATCH", id);
+});
+
+test("telefone institucional repetido em vários cadastros não transforma endereço genérico em duplicidade", () => {
+  const dept = "(42) 3532-4163";
+  const catalog = [
+    cmsRecord("arena-cultural", "Arena Cultural", "São Mateus do Sul, PR", dept),
+    cmsRecord("miss-sao-mateus", "Miss São Mateus do Sul", "São Mateus do Sul, PR", dept),
+    cmsRecord("casa-da-memoria", "Casa da Memória", "São Mateus do Sul, PR", dept),
+    cmsRecord("rua-do-mathe", "Rua do Mathe", "São Mateus do Sul, PR", dept),
+  ];
+  for (const { id } of catalog) assert.equal(classifyEdit(id, catalog).kind, "NO_MATCH", id);
+});
+
+test("endereço genérico com telefone ou site exclusivo em comum continua exigindo revisão", () => {
+  const byPhone = [
+    cmsRecord("parada-a", "Parada do Chimarrão", "Fluviópolis", "(42) 99960-0496"),
+    cmsRecord("parada-b", "Posto Parada Nova", "Fluviópolis", "42 99960-0496"),
+  ];
+  assert.equal(classifyEdit("parada-a", byPhone).kind, "AMBIGUOUS_MATCH");
+  const bySite = [
+    cmsRecord("loja-a", "Loja do Mate", "Centro", "", "https://mate.example/"),
+    cmsRecord("loja-b", "Empório do Mate", "Centro", "", "https://www.mate.example"),
+  ];
+  assert.equal(classifyEdit("loja-a", bySite).kind, "AMBIGUOUS_MATCH");
+});
+
+test("duplicidade real com mesmo nome continua detectada mesmo com endereço incompleto", () => {
+  const catalog = [
+    cmsRecord("churrascaria-dallas", "Restaurante e Churrascaria Dallas", "Localidade de Fluviópolis", "(42) 98845-6741"),
+    cmsRecord("restaurante-dallas", "Restaurante e Churrascaria Dallas", "Fluviópolis", "(42) 98845-6741"),
+  ];
+  const result = classifyEdit("restaurante-dallas", catalog);
+  assert.equal(result.kind, "AMBIGUOUS_MATCH");
+  assert.deepEqual(result.candidates.map((c) => c.id), ["churrascaria-dallas"]);
+  const sameEverything = [
+    cmsRecord("bar-a", "Bar Central", "Centro"),
+    cmsRecord("bar-b", "Bar Central", "Centro"),
+  ];
+  assert.equal(classifyEdit("bar-a", sameEverything).kind, "SEMANTIC_CMS_MATCH");
+});
+
+test("endereço com número continua bloqueando nome diferente no mesmo imóvel", () => {
+  const catalog = [
+    cmsRecord("loja-1", "Loja Um", "Rua XV de Novembro, 120", "(42) 91111-1111"),
+    cmsRecord("loja-2", "Loja Dois", "R. XV de Novembro, 120", "(42) 92222-2222"),
+    cmsRecord("loja-3", "Loja Três", "Rua XV de Novembro, 300", "(42) 93333-3333"),
+  ];
+  assert.equal(classifyEdit("loja-1", catalog).kind, "AMBIGUOUS_MATCH");
+  assert.deepEqual(classifyEdit("loja-1", catalog).candidates.map((c) => c.id), ["loja-2"]);
+  assert.equal(classifyEdit("loja-3", catalog).kind, "NO_MATCH");
+});
+
+test("edição de registro existente não colide consigo mesmo nem com vizinhos do mesmo bairro", () => {
+  const catalog = [
+    cmsRecord("hotel-sao-mateus", "Hotel São Mateus", "Centro", "(42) 3532-1802"),
+    cmsRecord("hotel-dom-leopoldo", "Hotel Dom Leopoldo", "Centro", "(42) 3282-3000"),
+  ];
+  const edited = { ...catalog[0].data, media: { mainImage: { url: "images/empreendimentos/hotel-sao-mateus/hotel-sao-mateus-09.jpeg" } } };
+  // O painel compara a edição com todos os outros registros (assertNoManualSemanticDuplicate).
+  const result = bridge.classifyDuplicate(edited, {
+    cms: catalog.filter((entry) => entry.id !== edited.id), pending: [], legacyApproved: [], excludeSubmissionId: edited.id,
+  });
+  assert.equal(result.kind, "NO_MATCH");
+  assert.match(moduleSource, /candidate\.id !== desired\.id/, "painel exclui o próprio registro antes de comparar");
+});
+
+test("aprovação de cadastro do Portal com endereço genérico só para em duplicidade verdadeira", () => {
+  const portal = submission({ id: "est_portal", name: "Pesqueiro Novo", nome: "Pesqueiro Novo", address: "Localidade de Fluviópolis", endereco: "Localidade de Fluviópolis", phone: "(42) 97777-0000", website: "" });
+  const cms = [
+    cmsRecord("canil-sao-jose", "Canil São José", "Localidade de Fluviópolis", "(42) 99111-0002"),
+    cmsRecord("ervateira-rei-verde", "Ervateira Rei Verde", "Localidade de Fluviópolis", "(42) 99111-0001"),
+  ];
+  assert.equal(bridge.classifyDuplicate(portal, { cms, pending: [], legacyApproved: [], excludeSubmissionId: portal.id }).kind, "NO_MATCH");
+  const resend = submission({ id: "est_portal_2", name: "Canil São José", nome: "Canil São José", address: "Localidade de Fluviópolis", endereco: "Localidade de Fluviópolis", phone: "(42) 99111-0002", website: "" });
+  const dup = bridge.classifyDuplicate(resend, { cms, pending: [], legacyApproved: [], excludeSubmissionId: resend.id });
+  assert.notEqual(dup.kind, "NO_MATCH");
+  assert.deepEqual(dup.candidates.map((c) => c.id), ["canil-sao-jose"]);
+});

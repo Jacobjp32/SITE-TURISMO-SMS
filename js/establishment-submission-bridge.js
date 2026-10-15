@@ -176,7 +176,7 @@
         });
     }
 
-    function relationToCandidate(submission, candidate) {
+    function relationToCandidate(submission, candidate, sharedPhones) {
         var sourceIdentity = semanticIdentity(submission);
         var targetData = candidateData(candidate);
         var targetIdentity = semanticIdentity(targetData);
@@ -200,11 +200,33 @@
         if (sameName && (sameSlug || samePhone || sameWebsite || (!!sourceIdentity.normalizedAddress && !!targetIdentity.normalizedAddress))) {
             return "ambiguous";
         }
-        if (sameAddress && sameNumber && (samePhone || sameWebsite || (!!sourceIdentity.normalizedName && !!targetIdentity.normalizedName))) {
+        // Endereço sem número ("Centro", "Localidade de X", só a cidade) descreve uma região,
+        // não um imóvel: sozinho não indica duplicidade, só junto de telefone ou site iguais.
+        var specificAddress = sameAddress && sameNumber && !!sourceIdentity.addressNumber && !!targetIdentity.addressNumber;
+        if (specificAddress && (samePhone || sameWebsite || (!!sourceIdentity.normalizedName && !!targetIdentity.normalizedName))) {
+            return "ambiguous";
+        }
+        // Telefone repetido em vários cadastros (central da Prefeitura, departamento) é contato
+        // institucional e não identifica um estabelecimento.
+        var identifyingPhone = samePhone && !(sharedPhones && sharedPhones[sourceIdentity.normalizedPhone]);
+        if (sameAddress && !specificAddress && (identifyingPhone || sameWebsite)) {
             return "ambiguous";
         }
         if (sameSlug) return "ambiguous";
         return "none";
+    }
+
+    // Telefones presentes em três ou mais cadastros do conjunto comparado.
+    function sharedPhoneIndex(candidates) {
+        var counts = Object.create(null);
+        var shared = Object.create(null);
+        candidates.forEach(function (candidate) {
+            var phone = semanticIdentity(candidateData(candidate)).normalizedPhone;
+            if (!phone) return;
+            counts[phone] = (counts[phone] || 0) + 1;
+            if (counts[phone] >= 3) shared[phone] = true;
+        });
+        return shared;
     }
 
     function normalizedCandidates(items, scope) {
@@ -230,8 +252,9 @@
             return candidate.id !== currentId;
         });
         var all = cms.concat(pending, legacy);
+        var sharedPhones = sharedPhoneIndex(all);
         var matches = all.map(function (candidate) {
-            return Object.assign({}, candidate, { relation: relationToCandidate(submission, candidate) });
+            return Object.assign({}, candidate, { relation: relationToCandidate(submission, candidate, sharedPhones) });
         }).filter(function (candidate) { return candidate.relation !== "none"; });
         var exactCms = matches.filter(function (candidate) { return candidate.scope === "cms" && candidate.relation === "exact"; });
         var semanticCms = matches.filter(function (candidate) { return candidate.scope === "cms" && candidate.relation === "semantic"; });
