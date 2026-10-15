@@ -1298,6 +1298,8 @@
       descricaoLonga: item.descricaoLonga || item.historia || "",
       imagem: item.imagem || gallery[0] || "",
       galeria: gallery,
+      // Registros originais das fotos (crédito/legenda) para js/image-attribution.js.
+      media: item.media && typeof item.media === "object" ? item.media : null,
       url: item.url || "",
       localId: item.localId || item.placeId || "",
       localUrl: item.localUrl || item.localDetailUrl || "",
@@ -1609,6 +1611,30 @@
     return replaceCount(t("thematicRoutesSummaryMany"), count);
   }
 
+  // Crédito/licença da foto exibida (js/image-attribution.js). Sem crédito, não gera nada.
+  // A capa pode vir da 1ª foto da galeria; a busca é pela URL efetivamente exibida.
+  function getPhotoAttribution(item, url) {
+    var attribution = window.SMSImageAttribution;
+    return attribution && url ? attribution.forItemImage(item, url) : null;
+  }
+
+  function getPhotoCreditText(item, url) {
+    var found = getPhotoAttribution(item, url);
+    return found ? window.SMSImageAttribution.text(found, state.lang) : "";
+  }
+
+  // Versão com links (autor, fonte, licença). Só fora de botões/links.
+  function getPhotoCreditHtml(item, url) {
+    var found = getPhotoAttribution(item, url);
+    var markup = found ? window.SMSImageAttribution.html(found, state.lang) : "";
+    return markup ? '<p class="map-photo-credit">' + markup + "</p>" : "";
+  }
+
+  function getPhotoCreditCompact(item, url) {
+    var text = getPhotoCreditText(item, url);
+    return text ? '<small class="map-photo-credit is-compact">' + escapeHtml(text) + "</small>" : "";
+  }
+
   function getImageHtml(item, className) {
     if (!item.imagem) {
       if (isRouteItem(item)) {
@@ -1842,9 +1868,14 @@
       + '<h3>' + escapeHtml(t("gallery")) + '</h3>'
       + '<div class="map-details-gallery-grid">'
       + images.slice(1, 7).map(function (image) {
-        return '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.nome) + '" loading="lazy" decoding="async" width="640" height="360">';
+        var credit = getPhotoCreditCompact(item, image);
+        var img = '<img src="' + escapeHtml(image) + '" alt="' + escapeHtml(item.nome) + '" loading="lazy" decoding="async" width="640" height="360">';
+        return credit ? '<figure class="map-details-gallery-item">' + img + credit + "</figure>" : img;
       }).join("")
-      + "</div></section>";
+      + "</div>"
+      + images.slice(1, 7).map(function (image) { return getPhotoCreditHtml(item, image); })
+        .filter(function (markup, index, list) { return markup && list.indexOf(markup) === index; }).join("")
+      + "</section>";
   }
 
   function renderDetailsModalContent(item) {
@@ -1858,6 +1889,7 @@
     return ''
       + '<div class="map-details-media">'
       + getImageHtml(item, "map-details-image")
+      + getPhotoCreditHtml(item, item.imagem)
       + '</div>'
       + '<div class="map-details-body">'
       + '<div class="map-details-heading">'
@@ -1980,6 +2012,7 @@
     container.innerHTML = ""
       + '<div class="map-detail">'
       + getImageHtml(item, "map-detail-image")
+      + getPhotoCreditHtml(item, item.imagem)
       + '<div class="map-detail-top">'
       + "<div>"
       + '<span class="map-detail-category is-soft" style="--detail-accent:' + getCategoryConfig(item.categoriaMapa).accent + ';--detail-color:' + getCategoryConfig(item.categoriaMapa).color + ';">' + escapeHtml(item.categoriaLabel) + "</span>"
@@ -2034,6 +2067,7 @@
       + "<p>" + escapeHtml(item.descricao || t("noDescription")) + "</p>"
       + (isRouteItem(item) ? '<p class="map-list-support">' + t("routeSupport") + "</p>" : "")
       + '<div class="map-list-card-tags">' + tags.join("") + "</div>"
+      + getPhotoCreditCompact(item, item.imagem)
       + "</div>"
       + "</button>"
       + '<div class="map-list-card-actions">'
@@ -2868,6 +2902,7 @@
       + '<div class="mi-sheet-main">'
       + '<p class="mi-sheet-kicker" style="--mi-fam:' + window.MAPA_ILUSTRADO.familyColor(family) + '"><span class="mi-sheet-kicker-dot" aria-hidden="true"></span>' + escapeHtml(familyLabel) + "</p>"
       + '<h2 class="mi-sheet-title" id="miSheetTitle" tabindex="-1">' + escapeHtml(item.nome) + "</h2>"
+      + getPhotoCreditCompact(item, item.imagem)
       + '<div class="mi-sheet-actions">'
       + renderPrimaryInfoAction(item, localDetailUrl)
       + (item.possuiCoordenadas ? '<a class="map-button" href="' + escapeHtml(item.mapsUrl) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(t("directions")) + "</a>" : "")
@@ -2878,6 +2913,7 @@
       + (meta.length ? '<ul class="mi-sheet-meta">' + meta.join("") + "</ul>" : "")
       + routeChips
       + renderApprovedEventsSection(item, "panel")
+      + getPhotoCreditHtml(item, item.imagem)
       + "</div>"
       + "</div>";
   }

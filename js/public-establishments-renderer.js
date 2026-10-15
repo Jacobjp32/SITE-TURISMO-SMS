@@ -49,6 +49,11 @@
   // primeira foto da galeria do próprio registro. Registros do CMS podem ter galeria
   // sem capa (ex.: Hotel São Mateus), e a galeria é do mesmo empreendimento.
   function ownImage(item) {
+    var raw = ownImageRaw(item);
+    return raw ? safeImage(raw) : "";
+  }
+
+  function ownImageRaw(item) {
     var candidates = [
       item && item.imagem,
       item && item.media && item.media.mainImage && item.media.mainImage.url
@@ -62,10 +67,32 @@
     for (var i = 0; i < candidates.length; i += 1) {
       var raw = clean(candidates[i]);
       if (!raw) continue;
-      var safe = safeImage(raw);
-      if (safe !== FALLBACK_IMAGE) return safe;
+      if (safeImage(raw) !== FALLBACK_IMAGE) return raw;
     }
     return "";
+  }
+
+  // Crédito discreto da foto do card (autor e licença), no fim do corpo do card para não
+  // sobrepor a foto nem desalinhar títulos. O card inteiro é um link, então aqui vai só
+  // texto; os links de fonte e licença ficam na ficha (local.html).
+  var creditStyleInjected = false;
+  function cardCredit(item) {
+    return photoCreditMarkup(item, ownImageRaw(item));
+  }
+
+  function photoCreditMarkup(item, rawUrl) {
+    var attribution = window.SMSImageAttribution;
+    if (!attribution || !rawUrl) return "";
+    var text = attribution.text(attribution.forItemImage(item, rawUrl));
+    if (!text) return "";
+    if (!creditStyleInjected && document.head) {
+      creditStyleInjected = true;
+      var style = document.createElement("style");
+      style.setAttribute("data-photo-credit-style", "");
+      style.textContent = ".card-photo-credit{display:block;margin:.45rem 0 0;padding:0;font-size:.68rem;letter-spacing:0;text-transform:none;line-height:1.35;font-weight:400;color:#6b6b6b;text-align:left;overflow-wrap:anywhere}";
+      document.head.appendChild(style);
+    }
+    return '<small class="card-photo-credit">' + escapeHtml(text) + "</small>";
   }
 
   // Apresentação editorial (vitrine da home): mesma ordem oficial, mas registros com
@@ -83,7 +110,8 @@
   // Bloco de mídia: foto real quando existir; senão, tile tipográfico com a inicial e a categoria.
   // Evita que a foto aérea genérica represente lugares diferentes como se fosse deles.
   function mediaMarkup(item, imgClass, width, height) {
-    var own = ownImage(item);
+    var ownRaw = ownImageRaw(item);
+    var own = ownRaw ? safeImage(ownRaw) : "";
     var name = itemName(item);
     if (own) {
       return '<img src="' + own + '" class="' + imgClass + '" alt="' + escapeHtml(name) + '" loading="lazy" decoding="async" width="' + (width || 640) + '" height="' + (height || 360) + '">';
@@ -167,7 +195,7 @@
       return '<article class="featured-experience-card" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
         '<a href="' + itemUrl(item) + '">' +
           mediaMarkup(item, "featured-experience-media") +
-          '<div class="featured-experience-body"><span>' + escapeHtml(itemCategory(item)) + '</span><h3>' + escapeHtml(name) + '</h3><small>Conhecer</small></div>' +
+          '<div class="featured-experience-body"><span>' + escapeHtml(itemCategory(item)) + '</span><h3>' + escapeHtml(name) + '</h3><small>Conhecer</small>' + cardCredit(item) + '</div>' +
         '</a>' +
       '</article>';
     }).join("") : emptyMarkup("Nenhum empreendimento foi marcado como destaque.");
@@ -184,7 +212,7 @@
       return '<a class="attraction-card public-establishment-card-link" href="' + itemUrl(item) + '" data-establishment-id="' + escapeHtml(item.id || item.slug) + '">' +
         mediaMarkup(item, "attraction-image") +
         '<div class="attraction-content"><div class="attraction-icon" aria-hidden="true">📍</div><h3 class="attraction-title">' + escapeHtml(name) + '</h3>' +
-        '<p class="attraction-desc">' + escapeHtml(itemDescription(item)) + '</p><p class="public-establishment-cta">Ver mais →</p></div>' +
+        '<p class="attraction-desc">' + escapeHtml(itemDescription(item)) + '</p><p class="public-establishment-cta">Ver mais →</p>' + cardCredit(item) + '</div>' +
       '</a>';
     }).join("") : emptyMarkup("Nenhum atrativo publicado no momento.");
   }
@@ -199,6 +227,7 @@
           mediaMarkup(item, "hotel-media") + '<h3 class="hotel-name">' + escapeHtml(itemName(item)) + '</h3>' +
           '<p class="hotel-description">' + escapeHtml(itemDescription(item)) + '</p>' +
           '<div class="hotel-contact">' + (phone ? '<span>📞 ' + escapeHtml(phone) + '</span>' : '') + (address ? '<span>📍 ' + escapeHtml(address) + '</span>' : '') + '</div>' +
+          cardCredit(item) +
         '</a>' +
       '</article>';
     }).join("") : emptyMarkup("Nenhuma hospedagem publicada no momento.");
@@ -261,7 +290,7 @@
           '<div class="hotel-content"><span class="hotel-category">' + escapeHtml(itemCategory(item)) + '</span><h3>' + escapeHtml(itemName(item)) + '</h3>' +
           '<p class="description">' + escapeHtml(itemDescription(item)) + '</p>' +
           '<div class="hotel-amenities">' + tags.map(function (tag) { return '<span class="amenity">✓ ' + escapeHtml(tag) + '</span>'; }).join("") + '</div>' +
-          '<div class="hotel-contact">' + (phone ? '<span>📞 ' + escapeHtml(phone) + '</span>' : '') + (address ? '<span>📍 ' + escapeHtml(address) + '</span>' : '') + '</div></div>' +
+          '<div class="hotel-contact">' + (phone ? '<span>📞 ' + escapeHtml(phone) + '</span>' : '') + (address ? '<span>📍 ' + escapeHtml(address) + '</span>' : '') + '</div>' + cardCredit(item) + '</div>' +
         '</a>' +
       '</article>';
     }).join("") : emptyMarkup("Nenhuma hospedagem publicada no momento.");

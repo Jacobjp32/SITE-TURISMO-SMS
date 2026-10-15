@@ -6,6 +6,19 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-15 — CRÉDITO E LICENÇA DAS FOTOS no portal público
+
+**Status:** branch `feat/credito-imagens` (base `origin/main` fd4bec4), publicada após autorização do usuário. Sem alteração de Rules, Storage ou esquema do Firestore.
+
+- **Módulo `js/image-attribution.js` (novo):** junta o crédito do CMS (`media.mainImage.credit` / `media.gallery[].credit`, texto não confiável e escapado) com um registro versionado de licenças por arquivo do portal (autor, fonte e link, licença e link, modificações). Links só vêm do registro e só `https://`. Rótulos em PT/EN/ES/PL. O registro existe porque o esquema de imagem nas Firestore Rules aceita só `credit`/`caption`; ampliá-lo exigiria publicar `firestore.rules`, cujo arquivo local ainda carrega regras do B2A6 pendentes de autorização própria.
+- **Ficha (`local.html`):** linha discreta logo abaixo da foto principal (com links de fonte e licença), legenda curta em cada foto da galeria e crédito completo na imagem ampliada (que passou a devolver o foco ao fechar). Cadastros sem crédito ficam como antes.
+- **Cards (`js/public-establishments-renderer.js`):** crédito em texto no fim do card (o card é um link; os links ficam na ficha), inclusive quando a capa vem da 1ª foto da galeria.
+- **Mapa (`js/mapa-turistico.js`, `css/mapa-turistico.css`):** crédito curto na lista e na folha recolhida; versão com links na folha expandida, no painel de detalhe e no modal.
+- **Painel (`js/admin/modules/empreendimentos.js`):** mostra a licença registrada de cada foto na gestão da galeria, resume os créditos atuais junto da lista de URLs e explica como editar o crédito de cada foto (fluxo "Editar metadados" já existente, preservado).
+- **Fotos:** Ervateira Baldo (4, AEN, "Foto: Gilson Abreu/AEN", reprodução permitida com indicação da fonte) e Ervateira Taquaral (2, Wikimedia Commons, autor Simplus Menegati, CC BY-SA 4.0; capa do cadastro preservada). Autoria e licença conferidas na fonte em 2026-10-15.
+- Cache: `?v=credito-imagens-20261015` em `image-attribution.js`, no renderer (via `nav-shared.js`), em `mapa-turistico.js/.css` e em `empreendimentos.js`; token do `nav-shared.js` mantido (o teste exige geração única).
+- Validação: `tests/image-attribution.test.mjs` 11/11; suíte sem emulador sem regressões (2 falhas preexistentes também na `origin/main`); verificação visual em desktop e celular.
+
 ## 2026-10-14 — PAINEL ADMIN: fechamento da candidata a publicação
 
 **Status:** branch `admin/painel-evolucao` rebaseada sobre `origin/main` (c80c5e5, com Mapa Ilustrado, hero aéreo, Capivarense e cookies); somente arquivos do painel e seus testes/scripts mudam. Sem push, sem deploy, sem alteração de Rules, permissões ou dados reais. Rollback: tag `admin-painel-rollback` (= c80c5e5).

@@ -1046,6 +1046,32 @@
         });
     }
 
+    // Resumo somente leitura dos créditos atuais, na ordem da lista de URLs.
+    function galleryCreditSummary(gallery) {
+        // Mesma ordem da lista de URLs acima (inclui imagens removidas, marcadas).
+        var rows = ensureArray(gallery).filter(function (img) { return img && img.url; }).map(function (img, index) {
+            var credit = clean(img.credit) || "sem crédito";
+            return '<li>' + escapeHtml("Linha " + (index + 1) + ": " + credit + (isRemovedImage(img) ? " (removida)" : "")) + '</li>';
+        });
+        return rows.length
+            ? '<details style="margin-top:0.5rem;"><summary style="cursor:pointer;">Créditos atuais da galeria (' + rows.length + ')</summary><ul style="margin:0.4rem 0 0 1.1rem;">' + rows.join("") + '</ul></details>'
+            : "";
+    }
+
+    // Licença/fonte registradas para arquivos do portal (js/image-attribution.js), somente leitura.
+    function registeredLicenseHtml(url) {
+        var attribution = window.SMSImageAttribution;
+        var entry = attribution && attribution.lookup ? attribution.lookup(url) : null;
+        if (!entry) return "";
+        var resolved = attribution.resolve({ url: url });
+        var license = typeof resolved.license === "string" ? resolved.license : (resolved.license && resolved.license.pt) || "";
+        var parts = [];
+        if (resolved.author) parts.push("Autor: " + resolved.author);
+        if (resolved.sourceName) parts.push("Fonte: " + resolved.sourceName);
+        if (license) parts.push("Licença: " + license);
+        return '<p style="margin:0 0 0.35rem;"><strong>Licença registrada no portal:</strong> ' + escapeHtml(parts.join(" · ")) + '</p>';
+    }
+
     function sourceLabel(source) {
         var value = clean(source);
         if (value === "portal_request") return "Portal";
@@ -1082,6 +1108,7 @@
                 '<p style="margin:0 0 0.35rem;"><strong>Texto alternativo:</strong> ' + escapeHtml(image.alt || "Sem texto alternativo") + '</p>' +
                 '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(image.caption || "Sem legenda") + '</p>' +
                 '<p style="margin:0 0 0.35rem;"><strong>Crédito:</strong> ' + escapeHtml(image.credit || "Sem crédito") + '</p>' +
+                registeredLicenseHtml(image.url) +
                 (image.sourceRequestId ? '<p style="margin:0 0 0.35rem;"><strong>Origem:</strong> enviada pelo empreendedor</p>' : '') +
                 '<div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:0.75rem;">' + actions + '</div>' +
             '</div>' +
@@ -1101,6 +1128,7 @@
                     '<p style="margin:0 0 0.35rem;"><strong>Texto alternativo:</strong> ' + escapeHtml(mainImage.alt || "Sem texto alternativo") + '</p>' +
                     '<p style="margin:0 0 0.35rem;"><strong>Legenda:</strong> ' + escapeHtml(mainImage.caption || "Sem legenda") + '</p>' +
                     '<p style="margin:0 0 0.35rem;"><strong>Crédito:</strong> ' + escapeHtml(mainImage.credit || "Sem crédito") + '</p>' +
+                    registeredLicenseHtml(mainImage.url) +
 
                 '</div>' +
             '</div>'
@@ -1215,6 +1243,8 @@
                     '<div class="admin-field">' +
                         '<label for="est_galleryUrls">URLs atuais da galeria (uma por linha)</label>' +
                         '<textarea class="admin-input" id="est_galleryUrls" rows="4">' + escapeHtml(ensureArray(item.media.gallery).map(function (img) { return img.url; }).join("\n")) + '</textarea>' +
+                        '<p class="admin-helper-text">Legenda e crédito de cada foto: depois de salvar, use “Editar metadados” na gestão editorial da galeria (detalhes do empreendimento). Os créditos são preservados ao editar esta lista.</p>' +
+                        galleryCreditSummary(item.media.gallery) +
                     '</div>' +
                     '<div class="admin-field">' +
                         '<label for="est_galleryFiles">Adicionar imagens por upload</label>' +
@@ -2802,7 +2832,7 @@
                 fields: [
                     { name: "alt", label: "Texto alternativo", value: data.image.alt || "", multiline: true, rows: 2, maxLength: 160, hint: "Descreva o que aparece na foto para quem usa leitor de tela." },
                     { name: "caption", label: "Legenda", value: data.image.caption || "", maxLength: 240 },
-                    { name: "credit", label: "Crédito", value: data.image.credit || "", maxLength: 160 }
+                    { name: "credit", label: "Crédito", value: data.image.credit || "", maxLength: 160, hint: "Ex.: Foto: Nome do autor/Agência. Obrigatório quando a licença da foto exige atribuição; aparece no portal junto da foto." }
                 ],
                 confirmLabel: "Salvar informações"
             });
@@ -2813,7 +2843,7 @@
             if (alt === null) return;
             caption = window.prompt("Legenda opcional da imagem:", data.image.caption || "");
             if (caption === null) return;
-            credit = window.prompt("Credito opcional da imagem:", data.image.credit || "");
+            credit = window.prompt("Credito da imagem (ex.: Foto: Nome do autor/Agencia). Obrigatorio quando a licenca exige atribuicao:", data.image.credit || "");
             if (credit === null) return;
         }
         if (!clean(alt) && !(await ask({

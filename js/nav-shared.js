@@ -599,6 +599,7 @@ body.font-larger{font-size:140%!important;}
             'js/cms-public-routes-adapter.js',
             'js/cms-public-establishments-adapter.js',
             'js/data/turismo-data.js',
+            'js/image-attribution.js',
             'js/public-establishments-renderer.js',
             'js/search-index.js',
             'js/search.js'
@@ -609,6 +610,8 @@ body.font-larger{font-size:140%!important;}
                     ? src + '?v=search-v22-20261013'
                     : src === 'js/data/eventos.js'
                         ? src + '?v=agro-postponed-20260924'
+                        : src === 'js/image-attribution.js' || src === 'js/public-establishments-renderer.js'
+                            ? src + '?v=credito-imagens-20261015'
                         : /public-establishments-renderer|turismo-data-adapter|pontos-turisticos/.test(src)
                             ? src + '?v=v22-20261013'
                             : /cms-public|turismo-data\.js/.test(src)

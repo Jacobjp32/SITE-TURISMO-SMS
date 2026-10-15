@@ -2062,3 +2062,16 @@ body.map-details-open {
         min-height: 148px;
     }
 }
+
+/* Crédito/licença das fotos (js/image-attribution.js) — só aparece quando a foto tem crédito. */
+.map-photo-credit { margin: 0; font-size: 0.72rem; line-height: 1.4; color: #6b6b6b; overflow-wrap: anywhere; }
+.map-photo-credit a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+.map-photo-credit a:hover, .map-photo-credit a:focus-visible { color: #1f5a3f; }
+.map-photo-credit.is-compact { display: block; margin-top: 0.3rem; font-size: 0.68rem; }
+.map-detail > .map-photo-credit { margin-top: -0.5rem; }
+.map-details-media > .map-photo-credit { padding: 0.55rem 0.85rem; background: #efe5d5; }
+.map-details-gallery-item { margin: 0; min-width: 0; }
+.map-details-gallery + .map-photo-credit, .map-details-gallery .map-photo-credit:not(.is-compact) { margin-top: 0.5rem; }
+.mi-sheet-main > .map-photo-credit.is-compact { margin: -0.15rem 0 0.35rem; }
+/* Folha recolhida no celular (grade de mapa-ilustrado.css): crédito em linha inteira, abaixo dos botões. */
+.mi-sheet:not(.is-expanded) .mi-sheet-main > .map-photo-credit.is-compact { grid-column: 1 / -1; grid-row: 4; margin: 0.45rem 0 0; }

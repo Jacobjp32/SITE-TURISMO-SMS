@@ -175,6 +175,21 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         .galeria-grid img:hover { transform: scale(1.03); box-shadow: 0 6px 20px rgba(0,0,0,0.18); }
+        .galeria-item { margin: 0; min-width: 0; }
+
+        /* ── CRÉDITO DAS FOTOS (só aparece quando a imagem tem crédito) ── */
+        .foto-credito { font-size: 0.72rem; line-height: 1.4; color: #6b6b6b; overflow-wrap: anywhere; }
+        .foto-credito a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+        .foto-credito a:hover, .foto-credito a:focus-visible { color: var(--verde2); }
+        .galeria-item .foto-credito { margin-top: 0.3rem; }
+        /* Layout clássico (foto de fundo): legenda pequena no canto, sobre o degradê. */
+        .hero .hero-credito { position: absolute; right: 1rem; bottom: 0.45rem; left: 1rem; z-index: 2; margin: 0; text-align: right; color: rgba(255,255,255,0.82); }
+        /* Layout Recortes (foto ao lado do título): linha logo abaixo da foto. */
+        body.rc-local .hero .hero-credito { position: static; grid-column: 2; grid-row: 3; margin: 0.55rem 0 0; text-align: right; color: #6b6b6b; }
+        @media (max-width: 599px) {
+            body.rc-local .hero .hero-credito { grid-column: 1; grid-row: 3; margin-top: -0.5rem; text-align: left; }
+            body.rc-local .hero .hero-content { grid-row: 4; }
+        }
 
         /* ── MAPA ── */
         .mapa-section { margin-bottom: 2rem; }
@@ -326,9 +341,12 @@
         .not-found .local-actions { justify-content: center; }
 
         /* ── LIGHTBOX ── */
-        .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; }
+        .lb { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 9999; align-items: center; justify-content: center; flex-direction: column; }
         .lb.open { display: flex; }
         .lb img { max-width: 90vw; max-height: 85vh; border-radius: 8px; }
+        .lb .lb-credit { max-width: min(90vw, 760px); margin: 0.7rem 1rem 0; color: rgba(255,255,255,0.85); text-align: center; }
+        .lb .lb-credit:empty { display: none; }
+        .lb .lb-credit a:hover, .lb .lb-credit a:focus-visible { color: #fff; }
         .lb-close {
             position: absolute; top: 1rem; right: 1.5rem;
             color: white; font-size: 2rem; cursor: pointer;
@@ -340,6 +358,7 @@
         footer a { color: var(--ouro); text-decoration: none; }
     </style>
     <script src="js/security-utils.js?v=site-public-b1-20260708"></script>
+    <script src="js/image-attribution.js?v=credito-imagens-20261015"></script>
     <script src="config.js?v=admin-e2e-publication-20260911"></script>
     <script src="js/locais-data.js?v=agro-02-20260909"></script>
     <script src="js/rotas-data.js?v=site-public-b1-20260708"></script>
@@ -368,6 +387,7 @@
 <div class="lb" id="lb" onclick="lbClose()">
     <button class="lb-close" onclick="lbClose()" aria-label="Fechar imagem ampliada">×</button>
     <img id="lb-img" src="" alt="" loading="lazy">
+    <p class="foto-credito lb-credit" id="lb-credit" onclick="event.stopPropagation()"></p>
 </div>
 
 <main id="page-root" tabindex="-1"></main>
@@ -468,7 +488,8 @@
         var lang = (stored || (navigator.language || "pt")).toLowerCase().split("-")[0];
         return STRINGS[lang] ? lang : "pt";
     }
-    var L_STR = STRINGS[detectLang()];
+    var PAGE_LANG = detectLang();
+    var L_STR = STRINGS[PAGE_LANG];
     function t(key) { return L_STR[key] || STRINGS.pt[key] || key; }
 
     function setMeta(id, attr, value) {
@@ -583,6 +604,12 @@
 
     // ── Galeria (opcional) ──
     var galeria = Array.isArray(local.galeria) ? local.galeria : [];
+    // ── Crédito/licença das fotos (js/image-attribution.js). Sem crédito, nada muda. ──
+    var ATTR = window.SMSImageAttribution || null;
+    var heroAttr = ATTR && local.imagem ? ATTR.forItemImage(local, local.imagem) : null;
+    var heroCreditHTML = heroAttr ? '<p class="foto-credito hero-credito">' + ATTR.html(heroAttr, PAGE_LANG) + '</p>' : "";
+    window.SMS_LOCAL_PHOTO_CREDITS = {};
+
     var galeriaHTML = galeria.length
         ? '<section class="galeria-section">' +
             '<span class="sec-label">' + SEC.html(t("gallery")) + '</span>' +
@@ -591,11 +618,17 @@
                     var safeSrc = SEC.url(src, FALLBACK_IMG) || FALLBACK_IMG;
                     var altTxt = nome + " — " + t("photo") + " " + (i + 1);
                     var ariaTxt = t("openPhoto") + " " + (i + 1) + ": " + nome;
-                    return '<img src="' + safeSrc + '" alt="' + SEC.attr(altTxt) + '" tabindex="0" ' +
-                        'role="button" aria-label="' + SEC.attr(ariaTxt) + '" ' +
-                        'onclick="lbOpen(this.src, this.alt)" ' +
-                        'onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();lbOpen(this.src,this.alt);}" ' +
-                        'onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">';
+                    var photoAttr = ATTR ? ATTR.forItemImage(local, src) : null;
+                    var creditText = photoAttr ? ATTR.text(photoAttr, PAGE_LANG) : "";
+                    if (photoAttr) window.SMS_LOCAL_PHOTO_CREDITS[i] = ATTR.html(photoAttr, PAGE_LANG, "full");
+                    return '<figure class="galeria-item">' +
+                        '<img src="' + safeSrc + '" alt="' + SEC.attr(altTxt) + '" tabindex="0" ' +
+                        'role="button" aria-label="' + SEC.attr(ariaTxt + (creditText ? " (" + creditText + ")" : "")) + '" ' +
+                        'onclick="lbOpen(this.src, this.alt, ' + i + ', this)" ' +
+                        'onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();lbOpen(this.src,this.alt,' + i + ',this);}" ' +
+                        'onerror="imgFallback(this)" loading="lazy" decoding="async" width="640" height="360">' +
+                        (creditText ? '<figcaption class="foto-credito">' + SEC.html(creditText) + '</figcaption>' : "") +
+                    '</figure>';
                 }).join("") +
             '</div></section>'
         : "";
@@ -738,6 +771,7 @@
                 '<h1 class="hero-title">' + SEC.html(nome) + '</h1>' +
                 (subtitulo ? '<p class="hero-sub">' + SEC.html(subtitulo) + '</p>' : "") +
             '</div>' +
+            heroCreditHTML +
         '</div>' +
 
         '<div class="local-container">' +
@@ -832,15 +866,26 @@ function voltarAoMapa(e) {
 }
 
 // Lightbox simples
-function lbOpen(src, alt) {
+var lbOpener = null;
+function lbOpen(src, alt, index, opener) {
     document.getElementById("lb-img").src = src;
     document.getElementById("lb-img").alt = alt;
+    // Crédito completo (autor, fonte, licença e links) — HTML já escapado por js/image-attribution.js.
+    var credits = window.SMS_LOCAL_PHOTO_CREDITS || {};
+    document.getElementById("lb-credit").innerHTML = (index != null && credits[index]) || "";
     document.getElementById("lb").classList.add("open");
     document.body.style.overflow = "hidden";
+    lbOpener = opener || null;
+    var closeButton = document.querySelector(".lb-close");
+    if (closeButton) closeButton.focus();
 }
 function lbClose() {
-    document.getElementById("lb").classList.remove("open");
+    var lb = document.getElementById("lb");
+    if (!lb.classList.contains("open")) return;
+    lb.classList.remove("open");
     document.body.style.overflow = "";
+    if (lbOpener && typeof lbOpener.focus === "function") lbOpener.focus();
+    lbOpener = null;
 }
 document.addEventListener("keydown", function (e) { if (e.key === "Escape") lbClose(); });
 </script>
