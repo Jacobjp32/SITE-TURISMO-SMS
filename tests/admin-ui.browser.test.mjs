@@ -335,7 +335,12 @@ test("capa do evento pela Biblioteca de mídia: escolher, remover, trocar, salva
     if (f.publicado) f.publicado.value = "false"; })()`);
   const select = async (id) => evaluate(`(() => { const s = document.getElementById("eventMediaId"); s.value = ${JSON.stringify(id)}; s.dispatchEvent(new Event("change", { bubbles: true })); return document.getElementById("mainImage").value; })()`);
   assert.equal(await select("ui-media-1"), "images/ui-foto-1.jpg");
+  // Remover capa limpa o campo e marca a remoção.
+  await clickButtonText("Remover capa");
+  assert.deepEqual(await evaluate(`[document.getElementById("mainImage").value, document.getElementById("eventRemoveCover").value]`), ["", "true"]);
+  // Escolher outra imagem desfaz a remoção (era o handler quebrado do FUNC-01).
   assert.equal(await select("ui-media-2"), "images/ui-foto-2.jpg", "trocar a capa");
+  assert.equal(await evaluate(`document.getElementById("eventRemoveCover").value`), "false");
   assert.equal(await evaluate(`document.getElementById("mainImage").checkValidity()`), true, "caminho interno é aceito");
   const invalid = await evaluate(`[...document.getElementById("eventCmsForm").elements].filter((el) => el.willValidate && !el.checkValidity()).map((el) => (el.name || el.id) + ": " + el.validationMessage)`);
   assert.deepEqual(invalid, [], "formulário válido antes de salvar");
@@ -345,6 +350,17 @@ test("capa do evento pela Biblioteca de mídia: escolher, remover, trocar, salva
   const saved = await evaluate(`firebase.firestore().collection("eventos_aprovados").get({ source: "server" }).then((s) => s.docs.map((d) => d.data()).find((e) => (e.title || e.nome) === "[UI] Evento com capa"))`);
   assert.ok(saved, "evento gravado");
   assert.equal(saved.mainImage, "images/ui-foto-2.jpg");
+
+  // Reabrir o evento salvo mostra a capa escolhida.
+  await evaluate(`AdminContentCMS.loadApprovedEvents()`);
+  const marker = await evaluate(`(() => { const row = [...document.querySelectorAll("#section-eventos tr")].find((r) => r.textContent.includes("[UI] Evento com capa"));
+    const btn = row && row.querySelector('[data-admin-action="content-open-event"]'); if (!btn) return null; btn.setAttribute("data-ui-reopen", "1"); return true; })()`);
+  assert.ok(marker, "evento na lista");
+  await clickSelector('[data-ui-reopen="1"]');
+  await waitFor(`document.getElementById("mainImage")`, 5000, "editor reaberto");
+  assert.equal(await evaluate(`document.getElementById("mainImage").value`), "images/ui-foto-2.jpg");
+  await clickButtonText("Cancelar", `document.getElementById("contentModal")`);
+  await waitFor(`document.getElementById("contentModal").hidden`, 5000, "editor fechado sem alteração");
 });
 
 test("notícia: caminho interno aceito, javascript: recusado, autor legível na lista", { skip: SKIP }, async () => {
