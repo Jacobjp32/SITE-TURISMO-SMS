@@ -1001,7 +1001,8 @@
         (async function () {
           var db = await ensurePublicFirestore();
           if (!db) return null;
-          return db.collection("eventos_aprovados").get();
+          // Só publicados: as Rules não expõem rascunhos (Rodada 1).
+          return db.collection("eventos_aprovados").where("publicado", "==", true).get();
         })(),
         FIREBASE_PUBLIC_TIMEOUT_MS,
         "Carregamento público do Firestore no mapa"

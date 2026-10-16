@@ -3876,3 +3876,79 @@ describe("CMS establishments C1 V2 — recovery do orquestrador e concorrência 
     assert.equal(db.raw.revision, 181);
   });
 });
+
+// Rodada 1 (2026-10): rascunhos de eventos e autocadastro.
+describe("Rodada 1 — eventos_aprovados só expõe publicados", () => {
+  const draft = {
+    title: "[Sintético] Rascunho", publicado: false, status: "rascunho",
+    ownerEmail: "remetente@example.invalid", phone: "(00) 0000-0000",
+  };
+  const published = { title: "[Sintético] Publicado", publicado: true, status: "aprovado" };
+
+  test("anônimo não lê rascunho, lê publicado", async () => {
+    await seedDocuments([["eventos_aprovados/ev-draft", draft], ["eventos_aprovados/ev-pub", published]]);
+    await assertFails(getDoc(doc(anonymousDb(), "eventos_aprovados", "ev-draft")));
+    await assertSucceeds(getDoc(doc(anonymousDb(), "eventos_aprovados", "ev-pub")));
+  });
+
+  test("anônimo não lista a coleção inteira, mas lista os publicados", async () => {
+    await seedDocuments([["eventos_aprovados/ev-draft", draft], ["eventos_aprovados/ev-pub", published]]);
+    await assertFails(getDocs(collection(anonymousDb(), "eventos_aprovados")));
+    const snapshot = await assertSucceeds(getDocs(query(
+      collection(anonymousDb(), "eventos_aprovados"), where("publicado", "==", true),
+    )));
+    assert.deepEqual(snapshot.docs.map((d) => d.id), ["ev-pub"]);
+  });
+
+  test("usuário comum não lê rascunho; admin e moderator leem", async () => {
+    await seedDocuments([
+      userEntry("user-r1", "user", true),
+      userEntry("admin-r1", "admin", true),
+      userEntry("mod-r1", "moderator", true),
+      ["eventos_aprovados/ev-draft", draft],
+    ]);
+    await assertFails(getDoc(doc(authenticatedDb("user-r1"), "eventos_aprovados", "ev-draft")));
+    await assertSucceeds(getDoc(doc(authenticatedDb("admin-r1"), "eventos_aprovados", "ev-draft")));
+    await assertSucceeds(getDoc(doc(authenticatedDb("mod-r1"), "eventos_aprovados", "ev-draft")));
+    await assertSucceeds(getDocs(collection(authenticatedDb("admin-r1"), "eventos_aprovados")));
+  });
+
+  test("documento sem o campo publicado não é público", async () => {
+    await seedDocuments([["eventos_aprovados/ev-legacy", { title: "[Sintético] Legado", status: "aprovado" }]]);
+    await assertFails(getDoc(doc(anonymousDb(), "eventos_aprovados", "ev-legacy")));
+  });
+});
+
+describe("Rodada 1 — autocadastro em usuarios", () => {
+  function selfDb(uid, email) {
+    return testEnv.authenticatedContext(uid, email ? { email } : {}).firestore();
+  }
+  const base = {
+    nome: "Sintético", telefone: "", tipo: "turista", organizacao: "",
+    ativo: true, role: "user", verificado: false,
+  };
+
+  test("cria com o e-mail da própria conta", async () => {
+    await assertSucceeds(setDoc(doc(selfDb("self-ok", "pessoa@example.invalid"), "usuarios", "self-ok"), {
+      ...base, email: "pessoa@example.invalid", criadoEm: serverTimestamp(),
+    }));
+  });
+
+  test("e-mail diferente do da conta é negado", async () => {
+    await assertFails(setDoc(doc(selfDb("self-forged", "pessoa@example.invalid"), "usuarios", "self-forged"), {
+      ...base, email: "outra.pessoa@example.invalid",
+    }));
+  });
+
+  test("campos fora do formulário do Portal são negados", async () => {
+    await assertFails(setDoc(doc(selfDb("self-extra", "pessoa@example.invalid"), "usuarios", "self-extra"), {
+      ...base, email: "pessoa@example.invalid", cargo: "Secretário",
+    }));
+  });
+
+  test("verificado não pode nascer true", async () => {
+    await assertFails(setDoc(doc(selfDb("self-verified", "pessoa@example.invalid"), "usuarios", "self-verified"), {
+      ...base, email: "pessoa@example.invalid", verificado: true,
+    }));
+  });
+});

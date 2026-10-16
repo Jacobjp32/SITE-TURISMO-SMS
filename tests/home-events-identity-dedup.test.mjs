@@ -54,7 +54,14 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSo
         __firestoreModule: {
             getFirestore: () => ({}),
             collection: () => ({}),
-            getDocs: async () => ({ empty: docs.length === 0, docs })
+            // Simula o servidor: a home consulta where('publicado', '==', true) (Rodada 1).
+            where: (field, op, value) => ({ field, op, value }),
+            query: (ref, ...filters) => ({ ref, filters }),
+            getDocs: async (target) => {
+                const filters = (target && target.filters) || [];
+                const visible = docs.filter((d) => filters.every((f) => f.op === '==' && d.data()[f.field] === f.value));
+                return { empty: visible.length === 0, docs: visible };
+            }
         },
         __appCheckModule: {
             initModularAppCheck: async () => {}

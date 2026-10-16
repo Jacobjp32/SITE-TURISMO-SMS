@@ -81,7 +81,7 @@ test("links de âncora internos possuem destinos", () => {
 });
 
 test("home preserva policy e não restaura destaque temporário", () => {
-  assert.match(home, /js\/home-eventos\.js\?v=agro-postponed-20260924/);
+  assert.match(home, /js\/home-eventos\.js\?v=admin-rodada1-20261016/);
   assert.doesNotMatch(home, /id="mes-polones-feature"|temporary-polish-month-feature/i);
 });
 

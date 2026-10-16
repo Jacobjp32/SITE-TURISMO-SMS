@@ -38,7 +38,9 @@ function extractCards(html) {
         .map(match => ({ id: match[1], title: match[2] }));
 }
 
-async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSource = ADAPTER_SOURCE } = {}) {
+// serverFilter: true simula as Rules/consulta reais (só publicado == true chega
+// ao navegador); false isola a política do cliente (defesa em profundidade).
+async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSource = ADAPTER_SOURCE, serverFilter = true } = {}) {
     const renders = [];
     const listeners = new Map();
     const container = {
@@ -58,7 +60,14 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSo
         __firestoreModule: {
             getFirestore: () => ({}),
             collection: () => ({}),
-            getDocs: async () => ({ empty: docs.length === 0, docs })
+            // Simula o servidor: a home consulta where('publicado', '==', true) (Rodada 1).
+            where: (field, op, value) => ({ field, op, value }),
+            query: (ref, ...filters) => ({ ref, filters }),
+            getDocs: async (target) => {
+                const filters = serverFilter ? ((target && target.filters) || []) : [];
+                const visible = docs.filter((d) => filters.every((f) => f.op === '==' && d.data()[f.field] === f.value));
+                return { empty: visible.length === 0, docs: visible };
+            }
         },
         __appCheckModule: {
             initModularAppCheck: async () => {}
@@ -92,7 +101,8 @@ async function runHome({ annual = [], docs = [], source = HOME_SOURCE, adapterSo
 async function assertFirestoreEligibility(fields, expected, adapterSource = ADAPTER_SOURCE, message = '') {
     const result = await runHome({
         docs: [firestoreDoc('policy-candidate', firestoreEvent(fields))],
-        adapterSource
+        adapterSource,
+        serverFilter: false
     });
     assert.equal(result.cards.length === 1, expected, message);
 }
@@ -140,20 +150,31 @@ test('canonical publication truth table controls real Home rendering', async (t)
 });
 
 test('audited production combinations remain eligible without real document IDs', async () => {
-    const auditedCombinations = [
-        ...Array.from({ length: 7 }, () => ({ status: 'aprovado', publicado: true })),
-        ...Array.from({ length: 3 }, () => ({ status: 'aprovado' }))
-    ];
+    // Auditoria original: 7 publicados + 3 legados sem o campo publicado.
+    // Rodada 1 (2026-10-16): sondagem anônima da produção encontrou 0 legados
+    // sem publicado (12 documentos, todos publicado=false/rascunho). Com a Rule
+    // nova, só publicado == true é público; os publicados continuam elegíveis.
+    const auditedPublished = Array.from({ length: 7 }, () => ({ status: 'aprovado', publicado: true }));
     let eligibleCount = 0;
 
-    for (const fields of auditedCombinations) {
+    for (const fields of auditedPublished) {
         const result = await runHome({
             docs: [firestoreDoc('sanitized-audit-candidate', firestoreEvent(fields))]
         });
         eligibleCount += Number(result.cards.length === 1);
     }
 
-    assert.equal(eligibleCount, 10);
+    assert.equal(eligibleCount, 7);
+});
+
+test('Rodada 1: a home só recebe do servidor eventos com publicado == true', async () => {
+    const visible = async (fields) => (await runHome({
+        docs: [firestoreDoc('server-filter-candidate', firestoreEvent(fields))]
+    })).cards.length === 1;
+    assert.equal(await visible({ status: 'aprovado', publicado: true }), true);
+    assert.equal(await visible({ status: 'aprovado' }), false, 'legado sem publicado deixa de ser público');
+    assert.equal(await visible({ status: 'aprovado', publicado: false }), false);
+    assert.equal(await visible({ status: 'rascunho', publicado: false }), false);
 });
 
 async function assertMutationSentinel(adapterSource) {

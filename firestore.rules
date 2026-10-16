@@ -1442,6 +1442,22 @@ service cloud.firestore {
         validReservationExperience(data);
     }
 
+    // Rodada 1 (2026-10): autocadastro só com os campos do Portal; e-mail, se
+    // informado, igual ao da conta autenticada (o painel o usa ao criar
+    // vínculos); "verificado" não pode nascer true.
+    function validSelfProfileFields(data) {
+      return data.keys().hasOnly([
+          'nome', 'email', 'telefone', 'tipo', 'organizacao',
+          'ativo', 'role', 'criadoEm', 'verificado'
+        ]) &&
+        (!data.keys().hasAny(['email']) || (
+          data.email is string &&
+          request.auth.token.email is string &&
+          data.email.lower() == request.auth.token.email.lower()
+        )) &&
+        (!data.keys().hasAny(['verificado']) || data.verificado == false);
+    }
+
     match /usuarios/{userId} {
       allow read: if isAdmin() || (signedIn() && request.auth.uid == userId);
       allow create: if validUserAuthorizationProfile(request.resource.data) && (
@@ -1449,7 +1465,8 @@ service cloud.firestore {
           signedIn() &&
           request.auth.uid == userId &&
           request.resource.data.role == 'user' &&
-          request.resource.data.ativo == true
+          request.resource.data.ativo == true &&
+          validSelfProfileFields(request.resource.data)
         )
       );
       allow update: if validUserAuthorizationProfile(request.resource.data) && (
@@ -1484,7 +1501,10 @@ service cloud.firestore {
     }
 
     match /eventos_aprovados/{eventId} {
-      allow read: if true;
+      // Rodada 1 (2026-10): rascunhos e despublicados deixam de ser públicos.
+      // Antes, read: if true expunha dados de remetentes em documentos
+      // antigos. Consultas públicas devem filtrar where('publicado', '==', true).
+      allow read: if isModerator() || resource.data.publicado == true;
       allow write: if isModerator();
     }
 

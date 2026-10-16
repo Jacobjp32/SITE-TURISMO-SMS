@@ -792,7 +792,8 @@
         if (!db) return [];
 
         try {
-            const snapshot = await db.collection('eventos_aprovados').get();
+            // Só publicados: as Rules não expõem rascunhos (Rodada 1).
+            const snapshot = await db.collection('eventos_aprovados').where('publicado', '==', true).get();
             return snapshot.docs
                 .filter(doc => {
                     const data = doc.exists ? doc.data() : {};

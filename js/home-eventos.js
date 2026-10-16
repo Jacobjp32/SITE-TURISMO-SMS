@@ -196,7 +196,7 @@
             // 2. Tentar enriquecer com Firebase
             try {
                 const { initializeApp, getApps } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-                const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+                const { getFirestore, collection, getDocs, query, where } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
                 const { initModularAppCheck } = await import('./firebase-app-check.js');
                 const firebaseConfig = window.CONFIG && window.CONFIG.firebase;
                 if (!firebaseConfig) throw new Error('CONFIG.firebase ausente');
@@ -204,7 +204,8 @@
                 const app = existingApp || initializeApp(firebaseConfig, 'home-eventos');
                 await initModularAppCheck(app);
                 const db = getFirestore(app);
-                const snap = await getDocs(collection(db, 'eventos_aprovados'));
+                // Só publicados: as Rules não expõem rascunhos (Rodada 1).
+                const snap = await getDocs(query(collection(db, 'eventos_aprovados'), where('publicado', '==', true)));
                 if (!snap.empty) {
                     const fbEventos = snap.docs.map((d) => {
                         const e = d.data();

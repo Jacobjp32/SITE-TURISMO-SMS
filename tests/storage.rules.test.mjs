@@ -539,3 +539,23 @@ describe("Mídia aprovada em namespace público neutro", () => {
     ));
   });
 });
+
+// Rodada 1 (2026-10): arquivos do CMS acessíveis pela URL, sem listagem pública.
+describe("Rodada 1 — cms-media sem listagem pública", () => {
+  test("anônimo lê o arquivo pela URL, mas não lista a pasta", async () => {
+    await seedStorageObject("cms-media/admin-active/r1-image.png");
+    await assertSucceeds(storageFor().ref("cms-media/admin-active/r1-image.png").getMetadata());
+    await assertFails(storageFor().ref("cms-media/admin-active").listAll());
+    await assertFails(storageFor().ref("cms-media").listAll());
+  });
+
+  test("usuário comum não lista; admin ativo lista", async () => {
+    await seedProfiles([
+      ["user-active", profileData("user", true)],
+      ["admin-active", profileData("admin", true)],
+    ]);
+    await seedStorageObject("cms-media/admin-active/r1-image.png");
+    await assertFails(storageFor("user-active").ref("cms-media/admin-active").listAll());
+    await assertSucceeds(storageFor("admin-active").ref("cms-media/admin-active").listAll());
+  });
+});

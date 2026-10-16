@@ -71,7 +71,10 @@ service firebase.storage {
     // (cms-media/{uid}/banners/{bannerId}/{file}) sem nova arvore. Bloco 4B.
     // Criacao: validCmsImageUpload = isAdmin + uid proprio + <=5MB + jpeg/jpg/png/webp.
     match /cms-media/{uid}/{allFiles=**} {
-      allow read: if true;
+      // Rodada 1 (2026-10): arquivos continuam acessíveis pela URL (get), mas
+      // listar a pasta deixa de ser público (expunha imagens ainda não publicadas).
+      allow get: if true;
+      allow list: if isAdmin();
       allow create: if validCmsImageUpload(uid);
       allow update, delete: if false;
     }
