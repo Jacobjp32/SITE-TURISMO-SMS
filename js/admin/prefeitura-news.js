@@ -468,12 +468,19 @@
         } else if (doc.origemHash === hash) {
           state = "existente";
           detail = "Já importada e sem mudanças na origem.";
+        } else if (doc.atualizacaoOrigem && doc.atualizacaoOrigem.origemHash === hash) {
+          state = "pendente";
+          detail = "A versão nova da Prefeitura já está guardada no CMS esperando revisão.";
         } else if (contentHash(doc) === doc.origemHash) {
           state = "atualizada";
-          detail = "A Prefeitura alterou a publicação; o CMS não foi editado desde a importação.";
+          detail = doc.publicado === true
+            ? "A Prefeitura alterou a publicação. A notícia está no ar: a versão nova fica guardada para revisão e nada muda no portal até você publicar."
+            : "A Prefeitura alterou a publicação; o rascunho no CMS recebe o texto novo.";
         } else {
           state = "conflito";
-          detail = "A Prefeitura alterou a publicação e a notícia também foi editada no CMS. Atualizar sobrescreve a edição.";
+          detail = doc.publicado === true
+            ? "A Prefeitura alterou a publicação e a notícia também foi editada no CMS. A versão nova só fica guardada para revisão; o que está no ar não muda."
+            : "A Prefeitura alterou a publicação e o rascunho também foi editado no CMS. Atualizar sobrescreve a edição do rascunho.";
         }
       }
       return { item: item, hash: hash, state: state, detail: detail, docId: doc ? doc.id : docIdFor(item) };
@@ -543,6 +550,28 @@
     return Object.assign(fields, extra || {});
   }
 
+  // Atualização vinda da origem para uma notícia já importada.
+  // - Publicada: o conteúdo no ar NUNCA é trocado pela importação. A versão nova
+  //   fica em atualizacaoOrigem (com atualizacaoPendente) para a equipe revisar
+  //   no editor e publicar pelo fluxo normal, com prévia.
+  // - Rascunho: recebe o texto novo (continua fora do ar) e limpa pendências.
+  function buildUpdate(item, extra, existingDoc) {
+    var meta = extra || {};
+    if (existingDoc && existingDoc.publicado === true) {
+      var pending = sourceFields(item);
+      pending.origemHash = contentHash(pending);
+      if (meta.origemImportadoEm) pending.detectadaEm = meta.origemImportadoEm;
+      var patch = { atualizacaoOrigem: pending, atualizacaoPendente: true };
+      if ("updatedAt" in meta) patch.updatedAt = meta.updatedAt;
+      if ("updatedBy" in meta) patch.updatedBy = meta.updatedBy;
+      return patch;
+    }
+    var draftPatch = buildUpdatePatch(item, meta);
+    draftPatch.atualizacaoOrigem = null;
+    draftPatch.atualizacaoPendente = false;
+    return draftPatch;
+  }
+
   function summarize(collected, plan) {
     var items = (collected && collected.items) || [];
     var count = function (fn) { return items.filter(fn).length; };
@@ -579,6 +608,7 @@
     planImport: planImport,
     buildNewDoc: buildNewDoc,
     buildUpdatePatch: buildUpdatePatch,
+    buildUpdate: buildUpdate,
     summarize: summarize
   };
 });

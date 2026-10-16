@@ -9,6 +9,7 @@
         events: [],
         news: [],
         media: [],
+        userNames: null,
         mediaUsageMap: {},
         _eventPreviewObjectUrl: "",
 
@@ -60,6 +61,33 @@
             return this.media;
         },
 
+        // Nome legível de quem alterou (usuarios/{uid}.nome), com o ID da conta
+        // preservado no title para rastreabilidade. Falha de leitura não impede a lista.
+        ensureUserNames: async function () {
+            if (this.userNames || !this.db) return this.userNames || {};
+            var names = {};
+            try {
+                var snapshot = await this.db.collection("usuarios").get();
+                snapshot.docs.forEach(function (doc) {
+                    var data = doc.data() || {};
+                    var name = clean(data.nome || data.displayName);
+                    if (name) names[doc.id] = name;
+                });
+                this.userNames = names;
+            } catch (error) {
+                console.warn("[admin-content-cms] Não foi possível carregar nomes da equipe.", error);
+            }
+            return names;
+        },
+
+        authorLabel: function (uid) {
+            var id = clean(uid);
+            if (!id) return "—";
+            var names = this.userNames || {};
+            var label = names[id] || "Conta sem nome cadastrado";
+            return '<span title="ID da conta: ' + escapeHtml(id) + '">' + escapeHtml(label) + '</span>';
+        },
+
         loadApprovedEvents: async function () {
             var container = document.getElementById("eventos-aprovados-container");
             if (!container) return;
@@ -70,6 +98,7 @@
 
             try {
                 var snapshot = await this.db.collection("eventos_aprovados").get();
+                await this.ensureUserNames();
                 this.events = snapshot.docs.map(function (doc) {
                     return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
@@ -80,6 +109,7 @@
                 }
 
                 var SEC = this.SEC;
+                var self = this;
                 container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr>' +
                     '<th>Evento</th><th>Data</th><th>Local</th><th>Status</th><th>Histórico</th><th>Ações</th>' +
                     '</tr></thead><tbody>' +
@@ -88,7 +118,7 @@
                         var cover = getPrimaryEventImage(eventItem);
                         return '<tr><td><strong>' + SEC.html(getTitle(eventItem), "Sem título") + '</strong><br><small>' +
                             SEC.html(getOrganizer(eventItem), "Sem organizador") + '</small>' +
-                            (cover ? '<div class="table-inline-media"><img src="' + SEC.url(cover.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(getTitle(eventItem), "Evento") + '" onerror="this.closest(\\\'.table-inline-media\\\').classList.add(\\\'is-error\\\');this.remove();"><span>' +
+                            (cover ? '<div class="table-inline-media"><img src="' + SEC.url(cover.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(getTitle(eventItem), "Evento") + '" onerror="this.closest(\'.table-inline-media\').classList.add(\'is-error\');this.remove();"><span>' +
                                 SEC.html(cover.name || "Capa atual", "Capa atual") + '</span></div>' : "") +
                             '</td><td>' +
                             SEC.html(getEventDate(eventItem), "—") + '<br><small>' + SEC.html(getEventTime(eventItem), "—") + '</small></td><td>' +
@@ -96,7 +126,7 @@
                             (published ? 'badge-success">Publicado' : 'badge-warning">Despublicado') + '</span>' +
                             (eventItem.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>Atualizado: ' +
                             SEC.html(formatAdminDate(eventItem.updatedAt || eventItem.reviewedAt), "—") + '<br>Por: ' +
-                            SEC.html(eventItem.updatedBy || eventItem.reviewedBy || "—") + '</small></td><td>' +
+                            self.authorLabel(eventItem.updatedBy || eventItem.reviewedBy) + '</small></td><td>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-preview-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Prévia</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Editar</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-duplicate-event" data-admin-target-id="' + SEC.attr(eventItem.id) + '">Duplicar</button>' +
@@ -485,6 +515,7 @@
 
             try {
                 var snapshot = await this.db.collection("noticias").get();
+                await this.ensureUserNames();
                 this.news = snapshot.docs.map(function (doc) {
                     return Object.assign({}, doc.data(), { id: doc.id });
                 }).sort(compareAdminDateDesc);
@@ -495,6 +526,7 @@
                 }
 
                 var SEC = this.SEC;
+                var self = this;
                 container.innerHTML = '<div class="table-responsive"><table class="data-table"><thead><tr><th>Notícia</th><th>Categoria</th><th>Status</th><th>Atualização</th><th>Ações</th></tr></thead><tbody>' +
                     this.news.map(function (item) {
                         var published = item.publicado === true || item.status === "publicado";
@@ -507,8 +539,9 @@
                             '</td><td>' + SEC.html(item.categoria, "—") +
                             (legacy ? '<br><span class="badge badge-info">Legado</span>' : '') +
                             '</td><td><span class="badge ' + (published ? 'badge-success">Publicado' : 'badge-warning">Rascunho') + '</span>' +
+                            (item.atualizacaoPendente === true ? '<br><span class="badge badge-info" title="Abra em Editar para revisar a versão nova da Prefeitura">Atualização da Prefeitura para revisar</span>' : '') +
                             (item.destaque ? '<br><span class="badge badge-info">Destaque</span>' : '') + '</td><td><small>' +
-                            SEC.html(formatAdminDate(item.updatedAt || item.publishedAt || item.data), "—") + '<br>' + SEC.html(item.updatedBy || "—") + '</small></td><td>' +
+                            SEC.html(formatAdminDate(item.updatedAt || item.publishedAt || item.data), "—") + '<br>Por: ' + self.authorLabel(item.updatedBy) + '</small></td><td>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-preview-news" data-admin-target-id="' + SEC.attr(item.id) + '">Prévia</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-open-news" data-admin-target-id="' + SEC.attr(item.id) + '">Editar</button>' +
                             '<button class="btn-sm btn-edit" type="button" data-admin-action="content-toggle-news-publish" data-admin-target-id="' + SEC.attr(item.id) + '">' + (published ? 'Despublicar' : 'Publicar') + '</button>' +
@@ -529,6 +562,31 @@
             }
             this.openModal(item && item.id ? "Editar notícia" : "Nova notícia", buildNewsForm(item));
             this.bindEditorForm("newsCmsForm");
+        },
+
+        // "Usar o texto atualizado": só preenche o formulário; nada é gravado até
+        // salvar, e publicar continua passando pela prévia. "Manter": a
+        // atualização pendente é descartada ao salvar.
+        useNewsOriginUpdate: function (newsId, decision) {
+            var item = this.news.find(function (post) { return post.id === newsId; });
+            var form = document.getElementById("newsCmsForm");
+            if (!item || !form || !item.atualizacaoOrigem) return;
+            var pending = item.atualizacaoOrigem;
+            var status = form.querySelector("[data-origin-update-status]");
+            if (decision === "apply") {
+                form.titulo.value = pending.titulo || form.titulo.value;
+                form.resumo.value = pending.resumo || "";
+                form.conteudo.value = pending.conteudo || "";
+                form.imagem.value = pending.imagem || "";
+                form.galeria.value = Array.isArray(pending.galeria) ? pending.galeria.join("\n") : "";
+                if (pending.linkOrigem) form.linkOrigem.value = pending.linkOrigem;
+                form.aplicarOrigem.value = "apply";
+                if (status) status.textContent = "Texto da Prefeitura copiado para o formulário. Revise e salve; publicar continua passando pela prévia.";
+            } else {
+                form.aplicarOrigem.value = "ignore";
+                if (status) status.textContent = "A atualização da Prefeitura será descartada quando você salvar. O texto atual foi mantido.";
+            }
+            form.dispatchEvent(new Event("input", { bubbles: true }));
         },
 
         bindEditorForm: function (formId) {
@@ -598,6 +656,8 @@
             var form = event.target;
             var title = clean(form.titulo.value);
             if (!title) return notify("Título é obrigatório.", "error");
+            var linkProblem = newsLinkProblem(form);
+            if (linkProblem) return notify(linkProblem, "error");
             if (form.publicado.value === "true" && form.dataset.publishReviewed !== "true" && window.AdminContentPreview) {
                 this.showEditorPreview("news", true);
                 return;
@@ -630,6 +690,19 @@
             };
 
             if (!form.newsId.value) payload.createdAt = now;
+
+            var originDecision = form.aplicarOrigem ? form.aplicarOrigem.value : "";
+            var existingNews = this.news.find(function (post) { return post.id === id; });
+            if ((originDecision === "apply" || originDecision === "ignore") && existingNews && existingNews.atualizacaoOrigem) {
+                // A versão da origem passa a ser a referência; a pendência sai do documento.
+                payload.origemHash = existingNews.atualizacaoOrigem.origemHash || existingNews.origemHash || "";
+                payload.atualizacaoPendente = false;
+                payload.atualizacaoOrigem = window.firebase.firestore.FieldValue.delete();
+                if (originDecision === "apply") payload.autor = existingNews.atualizacaoOrigem.autor || existingNews.autor || payload.autor;
+            } else if (existingNews && existingNews.origemTipo === "prefeitura") {
+                // Notícia importada: preserva autor da origem em vez do rótulo genérico.
+                payload.autor = existingNews.autor || payload.autor;
+            }
 
             try {
                 await this.db.collection("noticias").doc(id).set(payload, { merge: true });
@@ -874,7 +947,7 @@
                     var searchText = [item.title, item.category, item.alt, item.url].join(" ").toLowerCase();
                     return '<article class="media-admin-card" data-media-search="' + SEC.attr(searchText) + '" data-media-usage="' + (usage.total ? 'used' : 'unused') + '" data-media-alt="' + (clean(item.alt) ? 'yes' : 'no') + '">' +
                         '<div class="media-admin-thumb">' +
-                            '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\\\'.media-admin-thumb\\\').classList.add(\\\'is-error\\\');this.remove();">' +
+                            '<img src="' + SEC.url(item.url, DEFAULT_IMAGE) + '" alt="' + SEC.attr(item.title, "Mídia") + '" onerror="this.closest(\'.media-admin-thumb\').classList.add(\'is-error\');this.remove();">' +
                         '</div>' +
                         '<div class="media-admin-body">' +
                             '<strong>' + SEC.html(item.title, "Sem título") + '</strong>' +
@@ -1147,6 +1220,33 @@
         }
     }
 
+    // Links de notícia: https:// ou caminho interno do site; nunca outros
+    // protocolos (javascript:, data:...) nem caracteres que quebrem atributos.
+    function isAllowedLink(url) {
+        var value = clean(url);
+        if (!value) return true;
+        if (/['"()\\<>\s]/.test(value)) return false;
+        if (/^https?:\/\//i.test(value)) return true;
+        if (/^\/\//.test(value) || /^[a-z][a-z0-9+.-]*:/i.test(value)) return false;
+        return /^\/?[a-z0-9][a-z0-9._~\/-]*([?#][^\s]*)?$/i.test(value);
+    }
+
+    function newsLinkProblem(form) {
+        var image = clean(form.imagem.value);
+        if (image && !isAllowedImageUrl(image)) {
+            return "Imagem de capa: use um endereço https:// ou um caminho do site, como images/foto.jpg.";
+        }
+        var gallery = splitList(form.galeria.value);
+        for (var i = 0; i < gallery.length; i += 1) {
+            if (!isAllowedImageUrl(gallery[i])) {
+                return "Galeria: a linha " + (i + 1) + " não é um endereço de imagem válido (https:// ou caminho do site).";
+            }
+        }
+        if (!isAllowedLink(form.videoUrl.value)) return "Vídeo/link: use um endereço https:// ou um caminho do site.";
+        if (!isAllowedLink(form.linkOrigem.value)) return "Link de origem: use um endereço https:// ou um caminho do site.";
+        return "";
+    }
+
     function isAllowedImageUrl(url) {
         var value = clean(url);
         if (!value) return false;
@@ -1255,7 +1355,7 @@
         if (image.size) metaParts.push(escapeHtml(formatBytes(image.size)));
         if (note) metaParts.push(escapeHtml(note));
 
-        return '<img src="' + previewUrl + '" alt="' + escapeHtml(image.name || "Capa do evento") + '" onerror="this.closest(\\\'.event-cover-preview\\\').classList.add(\\\'is-error\\\');this.remove();">' +
+        return '<img src="' + previewUrl + '" alt="' + escapeHtml(image.name || "Capa do evento") + '" onerror="this.closest(\'.event-cover-preview\').classList.add(\'is-error\');this.remove();">' +
             '<div class="event-cover-meta">' + (metaParts.join(" · ") || "Pré-visualização da capa") + '</div>';
     }
 
@@ -1268,7 +1368,7 @@
         return '<div class="event-gallery-admin-list">' + images.map(function (image, index) {
             var imageUrl = safePreviewUrl(image.url);
             return '<a href="' + imageUrl + '" target="_blank" rel="noopener noreferrer" class="event-gallery-admin-item">' +
-                '<img src="' + imageUrl + '" alt="' + escapeHtml(image.name || ("Imagem " + (index + 1))) + '" onerror="this.parentNode.classList.add(\\\'is-error\\\');this.remove();">' +
+                '<img src="' + imageUrl + '" alt="' + escapeHtml(image.name || ("Imagem " + (index + 1))) + '" onerror="this.parentNode.classList.add(\'is-error\');this.remove();">' +
                 '<span>' + escapeHtml(image.name || ("Imagem " + (index + 1))) + '</span>' +
                 '<small>' + escapeHtml(image.contentType || "Tipo não informado") + ' · ' + escapeHtml(formatBytes(image.size)) + '</small>' +
             '</a>';
@@ -1331,7 +1431,7 @@
                             '<div class="event-cover-controls">' +
                                 '<div class="admin-field">' +
                                     '<label for="mainImage">URL manual</label>' +
-                                    '<input class="admin-input" id="mainImage" name="mainImage" type="url" value="' + escapeHtml(item.mainImage || item.image || item.coverImage || "") + '" oninput="document.getElementById(\\\'eventRemoveCover\\\').value=\\\'false\\\';document.getElementById(\\\'eventRemoveGalleryCoverFallback\\\').value=\\\'false\\\';document.getElementById(\\\'eventMediaId\\\').value=\\\'\\\';var fileInput=document.getElementById(\\\'eventCoverUpload\\\');if(fileInput){fileInput.value=\\\'\\\';}AdminContentCMS.releaseEventPreviewUrl();AdminContentCMS.syncEventCoverPreview();">' +
+                                    '<input class="admin-input" id="mainImage" name="mainImage" type="text" inputmode="url" autocomplete="off" value="' + escapeHtml(item.mainImage || item.image || item.coverImage || "") + '" oninput="document.getElementById(\'eventRemoveCover\').value=\'false\';document.getElementById(\'eventRemoveGalleryCoverFallback\').value=\'false\';document.getElementById(\'eventMediaId\').value=\'\';var fileInput=document.getElementById(\'eventCoverUpload\');if(fileInput){fileInput.value=\'\';}AdminContentCMS.releaseEventPreviewUrl();AdminContentCMS.syncEventCoverPreview();">' +
                                 '</div>' +
                                 '<div class="admin-field">' +
                                     '<label for="eventMediaId">Biblioteca de mídia</label>' +
@@ -1374,7 +1474,7 @@
     }
 
     function buildMediaSelect(mediaItems, selectedMediaId) {
-        return '<select class="admin-input" id="eventMediaId" name="eventMediaId" onchange="document.getElementById(\\\'eventRemoveCover\\\').value=\\\'false\\\';AdminContentCMS.handleEventMediaSelection(this.value)">' +
+        return '<select class="admin-input" id="eventMediaId" name="eventMediaId" onchange="document.getElementById(\'eventRemoveCover\').value=\'false\';AdminContentCMS.handleEventMediaSelection(this.value)">' +
             '<option value="">Selecione uma mídia da biblioteca</option>' +
             (mediaItems || []).map(function (item) {
                 return '<option value="' + escapeHtml(item.id) + '"' + (item.id === selectedMediaId ? " selected" : "") + '>' +
@@ -1467,19 +1567,35 @@
         return Promise.resolve(confirm([options.title, options.message].concat(options.details || []).filter(Boolean).join("\n\n")));
     }
 
+    // Aviso de atualização da Prefeitura guardada para revisão (notícia no ar).
+    function originUpdateNotice(item) {
+        var pending = item && item.atualizacaoPendente === true && item.atualizacaoOrigem;
+        if (!pending) return "";
+        var id = escapeHtml(item.id || "");
+        return '<div class="admin-notice admin-notice-info" data-origin-update role="status" style="margin-bottom:1rem;padding:0.85rem 1rem;border:1px solid #b9d7f5;border-radius:10px;background:#eef6ff;">' +
+            '<p style="margin:0 0 0.5rem;"><strong>A Prefeitura atualizou esta notícia.</strong> O portal continua mostrando a versão atual até você revisar e publicar.</p>' +
+            '<p style="margin:0 0 0.75rem;">Novo título na origem: <em>' + escapeHtml(pending.titulo || "") + '</em></p>' +
+            '<button class="btn-secondary" type="button" data-admin-action="content-news-use-origin" data-admin-target-id="' + id + '">Usar o texto atualizado da Prefeitura</button> ' +
+            '<button class="btn-secondary" type="button" data-admin-action="content-news-ignore-origin" data-admin-target-id="' + id + '">Manter a versão atual</button>' +
+            '<p data-origin-update-status style="margin:0.6rem 0 0;font-size:0.9rem;"></p>' +
+        '</div>';
+    }
+
     function buildNewsForm(item) {
         item = item || {};
         return '<form id="newsCmsForm" class="editor-form" data-editor-mode="edit" onsubmit="AdminContentCMS.saveNews(event)">' +
             editorTabs("news") +
             '<div class="admin-modal-body" data-editor-pane="edit"><input type="hidden" name="newsId" value="' + escapeHtml(item.id || "") + '">' +
+            '<input type="hidden" name="aplicarOrigem" value="">' +
+            originUpdateNotice(item) +
             '<div class="admin-modal-grid">' +
             field("titulo", "Título", item.titulo || "", true) +
             field("slug", "Slug", item.slug || "") +
             field("categoria", "Categoria", item.categoria || "Turismo") +
             field("publishedAt", "Data de publicação", item.publishedAt || item.data || new Date().toISOString()) +
-            field("imagem", "Imagem de capa (URL)", item.imagem || "", false, "url") +
-            field("videoUrl", "Vídeo/link opcional", item.videoUrl || item.video || "", false, "url") +
-            field("linkOrigem", "Link de origem", item.linkOrigem || item.sourceUrl || "", false, "url") +
+            field("imagem", "Imagem de capa (endereço https:// ou caminho do site, ex.: images/foto.jpg)", item.imagem || "") +
+            field("videoUrl", "Vídeo/link opcional", item.videoUrl || item.video || "") +
+            field("linkOrigem", "Link de origem", item.linkOrigem || item.sourceUrl || "") +
             '<div class="admin-field"><label for="newsPublished">Status</label><select id="newsPublished" name="publicado"><option value="false"' + (item.publicado !== true ? " selected" : "") + '>Rascunho</option><option value="true"' + (item.publicado === true ? " selected" : "") + '>Publicado</option></select></div>' +
             '<div class="admin-field full"><label><input type="checkbox" name="destaque" ' + (item.destaque ? "checked" : "") + '> Notícia em destaque</label></div>' +
             textarea("resumo", "Resumo", item.resumo || "") +
@@ -1499,7 +1615,7 @@
                 '<div class="admin-modal-grid">' +
                     field("title", "Título", item.title || "", true) +
                     field("category", "Categoria", item.category || "Imagem") +
-                    field("url", "URL existente", item.url || "", false, "url") +
+                    field("url", "URL existente", item.url || "") +
                     field("file", "Enviar imagem", "", false, "file") +
                     field("alt", "Texto alternativo", item.alt || "") +
                 '</div>' +

@@ -102,6 +102,29 @@ test("deduplicação: nova, existente, atualizada, conflito e vinculada", () => 
   assert.equal(linked.docId, "noticia_manual");
 });
 
+test("atualização de notícia publicada fica guardada para revisão e não toca o conteúdo no ar", () => {
+  const item = sample({ sourceId: "11", titulo: "Título novo da origem", conteudo: "Texto novo.", link: P.BASE_URL + "/portal/noticias/0/3/11/a" });
+  const live = { id: "noticia_prefeitura_11", origemTipo: "prefeitura", origemId: "11", publicado: true, titulo: "Título no ar", conteudo: "Texto no ar." };
+  const patch = P.buildUpdate(item, { updatedBy: "admin-1", origemImportadoEm: "agora" }, live);
+  for (const key of ["titulo", "resumo", "conteudo", "imagem", "galeria", "publicado", "status", "slug", "origemHash"]) {
+    assert.equal(key in patch, false, key + " não pode mudar no ar");
+  }
+  assert.equal(patch.atualizacaoPendente, true);
+  assert.equal(patch.atualizacaoOrigem.titulo, "Título novo da origem");
+  assert.equal(patch.atualizacaoOrigem.origemHash, P.contentHash(patch.atualizacaoOrigem));
+  assert.equal(patch.atualizacaoOrigem.detectadaEm, "agora");
+  assert.equal(patch.updatedBy, "admin-1");
+
+  const stored = Object.assign({}, live, { origemHash: "antigo" }, patch);
+  assert.equal(P.planImport([item], [stored])[0].state, "pendente", "repetir não grava de novo");
+
+  const draft = Object.assign({}, live, { publicado: false });
+  const draftPatch = P.buildUpdate(item, { updatedBy: "admin-1" }, draft);
+  assert.equal(draftPatch.titulo, "Título novo da origem", "rascunho recebe o texto novo");
+  assert.equal(draftPatch.atualizacaoPendente, false);
+  assert.equal("publicado" in draftPatch, false);
+});
+
 test("atualização preserva publicação, destaque e slug do CMS", () => {
   const patch = P.buildUpdatePatch(sample({ sourceId: "9", titulo: "Novo", conteudo: "x", link: P.BASE_URL + "/portal/noticias/0/3/9/a" }));
   for (const key of ["publicado", "status", "destaque", "slug", "createdAt"]) assert.equal(key in patch, false, key);

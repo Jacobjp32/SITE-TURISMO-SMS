@@ -1780,6 +1780,8 @@
                 case 'content-open-news': result = AdminContentCMS.openNewsModal(targetId); break;
                 case 'content-toggle-news-publish': result = AdminContentCMS.toggleNewsPublish(targetId); break;
                 case 'content-preview-news': result = AdminContentCMS.previewNews(targetId); break;
+                case 'content-news-use-origin': result = AdminContentCMS.useNewsOriginUpdate(targetId, 'apply'); break;
+                case 'content-news-ignore-origin': result = AdminContentCMS.useNewsOriginUpdate(targetId, 'ignore'); break;
                 case 'content-confirm-news-publish': AdminContentCMS.closeModal(); result = AdminContentCMS.toggleNewsPublish(targetId, true); break;
                 case 'content-confirm-event-publish': AdminContentCMS.closeModal(); result = AdminContentCMS.toggleEventPublish(targetId, true); break;
                 case 'content-delete-news': result = AdminContentCMS.deleteNews(targetId); break;

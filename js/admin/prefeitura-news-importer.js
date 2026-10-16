@@ -10,6 +10,7 @@
         existente: "Já no CMS",
         atualizada: "Atualizada na Prefeitura",
         conflito: "Atualizada + editada no CMS",
+        pendente: "Atualização guardada para revisão",
         vinculada: "Já ligada a outra notícia"
     };
     var DECISION_TONE = { elegivel: "badge-success", revisao: "badge-warning", descartada: "badge-info" };
@@ -301,12 +302,12 @@
             var outOfScope = rows.filter(function (row) { return row.item.classificacao.decision !== "elegivel"; }).length;
             var confirmOptions = {
                 title: "Importar " + rows.length + " notícia(s)?",
-                message: "Entram no CMS como rascunho — nada vai ao ar até você publicar.",
+                message: "Notícias novas entram como rascunho. Notícias que já estão no ar não são alteradas: a versão nova da Prefeitura fica guardada para você revisar e publicar. Nada vai ao ar sem você publicar.",
                 details: [
                     rows.filter(function (r) { return r.state === "nova"; }).length + " nova(s), " +
                     rows.filter(function (r) { return r.state !== "nova"; }).length + " atualização(ões) de conteúdo já importado."
                 ].concat(outOfScope ? [outOfScope + " selecionada(s) fora da lista Cultura e Turismo, por escolha sua."] : []),
-                confirmLabel: "Importar como rascunho"
+                confirmLabel: "Importar"
             };
             var confirmed = window.AdminFeedback ? await window.AdminFeedback.confirm(confirmOptions) : confirm(confirmOptions.title);
             if (!confirmed) return;
@@ -316,10 +317,14 @@
             this.updateFooter();
             var created = 0;
             var updated = 0;
+            var pendingReview = 0;
             var skipped = 0;
             try {
                 // Revalida contra o estado atual do CMS antes de gravar (outra aba pode ter importado).
-                var freshPlan = api().planImport(rows.map(function (r) { return r.item; }), await this.loadExisting());
+                var existingDocs = await this.loadExisting();
+                var existingById = {};
+                existingDocs.forEach(function (existingDoc) { existingById[existingDoc.id] = existingDoc; });
+                var freshPlan = api().planImport(rows.map(function (r) { return r.item; }), existingDocs);
                 var now = window.firebase.firestore.FieldValue.serverTimestamp();
                 var adminId = window.firebase.auth && window.firebase.auth().currentUser ? window.firebase.auth().currentUser.uid : "";
                 var batch = db.batch();
@@ -330,13 +335,15 @@
                         batch.set(ref, api().buildNewDoc(row.item, { createdAt: now, updatedAt: now, updatedBy: adminId, origemImportadoEm: now }));
                         created += 1;
                     } else if (row.state === "atualizada" || (row.state === "conflito" && overwrite)) {
-                        batch.set(ref, api().buildUpdatePatch(row.item, { updatedAt: now, updatedBy: adminId, origemImportadoEm: now }), { merge: true });
-                        updated += 1;
+                        var current = existingById[row.docId] || null;
+                        batch.set(ref, api().buildUpdate(row.item, { updatedAt: now, updatedBy: adminId, origemImportadoEm: now }, current), { merge: true });
+                        if (current && current.publicado === true) pendingReview += 1;
+                        else updated += 1;
                     } else {
                         skipped += 1;
                     }
                 });
-                if (created + updated) await batch.commit();
+                if (created + updated + pendingReview) await batch.commit();
             } catch (error) {
                 console.error("[prefeitura-news] Falha ao importar.", error);
                 notify("A importação falhou e nada foi gravado. Tente novamente.", "error");
@@ -345,10 +352,12 @@
                 return;
             }
             this.busy = false;
-            if (!created && !updated) {
+            if (!created && !updated && !pendingReview) {
                 notify("Nenhuma notícia foi importada: todas já estavam no CMS (" + skipped + ").", "info");
             } else {
-                notify(created + " notícia(s) criada(s) e " + updated + " atualizada(s) como rascunho." + (skipped ? " " + skipped + " já existia(m) e foi(ram) ignorada(s)." : ""), "success");
+                notify(created + " notícia(s) nova(s) como rascunho; " + updated + " rascunho(s) atualizado(s); " +
+                    pendingReview + " atualização(ões) de notícias no ar guardada(s) para revisão (o portal não mudou)." +
+                    (skipped ? " " + skipped + " já existia(m) e foi(ram) ignorada(s)." : ""), "success");
             }
             if (typeof cms().loadNews === "function") cms().loadNews();
             await this.refresh();

@@ -24,13 +24,15 @@ async function existingNews() {
 
 // Mesmo fluxo do painel: plano contra o CMS e gravação em lote só do que mudou.
 async function runImport(items, { overwrite = false } = {}) {
-  const plan = P.planImport(items, await existingNews());
+  const existing = await existingNews();
+  const byId = Object.fromEntries(existing.map((d) => [d.id, d]));
+  const plan = P.planImport(items, existing);
   const batch = writeBatch(adminDb);
   const counts = { created: 0, updated: 0, skipped: 0 };
   for (const row of plan) {
     const ref = doc(adminDb, "noticias", row.docId);
     if (row.state === "nova") { batch.set(ref, P.buildNewDoc(row.item, { updatedBy: "admin-1" })); counts.created += 1; }
-    else if (row.state === "atualizada" || (row.state === "conflito" && overwrite)) { batch.set(ref, P.buildUpdatePatch(row.item, { updatedBy: "admin-1" }), { merge: true }); counts.updated += 1; }
+    else if (row.state === "atualizada" || (row.state === "conflito" && overwrite)) { batch.set(ref, P.buildUpdate(row.item, { updatedBy: "admin-1" }, byId[row.docId] || null), { merge: true }); counts.updated += 1; }
     else counts.skipped += 1;
   }
   if (counts.created + counts.updated) await batch.commit();
@@ -86,7 +88,7 @@ test("repetir a importação não cria duplicatas", async () => {
   assert.equal((await existingNews()).length, before);
 });
 
-test("mudança na Prefeitura atualiza; edição no CMS só é sobrescrita com confirmação", async () => {
+test("mudança na Prefeitura: rascunho atualiza; notícia no ar nunca muda sem revisão", async () => {
   const [a, b] = snapshot.items.filter((i) => i.classificacao.decision === "elegivel").slice(1, 3);
   // b foi editada pela equipe no CMS e publicada.
   await updateDoc(doc(adminDb, "noticias", P.docIdFor(b)), { resumo: "Resumo revisado pela equipe.", publicado: true, status: "publicado" });
@@ -100,10 +102,32 @@ test("mudança na Prefeitura atualiza; edição no CMS só é sobrescrita com co
   assert.equal(docB.resumo, "Resumo revisado pela equipe.", "edição preservada sem confirmação");
   assert.equal(docB.publicado, true);
 
+  // Mesmo confirmando a sobrescrita, a notícia publicada não muda no ar:
+  // a versão nova fica guardada para revisão.
+  const liveBefore = (await getDoc(doc(adminDb, "noticias", P.docIdFor(b)))).data();
   await runImport([changedB], { overwrite: true });
-  const overwritten = (await getDoc(doc(adminDb, "noticias", P.docIdFor(b)))).data();
-  assert.equal(overwritten.titulo, changedB.titulo);
-  assert.equal(overwritten.publicado, true, "publicação continua como estava");
+  const afterOverwrite = (await getDoc(doc(adminDb, "noticias", P.docIdFor(b)))).data();
+  assert.equal(afterOverwrite.titulo, liveBefore.titulo, "título no ar não mudou");
+  assert.equal(afterOverwrite.resumo, "Resumo revisado pela equipe.", "texto no ar não mudou");
+  assert.equal(afterOverwrite.publicado, true, "publicação continua como estava");
+  assert.equal(afterOverwrite.atualizacaoPendente, true);
+  assert.equal(afterOverwrite.atualizacaoOrigem.titulo, changedB.titulo, "versão nova guardada para revisão");
+
+  // O que o público lê também não mudou.
+  const anon = env.unauthenticatedContext().firestore();
+  const publicView = (await getDoc(doc(anon, "noticias", P.docIdFor(b)))).data();
+  assert.equal(publicView.titulo, liveBefore.titulo);
+
+  // Repetir a importação reconhece a pendência e não grava de novo.
+  const again = await runImport([changedB], { overwrite: true });
+  assert.equal(again.plan[0].state, "pendente");
+  assert.equal(again.counts.updated, 0);
+
+  // Rascunho importado (a) recebe o texto novo, continua fora do ar.
+  const docA = (await getDoc(doc(adminDb, "noticias", P.docIdFor(a)))).data();
+  assert.equal(docA.conteudo, changedA.conteudo);
+  assert.equal(docA.publicado, false);
+  assert.equal(docA.atualizacaoPendente, false);
 });
 
 test("rascunhos importados não são públicos", async () => {

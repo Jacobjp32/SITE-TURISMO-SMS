@@ -749,8 +749,8 @@
                     '<div>' +
                         '<label for="banner_imageUrl" ' +
                         'style="font-size:0.8rem;font-weight:normal;color:#555;">' +
-                        'ou URL externa (https://…)</label>' +
-                        '<input class="admin-input" type="url" id="banner_imageUrl" name="imageUrl" ' +
+                        'ou endereço https:// ou caminho do site (ex.: images/banner.jpg)</label>' +
+                        '<input class="admin-input" type="text" inputmode="url" autocomplete="off" id="banner_imageUrl" name="imageUrl" ' +
                         'value="' + escapeAttr(currentUrl) + '" maxlength="' + LIMITS.url + '" ' +
                         'placeholder="https://">' +
                         (hasPath
@@ -808,7 +808,7 @@
                     fieldText("startAt", "Início", millisToInputValue(item.startAt), { type: "datetime-local" }) +
                     fieldText("endAt", "Fim", millisToInputValue(item.endAt), { type: "datetime-local" }) +
                     fieldText("ctaLabel", "Texto do botão (CTA)", item.ctaLabel || "", { maxlength: LIMITS.ctaLabel }) +
-                    fieldText("ctaUrl", "Link do CTA", item.ctaUrl || "", { type: "url", maxlength: LIMITS.url }) +
+                    fieldText("ctaUrl", "Link do CTA", item.ctaUrl || "", { maxlength: LIMITS.url }) +
                     fieldSelect("ctaTarget", "Abertura do CTA", targetOptions, inEnum(clean(item.ctaTarget), CTA_TARGETS, "_self")) +
                     buildImageSection(item) +
                     fieldText("imageAlt", "Texto alternativo (alt)", item.imageAlt || "", { maxlength: LIMITS.imageAlt }) +
