@@ -8,7 +8,9 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const parse5 = require("parse5");
 const root = new URL("../", import.meta.url);
-const read = (path) => readFile(new URL(path, root), "utf8");
+// Normaliza CRLF: no Windows (core.autocrlf=true) a cópia de trabalho usa CRLF
+// e as âncoras dos testes procuram "\n".
+const read = async (path) => (await readFile(new URL(path, root), "utf8")).replace(/\r\n/g, "\n");
 const publicationSource = await read("js/publication-contracts.js");
 const publicationSandbox = { URL, TextEncoder };
 runInNewContext(publicationSource, publicationSandbox, { filename: "js/publication-contracts.js" });

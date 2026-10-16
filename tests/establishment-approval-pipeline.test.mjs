@@ -5,13 +5,16 @@ import test from "node:test";
 import vm from "node:vm";
 
 const root = new URL("../", import.meta.url);
+// Normaliza CRLF: no Windows (core.autocrlf=true) a cópia de trabalho usa CRLF
+// e as âncoras dos testes procuram "\n".
+const readLf = async (path) => (await readFile(new URL(path, root), "utf8")).replace(/\r\n/g, "\n");
 const [bridgeSource, moduleSource, publicationSource, authSource, adminHtml, portalHtml] = await Promise.all([
-  readFile(new URL("js/establishment-submission-bridge.js", root), "utf8"),
-  readFile(new URL("js/admin/modules/empreendimentos.js", root), "utf8"),
-  readFile(new URL("js/publication-contracts.js", root), "utf8"),
-  readFile(new URL("js/firebase-auth.js", root), "utf8"),
-  readFile(new URL("admin-firebase.html", root), "utf8"),
-  readFile(new URL("portal-usuario.html", root), "utf8"),
+  readLf("js/establishment-submission-bridge.js"),
+  readLf("js/admin/modules/empreendimentos.js"),
+  readLf("js/publication-contracts.js"),
+  readLf("js/firebase-auth.js"),
+  readLf("admin-firebase.html"),
+  readLf("portal-usuario.html"),
 ]);
 
 const bridgeContext = { URL, encodeURIComponent };
