@@ -131,6 +131,17 @@ Também confirmado: listagem anônima de `cms-media/` (uma pasta de usuário com
    - Hosting: `git revert` dos commits da rodada, ou redeploy a partir da tag de rollback recomendada `admin-rodada1-rollback` = `f0bf549`, a criar antes do merge.
    - Para voltar só a mudança de eventos: as consultas públicas novas funcionam com a Rule antiga.
 
+### 8.1 Execução — Rules publicadas em 16/10/2026 (autorização do responsável)
+
+| Etapa | Resultado |
+|---|---|
+| Pré-checagem | A produção ainda estava nos rulesets de 15/09: Firestore `126896db-b47b-40d5-a00e-0c0438d2230f` e Storage `bed001ca-01e1-45a5-af22-3a47f8ee1b79`. São esses os rulesets de **rollback**. |
+| Publicação | `firebase deploy --only firestore:rules,storage --project turismo-sms` a partir de `ff6d4db`. O Storage foi liberado normalmente. No Firestore o CLI devolveu um 409 ("release already exists") **depois** de a release já ter sido atualizada. A leitura posterior confirmou a publicação, e não houve nova tentativa. |
+| Rulesets novos | Firestore `58f81c6f-c052-42aa-9d6e-3420c13a6d70` (14:28:58 UTC) e Storage `1268dc73-b70f-4933-9b91-700153db00ff` (14:28:52 UTC). Ambos **idênticos** aos arquivos da branch (hash normalizado). |
+| Sondagem anônima | `eventos_aprovados` sem filtro: **403** (antes 200, com dados pessoais) · só publicados: 200 (0 documentos) · notícias publicadas: 200 (34) · empreendimentos publicados: 200 (68) · imagem de `cms-media` pela URL: **200** · listagem de `cms-media/`: **403** (antes 200). |
+| Portal público (código antigo) | Agenda, home (4 cartões em "Acontece em breve") e mapa (marcadores) carregam **sem erros no console**, usando o conteúdo estático para eventos, como previsto. |
+| Pendente | Hosting (painel e consultas públicas novas) ainda **não** publicado. O painel em produção segue com o fluxo antigo de edição de publicados, que as Rules novas continuam aceitando. |
+
 ## 9. Checklist de homologação (produção, após o deploy)
 
 - [ ] Anônimo: listar `eventos_aprovados` sem filtro → negado; com `publicado == true` → permitido.
