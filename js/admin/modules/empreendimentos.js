@@ -1522,6 +1522,25 @@
         return "";
     }
 
+    // Mesmo critério de establishmentPublishContentReady nas Rules: um item
+    // publicado só aceita alterações que o mantenham apto a ficar no ar.
+    function publishReadinessProblem(doc) {
+        var content = doc.content || {};
+        var location = doc.location || {};
+        var coordinates = location.coordinates || {};
+        if (!clean(doc.name) || !clean(doc.slug) || !clean(doc.categoryId) || !clean(doc.categoryLabel)) {
+            return "Nome, endereço da página e categoria são obrigatórios para um empreendimento publicado.";
+        }
+        if (!clean(content.summary) && !clean(content.description)) {
+            return "Um empreendimento publicado precisa de resumo ou descrição.";
+        }
+        var hasCoordinates = typeof coordinates.lat === "number" && typeof coordinates.lng === "number";
+        if (!clean(location.address) && !hasCoordinates) {
+            return "Um empreendimento publicado precisa de endereço ou de localização no mapa.";
+        }
+        return "";
+    }
+
     function semanticCanonicalizationError() {
         var error = conflictError();
         error.reason = "SEMANTIC_CANONICALIZATION_INVALID";
@@ -1831,8 +1850,15 @@
         });
     }
 
+    // Leituras de reconciliação sempre do servidor: com um listener ativo no
+    // mesmo documento o SDK pode devolver o cache, que ainda não reflete a
+    // transação anterior, e a própria gravação seria lida como conflito.
+    function serverGet(ref) {
+        return ref.get({ source: "server" });
+    }
+
     function reconcilePendingGroup(saga, group) {
-        return saga.ref.get().then(function (snapshot) {
+        return serverGet(saga.ref).then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
             var raw = snapshot.data() || {};
             if (!semanticGroupSourceValid(raw, group)) throw conflictError();
@@ -1938,7 +1964,7 @@
 
     function resumeSagaWorkflow(db, completedSaga) {
         if (!completedSaga || completedSaga.resumePhase === "finish") return Promise.resolve();
-        return completedSaga.ref.get().then(function (snapshot) {
+        return serverGet(completedSaga.ref).then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
             var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
             var nextSaga;
@@ -1997,18 +2023,20 @@
         var galleryInput = document.getElementById("est_galleryFiles");
         var mainFile = mainInput && mainInput.files ? mainInput.files[0] : null;
         var galleryFiles = galleryInput && galleryInput.files ? Array.prototype.slice.call(galleryInput.files) : [];
+        // Retomada depois de uma falha no meio do salvamento: a revisão que a
+        // saga conhece é a da própria gravação parcial. O formulário atual
+        // (inclusive o que foi digitado depois da falha) é salvo por inteiro
+        // contra o estado do servidor, sem confundir a própria escrita com
+        // alteração de outro administrador.
+        var selfRevision = null;
         if (state.pendingSaga && state.pendingSaga.flow === "form" && state.pendingSaga.ref.id === payload.id) {
-            setSaveProgress("Salvando...", false);
-            var pendingSaga = state.pendingSaga;
-            executeSaga(db, pendingSaga)
-                .then(function () { return resumeSagaWorkflow(db, pendingSaga); })
-                .then(finishSave)
-                .catch(failSave);
-            return false;
+            selfRevision = state.pendingSaga.expectedRevision;
         }
+        state.pendingSaga = null;
         var ref = db.collection(COLLECTION).doc(payload.id);
         var shouldResumePublished = !!(existing &&
             (existing.status === "published" || hasResumeEditSession(existing)));
+        var editingPublished = false;
         var base;
         var saga;
         setSaveProgress(editingId ? "Salvando..." : "Criando rascunho...", false);
@@ -2018,7 +2046,7 @@
         }).then(function () {
             if (editingId) {
                 base = state.editingBase || normalizeDoc(existing, existing.__id);
-                return ref.get().then(function (snapshot) {
+                return serverGet(ref).then(function (snapshot) {
                     if (!snapshot.exists) throw conflictError();
                     var current = normalizeDoc(snapshot.data() || {}, snapshot.id);
                     if (current.status === "archived") {
@@ -2026,7 +2054,13 @@
                         archivedError.code = "establishment-archived";
                         throw archivedError;
                     }
-                    if (current.revision !== base.revision) throw conflictError();
+                    if (selfRevision !== null && current.revision === selfRevision) {
+                        base = current;
+                        state.editingBase = current;
+                    } else if (current.revision !== base.revision) {
+                        throw conflictError();
+                    }
+                    shouldResumePublished = current.status === "published" || hasResumeEditSession(current);
                 });
             }
             return ref.get().then(function (snapshot) {
@@ -2054,10 +2088,36 @@
             if (!editingId) return null;
             return reserveManualIdentityLock(db, ref, payload, base, uid);
         }).then(function () {
+            var initialSaga;
+            if (base.status === "published" && !base.editSession) {
+                // Rodada 1: o item continua publicado durante e depois do
+                // salvamento. Cada grupo é gravado mantendo status e
+                // publicação; as Rules exigem que o resultado continue pronto
+                // para publicação, e a mesma checagem é feita aqui antes da
+                // primeira gravação.
+                editingPublished = true;
+                payload.status = "published";
+                payload.publishing = cloneValue(base.publishing);
+                payload.editSession = null;
+                var readiness = publishReadinessProblem(payload);
+                if (readiness) {
+                    var readinessError = new Error(readiness);
+                    readinessError.code = "establishment-not-publishable";
+                    throw readinessError;
+                }
+                initialSaga = buildSaga(ref, payload, base, uid, groupsToWrite(base, payload).filter(function (group) {
+                    return group !== "lifecycle";
+                }));
+                initialSaga.resumePhase = "finish";
+                initialSaga.flow = "form";
+                saga = initialSaga;
+                return executeSaga(db, initialSaga);
+            }
             payload.status = "draft";
             payload.publishing = lifecycleDraft(payload).publishing;
-            var initialSaga;
             if (base.status === "published") {
+                // Documento publicado com sessão de edição legada (anterior à
+                // Rodada 1): mantém o fluxo antigo de retomada.
                 setSaveProgress("Retirando publicacao...", false);
                 var draftDesired = lifecycleEditDraft(base, uid);
                 initialSaga = buildSaga(ref, draftDesired, base, uid, ["lifecycle"]);
@@ -2101,8 +2161,16 @@
                     toast("Upload confirmado; nao foi possivel verificar o vinculo. Nao selecione outro arquivo antes de tentar novamente.", "error");
                 });
             }
+            // executeSaga mantém em state.pendingSaga a saga interrompida, com a
+            // revisão da própria gravação parcial; "Tentar novamente" a usa
+            // como selfRevision.
+            var stillPublished = editingPublished
+                ? " O empreendimento continua publicado no portal."
+                : "";
             if (error && error.code === "establishment-conflict") {
-                toast(error.message, "error");
+                toast("Outro administrador alterou este empreendimento depois que você abriu o editor. " +
+                    "Suas alterações não foram gravadas por cima das dele e continuam neste formulário: " +
+                    "copie o que precisar, clique em Cancelar e abra o registro de novo." + stillPublished, "error");
                 setSaveProgress("Tentar novamente", true);
                 return;
             }
@@ -2111,7 +2179,15 @@
                 setSaveProgress("Salvar rascunho", true);
                 return;
             }
-            toast("Falha parcial. O rascunho foi preservado. Tente novamente.", "error");
+            if (error && error.code === "establishment-not-publishable") {
+                toast(error.message + " Nada foi gravado; o empreendimento continua publicado com a versão anterior.", "error");
+                setSaveProgress("Salvar e publicar alteracoes", true);
+                return;
+            }
+            toast(editingPublished
+                ? "O salvamento foi interrompido antes do fim." + stillPublished +
+                    " Parte das alterações pode já estar no ar. Clique em Tentar novamente para concluir; o que está no formulário não foi perdido."
+                : "O salvamento foi interrompido antes do fim. O rascunho foi preservado e o que está no formulário não foi perdido. Clique em Tentar novamente.", "error");
             handleWriteError(error, "salvar empreendimento");
             setSaveProgress("Tentar novamente", true);
         }
@@ -2736,7 +2812,7 @@
             return Promise.reject(unavailable);
         }
         var ref = db.collection(COLLECTION).doc(id);
-        return ref.get().then(function (snapshot) {
+        return serverGet(ref).then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
             var base = normalizeDoc(snapshot.data() || {}, snapshot.id);
             if (Number.isInteger(options.expectedRevision) && base.revision !== options.expectedRevision) {
@@ -2760,7 +2836,22 @@
             });
             var resumePublished = base.status === "published" || hasResumeEditSession(base);
             var initialSaga;
-            if (base.status === "published") {
+            if (base.status === "published" && !base.editSession) {
+                // Rodada 1: aplica os grupos mantendo o item publicado.
+                desired.status = base.status;
+                desired.publishing = cloneValue(base.publishing);
+                desired.editSession = null;
+                var readiness = publishReadinessProblem(desired);
+                if (readiness) {
+                    var readinessError = new Error(readiness);
+                    readinessError.code = "establishment-not-publishable";
+                    throw readinessError;
+                }
+                initialSaga = buildSaga(ref, desired, base, uid, groups.filter(function (group) {
+                    return group !== "lifecycle";
+                }));
+                initialSaga.resumePhase = "finish";
+            } else if (base.status === "published") {
                 initialSaga = buildSaga(ref, lifecycleEditDraft(base, uid), base, uid, ["lifecycle"]);
                 initialSaga.resumePhase = "groups";
                 initialSaga.resumePayload = desired;

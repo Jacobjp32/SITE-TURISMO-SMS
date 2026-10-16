@@ -990,12 +990,30 @@ service cloud.firestore {
           ]));
     }
 
+    // Rodada 1 (2026-10): um grupo pode ser gravado num documento publicado
+    // sem retirá-lo do ar, desde que ele continue publicado, não tenha sessão
+    // de edição legada e o resultado continue pronto para publicação.
+    // Rascunhos seguem o contrato anterior (draft -> draft). A prontidão só é
+    // reavaliada quando o grupo gravado pode afetá-la (identidade, conteúdo ou
+    // localização); mídia, fontes e relações não mudam a prontidão e assim não
+    // pagam o custo extra de expressões.
+    function establishmentGroupStatusKept() {
+      return (resource.data.status == 'draft' && request.resource.data.status == 'draft') ||
+        (resource.data.status == 'published' &&
+          request.resource.data.status == 'published' &&
+          !resource.data.keys().hasAny(['editSession']) &&
+          !request.resource.data.keys().hasAny(['editSession']) &&
+          (!request.resource.data.diff(resource.data).affectedKeys().hasAny([
+              'slug', 'name', 'categoryId', 'categoryLabel', 'content', 'location'
+            ]) ||
+            establishmentPublishContentReady(request.resource.data)));
+    }
+
     function cheapDraftGroupEnvelopeValid() {
       return isAdmin() &&
         hasEstablishmentIdentity(resource.data) &&
         hasEstablishmentIdentity(request.resource.data) &&
-        resource.data.status == 'draft' &&
-        request.resource.data.status == 'draft' &&
+        establishmentGroupStatusKept() &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdAt == resource.data.createdAt &&
         request.resource.data.createdBy == resource.data.createdBy &&
@@ -1143,8 +1161,7 @@ service cloud.firestore {
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny(['lifecycle'])
           ? isLifecycleGroupWrite()
-          : resource.data.status == 'draft' &&
-            request.resource.data.status == 'draft' &&
+          : establishmentGroupStatusKept() &&
             selectedDraftGroupWriteValid());
     }
     // Caminho estreito para o batch N:N do modulo Rotas. Evita reavaliar o

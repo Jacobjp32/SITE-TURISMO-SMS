@@ -919,7 +919,7 @@ test("mídia de gestor usa namespace neutro, não projeta PII e retoma upload pa
   assert.equal(cms.review.lastReviewNotes, "");
 });
 
-test("retry de mídia retoma lifecycle parcial sem recopy e republica", async () => {
+test("retry de mídia retoma grupo parcial sem recopy e sem tirar do ar", async () => {
   const requestId = "manager-media-lifecycle-resume";
   const privatePath = managerSourcePath(USER_A_UID, requestId, 1);
   const image = {
@@ -949,7 +949,9 @@ test("retry de mídia retoma lifecycle parcial sem recopy e republica", async ()
     collection: (name) => adminRuntimeDb.collection(name),
     runTransaction(callback) {
       transactionCalls += 1;
-      if (transactionCalls === 4) return Promise.reject(new Error("synthetic-media-group-failure-after-lifecycle"));
+      // Rodada 1: sem a etapa de despublicação, a 3ª transação é o segundo
+      // grupo (review), depois de a mídia já ter sido gravada.
+      if (transactionCalls === 3) return Promise.reject(new Error("synthetic-media-second-group-failure"));
       return adminRuntimeDb.runTransaction(callback);
     },
   };
@@ -957,11 +959,12 @@ test("retry de mídia retoma lifecycle parcial sem recopy e republica", async ()
   storagePutCount = 0;
   const failed = await failingSystem.applyAcceptedEstablishmentUpdateMedia(requestId);
   assert.equal(failed.success, false);
-  assert.equal(transactionCalls, 4);
+  assert.equal(transactionCalls, 3);
   assert.equal(storagePutCount, 1);
   const partial = (await getDoc(doc(adminDb, "cms_establishments", "chess-choperia"))).data();
-  assert.equal(partial.status, "draft");
-  assert.equal(partial.editSession.resumeStatus, "published");
+  // A falha no meio não retira o empreendimento do portal.
+  assert.equal(partial.status, "published");
+  assert.equal(Boolean(partial.editSession), false);
 
   const retried = await adminSystem.applyAcceptedEstablishmentUpdateMedia(requestId);
   assert.equal(retried.success, true, retried.message);
@@ -1059,7 +1062,7 @@ test("writer textual mantém request ID e notas privadas fora do CMS", async () 
   assert.deepEqual(privateRequest.appliedFields, ["description"]);
 });
 
-test("retry textual retoma saga multi-grupo parcial e restaura publicação", async () => {
+test("retry textual retoma saga multi-grupo parcial sem tirar do ar", async () => {
   const requestId = "manager-text-multigroup-resume";
   const description = "Descrição aprovada com retomada multi-grupo.";
   const instagram = "@retomada_sintetica";
@@ -1078,17 +1081,19 @@ test("retry textual retoma saga multi-grupo parcial e restaura publicação", as
     collection: (name) => adminRuntimeDb.collection(name),
     runTransaction(callback) {
       transactionCalls += 1;
-      if (transactionCalls === 4) return Promise.reject(new Error("synthetic-text-second-group-failure"));
+      // Rodada 1: sem a etapa de despublicação, a 3ª transação é o segundo grupo.
+      if (transactionCalls === 3) return Promise.reject(new Error("synthetic-text-second-group-failure"));
       return adminRuntimeDb.runTransaction(callback);
     },
   };
   const failingSystem = loadAdminRuntime(ADMIN_UID, "admin", failingDb, storageFacade).system;
   const failed = await failingSystem.applyApprovedEstablishmentUpdateRequest(requestId);
   assert.equal(failed.success, false);
-  assert.equal(transactionCalls, 4);
+  assert.equal(transactionCalls, 3);
   const partial = (await getDoc(doc(adminDb, "cms_establishments", "chess-choperia"))).data();
-  assert.equal(partial.status, "draft");
-  assert.equal(partial.editSession.resumeStatus, "published");
+  // A falha no meio não retira o empreendimento do portal.
+  assert.equal(partial.status, "published");
+  assert.equal(Boolean(partial.editSession), false);
   assert.equal(partial.content.description, description);
   assert.notEqual(partial.contact.instagram, instagram);
 

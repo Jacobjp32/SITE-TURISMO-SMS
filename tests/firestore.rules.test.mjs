@@ -2257,15 +2257,82 @@ describe("CMS establishments C1 V2 — markers e bootstrap legado", () => {
 });
 
 describe("CMS establishments C1 V2 — publication, lifecycle e UX completo", () => {
-  test("P1 published in-place geral é negado; relationship narrow atual continua permitido", async () => {
+  // Rodada 1 (2026-10): o contrato anterior negava gravar grupos num documento
+  // publicado, o que obrigava o painel a despublicar antes de salvar. Agora a
+  // gravação por grupo mantém o item publicado, desde que ele continue apto
+  // a ficar no ar.
+  test("P1 published in-place por grupo mantém publicado; relationship narrow continua permitido", async () => {
     const base = v2Fixture("published");
     await seedDocuments([userEntry("admin-v2", "admin", true), ["cms_establishments/est-v2", base]]);
     const target = doc(authenticatedDb("admin-v2"), "cms_establishments", "est-v2");
-    await assertFails(writeGroup(target, "core", validGroupMutation("core", base), 12, allMarkers()));
+    await assertSucceeds(writeGroup(target, "core", validGroupMutation("core", base), 12, allMarkers()));
+    await assertSucceeds(writeGroup(target, "content", validGroupMutation("content", base), 13, allMarkers()));
+    await assertSucceeds(writeGroup(target, "contact", validGroupMutation("contact", base), 14, allMarkers()));
+    await assertSucceeds(writeGroup(target, "location", validGroupMutation("location", base), 15, allMarkers()));
+    await assertSucceeds(writeGroup(target, "media", validGroupMutation("media", base), 16, allMarkers()));
+    await assertSucceeds(writeGroup(target, "display", validGroupMutation("display", base), 17, allMarkers()));
+    const snapshot = await assertSucceeds(getDoc(target));
+    assert.equal(snapshot.data().status, "published");
+    assert.equal(snapshot.data().name, "Nome atualizado");
+    assert.equal(snapshot.data().content.summary, "Resumo atualizado");
     await assertSucceeds(updateDoc(target, {
       relationships: { ...base.relationships, routeIds: ["rota-erva-mate"] },
       updatedAt: serverTimestamp(), updatedBy: "admin-v2",
     }));
+  });
+
+  test("P1b published não aceita grupo que o deixaria impublicável", async () => {
+    const base = v2Fixture("published");
+    await seedDocuments([userEntry("admin-v2", "admin", true), ["cms_establishments/est-v2", base]]);
+    const target = doc(authenticatedDb("admin-v2"), "cms_establishments", "est-v2");
+    await assertFails(writeGroup(target, "content", {
+      content: { ...base.content, summary: "", description: "" },
+    }, 12, allMarkers()));
+    await assertFails(writeGroup(target, "location", {
+      location: { ...base.location, address: "", coordinates: { lat: null, lng: null } },
+    }, 12, allMarkers()));
+    await assertFails(writeGroup(target, "core", invalidGroupMutation("core", base), 12, allMarkers()));
+    const snapshot = await assertSucceeds(getDoc(target));
+    assert.equal(snapshot.data().status, "published");
+    assert.equal(snapshot.data().revision, 11);
+  });
+
+  test("P1c grupo em published não muda status, não abre sessão legada e exige admin", async () => {
+    const base = v2Fixture("published");
+    await seedDocuments([
+      userEntry("admin-v2", "admin", true),
+      userEntry("user-v2", "user", true),
+      ["cms_establishments/est-v2", base],
+    ]);
+    const target = doc(authenticatedDb("admin-v2"), "cms_establishments", "est-v2");
+    await assertFails(writeGroup(target, "content", {
+      ...validGroupMutation("content", base), status: "draft",
+    }, 12, allMarkers()));
+    await assertFails(writeGroup(target, "content", {
+      ...validGroupMutation("content", base),
+      editSession: { resumeStatus: "published", startedAt: serverTimestamp(), startedBy: "admin-v2" },
+    }, 12, allMarkers()));
+    await assertFails(writeGroup(
+      doc(authenticatedDb("user-v2"), "cms_establishments", "est-v2"),
+      "content", validGroupMutation("content", base), 12, allMarkers(),
+    ));
+    await assertFails(writeGroup(
+      doc(anonymousDb(), "cms_establishments", "est-v2"),
+      "content", validGroupMutation("content", base), 12, allMarkers(),
+    ));
+    await assertFails(writeGroup(target, "content", validGroupMutation("content", base), 13, allMarkers()));
+  });
+
+  test("P1d draft com sessão de edição legada segue o fluxo anterior", async () => {
+    const base = {
+      ...v2Fixture("draft"),
+      editSession: { resumeStatus: "published", startedAt: new Date("2026-09-11T12:01:00Z"), startedBy: "admin-v2" },
+    };
+    await seedDocuments([userEntry("admin-v2", "admin", true), ["cms_establishments/est-v2", base]]);
+    const target = doc(authenticatedDb("admin-v2"), "cms_establishments", "est-v2");
+    await assertSucceeds(writeGroup(target, "content", validGroupMutation("content", base), 12, allMarkers()));
+    const snapshot = await assertSucceeds(getDoc(target));
+    assert.equal(snapshot.data().status, "draft");
   });
 
   test("P2 published -> draft -> patch -> republish é permitido", async () => {
