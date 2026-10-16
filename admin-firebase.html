@@ -1706,7 +1706,7 @@
     <!-- CMS-2B: módulo real de Empreendimentos. Carregar ANTES do placeholder.js. -->
     <script src="js/admin/admin-geo-picker.js?v=admin-painel-20261014-final"></script>
     <script src="js/image-attribution.js?v=credito-imagens-20261015"></script>
-    <script src="js/admin/modules/empreendimentos.js?v=credito-imagens-20261015"></script>
+    <script src="js/admin/modules/empreendimentos.js?v=admin-rodada1-20261016"></script>
     <!-- Rotas V1.1: helpers puros + módulo real, antes do placeholder do mesmo id. -->
     <script src="js/admin/modules/rotas-helpers.js?v=rotas-v1-1-admin-20260820"></script>
     <script src="js/admin/modules/rotas.js?v=admin-painel-20261014-final"></script>
@@ -1727,6 +1727,9 @@
         const ADMIN_SESSION_LAST_ACTIVITY_KEY = 'sms-admin-last-activity';
         const ADMIN_SESSION_START_KEY = 'sms-admin-session-start';
         let adminLoginIntent = false;
+        // Requisição de login em curso. O primeiro authStateChanged (sem usuário)
+        // pode chegar depois do envio do formulário e não deve apagar a intenção.
+        let adminLoginInFlight = false;
         let adminSessionMonitorId = null;
         let adminActivityListenersBound = false;
         let adminSessionLogoutInProgress = false;
@@ -1931,6 +1934,10 @@
             const activityHandler = function(event) {
                 if (!window.currentUser || window.currentUser.role !== 'admin') return;
                 if (event && event.type === 'visibilitychange' && document.hidden) return;
+                // Login em andamento: a sessão nova ainda não foi registrada
+                // (checkAdminAuth faz isso). Sem esta guarda, um foco/clique
+                // nesse intervalo encerrava a sessão recém-aberta como "expirada".
+                if (adminLoginIntent) return;
 
                 const session = getAdminSessionSnapshot();
                 if (!session.isValid) {
@@ -2019,6 +2026,7 @@
 
             try {
                 adminLoginIntent = true;
+                adminLoginInFlight = true;
                 const result = await FirebaseSystem.login(email, senha);
 
                 if (!result.success) {
@@ -2029,6 +2037,7 @@
                 adminLoginIntent = false;
                 setLoginFeedback(error.message || 'Não foi possível entrar. Tente novamente.', 'error');
             } finally {
+                adminLoginInFlight = false;
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
             }
@@ -2039,7 +2048,7 @@
             const user = window.currentUser;
 
             if (!user) {
-                adminLoginIntent = false;
+                if (!adminLoginInFlight) adminLoginIntent = false;
                 if (!adminSessionLogoutInProgress) {
                     showAdminLogin();
                 }
@@ -4025,5 +4034,6 @@
         }
     </script>
     <script src="js/admin/admin-nav.js?v=admin-painel-20261014-final"></script>
+    <script src="js/admin/admin-unsaved-guard.js?v=admin-rodada1-20261016"></script>
 </body>
 </html>
