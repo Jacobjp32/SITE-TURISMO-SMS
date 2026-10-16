@@ -94,7 +94,8 @@ function compatDb(db, probe = {}) {
             raw,
             get(options) {
               self.getCalls.push(options || null);
-              return raw.get();
+              const stale = probe.staleGet ? probe.staleGet() : null;
+              return stale ? Promise.resolve(stale) : raw.get();
             },
           };
         },
@@ -118,6 +119,7 @@ function loadModule(compat, uid) {
     console,
     document: { getElementById: () => null },
     window: {
+      setTimeout,
       AdminContext: { db: compat, storage: null, currentUser: { uid } },
       AdminUI: { showToast() {} },
       crypto: globalThis.crypto,
@@ -265,4 +267,30 @@ test("conflito real de outro admin entre o início e a gravação é detectado",
     expectedRevision: 5,
   }), { code: "establishment-conflict" });
   assert.equal((await current()).content.summary, "Gravado por B direto");
+});
+
+test("leitura atrasada do servidor (revisão antiga) não vira falso conflito", async () => {
+  // Uma leitura iniciada antes da gravação anterior chega depois dela com a
+  // revisão antiga. A saga sabe que a revisão só cresce e relê.
+  const staleSnapshot = await dbA.collection("cms_establishments").doc(ID).get();
+  let afterFirstTransaction = false;
+  let staleServed = 0;
+  const compat = compatDb(dbA, {
+    afterTransaction: async () => { afterFirstTransaction = true; },
+    staleGet: () => {
+      if (!afterFirstTransaction || staleServed >= 2) return null;
+      staleServed += 1;
+      return staleSnapshot;
+    },
+  });
+  const module = loadModule(compat, ADMIN_A);
+  await module._applyCanonicalFields(ID, {
+    "content.summary": "Depois da leitura atrasada",
+    "contact.phone": "(42) 3222-2222",
+  }, { flow: "rodada1-stale-read" });
+  assert.equal(staleServed, 2, "a leitura atrasada foi de fato servida");
+  const final = await current();
+  assert.equal(final.status, "published");
+  assert.equal(final.content.summary, "Depois da leitura atrasada");
+  assert.equal(final.contact.phone, "(42) 3222-2222");
 });

@@ -1857,8 +1857,30 @@
         return ref.get({ source: "server" });
     }
 
-    function reconcilePendingGroup(saga, group) {
+    // Revisões só crescem: se o servidor devolve uma revisão MENOR que a que a
+    // própria saga já confirmou, a leitura começou antes da gravação anterior
+    // (leituras concorrentes no mesmo cliente). Relê algumas vezes em vez de
+    // acusar um conflito que não existe.
+    var STALE_READ_RETRIES = 3;
+    var STALE_READ_DELAY_MS = 150;
+
+    function readAtLeastRevision(saga, attempt) {
         return serverGet(saga.ref).then(function (snapshot) {
+            var raw = snapshot.exists ? (snapshot.data() || {}) : null;
+            var revision = raw && Number.isInteger(raw.revision) ? raw.revision : 0;
+            var timer = typeof setTimeout === "function" ? setTimeout
+                : (typeof window !== "undefined" && window && typeof window.setTimeout === "function" ? window.setTimeout : null);
+            if (raw && revision < saga.expectedRevision && attempt < STALE_READ_RETRIES && timer) {
+                return new Promise(function (resolve) {
+                    timer(resolve, STALE_READ_DELAY_MS * (attempt + 1));
+                }).then(function () { return readAtLeastRevision(saga, attempt + 1); });
+            }
+            return snapshot;
+        });
+    }
+
+    function reconcilePendingGroup(saga, group) {
+        return readAtLeastRevision(saga, 0).then(function (snapshot) {
             if (!snapshot.exists) throw conflictError();
             var raw = snapshot.data() || {};
             if (!semanticGroupSourceValid(raw, group)) throw conflictError();
@@ -2049,6 +2071,8 @@
                 return serverGet(ref).then(function (snapshot) {
                     if (!snapshot.exists) throw conflictError();
                     var current = normalizeDoc(snapshot.data() || {}, snapshot.id);
+                    // Para a mensagem de falha poder dizer se o item segue no ar.
+                    editingPublished = current.status === "published" && !current.editSession;
                     if (current.status === "archived") {
                         var archivedError = new Error("Restaure o empreendimento arquivado como rascunho antes de editar.");
                         archivedError.code = "establishment-archived";
