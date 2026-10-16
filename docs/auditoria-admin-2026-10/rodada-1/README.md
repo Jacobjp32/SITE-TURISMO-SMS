@@ -140,23 +140,35 @@ Também confirmado: listagem anônima de `cms-media/` (uma pasta de usuário com
 | Rulesets novos | Firestore `58f81c6f-c052-42aa-9d6e-3420c13a6d70` (14:28:58 UTC) e Storage `1268dc73-b70f-4933-9b91-700153db00ff` (14:28:52 UTC). Ambos **idênticos** aos arquivos da branch (hash normalizado). |
 | Sondagem anônima | `eventos_aprovados` sem filtro: **403** (antes 200, com dados pessoais) · só publicados: 200 (0 documentos) · notícias publicadas: 200 (34) · empreendimentos publicados: 200 (68) · imagem de `cms-media` pela URL: **200** · listagem de `cms-media/`: **403** (antes 200). |
 | Portal público (código antigo) | Agenda, home (4 cartões em "Acontece em breve") e mapa (marcadores) carregam **sem erros no console**, usando o conteúdo estático para eventos, como previsto. |
-| Pendente | Hosting (painel e consultas públicas novas) ainda **não** publicado. O painel em produção segue com o fluxo antigo de edição de publicados, que as Rules novas continuam aceitando. |
+| Hosting | Publicado depois, ver §8.2. |
+
+### 8.2 Execução — Hosting publicado em 16/10/2026 (autorização do responsável)
+
+| Etapa | Resultado |
+|---|---|
+| Rollback | Tag `admin-rodada1-rollback` criada em `f0bf549` e enviada ao remoto. |
+| Publicação | Merge da branch em `main` e push (`origin/main` = `310d85e`). O build do GitHub Pages concluiu às 14:45 UTC. |
+| Portal público | Home, Agenda e Mapa carregam o código novo, **sem erros no console**. A consulta da home só de publicados retorna `ok` (0 eventos publicados hoje). A coleção completa é negada (`permission-denied`). |
+| Painel (login manual do responsável) | Validado sem gravar em cadastros reais. Resultado item a item no §9. Contagens antes e depois das verificações: `eventos_aprovados` 12 → 12, `eventos_pendentes` 2, `noticias` 34 → 34. O empreendimento aberto no teste continuou na revisão 14, publicado. Console sem erros. |
 
 ## 9. Checklist de homologação (produção, após o deploy)
 
-- [ ] Anônimo: listar `eventos_aprovados` sem filtro → negado; com `publicado == true` → permitido.
-- [ ] Anônimo: listar `cms-media/` → negado; abrir uma imagem publicada pela URL → funciona.
-- [ ] Home, Agenda e Mapa carregam sem erro no console.
-- [ ] Login de admin entra direto, sem "sessão expirou".
-- [ ] Editar um empreendimento publicado: o item não some do portal em nenhum momento, e o aviso diz "salvas e publicadas".
-- [ ] Alterar um campo e clicar em outro menu: aparece "Descartar alterações?" e "Continuar editando" mantém o texto.
-- [ ] Sem alteração, trocar de menu não pergunta nada.
-- [ ] Modal de evento: Esc fecha; Tab não sai do modal.
-- [ ] Novo evento: escolher imagem na Biblioteca preenche a capa.
-- [ ] Notícia com imagem `images/...` salva sem erro.
-- [ ] Lista de notícias mostra o nome do autor.
-- [ ] Importador: buscar e importar uma notícia **já publicada** que mudou na origem. O portal não muda, aparece o selo "para revisar", e publicar só ocorre depois da prévia.
-- [ ] Autocadastro no Portal do Usuário continua funcionando.
+Situação em 16/10/2026. **[x]** = verificado em produção. **[ ] (humano)** = precisa gravar dado real, ficando para homologação do responsável.
+
+- [x] Anônimo: listar `eventos_aprovados` sem filtro → negado; com `publicado == true` → permitido.
+- [x] Anônimo: listar `cms-media/` → negado; abrir uma imagem publicada pela URL → funciona.
+- [x] Home, Agenda e Mapa carregam sem erro no console.
+- [x] Login de admin entra direto, sem "sessão expirou".
+- [ ] (humano) Editar um empreendimento publicado: o item não some do portal em nenhum momento, e o aviso diz "salvas e publicadas". Coberto no Emulator (`admin-published-edit`, 7/7).
+- [x] Alterar um campo e clicar em outro menu: aparece "Descartar alterações?" (testado com "Ponte do Rio Iguaçu"). Ao descartar, nada é gravado. *"Continuar editando" não foi clicado em produção; está coberto no teste de UI.*
+- [x] Sem alteração, Esc no modal e troca de menu não perguntam nada.
+- [x] Modal de evento: foco no primeiro campo, Tab e Shift+Tab presos no modal, Esc fecha, o foco volta a "Novo evento". Com texto digitado, Esc pede "Descartar alterações?".
+- [ ] Novo evento: escolher imagem na Biblioteca preenche a capa. **Não testável em produção**: a coleção `media_library` está vazia (0 documentos). Coberto no teste de UI. Testar quando houver a primeira mídia cadastrada.
+- [x] Notícia com imagem `images/...`: o campo aceita `images/...`, `/images/...` e `https://` (`checkValidity` = true). Não houve salvamento.
+- [x] Lista de notícias mostra o nome do autor: 34 de 34, nenhum UID visível, ID no `title` ("ID da conta").
+- [ ] (humano) Importador: buscar e importar uma notícia **já publicada** que mudou na origem. O portal não muda, aparece o selo "para revisar", e publicar só ocorre depois da prévia. Hoje não há nenhum selo pendente.
+- [ ] (humano) Link `javascript:` em notícia é recusado ao salvar. Exige tentativa de salvamento; coberto no teste de UI.
+- [ ] (humano) Autocadastro no Portal do Usuário continua funcionando. Exige criar conta real.
 
 ## 10. Preparação da próxima rodada (navegabilidade e UX)
 
