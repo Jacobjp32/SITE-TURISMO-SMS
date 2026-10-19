@@ -404,3 +404,10 @@ textarea:focus-visible,
     font-size: 0.78rem;
     font-weight: 700;
 }
+
+/* Polimento 2026-10: no cabeçalho móvel das páginas sem o tema Recortes, o selo sazonal do menu
+   só aparece quando tem arte carregada. Sem arte (headerBadge nulo) ele era um círculo genérico,
+   sem função, que parecia um botão ao lado do menu. Selos de hero/mapa e efeitos sazonais seguem iguais. */
+@media (max-width: 968px) {
+    .nav-container .season-mascot--nav:not(:has(.season-mascot__asset.season-asset-loaded)) { display: none; }
+}
