@@ -67,14 +67,19 @@
     box-shadow: var(--cv-shadow);
     transition: transform .25s cubic-bezier(.2, .7, .2, 1), box-shadow .25s ease;
 }
+/* A arte (1200x1200) tem a capivara entre x 275–997 e y 100–1162. A imagem é
+   dimensionada pela altura do frame (104%) e ancorada embaixo para que a
+   personagem caiba inteira no arco — orelha, pata e pés — em qualquer tamanho
+   de frame. -53% centraliza o desenho, que fica deslocado à direita na arte. */
 #sms-mascot .cv-launcher-frame img {
     position: absolute;
     left: 50%;
-    bottom: -18px;
-    width: 104px;
-    height: 104px;
+    bottom: -1px;
+    width: auto;
+    height: 104%;
+    aspect-ratio: 1 / 1;
     max-width: none;
-    transform: translateX(-46%);
+    transform: translateX(-53%);
     object-fit: contain;
     pointer-events: none;
     user-select: none;
@@ -85,7 +90,7 @@
 html body #sms-mascot .cv-launcher.sms-mascot-launcher { width: auto; height: auto; }
 #sms-mascot .cv-launcher:hover .cv-launcher-frame,
 #sms-mascot .cv-launcher:focus-visible .cv-launcher-frame { transform: translateY(-3px); }
-#sms-mascot .cv-launcher:hover .cv-launcher-frame img { transform: translateX(-46%) translateY(-4px) rotate(-3deg); }
+#sms-mascot .cv-launcher:hover .cv-launcher-frame img { transform: translateX(-53%) translateY(-3px) rotate(-3deg); }
 #sms-mascot .cv-launcher:focus-visible { outline: none; }
 #sms-mascot .cv-launcher:focus-visible .cv-launcher-frame { outline: 3px solid var(--cv-red); outline-offset: 3px; }
 /* Aberto no desktop: o lançador vira o botão "fechar" (o retrato fica só no cabeçalho). */
@@ -231,11 +236,12 @@ html body #sms-mascot .cv-launcher.sms-mascot-launcher { width: auto; height: au
 #sms-mascot .cv-portrait img {
     position: absolute;
     left: 50%;
-    bottom: -20px;
-    width: 104px;
-    height: 104px;
+    bottom: 1px;
+    width: auto;
+    height: 102%;
+    aspect-ratio: 1 / 1;
     max-width: none;
-    transform: translateX(-46%);
+    transform: translateX(-53%);
     object-fit: contain;
 }
 #sms-mascot .cv-head-text { min-width: 0; flex: 1; padding: 0 2.9rem .2rem 0; }
@@ -498,9 +504,9 @@ html body #sms-mascot .cv-launcher.sms-mascot-launcher { width: auto; height: au
 /* Aceno único no celular (a capivara do cabeçalho se apresenta sem cobrir nada). */
 #sms-mascot.cv-wave .cv-launcher-frame img { animation: cvWave 1.2s ease-in-out 2; transform-origin: 50% 90%; }
 @keyframes cvWave {
-    0%, 100% { transform: translateX(-46%) rotate(0); }
-    25% { transform: translateX(-46%) rotate(-7deg) translateY(-2px); }
-    60% { transform: translateX(-46%) rotate(5deg); }
+    0%, 100% { transform: translateX(-53%) rotate(0); }
+    25% { transform: translateX(-53%) rotate(-6deg) translateY(-2px); }
+    60% { transform: translateX(-53%) rotate(4deg); }
 }
 
 /* ── Celular: folha inferior ── */
@@ -508,7 +514,6 @@ html body #sms-mascot .cv-launcher.sms-mascot-launcher { width: auto; height: au
 @media (max-width: 768px) {
     #sms-mascot { left: 14px; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
     #sms-mascot .cv-launcher-frame { width: 54px; height: 64px; }
-    #sms-mascot .cv-launcher-frame img { width: 90px; height: 90px; bottom: -16px; }
     #sms-mascot .cv-launcher-tag,
     #sms-mascot .cv-peek { display: none !important; }
 
@@ -576,7 +581,8 @@ body.cv-sheet-open .back-to-top { visibility: hidden !important; pointer-events:
         box-shadow: none;
         background: var(--cv-card);
     }
-    body.recortes #sms-mascot .cv-launcher-frame img { width: 74px; height: 74px; bottom: auto; top: -3px; }
+    /* Avatar em busto: cabeça, orelhas e a pata que acena ficam dentro do círculo. */
+    body.recortes #sms-mascot .cv-launcher-frame img { width: auto; height: 150%; bottom: auto; top: 1px; }
     body.recortes #sms-mascot.is-open .cv-launcher-frame { background: var(--cv-mate); border-color: var(--cv-mate); }
 }
 

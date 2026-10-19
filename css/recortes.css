@@ -212,6 +212,8 @@ body.recortes .rc-agenda-grid .home-event-link { color: var(--rc-mate) !importan
 body.recortes .rc-places { padding: clamp(64px, 9vw, 112px) 0; background: var(--rc-paper-2); }
 body.recortes .rc-places-head { display: flex; justify-content: space-between; align-items: baseline; gap: 2rem; flex-wrap: wrap; margin-bottom: 28px; }
 body.recortes .rc-places-head p { margin: 0; max-width: 44ch; }
+/* As setas do carrossel ficam no canto direito desta faixa: reserva o espaço delas (só onde aparecem). */
+@media (min-width: 901px) { body.recortes .rc-places-head { padding-right: 120px; } }
 body.recortes .rc-strip { position: relative; }
 body.recortes .rc-strip .featured-carousel-track { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(240px, 22%); gap: 20px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 12px; scrollbar-width: thin; }
 body.recortes .rc-strip .featured-experience-card { scroll-snap-align: start; background: none !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important; min-width: 0; }
@@ -226,7 +228,7 @@ body.recortes .rc-strip .featured-carousel-control { position: absolute; top: -6
 body.recortes .rc-strip .featured-carousel-control--prev { right: 56px; }
 body.recortes .rc-strip .featured-carousel-control--next { right: 0; }
 body.recortes .rc-places-sub { margin-top: 56px; }
-body.recortes .rc-atlas { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0 clamp(16px, 3vw, 40px) !important; padding: 0 !important; max-width: none !important; border-top: 1px solid var(--rc-line); }
+body.recortes .rc-atlas { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0 clamp(16px, 3vw, 40px) !important; padding: 0 !important; margin-inline: 0 !important; max-width: none !important; border-top: 1px solid var(--rc-line); }
 body.recortes .rc-atlas .attraction-card { max-width: none !important; width: auto !important; display: grid !important; grid-template-columns: 88px 1fr; gap: 1rem; align-items: center; padding: 1rem 0 !important; background: none !important; border: 0 !important; border-bottom: 1px solid var(--rc-line) !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; text-decoration: none; color: var(--rc-ink); height: auto !important; min-height: 0 !important; }
 body.recortes .rc-atlas .attraction-image { width: 88px !important; height: 88px !important; border-radius: 50% !important; object-fit: cover; }
 body.recortes .rc-atlas .card-media-typographic { display: grid; place-items: center; background: var(--rc-mate) !important; color: var(--rc-paper); }
@@ -257,6 +259,15 @@ body.recortes .rc-weather .weather-heading p { margin: 0 0 .25rem; font-size: .9
 body.recortes .rc-weather .weather-grid { display: grid !important; grid-template-columns: repeat(3, 1fr) !important; gap: 0 !important; margin-top: 1rem; border-top: 1px solid var(--rc-line); }
 body.recortes .rc-weather .weather-card { background: none !important; border: 0 !important; border-right: 1px solid var(--rc-line) !important; border-radius: 0 !important; box-shadow: none !important; padding: 1rem 1rem 0 0 !important; color: var(--rc-ink) !important; }
 body.recortes .rc-weather .weather-card:last-child { border-right: 0 !important; }
+/* Polimento: respiro dos dois lados do divisor e linhas alinhadas entre as três colunas,
+   mesmo quando um rótulo ("Próximos dias") quebra em duas linhas. */
+body.recortes .rc-weather .weather-card { padding: 1rem .9rem 0 !important; }
+body.recortes .rc-weather .weather-card:first-child { padding-left: 0 !important; }
+@supports (grid-template-rows: subgrid) {
+    body.recortes .rc-weather .weather-grid { grid-template-rows: auto auto auto; }
+    body.recortes .rc-weather .weather-card { display: grid; grid-row: span 3; grid-template-rows: subgrid; align-content: start; }
+    body.recortes .rc-weather .weather-card span { align-self: end; }
+}
 body.recortes .rc-weather .weather-card span { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--rc-mate-2) !important; font-weight: 600; }
 body.recortes .rc-weather .weather-card strong { display: block; font: 300 2.6rem/1.1 var(--rc-display) !important; color: var(--rc-ink) !important; }
 body.recortes .rc-weather .weather-card p { font-size: .9rem !important; margin: 0; color: var(--rc-ink-2) !important; }
@@ -308,7 +319,7 @@ body.recortes .rc-news::after { content: ""; position: absolute; left: 0; right:
     body.recortes .rc-index-head { display: block; }
     body.recortes .rc-index-note { text-align: left; margin-top: .4rem; }
     /* Sumário vira uma fita de recortes deslizável, do tamanho do polegar. */
-    body.recortes .rc-index-list { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; margin: 0 calc(var(--rc-gutter) * -1); padding: 0 var(--rc-gutter) 8px; scrollbar-width: none; }
+    body.recortes .rc-index-list { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--rc-gutter); gap: 12px; margin: 0 calc(var(--rc-gutter) * -1); padding: 0 var(--rc-gutter) 8px; scrollbar-width: none; }
     body.recortes .rc-index-list::-webkit-scrollbar { display: none; }
     body.recortes .rc-index-list li { flex: 0 0 38%; scroll-snap-align: start; }
     body.recortes .rc-index-name { font-size: 1.1rem; }
@@ -327,7 +338,7 @@ body.recortes .rc-news::after { content: ""; position: absolute; left: 0; right:
     body.recortes .rc-almanac li { grid-template-columns: 1fr; gap: .1rem; }
     body.recortes .rc-festa-grid { grid-template-columns: 1fr; }
     body.recortes .rc-agenda-grid { grid-template-columns: 1fr !important; }
-    body.recortes .rc-strip .featured-carousel-track { grid-auto-columns: 62%; margin: 0 calc(var(--rc-gutter) * -1); padding: 0 var(--rc-gutter) 12px; }
+    body.recortes .rc-strip .featured-carousel-track { grid-auto-columns: 62%; margin: 0 calc(var(--rc-gutter) * -1); padding: 0 var(--rc-gutter) 12px; scroll-padding-inline: var(--rc-gutter) !important; }
     body.recortes .rc-strip .featured-carousel-control { display: none; }
     body.recortes .rc-atlas { grid-template-columns: 1fr !important; }
     body.recortes .rc-atlas .attraction-card { grid-template-columns: 64px 1fr; }
@@ -414,12 +425,17 @@ body.rc-local .sec-label::before { content: none !important; }
 body.rc-local .hero-sub { font-size: 1.08rem !important; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; max-width: 46ch; }
 body.rc-local .relacionados-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
 body.rc-local .rel-card-body p { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* Nomes longos ("Chimarródromo") não podem ser cortados nas três colunas estreitas do celular. */
+body.rc-local .rel-card-body h4 { overflow-wrap: anywhere; }
+@media (max-width: 480px) { body.rc-local .relacionados-grid { gap: 12px !important; } body.rc-local .rel-card-body h4 { font-size: 1rem !important; hyphens: auto; } }
 body.rc-local .historia-box { background: none !important; }
 body.rc-local .hero { align-items: center; }
 body.rc-local .hero-content { align-self: center; }
 body.rc-local .sms-breadcrumb, body.rc-local .sms-breadcrumb * { background: none !important; }
 @media (max-width: 900px) {
-    body.rc-local .local-container { display: flex !important; flex-direction: column; }
+    /* align-items: stretch — o local.html usa align-items: start (grid) e, em coluna flex, isso
+       encolhia blocos sem largura própria (o mapa ficava com metade da tela). */
+    body.rc-local .local-container { display: flex !important; flex-direction: column; align-items: stretch !important; }
     body.rc-local .col-left { display: contents; }
     body.rc-local .col-left > .sec-label { order: 1; }
     body.rc-local .col-left > .sec-title { order: 2; }
@@ -508,7 +524,7 @@ body.recortes .rc-cta-short, body.recortes .rc-hero-caption-short { display: non
 /* Mascote no celular: a capivara mora no cabeçalho, ao lado do "Aa" — nunca sobre o texto.
    O balão e o painel abrem para baixo, a partir da faixa do menu. */
 @media (max-width: 768px) {
-    body.recortes #sms-mascot { z-index: 10001 !important; left: auto !important; bottom: auto !important; top: calc(var(--sms-main-nav-top) + (var(--sms-main-nav-height) - 44px) / 2) !important; right: calc(var(--rc-gutter) + 104px) !important; }
+    body.recortes #sms-mascot { z-index: 10001 !important; left: auto !important; bottom: auto !important; top: calc(var(--sms-main-nav-top) + (var(--sms-main-nav-height) - 44px) / 2) !important; right: calc(var(--rc-gutter) + 112px) !important; }
     /* O guia (Capivarense) abre como folha inferior: ver css/tourism-mascot.css. */
     body.recortes #sms-mascot.is-open { z-index: 2147482000 !important; }
 }
@@ -630,7 +646,7 @@ body.rc-sabores .rc-sab-source a { color: var(--rc-mate); }
 
 /* Onde comer: cards do renderizador viram linhas de livro-razão em duas colunas */
 body.rc-sabores .rc-sab-eat .restaurants-grid { display: grid !important; grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 0 clamp(16px, 3vw, 40px) !important; border-top: 1px solid var(--rc-line); padding: 0 !important; }
-body.rc-sabores .rc-sab-eat .restaurant-card { display: block !important; padding: 1rem 0 !important; background: none !important; border: 0 !important; border-bottom: 1px solid var(--rc-line) !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; color: var(--rc-ink); text-decoration: none; }
+body.rc-sabores .rc-sab-eat .restaurant-card { display: block !important; text-align: left; padding: 1rem 0 !important; background: none !important; border: 0 !important; border-bottom: 1px solid var(--rc-line) !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; color: var(--rc-ink); text-decoration: none; }
 body.rc-sabores .rc-sab-eat .restaurant-icon { display: none !important; }
 body.rc-sabores .rc-sab-eat .restaurant-info h4 { margin: 0 0 .2rem; font: 400 1.2rem/1.2 var(--rc-display) !important; color: var(--rc-ink) !important; }
 body.rc-sabores .rc-sab-eat .cuisine { display: block; font: 600 .68rem var(--rc-text) !important; letter-spacing: .14em; text-transform: uppercase; color: var(--rc-mate-2) !important; margin-bottom: .35rem; }
@@ -710,7 +726,7 @@ body.rc-ondeficar .rc-credit { color: var(--rc-ink-2); text-decoration: underlin
 body.rc-ondeficar .rc-stay-list { padding: clamp(40px, 6vw, 80px) 0; background: var(--rc-paper-2); }
 body.rc-ondeficar .rc-stay-list-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 28px; }
 body.rc-ondeficar .rc-stay-list-head .rc-section-title { margin: 0; }
-body.rc-ondeficar .rc-filter { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 !important; padding: 0 !important; background: none !important; }
+body.rc-ondeficar .rc-filter { display: flex; flex-wrap: wrap; gap: .5rem; margin: 0 !important; padding: 0 !important; background: none !important; justify-content: flex-start !important; }
 body.rc-ondeficar .rc-filter .filter-btn { min-height: 40px; padding: .4rem 1rem !important; border: 1px solid var(--rc-line) !important; border-radius: 999px !important; background: var(--rc-card) !important; color: var(--rc-ink) !important; font: 500 .9rem var(--rc-text) !important; box-shadow: none !important; }
 body.rc-ondeficar .rc-filter .filter-btn.active { background: var(--rc-ink) !important; color: var(--rc-paper) !important; border-color: var(--rc-ink) !important; }
 
@@ -768,7 +784,8 @@ body.rc-ondeficar .footer { background: var(--rc-mate) !important; }
     body.rc-ondeficar .hotel-content { padding: 14px 14px 16px !important; }
     body.rc-ondeficar .hotel-amenities { display: none !important; }
     body.rc-ondeficar .rc-tips { grid-template-columns: 1fr; }
-    body.rc-ondeficar .rc-filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: 100%; }
+    /* Faixa rolável sangra até a borda da tela, mas começa e termina no alinhamento do texto. */
+    body.rc-ondeficar .rc-filter { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; width: auto; margin-inline: calc(var(--rc-gutter) * -1) !important; padding-inline: var(--rc-gutter) !important; scroll-padding-inline: var(--rc-gutter); }
     body.rc-ondeficar .rc-filter .filter-btn { flex: 0 0 auto; }
 }
 
@@ -829,7 +846,7 @@ body.rc-oqf-page .footer { background: var(--rc-mate) !important; }
     body.rc-oqf-page .rc-porthole-ring { padding: 20px; }
     body.rc-oqf-page .rc-oqf-item { grid-template-columns: 40px minmax(0, 1fr); gap: .8rem; }
     body.rc-oqf-page .rc-oqf-num { font-size: 1.8rem; }
-    body.rc-oqf-page .rc-oqf-link { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: baseline; gap: .6rem; }
+    body.rc-oqf-page .rc-oqf-link { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: baseline; gap: .75rem; justify-content: start; }
     body.rc-oqf-page .rc-oqf-count { font-size: 1.6rem; }
 }
 
@@ -873,6 +890,9 @@ body.rc-mapa .map-filter-btn[aria-selected="true"] .map-filter-count,
 body.rc-mapa .map-filter-btn.is-active .map-filter-count { background: rgba(244, 238, 227, .18) !important; }
 body.rc-mapa .map-button.primary { background: var(--rc-mate) !important; border-color: var(--rc-mate) !important; color: #fff !important; border-radius: 999px !important; }
 body.rc-mapa .map-button:not(.primary) { background: transparent !important; border: 1px solid var(--rc-line) !important; color: var(--rc-ink) !important; border-radius: 999px !important; }
+/* Polimento: o botão secundário dos cards é pílula (como "Abrir ficha"), não link sublinhado. */
+body.rc-mapa .map-list-card-actions .map-button:not(.primary) { text-decoration: none !important; padding: .5rem 1rem !important; min-height: 40px; display: inline-flex; align-items: center; }
+body.rc-mapa .map-list-card-actions .map-button:not(.primary):hover { border-color: var(--rc-ink) !important; }
 body.rc-mapa .map-overview-stat { background: transparent !important; border: 0 !important; border-bottom: 1px solid var(--rc-line) !important; border-radius: 0 !important; }
 body.rc-mapa .map-overview-stat strong { font: 300 2rem var(--rc-display) !important; color: var(--rc-ink) !important; }
 body.rc-mapa .map-list-badge { background: transparent !important; border: 1px solid var(--rc-line) !important; color: var(--rc-mate-2) !important; }
@@ -940,6 +960,9 @@ body.rc-eventos .ev-meta { color: var(--rc-ink-2) !important; }
 body.rc-eventos .badge-dest { background: none !important; color: var(--rc-ochre) !important; font-style: italic; }
 body.rc-eventos .btn-ver { background: transparent !important; border: 1.5px solid var(--rc-ink) !important; color: var(--rc-ink) !important; border-radius: 999px !important; }
 body.rc-eventos .btn-ver:hover { background: var(--rc-ink) !important; color: var(--rc-paper) !important; }
+/* Polimento: no celular a linha do evento não tem respiro à esquerda; o botão "Ver mais" ficava
+   desalinhado (0 px à esquerda, 20 px à direita). Agora ocupa a mesma largura do divisor. */
+@media (max-width: 768px) { body.rc-eventos .ev-card { padding-right: 0 !important; } }
 body.rc-eventos .feira-resumo { background: var(--rc-paper-2) !important; border: 0 !important; border-radius: 0 !important; }
 
 /* Calendário */
@@ -989,6 +1012,9 @@ body.rc-galeria .tab:hover, body.rc-galeria .tab.on { color: var(--rc-ochre) !im
 
 /* Pranchas */
 body.rc-galeria .sec { max-width: 1480px !important; padding: clamp(40px, 6vw, 72px) var(--rc-gutter) !important; border-top: 1px solid rgba(244, 238, 227, .14); background: none !important; }
+/* Polimento: os blocos legados .sec-alt (fundo branco, raio 20px) deixavam títulos e legendas
+   claros sobre branco em Belezas Naturais, Eventos e Tradições e Caminhos de Fluviópolis. */
+body.rc-galeria .sec-alt { background: none !important; border-radius: 0 !important; margin: 0 !important; box-shadow: none !important; }
 body.rc-galeria .sec-title { text-align: left !important; margin: 0 0 1.6rem !important; font: 400 clamp(1.9rem, 3.4vw, 2.8rem) var(--rc-display) !important; color: #f4eee3 !important; }
 body.rc-galeria .grid { display: block !important; columns: 4 260px; column-gap: 18px; margin: 0 !important; }
 body.rc-galeria .card { counter-increment: rcgal; break-inside: avoid; display: block; margin: 0 0 22px !important; background: none !important; border: 0 !important; border-radius: 0 !important; box-shadow: none !important; transform: none !important; overflow: visible !important; position: relative; }
@@ -1106,3 +1132,10 @@ body.recortes #sms-cookie-banner, body.recortes #sms-cookie-banner * { font-fami
 }
 body.rc-ondeficar .rc-stay-rural { margin: 22px 0 0 !important; padding: 14px 18px; border: 1px dashed var(--rc-line); border-radius: 6px; max-width: 70ch; font-size: .95rem !important; color: var(--rc-ink-2); }
 body.rc-ondeficar .rc-stay-rural a { color: var(--rc-mate); }
+
+/* Polimento 2026-10 (tablet): notícias e festas da home seguem em três colunas entre 601 e 900 px,
+   em vez de uma coluna com imagens de ~800 px. */
+@media (min-width: 601px) and (max-width: 900px) {
+    body.recortes .rc-news-list, body.recortes .rc-festa-grid { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; gap: 18px; }
+    body.recortes .rc-news-list .blog-title { font-size: 1.12rem !important; }
+}

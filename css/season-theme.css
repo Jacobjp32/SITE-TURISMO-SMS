@@ -322,7 +322,6 @@ html[data-season] .privacy-hero::after {
 html[data-season] :is(
     .section,
     .info-card,
-    .quick-link,
     .post-card,
     .sidebar-card,
     .blog-card,

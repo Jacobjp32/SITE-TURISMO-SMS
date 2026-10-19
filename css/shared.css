@@ -76,6 +76,10 @@ body {
     line-height: 1.6;
 }
 
+/* Polimento 2026-10: títulos herdavam o line-height 1.6 do corpo e, em duas ou três linhas,
+   ficavam soltos demais (Para o Trade, Transparência). Regra de base; classes específicas prevalecem. */
+h1, h2, h3 { line-height: 1.2; }
+
 /* ===== Focus & Acessibilidade ===== */
 /* Estilo de foco visível para navegação via teclado */
 a:focus-visible,

@@ -22,6 +22,12 @@
 .post-card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; }
 .post-image { height: 200px; background-size: cover; background-position: center; }
 .post-card.featured .post-image { height: 100%; min-height: 300px; }
+/* Cartaz (arte com texto): inteiro, sobre fundo desfocado da própria imagem. */
+.post-image.post-image--cartaz { position: relative; overflow: hidden; isolation: isolate; }
+.post-image--cartaz::before,
+.post-image--cartaz::after { content: ""; position: absolute; background-image: inherit; background-position: center; background-repeat: no-repeat; }
+.post-image--cartaz::before { inset: -24px; background-size: cover; filter: blur(18px) brightness(.72) saturate(.9); }
+.post-image--cartaz::after { inset: 8px; background-size: contain; }
 .post-content { padding: 1.5rem; }
 .post-category { display: inline-block; background: var(--gold-polish); color: var(--forest-deep); padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; margin-bottom: 0.75rem; }
 .post-title { font-family: var(--font-display); font-size: 1.5rem; color: var(--forest-deep); margin-bottom: 0.75rem; line-height: 1.3; }

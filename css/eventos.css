@@ -580,15 +580,17 @@
         .agrosamas-card-info {
             display: flex;
             justify-content: center;
-            gap: 1rem;
+            flex-wrap: wrap;
+            gap: .5rem;
             margin-bottom: 1rem;
         }
         
-        .agrosamas-card-info span {
+        .agrosamas-card-info > span {
             background: rgba(255,255,255,0.15);
             padding: 0.3rem 0.7rem;
             border-radius: 10px;
             font-size: 0.85rem;
+            white-space: nowrap;
         }
         
         .agrosamas-card-btn {

@@ -32,5 +32,5 @@
         .quick-links{display:flex;gap:.75rem;flex-wrap:wrap;justify-content:center;opacity:.7;font-size:.9rem}
         .quick-links a{color:white;text-decoration:none;padding:.3rem .7rem;border-radius:20px;border:1px solid rgba(255,255,255,.2);transition:all .3s}
         .quick-links a:hover{background:rgba(255,255,255,.1);opacity:1}
-        .deco{position:absolute;opacity:.04;font-size:18rem;pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%)}
+        .deco{position:absolute;opacity:.04;font-size:min(18rem,80vw);pointer-events:none;user-select:none;top:50%;left:50%;transform:translate(-50%,-50%)}
         @media(max-width:500px){.code{font-size:5rem}.links{flex-direction:column;align-items:center}}
