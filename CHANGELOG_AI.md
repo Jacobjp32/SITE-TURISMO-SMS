@@ -6,6 +6,16 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-19 — PAINEL: "sem permissão" ao salvar empreendimento publicado (limite das Rules)
+
+**Status:** branch `fix/admin-limite-expressoes-regras` (base `origin/main` 08c8b53), Rules e painel publicados com autorização do usuário. Rollback: tag `admin-limite-regras-rollback` (= 08c8b53) — redeploy de `firestore.rules` dessa tag (conteúdo idêntico ao ruleset publicado em 16/10).
+
+- **Causa:** a edição de empreendimento publicado (Rodada 1, 71c54b1) passava pelo envelope V2 completo + prontidão de publicação, e as Rules recalculavam a comparação do documento inteiro 10–13 vezes por gravação. Em cadastros com galeria e listas, a avaliação passava do limite de 1000 expressões e o Firestore devolvia `permission-denied` mesmo para administradora ativa. Reproduzido no Emulator com cópias dos 68 publicados (dados públicos): 22 recusavam o grupo Localização, inclusive o `delicias-da-bernardina` do incidente. Nenhum publicado foi atualizado entre 15/10 e 19/10; a tentativa que falhou não gravou nada (revisão 14 intacta).
+- **`firestore.rules`:** `establishmentUpdateAllowed(changed)` calcula o `diff` uma vez e o repassa aos seletores e validadores de `cms_establishments`; o caminho geral usa o mesmo envelope enxuto dos caminhos estreitos (o envelope V2 repetia checagens já garantidas). Condições de autorização e validação inalteradas; nenhuma permissão ampliada.
+- **Painel (`empreendimentos.js`):** em `permission-denied`, confere `usuarios/{uid}` no servidor antes de culpar a conta e informa o grupo recusado; a mensagem de falha diz quantos grupos foram de fato gravados em vez de "parte pode estar no ar". Cache `?v=admin-limite-regras-20261019`.
+- **Testes:** `tests/establishment-rules-budget.emulator.test.mjs` (31; falha com as Rules antigas): todos os grupos num cadastro realista e no máximo do painel (galeria 60, tags 30, rotas 20, legado 20, lugares/eventos 50), despublicar/republicar, negativas (anônimo, usuário comum, admin inativo, sem perfil, dois grupos, campo estranho, autoria, revisão, auditoria, publicado sem localização, tipo inválido) e mensagens. `test:rules` 545/545, `test:admin-public-e2e` 86/86, `test:admin-ui` 6/6.
+- **Limite residual:** com mais de ~35 tags e todas as demais listas no máximo, o grupo Conteúdo ainda estoura; o painel limita tags a 30.
+
 ## 2026-10-15 — CRÉDITO E LICENÇA DAS FOTOS no portal público
 
 **Status:** branch `feat/credito-imagens` (base `origin/main` fd4bec4), publicada após autorização do usuário. Sem alteração de Rules, Storage ou esquema do Firestore.

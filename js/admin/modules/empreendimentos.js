@@ -53,6 +53,21 @@
         source: ["source"],
         lifecycle: ["status", "publishing"]
     };
+    var GROUP_LABELS = {
+        core: "Identificação",
+        content: "Conteúdo",
+        contact: "Contato",
+        location: "Localização",
+        media: "Fotos e galeria",
+        relationshipsRouteIds: "Rotas",
+        relationshipsRelatedPlaceIds: "Lugares relacionados",
+        relationshipsRelatedEventIds: "Eventos relacionados",
+        display: "Exibição",
+        seo: "SEO",
+        review: "Revisão",
+        source: "Origem",
+        lifecycle: "Publicação"
+    };
     var CATEGORIES = [
         { id: "gastronomia", label: "Gastronomia" },
         { id: "hospedagem", label: "Hospedagem" },
@@ -2208,11 +2223,23 @@
                 setSaveProgress("Salvar e publicar alteracoes", true);
                 return;
             }
-            toast(editingPublished
-                ? "O salvamento foi interrompido antes do fim." + stillPublished +
-                    " Parte das alterações pode já estar no ar. Clique em Tentar novamente para concluir; o que está no formulário não foi perdido."
-                : "O salvamento foi interrompido antes do fim. O rascunho foi preservado e o que está no formulário não foi perdido. Clique em Tentar novamente.", "error");
-            handleWriteError(error, "salvar empreendimento");
+            // A saga interrompida diz exatamente quantos grupos já foram
+            // gravados e em qual parou; a mensagem não especula.
+            var interrupted = state.pendingSaga;
+            var writtenGroups = interrupted ? interrupted.completed : 0;
+            var failedGroup = interrupted && interrupted.groups.length ? interrupted.groups[0] : "";
+            var failedLabel = GROUP_LABELS[failedGroup] || "";
+            var where = failedLabel ? " no grupo \"" + failedLabel + "\"" : "";
+            if (editingPublished) {
+                toast(writtenGroups
+                    ? "O salvamento parou" + where + " depois de gravar " + writtenGroups + " de " + interrupted.total +
+                        " grupos." + stillPublished + " Os grupos já gravados estão no ar. Clique em Tentar novamente para concluir; o que está no formulário não foi perdido."
+                    : "O salvamento parou" + where + " antes de gravar qualquer alteração." + stillPublished +
+                        " Nada mudou no portal. O que está no formulário não foi perdido.", "error");
+            } else {
+                toast("O salvamento foi interrompido" + where + ". O rascunho foi preservado e o que está no formulário não foi perdido. Clique em Tentar novamente.", "error");
+            }
+            handleWriteError(error, "salvar empreendimento", failedLabel);
             setSaveProgress("Tentar novamente", true);
         }
         return false;
@@ -3104,10 +3131,42 @@
         return load();
     }
 
-    function handleWriteError(error, action) {
+    // "permission-denied" do Firestore significa apenas que as Rules
+    // recusaram a gravação: pode ser a conta (perfil inativo/sem papel) ou os
+    // dados (validação, limite de avaliação das Rules). Antes de culpar a
+    // conta, o painel confere o perfil no servidor.
+    function verifyOwnAdminProfile() {
+        var db = getDb();
+        var uid = currentUid();
+        if (!db || !uid) return Promise.resolve("unknown");
+        return db.collection("usuarios").doc(uid).get({ source: "server" }).then(function (snapshot) {
+            var data = snapshot && snapshot.exists ? (snapshot.data() || {}) : null;
+            if (!data) return "missing";
+            return data.role === "admin" && data.ativo === true ? "active-admin" : "not-active-admin";
+        }).catch(function () {
+            return "unknown";
+        });
+    }
+
+    function handleWriteError(error, action, groupLabel) {
         var code = error && error.code ? error.code : "";
         if (code === "permission-denied") {
-            toast("Sem permissão para " + action + ". Confirme que sua conta continua como administradora ativa.", "error");
+            verifyOwnAdminProfile().then(function (profile) {
+                if (profile === "active-admin") {
+                    toast("O Firestore recusou " + action + (groupLabel ? " (grupo \"" + groupLabel + "\")" : "") +
+                        ". Sua conta está ativa como administradora: a recusa veio da validação dos dados pelas regras de segurança, não da sua permissão. Informe o suporte técnico com o detalhe registrado no console.", "error");
+                } else if (profile === "missing" || profile === "not-active-admin") {
+                    toast("Sem permissão para " + action + ": sua conta não está ativa como administradora no cadastro de usuários.", "error");
+                } else {
+                    toast("Sem permissão para " + action + ". Não foi possível confirmar o perfil da conta agora; recarregue o painel e tente de novo.", "error");
+                }
+                console.warn("[admin-establishments] Recusa das Rules ao " + action + ".", {
+                    group: groupLabel || "",
+                    profile: profile,
+                    error: error
+                });
+            });
+            return;
         } else if (code === "already-exists") {
             toast(error.message || "Ja existe um registro com este ID/slug.", "error");
         } else {
@@ -3176,6 +3235,7 @@
         _approvedPublicMediaPaths: approvedPublicMediaPaths,
         _uploadedMediaReferenced: uploadedMediaReferenced,
         _applyCanonicalFields: applyCanonicalFields,
+        _handleWriteError: handleWriteError,
         _groupsForFieldPaths: groupsForFieldPaths,
         _resumeSagaWorkflow: resumeSagaWorkflow,
         _reconcilePendingGroup: reconcilePendingGroup,

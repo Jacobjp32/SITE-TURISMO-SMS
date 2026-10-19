@@ -668,17 +668,6 @@ service cloud.firestore {
         request.resource.data.revision == 0;
     }
 
-    function establishmentSourceMetadataValid() {
-      return (
-          !resource.data.keys().hasAny(['schemaVersion', 'validatedGroups', 'revision'])
-        ) || (
-          resource.data.keys().hasAll(['schemaVersion', 'validatedGroups', 'revision']) &&
-          resource.data.schemaVersion == 2 &&
-          resource.data.revision is int && resource.data.revision >= 0 &&
-          validEstablishmentMarkers(resource.data.validatedGroups)
-        );
-    }
-
     function establishmentEditSessionTransitionValid() {
       return (
           resource.data.keys().hasAny(['editSession']) &&
@@ -708,23 +697,6 @@ service cloud.firestore {
         );
     }
 
-    function establishmentV2EnvelopeValid() {
-      return establishmentFieldsAllowed(request.resource.data) &&
-        hasEstablishmentIdentity(resource.data) &&
-        hasEstablishmentIdentity(request.resource.data) &&
-        request.resource.data.id == resource.data.id &&
-        request.resource.data.createdBy == resource.data.createdBy &&
-        request.resource.data.createdAt == resource.data.createdAt &&
-        request.resource.data.updatedAt == request.time &&
-        request.resource.data.updatedBy == request.auth.uid &&
-        request.resource.data.schemaVersion == 2 &&
-        request.resource.data.revision == resource.data.get('revision', 0) + 1 &&
-        validEstablishmentMarkers(request.resource.data.validatedGroups) &&
-        establishmentSourceMetadataValid() &&
-        (!resource.data.keys().hasAny(['schemaVersion']) ||
-          request.resource.data.schemaVersion == resource.data.schemaVersion);
-    }
-
     function establishmentMarkerValid(group) {
       return request.resource.data.validatedGroups[group] == 2 &&
         request.resource.data.validatedGroups.diff(
@@ -732,52 +704,52 @@ service cloud.firestore {
         ).affectedKeys().hasOnly([group]);
     }
 
-    function establishmentGroupWriteKeysValid(fields) {
-      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(
+    function establishmentGroupWriteKeysValid(changed, fields) {
+      return changed.hasOnly(
         fields.concat([
           'updatedAt', 'updatedBy', 'schemaVersion', 'validatedGroups', 'revision'
         ])
       );
     }
 
-    function isCoreGroupWrite() {
-      return establishmentGroupWriteKeysValid(['slug', 'name', 'categoryId', 'categoryLabel']) &&
-        request.resource.data.diff(resource.data).affectedKeys()
+    function isCoreGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['slug', 'name', 'categoryId', 'categoryLabel']) &&
+        changed
           .hasAny(['slug', 'name', 'categoryId', 'categoryLabel', 'validatedGroups']) &&
         establishmentMarkerValid('core') &&
         validEstablishmentCore(request.resource.data);
     }
 
-    function isContentGroupWrite() {
-      return establishmentGroupWriteKeysValid(['content']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['content', 'validatedGroups']) &&
+    function isContentGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['content']) &&
+        changed.hasAny(['content', 'validatedGroups']) &&
         establishmentMarkerValid('content') &&
         validEstablishmentContent(request.resource.data.content);
     }
 
-    function isContactGroupWrite() {
-      return establishmentGroupWriteKeysValid(['contact']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['contact', 'validatedGroups']) &&
+    function isContactGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['contact']) &&
+        changed.hasAny(['contact', 'validatedGroups']) &&
         establishmentMarkerValid('contact') &&
         validEstablishmentContact(request.resource.data.contact);
     }
 
-    function isLocationGroupWrite() {
-      return establishmentGroupWriteKeysValid(['location']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['location', 'validatedGroups']) &&
+    function isLocationGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['location']) &&
+        changed.hasAny(['location', 'validatedGroups']) &&
         establishmentMarkerValid('location') &&
         validEstablishmentLocation(request.resource.data.location);
     }
 
-    function isMediaGroupWrite() {
-      return establishmentGroupWriteKeysValid(['media']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['media', 'validatedGroups']) &&
+    function isMediaGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['media']) &&
+        changed.hasAny(['media', 'validatedGroups']) &&
         establishmentMarkerValid('media') &&
         validEstablishmentMedia(request.resource.data.media);
     }
 
-    function establishmentRelationshipWriteKeysValid(field) {
-      return establishmentGroupWriteKeysValid(['relationships']) && (
+    function establishmentRelationshipWriteKeysValid(changed, field) {
+      return establishmentGroupWriteKeysValid(changed, ['relationships']) && (
         resource.data.keys().hasAny(['relationships'])
           ? request.resource.data.relationships.diff(resource.data.relationships)
               .affectedKeys().hasOnly(field == 'routeIds'
@@ -789,57 +761,57 @@ service cloud.firestore {
       );
     }
 
-    function isRelationshipsRouteIdsGroupWrite() {
-      return establishmentGroupWriteKeysValid(['relationships']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
-        establishmentRelationshipWriteKeysValid('routeIds') &&
+    function isRelationshipsRouteIdsGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['relationships']) &&
+        changed.hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid(changed, 'routeIds') &&
         establishmentMarkerValid('relationshipsRouteIds') &&
         validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
         validStringList(request.resource.data.relationships.routeIds);
     }
 
-    function isRelationshipsRelatedPlaceIdsGroupWrite() {
-      return establishmentGroupWriteKeysValid(['relationships']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
-        establishmentRelationshipWriteKeysValid('relatedPlaceIds') &&
+    function isRelationshipsRelatedPlaceIdsGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['relationships']) &&
+        changed.hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid(changed, 'relatedPlaceIds') &&
         establishmentMarkerValid('relationshipsRelatedPlaceIds') &&
         validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
         validStringList(request.resource.data.relationships.relatedPlaceIds);
     }
 
-    function isRelationshipsRelatedEventIdsGroupWrite() {
-      return establishmentGroupWriteKeysValid(['relationships']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships', 'validatedGroups']) &&
-        establishmentRelationshipWriteKeysValid('relatedEventIds') &&
+    function isRelationshipsRelatedEventIdsGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['relationships']) &&
+        changed.hasAny(['relationships', 'validatedGroups']) &&
+        establishmentRelationshipWriteKeysValid(changed, 'relatedEventIds') &&
         establishmentMarkerValid('relationshipsRelatedEventIds') &&
         validEstablishmentRelationshipsShape(request.resource.data.relationships) &&
         validStringList(request.resource.data.relationships.relatedEventIds);
     }
 
-    function isDisplayGroupWrite() {
-      return establishmentGroupWriteKeysValid(['display']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['display', 'validatedGroups']) &&
+    function isDisplayGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['display']) &&
+        changed.hasAny(['display', 'validatedGroups']) &&
         establishmentMarkerValid('display') &&
         validEstablishmentDisplay(request.resource.data.display);
     }
 
-    function isSeoGroupWrite() {
-      return establishmentGroupWriteKeysValid(['seo']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['seo', 'validatedGroups']) &&
+    function isSeoGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['seo']) &&
+        changed.hasAny(['seo', 'validatedGroups']) &&
         establishmentMarkerValid('seo') &&
         validEstablishmentSeo(request.resource.data.seo);
     }
 
-    function isReviewGroupWrite() {
-      return establishmentGroupWriteKeysValid(['review']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['review', 'validatedGroups']) &&
+    function isReviewGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['review']) &&
+        changed.hasAny(['review', 'validatedGroups']) &&
         establishmentMarkerValid('review') &&
         validEstablishmentReview(request.resource.data.review);
     }
 
-    function isSourceGroupWrite() {
-      return establishmentGroupWriteKeysValid(['source']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasAny(['source', 'validatedGroups']) &&
+    function isSourceGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['source']) &&
+        changed.hasAny(['source', 'validatedGroups']) &&
         establishmentMarkerValid('source') &&
         validEstablishmentSource(request.resource.data.source);
     }
@@ -905,83 +877,83 @@ service cloud.firestore {
             request.resource.data.publishing.archiveReason == '');
     }
 
-    function isLifecycleGroupWrite() {
-      return establishmentGroupWriteKeysValid(['status', 'publishing', 'editSession']) &&
-        request.resource.data.diff(resource.data).affectedKeys()
+    function isLifecycleGroupWrite(changed) {
+      return establishmentGroupWriteKeysValid(changed, ['status', 'publishing', 'editSession']) &&
+        changed
           .hasAny(['status', 'publishing', 'editSession', 'validatedGroups']) &&
         establishmentMarkerValid('lifecycle') &&
         validEstablishmentLifecycle(request.resource.data) &&
         establishmentLifecycleTransitionValid() &&
-        ((!request.resource.data.diff(resource.data).affectedKeys().hasAny(['editSession']) &&
+        ((!changed.hasAny(['editSession']) &&
             !resource.data.keys().hasAny(['editSession'])) ||
           establishmentEditSessionTransitionValid()) &&
         establishmentLifecycleAuditValid();
     }
 
-    function establishmentMutationSelectsOneGroup() {
+    function establishmentMutationSelectsOneGroup(changed) {
       let markerKeys = request.resource.data.validatedGroups.diff(
         resource.data.get('validatedGroups', {})
       ).affectedKeys();
       return markerKeys.size() <= 1 &&
         (markerKeys.size() == 1 ||
-          request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          changed.hasAny([
             'slug', 'name', 'categoryId', 'categoryLabel', 'content', 'contact',
             'location', 'media', 'relationships', 'display', 'seo', 'review',
             'source', 'status', 'publishing'
           ]));
     }
 
-    function selectedDraftGroupWriteValid() {
-      let changedKeys = request.resource.data.diff(resource.data).affectedKeys();
+    function selectedDraftGroupWriteValid(changed) {
+      let changedKeys = changed;
       let markerKeys = request.resource.data.validatedGroups.diff(
         resource.data.get('validatedGroups', {})
       ).affectedKeys();
       return (changedKeys.hasAny(['slug', 'name', 'categoryId', 'categoryLabel']) || markerKeys.hasAny(['core']))
-          ? isCoreGroupWrite()
+          ? isCoreGroupWrite(changed)
         : (changedKeys.hasAny(['content']) || markerKeys.hasAny(['content']))
-          ? isContentGroupWrite()
+          ? isContentGroupWrite(changed)
         : (changedKeys.hasAny(['contact']) || markerKeys.hasAny(['contact']))
-          ? isContactGroupWrite()
+          ? isContactGroupWrite(changed)
         : (changedKeys.hasAny(['location']) || markerKeys.hasAny(['location']))
-          ? isLocationGroupWrite()
+          ? isLocationGroupWrite(changed)
         : (changedKeys.hasAny(['media']) || markerKeys.hasAny(['media']))
-          ? isMediaGroupWrite()
+          ? isMediaGroupWrite(changed)
         : (markerKeys.hasAny(['relationshipsRouteIds']) ||
             (changedKeys.hasAny(['relationships']) &&
               request.resource.data.relationships.diff(resource.data.relationships)
                 .affectedKeys().hasAny(['routeIds'])))
-          ? isRelationshipsRouteIdsGroupWrite()
+          ? isRelationshipsRouteIdsGroupWrite(changed)
         : (markerKeys.hasAny(['relationshipsRelatedPlaceIds']) ||
             (changedKeys.hasAny(['relationships']) &&
               request.resource.data.relationships.diff(resource.data.relationships)
                 .affectedKeys().hasAny(['relatedPlaceIds'])))
-          ? isRelationshipsRelatedPlaceIdsGroupWrite()
+          ? isRelationshipsRelatedPlaceIdsGroupWrite(changed)
         : (markerKeys.hasAny(['relationshipsRelatedEventIds']) ||
             (changedKeys.hasAny(['relationships']) &&
               request.resource.data.relationships.diff(resource.data.relationships)
                 .affectedKeys().hasAny(['relatedEventIds'])))
-          ? isRelationshipsRelatedEventIdsGroupWrite()
+          ? isRelationshipsRelatedEventIdsGroupWrite(changed)
         : (changedKeys.hasAny(['display']) || markerKeys.hasAny(['display']))
-          ? isDisplayGroupWrite()
+          ? isDisplayGroupWrite(changed)
         : (changedKeys.hasAny(['seo']) || markerKeys.hasAny(['seo']))
-          ? isSeoGroupWrite()
+          ? isSeoGroupWrite(changed)
         : (changedKeys.hasAny(['review']) || markerKeys.hasAny(['review']))
-          ? isReviewGroupWrite()
+          ? isReviewGroupWrite(changed)
         : (changedKeys.hasAny(['source']) || markerKeys.hasAny(['source']))
-          ? isSourceGroupWrite()
+          ? isSourceGroupWrite(changed)
         : false;
     }
 
-    function isEstablishmentAtomicRelationshipUpdate() {
+    function isEstablishmentAtomicRelationshipUpdate(changed) {
       return request.resource.data.keys().hasAll(['validatedGroups']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        changed.hasOnly([
           'relationships', 'updatedAt', 'updatedBy', 'schemaVersion',
           'validatedGroups', 'revision'
         ]) &&
         request.resource.data.validatedGroups.diff(
           resource.data.get('validatedGroups', {})
         ).affectedKeys().size() <= 1 &&
-        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['relationships']) ||
+        (changed.hasAny(['relationships']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny([
@@ -997,23 +969,23 @@ service cloud.firestore {
     // reavaliada quando o grupo gravado pode afetá-la (identidade, conteúdo ou
     // localização); mídia, fontes e relações não mudam a prontidão e assim não
     // pagam o custo extra de expressões.
-    function establishmentGroupStatusKept() {
+    function establishmentGroupStatusKept(changed) {
       return (resource.data.status == 'draft' && request.resource.data.status == 'draft') ||
         (resource.data.status == 'published' &&
           request.resource.data.status == 'published' &&
           !resource.data.keys().hasAny(['editSession']) &&
           !request.resource.data.keys().hasAny(['editSession']) &&
-          (!request.resource.data.diff(resource.data).affectedKeys().hasAny([
+          (!changed.hasAny([
               'slug', 'name', 'categoryId', 'categoryLabel', 'content', 'location'
             ]) ||
             establishmentPublishContentReady(request.resource.data)));
     }
 
-    function cheapDraftGroupEnvelopeValid() {
+    function cheapDraftGroupEnvelopeValid(changed) {
       return isAdmin() &&
         hasEstablishmentIdentity(resource.data) &&
         hasEstablishmentIdentity(request.resource.data) &&
-        establishmentGroupStatusKept() &&
+        establishmentGroupStatusKept(changed) &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdAt == resource.data.createdAt &&
         request.resource.data.createdBy == resource.data.createdBy &&
@@ -1033,99 +1005,99 @@ service cloud.firestore {
           resource.data.validatedGroups is map);
     }
 
-    function selectedAtomicRelationshipWriteValid() {
+    function selectedAtomicRelationshipWriteValid(changed) {
       let markerKeys = request.resource.data.validatedGroups.diff(
         resource.data.get('validatedGroups', {})
       ).affectedKeys();
       return (markerKeys.hasAny(['relationshipsRouteIds']) ||
             request.resource.data.relationships.diff(resource.data.relationships)
               .affectedKeys().hasAny(['routeIds', 'legacyRoute', 'legacyRouteName']))
-          ? isRelationshipsRouteIdsGroupWrite()
+          ? isRelationshipsRouteIdsGroupWrite(changed)
         : (markerKeys.hasAny(['relationshipsRelatedPlaceIds']) ||
             request.resource.data.relationships.diff(resource.data.relationships)
               .affectedKeys().hasAny(['relatedPlaceIds']))
-          ? isRelationshipsRelatedPlaceIdsGroupWrite()
+          ? isRelationshipsRelatedPlaceIdsGroupWrite(changed)
         : (markerKeys.hasAny(['relationshipsRelatedEventIds']) ||
             request.resource.data.relationships.diff(resource.data.relationships)
               .affectedKeys().hasAny(['relatedEventIds']))
-          ? isRelationshipsRelatedEventIdsGroupWrite()
+          ? isRelationshipsRelatedEventIdsGroupWrite(changed)
         : false;
     }
 
-    function isValidEstablishmentAtomicRelationshipUpdate() {
-      return cheapDraftGroupEnvelopeValid() &&
-        selectedAtomicRelationshipWriteValid();
+    function isValidEstablishmentAtomicRelationshipUpdate(changed) {
+      return cheapDraftGroupEnvelopeValid(changed) &&
+        selectedAtomicRelationshipWriteValid(changed);
     }
 
-    function isEstablishmentSourceGroupUpdate() {
+    function isEstablishmentSourceGroupUpdate(changed) {
       return request.resource.data.keys().hasAll(['validatedGroups']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        changed.hasOnly([
           'source', 'updatedAt', 'updatedBy', 'schemaVersion',
           'validatedGroups', 'revision'
         ]) &&
         request.resource.data.validatedGroups.diff(
           resource.data.get('validatedGroups', {})
         ).affectedKeys().hasOnly(['source']) &&
-        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['source']) ||
+        (changed.hasAny(['source']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny(['source']));
     }
 
-    function isValidEstablishmentSourceGroupUpdate() {
-      return cheapDraftGroupEnvelopeValid() && isSourceGroupWrite();
+    function isValidEstablishmentSourceGroupUpdate(changed) {
+      return cheapDraftGroupEnvelopeValid(changed) && isSourceGroupWrite(changed);
     }
 
-    function isEstablishmentContentGroupUpdate() {
+    function isEstablishmentContentGroupUpdate(changed) {
       return request.resource.data.keys().hasAll(['validatedGroups']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        changed.hasOnly([
           'content', 'updatedAt', 'updatedBy', 'schemaVersion',
           'validatedGroups', 'revision'
         ]) &&
         request.resource.data.validatedGroups.diff(
           resource.data.get('validatedGroups', {})
         ).affectedKeys().hasOnly(['content']) &&
-        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['content']) ||
+        (changed.hasAny(['content']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny(['content']));
     }
 
-    function isValidEstablishmentContentGroupUpdate() {
-      return cheapDraftGroupEnvelopeValid() && isContentGroupWrite();
+    function isValidEstablishmentContentGroupUpdate(changed) {
+      return cheapDraftGroupEnvelopeValid(changed) && isContentGroupWrite(changed);
     }
 
     // Caminho estreito para mídia. Evita percorrer o validador V2 completo,
     // que excede o limite de expressões quando a galeria contém metadados.
-    function isEstablishmentMediaGroupUpdate() {
+    function isEstablishmentMediaGroupUpdate(changed) {
       return request.resource.data.keys().hasAll(['validatedGroups']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        changed.hasOnly([
           'media', 'updatedAt', 'updatedBy', 'schemaVersion',
           'validatedGroups', 'revision'
         ]) &&
         request.resource.data.validatedGroups.diff(
           resource.data.get('validatedGroups', {})
         ).affectedKeys().hasOnly(['media']) &&
-        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['media']) ||
+        (changed.hasAny(['media']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny(['media']));
     }
 
-    function isValidEstablishmentMediaGroupUpdate() {
-      return cheapDraftGroupEnvelopeValid() && isMediaGroupWrite();
+    function isValidEstablishmentMediaGroupUpdate(changed) {
+      return cheapDraftGroupEnvelopeValid(changed) && isMediaGroupWrite(changed);
     }
 
-    function isEstablishmentLifecycleGroupUpdate() {
+    function isEstablishmentLifecycleGroupUpdate(changed) {
       return request.resource.data.keys().hasAll(['validatedGroups']) &&
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        changed.hasOnly([
           'status', 'publishing', 'editSession', 'updatedAt', 'updatedBy',
           'schemaVersion', 'validatedGroups', 'revision'
         ]) &&
         request.resource.data.validatedGroups.diff(
           resource.data.get('validatedGroups', {})
         ).affectedKeys().hasOnly(['lifecycle']) &&
-        (request.resource.data.diff(resource.data).affectedKeys()
+        (changed
             .hasAny(['status', 'publishing', 'editSession']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
@@ -1147,31 +1119,37 @@ service cloud.firestore {
         establishmentSourceMetadataShapeValid();
     }
 
-    function isValidEstablishmentLifecycleGroupUpdate() {
-      return lifecycleGroupEnvelopeValid() && isLifecycleGroupWrite();
+    function isValidEstablishmentLifecycleGroupUpdate(changed) {
+      return lifecycleGroupEnvelopeValid() && isLifecycleGroupWrite(changed);
     }
 
-    function isValidEstablishmentV2GroupUpdate() {
-      return isAdmin() &&
-        establishmentV2EnvelopeValid() &&
-        establishmentMutationSelectsOneGroup() &&
-        (request.resource.data.diff(resource.data).affectedKeys()
+    // Caminho geral (identidade, contato, localização, exibição, SEO, revisão).
+    // Usa o mesmo envelope enxuto dos caminhos estreitos: o envelope V2 completo
+    // repetia checagens que os validadores de grupo já garantem (cada grupo só
+    // altera os próprios campos e o próprio marcador) e, somado à prontidão de
+    // publicação da Rodada 1, estourava o limite de 1000 expressões em
+    // documentos publicados com galeria — o Firestore negava a gravação e o
+    // painel exibia "sem permissão" para administradores ativos.
+    function isValidEstablishmentV2GroupUpdate(changed) {
+      return lifecycleGroupEnvelopeValid() &&
+        establishmentMutationSelectsOneGroup(changed) &&
+        (changed
             .hasAny(['status', 'publishing', 'editSession']) ||
           request.resource.data.validatedGroups.diff(
             resource.data.get('validatedGroups', {})
           ).affectedKeys().hasAny(['lifecycle'])
-          ? isLifecycleGroupWrite()
-          : establishmentGroupStatusKept() &&
-            selectedDraftGroupWriteValid());
+          ? isLifecycleGroupWrite(changed)
+          : establishmentGroupStatusKept(changed) &&
+            selectedDraftGroupWriteValid(changed));
     }
     // Caminho estreito para o batch N:N do modulo Rotas. Evita reavaliar o
     // schema integral legado (que se aproxima do limite de expressoes) quando
     // somente relationships e a auditoria de update mudam.
-    function isValidEstablishmentRelationshipUpdate() {
+    function isValidEstablishmentRelationshipUpdate(changed) {
       return isAdmin() &&
         hasEstablishmentIdentity(resource.data) &&
         hasEstablishmentIdentity(request.resource.data) &&
-        request.resource.data.diff(resource.data).affectedKeys()
+        changed
           .hasOnly(['relationships', 'updatedAt', 'updatedBy']) &&
         request.resource.data.id == resource.data.id &&
         request.resource.data.createdAt == resource.data.createdAt &&
@@ -1184,9 +1162,29 @@ service cloud.firestore {
         validStringList(request.resource.data.relationships.routeIds);
     }
 
-    function isEstablishmentRelationshipOnlyUpdate() {
-      return request.resource.data.diff(resource.data).affectedKeys()
+    function isEstablishmentRelationshipOnlyUpdate(changed) {
+      return changed
         .hasOnly(['relationships', 'updatedAt', 'updatedBy']);
+    }
+
+    // A comparação do documento inteiro (diff) é calculada uma única vez por
+    // gravação e repassada aos validadores. Antes, cada seletor e validador a
+    // recalculava (10 a 13 vezes por gravação), o que levava documentos com
+    // listas longas ao limite de 1000 expressões das Rules.
+    function establishmentUpdateAllowed(changed) {
+      return isEstablishmentRelationshipOnlyUpdate(changed)
+          ? isValidEstablishmentRelationshipUpdate(changed)
+          : isEstablishmentAtomicRelationshipUpdate(changed)
+            ? isValidEstablishmentAtomicRelationshipUpdate(changed)
+            : isEstablishmentMediaGroupUpdate(changed)
+              ? isValidEstablishmentMediaGroupUpdate(changed)
+              : isEstablishmentLifecycleGroupUpdate(changed)
+                ? isValidEstablishmentLifecycleGroupUpdate(changed)
+                : isEstablishmentSourceGroupUpdate(changed)
+                  ? isValidEstablishmentSourceGroupUpdate(changed)
+                  : isEstablishmentContentGroupUpdate(changed)
+                    ? isValidEstablishmentContentGroupUpdate(changed)
+                    : isValidEstablishmentV2GroupUpdate(changed);
     }
 
     // --- Rotas V1.1 ---
@@ -1658,19 +1656,8 @@ service cloud.firestore {
       allow get: if isAdmin() || resource.data.status == 'published';
       allow list: if isAdmin() || resource.data.status == 'published';
       allow create: if isValidEstablishmentShellCreate(establishmentId);
-      allow update: if isEstablishmentRelationshipOnlyUpdate()
-        ? isValidEstablishmentRelationshipUpdate()
-        : isEstablishmentAtomicRelationshipUpdate()
-          ? isValidEstablishmentAtomicRelationshipUpdate()
-          : isEstablishmentMediaGroupUpdate()
-            ? isValidEstablishmentMediaGroupUpdate()
-            : isEstablishmentLifecycleGroupUpdate()
-              ? isValidEstablishmentLifecycleGroupUpdate()
-              : isEstablishmentSourceGroupUpdate()
-                ? isValidEstablishmentSourceGroupUpdate()
-                : isEstablishmentContentGroupUpdate()
-                  ? isValidEstablishmentContentGroupUpdate()
-                  : isValidEstablishmentV2GroupUpdate();
+      allow update: if establishmentUpdateAllowed(
+        request.resource.data.diff(resource.data).affectedKeys());
       allow delete: if isAdmin() &&
         isDeletableEstablishmentStatus(resource.data.status) &&
         !resource.data.keys().hasAny(['editSession']);
