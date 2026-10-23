@@ -6,7 +6,10 @@ import vm from "node:vm";
 import { assertFails, assertSucceeds, initializeTestEnvironment } from "@firebase/rules-unit-testing";
 import { collection, deleteDoc, deleteField, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 
-const PROJECT_ID = "demo-turismo-sms-admin-finalization";
+const PROJECT_ID = process.env.ESTABLISHMENT_APPROVAL_TEST_PROJECT_ID || "demo-turismo-sms-admin-finalization";
+if (!["demo-turismo-sms-admin-finalization", "demo-turismo-sms-duplicate-regression"].includes(PROJECT_ID)) {
+  throw new Error("Approval tests require an explicitly allowed demo project.");
+}
 const ADMIN_UID = "approval-admin";
 const MODERATOR_UID = "approval-moderator";
 const USER_A_UID = "approval-user-a";
@@ -18,7 +21,7 @@ const GROUPS = [
 ];
 
 const root = new URL("../", import.meta.url);
-const [firestoreRules, storageRules, bridgeSource, publicationSource, moduleSource, authSource, adapterSource] = await Promise.all([
+const [firestoreRules, storageRules, bridgeSource, publicationSource, moduleSource, authSource, adapterSource, moderationSource] = await Promise.all([
   readFile(new URL("firestore.rules", root), "utf8"),
   readFile(new URL("storage.rules", root), "utf8"),
   readFile(new URL("js/establishment-submission-bridge.js", root), "utf8"),
@@ -26,6 +29,7 @@ const [firestoreRules, storageRules, bridgeSource, publicationSource, moduleSour
   readFile(new URL("js/admin/modules/empreendimentos.js", root), "utf8"),
   readFile(new URL("js/firebase-auth.js", root), "utf8"),
   readFile(new URL("js/cms-public-establishments-adapter.js", root), "utf8"),
+  readFile(new URL("js/establishment-moderation.js", root), "utf8"),
 ]);
 
 let testEnv;
@@ -62,9 +66,11 @@ function plainRealm(value) {
 
 function compatDb(db) {
   function compatRef(name, id) {
-    const raw = db.collection(name).doc(id);
+    const raw = id ? db.collection(name).doc(id) : db.collection(name).doc();
+    id = raw.id;
     return {
       id, raw,
+      collection: (child) => ({ doc: (childId) => compatRef(name + '/' + id + '/' + child, childId) }),
       get: () => raw.get(),
       set: (data) => raw.set(plainRealm(data)),
       update: (patch) => {
@@ -143,16 +149,18 @@ function makeStorageFacade(storage) {
 
 function loadBridgeAndContracts() {
   const context = { URL, TextEncoder, encodeURIComponent };
+  vm.runInNewContext(moderationSource, context);
   vm.runInNewContext(bridgeSource, context);
   vm.runInNewContext(publicationSource, context);
   return {
     bridge: context.EstablishmentSubmissionBridge,
     contracts: context.SMSPublicationContracts,
+    moderation: context.EstablishmentModeration,
   };
 }
 
 function loadAdminRuntime(uid, role, runtimeDb = adminRuntimeDb, runtimeStorage = storageFacade) {
-  const { bridge, contracts } = loadBridgeAndContracts();
+  const { bridge, contracts, moderation } = loadBridgeAndContracts();
   const document = {
     getElementById: () => null,
     addEventListener() {}, querySelectorAll: () => [], querySelector: () => null,
@@ -163,6 +171,7 @@ function loadAdminRuntime(uid, role, runtimeDb = adminRuntimeDb, runtimeStorage 
   const firebase = { firestore, storage: () => runtimeStorage, apps: [] };
   const window = {
     EstablishmentSubmissionBridge: bridge,
+    EstablishmentModeration: moderation,
     SMSPublicationContracts: contracts,
     AdminContext: { db: runtimeDb, storage: runtimeStorage, currentUser: { uid, role, ativo: true } },
     firebase,
@@ -289,6 +298,46 @@ before(async () => {
 });
 
 after(async () => { await testEnv?.cleanup(); });
+
+for (const [index, status] of ["em_analise", "correcao_solicitada"].entries()) {
+  test(`duplicidade em moderação ${status} bloqueia aprovação antes de criar draft`, async (t) => {
+    const targetId = `duplicate-regression-target-${status}`;
+    const otherId = `duplicate-regression-other-${status}`;
+    t.after(() => testEnv.withSecurityRulesDisabled(async (context) => {
+      const db = context.firestore();
+      await Promise.all([targetId, otherId].map(id => deleteDoc(doc(db, "estabelecimentos_pendentes", id))));
+    }));
+    const phone = `(42) 99988-310${index}`;
+    const address = `Rua Teste Duplicidade ${index}, 731, Centro`;
+    await testEnv.withSecurityRulesDisabled(async (context) => {
+      const db = context.firestore();
+      await Promise.all([
+        setDoc(doc(db, "estabelecimentos_pendentes", targetId), pendingFixture(USER_A_UID, targetId, phone, new Date("2026-10-23T10:00:00Z"), {
+          nome: `Hotel Alvo Duplicidade ${index}`, name: `Hotel Alvo Duplicidade ${index}`,
+          endereco: address, address, website: `https://alvo-duplicidade-${index}.example`, site: `https://alvo-duplicidade-${index}.example`,
+          images: [], mainImage: "", imageCount: 0,
+        })),
+        setDoc(doc(db, "estabelecimentos_pendentes", otherId), pendingFixture(USER_B_UID, otherId, phone, new Date("2026-10-23T11:00:00Z"), {
+          nome: `Outro Nome Duplicidade ${index}`, name: `Outro Nome Duplicidade ${index}`,
+          endereco: address, address, website: `https://outro-duplicidade-${index}.example`, site: `https://outro-duplicidade-${index}.example`,
+          status, images: [], mainImage: "", imageCount: 0,
+        })),
+      ]);
+    });
+    storagePutCount = 0;
+    const result = await adminSystem.approveEstablishment(targetId);
+    assert.equal(result.success, false);
+    assert.equal(result.code, "POSSIBLE_DUPLICATE_REQUIRES_REVIEW");
+    assert.equal(result.candidates.length, 1);
+    assert.equal(result.candidates[0].id, otherId);
+    assert.equal(storagePutCount, 0);
+    assert.equal((await getDoc(doc(adminDb, "cms_establishments", `hotel-alvo-duplicidade-${index}`))).exists(), false);
+    const original = (await getDoc(doc(adminDb, "estabelecimentos_pendentes", targetId))).data();
+    assert.equal(original.status, "pendente");
+    assert.equal(original.cmsImportState, undefined);
+    assert.equal((await getDoc(doc(adminDb, "estabelecimentos_pendentes", otherId))).data().status, status);
+  });
+}
 
 test("consulta do Portal lista somente as submissões do próprio usuário nos três estados", async () => {
   const ownerDb = testEnv.authenticatedContext(USER_A_UID).firestore();
@@ -673,7 +722,8 @@ test("metadado editorial inválido falha antes do shell e da promoção", async 
   storagePutCount = 0;
   const result = await adminSystem.approveEstablishment(submissionId);
   assert.equal(result.success, false);
-  assert.equal(result.code, "establishment-bridge/unknown-category");
+  assert.equal(result.code, "publication/invalid-field");
+  assert.equal(result.field, "category");
   assert.equal(storagePutCount, 0);
   assert.equal((await getDoc(doc(adminDb, "cms_establishments", "categoria-sintetica"))).exists(), false);
   assert.equal((await getDoc(doc(adminDb, "estabelecimentos_pendentes", submissionId))).data().cmsImportState, undefined);

@@ -6,7 +6,7 @@
 (function (root, factory) {
     "use strict";
 
-    var api = factory();
+    var api = factory(root);
     if (typeof module === "object" && module.exports) module.exports = api;
     if (root) {
         Object.defineProperty(root, "EstablishmentSubmissionBridge", {
@@ -16,7 +16,7 @@
             enumerable: false
         });
     }
-})(typeof globalThis !== "undefined" ? globalThis : this, function () {
+})(typeof globalThis !== "undefined" ? globalThis : this, function (root) {
     "use strict";
 
     var CATEGORY_MAP = Object.freeze({
@@ -95,13 +95,26 @@
         return "";
     }
 
+    function effective(source) {
+        if (root.EstablishmentModeration) return root.EstablishmentModeration.effective(source || {});
+        if (source && source.moderation) throw new Error("Serviço de revisão indisponível. Recarregue a página.");
+        return source || {};
+    }
+
+    function submissionWebsite(raw) {
+        // An explicit empty canonical website must not revive a legacy social handle.
+        if (Object.prototype.hasOwnProperty.call(raw, "website")) return clean(raw.website);
+        var legacy = clean(raw.site);
+        return legacy.charAt(0) === "@" ? "" : legacy;
+    }
+
     function canonicalAddressNumber(value) {
         var matches = normalizeAddress(value).match(/\b\d+[a-z]?\b/g);
         return matches && matches.length ? matches[matches.length - 1] : "";
     }
 
     function semanticIdentity(source) {
-        var raw = source || {};
+        var raw = effective(source);
         var name = first(raw, ["name", "nome"]);
         var address = first(raw.location || raw, ["address", "endereco"]);
         var website = first(raw.contact || raw, ["website", "site"]);
@@ -118,7 +131,7 @@
     }
 
     function approvalFingerprint(source) {
-        var raw = source || {};
+        var raw = effective(source);
         var images = (Array.isArray(raw.images) ? raw.images : []).map(function (image) {
             var item = typeof image === "string" ? { url: image } : (image || {});
             return {
@@ -141,7 +154,8 @@
             phone: clean(first(raw, ["phone", "telefone"])),
             whatsapp: clean(raw.whatsapp),
             instagram: clean(raw.instagram),
-            website: clean(first(raw, ["website", "site"])),
+            website: submissionWebsite(raw),
+            moderationRevision: raw.moderation && raw.moderation.revision || 0,
             openingHours: clean(first(raw, ["openingHours", "horario"])),
             mainImage: clean(raw.mainImage),
             image: clean(raw.image),
@@ -296,13 +310,13 @@
     }
 
     function validateSubmissionForImport(submission, options) {
-        var raw = submission || {};
+        var raw = effective(submission);
         var config = options || {};
         if (typeof config.safeExternalUrl !== "function") throw new TypeError("safeExternalUrl é obrigatório.");
         var name = clean(first(raw, ["name", "nome"]));
         var description = clean(first(raw, ["description", "descricao"]));
         var category = categoryFor(first(raw, ["category", "categoria"]));
-        var websiteRaw = clean(first(raw, ["website", "site"]));
+        var websiteRaw = submissionWebsite(raw);
         if (!name) {
             var nameError = new Error("A submissão não possui nome editorial válido.");
             nameError.code = "establishment-bridge/invalid-content";
@@ -320,7 +334,7 @@
         }
         var website = config.safeExternalUrl(websiteRaw, "");
         if (websiteRaw && !website) {
-            var websiteError = new Error("O site informado na submissão não é uma URL HTTPS válida.");
+            var websiteError = new Error("O endereço do website precisa ser corrigido. Abra a solicitação e revise o campo Site; use uma URL HTTPS ou deixe o campo opcional vazio.");
             websiteError.code = "publication/invalid-field";
             websiteError.field = "website";
             throw websiteError;
@@ -351,7 +365,7 @@
     }
 
     function mapSubmissionToCmsDraft(submission, options) {
-        var raw = submission || {};
+        var raw = effective(submission);
         var config = options || {};
         if (typeof config.createBase !== "function") throw new TypeError("createBase é obrigatório.");
         if (typeof config.safeAsset !== "function") throw new TypeError("safeAsset é obrigatório.");
@@ -390,7 +404,9 @@
         desired.contact.phone = clean(first(raw, ["phone", "telefone"]));
         desired.contact.whatsapp = clean(raw.whatsapp);
         desired.contact.website = validated.website;
-        desired.contact.instagram = clean(raw.instagram);
+        desired.contact.instagram = raw.instagram == null
+            ? (clean(raw.site).charAt(0) === "@" ? clean(raw.site) : "") : clean(raw.instagram);
+        desired.contact.email = clean(raw.email);
         desired.location.address = clean(first(raw, ["address", "endereco"]));
         desired.media.gallery = images;
         desired.media.mainImage = images.length ? Object.assign({}, images[0]) : desired.media.mainImage;

@@ -1203,7 +1203,7 @@
                     field("Telefone", "est_phone", item.contact.phone, "text") +
                     field("WhatsApp", "est_whatsapp", item.contact.whatsapp, "text") +
                     field("E-mail", "est_email", item.contact.email, "email") +
-                    field("Site", "est_website", item.contact.website, "url") +
+                    websiteField(item.contact.website) +
                     field("Instagram", "est_instagram", item.contact.instagram, "text") +
                     field("Facebook", "est_facebook", item.contact.facebook, "text")) +
                 group("Localização",
@@ -1294,6 +1294,55 @@
             '<input class="admin-input" id="' + escapeAttr(id) + '" type="' + escapeAttr(type || "text") + '" value="' + escapeAttr(value) + '"' +
             (required ? " required" : "") + (extraAttrs ? " " + extraAttrs : "") + '>' +
         '</div>';
+    }
+
+    // Mesmo limite e sintaxe HTTPS de validSubmissionWebsite nas Rules.
+    // O fallback mantém este módulo utilizável sem o painel de moderação.
+    function websiteValidation(website, skipSuggestion) {
+        var valid = typeof website === "string" && website.length <= 240 &&
+            (!website || /^https:\/\/[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+(?::(?:[0-5]?[0-9]{1,4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?(?:[/?#][A-Za-z0-9._~:/?#@!$&()*+,;=%-]*)?$/.test(website));
+        if (valid && window.EstablishmentModeration && typeof window.EstablishmentModeration.validate === "function") {
+            valid = window.EstablishmentModeration.validate({ website: website }).valid;
+        }
+        var suggestion = "";
+        if (!valid && !skipSuggestion && typeof website === "string") {
+            var candidate = /^http:\/\//i.test(website) ? website.replace(/^http:\/\//i, "https://") : "https://" + website;
+            if (candidate !== website && websiteValidation(candidate, true).valid) suggestion = candidate;
+        }
+        return { valid: valid, suggestion: suggestion, message: valid ? "" : "Site: informe uma URL HTTPS completa (até 240 caracteres) ou deixe o campo vazio. Para um cadastro antigo com HTTP, corrija o site ou limpe o campo antes de salvar o contato." };
+    }
+
+    function websiteField(website) {
+        var result = websiteValidation(website);
+        return '<div class="admin-field">' +
+            '<label for="est_website">Site</label>' +
+            '<input class="admin-input" id="est_website" type="url" value="' + escapeAttr(website) + '" aria-describedby="est_website_hint" aria-invalid="' + (!result.valid) + '" oninput="AdminEstablishmentsModule.onWebsiteChange()">' +
+            '<small id="est_website_hint" role="status">' + escapeHtml(result.message || "Use HTTPS ou deixe vazio. A sugestão não confirma que o site está disponível.") + '</small>' +
+            '<button class="btn-secondary" id="est_website_https" type="button"' + (result.suggestion ? '' : ' hidden') + ' onclick="AdminEstablishmentsModule.applyWebsiteHttps()">Usar sugestão HTTPS</button>' +
+        '</div>';
+    }
+
+    function onWebsiteChange() {
+        var input = document.getElementById("est_website");
+        if (!input) return;
+        var result = websiteValidation(clean(input.value));
+        input.setAttribute("aria-invalid", String(!result.valid));
+        var hint = document.getElementById("est_website_hint");
+        if (hint) hint.textContent = result.message || "Use HTTPS ou deixe vazio. A sugestão não confirma que o site está disponível.";
+        var button = document.getElementById("est_website_https");
+        if (button) button.hidden = !result.suggestion;
+    }
+
+    function applyWebsiteHttps() {
+        var input = document.getElementById("est_website");
+        var result = websiteValidation(value("est_website"));
+        if (input && result.suggestion) {
+            input.value = result.suggestion;
+            onWebsiteChange();
+            input.focus();
+            toast("Sugestão HTTPS aplicada ao formulário. Confira o endereço e salve para confirmar a alteração.", "info");
+        }
+        return false;
     }
 
     function textareaField(label, id, value, required) {
@@ -1452,7 +1501,7 @@
             phone: limit(value("est_phone"), 120),
             whatsapp: limit(value("est_whatsapp"), 120),
             email: limit(value("est_email"), 160),
-            website: limit(value("est_website"), 240),
+            website: value("est_website"),
             instagram: limit(value("est_instagram"), 160),
             facebook: limit(value("est_facebook"), 160)
         };
@@ -1523,11 +1572,29 @@
         return syncApprovedPublicMediaPaths(base);
     }
 
-    function validateDocForSave(doc) {
+    function websiteWriteProblem(doc, base, groups) {
+        var website = doc.contact && doc.contact.website != null ? doc.contact.website : "";
+        var plannedGroups = groups || (base ? groupsToWrite(base, doc) : ["contact"]);
+        var unchangedWebsite = base && base.contact && website === base.contact.website;
+        // Grupos independentes nas Rules não revalidam o contato. Só preserva
+        // o legado quando o Site é idêntico e o plano não escreve esse grupo.
+        if (unchangedWebsite && plannedGroups.indexOf("contact") === -1) return "";
+        var result = websiteValidation(website);
+        if (result.valid) return "";
+        if (unchangedWebsite && plannedGroups.indexOf("contact") !== -1 &&
+            (!base.validatedGroups || base.validatedGroups.contact !== SCHEMA_VERSION)) {
+            return "A migração do esquema precisa gravar o grupo de contato. Corrija explicitamente o Site para HTTPS ou deixe-o vazio antes de salvar.";
+        }
+        return result.message;
+    }
+
+    function validateDocForSave(doc, base, groups) {
         if (!doc.id || !doc.slug) return "Informe um ID/slug.";
         if (!doc.name) return "Informe o nome do empreendimento.";
         if (!doc.categoryId || !doc.categoryLabel) return "Informe a categoria.";
         if (!doc.content.summary) return "Informe o resumo.";
+        var websiteProblem = websiteWriteProblem(doc, base, groups);
+        if (websiteProblem) return websiteProblem;
         if (doc.location.coordinates.lat == null && doc.location.coordinates.lng != null) return "Latitude e longitude devem ser preenchidas juntas.";
         if (doc.location.coordinates.lat != null && doc.location.coordinates.lng == null) return "Latitude e longitude devem ser preenchidas juntas.";
         if (doc.location.coordinates.lat != null && (doc.location.coordinates.lat < -90 || doc.location.coordinates.lat > 90)) return "Latitude invalida.";
@@ -2047,7 +2114,8 @@
         var editingId = value("est_form_editingId");
         var existing = editingId ? findItem(editingId) : null;
         var payload = readForm(existing, uid);
-        var validation = validateDocForSave(payload);
+        var validationBase = editingId && existing ? (state.editingBase || normalizeDoc(existing, existing.__id)) : null;
+        var validation = validateDocForSave(payload, validationBase);
         if (validation) {
             toast(validation, "error");
             return false;
@@ -2099,6 +2167,9 @@
                     } else if (current.revision !== base.revision) {
                         throw conflictError();
                     }
+                    // O plano efetivo deve usar também os marcadores lidos do
+                    // servidor; uma migração pode passar a incluir contato.
+                    base = current;
                     shouldResumePublished = current.status === "published" || hasResumeEditSession(current);
                 });
             }
@@ -2120,6 +2191,12 @@
                 });
             });
         }).then(function () {
+            var currentValidation = validateDocForSave(payload, editingId ? base : null);
+            if (currentValidation) {
+                var validationError = new Error(currentValidation);
+                validationError.code = "establishment-validation";
+                throw validationError;
+            }
             return prepareUploads(storage, uid, payload, mainFile, galleryFiles);
         }).then(function () {
             // A edição só reserva a nova identidade depois que uploads foram
@@ -2216,6 +2293,11 @@
             if (error && error.code === "establishment-archived") {
                 toast(error.message, "error");
                 setSaveProgress("Salvar rascunho", true);
+                return;
+            }
+            if (error && error.code === "establishment-validation") {
+                toast(error.message + " Nada foi gravado." + stillPublished, "error");
+                setSaveProgress("Tentar novamente", true);
                 return;
             }
             if (error && error.code === "establishment-not-publishable") {
@@ -2387,7 +2469,7 @@
                 var pendingStatus = clean(pending.status).toLowerCase();
                 var idempotentFinal = pendingStatus === "aprovado" &&
                     pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
-                if (pendingStatus !== "pendente" && !idempotentFinal) {
+                if (["pendente", "em_analise"].indexOf(pendingStatus) === -1 && !idempotentFinal) {
                     throw importCollisionError("A submissão não está mais pendente para aprovação.");
                 }
                 if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
@@ -2544,7 +2626,7 @@
                 var pendingStatus = clean(pending.status).toLowerCase();
                 var idempotentFinal = pendingStatus === "aprovado" &&
                     pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
-                if (pendingStatus !== "pendente" && !idempotentFinal) {
+                if (["pendente", "em_analise"].indexOf(pendingStatus) === -1 && !idempotentFinal) {
                     throw importCollisionError("A submissão não está mais pendente para aprovação.");
                 }
                 if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
@@ -2599,7 +2681,7 @@
                     var pendingStatus = clean(pending.status).toLowerCase();
                     var idempotentFinal = pendingStatus === "aprovado" &&
                         pending.cmsImportState === "draft_created" && pending.cmsEstablishmentId === cmsId;
-                    if (pendingStatus !== "pendente" && !idempotentFinal) {
+                    if (["pendente", "em_analise"].indexOf(pendingStatus) === -1 && !idempotentFinal) {
                         throw importCollisionError("A submissão não está mais pendente para finalizar a aprovação.");
                     }
                     if (expectedFingerprint && bridge.approvalFingerprint(pending) !== expectedFingerprint) {
@@ -2610,7 +2692,14 @@
                             throw importCollisionError("O draft CMS não está íntegro para finalizar a aprovação.");
                         }
                         var completedAt = serverTimestamp();
-                        transaction.update(pendingRef, {
+                        var approvalAudit = {};
+                        if (!idempotentFinal) {
+                            if (!window.EstablishmentModeration) throw importCollisionError("Serviço de histórico indisponível. Recarregue o painel para retomar.");
+                            approvalAudit = window.EstablishmentModeration.finalizeApproval({
+                                tx: transaction, pendingRef: pendingRef, raw: pending, uid: uid, timestamp: completedAt
+                            });
+                        }
+                        transaction.update(pendingRef, Object.assign({
                             status: "aprovado",
                             reviewedAt: completedAt,
                             reviewedBy: uid,
@@ -2620,7 +2709,7 @@
                             cmsImportedAt: completedAt,
                             updatedAt: completedAt,
                             updatedBy: uid
-                        });
+                        }, approvalAudit));
                     });
                 });
             });
@@ -2885,6 +2974,16 @@
                 return !semanticGroupsEqual(base, desired, group) ||
                     !base.validatedGroups || base.validatedGroups[group] !== SCHEMA_VERSION;
             });
+            // A sessão legada começa pelo lifecycle, mas a retomada calcula
+            // todos os grupos. Valide esse plano antes da primeira escrita.
+            var validationGroups = base.status === "published" && base.editSession
+                ? groupsToWrite(base, desired) : groups;
+            var websiteProblem = websiteWriteProblem(desired, base, validationGroups);
+            if (websiteProblem) {
+                var validationError = new Error(websiteProblem);
+                validationError.code = "establishment-validation";
+                throw validationError;
+            }
             var resumePublished = base.status === "published" || hasResumeEditSession(base);
             var initialSaga;
             if (base.status === "published" && !base.editSession) {
@@ -3211,6 +3310,8 @@
         _geoQuality: geoQuality,
         onMainImageChange: onMainImageChange,
         onGalleryChange: onGalleryChange,
+        onWebsiteChange: onWebsiteChange,
+        applyWebsiteHttps: applyWebsiteHttps,
         _state: state,
         _normalizeDoc: normalizeDoc,
         _readForm: readForm,

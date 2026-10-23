@@ -497,13 +497,14 @@
     <!-- Config DEVE vir antes de firebase-auth.js -->
     <script src="config.js"></script>
     <script src="js/publication-contracts.js?v=security-hardening-02a-20260913"></script>
+    <script src="js/establishment-moderation.js?v=moderation-20261023"></script>
     <!-- Firebase Compat SDK — DEVE vir antes de firebase-auth.js -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-check-compat.js"></script>
-    <script src="js/firebase-auth.js?v=auth-login-fix-20260525"></script>
+    <script src="js/firebase-auth.js?v=moderation-20261023"></script>
     <script src="js/data/hospedagens.js"></script>
     <script src="js/data/restaurantes.js"></script>
     <script src="js/cms-public-establishments-adapter.js?v=admin-e2e-publication-20260911"></script>
@@ -1267,7 +1268,7 @@
             var pendingHint = status === 'pendente'
                 ? '<p class="claim-extra claim-info">Cadastro recebido e aguardando análise da equipe responsável.</p>'
                 : '';
-            var reviewNote = status === 'rejeitado' && establishment.reviewNotes
+            var reviewNote = ['rejeitado', 'correcao_solicitada'].includes(status) && establishment.reviewNotes
                 ? '<p class="claim-extra"><strong>Motivo informado pela equipe:</strong> ' + escapeHtml(establishment.reviewNotes) + '</p>'
                 : '';
 
@@ -1287,7 +1288,7 @@
     }
 
     function labelStatus(s) {
-        return ({pendente:'⏳ Em Análise', aprovado:'✅ Aprovado', rejeitado:'❌ Não Aprovado'})[s] || (s||'');
+        return ({pendente:'⏳ Aguardando análise', em_analise:'Em análise', correcao_solicitada:'Correção solicitada — consulte a orientação da equipe', aprovado:'✅ Aprovado', rejeitado:'❌ Não Aprovado'})[s] || (s||'');
     }
 
     function escapeHtml(value) {
@@ -1298,7 +1299,7 @@
 
     function safeStatus(status) {
         status = String(status || 'pendente').toLowerCase();
-        return /^(pendente|aprovado|rejeitado)$/.test(status) ? status : 'pendente';
+        return /^(pendente|em_analise|correcao_solicitada|aprovado|rejeitado)$/.test(status) ? status : 'pendente';
     }
 
     function getClaimRoleLabel(role) {
@@ -1781,6 +1782,18 @@
             mostrarNotif('A descrição do estabelecimento não pode conter HTML.', 'error');
             return;
         }
+        var socialOrSite = document.getElementById('estSite').value.trim();
+        var instagram = socialOrSite.charAt(0) === '@' ? socialOrSite : '';
+        var website = instagram ? '' : socialOrSite;
+        var check = EstablishmentModeration.validate({ name: nome, category: cat.value,
+            address: end, description: desc, phone: tel, website: website, instagram: instagram,
+            whatsapp: document.getElementById('estWhatsapp').value.trim(),
+            openingHours: document.getElementById('estHorario').value.trim() });
+        if (!check.valid) {
+            mostrarNotif(Object.values(check.errors).join(' ') + ' Revise os dados antes de enviar.', 'error');
+            if (check.errors.website) document.getElementById('estSite').focus();
+            return;
+        }
         var btn = document.getElementById('btnEnviarEst');
         btn.disabled = true; btn.textContent = 'Enviando...';
 
@@ -1790,9 +1803,6 @@
         try {
             uploadedImages = await uploadSubmissionImages('establishment', submissionId, user);
 
-            var socialOrSite = sanitizePlainText(document.getElementById('estSite').value);
-            var instagram = socialOrSite.charAt(0) === '@' ? socialOrSite : '';
-            var website = instagram ? '' : socialOrSite;
             var payload = {
                 id: submissionId,
                 nome: nome,

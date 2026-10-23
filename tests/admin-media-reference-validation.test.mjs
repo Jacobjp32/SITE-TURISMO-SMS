@@ -125,7 +125,7 @@ test("LEGACY_FORM_RELATIVE_MEDIA_PATH_DOES_NOT_TRIGGER_NATIVE_URL_BLOCK", () => 
 test("campos nao-midia preservam type=url", () => {
   assert.match(
     source,
-    /field\(\s*"Site"\s*,\s*"est_website"\s*,\s*item\.contact\.website\s*,\s*"url"\s*\)/,
+    /id="est_website" type="url"/,
   );
   assert.match(
     source,

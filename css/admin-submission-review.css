@@ -1,0 +1,37 @@
+.submission-review { width: min(960px, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 1.5rem; border: 1px solid #cbd5e1; border-radius: 12px; color: #183247; background: #fff; overflow-y: auto; box-sizing: border-box; }
+.submission-review::backdrop { background: rgb(15 23 42 / 65%); }
+.submission-review header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.submission-review h2 { margin: 0 0 1rem; font-size: 1.4rem; }
+.submission-review h3 { margin: 1.25rem 0 .75rem; }
+.submission-review .sr-status { padding: .8rem; background: #eff6ff; border-left: 4px solid #2563eb; white-space: pre-wrap; }
+.submission-review .sr-error { background: #fff1f2; border-color: #b91c1c; color: #991b1b; }
+.submission-review .sr-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.submission-review .sr-field { display: flex; flex-direction: column; min-width: 0; gap: .35rem; }
+.submission-review label { display: block; font-weight: 600; margin-bottom: .3rem; }
+.submission-review input, .submission-review textarea, .submission-review select { box-sizing: border-box; width: 100%; font: inherit; padding: .65rem; color: #172b3a; background: #fff; border: 1px solid #94a3b8; border-radius: 5px; }
+.submission-review input[readonly], .submission-review textarea[readonly], .submission-review select:disabled { background: #f1f5f9; }
+.submission-review [aria-invalid="true"] { border: 2px solid #b91c1c; }
+.submission-review .sr-field-error { color: #991b1b; font-size: .9rem; }
+.submission-review [name="reviewNotes"] { margin: .3rem 0 1rem; }
+.submission-review .sr-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin: 1rem 0; }
+.submission-review button { padding: .65rem .9rem; border: 1px solid #64748b; border-radius: 5px; font: inherit; background: #f8fafc; color: #183247; cursor: pointer; overflow-wrap: anywhere; }
+.submission-review button[type="submit"], .submission-review [data-action="approve"] { background: #175a40; color: #fff; border-color: #175a40; }
+.submission-review button:disabled { opacity: .6; cursor: wait; }
+.submission-review button:focus-visible, .submission-review input:focus-visible, .submission-review textarea:focus-visible, .submission-review select:focus-visible, .submission-review summary:focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.submission-review .sr-media { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; }
+.submission-review figure { margin: 0; overflow-wrap: anywhere; }
+.submission-review img { display: block; width: 100%; max-height: 220px; object-fit: contain; background: #f1f5f9; border-radius: 5px; }
+.submission-review figcaption { font-size: .85rem; margin: .4rem 0; }
+.submission-review details { border-top: 1px solid #cbd5e1; padding: .8rem 0; }
+.submission-review summary { cursor: pointer; font-weight: 600; }
+.submission-review pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .85rem; max-height: 380px; overflow-y: auto; background: #f8fafc; padding: .75rem; }
+.submission-review dd { margin: .2rem 0 1rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+.submission-review dt { font-weight: 600; }
+.submission-review .sr-identification { padding: .8rem 1rem; margin: 1rem 0; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 5px; }
+.submission-review .sr-identification dl { margin: 0; }
+.submission-review .sr-history-table { overflow-x: auto; }
+.submission-review .sr-history-table table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
+.submission-review .sr-history-table th, .submission-review .sr-history-table td { text-align: left; vertical-align: top; padding: .65rem; border: 1px solid #cbd5e1; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 110px; }
+.submission-review .sr-history-table thead { background: #f1f5f9; }
+.submission-review .sr-preview { border: 1px solid #94a3b8; padding: 1rem; margin: 1rem 0; border-radius: 5px; }
+@media (max-width: 600px) { .submission-review { padding: 1rem; width: calc(100vw - 1rem); max-height: calc(100dvh - 1rem); } .submission-review .sr-fields { grid-template-columns: 1fr; } .submission-review .sr-actions { flex-direction: column; } .submission-review .sr-actions button { width: 100%; } }

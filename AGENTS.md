@@ -8,6 +8,10 @@ conhecimento técnico estável; prompts devem descrever apenas o delta da tarefa
 
 ## Leitura progressiva
 
+Antes de editar código, cumpra o preflight obrigatório em
+`docs/agent-runbook/preflight-and-production-baseline.md`: confirme produção,
+sincronização Git, recuperação e preservação de trabalhos paralelos.
+
 1. Leia este mapa.
 2. Abra o runbook específico em `docs/agent-runbook/`.
 3. Inspecione apenas o source, configuração e testes relevantes ao delta.

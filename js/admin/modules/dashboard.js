@@ -104,7 +104,7 @@
 
     function isPendingRequest(status) {
         var s = String(status || "").toLowerCase();
-        return s === "pending" || s === "pendente" || s === "changes_requested" || s === "needs_changes";
+        return s === "pending" || s === "pendente";
     }
 
     // ---------- Análises ----------

@@ -8,16 +8,18 @@ const root = new URL("../", import.meta.url);
 // Normaliza CRLF: no Windows (core.autocrlf=true) a cópia de trabalho usa CRLF
 // e as âncoras dos testes procuram "\n".
 const readLf = async (path) => (await readFile(new URL(path, root), "utf8")).replace(/\r\n/g, "\n");
-const [bridgeSource, moduleSource, publicationSource, authSource, adminHtml, portalHtml] = await Promise.all([
+const [bridgeSource, moduleSource, publicationSource, authSource, adminHtml, portalHtml, moderationSource] = await Promise.all([
   readLf("js/establishment-submission-bridge.js"),
   readLf("js/admin/modules/empreendimentos.js"),
   readLf("js/publication-contracts.js"),
   readLf("js/firebase-auth.js"),
   readLf("admin-firebase.html"),
   readLf("portal-usuario.html"),
+  readLf("js/establishment-moderation.js"),
 ]);
 
 const bridgeContext = { URL, encodeURIComponent };
+vm.runInNewContext(moderationSource, bridgeContext);
 vm.runInNewContext(bridgeSource, bridgeContext);
 const bridge = bridgeContext.EstablishmentSubmissionBridge;
 
@@ -140,7 +142,7 @@ test("Portal acompanha submissões próprias sem confundir aprovação com publi
   assert.match(portalHtml, /status === 'pendente'[\s\S]*aguardando análise/);
   assert.match(portalHtml, /status === 'aprovado'[\s\S]*catálogo editorial como rascunho/);
   assert.match(portalHtml, /ainda não significa que ele foi publicado no portal/);
-  assert.match(portalHtml, /status === 'rejeitado'[\s\S]*reviewNotes/);
+  assert.match(portalHtml, /'rejeitado', 'correcao_solicitada'[\s\S]*reviewNotes/);
 });
 
 test("mídia preparada é reutilizada sem path privado nem galeria duplicada", () => {
@@ -254,6 +256,85 @@ test("entre duplicatas pendentes somente a submissão mais antiga pode reservar 
   assert.equal(bridge.isPreferredPendingSubmission(second, [{ id: first.id, data: first }]), false);
 });
 
+// Exercise the real approval entry point and classifier, with database snapshots
+// isolated in memory. A reservation sentinel proves the preflight did not mutate.
+async function approvalDuplicatePreflight(otherStatus, sameSubmission = false) {
+  const target = submission({ id: "est_duplicate_target", status: "pendente" });
+  const other = submission({
+    id: sameSubmission ? target.id : "est_duplicate_other",
+    name: "Outro Restaurante Sintético", nome: "Outro Restaurante Sintético",
+    website: "https://outro-restaurante.example", status: otherStatus,
+  });
+  let classified;
+  let reservations = 0;
+  const snapshot = (data) => ({ exists: true, data: () => data });
+  const fakeDb = {
+    collection(name) {
+      return {
+        doc: () => ({ get: async () => snapshot(target) }),
+        get: async () => ({ docs: name === "estabelecimentos_pendentes"
+          ? [{ id: other.id, data: () => other }] : [] }),
+      };
+    },
+  };
+  const classifier = Object.assign({}, bridge, {
+    classifyDuplicate(raw, options) {
+      classified = bridge.classifyDuplicate(raw, options);
+      return classified;
+    },
+  });
+  const body = authSource.match(/approveEstablishment:\s*(async function[\s\S]*?)\n\s*},\n\s*\n\s*rejectEstablishment:/)?.[1];
+  assert.ok(body, "approval entry point available");
+  const approve = vm.runInNewContext("(" + body + "\n})", {
+    requirePublicationContracts: () => contracts,
+    requireEstablishmentSubmissionBridge: () => classifier,
+    establishmentSubmissionProvenanceId: async (id) => provenanceId(id),
+    firebase: { firestore: () => fakeDb },
+    snapshotItems: (value) => value.docs.map((item) => ({ id: item.id, data: item.data() })),
+    sanitizeLogMessage: (error) => String(error && error.message || error),
+    currentUser: { uid: "admin-synthetic" },
+    console: { error() {} },
+    window: {
+      EstablishmentModeration: bridgeContext.EstablishmentModeration,
+      AdminEstablishmentsModule: {
+        importSubmissionDraft() { assert.fail("must not import during preflight"); },
+        reserveSubmissionImport() {
+          reservations += 1;
+          throw Object.assign(new Error("preflight completed"), { code: "test/reservation-sentinel" });
+        },
+      },
+    },
+  });
+  const result = await approve.call({ isAdmin: () => true }, target.id);
+  return { result, classified, reservations };
+}
+
+for (const status of ["pendente", "em_analise", "correcao_solicitada"]) {
+  test(`aprovação bloqueia identidade ambígua em solicitação ${status}`, async () => {
+    const { result, classified, reservations } = await approvalDuplicatePreflight(status);
+    assert.equal(classified.kind, "AMBIGUOUS_MATCH");
+    assert.equal(result.success, false);
+    assert.equal(result.code, "POSSIBLE_DUPLICATE_REQUIRES_REVIEW");
+    assert.equal(result.candidates.length, 1);
+    assert.equal(reservations, 0, "no reservation, media promotion or draft import");
+  });
+}
+
+for (const status of ["aprovado", "rejeitado", "estado_desconhecido"]) {
+  test(`aprovação exclui solicitação ${status} da comparação de solicitações abertas`, async () => {
+    const { result, classified, reservations } = await approvalDuplicatePreflight(status);
+    assert.equal(classified.kind, "NO_MATCH");
+    assert.equal(result.code, "test/reservation-sentinel");
+    assert.equal(reservations, 1);
+  });
+}
+
+test("aprovação exclui a própria solicitação da comparação em análise", async () => {
+  const { classified, reservations } = await approvalDuplicatePreflight("em_analise", true);
+  assert.equal(classified.kind, "NO_MATCH");
+  assert.equal(reservations, 1);
+});
+
 test("runtime não grava novos estabelecimentos_aprovados e exige admin", () => {
   const approvalBody = authSource.match(/approveEstablishment:\s*async function[\s\S]*?\n\s*},\n\s*\n\s*rejectEstablishment:/)?.[0] || "";
   assert.match(approvalBody, /if \(!this\.isAdmin\(\)\)/);
@@ -304,8 +385,24 @@ test("mídia de solicitação aplicada ao CMS não projeta path privado nem iden
 test("copy e UI descrevem draft, não publicação", () => {
   assert.match(authSource, /Cadastro aprovado e enviado ao catálogo editorial como rascunho/);
   assert.match(adminHtml, /Nada será publicado automaticamente/);
-  assert.match(adminHtml, /Aprovar e criar draft/);
-  assert.match(adminHtml, /Aprovação exige admin/);
+  assert.match(adminHtml, /Abrir solicitação/);
+  assert.match(authSource, /Somente administradores podem aprovar e criar o rascunho/);
+});
+
+test("website opcional não ressuscita Instagram legado e correção mantém o original", () => {
+  assert.throws(() => mapDraft(submission({ name: undefined, nome: undefined })), { code: "establishment-bridge/invalid-content" });
+  assert.equal(mapDraft(submission({ images: [], mainImage: "", website: "" })).media.gallery.length, 0);
+  const original = submission({ website: "", site: "@hotel", instagram: "@hotel" });
+  assert.equal(mapDraft(original).contact.website, "");
+  assert.equal(mapDraft(original).contact.instagram, "@hotel");
+  assert.equal(mapDraft({ ...original, moderation: { revision: 1, corrections: { instagram: null } } }).contact.instagram, "");
+  const invalid = submission({ website: "hotel.example", site: "hotel.example" });
+  assert.throws(() => mapDraft(invalid), { code: "publication/invalid-field", field: "website" });
+  const corrected = { ...invalid, moderation: { revision: 1, corrections: { website: "https://hotel.example" } } };
+  assert.equal(mapDraft(corrected).contact.website, "https://hotel.example");
+  assert.equal(corrected.website, "hotel.example");
+  assert.notEqual(bridge.approvalFingerprint(invalid), bridge.approvalFingerprint(corrected));
+  assert.equal(mapDraft({ ...corrected, moderation: { revision: 2, corrections: { website: null } } }).contact.website, "");
 });
 
 test("fingerprint ignora workflow e PII, mas cobre metadados editoriais que afetam a saga", () => {

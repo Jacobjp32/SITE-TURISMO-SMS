@@ -1567,14 +1567,15 @@ const FirebaseSystem = {
         return result.success ? result.items : [];
     },
 
-    getPendingEstablishmentsReport: async function() {
-        var diagnostics = { collection: 'estabelecimentos_pendentes', filter: 'status == pendente' };
+    getPendingEstablishmentsReport: async function(includeHistory) {
+        var diagnostics = { collection: 'estabelecimentos_pendentes', filter: includeHistory === true ? 'histórico de solicitações' : 'status in pendente, em_analise' };
         if (!this.isModerator()) {
             return { success: false, items: [], diagnostics: diagnostics, error: new Error('Permissão negada.') };
         }
         try {
-            const snap = await firebase.firestore().collection('estabelecimentos_pendentes')
-                .where('status', '==', 'pendente').get();
+            let query = firebase.firestore().collection('estabelecimentos_pendentes');
+            if (includeHistory !== true) query = query.where('status', 'in', ['pendente', 'em_analise']);
+            const snap = await query.get();
             const items = snap.docs.map(function(d) { return Object.assign({}, d.data(), { id: d.id }); });
             return { success: true, items: items, diagnostics: Object.assign({ matchedDocs: items.length }, diagnostics) };
         } catch(e) {
@@ -1606,7 +1607,21 @@ const FirebaseSystem = {
             const ref = db.collection('estabelecimentos_pendentes').doc(submissionId);
             const doc = await ref.get();
             if (!doc.exists) return { success: false, message: 'Estabelecimento não encontrado.' };
-            const submission = Object.assign({}, doc.data() || {}, { id: submissionId });
+            const originalSubmission = Object.assign({}, doc.data() || {}, { id: submissionId });
+            const submission = window.EstablishmentModeration
+                ? window.EstablishmentModeration.effective(originalSubmission) : originalSubmission;
+            if (window.EstablishmentModeration) {
+                const editable = {};
+                window.EstablishmentModeration.fields.forEach(function(field) {
+                    editable[field] = submission[field] == null ? '' : submission[field];
+                });
+                const validation = window.EstablishmentModeration.validate(editable);
+                if (!validation.valid) {
+                    const field = Object.keys(validation.errors)[0];
+                    return { success: false, code: 'publication/invalid-field', field: field,
+                        message: validation.errors[field] + ' Abra a solicitação para revisar o campo.' };
+                }
+            }
             bridge.validateSubmissionForImport(submission, {
                 safeExternalUrl: publicationContracts.url.externalHttps
             });
@@ -1630,7 +1645,12 @@ const FirebaseSystem = {
                 const duplicate = bridge.classifyDuplicate(submission, {
                     cms: snapshotItems(snapshots[0]),
                     pending: snapshotItems(snapshots[1]).filter(function(candidate) {
-                        return String(candidate.data && candidate.data.status || '').trim().toLowerCase() === 'pendente';
+                        // All unresolved requests still represent a possible identity,
+                        // including requests awaiting the owner's corrections. Terminal
+                        // approved/rejected requests are excluded here; canonical CMS
+                        // and legacy approvals are compared in their own scopes.
+                        var status = String(candidate.data && candidate.data.status || '').trim().toLowerCase();
+                        return ['pendente', 'em_analise', 'correcao_solicitada'].indexOf(status) !== -1;
                     }),
                     legacyApproved: snapshotItems(snapshots[2]),
                     excludeSubmissionId: submissionId
@@ -1732,6 +1752,7 @@ const FirebaseSystem = {
             return {
                 success: false,
                 code: e && e.code || 'ESTABLISHMENT_APPROVAL_FAILED',
+                field: e && e.field || '',
                 message: e && (e.code === 'publication/invalid-field' || e.code === 'establishment-bridge/private-media' || e.code === 'establishment-bridge/unknown-category' || e.code === 'establishment-bridge/invalid-content')
                     ? e.message
                     : (e && e.cmsMediaType ? getMediaApplicationErrorMessage(e) : 'Não foi possível concluir a aprovação. Nenhuma publicação automática foi feita; tente novamente para retomar o rascunho.')
@@ -3227,7 +3248,7 @@ const FirebaseSystem = {
                 db.collection('usuarios').get(),
                 this.getPendingEventsReport(),
                 db.collection('eventos_aprovados').get(),
-                db.collection('estabelecimentos_pendentes').where('status','==','pendente').get()
+                db.collection('estabelecimentos_pendentes').where('status','in',['pendente', 'em_analise']).get()
             ]);
             return {
                 totalUsers:            usersSnap.size,

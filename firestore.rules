@@ -23,14 +23,99 @@ service cloud.firestore {
     }
 
     function establishmentSubmissionHasNoWorkflowAuthority(data) {
-      return !data.keys().hasAny(['cmsEstablishmentId', 'cmsImportState', 'cmsImportedAt']) &&
+      return !data.keys().hasAny(['cmsEstablishmentId', 'cmsImportState', 'cmsImportedAt', 'moderation']) &&
         (!data.keys().hasAny(['reviewedAt']) || data.reviewedAt == null) &&
         (!data.keys().hasAny(['reviewedBy']) || data.reviewedBy == null) &&
         (!data.keys().hasAny(['reviewNotes']) || data.reviewNotes == '');
     }
 
+    function validSubmissionWebsite(value) {
+      return value is string && value.size() <= 240 &&
+        (value == '' || value.matches('^https://[A-Za-z0-9-]+([.][A-Za-z0-9-]+)+(:(?:[0-5]?[0-9]{1,4}|6[0-4][0-9]{3}|65[0-4][0-9]{2}|655[0-2][0-9]|6553[0-5]))?([/?#][A-Za-z0-9._~:/?#@!$&()*+,;=%-]*)?$'));
+    }
+
+    // Administrative corrections are additive; the original submission stays immutable.
+    function validSubmissionCorrections(data) {
+      return data is map && data.keys().hasOnly(['name', 'category', 'address', 'description', 'phone', 'whatsapp', 'email', 'website', 'instagram', 'openingHours', 'contactName']) &&
+        (!data.keys().hasAny(['name']) || (data.name is string && data.name.size() <= 160 && data.name.matches('(?s).*[^ \\t\\r\\n].*'))) &&
+        (!data.keys().hasAny(['category']) || (data.category is string && data.category.size() <= 80 && data.category.matches('(?s).*[^ \\t\\r\\n].*') && data.category in ['hospedagem', 'restaurante', 'gastronomia', 'atracao', 'ponto_turistico', 'comercio', 'servico', 'produtor', 'turismo_rural'])) &&
+        (!data.keys().hasAny(['address']) || (data.address is string && data.address.size() <= 500 && data.address.matches('(?s).*[^ \\t\\r\\n].*'))) &&
+        (!data.keys().hasAny(['description']) || (data.description is string && data.description.size() <= 4000 && data.description.matches('(?s).*[^ \\t\\r\\n].*'))) &&
+        (!data.keys().hasAny(['phone']) || (data.phone is string && data.phone.size() <= 32 && data.phone.matches('^[+]?([ ()-]*[0-9]){8,15}[ ()-]*$'))) &&
+        (!data.keys().hasAny(['whatsapp']) || (data.whatsapp == null || (data.whatsapp is string && data.whatsapp.size() <= 32 && (data.whatsapp == '' || data.whatsapp.matches('^[+]?([ ()-]*[0-9]){8,15}[ ()-]*$'))))) &&
+        (!data.keys().hasAny(['email']) || (data.email == null || (data.email is string && data.email.size() <= 254 && (data.email == '' || data.email.matches('^[^@\\s]+@[^@\\s]+[.][^@\\s]+$'))))) &&
+        (!data.keys().hasAny(['website']) || (data.website == null || validSubmissionWebsite(data.website))) &&
+        (!data.keys().hasAny(['instagram']) || (data.instagram == null || (data.instagram is string && data.instagram.size() <= 160 && (data.instagram == '' || data.instagram.matches('^@?[A-Za-z0-9._]{1,30}$') || data.instagram.matches('^https://(www[.])?instagram[.]com/[A-Za-z0-9._]{1,30}/?$'))))) &&
+        (!data.keys().hasAny(['openingHours']) || (data.openingHours == null || (data.openingHours is string && data.openingHours.size() <= 1000))) &&
+        (!data.keys().hasAny(['contactName']) || (data.contactName == null || (data.contactName is string && data.contactName.size() <= 160)));
+    }
+
+    function moderationSubmissionOpen(data) {
+      return data.status in ['pendente', 'em_analise', 'correcao_solicitada'] &&
+        !data.keys().hasAny(['cmsImportState', 'cmsEstablishmentId', 'cmsImportedAt']);
+    }
+
+    function validSubmissionModeration(estId) {
+      let old = resource.data.get('moderation', {'revision': 0, 'corrections': {}});
+      let next = request.resource.data.moderation;
+      let audit = getAfter(/databases/$(database)/documents/estabelecimentos_pendentes/$(estId)/history/$(next.lastHistoryId)).data;
+      return (isAdmin() ||
+          (isModerator() && audit.action == 'decision' && resource.data.status == 'pendente' &&
+            request.resource.data.status == 'rejeitado')) &&
+        ((audit.action != 'approval' && moderationSubmissionOpen(resource.data)) ||
+          (audit.action == 'approval' && resource.data.status in ['pendente', 'em_analise'] &&
+            resource.data.get('cmsImportState', '') in ['media_preparing', 'media_prepared', 'draft_creating'] &&
+            resource.data.get('cmsEstablishmentId', '') != '' &&
+            request.resource.data.cmsEstablishmentId == resource.data.cmsEstablishmentId &&
+            request.resource.data.cmsImportState == 'draft_created' &&
+            request.resource.data.cmsImportedAt == request.time &&
+            request.resource.data.updatedAt == request.time &&
+            request.resource.data.updatedBy == request.auth.uid)) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'moderation', 'status', 'reviewedAt', 'reviewedBy', 'reviewNotes',
+          'cmsEstablishmentId', 'cmsImportState', 'cmsImportedAt', 'updatedAt', 'updatedBy'
+        ]) &&
+        next.keys().hasAll(['revision', 'corrections', 'updatedAt', 'updatedBy', 'lastHistoryId']) &&
+        next.keys().hasOnly(['revision', 'corrections', 'updatedAt', 'updatedBy', 'lastHistoryId']) &&
+        next.revision is int && next.revision == old.revision + 1 &&
+        next.updatedAt == request.time && next.updatedBy == request.auth.uid &&
+        next.lastHistoryId is string && next.lastHistoryId.size() > 0 &&
+        validSubmissionCorrections(next.corrections) &&
+        audit.revision == next.revision && audit.before == old.corrections &&
+        audit.after == next.corrections && audit.beforeStatus == resource.data.status &&
+        audit.afterStatus == request.resource.data.status &&
+        audit.actorUid == request.auth.uid && audit.createdAt == request.time &&
+        audit.reason is string && audit.reason.matches('(?s).*[^\\s].*') && audit.reason.size() <= 2000 &&
+        ((audit.action == 'correction' && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['moderation'])) ||
+          (audit.action in ['decision', 'approval'] && next.corrections == old.corrections &&
+            ((audit.action == 'decision' &&
+            request.resource.data.status in ['pendente', 'em_analise', 'correcao_solicitada', 'rejeitado'] &&
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['moderation', 'status', 'reviewedAt', 'reviewedBy', 'reviewNotes'])) ||
+              (audit.action == 'approval' && request.resource.data.status == 'aprovado' && audit.reason == 'Rascunho privado criado')) &&
+            request.resource.data.reviewedAt == request.time &&
+            request.resource.data.reviewedBy == request.auth.uid &&
+            (audit.action == 'approval' || request.resource.data.reviewNotes == audit.reason)));
+    }
+
+    function validSubmissionPipelineUpdate() {
+      // Preserve the established approval saga, without giving it an edit bypass.
+      return isAdmin() &&
+        (!request.resource.data.keys().hasAny(['cmsImportState']) ||
+          resource.data.keys().hasAny(['cmsImportState']) || resource.data.status in ['pendente', 'em_analise']) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+        'status', 'reviewedAt', 'reviewedBy', 'reviewNotes', 'updatedAt', 'updatedBy',
+        'cmsImportState', 'cmsEstablishmentId', 'cmsImportedAt', 'cmsImportFingerprint',
+        'cmsApprovalFingerprint', 'cmsImportError', 'cmsImportStartedAt', 'cmsImportStartedBy'
+      ]) &&
+      (request.resource.data.status == resource.data.status ||
+        (!resource.data.keys().hasAny(['moderation']) && request.resource.data.status == 'rejeitado')) &&
+      (!resource.data.keys().hasAny(['moderation']) ||
+        request.resource.data.keys().hasAny(['cmsImportState']));
+    }
+
     function validModeratorEstablishmentRejection() {
       return resource.data.status == 'pendente' &&
+        !resource.data.keys().hasAny(['moderation']) &&
         establishmentSubmissionHasNoWorkflowAuthority(resource.data) &&
         request.resource.data.status == 'rejeitado' &&
         request.resource.data.diff(resource.data).affectedKeys()
@@ -508,7 +593,7 @@ service cloud.firestore {
         data.phone is string &&
         data.whatsapp is string &&
         data.email is string &&
-        data.website is string &&
+        validSubmissionWebsite(data.website) &&
         data.instagram is string &&
         data.facebook is string;
     }
@@ -1494,8 +1579,24 @@ service cloud.firestore {
         request.resource.data.submittedBy == request.auth.uid &&
         request.resource.data.status == 'pendente' &&
         establishmentSubmissionHasNoWorkflowAuthority(request.resource.data);
-      allow update: if isAdmin() || (isModerator() && validModeratorEstablishmentRejection());
-      allow delete: if isAdmin() && !resource.data.keys().hasAny(['cmsImportState']);
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasAny(['moderation'])
+        ? validSubmissionModeration(estId)
+        : validSubmissionPipelineUpdate() || (isModerator() && validModeratorEstablishmentRejection());
+      match /history/{historyId} {
+        allow read: if isAdmin();
+        allow create: if (isAdmin() ||
+            (isModerator() && request.resource.data.action == 'decision' &&
+              request.resource.data.beforeStatus == 'pendente' && request.resource.data.afterStatus == 'rejeitado')) &&
+          request.resource.data.keys().hasAll(['revision', 'before', 'after', 'beforeStatus', 'afterStatus', 'action', 'reason', 'actorUid', 'createdAt']) &&
+          request.resource.data.keys().hasOnly(['revision', 'before', 'after', 'beforeStatus', 'afterStatus', 'action', 'reason', 'actorUid', 'createdAt']) &&
+          getAfter(/databases/$(database)/documents/estabelecimentos_pendentes/$(estId)).data.moderation.lastHistoryId == historyId &&
+          getAfter(/databases/$(database)/documents/estabelecimentos_pendentes/$(estId)).data.moderation.revision == request.resource.data.revision &&
+          getAfter(/databases/$(database)/documents/estabelecimentos_pendentes/$(estId)).data.moderation.corrections == request.resource.data.after &&
+          get(/databases/$(database)/documents/estabelecimentos_pendentes/$(estId)).data.get('moderation', {'revision': 0, 'corrections': {}}).revision + 1 == request.resource.data.revision &&
+          request.resource.data.actorUid == request.auth.uid && request.resource.data.createdAt == request.time;
+        allow update, delete: if false;
+      }
+      allow delete: if isAdmin() && !resource.data.keys().hasAny(['cmsImportState', 'moderation']);
     }
 
     match /eventos_aprovados/{eventId} {

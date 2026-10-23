@@ -33,9 +33,12 @@ junte as três listas em uma única escrita.
 
 ## Published, reload e reconciliação
 
-- Edição completa de published segue P2: `published -> draft -> patches ->
-  republish`; edição parcial genérica in-place não é o contrato.
-- `editSession` persistida registra que o draft veio de edição publicada.
+- Edição de `published` sem `editSession` mantém o documento publicado durante
+  os patches por grupos, com revisão e validação de aptidão antes do salvamento.
+  Esse é o comportamento atual do módulo e dos testes de edição publicada.
+- `editSession` persistida identifica uma edição legada iniciada pelo fluxo
+  `published -> draft -> patches -> republish`; a retomada desse estado continua
+  suportada, sem impor essa transição a uma nova edição publicada.
 - Reload/resume reconstrói o progresso pelo documento remoto, não pelo estado JS.
 - O writer estreito de Rotas preserva `editSession` e só altera seu subgrupo.
 - Reconciliação usa `SEMANTIC_IDEMPOTENT_EQUIVALENCE` e falha fechado diante de
@@ -65,6 +68,8 @@ prova que a Rule negou pelo motivo esperado.
 - Orquestrador/Admin: `js/admin/modules/empreendimentos.js`
 - Autorização: `firestore.rules`
 - Casos canônicos C1 V2: `tests/firestore.rules.test.mjs`
+- Edição publicada e orçamento de expressões: `tests/admin-published-edit.emulator.test.mjs`
+  e `tests/establishment-rules-budget.emulator.test.mjs`
 - Storage: `storage.rules` e `tests/storage.rules.test.mjs`
 - Schema documental: `docs/schemas/cms-establishments.schema.md`
 
