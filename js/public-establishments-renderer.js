@@ -255,16 +255,21 @@
     if (/pousada|chale|chalé/.test(source)) return "pousada";
     if (/rural|sitio|sítio|fazenda|colonia|colônia/.test(source)) return "rural";
     var nameAndTags = clean([itemName(item), ensureArray(item && item.tags).join(" ")].join(" ")).toLowerCase();
-    if (/\bhot[eé]is\b|\bhotel\b/.test(nameAndTags) && !/\bpet\b|canil|c[aã]es/.test(nameAndTags)) return "hotel";
+    if (/\bhot[eé]is\b|\bhotel\b/.test(nameAndTags) && !/\bpet\b|canil|c[aã]es/.test(withoutPetFriendlyAmenity(nameAndTags))) return "hotel";
     return "outros";
   }
 
   // Hospedagem para pessoas: hotel/creche de animais não entra (o registro continua no
   // mapa, em Serviços), nem registro genérico sem nenhum contato ("Pousadas Rurais"),
   // que não é um empreendimento específico.
+  function withoutPetFriendlyAmenity(text) {
+    // Aceitar animais é uma comodidade da hospedagem, não um hotel para animais.
+    return text.replace(/\bpet[\s-]+friendly\b/g, " ");
+  }
+
   function isPetService(item) {
     var source = clean([itemName(item), itemDescription(item), ensureArray(item && item.tags).join(" ")].join(" ")).toLowerCase();
-    return /\bpet\b|canil|c[aã]es de pastoreio/.test(source);
+    return /\bpet\b|canil|c[aã]es de pastoreio/.test(withoutPetFriendlyAmenity(source));
   }
 
   function isGenericListing(item) {
