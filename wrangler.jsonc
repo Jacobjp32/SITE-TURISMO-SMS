@@ -1,0 +1,15 @@
+{
+  // Portal público de Turismo SMS no Worker existente `site-turismo-sms`
+  // (conta Cloudflare da prefeitura, subdomain imprensapmsms).
+  // Sem `routes` e sem domínio customizado: não altera DNS.
+  // Produção continua no GitHub Pages até a troca autorizada do
+  // CNAME turismo.saomateusdosul.pr.gov.br.
+  "name": "site-turismo-sms",
+  "compatibility_date": "2026-10-27",
+  "workers_dev": true,
+  "assets": {
+    "directory": ".",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}

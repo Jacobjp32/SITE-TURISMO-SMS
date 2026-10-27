@@ -27,7 +27,10 @@
     "test:rules:storage:node": "node --test --test-concurrency=1 tests/storage.rules.test.mjs",
     "test:rules:node": "npm run test:rotas:model && npm run test:rotas:dry-run && npm run test:media-reference-safety && npm run test:rules:firestore:node && npm run test:rules:storage:node",
     "test:rules": "firebase emulators:exec --only firestore,storage --project demo-turismo-sms-rules-test \"npm run test:rules:node\"",
-    "test:admin-ui": "firebase emulators:exec --only auth,firestore,storage --project demo-turismo-sms-admin-finalization \"node --test --test-concurrency=1 tests/admin-ui.browser.test.mjs\""
+    "test:admin-ui": "firebase emulators:exec --only auth,firestore,storage --project demo-turismo-sms-admin-finalization \"node --test --test-concurrency=1 tests/admin-ui.browser.test.mjs\"",
+    "cf:dry-run": "npx --yes wrangler@4.153.0 deploy --dry-run",
+    "cf:dev": "npx --yes wrangler@4.153.0 dev",
+    "cf:deploy": "npx --yes wrangler@4.153.0 deploy"
   },
   "devDependencies": {
     "@firebase/rules-unit-testing": "5.0.1",

@@ -6,6 +6,17 @@ Use este arquivo para manter continuidade entre sessões do Claude, Claude Code,
 
 ---
 
+## 2026-10-27 — Configuração do Worker Cloudflare `site-turismo-sms`
+
+**Status:** configuração local para a conta da prefeitura publicar o portal no Worker que hoje responde "Hello world". Sem DNS, sem deploy e sem retirar o GitHub Pages.
+
+- **`wrangler.jsonc`:** Worker `site-turismo-sms`, assets na raiz, `html_handling: auto-trailing-slash` (o mesmo desenho do Pages: `/eventos` serve `eventos.html`, `/eventos/` serve a ponte) e `not_found_handling: 404-page`. Sem rotas e sem domínio.
+- **`.assetsignore`:** exclui quatro MP4 acima do limite de 25 MiB. A hero já usa `videos/ROTA_DO_TURISMO.hero-720p-opt-v1.mp4` (cerca de 19 MiB).
+- **`videos/cf/` + `_redirects`:** a galeria continua pedindo os nomes originais. No Worker, proxy 200 entrega cópias 720p abaixo de 25 MiB. O GitHub Pages ignora `_redirects` e segue com os originais.
+- **Passo a passo:** `docs/cloudflare-site-turismo-sms.md`.
+
+---
+
 ## 2026-10-19 — PAINEL: "sem permissão" ao salvar empreendimento publicado (limite das Rules)
 
 **Status:** branch `fix/admin-limite-expressoes-regras` (base `origin/main` 08c8b53), Rules e painel publicados com autorização do usuário. Rollback: tag `admin-limite-regras-rollback` (= 08c8b53) — redeploy de `firestore.rules` dessa tag (conteúdo idêntico ao ruleset publicado em 16/10).
