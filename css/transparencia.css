@@ -239,3 +239,345 @@
                 display: none;
             }
         }
+
+/* ============================================================ */
+/* Viajantes + Seguras — programa estadual (divulgação)          */
+/* Área institucional voltada ao trade; separada da prestação   */
+/* de contas por cabeçalho próprio e paleta do portal.          */
+/* ============================================================ */
+.vms {
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid rgba(10, 61, 46, 0.12);
+}
+
+.vms > :not(.vms-hero) {
+    margin-left: 2.5rem;
+    margin-right: 2.5rem;
+}
+
+.vms-hero {
+    background: linear-gradient(135deg, var(--forest-deep), #0d5a3e);
+    color: #fff;
+    padding: 2.5rem;
+}
+
+.vms-eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--forest-deep);
+    background: var(--gold-polish);
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+}
+
+.vms-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    line-height: 1.1;
+    font-weight: 700;
+    margin: 0 0 0.9rem;
+}
+
+.vms-title-sub {
+    display: block;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    color: #f1d9bd;
+    margin-top: 0.35rem;
+}
+
+.vms-lead {
+    max-width: 62ch;
+    font-size: 1.02rem;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.vms-origin {
+    margin-top: 1.25rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.78);
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    padding-top: 0.9rem;
+}
+
+.vms-disclaimer {
+    margin-top: 1.75rem;
+    padding: 0.9rem 1.1rem;
+    font-size: 0.88rem;
+    color: #4a4a4a;
+    background: var(--cream-light);
+    border-radius: 10px;
+    border: 1px solid rgba(10, 61, 46, 0.18);
+}
+
+.vms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.75rem;
+}
+
+/* Ícone ao lado do título; demais conteúdos ocupam a largura toda */
+.vms-card {
+    background: #fff;
+    border: 1px solid #ece7dc;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 0.65rem;
+    align-content: start;
+}
+
+.vms-card > :not(.vms-card-icon):not(h3) {
+    grid-column: 1 / -1;
+}
+
+.vms-card-icon {
+    display: flex;
+    align-items: center;
+    color: var(--gold-polish);
+    margin-bottom: 0.6rem;
+}
+
+.vms-card h3 {
+    font-size: 1.1rem;
+    color: var(--forest-deep);
+    margin-bottom: 0.6rem;
+    align-self: center;
+}
+
+.vms-card p {
+    font-size: 0.92rem;
+    color: #555;
+    margin-bottom: 0.6rem;
+}
+
+.vms-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.4rem 0 0.6rem;
+}
+
+.vms-list li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.92rem;
+    color: #444;
+    margin-bottom: 0.4rem;
+}
+
+.vms-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold-polish);
+}
+
+.vms-small {
+    font-size: 0.82rem;
+    color: #666;
+}
+
+.vms-block-title {
+    font-size: 1.3rem;
+    color: var(--forest-deep);
+    margin-bottom: 0.4rem;
+}
+
+.vms-block-intro {
+    font-size: 0.92rem;
+    color: #555;
+    margin-bottom: 1.25rem;
+}
+
+.vms-steps-wrap {
+    margin-top: 2.25rem;
+}
+
+.vms-steps {
+    list-style: none;
+    counter-reset: vms-step;
+    padding: 0;
+    margin: 0 0 1rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1rem;
+}
+
+.vms-steps li {
+    counter-increment: vms-step;
+    position: relative;
+    background: var(--cream-light);
+    border-radius: 12px;
+    padding: 3.1rem 1.1rem 1.2rem;
+}
+
+.vms-steps li::before {
+    content: counter(vms-step);
+    position: absolute;
+    top: 1rem;
+    left: 1.1rem;
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    background: var(--forest-deep);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vms-steps strong {
+    display: block;
+    color: var(--forest-deep);
+    margin-bottom: 0.35rem;
+}
+
+.vms-steps span {
+    display: block;
+    font-size: 0.86rem;
+    color: #555;
+}
+
+.vms-resources {
+    margin-top: 2.25rem;
+    margin-bottom: 2.5rem;
+}
+
+.vms-resources-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    gap: 1.25rem;
+    margin-top: 1rem;
+    align-items: start;
+}
+
+.vms-links {
+    display: grid;
+    gap: 0.7rem;
+}
+
+.vms-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.95rem 1.2rem;
+    border-radius: 10px;
+    border: 1px solid rgba(10, 61, 46, 0.25);
+    color: var(--forest-deep);
+    background: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.vms-link:hover {
+    background: var(--cream-light);
+    border-color: var(--forest-deep);
+}
+
+.vms-link--primary {
+    background: var(--forest-deep);
+    border-color: var(--forest-deep);
+    color: #fff;
+}
+
+.vms-link--primary:hover {
+    background: #0a5d3e;
+    border-color: #0a5d3e;
+}
+
+.vms-ext {
+    flex-shrink: 0;
+    font-size: 1.05rem;
+}
+
+.vms-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.vms-contact {
+    background: var(--cream-light);
+    border-radius: 12px;
+    padding: 1.4rem;
+    border: 1px solid rgba(10, 61, 46, 0.14);
+}
+
+.vms-contact h4 {
+    color: var(--forest-deep);
+    margin-bottom: 0.5rem;
+}
+
+.vms-contact p {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.6rem;
+}
+
+.vms-contact-line span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #7a6a55;
+}
+
+.vms-contact-line a {
+    color: var(--forest-deep);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+body.high-contrast .vms-hero,
+body.high-contrast .vms-card,
+body.high-contrast .vms-steps li,
+body.high-contrast .vms-contact,
+body.high-contrast .vms-disclaimer,
+body.high-contrast .vms-link { background: #111 !important; color: #fff !important; border-color: #fff !important; }
+body.high-contrast .vms h3,
+body.high-contrast .vms h4,
+body.high-contrast .vms p,
+body.high-contrast .vms li,
+body.high-contrast .vms span,
+body.high-contrast .vms strong { color: #fff !important; }
+
+@media (max-width: 768px) {
+    .vms-hero {
+        padding: 1.75rem 1.5rem;
+    }
+
+    .vms > :not(.vms-hero) {
+        margin-left: 1.5rem;
+        margin-right: 1.5rem;
+    }
+
+    .vms-resources-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vms-link { transition: none; }
+}
