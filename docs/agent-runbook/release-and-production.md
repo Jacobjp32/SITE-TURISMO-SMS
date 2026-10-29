@@ -88,6 +88,17 @@ efêmero, explicitamente autorizado e removível puder comprovar o contrato.
 5. Publicar apenas o escopo autorizado.
 6. Verificar alinhamento remoto e smoke correspondente à autorização.
 
+## Worker Cloudflare preparado
+
+O portal também pode ser publicado no Worker `site-turismo-sms` da conta
+da prefeitura, sem script de aplicação: assets estáticos da raiz, com
+`wrangler.jsonc`. O passo a passo, a conta `imprensapmsms` e o que fica de
+fora do upload estão em `docs/cloudflare-site-turismo-sms.md`.
+
+Isso não troca o host público. O `CNAME` e o domínio
+`turismo.saomateusdosul.pr.gov.br` continuam no GitHub Pages até uma
+autorização própria de DNS. O `wrangler.jsonc` não declara rota nem domínio.
+
 ## STOP CONDITIONS
 
 - Qualquer SHA/base fixada diverge após fetch.

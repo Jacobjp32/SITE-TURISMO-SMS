@@ -14,6 +14,7 @@ depois, o source e os testes indicados por ele.
 | Firebase, Rules e Emulators | `firebase-and-emulators.md` | `package.json`, `firebase.json`, testes de Rules |
 | Git, EOL e paths protegidos | `git-integrity.md` | objetos Git e árvore rastreada |
 | GitHub Pages e produção | `release-and-production.md` | configuração de Pages, `CNAME`, `js/site-meta.js` |
+| Worker Cloudflare do portal (ainda não é o DNS público) | `../cloudflare-site-turismo-sms.md` | `wrangler.jsonc`, `.assetsignore`, `_redirects` |
 | Save Contract C1 V2 | `cms-establishments-v2.md` | Admin, Rules e testes canônicos |
 
 Execute o guardrail estrutural com:

@@ -1,0 +1,6 @@
+# GitHub Pages ignora este arquivo.
+# No Worker, status 200 é proxy interno: a URL da galeria não muda e o
+# arquivo servido é a cópia abaixo de 25 MiB. Os originais continuam no
+# repositório para o GitHub Pages.
+/videos/INSTITUCIONAL_POLONES.mp4 /videos/cf/institucional-polones.mp4 200
+/videos/VIDEO_ABERTURA_4K.mp4 /videos/cf/abertura-sao-mateus.mp4 200

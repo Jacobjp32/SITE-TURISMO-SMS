@@ -1,0 +1,28 @@
+# Não publicar como asset do Worker. O site público continua sendo a raiz
+# do repositório (o mesmo conjunto que o GitHub Pages serve), menos o que
+# está listado aqui.
+
+# Dependências, estado local e segredos
+node_modules
+.git
+.github
+.wrangler
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+*.pem
+*.key
+*.p12
+serviceAccount*.json
+credentials*.json
+
+# Workers Static Assets recusa arquivo acima de 25 MiB.
+# INSTITUCIONAL_POLONES e VIDEO_ABERTURA_4K são pedidos pela galeria;
+# `_redirects` faz proxy 200 para as cópias em videos/cf/.
+# Os dois ROTA_DO_TURISMO maiores não são referenciados pelo HTML
+# (a hero usa videos/ROTA_DO_TURISMO.hero-720p-opt-v1.mp4, dentro do limite).
+videos/VIDEO_ABERTURA_4K.mp4
+videos/INSTITUCIONAL_POLONES.mp4
+videos/ROTA_DO_TURISMO.mp4
+videos/ROTA_DO_TURISMO.hero-720p.mp4
