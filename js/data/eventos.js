@@ -5,7 +5,7 @@ window.TURISMO_EVENTOS = [
     activeEditionId: "agrosamas-2026",
     nome: "AgroSamas",
     categoria: "Eventos",
-    descricao: "5º AgroSamas adiado preventivamente. Nova data ainda não definida; será divulgada pelos canais oficiais.",
+    descricao: "V AgroSamas 2026 cancelado de forma preventiva, diante das cheias do Rio Iguaçu. O Concurso Miss São Mateus do Sul, em 13 de novembro, no Parque de Exposições, está mantido.",
     imagem: "images/agrosamas-publico-show-noturno.webp",
     galeria: [
       "images/agrosamas-publico-show-noturno.webp",
@@ -18,11 +18,11 @@ window.TURISMO_EVENTOS = [
     editionUrl: "/agrosamas-2026",
     localId: "rua-do-mathe",
     localUrl: "/local?id=rua-do-mathe",
-    periodo: "Nova data a definir",
+    periodo: "Edição 2026 cancelada",
     local: "Rua do Mathe",
     recorrencia: "anual",
     coordenadas: { lat: -25.878, lng: -50.385 },
-    tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "adiado"]
+    tags: ["eventos", "agrosamas", "feira", "shows", "agropecuária", "cancelado"]
   },
   {
     id: "natal-ouro-verde",

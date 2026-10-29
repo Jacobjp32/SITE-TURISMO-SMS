@@ -86,17 +86,20 @@ body.agrosamas-page {
     display: none !important;
 }
 
-.agro-postponement-notice {
-    background: #fff7e9;
-    border-left: 7px solid var(--agro-rust);
-    box-shadow: 0 12px 32px rgba(12, 25, 18, 0.2);
+/* ---- Edição 2026 cancelada --------------------------------------------
+   Comunicado oficial de 27/10/2026. O laranja acompanha a arte oficial e
+   mantém contraste AA sobre o fundo escuro da série. */
+.agro-cancel-notice {
+    background: var(--agro-white);
+    border: 2px solid #f0823a;
+    border-radius: 12px;
     color: var(--agro-ink);
     margin: 1.35rem 0;
     max-width: 680px;
     padding: clamp(1rem, 2vw, 1.45rem);
 }
 
-.agro-postponement-notice strong {
+.agro-cancel-notice strong {
     color: var(--agro-rust-dark);
     display: block;
     font-size: clamp(1.2rem, 2.3vw, 1.65rem);
@@ -105,11 +108,134 @@ body.agrosamas-page {
     text-transform: uppercase;
 }
 
-.agro-postponement-notice p {
+.agro-cancel-notice p {
     font-size: clamp(0.88rem, 1.2vw, 1rem);
     line-height: 1.5;
     margin-top: 0.6rem;
     overflow-wrap: anywhere;
+}
+
+.agro-cancel-notice .agro-cancel-notice__keep {
+    border-top: 1px solid var(--agro-line);
+    font-weight: 700;
+    padding-top: 0.6rem;
+}
+
+.agro-cancel {
+    background: var(--agro-ink);
+    color: var(--agro-white);
+}
+
+.agro-cancel__inner {
+    display: grid;
+    gap: var(--agro-gap-md);
+    margin: 0 auto;
+    max-width: var(--agro-max);
+    padding: clamp(1.5rem, 3vw, 2.75rem) var(--agro-gutter) clamp(2rem, 4vw, 3.5rem);
+}
+
+.agro-cancel h1 {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-family: var(--agro-display);
+    font-size: var(--agro-display-lg);
+    gap: 0.25em 0.45em;
+    letter-spacing: var(--agro-ls-heading);
+    line-height: var(--agro-lh-display);
+}
+
+.agro-cancel__status {
+    background: #f0823a;
+    border-radius: 0.2em;
+    color: var(--agro-ink);
+    font-size: 0.78em;
+    letter-spacing: 0.02em;
+    padding: 0.06em 0.32em 0.1em;
+    text-transform: uppercase;
+}
+
+.agro-cancel__art {
+    margin: 0;
+}
+
+.agro-cancel__art img {
+    border-radius: 12px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+    display: block;
+    height: auto;
+    width: 100%;
+}
+
+.agro-cancel__body {
+    align-items: start;
+    display: grid;
+    gap: var(--agro-gap-md);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+
+.agro-cancel__copy p {
+    color: rgba(255, 253, 248, 0.92);
+    font-size: clamp(1rem, 1.2vw, 1.12rem);
+    line-height: 1.65;
+    max-width: 62ch;
+}
+
+.agro-cancel__copy p + p {
+    margin-top: 0.85rem;
+}
+
+.agro-cancel__copy .agro-cancel__source {
+    color: var(--agro-straw);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.agro-cancel__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    grid-column: 1;
+}
+
+.agro-cancel__keep {
+    background: var(--agro-white);
+    border: 2px solid #f0823a;
+    border-radius: 12px;
+    color: var(--agro-ink);
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+.agro-cancel__keep-label {
+    background: #f0823a;
+    border-radius: 999px;
+    color: var(--agro-ink);
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 850;
+    letter-spacing: 0.14em;
+    padding: 0.3rem 0.75rem;
+    text-transform: uppercase;
+}
+
+.agro-cancel__keep h2 {
+    font-size: var(--agro-heading-md);
+    line-height: 1.25;
+    margin: 0.85rem 0 0.5rem;
+}
+
+.agro-cancel__keep p {
+    line-height: 1.6;
+}
+
+.agro-info__keep {
+    border: 2px solid #f0823a;
+}
+
+@media (max-width: 820px) {
+    .agro-cancel__body {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 
 .agrosamas-page a:focus-visible,
@@ -248,14 +374,6 @@ body.agrosamas-page {
     padding: clamp(1.4rem, 2.2vw, 2rem) var(--agro-gutter) clamp(1.6rem, 2.4vw, 2.2rem);
     position: relative;
     z-index: 1;
-}
-
-.agro-postponed-page .agro-hero__inner {
-    grid-template-columns: minmax(0, 1fr);
-}
-
-.agro-postponed-page .agro-hero__copy {
-    max-width: 760px;
 }
 
 .agro-portal-mark,

@@ -139,9 +139,9 @@ function browserHarness() {
 
 test('physical edition route loads the canonical contract before its page controller', () => {
     assert.match(PAGE_SOURCE, /<link rel="canonical" href="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/agrosamas-2026">/);
-    const contractIndex = PAGE_SOURCE.indexOf('js/data/agrosamas.js?v=agro-postponed-20260924');
-    const bindingsIndex = PAGE_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-postponed-20260924');
-    const pageIndex = PAGE_SOURCE.indexOf('js/agrosamas-2026.js?v=agro-postponed-20260924');
+    const contractIndex = PAGE_SOURCE.indexOf('js/data/agrosamas.js?v=agro-cancelado-20261029');
+    const bindingsIndex = PAGE_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-cancelado-20261029');
+    const pageIndex = PAGE_SOURCE.indexOf('js/agrosamas-2026.js?v=agro-cancelado-20261029');
     assert.ok(contractIndex > -1);
     assert.ok(bindingsIndex > contractIndex);
     assert.ok(pageIndex > bindingsIndex);
@@ -149,12 +149,13 @@ test('physical edition route loads the canonical contract before its page contro
     assert.match(PAGE_SCRIPT, /contractApi\.getPublicProgramming\(/);
 });
 
-test('hero and practical facts use contract bindings instead of copied date boundaries', () => {
+test('cancellation notice opens the page and practical facts use contract bindings', () => {
     assert.doesNotMatch(PAGE_SOURCE + PAGE_SCRIPT, /2026-09-18|2026-09-21/);
-    assert.match(PAGE_SOURCE, /data-agro-start-day/);
-    assert.match(PAGE_SOURCE, /data-agro-end-day/);
-    assert.match(PAGE_SOURCE, /data-agrosamas-bind="month"/);
-    assert.match(PAGE_SOURCE, /data-agrosamas-bind="year"/);
+    const headerStart = PAGE_SOURCE.indexOf('<header class="agro-cancel"');
+    assert.ok(headerStart > -1 && headerStart < PAGE_SOURCE.indexOf('id="visao-geral"'));
+    assert.match(PAGE_SOURCE, /<h1 id="agro-title"><span class="agro-cancel__event">V AgroSamas 2026<\/span> <span class="agro-cancel__status"[^>]*>Cancelado<\/span><\/h1>/);
+    assert.match(PAGE_SOURCE, /<aside class="agro-cancel__keep"[\s\S]*?Concurso Miss São Mateus do Sul mantido[\s\S]*?no Parque de Exposições, está mantido\./);
+    assert.match(PAGE_SOURCE, /data-agrosamas-bind="date-range"/);
     assert.match(PAGE_SOURCE, /data-agro-location-scope/);
     assert.match(PAGE_SOURCE, /data-agro-location-link/);
     assert.match(PAGE_SCRIPT, /edition\.location\.route/);
@@ -183,14 +184,19 @@ test('the page contains the complete destination journey and a route back to the
     assert.doesNotMatch(PAGE_SOURCE, /firebase|admin-firebase/i);
 });
 
-test('visual foundation uses destination assets and the byte-identical approved event identity', () => {
+test('visual foundation uses destination assets, the official cancellation art and the approved identity', () => {
     assert.match(PAGE_STYLES, /\.\.\/images\/RUA_DO_MATHE\.jpg/);
     assert.match(PAGE_SOURCE, /images\/WEBP\/RUA-DO-MATHE-_2_\.webp/);
     assert.doesNotMatch(PAGE_SOURCE + PAGE_STYLES, /images\/empreendimentos\/agrosamas|agrosamas-publico-show-noturno/i);
-    assert.equal((PAGE_SOURCE.match(/<img[^>]+data-agrosamas-logo/g) || []).length, 1);
-    assert.match(PAGE_SOURCE, /data-agrosamas-logo src="images\/agrosamas\/2026\/logo-5-agrosamas\.png" width="1287" height="1222"/);
-    assert.doesNotMatch(PAGE_STYLES, /\.agro-title__official-logo\s*\{[^}]*\bfilter\s*:/s);
+    assert.match(PAGE_SOURCE, /<source media="\(max-width: 720px\)" type="image\/webp" width="1080" height="1350" srcset="images\/agrosamas\/2026\/agrosamas-2026-cancelado-feed-720\.webp 720w, images\/agrosamas\/2026\/agrosamas-2026-cancelado-feed-1080\.webp 1080w"/);
+    assert.match(PAGE_SOURCE, /<img src="images\/agrosamas\/2026\/agrosamas-2026-cancelado-banner-1280\.webp"[^>]+width="1920" height="1080" alt="Arte oficial do comunicado: V AgroSamas 2026 cancelado\./);
+    assert.doesNotMatch(PAGE_STYLES, /\.agro-cancel__art img\s*\{[^}]*object-fit\s*:\s*cover/s);
     for (const path of [
+        'images/agrosamas/2026/agrosamas-2026-cancelado-banner-1280.webp',
+        'images/agrosamas/2026/agrosamas-2026-cancelado-banner-1920.webp',
+        'images/agrosamas/2026/agrosamas-2026-cancelado-feed-720.webp',
+        'images/agrosamas/2026/agrosamas-2026-cancelado-feed-1080.webp',
+        'images/agrosamas/2026/agrosamas-2026-cancelado-og-1200x675.jpg',
         'images/agrosamas/2026/logo-5-agrosamas.png',
         'images/RUA_DO_MATHE.jpg',
         'images/WEBP/RUA-DO-MATHE-_1_.webp',
@@ -205,38 +211,45 @@ test('visual foundation uses destination assets and the byte-identical approved 
     assert.equal(createHash('sha256').update(logoBytes).digest('hex'), '5ceb3d4ffba413d88f2e157d8202916f206c049c04bdb505ee5629043990b839');
 });
 
-test('postponement remains visible before, during and after the former dates without countdown or scheduled Event schema', () => {
+test('cancellation stays visible across every announced date with no countdown and a cancelled Event schema', () => {
     const { context, document, elements } = browserHarness();
     const page = context.AgroSamas2026Page;
     assert.equal(page.renderContractBasics(), true);
-    assert.equal(elements.eventSchema.removed, true);
-    assert.match(document.title, /5º AgroSamas adiado/);
+    assert.notEqual(elements.eventSchema.removed, true);
+    const schema = JSON.parse(elements.eventSchema.textContent);
+    assert.equal(schema.eventStatus, 'https://schema.org/EventCancelled');
+    assert.equal(schema.startDate, '2026-11-13');
+    assert.equal(schema.endDate, '2026-11-15');
+    assert.match(document.title, /V AgroSamas 2026 cancelado/);
+    const staticSchema = JSON.parse(PAGE_SOURCE.match(/<script type="application\/ld\+json" id="agrosamas-event-schema">(.*?)<\/script>/)[1]);
+    assert.equal(staticSchema.eventStatus, 'https://schema.org/EventCancelled');
 
-    for (const instant of ['2026-09-17T23:00:00-03:00', '2026-09-18T12:00:00-03:00', '2026-09-22T00:00:00-03:00']) {
-        assert.equal(page.renderTemporalState(instant), context.AgroSamasContract.TEMPORAL_STATE.POSTPONED);
-        assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'POSTPONED');
+    for (const instant of ['2026-09-18T12:00:00-03:00', '2026-11-12T23:00:00-03:00', '2026-11-13T12:00:00-03:00', '2026-11-16T00:00:00-03:00']) {
+        assert.equal(page.renderTemporalState(instant), context.AgroSamasContract.TEMPORAL_STATE.CANCELLED);
+        assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'CANCELLED');
         assert.equal(elements.countdown.hidden, true);
-        assert.match(elements.heroKicker.textContent, /EVENTO ADIADO/);
-        assert.match(elements.status.textContent, /adiado.*nova data ainda não definida/);
+        assert.match(elements.heroKicker.textContent, /EDIÇÃO CANCELADA/);
+        assert.match(elements.status.textContent, /V AgroSamas 2026 cancelado/);
         assert.doesNotMatch(elements.countdownAccessible.textContent, /Faltam/);
     }
-    assert.equal(elements.primaryAction.getAttribute('href'), '#programacao');
+    assert.equal(elements.primaryAction.getAttribute('href'), '#planeje');
+    assert.doesNotMatch(PAGE_SOURCE, /data-countdown|role="timer"|adiad|nova data|remarca|a definir/i);
 });
 
-test('postponed edition presents an undated programming update and no old day tabs', () => {
+test('cancelled edition replaces the programme with an institutional notice and no day tabs', () => {
     const { context, elements } = browserHarness();
     const programming = context.AgroSamas2026Page.renderProgramming();
 
     assert.equal(programming.availability, 'UNAVAILABLE');
     assert.equal(programming.items.length, 0);
     assert.equal(elements.programDays.children.length, 0);
-    assert.match(elements.programContent.textContent, /Programação será atualizada após a definição da nova data/);
-    assert.match(elements.programContent.textContent, /nova data ainda não foi definida/);
-    assert.doesNotMatch(elements.programContent.textContent, /20 SET|Roupa Nova|2026-09-20/);
-    assert.equal(elements.programAvailability.textContent, 'Evento adiado');
+    assert.match(elements.programContent.textContent, /A programação do V AgroSamas 2026 foi cancelada/);
+    assert.match(elements.programContent.textContent, /13, 14 e 15 de novembro não serão realizadas/);
+    assert.doesNotMatch(elements.programContent.textContent, /20 SET|Roupa Nova|2026-09-20|nova data/);
+    assert.equal(elements.programAvailability.textContent, 'Programação cancelada');
 });
 
-test('a supplied old-date attraction cannot be republished while the edition is postponed', () => {
+test('a supplied attraction cannot be republished while the edition is cancelled', () => {
     const { context, elements } = browserHarness();
     const edition = context.AgroSamasContract.contract.edition;
     const date = edition.originalSchedule.startDate;
@@ -263,12 +276,12 @@ test('a supplied old-date attraction cannot be republished while the edition is 
     assert.equal(programming.items.length, 0);
     assert.equal(elements.programDays.children.length, 0);
     assert.doesNotMatch(elements.programContent.textContent, /19:00|Atração confirmada|Palco confirmado|Música/);
-    assert.match(elements.programContent.textContent, /Programação será atualizada/);
+    assert.match(elements.programContent.textContent, /foi cancelada/);
 });
 
 test('accessibility, responsive and reduced-motion contracts are explicit', () => {
-    assert.match(PAGE_SOURCE, /role="timer" aria-live="off"/);
     assert.match(PAGE_SOURCE, /role="tablist" aria-label="Dias do AgroSamas"/);
+    assert.match(PAGE_SOURCE, /<aside class="agro-cancel__keep" aria-labelledby="agro-keep-title">/);
     assert.match(PAGE_SCRIPT, /ArrowRight/);
     assert.match(PAGE_SCRIPT, /ArrowLeft/);
     assert.match(PAGE_STYLES, /@media \(max-width: 1050px\)/);

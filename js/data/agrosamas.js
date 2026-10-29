@@ -16,7 +16,7 @@
         PRE_EVENT: 'PRE_EVENT',
         EVENT_LIVE: 'EVENT_LIVE',
         POST_EVENT: 'POST_EVENT',
-        POSTPONED: 'POSTPONED',
+        CANCELLED: 'CANCELLED',
         UNKNOWN: 'UNKNOWN'
     });
     const LOCALE_BY_LANGUAGE = Object.freeze({
@@ -31,6 +31,7 @@
         municipality: 'https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3565/prefeitura-de-sao-mateus-do-sul-abre-inscricoes-para-chamamento-publico-para-comercializacao-de-chopp-no-5-agrosamas',
         miss: 'https://www.saomateusdosul.pr.gov.br/portal/noticias/0/3/3591/inscricoes-abertas-para-o-miss-sao-mateus-do-sul-2026/',
         contentOwner: 'user-provided:agro-05-content-owner-2026-09-10',
+        cancellationNotice: 'user-provided:prefeitura-comunicado-oficial-2026-10-27',
         tourismPortal: 'https://turismo.saomateusdosul.pr.gov.br/'
     });
 
@@ -56,11 +57,30 @@
             edition: 5,
             name: '5º AgroSamas',
             year: 2026,
-            status: 'POSTPONED',
-            newDate: null,
-            postponement: {
-                reason: 'O evento foi adiado preventivamente por recomendação da Defesa Civil, considerando as orientações da Defesa Civil do Paraná e do Simepar.',
-                update: 'A nova data ainda não foi definida e será divulgada posteriormente pelos canais oficiais.'
+            status: 'CANCELLED',
+            cancellation: {
+                announcedAt: '2026-10-27',
+                headline: 'V AgroSamas 2026 — CANCELADO',
+                statement: 'A Prefeitura Municipal de São Mateus do Sul informa o cancelamento da programação do V AgroSamas 2026, que estava prevista para os dias 13, 14 e 15 de novembro.',
+                reason: 'A decisão foi tomada de forma preventiva diante do cenário de cheias do Rio Iguaçu e dos riscos relacionados às condições meteorológicas, priorizando a segurança da população, dos expositores, trabalhadores e demais envolvidos.',
+                cancelledSchedule: {
+                    startDate: '2026-11-13',
+                    endDate: '2026-11-15'
+                },
+                maintainedActivity: {
+                    id: 'miss-sao-mateus-do-sul-2026',
+                    name: 'Concurso Miss São Mateus do Sul',
+                    date: '2026-11-13',
+                    venue: 'Parque de Exposições',
+                    status: 'MAINTAINED',
+                    notice: 'O Concurso Miss São Mateus do Sul, previsto para 13 de novembro, no Parque de Exposições, está mantido.'
+                },
+                art: {
+                    banner: '/images/agrosamas/2026/agrosamas-2026-cancelado-banner-1920.webp',
+                    feed: '/images/agrosamas/2026/agrosamas-2026-cancelado-feed-1080.webp',
+                    share: '/images/agrosamas/2026/agrosamas-2026-cancelado-og-1200x675.jpg'
+                },
+                source: OFFICIAL_SOURCES.cancellationNotice
             },
             route: '/agrosamas-2026',
             canonicalUrl: 'https://turismo.saomateusdosul.pr.gov.br/agrosamas-2026',
@@ -146,10 +166,10 @@
                     sources: [OFFICIAL_SOURCES.event]
                 },
                 missDate: {
-                    status: 'LEGACY',
-                    value: '2026-09-18',
-                    publicForEdition: false,
-                    sources: [OFFICIAL_SOURCES.miss]
+                    status: 'CONFIRMED',
+                    value: '2026-11-13',
+                    venue: 'Parque de Exposições',
+                    sources: [OFFICIAL_SOURCES.cancellationNotice]
                 },
                 anniversaryIntegration: {
                     status: 'CONFIRMED',
@@ -245,7 +265,7 @@
     function resolveTemporalState(now) {
         const current = asTime(now);
         if (!Number.isFinite(current)) return TEMPORAL_STATE.UNKNOWN;
-        if (contract.edition.status === 'POSTPONED') return TEMPORAL_STATE.POSTPONED;
+        if (contract.edition.status === 'CANCELLED') return TEMPORAL_STATE.CANCELLED;
         const start = Date.parse(contract.edition.temporal.liveStartAt);
         const end = Date.parse(contract.edition.temporal.liveEndExclusiveAt);
         if (!Number.isFinite(current) || !Number.isFinite(start) || !Number.isFinite(end) || start >= end) {
@@ -262,12 +282,12 @@
     }
 
     function formatDateRange(language, options) {
-        if (contract.edition.status === 'POSTPONED') {
+        if (contract.edition.status === 'CANCELLED') {
             return {
-                pt: 'Nova data a definir',
-                en: 'New date to be announced',
-                es: 'Nueva fecha por definir',
-                pl: 'Nowy termin zostanie podany'
+                pt: 'Edição 2026 cancelada',
+                en: '2026 edition cancelled',
+                es: 'Edición 2026 cancelada',
+                pl: 'Edycja 2026 odwołana'
             }[normalizeLanguage(language)];
         }
         const locale = LOCALE_BY_LANGUAGE[normalizeLanguage(language)];
@@ -286,12 +306,12 @@
     }
 
     function formatStartMonth(language) {
-        if (contract.edition.status === 'POSTPONED') {
+        if (contract.edition.status === 'CANCELLED') {
             return {
-                pt: 'ADIADO',
-                en: 'POSTPONED',
-                es: 'APLAZADO',
-                pl: 'PRZEŁOŻONE'
+                pt: 'CANCELADO',
+                en: 'CANCELLED',
+                es: 'CANCELADO',
+                pl: 'ODWOŁANE'
             }[normalizeLanguage(language)];
         }
         const locale = LOCALE_BY_LANGUAGE[normalizeLanguage(language)];
@@ -303,19 +323,28 @@
     }
 
     function isEditionDate(value) {
-        return contract.edition.status !== 'POSTPONED' &&
+        return contract.edition.status !== 'CANCELLED' &&
             typeof value === 'string' &&
             value >= contract.edition.startDate && value <= contract.edition.endDate;
     }
 
+    function withinSchedule(date, schedule) {
+        return Boolean(date) && date >= schedule.startDate && date <= schedule.endDate;
+    }
+
+    // Esconde ocorrências do AgroSamas 2026 em qualquer período já anunciado
+    // (setembro original ou novembro cancelado). O Concurso Miss São Mateus do
+    // Sul foi mantido e nunca é tratado como ocorrência cancelada.
     function isSupersededOccurrence(raw) {
-        if (contract.edition.status !== 'POSTPONED' || !raw || typeof raw !== 'object') return false;
+        if (contract.edition.status !== 'CANCELLED' || !raw || typeof raw !== 'object') return false;
         const value = raw.date || raw.data || raw.dataInicio;
         const date = typeof value === 'string' ? value.slice(0, 10) : '';
-        const original = contract.edition.originalSchedule;
-        if (date < original.startDate || date > original.endDate) return false;
+        const cancellation = contract.edition.cancellation;
+        if (!withinSchedule(date, contract.edition.originalSchedule) &&
+            !withinSchedule(date, cancellation.cancelledSchedule)) return false;
         const identity = [raw.title, raw.titulo, raw.nome, raw.description, raw.descricao]
             .filter(hasText).join(' ');
+        if (raw.id === cancellation.maintainedActivity.id || /\bmiss\b/i.test([raw.title, raw.titulo, raw.nome].filter(hasText).join(' '))) return false;
         return raw.seriesId === contract.series.id ||
             raw.editionId === contract.edition.id ||
             /agro[\s-]*samas/i.test(identity);
@@ -328,7 +357,7 @@
     function getPublicProgramming(programming) {
         const source = programming || contract.edition.programming;
         const availabilityValues = Object.values(PROGRAMMING_AVAILABILITY);
-        const availability = contract.edition.status === 'POSTPONED'
+        const availability = contract.edition.status === 'CANCELLED'
             ? PROGRAMMING_AVAILABILITY.UNAVAILABLE
             : source && availabilityValues.includes(source.availability)
             ? source.availability

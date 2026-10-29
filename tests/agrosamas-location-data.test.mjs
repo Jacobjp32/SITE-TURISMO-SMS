@@ -147,7 +147,9 @@ test('eventIdentityPreserved=true', () => {
     assert.equal(agrosamas.hubUrl, '/agrosamas');
     assert.equal(agrosamas.editionUrl, '/agrosamas-2026');
     assert.equal(agrosamas.categoria, 'Eventos');
-    assert.equal(agrosamas.periodo, 'Nova data a definir');
+    assert.equal(agrosamas.periodo, 'Edição 2026 cancelada');
+    assert.match(agrosamas.descricao, /Concurso Miss São Mateus do Sul[^.]*está mantido/);
+    assert.doesNotMatch(agrosamas.descricao + agrosamas.tags.join(' '), /adiad|nova data/i);
     assert.equal(agrosamas.recorrencia, 'anual');
 });
 

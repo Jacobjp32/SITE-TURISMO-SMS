@@ -33,7 +33,7 @@
     }
 
     function editionDates(edition) {
-        if (edition.status === 'POSTPONED' || !edition.startDate || !edition.endDate) return [];
+        if (edition.status === 'CANCELLED' || !edition.startDate || !edition.endDate) return [];
         var start = toUtcNoon(edition.startDate);
         var end = toUtcNoon(edition.endDate);
         var dates = [];
@@ -80,8 +80,35 @@
     function renderSchema(edition) {
         var schema = one('#agrosamas-event-schema');
         if (!schema) return;
-        if (edition.status === 'POSTPONED') {
-            schema.remove();
+        if (edition.status === 'CANCELLED') {
+            var cancellation = edition.cancellation;
+            schema.textContent = JSON.stringify({
+                '@context': 'https://schema.org',
+                '@type': 'Event',
+                name: 'V AgroSamas 2026',
+                description: cancellation.statement + ' ' + cancellation.reason,
+                startDate: cancellation.cancelledSchedule.startDate,
+                endDate: cancellation.cancelledSchedule.endDate,
+                eventStatus: 'https://schema.org/EventCancelled',
+                eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+                url: edition.canonicalUrl,
+                image: ['https://turismo.saomateusdosul.pr.gov.br' + cancellation.art.share],
+                location: {
+                    '@type': 'Place',
+                    name: edition.location.scope,
+                    address: {
+                        '@type': 'PostalAddress',
+                        addressLocality: edition.location.city,
+                        addressRegion: edition.location.state,
+                        addressCountry: edition.location.country
+                    }
+                },
+                organizer: {
+                    '@type': 'GovernmentOrganization',
+                    name: 'Prefeitura Municipal de São Mateus do Sul',
+                    url: 'https://www.saomateusdosul.pr.gov.br'
+                }
+            });
             return;
         }
         var contractApi = api();
@@ -125,8 +152,8 @@
         var contractApi = api();
         if (!contractApi || !document) return false;
         var edition = contractApi.contract.edition;
-        var pageTitle = edition.status === 'POSTPONED'
-            ? edition.name + ' adiado | São Mateus do Sul'
+        var pageTitle = edition.status === 'CANCELLED'
+            ? 'V AgroSamas 2026 cancelado | São Mateus do Sul'
             : edition.name + ' ' + edition.year + ' | São Mateus do Sul';
         document.title = pageTitle;
         all('meta[property="og:title"], meta[name="twitter:title"]').forEach(function (meta) {
@@ -147,13 +174,13 @@
     }
 
     function temporalCopy(state, edition, now) {
-        if (state === 'POSTPONED') {
+        if (state === 'CANCELLED') {
             return {
-                kicker: 'EVENTO ADIADO',
-                lead: edition.postponement.reason + ' ' + edition.postponement.update,
-                status: edition.name + ' adiado · nova data ainda não definida',
-                action: 'Entenda o adiamento',
-                actionTarget: '#programacao'
+                kicker: 'EDIÇÃO CANCELADA',
+                lead: edition.cancellation.statement + ' ' + edition.cancellation.reason,
+                status: 'V AgroSamas 2026 cancelado',
+                action: 'Explorar São Mateus do Sul',
+                actionTarget: '#planeje'
             };
         }
         var timeZone = edition.temporal.timezone;
@@ -344,14 +371,14 @@
         if (!contractApi || !dayContainer || !content) return null;
         var edition = contractApi.contract.edition;
         var programming = contractApi.getPublicProgramming(programmingInput || edition.programming);
-        if (edition.status === 'POSTPONED') {
-            var postponedSection = one('#programacao');
-            if (postponedSection) postponedSection.setAttribute('data-programming-status', 'POSTPONED');
-            setText('[data-program-availability]', 'Evento adiado');
+        if (edition.status === 'CANCELLED') {
+            var cancelledSection = one('#programacao');
+            if (cancelledSection) cancelledSection.setAttribute('data-programming-status', 'CANCELLED');
+            setText('[data-program-availability]', 'Programação cancelada');
             dayContainer.replaceChildren();
             content.replaceChildren(
-                element('h3', '', 'Programação será atualizada após a definição da nova data.'),
-                element('p', '', edition.postponement.update)
+                element('h3', '', 'A programação do V AgroSamas 2026 foi cancelada.'),
+                element('p', '', 'As atividades previstas para 13, 14 e 15 de novembro não serão realizadas. A decisão foi preventiva, diante das cheias do Rio Iguaçu e dos riscos meteorológicos.')
             );
             return programming;
         }

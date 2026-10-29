@@ -68,12 +68,13 @@ test('canonical contract has stable, immutable series and edition identities', (
     assert.equal(descriptor.configurable, false);
 });
 
-test('postponed edition has no current date and retains superseded dates only as history', () => {
+test('cancelled edition has no current date, keeps the official notice and the maintained Miss contest', () => {
     const { api } = loadContract();
     const edition = api.contract.edition;
 
-    assert.equal(edition.status, 'POSTPONED');
-    assert.equal(edition.newDate, null);
+    assert.equal(edition.status, 'CANCELLED');
+    assert.equal(edition.newDate, undefined);
+    assert.equal(edition.postponement, undefined);
     assert.equal(edition.startDate, null);
     assert.equal(edition.endDate, null);
     assert.equal(edition.durationDays, null);
@@ -86,17 +87,26 @@ test('postponed edition has no current date and retains superseded dates only as
     assert.equal(edition.location.scope, 'Rua do Mathe e entorno');
     assert.equal(edition.location.city, 'São Mateus do Sul');
     assert.equal(edition.location.state, 'PR');
-    assert.equal(edition.facts.missDate.value, '2026-09-18');
-    assert.equal(edition.facts.missDate.status, api.CONTENT_STATUS.LEGACY);
-    assert.equal(edition.facts.missDate.publicForEdition, false);
+    assert.equal(edition.facts.missDate.value, '2026-11-13');
+    assert.equal(edition.facts.missDate.venue, 'Parque de Exposições');
+    assert.equal(edition.facts.missDate.status, api.CONTENT_STATUS.CONFIRMED);
     assert.equal(edition.facts.dates.status, api.CONTENT_STATUS.LEGACY);
     assert.equal(edition.facts.dates.publicForEdition, false);
     assert.equal(edition.facts.anniversaryIntegration.status, 'CONFIRMED');
     assert.equal(edition.facts.anniversaryIntegration.value.years, 118);
-    assert.equal(api.formatDateRange('pt'), 'Nova data a definir');
-    assert.doesNotMatch(api.formatDateRange('pt'), /18|19|20|21|setembro/i);
-    assert.match(edition.postponement.reason, /Defesa Civil do Paraná e do Simepar/);
-    assert.match(edition.postponement.update, /nova data ainda não foi definida/i);
+    assert.equal(api.formatDateRange('pt'), 'Edição 2026 cancelada');
+    assert.doesNotMatch(api.formatDateRange('pt'), /\b(?:18|19|20|21)\b|setembro|nova data/i);
+    const cancellation = edition.cancellation;
+    assert.equal(cancellation.announcedAt, '2026-10-27');
+    assert.equal(cancellation.cancelledSchedule.startDate, '2026-11-13');
+    assert.equal(cancellation.cancelledSchedule.endDate, '2026-11-15');
+    assert.match(cancellation.statement, /informa o cancelamento da programação do V AgroSamas 2026/);
+    assert.match(cancellation.reason, /cheias do Rio Iguaçu/);
+    assert.equal(cancellation.maintainedActivity.status, 'MAINTAINED');
+    assert.equal(cancellation.maintainedActivity.date, '2026-11-13');
+    assert.equal(cancellation.maintainedActivity.venue, 'Parque de Exposições');
+    assert.match(cancellation.maintainedActivity.notice, /Concurso Miss São Mateus do Sul[^.]*está mantido/);
+    assert.doesNotMatch(JSON.stringify(cancellation), /adiad|nova data|remarca|a definir/i);
 });
 
 test('content status distinguishes confirmed, not-yet-announced, legacy and rejected facts', () => {
@@ -139,7 +149,7 @@ test('approved identity remains while superseded Roupa Nova item is withheld pub
     assert.equal(programming.items.length, 0);
 });
 
-test('temporal state stays POSTPONED throughout the superseded schedule', () => {
+test('temporal state stays CANCELLED throughout every announced schedule', () => {
     const { api } = loadContract();
 
     assert.equal(api.contract.edition.temporal.timezone, 'America/Sao_Paulo');
@@ -147,9 +157,12 @@ test('temporal state stays POSTPONED throughout the superseded schedule', () => 
         '2026-09-17T23:59:59-03:00',
         '2026-09-18T00:00:00-03:00',
         '2026-09-21T23:59:59-03:00',
-        '2026-09-22T00:00:00-03:00'
+        '2026-09-22T00:00:00-03:00',
+        '2026-11-13T12:00:00-03:00',
+        '2026-11-16T00:00:00-03:00'
     ]) {
-        assert.equal(api.resolveTemporalState(instant), api.TEMPORAL_STATE.POSTPONED);
+        assert.equal(api.resolveTemporalState(instant), api.TEMPORAL_STATE.CANCELLED);
+        assert.equal(api.TEMPORAL_STATE.POSTPONED, undefined);
     }
     assert.equal(api.resolveTemporalState('invalid'), api.TEMPORAL_STATE.UNKNOWN);
     assert.deepEqual(
@@ -158,7 +171,7 @@ test('temporal state stays POSTPONED throughout the superseded schedule', () => 
     );
 });
 
-test('programming contract withholds even formerly confirmed items while postponed', () => {
+test('programming contract withholds even formerly confirmed items while cancelled', () => {
     const { api } = loadContract();
     const candidates = [
         {
@@ -220,42 +233,50 @@ test('superseded occurrence guard blocks old AgroSamas dates without hiding othe
     }
     assert.equal(api.isSupersededOccurrence({ editionId: 'agrosamas-2026', dataInicio: '2026-09-20T19:00:00-03:00' }), true);
     assert.equal(api.isSupersededOccurrence({ seriesId: 'agrosamas', date: '2026-10-01' }), false);
+    for (const date of ['2026-11-13', '2026-11-14', '2026-11-15']) {
+        assert.equal(api.isSupersededOccurrence({ seriesId: 'agrosamas', date }), true, `cancelled ${date}`);
+        assert.equal(api.isSupersededOccurrence({ title: 'V AgroSamas 2026', data: date }), true, `cancelled title ${date}`);
+    }
+    assert.equal(api.isSupersededOccurrence({ title: 'Concurso Miss São Mateus do Sul', descricao: 'Durante o AgroSamas', data: '2026-11-13' }), false);
+    assert.equal(api.isSupersededOccurrence({ id: 'miss-sao-mateus-do-sul-2026', seriesId: 'agrosamas', date: '2026-11-13' }), false);
     assert.equal(api.isSupersededOccurrence(null), false);
 });
 
-test('Home and Eventos show postponed state while preserving both routes and location', () => {
+test('Home and Eventos show the cancelled state and the maintained Miss contest while preserving both routes', () => {
     for (const source of [INDEX_SOURCE, EVENTS_PAGE_SOURCE]) {
-        assert.match(source, /js\/data\/agrosamas\.js\?v=agro-postponed-20260924/);
-        assert.match(source, /js\/agrosamas-contract-bindings\.js\?v=agro-postponed-20260924/);
+        assert.match(source, /js\/data\/agrosamas\.js\?v=agro-cancelado-20261029/);
+        assert.match(source, /js\/agrosamas-contract-bindings\.js\?v=agro-cancelado-20261029/);
         assert.match(source, /data-agrosamas-bind="name"/);
-        assert.match(source, /data-agrosamas-bind="location"/);
+        assert.match(source, /Concurso Miss São Mateus do Sul, em 13 de novembro, no Parque de Exposições, está mantido/);
+        assert.doesNotMatch(source, /ADIADO|adiad|nova data/i);
         assert.match(source, /href="\/agrosamas-2026"/);
         assert.match(source, /href="\/agrosamas"/);
         assert.doesNotMatch(source, /data-agrosamas-featured-program|18[–-]21 set|20 SET|Roupa Nova/i);
     }
-    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-status">ADIADO/);
-    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-date-status">Nova data a definir/);
-    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-card-badge">ADIADO/);
-    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-new-date">Nova data ainda não definida/);
+    assert.match(EVENTS_PAGE_SOURCE, /data-agrosamas-bind="location"/);
+    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-status">CANCELADO/);
+    assert.match(INDEX_SOURCE, /data-lang-key="agrosamas-date-status">Programação de 13 a 15 de novembro cancelada/);
+    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-card-badge">CANCELADO/);
+    assert.match(EVENTS_PAGE_SOURCE, /data-lang-key="ev-agrosamas-date-status">13 a 15 de novembro · cancelado/);
 });
 
 test('changed editorial sources have cache-busted references in every active consumer', () => {
     assert.match(INDEX_SOURCE, /translations\.js\?v=polimento-20261019/);
     assert.match(INDEX_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(INDEX_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(INDEX_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
+    assert.match(INDEX_SOURCE, /js\/data\/eventos\.js\?v=agro-cancelado-20261029/);
     assert.match(INDEX_SOURCE, /js\/event-occurrence-adapter\.js\?v=agro-02-20260909/);
     assert.match(EVENTS_PAGE_SOURCE, /translations\.js\?v=polimento-20261019/);
     assert.match(EVENTS_PAGE_SOURCE, /config\.js\?v=agro-02-20260909/);
     assert.match(MAP_PAGE_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(MAP_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
+    assert.match(MAP_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-cancelado-20261029/);
     assert.match(LOCAL_PAGE_SOURCE, /js\/locais-data\.js\?v=agro-02-20260909/);
-    assert.match(LOCAL_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-postponed-20260924/);
-    assert.match(NEWS_PAGE_SOURCE, /js\/cms\.js\?v=agro-postponed-20260924/);
-    assert.match(NEWS_DETAIL_SOURCE, /js\/cms\.js\?v=agro-postponed-20260924/);
+    assert.match(LOCAL_PAGE_SOURCE, /js\/data\/eventos\.js\?v=agro-cancelado-20261029/);
+    assert.match(NEWS_PAGE_SOURCE, /js\/cms\.js\?v=agro-cancelado-20261029/);
+    assert.match(NEWS_DETAIL_SOURCE, /js\/cms\.js\?v=agro-cancelado-20261029/);
 });
 
-test('binding adapter renders postponed date text and withholds superseded programme', () => {
+test('binding adapter renders cancelled edition text, the maintained Miss date and withholds the programme', () => {
     const elements = [
         bindingElement('name'),
         bindingElement('date-range'),
@@ -295,14 +316,14 @@ test('binding adapter renders postponed date text and withholds superseded progr
 
     assert.equal(context.AgroSamasContractBindings.bind('en-US'), true);
     assert.equal(elements[0].textContent, '5º AgroSamas');
-    assert.equal(elements[1].textContent, 'New date to be announced');
-    assert.equal(elements[2].textContent, 'New date to be announced');
+    assert.equal(elements[1].textContent, '2026 edition cancelled');
+    assert.equal(elements[2].textContent, '2026 edition cancelled');
     assert.equal(elements[3].textContent, 'Rua do Mathe');
-    assert.equal(elements[4].textContent, 'New date to be announced');
-    assert.equal(elements[5].textContent, 'POSTPONED');
+    assert.equal(elements[4].textContent, '2026 edition cancelled');
+    assert.equal(elements[5].textContent, 'CANCELLED');
     assert.equal(elements[6].textContent, '2026');
     assert.equal(elements[7].textContent, 'AgroSamas');
-    assert.equal(elements[8].textContent, '');
+    assert.equal(elements[8].textContent, 'November 13');
     assert.equal(elements[9].textContent, '118');
     assert.equal(elements[10].textContent, '');
     assert.equal(elements[11].textContent, '');
@@ -311,11 +332,11 @@ test('binding adapter renders postponed date text and withholds superseded progr
     assert.equal(logo.attribute('width'), '1287');
     assert.equal(logo.attribute('height'), '1222');
     assert.equal(featuredProgram.hidden, true);
-    assert.equal(confirmedFacts[0].hidden, true);
+    assert.equal(confirmedFacts[0].hidden, false);
     assert.equal(confirmedFacts[1].hidden, false);
 
     assert.equal(context.AgroSamasContractBindings.bind('pl'), true);
-    assert.equal(elements[4].textContent, 'Nowy termin zostanie podany');
+    assert.equal(elements[4].textContent, 'Edycja 2026 odwołana');
     assert.ok(listeners.has('DOMContentLoaded'));
     assert.ok(listeners.has('translationsApplied'));
 });
@@ -340,8 +361,11 @@ test('planned routes are permanent metadata while the current event link remains
 
 test('all locales expose the safe programming fallback and no duplicate canonical literals', () => {
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-programming-fallback':/g) || []).length, 4);
-    assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-postponed-title':/g) || []).length, 4);
-    assert.equal((TRANSLATIONS_SOURCE.match(/'ev-agrosamas-new-date':/g) || []).length, 4);
+    for (const key of ['agrosamas-cancelled-title', 'agrosamas-cancelled-statement', 'agrosamas-cancelled-reason', 'agrosamas-cancelled-keep-text', 'ev-agrosamas-date-status']) {
+        assert.equal((TRANSLATIONS_SOURCE.match(new RegExp(`'${key}':`, 'g')) || []).length, 4, key);
+    }
+    assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-postponed-[a-z]+':|'ev-agrosamas-new-date':/g) || []).length, 0);
+    assert.doesNotMatch(TRANSLATIONS_SOURCE, /'(?:ev-)?agrosamas-[a-z-]+': '[^']*(?:adiad|postpon|aplazad|przełożon|nova data|new date|nueva fecha|nowy termin)/i);
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-badge':/g) || []).length, 0);
     assert.equal((TRANSLATIONS_SOURCE.match(/'agrosamas-nome':|'agrosamas-data':|'agrosamas-local':/g) || []).length, 0);
     assert.equal((TRANSLATIONS_SOURCE.match(/'ev-agrosamas-h':|'ev-agrosamas-data':/g) || []).length, 0);
@@ -370,7 +394,7 @@ test('active editorial surfaces contain no catalogued 2026 misinformation', () =
     assert.doesNotMatch(CMS_SOURCE + CHATBOT_SOURCE, /programação completa será divulgada em breve/i);
 });
 
-test('CMS fallback and formerly published AgroSamas notice state postponement', () => {
+test('CMS fallback and formerly published AgroSamas notices state the cancellation', () => {
     const context = vm.createContext({ window: {}, document: { addEventListener() {} } });
     vm.runInContext(CMS_SOURCE, context, { filename: 'js/cms.js' });
     const cms = context.window.CMS;
@@ -381,12 +405,21 @@ test('CMS fallback and formerly published AgroSamas notice state postponement', 
         resumo: 'Roupa Nova está confirmado para 20 de setembro',
         conteudo: 'Programação anterior'
     };
-    const updated = cms.normalizarAvisoAgroSamas([oldPost])[0];
+    const postponedPost = {
+        slug: notice.slug,
+        titulo: '5º AgroSamas adiado',
+        resumo: 'A nova data ainda não foi definida.',
+        conteudo: 'O 5º AgroSamas foi adiado preventivamente.'
+    };
+    const [updated, updatedPostponed] = cms.normalizarAvisoAgroSamas([oldPost, postponedPost]);
 
-    assert.match(notice.titulo, /adiado/i);
-    assert.match(updated.titulo, /adiado/i);
-    assert.match(updated.conteudo, /Defesa Civil do Paraná e do Simepar/);
-    assert.match(updated.conteudo, /nova data ainda não foi definida/i);
+    assert.match(notice.titulo, /cancelado/i);
+    for (const post of [updated, updatedPostponed]) {
+        assert.match(post.titulo, /V AgroSamas 2026 cancelado/);
+        assert.match(post.conteudo, /cheias do Rio Iguaçu/);
+        assert.match(post.conteudo, /Concurso Miss São Mateus do Sul[^.]*está mantido/);
+        assert.doesNotMatch([post.titulo, post.resumo, post.conteudo].join(' '), /adiad|nova data/i);
+    }
     assert.doesNotMatch([updated.titulo, updated.resumo, updated.conteudo].join(' '), /18 a 21 de setembro|Roupa Nova está confirmado/i);
 });
 

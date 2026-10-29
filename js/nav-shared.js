@@ -609,7 +609,7 @@ body.font-larger{font-size:140%!important;}
                 script.src = /js\/search(?:-index)?\.js$/.test(src)
                     ? src + '?v=search-v22-20261013'
                     : src === 'js/data/eventos.js'
-                        ? src + '?v=agro-postponed-20260924'
+                        ? src + '?v=agro-cancelado-20261029'
                         : src === 'js/image-attribution.js' || src === 'js/public-establishments-renderer.js'
                             ? src + '?v=credito-imagens-20261015'
                         : /public-establishments-renderer|turismo-data-adapter|pontos-turisticos/.test(src)

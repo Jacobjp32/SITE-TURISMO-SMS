@@ -151,12 +151,12 @@ test('permanent hub exists with perennial SEO, one h1 and canonical contract loa
     assert.equal(existsSync(new URL('../agrosamas.html', import.meta.url)), true);
     assert.match(HUB_SOURCE, /<link rel="canonical" href="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/agrosamas">/);
     assert.match(HUB_SOURCE, /<meta property="og:url" content="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/agrosamas">/);
-    assert.match(HUB_SOURCE, /<meta name="twitter:title" content="AgroSamas \| 5º adiado em São Mateus do Sul">/);
+    assert.match(HUB_SOURCE, /<meta name="twitter:title" content="AgroSamas \| Edição 2026 cancelada em São Mateus do Sul">/);
     assert.equal(count(HUB_SOURCE, /<h1\b/g), 1);
     assert.doesNotMatch(HUB_SOURCE, /http-equiv="refresh"|location\.(?:href|replace)/i);
-    const contractIndex = HUB_SOURCE.indexOf('js/data/agrosamas.js?v=agro-postponed-20260924');
-    const bindingsIndex = HUB_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-postponed-20260924');
-    const controllerIndex = HUB_SOURCE.indexOf('js/agrosamas-hub.js?v=agro-postponed-20260924');
+    const contractIndex = HUB_SOURCE.indexOf('js/data/agrosamas.js?v=agro-cancelado-20261029');
+    const bindingsIndex = HUB_SOURCE.indexOf('js/agrosamas-contract-bindings.js?v=agro-cancelado-20261029');
+    const controllerIndex = HUB_SOURCE.indexOf('js/agrosamas-hub.js?v=agro-cancelado-20261029');
     assert.ok(contractIndex > -1);
     assert.ok(bindingsIndex > contractIndex);
     assert.ok(controllerIndex > bindingsIndex);
@@ -186,23 +186,23 @@ test('hub provides event identity, destination discovery and only real internal 
     assert.match(HUB_SOURCE, /data-agro-superseded-date hidden/);
     assert.match(HUB_SOURCE, /data-agrosamas-bind="location"/);
     assert.match(HUB_SOURCE, /data-agrosamas-confirmed-fact="anniversaryIntegration"/);
-    assert.match(HUB_SOURCE, /data-agrosamas-confirmed-fact="missDate"/);
+    assert.match(HUB_SOURCE, /data-agrosamas-confirmed-fact="missDate"><span>Mantido<\/span>/);
 });
 
-test('hub keeps the edition postponed across the superseded schedule', () => {
+test('hub keeps the edition cancelled across every announced schedule', () => {
     const { context, document, elements } = hubHarness();
     const edition = context.AgroSamasContract.contract.edition;
     const page = context.AgroSamasHubPage;
     page.renderContractBasics();
 
-    assert.equal(edition.status, 'POSTPONED');
-    assert.equal(edition.newDate, null);
+    assert.equal(edition.status, 'CANCELLED');
     assert.ok(elements.links.every(link => link.getAttribute('href') === edition.route));
-    for (const instant of ['2026-09-17T23:59:59-03:00', '2026-09-18T12:00:00-03:00', '2026-09-22T00:00:00-03:00']) {
-        assert.equal(page.renderTemporalState(instant), 'POSTPONED');
-        assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'POSTPONED');
-        assert.match(elements.kicker.textContent, /adiado/i);
-        assert.match(elements.copy.textContent, /nova data/i);
+    for (const instant of ['2026-09-18T12:00:00-03:00', '2026-11-13T12:00:00-03:00', '2026-11-16T00:00:00-03:00']) {
+        assert.equal(page.renderTemporalState(instant), 'CANCELLED');
+        assert.equal(document.body.getAttribute('data-agro-temporal-state'), 'CANCELLED');
+        assert.match(elements.kicker.textContent, /cancelada/i);
+        assert.match(elements.copy.textContent, /cheias do Rio Iguaçu/);
+        assert.doesNotMatch(elements.copy.textContent, /adiad|nova data/i);
         assert.doesNotMatch(elements.primary.textContent, /agora/i);
     }
     assert.ok(elements.links.every(link => link.getAttribute('href') === edition.route));
@@ -226,13 +226,18 @@ test('Home and Eventos prioritize the edition and preserve access to the permane
     for (const source of [HOME_SOURCE, EVENTS_SOURCE]) {
         assert.doesNotMatch(source, /17[–-]21|17 a 21 de setembro|cinco dias/i);
         assert.doesNotMatch(source, /AgroSamas[^\n]{0,220}(?:entrada gratuita|gratuito)/i);
-        assert.match(source, /ADIADO/);
+        assert.match(source, /CANCELADO/);
+        assert.doesNotMatch(source, /ADIADO|adiad|nova data/i);
         assert.doesNotMatch(source, /Roupa Nova|20 SET|18[–-]21 set/i);
     }
-    assert.match(HOME_SOURCE, /data-lang-key="agrosamas-desc"[^>]*>O 5º AgroSamas foi adiado/);
-    assert.match(EVENTS_SOURCE, /data-lang-key="ev-agrosamas-new-date"[^>]*>Nova data ainda não definida/);
-    assert.match(HUB_SOURCE, /data-lang-key="agrosamas-postponed-title"[^>]*>5º AgroSamas adiado/);
-    assert.match(EDITION_SOURCE, /data-lang-key="agrosamas-postponed-title"[^>]*>5º AgroSamas adiado/);
+    assert.match(HOME_SOURCE, /data-lang-key="agrosamas-desc"[^>]*>O V AgroSamas 2026 foi cancelado/);
+    assert.match(EVENTS_SOURCE, /data-lang-key="ev-agrosamas-date-status"[^>]*>13 a 15 de novembro · cancelado/);
+    assert.match(HUB_SOURCE, /data-lang-key="agrosamas-cancelled-title"[^>]*>V AgroSamas 2026 cancelado/);
+    assert.match(EDITION_SOURCE, /data-lang-key="agrosamas-cancelled-status"[^>]*>Cancelado/);
+    for (const source of [HUB_SOURCE, EDITION_SOURCE]) {
+        assert.match(source, /data-lang-key="agrosamas-cancelled-keep-text">O Concurso Miss São Mateus do Sul, previsto para 13 de novembro, no Parque de Exposições, está mantido\./);
+        assert.doesNotMatch(source, /adiad|nova data|remarca|a definir|inscrições abertas|garanta sua/i);
+    }
 });
 
 test('menu, search and map summary expose the intended permanent and edition destinations once', () => {
@@ -262,21 +267,22 @@ test('not-yet-announced and legacy content stays out of public copy without bloc
     assert.doesNotMatch(publicPages, /entrada gratuita|estacionamento|bloqueio|parque dos dinossauros|show nacional/i);
     assert.doesNotMatch(publicPages, /images\/empreendimentos\/agrosamas|agrosamas-publico-show-noturno/i);
     assert.doesNotMatch(HUB_SOURCE, /expositores confirmados|4º AgroSamas|2025/i);
-    assert.match(EDITION_SCRIPT, /Programação será atualizada após a definição da nova data/i);
+    assert.match(EDITION_SCRIPT, /A programação do V AgroSamas 2026 foi cancelada/);
+    assert.doesNotMatch(EDITION_SCRIPT, /nova data|adiad/i);
     assert.doesNotMatch(publicPages, /PENDING|FAIL-CLOSED|NOT_YET_ANNOUNCED|CONFIRMED/);
 });
 
-test('hub and edition each render the official logo once and expose it for social sharing', () => {
-    for (const source of [HUB_SOURCE, EDITION_SOURCE]) {
-        assert.equal(count(source, /<img[^>]+data-agrosamas-logo/g), 1);
-        assert.match(source, /data-agrosamas-logo src="images\/agrosamas\/2026\/logo-5-agrosamas\.png" width="1287" height="1222"/);
-        assert.match(source, /property="og:image" content="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/images\/agrosamas\/2026\/logo-5-agrosamas\.png"/);
-    }
+test('hub keeps the official logo while the edition shares the official cancellation art', () => {
+    assert.equal(count(HUB_SOURCE, /<img[^>]+data-agrosamas-logo/g), 1);
+    assert.match(HUB_SOURCE, /data-agrosamas-logo src="images\/agrosamas\/2026\/logo-5-agrosamas\.png" width="1287" height="1222"/);
+    assert.match(HUB_SOURCE, /property="og:image" content="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/images\/agrosamas\/2026\/logo-5-agrosamas\.png"/);
+    assert.match(EDITION_SOURCE, /property="og:image" content="https:\/\/turismo\.saomateusdosul\.pr\.gov\.br\/images\/agrosamas\/2026\/agrosamas-2026-cancelado-og-1200x675\.jpg"/);
+    assert.match(EDITION_SOURCE, /property="og:title" content="V AgroSamas 2026 cancelado \| São Mateus do Sul"/);
 });
 
 test('hub reuses the approved visual family and legacy banner CSS is removed', () => {
-    assert.match(HUB_SOURCE, /css\/agrosamas-2026\.css\?v=agro-postponed-20260924/);
-    assert.match(HUB_SOURCE, /css\/agrosamas\.css\?v=agro-postponed-20260924/);
+    assert.match(HUB_SOURCE, /css\/agrosamas-2026\.css\?v=agro-cancelado-20261029/);
+    assert.match(HUB_SOURCE, /css\/agrosamas\.css\?v=agro-cancelado-20261029/);
     assert.match(HUB_STYLES, /@media \(max-width: 1050px\)/);
     assert.match(HUB_STYLES, /@media \(max-width: 820px\)/);
     assert.match(HUB_STYLES, /@media \(max-width: 560px\)/);

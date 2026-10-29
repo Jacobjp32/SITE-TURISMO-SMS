@@ -85,7 +85,7 @@ const CMS = {
         const aviso = this.getPostsIniciais()[0];
         return posts.map(post => {
             const desatualizado = post && post.slug === aviso.slug
-                && /18 a 21 de setembro de 2026|Roupa Nova está confirmado/.test([post.titulo, post.resumo, post.conteudo].join(' '));
+                && /18 a 21 de setembro de 2026|Roupa Nova está confirmado|AgroSamas adiado|nova data ainda não foi definida/i.test([post.titulo, post.resumo, post.conteudo].join(' '));
             return desatualizado
                 ? { ...post, titulo: aviso.titulo, resumo: aviso.resumo, conteudo: aviso.conteudo, dataPublicacao: aviso.dataPublicacao }
                 : post;
@@ -102,15 +102,15 @@ const CMS = {
         return [
             {
                 id: 1,
-                titulo: '5º AgroSamas adiado',
+                titulo: 'V AgroSamas 2026 cancelado',
                 slug: 'agrosamas-2026-datas-confirmadas',
                 categoria: 'Eventos',
-                resumo: 'O evento foi adiado preventivamente por recomendação da Defesa Civil. A nova data ainda não foi definida.',
-                conteudo: 'O 5º AgroSamas foi adiado preventivamente por recomendação da Defesa Civil, considerando as orientações da Defesa Civil do Paraná e do Simepar.\n\nA nova data ainda não foi definida e será divulgada posteriormente pelos canais oficiais.',
+                resumo: 'Programação de 13 a 15 de novembro cancelada de forma preventiva. O Concurso Miss São Mateus do Sul está mantido.',
+                conteudo: 'A Prefeitura Municipal de São Mateus do Sul informa o cancelamento da programação do V AgroSamas 2026, que estava prevista para os dias 13, 14 e 15 de novembro.\n\nA decisão foi tomada de forma preventiva diante do cenário de cheias do Rio Iguaçu e dos riscos relacionados às condições meteorológicas, priorizando a segurança da população, dos expositores, trabalhadores e demais envolvidos.\n\nO Concurso Miss São Mateus do Sul, previsto para 13 de novembro, no Parque de Exposições, está mantido.',
                 imagem: 'images/RUA_DO_MATHE.jpg',
-                linkOrigem: 'https://www.agrosamas.com.br/',
+                linkOrigem: 'https://turismo.saomateusdosul.pr.gov.br/agrosamas-2026',
                 autor: 'Departamento de Turismo',
-                dataPublicacao: '2026-09-24T00:00:00-03:00',
+                dataPublicacao: '2026-10-27T00:00:00-03:00',
                 destaque: true,
                 publicado: true
             },

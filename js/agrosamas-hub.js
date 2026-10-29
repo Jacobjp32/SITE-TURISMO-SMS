@@ -29,13 +29,13 @@
     }
 
     function temporalCopy(state, edition) {
-        if (state === 'POSTPONED') {
+        if (state === 'CANCELLED') {
             return {
-                kicker: 'EVENTO ADIADO',
-                copy: edition.postponement.reason + ' ' + edition.postponement.update,
-                primary: 'Entenda o adiamento',
-                editionCta: 'Ver informações da edição adiada',
-                archive: edition.name + ' · adiado'
+                kicker: 'EDIÇÃO 2026 CANCELADA',
+                copy: edition.cancellation.statement + ' ' + edition.cancellation.reason,
+                primary: 'Ler o comunicado oficial',
+                editionCta: 'Ler o comunicado oficial',
+                archive: edition.name + ' · edição cancelada'
             };
         }
         if (state === 'EVENT_LIVE') {

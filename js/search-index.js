@@ -33,7 +33,7 @@
 
   var fixedEntries = [
     makeEntry("AgroSamas", "Eventos · AgroSamas", "Hub permanente do AgroSamas: identidade, edições e conexão do evento com São Mateus do Sul.", "/agrosamas", ["agrosamas", "agro samas", "evento agro", "campo", "gastronomia", "empreendedorismo", "são mateus do sul", "Rua do Mathe"]),
-    makeEntry("5º AgroSamas 2026 — ADIADO", "Agenda · edição 2026", "O evento foi adiado. A nova data ainda não foi definida e será divulgada pelos canais oficiais.", "/agrosamas-2026", ["5º agrosamas", "5 agrosamas", "v agrosamas", "agrosamas 2026", "adiado", "nova data"]),
+    makeEntry("V AgroSamas 2026 — CANCELADO", "Agenda · edição 2026", "Programação de 13 a 15 de novembro cancelada de forma preventiva. O Concurso Miss São Mateus do Sul, em 13 de novembro, está mantido.", "/agrosamas-2026", ["5º agrosamas", "5 agrosamas", "v agrosamas", "agrosamas 2026", "adiado", "nova data"]),
     makeEntry("Mês Polonês — Tradycje Polskie", "Cultura · Mês Polonês", "Área permanente sobre a herança polonesa, a tradição e as edições do Mês Polonês em São Mateus do Sul.", "/mes-polones", ["mes polones", "mês polonês", "tradycje polskie", "capital polonesa", "capital paranaense polonesa", "cultura polonesa", "braspol"]),
     makeEntry("32º Mês Polonês 2026", "Agenda", "Programação do 32º Mês Polonês — Tradycje Polskie, de 18 de julho a 30 de agosto em São Mateus do Sul.", "/mes-polones-2026", ["mes polones", "mês polonês", "tradycje polskie", "polskie smaki", "cultura polonesa", "agosto", "braspol"]),
     makeEntry("Mapa Turístico", "Explore", "Visualização geral de pontos, rotas e referências do turismo local.", "/mapa-turistico", ["mapa", "turistico", "rotas", "pontos", "guia"]),
